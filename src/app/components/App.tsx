@@ -41,7 +41,7 @@ export default function App({ name }: AppProps) {
                             <option value="4">Dataset 4</option>
                         </select>
                     </div>
-                    <img className="logo" src="./bfr_logo.gif" alt="BfR Logo" />
+                    <img className="logo" src="/assets/bfr_logo.gif" alt="BfR Logo" />
                 </div>
             </div>
             <div className="footer">

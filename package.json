@@ -11,8 +11,8 @@
     "clean": "npx rimraf dist/*",
     "serve:pipe": "npm run build && ./node_modules/.bin/http-server dist",
     "cp:html": "npx copyfiles -u 1 ./src/**/*.html ./dist",
-    "cp:style": "npx copyfiles -u 1 ./src/**/*.css ./dist",
-    "cp:all": "npm run cp:html && npm run cp:style",
+    "cp:assets": "npx copyfiles -u 1 ./src/assets/* ./dist",
+    "cp:all": "npm run cp:html && npm run cp:assets",
     "test": "./node_modules/.bin/jest",
     "test:coverage": "./node_modules/.bin/jest --coverage"
   },
