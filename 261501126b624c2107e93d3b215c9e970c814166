@@ -1,0 +1,203 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0fdef251_813ef895",
+        "filename": "package.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "Please remove the unused dependencies - we add them again once we use them.",
+      "range": {
+        "startLine": 52,
+        "startChar": 20,
+        "endLine": 52,
+        "endChar": 21
+      },
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a965b613_bba7a5bc",
+        "filename": "src/app/components/Selector.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "Add correct Type.  Create an interface.  Avoid any if at all possible.",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "622c4812_781ea309",
+        "filename": "src/app/components/Selector.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "See above",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9435890d_87b9671b",
+        "filename": "src/app/components/Selector.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "I dislike this syntax, because you have to explicitly add the binding in the constructor:  You need to remember to do it \u0026 you write more code.  The best code is no code.  Maybe we should use arrow functions?  This is mostly a code styling decision, so whichever you prefer goes - you are after all the main developer - though we should aim to be consistent throughout the code base.",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3ebab76_ca79d381",
+        "filename": "src/app/components/Selector.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "remove console log statements",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0ae7b97_9cea1c6c",
+        "filename": "src/app/components/Selector.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "924958a1_5e33ccc9",
+        "filename": "src/app/components/SelectorItem.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "see previous note on the use of \u0027any\u0027",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0a22e45_c2036b0a",
+        "filename": "src/app/components/StartPage/App.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "This is a layout component - please rename to something more appropriate.\nAt a later stage we will probably have an App component one level up which will contain code required to start up the application",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f40821b_051cfe30",
+        "filename": "src/app/components/StartPage/Header.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "Remove superfluous comment",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "309ec3fe_a514e05c",
+        "filename": "src/app/components/StartPage/MainContent.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "Place the dataset import here.  It\u0027s clearly a temporary solution and will be removed later, so it\u0027s best to keep it confined to one place and not handed down the component tree.\nPotentially you could place it into the Selector component itself, but the assumption that the Selector will be handed the data by its parent is correct, so here is probably a better place.",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a678bab_a177ad90",
+        "filename": "src/app/index.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-06-11T14:44:02Z",
+      "side": 1,
+      "message": "Remove the dataset import here \u0026 place it closer to where it\u0027s used.",
+      "revId": "261501126b624c2107e93d3b215c9e970c814166",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
