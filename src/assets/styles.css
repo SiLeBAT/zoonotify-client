@@ -31,6 +31,13 @@ h1 {
   font-weight: normal;
 }
 
+h2 {
+  color: #034ea2;
+  font-size: 1rem;
+  align-self: center;
+  font-weight: normal;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
