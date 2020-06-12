@@ -51,5 +51,8 @@
   "dependencies": {
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
+  },
+  "znConfig": {
+    "lastChange": "2020-06-11 11:25:17 +0200"
   }
 }
