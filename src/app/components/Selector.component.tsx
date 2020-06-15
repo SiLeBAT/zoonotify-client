@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import SelectorItem from './Selector-Item.component';
-import { SelectorItemProps } from './Selector-Item.component'
+import {SelectorItem, SelectorItemProps } from './Selector-Item.component';
+
 
 interface SelectorProps {
     datasets: SelectorItemProps[]
@@ -11,7 +11,7 @@ interface State {
     selectedData: string;
 };
 
-class Selector extends Component<SelectorProps, State> {
+export class Selector extends Component<SelectorProps, State> {
     constructor(props: SelectorProps) {
         super(props)
         this.state = {
@@ -27,26 +27,24 @@ class Selector extends Component<SelectorProps, State> {
         });
     }
 
-    render() {
+    render(): JSX.Element {
         const selectorItems = this.state.data.map((item: SelectorItemProps) => <SelectorItem key={item.id} item={item} />)
 
         return (
             <div>
-                <label htmlFor="dataset1"> Datasetes </label>
-                <select
-                    value={this.state.selectedData}
-                    onChange={this.handleChange}
-                    id="dataset1"
-                    name="selectedData"
-                > 
-                    <option value="">-- Please, select  a dataset --</option>
-                    {selectorItems}
-                </select>
+                <label htmlFor="dataset1">
+                    Datasets
+                    <select
+                        value={this.state.selectedData}
+                        onChange={this.handleChange}
+                        id="dataset1"
+                        name="selectedData"
+                    >
+                        <option value="">-- Please, select a dataset --</option>
+                        {selectorItems}
+                    </select>
+                </label>
             </div>
-    
-        )
+        );
     }
 }
-
-
-export default Selector

@@ -1,10 +1,10 @@
 
 import * as React from 'react';
 
-export default function MainPageHeaderComponent() {
-    return (
-        <header className="header"> 
-            <span className="appName" >ZooNotify</span>
-        </header>
-    )
-}
+export function MainPageHeaderComponent(): JSX.Element {
+           return (
+               <header className="header">
+                   <span className="appName">ZooNotify</span>
+               </header>
+           );
+       }

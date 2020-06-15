@@ -1,21 +1,19 @@
 import * as React from 'react';
-import Header from './MainPage-Header.component';
-import Content from './MainPage-Content.component';
-import Footer from './MainPage-Footer.component';
+import { MainPageHeaderComponent as Header } from "./MainPage-Header.component";
+import { MainPageContentComponent as Content } from "./MainPage-Content.component";
+import { MainPageFooterComponent as Footer } from "./MainPage-Footer.component";
 
 
 interface LayoutProps {
     name: string;
 }
 
-export default function MainPageLayoutComponent(props: LayoutProps) {
-    return (
-        <div className="wrapper">
-            <Header />;
-            <Content name={props.name}/>;
-            <Footer />;
-        </div>
-    );
-
-}
-
+export function MainPageLayoutComponent(props: LayoutProps): JSX.Element {
+           return (
+               <div className="wrapper">
+                   <Header />;
+                   <Content name={props.name} />;
+                   <Footer />;
+               </div>
+           );
+       }

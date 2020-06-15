@@ -1,4 +1,4 @@
-const datasets = [
+export const datasets = [
     {
         id: 1,
         name: 'Test Dataset 1',
@@ -12,5 +12,3 @@ const datasets = [
         name: 'Test dataset 3',
     }
 ]
-
-export default datasets
