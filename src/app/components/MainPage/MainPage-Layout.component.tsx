@@ -1,8 +1,15 @@
-import * as React from 'react';
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import { MainPageHeaderComponent as Header } from "./MainPage-Header.component";
 import { MainPageContentComponent as Content } from "./MainPage-Content.component";
 import { MainPageFooterComponent as Footer } from "./MainPage-Footer.component";
 
+
+const wrapperStyle = css`
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+`
 
 interface LayoutProps {
     name: string;
@@ -10,10 +17,10 @@ interface LayoutProps {
 
 export function MainPageLayoutComponent(props: LayoutProps): JSX.Element {
            return (
-               <div className="wrapper">
-                   <Header />;
-                   <Content name={props.name} />;
-                   <Footer />;
+               <div className="wrapper" css={wrapperStyle}>
+                   <Header />
+                   <Content name={props.name} />
+                   <Footer />
                </div>
            );
        }
