@@ -5,11 +5,11 @@ import { primaryColor, backgroundColor } from '../Style/Style-MainTheme.componen
 
 const headerStyle = css`
     width: 100%;
-    background-color: ${primaryColor};
-    padding: 1em;
     display: flex;
+    background-color: ${primaryColor};
 `
 const appNameStyle = css`
+    padding: 1rem;
     font-size: 2rem;
     font-weight: bold;
     color: ${backgroundColor};

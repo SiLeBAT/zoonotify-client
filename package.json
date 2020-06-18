@@ -74,8 +74,11 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
+    "@material-ui/core": "^4.10.2",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-scrollbar": "^0.5.6",
+    "react-scrollbars-custom": "^4.0.25"
   },
   "znConfig": {
     "lastChange": "2020-06-11 11:25:17 +0200"

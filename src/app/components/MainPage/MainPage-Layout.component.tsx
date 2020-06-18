@@ -7,8 +7,10 @@ import { MainPageFooterComponent as Footer } from "./MainPage-Footer.component";
 
 const wrapperStyle = css`
     display: flex;
+    flex: 1;
     flex-direction: column;
-    min-height: 100%;
+    min-height: 100vh;
+    align-items: center;
 `
 
 interface LayoutProps {
