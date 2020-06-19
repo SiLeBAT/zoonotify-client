@@ -9,6 +9,6 @@ export const datasets = [
     },
     {
         id: 3,
-        name: 'Test dataset 3',
+        name: 'Test Dataset 3',
     }
 ]

@@ -8,6 +8,7 @@ const headerStyle = css`
     display: flex;
     background-color: ${primaryColor};
 `
+
 const appNameStyle = css`
     padding: 1rem;
     font-size: 2rem;
