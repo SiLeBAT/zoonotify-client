@@ -1,19 +1,31 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import styled from '@emotion/styled';
-import { surfaceColor, primaryColor, bfrBlueGrey} from '../Style/Style-MainTheme.component';
+import moment from 'moment';
+import { lastChange } from './LoadDateOfLastChange.component';
+import { surfaceColor, primaryColor, bfrBlueGrey } from '../../Style/Style-MainTheme.component';
 
 const footerStyle = css`
     color: ${primaryColor};
     background-color: ${surfaceColor};
     width: 100%;
     overflow: hidden;
+    border-top: 2px solid rgb(51, 77, 107);
 `
 
 const footerContentStyle = css`
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+`
+
+const footerDateStyle = css`
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: ${bfrBlueGrey};
+    background-color: rgb(51, 77, 107);
 `
 
 const Span = styled.span`
@@ -30,6 +42,11 @@ const Span = styled.span`
     }
 `
 
+const P = styled.p`
+    padding: 0;
+`
+
+
 export function MainPageFooterComponent(): JSX.Element {
                    return (
                         <footer css={footerStyle}>
@@ -38,6 +55,10 @@ export function MainPageFooterComponent(): JSX.Element {
                                 <Span>FAQ</Span>
                                 <Span>API-docs</Span>
                                 <Span>Datenschutzerklärung</Span>
+                            </div>
+                            <div css={footerDateStyle}>
+                                <P>Letzte Änderung: {moment(lastChange, "YYYY-MM-DD HH:mm:ss Z", "de").format("L")}
+                                </P>
                             </div>
                         </footer>
                     );
