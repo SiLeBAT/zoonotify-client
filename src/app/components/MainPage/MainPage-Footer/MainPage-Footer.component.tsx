@@ -1,21 +1,22 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import styled from '@emotion/styled';
-import { surfaceColor, primaryColor, bfrBlueGrey} from '../Style/Style-MainTheme.component';
+import { LastUpdate } from './LastUpdate';
+import { surfaceColor, primaryColor, bfrBlueGrey, bfrDarkBlueGrey } from '../../Style/Style-MainTheme.component';
 
 const footerStyle = css`
     color: ${primaryColor};
     background-color: ${surfaceColor};
     width: 100%;
     overflow: hidden;
+    border-top: 2px solid ${bfrDarkBlueGrey};
 `
-
 const footerContentStyle = css`
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    
 `
-
 const Span = styled.span`
     padding: 10px;
     min-width: 300px;
@@ -30,6 +31,7 @@ const Span = styled.span`
     }
 `
 
+
 export function MainPageFooterComponent(): JSX.Element {
                    return (
                         <footer css={footerStyle}>
@@ -39,6 +41,7 @@ export function MainPageFooterComponent(): JSX.Element {
                                 <Span>API-docs</Span>
                                 <Span>Datenschutzerklärung</Span>
                             </div>
+                            <LastUpdate />
                         </footer>
                     );
                 }

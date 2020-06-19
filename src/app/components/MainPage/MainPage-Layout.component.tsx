@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { MainPageHeaderComponent as Header } from "./MainPage-Header.component";
-import { MainPageContentComponent as Content } from "./MainPage-Content.component";
-import { MainPageFooterComponent as Footer } from "./MainPage-Footer.component";
+import { MainPageContentComponent as Content } from "./MainPage-Content/MainPage-Content.component";
+import { MainPageFooterComponent as Footer } from "./MainPage-Footer/MainPage-Footer.component";
 
 
 const wrapperStyle = css`
@@ -17,12 +17,14 @@ interface LayoutProps {
     name: string;
 }
 
+
 export function MainPageLayoutComponent(props: LayoutProps): JSX.Element {
+
            return (
                <div css={wrapperStyle}>
                    <Header />
                    <Content name={props.name} />
-                   <Footer />
+                   <Footer/>
                </div>
            );
        }

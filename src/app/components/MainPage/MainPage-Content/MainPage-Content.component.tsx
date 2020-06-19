@@ -1,10 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import styled from '@emotion/styled';
-
-import { surfaceColor, primaryColor, shadowPalette } from '../Style/Style-MainTheme.component';
-import { Selector } from '../Selector.component'
-import { datasets } from '../../datasets'
+import { surfaceColor, primaryColor, shadowPalette } from '../../Style/Style-MainTheme.component';
+import { Selector } from './Selector.component'
+import { datasets } from '../../../datasets'
 
 
 const contentStyle = css`
