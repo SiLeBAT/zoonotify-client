@@ -10,6 +10,6 @@ module.exports = {
   },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
-    '!src/app/index.tsx',
+    '!src/app/App.tsx',
   ],
 };
