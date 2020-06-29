@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
 import { surfaceColor, primaryColor, shadowPalette } from '../../Style/Style-MainTheme.component';
 import { Selector } from './Selector.component'
 import { datasets } from '../../../datasets'
@@ -9,6 +9,7 @@ import { datasets } from '../../../datasets'
 const contentStyle = css`
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 2em;
     flex: 1;
     flex-shrink: 0;
@@ -24,56 +25,58 @@ const boxStyle = css`
     flex-direction: column;
     justify-content: space-between;
     align-self: flex-start;
+    hyphens: auto; 
+    text-align: justify
+`
+const h1Style = css`
+    color: ${primaryColor};
+    font-size: 3rem;
+    align-self: center;
+    font-weight: normal;
+
+`
+const h2Style = css`
+    color: ${primaryColor};
+    font-size: 1rem;
+    align-self: center;
+    font-weight: normal;
+    text-align: center
+`
+const pStyle = css`
+    line-height: 1.6;
 `
 const logoStyle = css`
     align-self: start;
     margin-top: 20px;
     max-width: 100%;
     height: auto;
-`
-const Img = styled.img`
     margin-bottom: 20px;
 `
-const H1 = styled.h1`
-    color: ${primaryColor};
-    font-size: 3rem;
-    align-self: center;
-    font-weight: normal;
-`
-const H2 = styled.h2`
-    color: ${primaryColor};
-    font-size: 1rem;
-    align-self: center;
-    font-weight: normal;
-`
+
 
 interface ContentProps {
     name: string;
 }
 
 export function MainPageContentComponent(props: ContentProps): JSX.Element {
+    const { t } = useTranslation(['MainPage-Content']);
     return (
  
             <main css={contentStyle}>
                 <div css={boxStyle}>
-
-                    <H1>{props.name}</H1>
-                    <H2>
-                        Web-basierte Abfrage von Surveillancedaten gemäß RL 99/2003/EU (Zoonosenrichtlinie)
-                    </H2>
-                    <p>
-                        ZooNotify bietet die Möglichkeit, einen vereinfachten Datenbestand der gemäß RL 99/2003/EU (Zoonosenrichtlinie) gesammelten Erregernachweise in der Lebensmittelkette und derer Eigenschaften, die an das Bundesinstitut für Risikobewertung (BfR) übermittelt werden, abzufragen. Mit individuellen Abfragen oder durch Bearbeitung vordefinierter Beispielabfragen lassen sich Tabellen und Grafiken nach eigenem Bedarf erzeugen.
+                    <h1 css={h1Style}>{props.name}</h1>
+                    <h2 css={h2Style}> {t('Subtitle', 'Web-basierte Abfrage von Surveillancedaten gemäß RL 99/2003/EU (Zoonosenrichtlinie)')}</h2>
+                    <p css={pStyle}>
+                        {t('MainText', 'ZooNotify bietet die Möglichkeit, einen vereinfachten Datenbestand der gemäß RL 99/2003/EU (Zoonosenrichtlinie) gesammelten Erregernachweise in der Lebensmittelkette und derer Eigenschaften, die an das Bundesinstitut für Risikobewertung (BfR) übermittelt werden, abzufragen. Mit individuellen Abfragen oder durch Bearbeitung vordefinierter Beispielabfragen lassen sich Tabellen und Grafiken nach eigenem Bedarf erzeugen.')}
                     </p>
-                    <p>
-                        Bitte klicken Sie auf die untenstehenden Themen, um die Liste der interaktiven Datenbank zu erweitern:
+                    <p css={pStyle}>
+                        {t('SelectorIntro', 'Bitte klicken Sie auf die untenstehenden Themen, um die Liste der interaktiven Datenbank zu erweitern:')}
                     </p>
                     <div>
-                        <Selector datasets={datasets}/>
+                        <Selector label={t('SelectorLable', 'Datensätze: ')} text={t('SelectorText', 'Bitte, Datensatz auswählen')} datasets={datasets}/>
                     </div>
-                    <Img src="/assets/bfr_logo.gif" alt="BfR Logo" css={logoStyle}/>
+                    <img src="/assets/bfr_logo.gif" alt="BfR Logo" css={logoStyle}/>
                 </div>
-            </main>
-         
-       
+            </main>    
     )
 }

@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import moment from 'moment';
-import {bfrBlueGrey, bfrDarkBlueGrey } from '../../Style/Style-MainTheme.component';
-import {environment} from '../../../../environment';
+import { useTranslation } from 'react-i18next';
+import { bfrBlueGrey, bfrDarkBlueGrey } from '../../Style/Style-MainTheme.component';
+import { environment } from '../../../../environment';
 
 
 const footerDateStyle = css`
@@ -16,9 +17,11 @@ const footerDateStyle = css`
 
 export function LastUpdate(): JSX.Element  {
     const {lastChange} = environment; 
+    const { t } = useTranslation(['MainPage-Footer']);
+    const dateLayout = t('Date.Layout', 'de');
     return (
         <div css={footerDateStyle}>
-            <p>Letzte Änderung: {moment(lastChange, "YYYY-MM-DD HH:mm:ss Z", "de").format("L")}</p>
+            <p>{t('Date.Text', 'Letzte Änderung: ')} {moment(lastChange, "YYYY-MM-DD HH:mm:ss Z", dateLayout, true).format("L")}</p>
         </div>
     )
 }

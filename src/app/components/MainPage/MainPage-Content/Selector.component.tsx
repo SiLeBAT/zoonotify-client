@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import {SelectorItem, SelectorItemProps } from './Selector-Item.component';
+import { SelectorItem, SelectorItemProps } from './Selector-Item.component';
 
 
 interface SelectorProps {
+    label: string,
+    text: string,
     datasets: SelectorItemProps[]
 };
 
@@ -15,6 +17,7 @@ export class Selector extends Component<SelectorProps, State> {
     constructor(props: SelectorProps) {
         super(props)
         this.state = {
+            
             data: this.props.datasets,
             selectedData: ""
         }
@@ -33,14 +36,14 @@ export class Selector extends Component<SelectorProps, State> {
         return (
             <div>
                 <label htmlFor="dataset1">
-                    Datasets
+                    {this.props.label}
                     <select
                         value={this.state.selectedData}
                         onChange={this.handleChange}
                         id="dataset1"
                         name="selectedData"
                     >
-                        <option value="">-- Please, select a dataset --</option>
+                        <option value="">{this.props.text}</option>
                         {selectorItems}
                     </select>
                 </label>

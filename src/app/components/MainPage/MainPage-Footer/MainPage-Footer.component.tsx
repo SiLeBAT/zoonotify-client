@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import styled from '@emotion/styled';
-import { LastUpdate } from './LastUpdate';
+import { useTranslation } from 'react-i18next';
+import { LastUpdate } from './LastUpdate.component';
 import { surfaceColor, primaryColor, bfrBlueGrey, bfrDarkBlueGrey } from '../../Style/Style-MainTheme.component';
 
 const footerStyle = css`
@@ -14,10 +14,9 @@ const footerStyle = css`
 const footerContentStyle = css`
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    
+    flex-wrap: wrap;  
 `
-const Span = styled.span`
+const spanStyle = css`
     padding: 10px;
     min-width: 300px;
     display: flex;
@@ -33,15 +32,16 @@ const Span = styled.span`
 
 
 export function MainPageFooterComponent(): JSX.Element {
-                   return (
-                        <footer css={footerStyle}>
-                            <div css={footerContentStyle}>
-                                <Span>BfR - Bundesinstitut für Risikobewertung</Span>
-                                <Span>FAQ</Span>
-                                <Span>API-docs</Span>
-                                <Span>Datenschutzerklärung</Span>
-                            </div>
-                            <LastUpdate />
-                        </footer>
-                    );
-                }
+    const { t } = useTranslation(['MainPage-Footer']);
+    return (
+        <footer css={footerStyle}>
+            <div css={footerContentStyle}>
+                <span css={spanStyle}>{t('Content.Bfr', 'BfR - Bundesinstitut für Risikobewertung')}</span>
+                <span css={spanStyle}>{t('Content.Faq', 'FAQ')}</span>
+                <span css={spanStyle}>{t('Content.Api', 'API-docs')}</span>
+                <span css={spanStyle}>{t('Content.PrivacyPolicy', 'Datenschutzerklärung')}</span>
+            </div>
+            <LastUpdate />
+        </footer>
+    );
+}
