@@ -18,12 +18,15 @@ export const bfrMintgreen = 'rgb(52, 172, 159)'; // #34ac9f
 export const bfrRed = 'rgb(254, 0, 0)'; // #fe0000
 
 export const primaryColor = bfrBlue;
-export const secondaryColor = bfrOcre;
+export const secondaryColor = bfrLightgrey;
+export const tertiaryColor = bfrDarkBlueGrey;
+export const hoverColor = bfrBlueGrey;
 export const backgroundColor = bfrWhite;
 export const surfaceColor = bfrLightgrey;
 export const errorColor = bfrRed;
 export const onPrimaryColor = bfrWhite;
-export const onSecondaryColor = bfrBlack;
+export const onSecondaryColor = bfrBlue;
+export const onTertiaryColor = bfrBlueGrey;
 export const onBackgroundColor = bfrBlack;
 export const onSurfaceColor = bfrBlack;
 export const onErrorColor = bfrBlack;
