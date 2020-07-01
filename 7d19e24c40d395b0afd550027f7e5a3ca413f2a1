@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dad09364_6c70d5e0",
+        "filename": "src/app/index.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1015828
+      },
+      "writtenOn": "2020-07-01T14:35:56Z",
+      "side": 1,
+      "message": "- I would rename the index.tsx to App.tsx. This is your main container component.\n- MainPageLayoutComponent \u003d\u003e further discussion",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "7d19e24c40d395b0afd550027f7e5a3ca413f2a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
