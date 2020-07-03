@@ -22,6 +22,30 @@
       "revId": "7d19e24c40d395b0afd550027f7e5a3ca413f2a1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed191e8b_f5ad0a39",
+        "filename": "src/app/index.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1017946
+      },
+      "writtenOn": "2020-07-03T15:20:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dad09364_6c70d5e0",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "7d19e24c40d395b0afd550027f7e5a3ca413f2a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
