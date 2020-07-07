@@ -1,13 +1,12 @@
 import React, { Suspense } from 'react';
 import * as ReactDOM from 'react-dom';
-import { MainPageLayoutComponent } from "./MainPage/MainPage-Layout.component";
-import {environment} from '../environment';
+import { MainLayoutComponent } from "./Main/Main-Layout.component";
 import '../i18n';
 
 
 ReactDOM.render(
     <Suspense fallback={(<div>Loading</div>)}>
-        <MainPageLayoutComponent name={environment.appName} />
+        <MainLayoutComponent />
     </Suspense>,
     document.querySelector("#application")
 );

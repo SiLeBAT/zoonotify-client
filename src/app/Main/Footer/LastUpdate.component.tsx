@@ -2,12 +2,12 @@
 import { css, jsx } from '@emotion/core';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
-import { onTertiaryColor, tertiaryColor } from '../../Style/Style-MainTheme.component';
+import { onTertiaryColor, tertiaryColor } from '../../Shared/Style/Style-MainTheme.component';
 import { environment } from '../../../environment';
 
 
 const footerDateStyle = css`
-    font-size: 12px;
+    font-size: 0.75rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,9 +15,10 @@ const footerDateStyle = css`
     background-color: ${tertiaryColor};
 `
 
+
 export function LastUpdate(): JSX.Element  {
     const {lastChange} = environment; 
-    const { t } = useTranslation(['MainPage-Footer']);
+    const { t } = useTranslation(['Footer']);
     const dateLayout = t('Date.Layout');
     return (
         <div css={footerDateStyle}>
