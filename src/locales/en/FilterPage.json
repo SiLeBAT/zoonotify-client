@@ -1,0 +1,14 @@
+{
+    "Content": {
+        "Title": "Create query",
+        "Subtitle": "Filter settings",
+        "MainText": "To restrict your analysis to a subset of the data, please choose among the attributes."
+    },
+    "Filter": {
+        "SelectorLable": "Years"
+    },
+    "Buttons": {
+        "Submit": "Submit",
+        "Delete": "Delete all filter"
+    }
+}

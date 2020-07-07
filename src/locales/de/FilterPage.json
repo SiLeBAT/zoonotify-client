@@ -1,0 +1,14 @@
+{
+    "Content": {
+        "Title": "Abfrage erstellen",
+        "Subtitle": "Filtereinstellungen",
+        "MainText": "Um Ihre Analyse auf eine Teilmenge der Daten zu beschränken, wählen Sie bitte unter den Attributen."
+    },
+    "Filter": {
+        "SelectorLable": "Jahre"
+    },
+    "Buttons": {
+        "Submit": "Ergbenisse anzeigen",
+        "Delete": "Alle Filter löschen"
+    }
+}
