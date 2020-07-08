@@ -5,10 +5,10 @@ import { hoverColor } from '../../Shared/Style/Style-MainTheme.component';
 
 
 const footerContentStyle = css`
-    width: 100%;
     display: flex;
     flex-wrap: wrap;  
     justify-content: space-between;
+    flex-grow: 1;
 `
 const linkStyle = css`
     padding: 0.75em;
