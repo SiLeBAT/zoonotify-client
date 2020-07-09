@@ -6,7 +6,6 @@ import { surfaceColor, primaryColor } from '../../Shared/Style/Style-MainTheme.c
 
 
 const footerStyle = css`
-    color: ${primaryColor};
     background-color: ${surfaceColor};
     width: 100%;
     overflow: hidden;

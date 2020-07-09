@@ -9,7 +9,7 @@
     "build": "./node_modules/.bin/webpack && npm run cp:all",
     "prebuild": "npm run clean",
     "clean": "npx rimraf public/*",
-    "serve:pipe": "npm run build && ./node_modules/.bin/http-server -P http://localhost:3000 -c-1 public",
+    "serve:pipe": "npm run build && ./node_modules/.bin/http-server -P http://localhost:4000 -c-1 public",
     "cp:html": "npx copyfiles -u 1 ./src/**/*.html ./public",
     "cp:assets": "npx copyfiles -u 1 ./src/assets/* ./public",
     "cp:localesDe": "npx copyfiles -u 1 -E ./src/locales/de/* ./public",
