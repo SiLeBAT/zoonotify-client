@@ -8,7 +8,9 @@ import { primaryColor, onPrimaryColor } from '../../Shared/Style/Style-MainTheme
 const headerStyle = css`
     width: 100%;
     display: flex;
-    flex-direction: column;  
+    flex-direction: column; 
+    position: fixed; 
+    z-index: 100;
 `
 const mainHeaderStyle = css`
     padding: 0.5em 0 0.5em 1em;
