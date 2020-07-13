@@ -7,10 +7,7 @@ const textStyle = css`
     display: flex;
     flex: 0 1 auto;
     flex-direction: column;
-    justify-content: space-between;
-    align-self: flex-start;
     hyphens: auto; 
-    text-align: justify
 `
 const appNameStyle = css`
     color: ${primaryColor};
@@ -25,8 +22,9 @@ const appSubtitleStyle = css`
     font-weight: normal;
     text-align: center
 `
-const normalTextStyle = css`
+const contentTextStyle = css`
     line-height: 1.6;
+    text-align: center
 `
 
 
@@ -37,7 +35,7 @@ export function FilterPageContentComponent(): JSX.Element {
         <div css={textStyle}>
             <h1 css={appNameStyle}>{t('Content.Title')}</h1>
             <h2 css={appSubtitleStyle}>{t('Content.Subtitle')}</h2>
-            <p css={normalTextStyle}>
+            <p css={contentTextStyle}>
                 {t('Content.MainText')}
             </p>
         </div> 
