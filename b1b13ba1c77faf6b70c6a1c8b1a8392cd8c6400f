@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5760d600_9209ca64",
+        "filename": "src/app/Main/Header/Header.component.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-07-14T12:25:11Z",
+      "side": 1,
+      "message": "Spend some time looking for a work around.\nPosition: sticky is a relatively new feature - the browsers our Users are using may not support it.  If you can\u0027t find another solution, we\u0027ll discuss it in the Stand-up",
+      "revId": "b1b13ba1c77faf6b70c6a1c8b1a8392cd8c6400f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
