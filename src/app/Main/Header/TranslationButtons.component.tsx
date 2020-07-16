@@ -1,33 +1,66 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import styled from '@emotion/styled';
+import { useState } from 'react';
 import { changeAppLanguage } from '../../Core/localization.service';
-import { backgroundColor } from '../../Shared/Style/Style-MainTheme.component';
 
-
-const buttonStyle = css`
-    padding: 0.5em;  
-`
-const flagStyle = css`
-    margin: 0.5em;
-    padding: 0;
-    cursor: pointer;
-    background-color: ${backgroundColor};
-    border: none;
+const buttonAreaStyle = css`
+    padding: 0.5em; 
 `
 
-function countryToFlag(isoCode: string): string {
-    return typeof String.fromCodePoint !== 'undefined'
-      ? isoCode
-          .toUpperCase()
-          .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
-      : isoCode;
+type StyledComponentProps = {
+    bgImage: string
 }
 
+const Button = styled('button')`
+    margin: 0.2em;
+    padding: 0;
+    width: 16px;
+    height: 10.5px;
+    cursor: pointer;
+    border: none;
+    background-image: ${(props: StyledComponentProps) => props.bgImage}; 
+    background-repeat: no-repeat;
+    background-size: contain;
+    &::-moz-focus-inner {
+        border: none;
+    }
+    &:focus {
+        outline: none;
+    }
+    &:hover {
+        transform: scale(1.2, 1.2);
+    }
+`
+const selectedFlagStyle = css`
+    width: 20px;
+    height: 13.1px;
+    &:hover {
+        transform: none;
+    }
+`
+
 export function TranslationButtonsComponent(): JSX.Element {
+    const [selectedFlag, setSelectedFlag] = useState(true);
+
     return (
-        <div css={buttonStyle}>
-            <button type='button' onClick={()=>changeAppLanguage('de')} css={flagStyle}>{countryToFlag('DE')}</button>
-            <button type='button' onClick={()=>changeAppLanguage('en')} css={flagStyle}>{countryToFlag('GB')}</button>
+        <div css={buttonAreaStyle}>
+            <Button type='button' css={selectedFlag ? selectedFlagStyle : 'none'} bgImage="url('/assets/germany_flag_icon.png')"
+                onClick={() => {
+                    changeAppLanguage('de'); 
+                    setSelectedFlag(true)
+                }} 
+            >
+                &nbsp;
+            </Button>
+            <Button type='button' css={selectedFlag ? 'none' : selectedFlagStyle} bgImage="url('/assets/united_kingdom_flag_icon.png')"
+                onClick={() => {
+                    changeAppLanguage('en'); 
+                    setSelectedFlag(false)
+                }} 
+            >
+                &nbsp;
+            </Button>
         </div>
     );
 }
