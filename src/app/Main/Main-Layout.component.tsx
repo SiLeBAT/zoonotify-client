@@ -14,6 +14,7 @@ const wrapperStyle = css`
 `
 const bodyStyle = css`
     flex: 1 0 auto;
+    margin-top: 4rem; 
 `
 const footerStyle = css`
     flex: 0 1 auto;
