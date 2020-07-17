@@ -30,6 +30,9 @@ const linkStyle = css`
     margin: 0 auto;
     text-decoration: none;
     color: inherit;
+    &:focus {
+        outline: none;
+    }
 `
 
 
@@ -37,7 +40,7 @@ export function FooterLinksComponent(): JSX.Element {
     const { t } = useTranslation(['Footer']);
     return (
         <ul css={footerContentStyle}>
-            <li css={footerElementStyle}>{t('Content.Bfr')}</li>
+            <li css={footerElementStyle}><a href="https://www.bfr.bund.de/de/start.html" target="_blank" rel='noreferrer' css={linkStyle}>{t('Content.Bfr')}</a></li>
             <li css={footerElementStyle}>{t('Content.Faq')}</li>
             <li css={footerElementStyle}><a href="/api-docs/v1/" target="_blank" css={linkStyle}>{t('Content.Api')}</a></li>
             <li css={footerElementStyle}>{t('Content.PrivacyPolicy')}</li>
