@@ -18,7 +18,6 @@ const footerElementStyle = css`
     display: flex;
     flex-grow: 1;
     justify-content: center;
-    align-items: center;
     cursor: pointer;
     transition: 0.3s;
     color: ${primaryColor};
@@ -27,7 +26,9 @@ const footerElementStyle = css`
     }
 `
 const linkStyle = css`
-    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
     text-decoration: none;
     color: inherit;
     &:focus {
@@ -41,6 +42,7 @@ export function FooterLinksComponent(): JSX.Element {
     return (
         <ul css={footerContentStyle}>
             <li css={footerElementStyle}><a href="https://www.bfr.bund.de/de/start.html" target="_blank" rel='noreferrer' css={linkStyle}>{t('Content.Bfr')}</a></li>
+            <li css={footerElementStyle}><a href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/" target="_blank" rel='noreferrer' css={linkStyle}>FoodRisk-Labs</a></li>
             <li css={footerElementStyle}>{t('Content.Faq')}</li>
             <li css={footerElementStyle}><a href="/api-docs/v1/" target="_blank" css={linkStyle}>{t('Content.Api')}</a></li>
             <li css={footerElementStyle}>{t('Content.PrivacyPolicy')}</li>
