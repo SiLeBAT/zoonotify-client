@@ -18,6 +18,7 @@ const footerElementStyle = css`
     display: flex;
     flex-grow: 1;
     justify-content: center;
+    align-self: center;
     cursor: pointer;
     transition: 0.3s;
     color: ${primaryColor};
@@ -29,6 +30,7 @@ const linkStyle = css`
     width: 100%;
     display: flex;
     justify-content: center;
+    align-self: center;
     text-decoration: none;
     color: inherit;
     &:focus {
@@ -46,6 +48,7 @@ export function FooterLinksComponent(): JSX.Element {
             <li css={footerElementStyle}>{t('Content.Faq')}</li>
             <li css={footerElementStyle}><a href="/api-docs/v1/" target="_blank" css={linkStyle}>{t('Content.Api')}</a></li>
             <li css={footerElementStyle}>{t('Content.PrivacyPolicy')}</li>
+            <li css={footerElementStyle}><a href = "mailto: dominic.toelle@bfr.bund.de" css={linkStyle}>{t('Content.Mail')}</a></li>
         </ul>
     );
 }
