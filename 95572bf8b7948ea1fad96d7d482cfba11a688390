@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "820197df_0a6c7e25",
+        "filename": "src/app/Main/Body/FilterPage/DataPage-DataDownload.component.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-07-23T09:29:25Z",
+      "side": 1,
+      "message": "This is a function not a component. For the time being just move the function into the DataComponent.\nAlternatively turn it into a proper Component (i.e. Move the Button jsx here) and pass the data to be downloaded as a prop.",
+      "revId": "95572bf8b7948ea1fad96d7d482cfba11a688390",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7705295_f42abd22",
+        "filename": "src/app/Main/Body/FilterPage/DataPage-DataDownload.component.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-07-23T09:29:25Z",
+      "side": 1,
+      "message": "Surely \u0027never\u0027 is not the correct type here.",
+      "revId": "95572bf8b7948ea1fad96d7d482cfba11a688390",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "348116bf_1ee9e9ef",
+        "filename": "src/app/Main/Body/FilterPage/DataPage-DataDownload.component.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-07-23T09:29:25Z",
+      "side": 1,
+      "message": "You\u0027re creating an \u003ca\u003e attribute on the fly to do the download and then programatically clock it.  Seems very complicated.  Is there really no other way to implement this?",
+      "revId": "95572bf8b7948ea1fad96d7d482cfba11a688390",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
