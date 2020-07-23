@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+/** @jsx jsx */
+import { useState, useEffect } from 'react';
+import { css, jsx } from '@emotion/core';
+import { Button } from '@material-ui/core';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,8 +11,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { primaryColor } from '../../../Shared/Style/Style-MainTheme.component';
+import { objectToCsv } from './DataPage-DataDownload.component';
 
 const BASE_URL = '/v1/mockdata'
+
+const tableStyle = css`
+  height: 50vh;
+  overflow: scroll;
+`
 
 const useStyles = makeStyles({
   table: {
@@ -53,28 +62,39 @@ export function DataPageDataContentComponent(): JSX.Element {
     useEffect(():void => {
       getData();
     }, []);
-
+ 
     const keyUniqueId = 'uniqueId';
+
     return (
-        <TableContainer component={Paper}>
-        <Table stickyHeader className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-                {keyValues.map((keyValue:string) => (
-                    <StyledTableCell>{keyValue}</StyledTableCell>
-                ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {posts.map((post) => (
-                <TableRow key={post[keyUniqueId]}>
-                    {keyValues.map((keyValue:string) => (
-                        <TableCell className={classes.tableCell} component="th" scope="row">{post[keyValue]}</TableCell>
-                    ))}
-                </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <div>
+        
+        <Button variant="contained" color="primary" onClick={() => {
+            objectToCsv(posts); 
+        }} >
+            Download CSV
+        </Button>
+        <TableContainer component={Paper} css={tableStyle}>
+          <Table stickyHeader className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                  {keyValues.map((keyValue:string) => (
+                      <StyledTableCell>{keyValue}</StyledTableCell>
+                  ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {posts.map((post) => (
+                  <TableRow key={post[keyUniqueId]}>
+                      {keyValues.map((keyValue:string) => (
+                          <TableCell className={classes.tableCell} component="th" scope="row">{post[keyValue]}</TableCell>
+                      ))}
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+
+      
     );
 }
