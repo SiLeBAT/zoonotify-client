@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { FilterPageContentComponent as TextContent } from './FilterPage-Content.component';
-import { DataPageDataContentComponent as DataContent } from './DataPage-DataContent.component';
+import { DataPageDataContentComponent as DataContent } from './DataPage.component';
 import { surfaceColor, shadowPalette } from '../../../Shared/Style/Style-MainTheme.component';
 
 
