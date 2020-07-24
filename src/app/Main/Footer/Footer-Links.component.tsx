@@ -1,7 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 import { primaryColor, hoverColor } from '../../Shared/Style/Style-MainTheme.component';
+
 
 
 const footerContentStyle = css`
@@ -47,8 +49,13 @@ export function FooterLinksComponent(): JSX.Element {
             <li css={footerElementStyle}><a href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/" target="_blank" rel='noreferrer' css={linkStyle}>FoodRisk-Labs</a></li>
             <li css={footerElementStyle}>{t('Content.Faq')}</li>
             <li css={footerElementStyle}><a href="/api-docs/v1/" target="_blank" css={linkStyle}>{t('Content.Api')}</a></li>
-            <li css={footerElementStyle}>{t('Content.PrivacyPolicy')}</li>
+            <li css={footerElementStyle}>
+                <NavLink to="/dataprotectiondeclaration" css={linkStyle}>
+                    {t('Content.DataProtection')}
+                </NavLink>
+            </li>
             <li css={footerElementStyle}><a href = "mailto: dominic.toelle@bfr.bund.de" css={linkStyle}>{t('Content.Mail')}</a></li>
         </ul>
     );
 }
+

@@ -5,7 +5,7 @@ import {
   } from "react-router-dom";
 import { FilterPageLayoutComponent as FilterPage } from "./FilterPage/FilterPage-Layout.component";
 import { HomePageLayoutComponent as HomePage } from "./HomePage/HomePage.component";
-
+import { DataProtectionPageComponent as DataProtection } from "./DataProtectionPage/DataProtectionPage.component";
 
 
 const PageNotFound = (): JSX.Element => (
@@ -20,6 +20,7 @@ export function BodyRouterComponent(): JSX.Element {
         <Switch>
             <Route exact path="/" component={HomePage}/>
             <Route path="/filter" component={FilterPage}/>
+            <Route path="/dataprotectiondeclaration" component={DataProtection}/>
             <Route component={PageNotFound}/>
         </Switch>    
     );
