@@ -68,7 +68,11 @@
                 "Text4": "Die Löschung der Logfiles erfolgt nach 14 Tagen."
             },
             "32": {
+<<<<<<< HEAD
                 "Heading": "3.32 Kontaktaufnahme per E-Mail ",
+=======
+                "Heading": "3.2 Kontaktaufnahme per E-Mail ",
+>>>>>>>  User I would like to reach the Datenschutzerklärung from the Application footer
                 "Text1": "Die Kontaktaufnahme zum ZooNotify-Team kann per E-Mail über die Funktions-E-Mail-Adresse ",
                 "LinkMail": "dominic.toelle@bfr.bund.de",
                 "Text2": " erfolgen. Soweit Sie diesen Kontaktweg verwenden, werden die von Ihnen übermittelten Daten (z.B.: Name, Vorname, Anschrift o.ä.), zumindest jedoch die E-Mail-Adresse, sowie die in der E-Mail enthaltenen Informationen (inklusive ggf. von Ihnen übermittelter personenbezogener Daten) zum Zwecke der Kontaktaufnahme und Bearbeitung Ihres Anliegens verarbeitet. Wir weisen Sie darauf hin, dass die Verarbeitung der Daten auf Grundlage von Artikel 6 Absatz 1 lit. e DS-GVO in Verbindung mit §3 BDSG erfolgt. Eine Verarbeitung der von Ihnen übermittelten personenbezogenen Daten ist zum Zweck der Bearbeitung Ihres Anliegens erforderlich. "
