@@ -54,8 +54,7 @@ export function FooterLinksComponent(): JSX.Element {
                     {t('Content.DataProtection')}
                 </NavLink>
             </li>
-            <li css={footerElementStyle}><a href = "mailto: dominic.toelle@bfr.bund.de" css={linkStyle}>{t('Content.Mail')}</a></li>
+            <li css={footerElementStyle}><a href = {`mailto: dominic.toelle@bfr.bund.de?subject=ZooNotify-Problem:&body=${t('Content.MailText')}`} css={linkStyle}>{t('Content.Mail')}</a></li>
         </ul>
     );
 }
-
