@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847e4d0f_f0b76941",
+        "filename": "src/app/Main/Body/FilterPage/DataInterface.ts",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-07-29T11:17:03Z",
+      "side": 1,
+      "message": "Please rename the file to Isolat.model.ts",
+      "revId": "e25d983afd7f4318298c5aa7d22077b1cd9ff3f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "504f22c1_c732fe14",
+        "filename": "src/app/Main/Body/FilterPage/DataPage.component.tsx",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-07-29T11:17:03Z",
+      "side": 1,
+      "message": "See if this can be of help: https://www.npmjs.com/package/react-download-link",
+      "revId": "e25d983afd7f4318298c5aa7d22077b1cd9ff3f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
