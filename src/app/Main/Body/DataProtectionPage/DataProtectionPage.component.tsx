@@ -5,12 +5,13 @@ import { primaryColor } from '../../../Shared/Style/Style-MainTheme.component';
 
 const dataProtectionStyle = css`
     text-align: justify;
-    margin-left: 30vw;
-    margin-right: 30vw;
-    padding: 8px 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px 75px;
     overflow: auto;
-    max-width: 1024px;
+    max-width: 90ch;
     min-width: 241px;
+    line-height: 1.6;
 `
 const dataProtectionMainHeaderStyle = css`
     margin-top: 3%;
@@ -27,9 +28,6 @@ const dataProtectionHeaderStyle = css`
 const dataProtectionSubheaderStyle = css`
     font-weight: bold;
     text-align: center;
-`
-const dataProtectionItemStyle = css`
-    padding: 0 25% * 0.5;
 `
 const dataProtectionFooterStyle = css`
     border-top: 1px solid ${primaryColor};
@@ -54,7 +52,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h3 css={dataProtectionHeaderStyle}>
                 {t('Chapter.1.Heading')}
             </h3>
-            <div css={dataProtectionItemStyle}>
+            <div>
                 <p>{t('Chapter.1.Text1')}</p>
                 <table>
                     <tbody>
@@ -84,7 +82,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h3 css={dataProtectionHeaderStyle}>
                 {t('Chapter.2.Heading')}
             </h3>
-            <div css={dataProtectionItemStyle}>
+            <div>
                 <p>{t('Chapter.2.Text1')}<a
                         href="https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:32016R0679&qid=1527147390147&from=EN"
                         target="_blank" rel='noreferrer' >{t('Chapter.2.LinkDSGVO')}</a>{t('Chapter.2.Text2')}
@@ -118,7 +116,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h4 css={dataProtectionSubheaderStyle}>
                 {t('Chapter.3.31.Heading')}
             </h4>
-            <div css={dataProtectionItemStyle}>
+            <div>
                 <p>
                     {t('Chapter.3.31.Text1')}
                 </p>
@@ -149,7 +147,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h4 css={dataProtectionSubheaderStyle}>
                 {t('Chapter.3.32.Heading')}
             </h4>
-            <div css={dataProtectionItemStyle}>
+            <div>
                 <p>
                     {t('Chapter.3.32.Text1')} <a href="mailto:dominic.toelle@bfr.bund.de">{t('Chapter.3.32.LinkMail')}</a>
                     {t('Chapter.3.32.Text2')}
@@ -159,7 +157,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h3 css={dataProtectionHeaderStyle}>
                 {t('Chapter.4.Heading')}
             </h3>
-            <div css={dataProtectionItemStyle}>
+            <div>
                 <p>
                     {t('Chapter.4.Text')}
                 </p>
@@ -168,7 +166,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h3 css={dataProtectionHeaderStyle}>
                 {t('Chapter.5.Heading')}
             </h3>
-            <div css={dataProtectionItemStyle}>
+            <div>
                 <p>
                     {t('Chapter.5.Text1')}
                 </p>
@@ -198,11 +196,10 @@ export function DataProtectionPageComponent(): JSX.Element {
                 </p>
             </div>
 
-
             <h3 css={dataProtectionHeaderStyle}>
                 {t('Chapter.6.Heading')}
             </h3>
-            <div css={dataProtectionItemStyle}>
+            <div>
                 <p>
                     {t('Chapter.6.Text')}
                 </p>
