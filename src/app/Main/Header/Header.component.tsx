@@ -13,21 +13,21 @@ const headerStyle = css`
     z-index: 100;
 `
 const mainHeaderStyle = css`
-    padding: 0.5em 0 0.5em 1em;
+    display: flex;
+    flex-direction: row;
     box-shadow: 0 2px 6px 0 grey;
     background-color: ${primaryColor};
 `
 const appNameStyle = css`
-    padding: 0.5em 0 0.5em 1em;
+    padding: 0.5em 1em 0.5em 1em;
     font-size: 1.2rem;
     text-decoration: none;
     color: ${onPrimaryColor};
+    &:focus {
+        outline: none;
+    }
 `
-const translationHeaderStyle = css`
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-`
+
 
 export function HeaderLayoutComponent(): JSX.Element {
     return (
@@ -36,11 +36,8 @@ export function HeaderLayoutComponent(): JSX.Element {
                 <NavLink to="/" css={appNameStyle}>
                     ZooNotify
                 </NavLink>
-            </div>
-            <div css={translationHeaderStyle}>
-                <TranslationButtons />
+                <TranslationButtons/>
             </div>
         </header>
     );
 }
-

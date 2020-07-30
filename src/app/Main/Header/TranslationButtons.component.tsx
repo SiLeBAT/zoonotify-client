@@ -3,9 +3,13 @@ import { css, jsx } from '@emotion/core';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { changeAppLanguage } from '../../Core/localization.service';
+import { primaryColor } from '../../Shared/Style/Style-MainTheme.component';
+
 
 const buttonAreaStyle = css`
-    padding: 0.5em; 
+    margin-left: 2em;
+    display: flex;
+    align-items: center;
 `
 
 type StyledComponentProps = {
@@ -15,10 +19,11 @@ type StyledComponentProps = {
 const Button = styled('button')`
     margin: 0.2em;
     padding: 0;
-    width: 16px;
-    height: 10.5px;
+    width: 14px;
+    height: 9.19px;
     cursor: pointer;
     border: none;
+    background-color: ${primaryColor};
     background-image: ${(props: StyledComponentProps) => props.bgImage}; 
     background-repeat: no-repeat;
     background-size: contain;
@@ -33,8 +38,8 @@ const Button = styled('button')`
     }
 `
 const selectedFlagStyle = css`
-    width: 20px;
-    height: 13.1px;
+    width: 18px;
+    height: 11.79px;
     &:hover {
         transform: none;
     }
