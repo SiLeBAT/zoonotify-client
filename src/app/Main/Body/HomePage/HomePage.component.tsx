@@ -1,7 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { NavLink } from "react-router-dom";
-import { Button } from '@material-ui/core';
 import { HomePageContentComponent as Content } from './HomePage-Content.component';
 import { surfaceColor, shadowPalette } from '../../../Shared/Style/Style-MainTheme.component';
 
@@ -36,10 +34,6 @@ const logoStyle = css`
     height: auto;
     margin-bottom: 2rem;
 `
-const buttonStyle = css`
-    padding: 3rem;
-`
-
 
 
 export function HomePageLayoutComponent(): JSX.Element {
@@ -49,9 +43,6 @@ export function HomePageLayoutComponent(): JSX.Element {
                 <Content />
                 <div css={boxFooterStyle}>
                     <img src="/assets/bfr_logo.gif" alt="BfR Logo" css={logoStyle}/> 
-                    <NavLink to="/filter" css={buttonStyle}>
-                        <Button variant="contained" color="primary">Start</Button>
-                    </NavLink>
                 </div>
             </div>
         </main>    
