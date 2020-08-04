@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import { useTranslation } from 'react-i18next';
-import { primaryColor } from '../../../Shared/Style/Style-MainTheme.component';
+import { css, jsx } from "@emotion/core";
+import { useTranslation } from "react-i18next";
+import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 
 const textStyle = css`
     display: flex;
@@ -9,35 +9,34 @@ const textStyle = css`
     flex-direction: column;
     justify-content: space-between;
     align-self: flex-start;
-    hyphens: auto; 
-    text-align: justify
-`
+    hyphens: auto;
+    text-align: justify;
+    box-sizing: border-box;
+`;
 const appNameStyle = css`
-    color: ${primaryColor};
     font-size: 3rem;
     align-self: center;
     font-weight: normal;
-`
-const appSubtitleStyle = css`
     color: ${primaryColor};
+`;
+const appSubtitleStyle = css`
     font-size: 1rem;
     align-self: center;
     font-weight: normal;
-    text-align: center
-`
+    text-align: center;
+    color: ${primaryColor};
+`;
 const normalTextStyle = css`
     line-height: 1.6;
-`
+`;
 
 export function HomePageContentComponent(): JSX.Element {
-    const { t } = useTranslation(['HomePage-Content']);
+    const { t } = useTranslation(["HomePage-Content"]);
     return (
         <div css={textStyle}>
             <h1 css={appNameStyle}>ZooNotify</h1>
-            <h2 css={appSubtitleStyle}> {t('Subtitle')}</h2>
-            <p css={normalTextStyle}>
-                {t('MainText')}
-            </p>
-        </div>   
-    )
+            <h2 css={appSubtitleStyle}> {t("Subtitle")}</h2>
+            <p css={normalTextStyle}>{t("MainText")}</p>
+        </div>
+    );
 }

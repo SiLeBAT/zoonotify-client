@@ -1,19 +1,20 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import { FooterLinksComponent as Links } from './Footer-Links.component';
-import { LastUpdate } from './LastUpdate.component';
-import { surfaceColor, primaryColor } from '../../Shared/Style/Style-MainTheme.component';
-
+import { css, jsx } from "@emotion/core";
+import { FooterLinksComponent as Links } from "./Footer-Links.component";
+import { LastUpdate } from "./LastUpdate.component";
+import {
+    surfaceColor,
+    primaryColor,
+} from "../../Shared/Style/Style-MainTheme.component";
 
 const footerStyle = css`
-    background-color: ${surfaceColor};
     width: 100%;
-    overflow: hidden;
-    border-top: 2px solid ${primaryColor};
     display: flex;
     justify-content: space-between;
-`
-
+    box-sizing: border-box;
+    background-color: ${surfaceColor};
+    border-top: 2px solid ${primaryColor};
+`;
 
 export function FooterLayoutComponent(): JSX.Element {
     return (

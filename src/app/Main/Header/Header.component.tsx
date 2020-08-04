@@ -1,23 +1,25 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from "@emotion/core";
 import { NavLink } from "react-router-dom";
-import { TranslationButtonsComponent as TranslationButtons } from './TranslationButtons.component';
-import { primaryColor, onPrimaryColor } from '../../Shared/Style/Style-MainTheme.component';
-
+import { TranslationButtonsComponent as TranslationButtons } from "./TranslationButtons.component";
+import {
+    primaryColor,
+    onPrimaryColor,
+} from "../../Shared/Style/Style-MainTheme.component";
 
 const headerStyle = css`
     width: 100%;
     display: flex;
-    flex-direction: column; 
-    position: fixed; 
-    z-index: 100;
-`
+    flex-direction: column;
+    box-sizing: border-box;
+`;
 const mainHeaderStyle = css`
     display: flex;
     flex-direction: row;
+    box-sizing: inherit;
     box-shadow: 0 2px 6px 0 grey;
     background-color: ${primaryColor};
-`
+`;
 const appNameStyle = css`
     padding: 0.5em 1em 0.5em 1em;
     font-size: 1.2rem;
@@ -26,8 +28,7 @@ const appNameStyle = css`
     &:focus {
         outline: none;
     }
-`
-
+`;
 
 export function HeaderLayoutComponent(): JSX.Element {
     return (
@@ -36,7 +37,7 @@ export function HeaderLayoutComponent(): JSX.Element {
                 <NavLink to="/" css={appNameStyle}>
                     ZooNotify
                 </NavLink>
-                <TranslationButtons/>
+                <TranslationButtons />
             </div>
         </header>
     );
