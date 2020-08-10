@@ -10,5 +10,21 @@
     "Buttons": {
         "Submit": "Ergbenisse anzeigen",
         "Delete": "Alle Filter löschen"
+    },
+    "Drawer": {
+        "Title": "Grafikeinstellungen",
+        "Subtitles": {
+            "Filter": "Filter",
+            "Graph": "Diagrammachsen"
+        },
+        "Selector": "--Bitte auswählen--",
+        "Filters": { 
+            "Pathogen": "Erreger",
+            "Serovar": "Serovar"
+        },
+        "Graphs": {
+            "Row": "Reihen",
+            "Column": "Spalten"
+        }
     }
 }

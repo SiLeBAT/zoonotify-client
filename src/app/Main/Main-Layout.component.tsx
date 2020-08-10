@@ -23,8 +23,8 @@ const footerStyle = css`
 `;
 const headerStyle = css`
     width: 100%;
-    height: 42px;
     flex: 0 0 auto;
+    z-index: 100;
     box-sizing: border-box;
 `;
 const contentWrapperStyle = css`
