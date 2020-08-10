@@ -49,6 +49,17 @@ const DownloadButton = withStyles({
     },
 })(Button);
 
+function getFormattedTime(): string {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = today.getMonth() + 1;
+    const d = today.getDate();
+    const h = today.getHours();
+    const mi = today.getMinutes();
+    const s = today.getSeconds();
+    return `${y}-${m}-${d}T${h}${mi}${s}`;
+}
+
 interface ObjectToCsvProps {
     data: DBentry[];
     keyValues: DBtype[];
@@ -61,7 +72,9 @@ function objectToCsv(props: ObjectToCsvProps): string {
 
     props.data.forEach((row: DBentry) => {
         const values: string[] = headers.map((header: DBtype) => {
-            const escaped: string = `${row[header]}`.replace(/"/g, '\\"');
+            const escaped: string = `${row[header]}`
+                .replace(/"/g, '\\"')
+                .replace("undefined", "");
             return `"${escaped}"`;
         });
         csvRows.push(values.join(","));
@@ -87,12 +100,13 @@ export function ExportDataComponent(props: ExportProps): JSX.Element {
             {t("Export")}
         </div>
     );
+    const znFilename = `ZooNotify_${getFormattedTime()}.csv`;
     return (
         <div css={dataStyle}>
             <DownloadButton size="small" css={ButtonStyle}>
                 <DownloadLink
                     label={buttonLabel}
-                    filename="ZooNotify_download.csv"
+                    filename={znFilename}
                     exportFile={() => objectToCsv({ data, keyValues })}
                     css={ButtonLinkStyle}
                 />

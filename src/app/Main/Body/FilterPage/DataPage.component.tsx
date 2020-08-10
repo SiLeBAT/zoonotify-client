@@ -12,9 +12,7 @@ interface DataPageProps {
     keyValues: DBtype[];
 }
 
-export function DataPageComponent(
-    props: DataPageProps
-): JSX.Element {
+export function DataPageComponent(props: DataPageProps): JSX.Element {
     return (
         <div css={dataStyle}>
             <DataTable posts={props.data} keyValues={props.keyValues} />
