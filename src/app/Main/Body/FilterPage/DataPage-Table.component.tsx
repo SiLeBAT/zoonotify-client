@@ -14,7 +14,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
-import { DBentry, DBtype } from "./Isolat.model";
+import { DBentry, DBtype } from "../../../Shared/Isolat.model";
 
 const tableStyle = css`
     height: 750px;

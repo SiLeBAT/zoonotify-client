@@ -1,19 +1,31 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import { css, jsx, SerializedStyles } from "@emotion/core";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ExportDataComponent } from "./Header-Export.component";
 import { TranslationButtonsComponent as TranslationButtons } from "./TranslationButtons.component";
 import {
     primaryColor,
     onPrimaryColor,
+    secondaryColor,
+    bfrPrimaryPalette,
 } from "../../Shared/Style/Style-MainTheme.component";
+import { DBentry, DBtype } from "../../Shared/Isolat.model";
 
 const headerStyle = css`
     width: 100%;
     display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+`;
+
+const mainHeaderStyle = css`
+    width: 100%;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     box-sizing: border-box;
     box-shadow: 0 2px 6px 0 grey;
     background-color: ${primaryColor};
@@ -27,14 +39,18 @@ const appNameStyle = css`
         outline: none;
     }
 `;
-const queryStyle = css`
-    padding: 0.5em 1em 0.5em 1em;
+const queryStyle = (open: boolean): SerializedStyles => css`
     margin-right: 8em;
+    padding: 0.5em 1em 0.5em 1em;
     font-size: 1rem;
     text-decoration: none;
     color: ${onPrimaryColor};
+    background-color: ${open ? `${bfrPrimaryPalette[300]}` : "none"};
     &:focus {
         outline: none;
+    }
+    &:hover {
+        color: ${secondaryColor};
     }
 `;
 const leftHeaderStyle = css`
@@ -43,19 +59,61 @@ const leftHeaderStyle = css`
     justify-content: space-around;
 `;
 
-export function HeaderLayoutComponent(): JSX.Element {
+const subheaderStyle = (open: boolean): SerializedStyles => css`
+    width: 100%;
+    display: ${open ? "flex" : "none"};
+    justify-content: flex-end;
+    align-items: center;
+    box-sizing: border-box;
+    background-color: ${bfrPrimaryPalette[300]};
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px 0 grey;
+`;
+
+interface HeaderProps {
+    data: DBentry[];
+    keyValues: DBtype[];
+}
+
+export function HeaderLayoutComponent(props: HeaderProps): JSX.Element {
+    const [open, setOpen] = React.useState(false);
     const { t } = useTranslation(["Header"]);
+
+    const handleSubheader = (): void => {
+        setOpen(true);
+    };
+    const handleRemoveSubheader = (): void => {
+        setOpen(false);
+    };
+
     return (
         <header css={headerStyle}>
-            <div css={leftHeaderStyle}>
-                <NavLink to="/" css={appNameStyle}>
-                    ZooNotify
+            <div css={mainHeaderStyle}>
+                <div css={leftHeaderStyle}>
+                    <NavLink
+                        to="/"
+                        css={appNameStyle}
+                        onClick={handleRemoveSubheader}
+                    >
+                        ZooNotify
+                    </NavLink>
+                    <TranslationButtons />
+                </div>
+                <NavLink
+                    to="/filter"
+                    onClick={handleSubheader}
+                    css={queryStyle(open)}
+                >
+                    {t("Query")}
                 </NavLink>
-                <TranslationButtons />
             </div>
-            <NavLink to="/filter" css={queryStyle}>
-                {t("Query")}
-            </NavLink>
+
+            <div css={subheaderStyle(open)}>
+                <ExportDataComponent
+                    data={props.data}
+                    keyValues={props.keyValues}
+                />
+            </div>
         </header>
     );
 }

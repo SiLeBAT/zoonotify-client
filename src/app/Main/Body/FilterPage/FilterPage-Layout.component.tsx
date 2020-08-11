@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { FilterPageContentComponent as TextContent } from "./FilterPage-Content.component";
-import { DataPageDataContentComponent as DataContent } from "./DataPage.component";
+import { DataPageComponent as DataContent } from "./DataPage.component";
+import { DBentry, DBtype } from "../../../Shared/Isolat.model";
 
 const mainStyle = css`
     height: 100%;
@@ -17,15 +18,19 @@ const contentStyle = css`
     height: inherit;
     box-sizing: border-box;
 `;
+interface FilterPageProps {
+    data: DBentry[];
+    keyValues: DBtype[];
+}
 
-export function FilterPageLayoutComponent(): JSX.Element {
+export function FilterPageLayoutComponent(props: FilterPageProps): JSX.Element {
     return (
         <main css={mainStyle}>
             <div css={contentStyle}>
                 <div>
                     <TextContent />
                 </div>
-                <DataContent />
+                <DataContent data={props.data} keyValues={props.keyValues} />
             </div>
         </main>
     );
