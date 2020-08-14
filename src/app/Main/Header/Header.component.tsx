@@ -19,7 +19,6 @@ const headerStyle = css`
     flex-direction: column;
     box-sizing: border-box;
 `;
-
 const mainHeaderStyle = css`
     width: 100%;
     display: flex;
@@ -39,6 +38,7 @@ const appNameStyle = css`
         outline: none;
     }
 `;
+
 const queryStyle = (open: boolean): SerializedStyles => css`
     margin-right: 8em;
     padding: 0.5em 1em 0.5em 1em;
