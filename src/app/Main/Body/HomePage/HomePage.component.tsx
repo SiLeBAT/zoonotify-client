@@ -8,7 +8,8 @@ import {
 
 const contentStyle = css`
     height: 100%;
-    padding: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 5rem;
     box-sizing: border-box;
 `;
 const boxStyle = css`
