@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { useContext } from "react";
 import {
     withStyles,
     Theme,
@@ -13,8 +14,15 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import * as _ from "lodash";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { DBentry, DBtype } from "../../../Shared/Isolat.model";
+import { FilterContext } from "../../../Shared/Context/FilterContext";
+import { DataContext } from "../../../Shared/Context/DataContext";
+
+const dataStyle = css`
+    box-sizing: inherit;
+`;
 
 const tableStyle = css`
     height: 750px;
@@ -43,15 +51,20 @@ const StyledTableCell = withStyles((theme: Theme) =>
     })
 )(TableCell);
 
-interface TableProps {
-    posts: DBentry[];
-    keyValues: DBtype[];
-}
-
-export function DataPageTableComponent(props: TableProps): JSX.Element {
+export function DataPageTableComponent(): JSX.Element {
     const classes = useStyles();
+    const { filter } = useContext(FilterContext);
+    const { data } = useContext(DataContext);
+    let filterData = [];
+
+    if (filter.filterValue !== "") {
+        filterData = _.filter(data.data, { Serovar: filter.filterValue });
+    } else {
+        filterData = data.data;
+    }
 
     return (
+        <div css={dataStyle}>
         <TableContainer component={Paper} css={tableStyle}>
             <Table
                 stickyHeader
@@ -60,7 +73,7 @@ export function DataPageTableComponent(props: TableProps): JSX.Element {
             >
                 <TableHead>
                     <TableRow key="headerRow">
-                        {props.keyValues.map((keyValue: DBtype) => (
+                        {data.keyValues.map((keyValue: DBtype) => (
                             <StyledTableCell key={`headerRow_${keyValue}`}>
                                 {keyValue}
                             </StyledTableCell>
@@ -68,11 +81,11 @@ export function DataPageTableComponent(props: TableProps): JSX.Element {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {props.posts.map((post: DBentry) => {
+                    {filterData.map((post: DBentry) => {
                         const id = post.uniqueId;
                         return (
                             <TableRow key={id}>
-                                {props.keyValues.map((keyValue: DBtype) => (
+                                {data.keyValues.map((keyValue: DBtype) => (
                                     <TableCell
                                         key={`${id}_${keyValue}`}
                                         className={classes.tableCell}
@@ -88,5 +101,6 @@ export function DataPageTableComponent(props: TableProps): JSX.Element {
                 </TableBody>
             </Table>
         </TableContainer>
+        </div>
     );
 }
