@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import _ from "lodash";
 import { DBentry, DBtype } from "../Shared/Isolat.model";
+import { DataContext } from "../Shared/Context/DataContext";
 import { MainLayoutComponent } from "./Main-Layout.component";
 import { HeaderLayoutComponent as Header } from "./Header/Header.component";
 import { BodyRouterComponent as Body } from "./Body/Body-Router.component";
@@ -8,9 +10,9 @@ import { FooterLayoutComponent as Footer } from "./Footer/Footer-Layout.componen
 const BASE_URL = "/v1/mockdata";
 
 export function MainContainerComponent(): JSX.Element {
-    const [posts, setPosts] = useState<DBentry[]>([]);
+    const { setData } = useContext(DataContext);
 
-    const keyValues: DBtype[] = [
+    const keyValueProps: DBtype[] = [
         "Erreger",
         "BfR_Isolat_Nr",
         "Projektname",
@@ -62,20 +64,25 @@ export function MainContainerComponent(): JSX.Element {
 
     const getData = async (): Promise<void> => {
         const r: Response = await fetch(BASE_URL);
-        const data: DBentry[] = await r.json();
+        const dataProp: DBentry[] = await r.json();
         let i = 0;
-        for (i; i < data.length; i += 1) {
-            data[i].uniqueId = i + 1;
+        for (i; i < dataProp.length; i += 1) {
+            dataProp[i].uniqueId = i + 1;
         }
-        setPosts(data);
+        const filterValues = _.uniq(_.map(dataProp, "Serovar"));
+        setData({
+            ZNData: dataProp,
+            keyValues: keyValueProps,
+            uniqueValues: filterValues,
+        });
     };
 
     useEffect((): void => {
         getData();
     }, []);
 
-    const headerElement = <Header data={posts} keyValues={keyValues} />;
-    const bodyElement = <Body data={posts} keyValues={keyValues} />;
+    const headerElement = <Header />;
+    const bodyElement = <Body />;
     const footerElement = <Footer />;
 
     return (

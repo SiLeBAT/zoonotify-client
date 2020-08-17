@@ -9,8 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { useTranslation } from "react-i18next";
 import { ClippedDrawer as DrawerMenu } from "./Drawer-Layout.component";
 import { FilterPageContentComponent as TextContent } from "./FilterPage-Content.component";
-import { DataPageComponent as DataContent } from "./DataPage.component";
-import { DBentry, DBtype } from "../../../Shared/Isolat.model";
+import { DataPageTableComponent as DataContent } from "./DataPage-Table.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -82,10 +81,6 @@ const contentStyle = css`
     height: inherit;
     box-sizing: border-box;
 `;
-interface FilterPageProps {
-    data: DBentry[];
-    keyValues: DBtype[];
-}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -108,7 +103,8 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export function FilterPageLayoutComponent(props: FilterPageProps): JSX.Element {
+
+export function FilterPageLayoutComponent(): JSX.Element {
     const [open, setOpen] = React.useState(true);
     const classes = useStyles();
     const { t } = useTranslation(["FilterPage"]);
@@ -146,7 +142,7 @@ export function FilterPageLayoutComponent(props: FilterPageProps): JSX.Element {
                 <div>
                     <TextContent />
                 </div>
-                <DataContent data={props.data} keyValues={props.keyValues} />
+                <DataContent />
             </div>
         </main>
     );

@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { useContext } from "react";
 import DownloadLink from "react-download-link";
 import { Button, withStyles } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
@@ -9,6 +10,7 @@ import {
     secondaryColor,
 } from "../../Shared/Style/Style-MainTheme.component";
 import { DBentry, DBtype } from "../../Shared/Isolat.model";
+import { DataContext } from "../../Shared/Context/DataContext";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -84,15 +86,9 @@ function objectToCsv(props: ObjectToCsvProps): string {
     return csvData;
 }
 
-interface ExportProps {
-    data: DBentry[];
-    keyValues: DBtype[];
-}
-
-export function ExportDataComponent(props: ExportProps): JSX.Element {
+export function ExportDataComponent(): JSX.Element {
+    const { data } = useContext(DataContext);
     const { t } = useTranslation(["Header"]);
-    const { data } = props;
-    const { keyValues } = props;
 
     const buttonLabel = (
         <div css={ButtonLableStyle}>
@@ -101,13 +97,19 @@ export function ExportDataComponent(props: ExportProps): JSX.Element {
         </div>
     );
     const znFilename = `ZooNotify_${getFormattedTime()}.csv`;
+
     return (
         <div css={dataStyle}>
             <DownloadButton size="small" css={ButtonStyle}>
                 <DownloadLink
                     label={buttonLabel}
                     filename={znFilename}
-                    exportFile={() => objectToCsv({ data, keyValues })}
+                    exportFile={() =>
+                        objectToCsv({
+                            data: data.ZNData,
+                            keyValues: data.keyValues,
+                        })
+                    }
                     css={ButtonLinkStyle}
                 />
             </DownloadButton>

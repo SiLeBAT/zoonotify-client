@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import React from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ExportDataComponent } from "./Header-Export.component";
@@ -11,7 +11,6 @@ import {
     secondaryColor,
     bfrPrimaryPalette,
 } from "../../Shared/Style/Style-MainTheme.component";
-import { DBentry, DBtype } from "../../Shared/Isolat.model";
 
 const headerStyle = css`
     width: 100%;
@@ -70,13 +69,8 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
     box-shadow: 0 2px 6px 0 grey;
 `;
 
-interface HeaderProps {
-    data: DBentry[];
-    keyValues: DBtype[];
-}
-
-export function HeaderLayoutComponent(props: HeaderProps): JSX.Element {
-    const [open, setOpen] = React.useState(false);
+export function HeaderLayoutComponent(): JSX.Element {
+    const [open, setOpen] = useState(false);
     const { t } = useTranslation(["Header"]);
 
     const handleSubheader = (): void => {
@@ -109,10 +103,7 @@ export function HeaderLayoutComponent(props: HeaderProps): JSX.Element {
             </div>
 
             <div css={subheaderStyle(open)}>
-                <ExportDataComponent
-                    data={props.data}
-                    keyValues={props.keyValues}
-                />
+                <ExportDataComponent />
             </div>
         </header>
     );
