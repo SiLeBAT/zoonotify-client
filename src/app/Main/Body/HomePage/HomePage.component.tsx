@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { HomePageContentComponent as Content } from "./HomePage-Content.component";
+import { HomePageTextContentComponent as Content } from "./HomePage-TextContent.component";
 import {
     surfaceColor,
     shadowPalette,

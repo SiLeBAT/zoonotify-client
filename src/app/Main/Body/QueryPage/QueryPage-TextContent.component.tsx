@@ -28,8 +28,8 @@ const contentTextStyle = css`
     text-align: center;
 `;
 
-export function FilterPageContentComponent(): JSX.Element {
-    const { t } = useTranslation(["FilterPage"]);
+export function QueryPageTextContentComponent(): JSX.Element {
+    const { t } = useTranslation(["QueryPage"]);
     return (
         <div css={textStyle}>
             <h1 css={appNameStyle}>{t("Content.Title")}</h1>
