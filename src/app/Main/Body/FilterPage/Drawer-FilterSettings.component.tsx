@@ -1,13 +1,16 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import React from "react";
+import React, { useState, useContext } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import IconButton from "@material-ui/core/IconButton";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { useTranslation } from "react-i18next";
+import { FilterContext } from "../../../Shared/Context/FilterContext";
+import { DataContext } from "../../../Shared/Context/DataContext";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { SelectorItem } from "./Drawer-SelectorItem.component";
 
 const filterHeadingStyle = css`
     margin-top: 0.5em;
@@ -28,7 +31,7 @@ const filterSubheadingStyle = css`
 
 const selectorAreaStyle = css`
     width: -webkit-fill-available;
-    margin: 2em;
+    margin: 0 2em 2em 2em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -49,44 +52,49 @@ const selectorStyle = css`
         padding: 0.8em;
     }
 `;
+const selectorHeadingStyle = css`
+    padding: 0;
+    margin: 2em 2em 0 2em;
+`;
 
 export function FilterSettingsComponent(): JSX.Element {
-    const [state, setState] = React.useState<{
-        number: number;
-        rows: JSX.Element[];
-        pathogen: string;
-        serovar: string;
+    const [state, setState] = useState<{
+        numberOfFilters: number;
     }>({
-        rows: [],
-        number: 1,
-        pathogen: "",
-        serovar: "",
+        numberOfFilters: 1,
     });
+    const { filter, setFilter } = useContext(FilterContext);
+    const dataValue = useContext(DataContext);
 
     const { t } = useTranslation(["FilterPage"]);
 
+    /**
+     * @desc takes the current value of the selector with the onChange envent handler and sets it as filter value (in the Context).
+     * @param React.ChangeEvent An onChange event handler returns a Synthetic Event object which contains meta data (target input’s id, name, current value)
+     */
     const handleChange = (
-        event: React.ChangeEvent<{ name?: string; value: unknown }>
+        event: React.ChangeEvent<{ value: unknown }>
     ): void => {
-        const name = event.target.name as keyof typeof state;
-        setState({
-            ...state,
-            [name]: event.target.value,
-        });
+        const name = event.target.value as string;
+        setFilter({ filterValue: name });
     };
 
     const handleAdd = (): void => {
         setState({
-            ...state,
-            number: state.number += 1,
+            numberOfFilters: state.numberOfFilters += 1,
         });
     };
     const handleRemove = (): void => {
         setState({
-            ...state,
-            number: state.number -= 1,
+            numberOfFilters: state.numberOfFilters -= 1,
         });
     };
+
+    const filterValues = dataValue.data.uniqueValues;
+
+    const selectorItems = filterValues.map((item: string) => (
+        <SelectorItem item={item} />
+    ));
 
     return (
         <div>
@@ -100,39 +108,37 @@ export function FilterSettingsComponent(): JSX.Element {
             <div>
                 {(function Add(): JSX.Element[] {
                     const elements = [];
-                    for (let i = 0; i < state.number; i += 1) {
+                    for (let i = 0; i < state.numberOfFilters; i += 1) {
                         elements.push(
-                            <div css={selectorAreaStyle} key={i}>
-                                <FormControl
-                                    variant="filled"
-                                    css={selectorStyle}
-                                >
-                                    <Select
-                                        native
-                                        value={state.pathogen}
-                                        onChange={handleChange}
-                                        inputProps={{
-                                            name: "pathogen",
-                                            id: "filled-age-native-simple",
-                                        }}
+                            <div>
+                                <h5 css={selectorHeadingStyle}>Serovar</h5>
+                                <div css={selectorAreaStyle} key={i}>
+                                    <FormControl
+                                        variant="filled"
+                                        css={selectorStyle}
                                     >
-                                        <option value="">
-                                            {t("Drawer.Selector")}
-                                        </option>
-                                        <option value="pathogen">
-                                            {t("Drawer.Filters.Pathogen")}
-                                        </option>
-                                        <option value="serovar">
-                                            {t("Drawer.Filters.Serovar")}
-                                        </option>
-                                    </Select>
-                                </FormControl>
-                                <IconButton
-                                    css={iconButtonStyle}
-                                    onClick={handleRemove}
-                                >
-                                    <RemoveCircleIcon css={iconStyle} />
-                                </IconButton>
+                                        <Select
+                                            native
+                                            value={filter.filterValue}
+                                            onChange={handleChange}
+                                            inputProps={{
+                                                name: "filter",
+                                                id: "filled-age-native-simple",
+                                            }}
+                                        >
+                                            <option value="">
+                                                {t("Drawer.Selector")}
+                                            </option>
+                                            {selectorItems}
+                                        </Select>
+                                    </FormControl>
+                                    <IconButton
+                                        css={iconButtonStyle}
+                                        onClick={handleRemove}
+                                    >
+                                        <RemoveCircleIcon css={iconStyle} />
+                                    </IconButton>
+                                </div>
                             </div>
                         );
                     }
