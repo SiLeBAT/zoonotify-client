@@ -18,7 +18,7 @@
             "Graph": "Diagrammachsen"
         },
         "Selector": "--Bitte auswählen--",
-        "Filters": { 
+        "Filters": {
             "Pathogen": "Erreger",
             "Serovar": "Serovar"
         },

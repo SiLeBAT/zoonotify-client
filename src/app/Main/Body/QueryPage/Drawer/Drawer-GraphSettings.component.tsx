@@ -6,7 +6,7 @@ import Select from "@material-ui/core/Select";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const filterSubHeaderStyle = css`
     display: flex;
@@ -59,7 +59,7 @@ export function GraphSettingsComponent(): JSX.Element {
         column: "",
     });
 
-    const { t } = useTranslation(["FilterPage"]);
+    const { t } = useTranslation(["QueryPage"]);
 
     const handleChange = (
         event: React.ChangeEvent<{ name?: string; value: unknown }>

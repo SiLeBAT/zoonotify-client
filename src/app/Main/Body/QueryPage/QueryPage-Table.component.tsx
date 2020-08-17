@@ -51,7 +51,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
     })
 )(TableCell);
 
-export function DataPageTableComponent(): JSX.Element {
+export function QueryPageTableComponent(): JSX.Element {
     const classes = useStyles();
     const { filter } = useContext(FilterContext);
     const { data } = useContext(DataContext);
@@ -65,42 +65,42 @@ export function DataPageTableComponent(): JSX.Element {
 
     return (
         <div css={dataStyle}>
-        <TableContainer component={Paper} css={tableStyle}>
-            <Table
-                stickyHeader
-                className={classes.table}
-                aria-label="simple table"
-            >
-                <TableHead>
-                    <TableRow key="headerRow">
-                        {data.keyValues.map((keyValue: DBtype) => (
-                            <StyledTableCell key={`headerRow_${keyValue}`}>
-                                {keyValue}
-                            </StyledTableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {filterData.map((post: DBentry) => {
-                        const id = post.uniqueId;
-                        return (
-                            <TableRow key={id}>
-                                {data.keyValues.map((keyValue: DBtype) => (
-                                    <TableCell
-                                        key={`${id}_${keyValue}`}
-                                        className={classes.tableCell}
-                                        component="th"
-                                        scope="row"
-                                    >
-                                        {post[keyValue]}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        );
-                    })}
-                </TableBody>
-            </Table>
-        </TableContainer>
+            <TableContainer component={Paper} css={tableStyle}>
+                <Table
+                    stickyHeader
+                    className={classes.table}
+                    aria-label="simple table"
+                >
+                    <TableHead>
+                        <TableRow key="headerRow">
+                            {data.keyValues.map((keyValue: DBtype) => (
+                                <StyledTableCell key={`headerRow_${keyValue}`}>
+                                    {keyValue}
+                                </StyledTableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {filterData.map((post: DBentry) => {
+                            const id = post.uniqueId;
+                            return (
+                                <TableRow key={id}>
+                                    {data.keyValues.map((keyValue: DBtype) => (
+                                        <TableCell
+                                            key={`${id}_${keyValue}`}
+                                            className={classes.tableCell}
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            {post[keyValue]}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 }

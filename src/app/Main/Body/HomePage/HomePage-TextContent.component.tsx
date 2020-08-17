@@ -30,8 +30,8 @@ const normalTextStyle = css`
     line-height: 1.6;
 `;
 
-export function HomePageContentComponent(): JSX.Element {
-    const { t } = useTranslation(["HomePage-Content"]);
+export function HomePageTextContentComponent(): JSX.Element {
+    const { t } = useTranslation(["HomePage"]);
     return (
         <div css={textStyle}>
             <h1 css={appNameStyle}>ZooNotify</h1>

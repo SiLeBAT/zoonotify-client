@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { FilterPageLayoutComponent as FilterPage } from "./FilterPage/FilterPage-Layout.component";
+import { QueryPageLayoutComponent as QueryPage } from "./QueryPage/QueryPage-Layout.component";
 import { HomePageLayoutComponent as HomePage } from "./HomePage/HomePage.component";
 import { DataProtectionPageComponent as DataProtection } from "./DataProtectionPage/DataProtectionPage.component";
 
@@ -10,17 +10,11 @@ const PageNotFound = (): JSX.Element => (
     </div>
 );
 
-
 export function BodyRouterComponent(): JSX.Element {
     return (
         <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route
-                path="/abfrage"
-                component={() => (
-                    <FilterPage />
-                )}
-            />
+            <Route path="/abfrage" component={QueryPage} />
             <Route path="/datenschutzerklaerung" component={DataProtection} />
             <Route component={PageNotFound} />
         </Switch>

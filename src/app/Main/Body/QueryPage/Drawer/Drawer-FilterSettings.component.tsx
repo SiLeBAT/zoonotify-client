@@ -7,9 +7,9 @@ import IconButton from "@material-ui/core/IconButton";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { useTranslation } from "react-i18next";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { DataContext } from "../../../Shared/Context/DataContext";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { FilterContext } from "../../../../Shared/Context/FilterContext";
+import { DataContext } from "../../../../Shared/Context/DataContext";
+import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 import { SelectorItem } from "./Drawer-SelectorItem.component";
 
 const filterHeadingStyle = css`
@@ -66,7 +66,7 @@ export function FilterSettingsComponent(): JSX.Element {
     const { filter, setFilter } = useContext(FilterContext);
     const dataValue = useContext(DataContext);
 
-    const { t } = useTranslation(["FilterPage"]);
+    const { t } = useTranslation(["QueryPage"]);
 
     /**
      * @desc takes the current value of the selector with the onChange envent handler and sets it as filter value (in the Context).

@@ -1,15 +1,15 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import React from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import { useTranslation } from "react-i18next";
-import { ClippedDrawer as DrawerMenu } from "./Drawer-Layout.component";
-import { FilterPageContentComponent as TextContent } from "./FilterPage-Content.component";
-import { DataPageTableComponent as DataContent } from "./DataPage-Table.component";
+import { ClippedDrawer as DrawerMenu } from "./Drawer/Drawer-Layout.component";
+import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
+import { QueryPageTableComponent as DataContent } from "./QueryPage-Table.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -103,11 +103,10 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
-export function FilterPageLayoutComponent(): JSX.Element {
-    const [open, setOpen] = React.useState(true);
+export function QueryPageLayoutComponent(): JSX.Element {
+    const [open, setOpen] = useState(true);
     const classes = useStyles();
-    const { t } = useTranslation(["FilterPage"]);
+    const { t } = useTranslation(["QueryPage"]);
 
     const handleDrawer = (): void => {
         if (open) {
