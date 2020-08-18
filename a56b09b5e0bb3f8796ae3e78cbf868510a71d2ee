@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cda615aa_58463c38",
+        "filename": "package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-08-18T06:54:38Z",
+      "side": 1,
+      "message": "Should be a dev dependency",
+      "revId": "a56b09b5e0bb3f8796ae3e78cbf868510a71d2ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e312e8c1_81d6594a",
+        "filename": "src/app/Main/Body/FilterPage/Drawer-FilterSettings.component.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-08-18T06:54:38Z",
+      "side": 1,
+      "message": "I don\u0027t understand this.  You need to explain to me what is happening here",
+      "revId": "a56b09b5e0bb3f8796ae3e78cbf868510a71d2ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29846093_661c193c",
+        "filename": "src/app/Shared/Context/DataContext.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-08-18T06:54:38Z",
+      "side": 1,
+      "message": "Somewhere down the line you\u0027ll have a \"data.data\" property access.  Which is ugly.  Maybe consider renaming (e.g. Specify what kind of data). You can use the Visual Studio Code \u0027Rename symbol\u0027 function from the context menu to rename this across the whole code base.",
+      "revId": "a56b09b5e0bb3f8796ae3e78cbf868510a71d2ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c903fa9e_3bad6f50",
+        "filename": "src/app/Shared/Context/DataContext.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-08-18T06:54:38Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "a56b09b5e0bb3f8796ae3e78cbf868510a71d2ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
