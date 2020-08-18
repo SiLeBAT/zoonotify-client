@@ -21,15 +21,12 @@ export function BodyRouterComponent(props: BodyProps): JSX.Element {
         <Switch>
             <Route exact path="/" component={HomePage} />
             <Route
-                path="/filter"
+                path="/abfrage"
                 component={() => (
                     <FilterPage data={props.data} keyValues={props.keyValues} />
                 )}
             />
-            <Route
-                path="/dataprotectiondeclaration"
-                component={DataProtection}
-            />
+            <Route path="/datenschutzerklaerung" component={DataProtection} />
             <Route component={PageNotFound} />
         </Switch>
     );

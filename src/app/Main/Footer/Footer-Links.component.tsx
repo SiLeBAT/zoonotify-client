@@ -74,7 +74,7 @@ export function FooterLinksComponent(): JSX.Element {
                 </a>
             </li>
             <li css={footerElementStyle}>
-                <NavLink to="/dataprotectiondeclaration" css={linkStyle}>
+                <NavLink to="/datenschutzerklaerung" css={linkStyle}>
                     {t("Content.DataProtection")}
                 </NavLink>
             </li>

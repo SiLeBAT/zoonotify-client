@@ -100,7 +100,7 @@ export function HeaderLayoutComponent(props: HeaderProps): JSX.Element {
                     <TranslationButtons />
                 </div>
                 <NavLink
-                    to="/filter"
+                    to="/abfrage"
                     onClick={handleSubheader}
                     css={queryStyle(open)}
                 >
