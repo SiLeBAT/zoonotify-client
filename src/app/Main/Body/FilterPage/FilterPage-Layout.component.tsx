@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function FilterPageLayoutComponent(props: FilterPageProps): JSX.Element {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const classes = useStyles();
     const { t } = useTranslation(["FilterPage"]);
 
