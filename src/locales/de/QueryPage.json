@@ -1,11 +1,11 @@
 {
     "Content": {
-        "Title": "Abfrage erstellen",
-        "Subtitle": "Filtereinstellungen",
-        "MainText": "Um Ihre Analyse auf eine Teilmenge der Daten zu beschränken, wählen Sie bitte unter den Attributen."
+        "Title": "Abfrageergebnisse",
+        "MainText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque orci, ultricies sit amet posuere sit amet, lacinia nec arcu. Cras sed purus sodales, condimentum mi vitae, tincidunt velit. Phasellus tincidunt semper lectus non bibendum. Duis tellus ex, convallis quis risus mattis, eleifend ultrices elit. Curabitur blandit neque nulla, non porta dui facilisis et. Cras laoreet velit consectetur elementum tincidunt. Cras fringilla, tellus vitae aliquam eleifend, massa ex sodales est, a pretium magna ligula vel enim. Proin erat dolor, dignissim ut magna in, pellentesque interdum massa. Nulla ultrices tincidunt lacus id luctus. Vivamus sed neque at diam pharetra rutrum. Donec neque lorem, molestie fringilla urna ac, dignissim pretium metus. Morbi quis scelerisque eros. Pellentesque elementum aliquet gravida. Ut vel commodo augue."
     },
-    "Filter": {
-        "SelectorLable": "Jahre"
+    "Results": {
+        "Title": "Ergbnis",
+        "TableHead": "Anzahl Isolate:"
     },
     "Buttons": {
         "Submit": "Ergbenisse anzeigen",

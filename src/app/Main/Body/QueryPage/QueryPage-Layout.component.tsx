@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { useTranslation } from "react-i18next";
 import { ClippedDrawer as DrawerMenu } from "./Drawer/Drawer-Layout.component";
 import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
-import { QueryPageTableComponent as DataContent } from "./QueryPage-Table.component";
+import { QueryPageTableComponent as DataContent } from "./QueryPage-Data.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -81,6 +81,16 @@ const contentStyle = css`
     height: inherit;
     box-sizing: border-box;
 `;
+const contentBoxStyle = css`
+    max-width: 50%;
+    min-width: 40em;
+    margin: auto;
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    hyphens: auto;
+    box-sizing: border-box;
+`
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -138,10 +148,12 @@ export function QueryPageLayoutComponent(): JSX.Element {
             </div>
 
             <div css={contentStyle}>
-                <div>
-                    <TextContent />
+                <div css={contentBoxStyle}>
+                    <div>
+                        <TextContent />
+                    </div>
+                    <DataContent />
                 </div>
-                <DataContent />
             </div>
         </main>
     );
