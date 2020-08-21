@@ -6,6 +6,12 @@ import {
     primaryColor,
     hoverColor,
 } from "../../Shared/Style/Style-MainTheme.component";
+import {
+    dpdPageURL,
+    bfrHomepageURL,
+    foodRiskLabsURL,
+    apiURL,
+} from "../../Shared/URLs";
 
 const footerContentStyle = css`
     margin: 0;
@@ -49,7 +55,7 @@ export function FooterLinksComponent(): JSX.Element {
         <ul css={footerContentStyle}>
             <li css={footerElementStyle}>
                 <a
-                    href="https://www.bfr.bund.de/de/start.html"
+                    href={bfrHomepageURL}
                     target="_blank"
                     rel="noreferrer"
                     css={linkStyle}
@@ -59,7 +65,7 @@ export function FooterLinksComponent(): JSX.Element {
             </li>
             <li css={footerElementStyle}>
                 <a
-                    href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/"
+                    href={foodRiskLabsURL}
                     target="_blank"
                     rel="noreferrer"
                     css={linkStyle}
@@ -69,12 +75,17 @@ export function FooterLinksComponent(): JSX.Element {
             </li>
             <li css={footerElementStyle}>{t("Content.Faq")}</li>
             <li css={footerElementStyle}>
-                <a href="/api-docs/v1/" target="_blank" css={linkStyle}>
+                <a
+                    href={apiURL}
+                    target="_blank"
+                    rel="noreferrer"
+                    css={linkStyle}
+                >
                     {t("Content.Api")}
                 </a>
             </li>
             <li css={footerElementStyle}>
-                <NavLink to="/datenschutzerklaerung" css={linkStyle}>
+                <NavLink to={dpdPageURL} css={linkStyle}>
                     {t("Content.DataProtection")}
                 </NavLink>
             </li>

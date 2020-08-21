@@ -2,6 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { homePageURL } from "../../../Shared/URLs";
 
 const dataProtectionStyle = css`
     max-width: 90ch;
@@ -46,7 +47,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h1 css={dataProtectionMainHeaderStyle}>{t("Heading")}</h1>
             <p>
                 {t("Description.DescriptionText1")}
-                <a href="/">{t("Description.DescriptionLink")}</a>
+                <a href={homePageURL}>{t("Description.DescriptionLink")}</a>
                 {t("Description.DescriptionText2")}
             </p>
 

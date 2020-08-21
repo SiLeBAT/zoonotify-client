@@ -11,6 +11,7 @@ import {
     secondaryColor,
     bfrPrimaryPalette,
 } from "../../Shared/Style/Style-MainTheme.component";
+import { queryPageURL, homePageURL } from "../../Shared/URLs";
 
 const headerStyle = css`
     width: 100%;
@@ -85,7 +86,7 @@ export function HeaderLayoutComponent(): JSX.Element {
             <div css={mainHeaderStyle}>
                 <div css={leftHeaderStyle}>
                     <NavLink
-                        to="/"
+                        to={homePageURL}
                         css={appNameStyle}
                         onClick={handleRemoveSubheader}
                     >
@@ -94,7 +95,7 @@ export function HeaderLayoutComponent(): JSX.Element {
                     <TranslationButtons />
                 </div>
                 <NavLink
-                    to="/abfrage"
+                    to={queryPageURL}
                     onClick={handleSubheader}
                     css={queryStyle(open)}
                 >
