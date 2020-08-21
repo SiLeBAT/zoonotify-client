@@ -1,10 +1,13 @@
 import React, { useState, createContext } from "react";
 
 interface Filter {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mainFilter: any;
     filterValue: string;
 }
 
 const defaultFilter: Filter = {
+    mainFilter: {},
     filterValue: "",
 };
 
