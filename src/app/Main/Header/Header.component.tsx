@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ExportDataComponent } from "./Header-Export.component";
 import { TranslationButtonsComponent as TranslationButtons } from "./TranslationButtons.component";
@@ -71,15 +71,17 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
 `;
 
 export function HeaderLayoutComponent(): JSX.Element {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
 
-    const handleSubheader = (): void => {
-        setOpen(true);
-    };
-    const handleRemoveSubheader = (): void => {
-        setOpen(false);
-    };
+    const { pathname } = useLocation();
+    useEffect(() => {
+        if (pathname === ZNPaths.queryPagePath) {
+            setOpen(true);
+        } else {
+            setOpen(false);
+        }
+    });
 
     return (
         <header css={headerStyle}>
@@ -88,7 +90,6 @@ export function HeaderLayoutComponent(): JSX.Element {
                     <NavLink
                         to={ZNPaths.homePagePath}
                         css={appNameStyle}
-                        onClick={handleRemoveSubheader}
                     >
                         ZooNotify
                     </NavLink>
@@ -96,7 +97,6 @@ export function HeaderLayoutComponent(): JSX.Element {
                 </div>
                 <NavLink
                     to={ZNPaths.queryPagePath}
-                    onClick={handleSubheader}
                     css={queryStyle(open)}
                 >
                     {t("Query")}
