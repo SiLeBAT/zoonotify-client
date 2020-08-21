@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor, onBackgroundColor } from "../../../Shared/Style/Style-MainTheme.component";
 
 const textStyle = css`
     display: flex;
@@ -14,17 +14,19 @@ const textStyle = css`
     box-sizing: border-box;
 `;
 const appNameStyle = css`
+    margin-bottom: 1rem;
     font-size: 3rem;
     align-self: center;
     font-weight: normal;
     color: ${primaryColor};
 `;
 const appSubtitleStyle = css`
+    margin: 1em 0;
     font-size: 1rem;
     align-self: center;
     font-weight: normal;
     text-align: center;
-    color: ${primaryColor};
+    color: ${onBackgroundColor};
 `;
 const normalTextStyle = css`
     line-height: 1.6;
