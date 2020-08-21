@@ -11,6 +11,7 @@ import {
     secondaryColor,
     bfrPrimaryPalette,
 } from "../../Shared/Style/Style-MainTheme.component";
+import { ZNPaths } from "../../Shared/URLs";
 
 const headerStyle = css`
     width: 100%;
@@ -85,7 +86,7 @@ export function HeaderLayoutComponent(): JSX.Element {
             <div css={mainHeaderStyle}>
                 <div css={leftHeaderStyle}>
                     <NavLink
-                        to="/"
+                        to={ZNPaths.homePagePath}
                         css={appNameStyle}
                         onClick={handleRemoveSubheader}
                     >
@@ -94,7 +95,7 @@ export function HeaderLayoutComponent(): JSX.Element {
                     <TranslationButtons />
                 </div>
                 <NavLink
-                    to="/abfrage"
+                    to={ZNPaths.queryPagePath}
                     onClick={handleSubheader}
                     css={queryStyle(open)}
                 >

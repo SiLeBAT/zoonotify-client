@@ -6,8 +6,9 @@ import { MainLayoutComponent } from "./Main-Layout.component";
 import { HeaderLayoutComponent as Header } from "./Header/Header.component";
 import { BodyRouterComponent as Body } from "./Body/Body-Router.component";
 import { FooterLayoutComponent as Footer } from "./Footer/Footer-Layout.component";
+import { mockDataURL } from "../Shared/URLs";
 
-const BASE_URL = "/v1/mockdata";
+const BASE_URL = mockDataURL;
 
 export function MainContainerComponent(): JSX.Element {
     const { setData } = useContext(DataContext);
