@@ -1,0 +1,106 @@
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import { useContext, ReactNode } from "react";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Chip, MenuItem, Input } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { DataContext } from "../../../../../Shared/Context/DataContext";
+import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import {
+    FilterType,
+    mainFilterAttributes,
+} from "../../../../../Shared/Filter.model";
+import { FilterSelectorComponent } from "./Filter-Selector.component";
+
+const filterHeadingStyle = css`
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: ${primaryColor};
+`;
+const filterSubheadingStyle = css`
+    margin: 2.5em 0 0 0;
+    font-weight: bold;
+    font-size: 1rem;
+`;
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        formControl: {
+            margin: theme.spacing(1),
+            marginLeft: "16px",
+            marginRight: "16px",
+            width: "23em",
+        },
+        chips: {
+            display: "flex",
+            flexWrap: "wrap",
+        },
+        chip: {
+            margin: 2,
+        },
+        noLabel: {
+            marginTop: theme.spacing(3),
+        },
+    })
+);
+
+export function FilterSettingsComponent(): JSX.Element {
+    const classes = useStyles();
+    const { data } = useContext(DataContext);
+    const { filter } = useContext(FilterContext);
+    const { t } = useTranslation(["QueryPage"]);
+
+    const randerValues = (selected: unknown): ReactNode => (
+        <div className={classes.chips}>
+            {(selected as string[]).map((value) => (
+                <Chip key={value} label={value} className={classes.chip} />
+            ))}
+        </div>
+    );
+
+    const mainItemChild = (values: string[]): JSX.Element[] => (values.map(
+        (mainFilterValue) => (
+            <MenuItem key={mainFilterValue} value={mainFilterValue}>
+                {mainFilterValue}
+            </MenuItem>
+        )
+    ));
+
+    const inputElement = (index: number): JSX.Element => (
+        <Input id={`select-multiple-chip-${index}`} />
+    ); 
+    
+    const mainFilterLabels = [t("Drawer.Filters.Pathogen")];
+    const totalNumberOfFilters: number = mainFilterAttributes.length;
+    
+
+    return (
+        <div>
+            <h3 css={filterHeadingStyle}>{t("Drawer.Title")}</h3>
+            <h4 css={filterSubheadingStyle}>{t("Drawer.Subtitles.Filter")}</h4>
+            {(function AddSelectorElements(): JSX.Element[] {
+                const elements: JSX.Element[] = [];
+                for (let i = 0; i < totalNumberOfFilters; i += 1) {
+                    const filterAttribute: FilterType = mainFilterAttributes[i];
+                    const filterValues: string[] = filter[filterAttribute];
+                    elements.push(
+                        <FilterSelectorComponent
+                            index={i}
+                            label={mainFilterLabels[i]}
+                            filterAttribute={filterAttribute}
+                            filterValues={filterValues}
+                            inputElement={inputElement(i)}
+                            randerValues={randerValues}
+                            child={mainItemChild(data.uniqueValues[filterAttribute])}
+                        />
+                    );
+                }
+                return elements;
+            })()}
+        </div>
+    );
+}

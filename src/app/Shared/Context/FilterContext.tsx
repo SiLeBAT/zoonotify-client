@@ -1,16 +1,13 @@
 import React, { useState, createContext } from "react";
+import { FilterInterface } from "../Filter.model";
 
-interface Filter {
-    filterValue: string;
-}
-
-const defaultFilter: Filter = {
-    filterValue: "",
+const defaultFilter: FilterInterface = {
+    Erreger: []
 };
 
 interface ProfileState {
-    filter: Filter;
-    setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+    filter: FilterInterface;
+    setFilter: React.Dispatch<React.SetStateAction<FilterInterface>>;
 }
 
 const defaultFilterState: ProfileState = {

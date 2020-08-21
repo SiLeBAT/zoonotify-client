@@ -3,14 +3,20 @@ import { DBentry, DBtype } from "../Isolat.model";
 
 interface DataInterface {
     ZNData: DBentry[];
+    ZNDataFiltered: DBentry[];
     keyValues: DBtype[];
-    uniqueValues: string[];
+    uniqueValues: {
+        Erreger: string[],
+    };
 }
 
 const defaultProfile: DataInterface = {
     ZNData: [],
+    ZNDataFiltered: [],
     keyValues: [],
-    uniqueValues: [],
+    uniqueValues: {
+        Erreger: [],
+    },
 };
 
 interface ProfileState {
