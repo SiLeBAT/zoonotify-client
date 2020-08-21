@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { QueryPageLayoutComponent as QueryPage } from "./QueryPage/QueryPage-Layout.component";
 import { HomePageLayoutComponent as HomePage } from "./HomePage/HomePage.component";
 import { DataProtectionPageComponent as DataProtection } from "./DataProtectionPage/DataProtectionPage.component";
+import { homePageURL, queryPageURL, ddpPageURL } from "../../Shared/URLs";
 
 const PageNotFound = (): JSX.Element => (
     <div>
@@ -13,9 +14,9 @@ const PageNotFound = (): JSX.Element => (
 export function BodyRouterComponent(): JSX.Element {
     return (
         <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/abfrage" component={QueryPage} />
-            <Route path="/datenschutzerklaerung" component={DataProtection} />
+            <Route exact path={homePageURL} component={HomePage} />
+            <Route path={queryPageURL} component={QueryPage} />
+            <Route path={ddpPageURL} component={DataProtection} />
             <Route component={PageNotFound} />
         </Switch>
     );
