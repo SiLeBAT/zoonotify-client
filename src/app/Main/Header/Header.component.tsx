@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ExportDataComponent } from "./Header-Export.component";
 import { TranslationButtonsComponent as TranslationButtons } from "./TranslationButtons.component";
@@ -71,34 +71,28 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
 `;
 
 export function HeaderLayoutComponent(): JSX.Element {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
 
-    const handleSubheader = (): void => {
-        setOpen(true);
-    };
-    const handleRemoveSubheader = (): void => {
-        setOpen(false);
-    };
+    const { pathname } = useLocation();
+    useEffect(() => {
+        if (pathname === queryPageURL) {
+            setOpen(true);
+        } else {
+            setOpen(false);
+        }
+    });
 
     return (
         <header css={headerStyle}>
             <div css={mainHeaderStyle}>
                 <div css={leftHeaderStyle}>
-                    <NavLink
-                        to={homePageURL}
-                        css={appNameStyle}
-                        onClick={handleRemoveSubheader}
-                    >
+                    <NavLink to={homePageURL} css={appNameStyle}>
                         ZooNotify
                     </NavLink>
                     <TranslationButtons />
                 </div>
-                <NavLink
-                    to={queryPageURL}
-                    onClick={handleSubheader}
-                    css={queryStyle(open)}
-                >
+                <NavLink to={queryPageURL} css={queryStyle(open)}>
                     {t("Query")}
                 </NavLink>
             </div>
