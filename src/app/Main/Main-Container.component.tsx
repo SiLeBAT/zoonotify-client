@@ -63,6 +63,7 @@ export function MainContainerComponent(): JSX.Element {
         "Land",
     ];
 
+
     const getData = async (): Promise<void> => {
         const r: Response = await fetch(BASE_URL);
         const dataProp: DBentry[] = await r.json();
@@ -70,11 +71,13 @@ export function MainContainerComponent(): JSX.Element {
         for (i; i < dataProp.length; i += 1) {
             dataProp[i].uniqueId = i + 1;
         }
-        const filterValues = _.uniq(_.map(dataProp, "Serovar"));
+        const pathogenValues = _.uniq(_.map(dataProp, "Erreger"));
         setData({
             ZNData: dataProp,
             keyValues: keyValueProps,
-            uniqueValues: filterValues,
+            uniqueValues: {
+                Erreger: pathogenValues,
+            },
         });
     };
 

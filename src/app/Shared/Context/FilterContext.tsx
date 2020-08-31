@@ -1,19 +1,13 @@
 import React, { useState, createContext } from "react";
+import { FilterInterface } from "../Filter.model";
 
-interface Filter {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mainFilter: any;
-    filterValue: string;
-}
-
-const defaultFilter: Filter = {
-    mainFilter: {},
-    filterValue: "",
+const defaultFilter: FilterInterface = {
+    Erreger: []
 };
 
 interface ProfileState {
-    filter: Filter;
-    setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+    filter: FilterInterface;
+    setFilter: React.Dispatch<React.SetStateAction<FilterInterface>>;
 }
 
 const defaultFilterState: ProfileState = {
