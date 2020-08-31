@@ -72,12 +72,14 @@ export function MainContainerComponent(): JSX.Element {
             dataProp[i].uniqueId = i + 1;
         }
         const pathogenValues = _.uniq(_.map(dataProp, "Erreger"));
+        const matrixValues = _.uniq(_.map(dataProp, "Matrix"));
         setData({
             ZNData: dataProp,
             ZNDataFiltered: dataProp,
             keyValues: keyValueProps,
             uniqueValues: {
                 Erreger: pathogenValues,
+                Matrix: matrixValues,
             },
         });
     };

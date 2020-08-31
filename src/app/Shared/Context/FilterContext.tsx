@@ -2,7 +2,8 @@ import React, { useState, createContext } from "react";
 import { FilterInterface } from "../Filter.model";
 
 const defaultFilter: FilterInterface = {
-    Erreger: []
+    Erreger: [],
+    Matrix: []
 };
 
 interface ProfileState {
