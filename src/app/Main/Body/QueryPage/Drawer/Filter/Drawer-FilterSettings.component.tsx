@@ -1,16 +1,17 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import React, { useState, useContext } from "react";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import IconButton from "@material-ui/core/IconButton";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import { useContext, ReactNode } from "react";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Chip, MenuItem, Input } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
-import { DataContext } from "../../../../../Shared/Context/DataContext";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { SelectorItem } from "../Drawer-SelectorItem.component";
+import { DataContext } from "../../../../../Shared/Context/DataContext";
+import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import {
+    FilterType,
+    mainFilterAttributes,
+} from "../../../../../Shared/Filter.model";
+import { FilterSelectorComponent } from "./Filter-Selector.component";
 
 const filterHeadingStyle = css`
     margin-top: 0.5em;
@@ -21,187 +22,85 @@ const filterHeadingStyle = css`
     color: ${primaryColor};
 `;
 const filterSubheadingStyle = css`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    margin: 2.5em 0 0 0;
     font-weight: bold;
     font-size: 1rem;
-    line-height: 2rem;
 `;
 
-const mainSelectorAreaStyle = css`
-    width: -webkit-fill-available;
-    margin: 0 2em 2em 2em;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-`;
-const iconButtonStyle = css`
-    height: fit-content;
-    margin-left: 1em;
-    padding: 0;
-    color: ${primaryColor};
-`;
-const iconStyle = css`
-    width: 36px;
-    height: 36px;
-`;
-const subSelectorAreaStyle = css`
-    display: none;
-`;
-const selectorStyle = css`
-    width: inherit;
-    select {
-        padding: 0.8em;
-    }
-`;
-/* const selectorHeadingStyle = css`
-    padding: 0;
-    margin: 2em 2em 0 2em;
-`; */
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        formControl: {
+            margin: theme.spacing(1),
+            marginLeft: "16px",
+            marginRight: "16px",
+            width: "23em",
+        },
+        chips: {
+            display: "flex",
+            flexWrap: "wrap",
+        },
+        chip: {
+            margin: 2,
+        },
+        noLabel: {
+            marginTop: theme.spacing(3),
+        },
+    })
+);
 
 export function FilterSettingsComponent(): JSX.Element {
-    const [state, setState] = useState<{
-        numberOfFilters: number;
-        subFilter: boolean;
-    }>({
-        numberOfFilters: 1,
-        subFilter: false,
-    });
-    const { filter, setFilter } = useContext(FilterContext);
-    const dataValue = useContext(DataContext);
-
+    const classes = useStyles();
+    const { data } = useContext(DataContext);
+    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
-    const filterName = `filter${state.numberOfFilters}`
-    const mainFilterValues = ["Erreger", "Matrix", "Projekt"];
 
+    const randerValues = (selected: unknown): ReactNode => (
+        <div className={classes.chips}>
+            {(selected as string[]).map((value) => (
+                <Chip key={value} label={value} className={classes.chip} />
+            ))}
+        </div>
+    );
 
-    /**
-     * @desc takes the current value of the selector with the onChange envent handler and sets it as filter value (in the Context).
-     * @param React.ChangeEvent An onChange event handler returns a Synthetic Event object which contains meta data (target input’s id, name, current value)
-     */
-    const handleMainFilterChange = (
-        event: React.ChangeEvent<{ value: unknown }>
-    ): void => {
-        const name = event.target.value as string;
-/*         const filterName = `filter${state.numberOfFilters}` */        
-        filter.mainFilter[filterName] = name;
-        mainFilterValues.splice( mainFilterValues.indexOf(name, 1 ));
-        // eslint-disable-next-line no-console
-        console.log(mainFilterValues)
-        /* setFilter({ ...filter, mainFilter: {filter.mainFilter[filterName]: name} }); */
-        setState({ ...state, subFilter: true });
-    };
-    const handleChange = (
-        event: React.ChangeEvent<{ value: unknown }>
-    ): void => {
-        const name = event.target.value as string;
-        setFilter({ ...filter, filterValue: name });
-    };
-
-    const handleAdd = (): void => {
-        setState({ ...state, numberOfFilters: state.numberOfFilters += 1 });
-    };
-    const handleRemove = (): void => {
-        setState({ ...state, numberOfFilters: state.numberOfFilters -= 1 });
-        /* remove filter.mainFilter[filterName] and Add it tomainFilterValues */
-    };
-
-
-    const mainSelectorItems = mainFilterValues.map((item: string) => (
-        <SelectorItem item={item} />
-    ));
-    const filterValues = dataValue.data.uniqueValues;
-    const selectorItems = filterValues.map((item: string) => (
-        <SelectorItem item={item} />
+    const mainItemChild = (values: string[]): JSX.Element[] => (values.map(
+        (mainFilterValue) => (
+            <MenuItem key={mainFilterValue} value={mainFilterValue}>
+                {mainFilterValue}
+            </MenuItem>
+        )
     ));
 
-    // eslint-disable-next-line no-console
-    console.log(filter);
+    const inputElement = (index: number): JSX.Element => (
+        <Input id={`select-multiple-chip-${index}`} />
+    ); 
+    
+    const mainFilterLabels = [t("Drawer.Filters.Pathogen")];
+    const totalNumberOfFilters: number = mainFilterAttributes.length;
+    
 
     return (
         <div>
             <h3 css={filterHeadingStyle}>{t("Drawer.Title")}</h3>
-            <div css={filterSubheadingStyle}>
-                <h4>{t("Drawer.Subtitles.Filter")}</h4>
-                <IconButton css={iconButtonStyle} onClick={handleAdd}>
-                    <AddCircleIcon css={iconStyle} />
-                </IconButton>
-            </div>
-            <div>
-                {(function Add(): JSX.Element[] {
-                    const elements = [];
-                    for (let i = 0; i < state.numberOfFilters; i += 1) {
-                        elements.push(
-                            <div>
-                                <div css={mainSelectorAreaStyle} key={i}>
-                                    <FormControl
-                                        variant="filled"
-                                        css={selectorStyle}
-                                    >
-                                        <Select
-                                            native
-                                            value={filter.mainFilter[filterName]}
-                                            onChange={handleMainFilterChange}
-                                            inputProps={{
-                                                name: "filter",
-                                                id: "filled-znData",
-                                            }}
-                                        >
-                                            <option value="">
-                                                {t("Drawer.Selector")}
-                                            </option>
-                                            {mainSelectorItems}
-                                        </Select>
-                                    </FormControl>
-                                    <IconButton
-                                        css={iconButtonStyle}
-                                        onClick={handleRemove}
-                                    >
-                                        <RemoveCircleIcon css={iconStyle} />
-                                    </IconButton>
-                                </div>
-
-                                <div
-                                    css={
-                                        state.subFilter
-                                            ? mainSelectorAreaStyle
-                                            : subSelectorAreaStyle
-                                    }
-                                    key={i}
-                                >
-                                    <FormControl
-                                        variant="filled"
-                                        css={selectorStyle}
-                                    >
-                                        <Select
-                                            native
-                                            value={filter.filterValue}
-                                            onChange={handleChange}
-                                            inputProps={{
-                                                name: "filter",
-                                                id: "filled-age-native-simple",
-                                            }}
-                                        >
-                                            <option value="">
-                                                {t("Drawer.Selector")}
-                                            </option>
-                                            {selectorItems}
-                                        </Select>
-                                    </FormControl>
-                                    <IconButton
-                                        css={iconButtonStyle}
-                                        onClick={handleRemove}
-                                    >
-                                        <RemoveCircleIcon css={iconStyle} />
-                                    </IconButton>
-                                </div>
-                            </div>
-                        );
-                    }
-                    return elements;
-                })()}
-            </div>
+            <h4 css={filterSubheadingStyle}>{t("Drawer.Subtitles.Filter")}</h4>
+            {(function AddSelectorElements(): JSX.Element[] {
+                const elements: JSX.Element[] = [];
+                for (let i = 0; i < totalNumberOfFilters; i += 1) {
+                    const filterAttribute: FilterType = mainFilterAttributes[i];
+                    const filterValues: string[] = filter[filterAttribute];
+                    elements.push(
+                        <FilterSelectorComponent
+                            index={i}
+                            label={mainFilterLabels[i]}
+                            filterAttribute={filterAttribute}
+                            filterValues={filterValues}
+                            inputElement={inputElement(i)}
+                            randerValues={randerValues}
+                            child={mainItemChild(data.uniqueValues[filterAttribute])}
+                        />
+                    );
+                }
+                return elements;
+            })()}
         </div>
     );
 }

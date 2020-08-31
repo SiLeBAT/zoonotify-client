@@ -19,7 +19,7 @@
         },
         "Selector": "--Please select an option--",
         "Filters": {
-            "Pathogen": "Pathogen",
+            "Pathogen": "Pathogens",
             "Serovar": "Serovar"
         },
         "Graphs": {
