@@ -66,12 +66,12 @@ export function QueryPageTableComponent(): JSX.Element {
         filterData = data.ZNData;
         const filterKeyValues = Object.keys(filter) as FilterType[];
         await Promise.all(
-            filterKeyValues.map(async (attribute) => {
-                const filterValues = filter[attribute];
+            filterKeyValues.map(async (attribute: FilterType) => {
+                const filterValues: string[] = filter[attribute];
                 let newFilterData: DBentry[] = [];
                 await Promise.all(
-                    filterValues.map(async (value) => {
-                        const partialFilterData = _.filter(filterData, {
+                    filterValues.map(async (value: string) => {
+                        const partialFilterData: DBentry[] = _.filter(filterData, {
                             [attribute]: value,
                         });
                         newFilterData = newFilterData.concat(partialFilterData);
@@ -87,7 +87,7 @@ export function QueryPageTableComponent(): JSX.Element {
         key
     ): boolean {
         const k = key as FilterType;
-        const empty = _.isEmpty(filter[k]);
+        const empty: boolean = _.isEmpty(filter[k]);
         return empty;
     });
 

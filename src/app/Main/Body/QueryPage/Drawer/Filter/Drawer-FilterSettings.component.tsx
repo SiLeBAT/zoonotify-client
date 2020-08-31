@@ -78,7 +78,7 @@ export function FilterSettingsComponent(): JSX.Element {
         });
     };
 
-    const mainFilterLabels = [t("Drawer.Filters.Pathogen")]
+    const mainFilterLabels = [t("Drawer.Filters.Pathogen"), t("Drawer.Filters.Matrix")]
     const totalNumberOfFilters: number = mainFilterAttributes.length;
 
     return (

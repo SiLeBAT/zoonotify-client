@@ -20,6 +20,7 @@
         "Selector": "--Please select an option--",
         "Filters": {
             "Pathogen": "Pathogens",
+            "Matrix": "Food products",
             "Serovar": "Serovar"
         },
         "Graphs": {
