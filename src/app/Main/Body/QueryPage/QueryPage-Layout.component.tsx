@@ -1,20 +1,24 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import clsx from "clsx";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import { Divider } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import { useTranslation } from "react-i18next";
 import { ClippedDrawer as DrawerMenu } from "./Drawer/Drawer-Layout.component";
 import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
+import { QueryPageParameterContentComponent as ParameterContent } from "./QueryPage-ParameterContent.component";
 import { QueryPageTableComponent as DataContent } from "./QueryPage-Data.component";
 import {
     primaryColor,
     onPrimaryColor,
     bfrLightblue,
 } from "../../../Shared/Style/Style-MainTheme.component";
+import { FilterContext } from "../../../Shared/Context/FilterContext";
+import { FilterType } from "../../../Shared/Filter.model";
 
 const drawerWidth = 433;
 
@@ -71,7 +75,6 @@ const drawerIconStyle = css`
         border-radius: 0 1em 1em 0;
     }
 `;
-
 const contentStyle = css`
     width: 0;
     min-width: 500px;
@@ -90,7 +93,23 @@ const contentBoxStyle = css`
     flex-direction: column;
     hyphens: auto;
     box-sizing: border-box;
-`
+`;
+const headingStyle = css`
+    font-size: 3rem;
+    text-align: center;
+    font-weight: normal;
+    color: ${primaryColor};
+`;
+const deviderStyle = css`
+    width: 100%;
+    height: 0.15em;
+    background: ${primaryColor};
+    padding: 0;
+    margin: 2em 0;
+`;
+const subHeadingTextStyle = css`
+    margin-top: 2em;
+`;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -115,6 +134,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function QueryPageLayoutComponent(): JSX.Element {
     const [open, setOpen] = useState(true);
+    const [isFilter, setIsFilter] = useState(false);
+    const { filter } = useContext(FilterContext);
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
 
@@ -125,6 +146,15 @@ export function QueryPageLayoutComponent(): JSX.Element {
             setOpen(true);
         }
     };
+
+    useEffect((): void => {
+        Object.keys(filter).forEach((element): void => {
+            const e = element as FilterType;
+            if (filter[e].length !== 0) {
+                setIsFilter(true);
+            }
+        });
+    });
 
     return (
         <main css={mainStyle}>
@@ -148,10 +178,17 @@ export function QueryPageLayoutComponent(): JSX.Element {
             </div>
 
             <div css={contentStyle}>
+                <h1 css={headingStyle}>{t("Content.Title")}</h1>
                 <div css={contentBoxStyle}>
-                    <div>
-                        <TextContent />
-                    </div>
+                    {isFilter ? (
+                        <ParameterContent />
+                    ) : (
+                        <div>
+                            <TextContent />
+                        </div>
+                    )}
+                    <Divider variant="middle" css={deviderStyle} />
+                    <h3 css={subHeadingTextStyle}>{t("Results.Title")}</h3>
                     <DataContent />
                 </div>
             </div>
