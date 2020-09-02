@@ -11,6 +11,8 @@ import {
 } from "../../Shared/Style/Style-MainTheme.component";
 import { DBentry, DBtype } from "../../Shared/Isolat.model";
 import { DataContext } from "../../Shared/Context/DataContext";
+import { FilterContext } from "../../Shared/Context/FilterContext";
+import { FilterInterface, FilterType } from "../../Shared/Filter.model";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -65,10 +67,34 @@ function getFormattedTime(): string {
 interface ObjectToCsvProps {
     data: DBentry[];
     keyValues: DBtype[];
+    filter: FilterInterface;
+    allFilterLabel: string;
+    mainFilterLabels: string[];
 }
 
 function objectToCsv(props: ObjectToCsvProps): string {
+    // eslint-disable-next-line no-console
+    console.log(props.allFilterLabel);
     const csvRows: string[] = [];
+
+    csvRows.push("\uFEFF");
+    csvRows.push("####################");
+    csvRows.push("#####Parameter:");
+
+    Object.keys(props.filter).forEach((element, i): void => {
+        const e = element as FilterType;
+        if (props.filter[e].length !== 0) {
+            csvRows.push(
+                `###${props.mainFilterLabels[i]}:"${props.filter[e].join('""')}"`
+            );
+        } else {
+            csvRows.push(
+                `###${props.mainFilterLabels[i]}:${props.allFilterLabel}`
+            );
+        }
+    });
+    csvRows.push("####################");
+
     const headers: DBtype[] = props.keyValues;
     csvRows.push(headers.join(","));
 
@@ -88,26 +114,36 @@ function objectToCsv(props: ObjectToCsvProps): string {
 
 export function ExportDataComponent(): JSX.Element {
     const { data } = useContext(DataContext);
-    const { t } = useTranslation(["Header"]);
+    const { filter } = useContext(FilterContext);
+    const { t } = useTranslation(["Header", "QueryPage"]);
 
     const buttonLabel = (
         <div css={ButtonLableStyle}>
             <GetAppIcon fontSize="small" />
-            {t("Export")}
+            {t("Header:Export")}
         </div>
     );
-    const znFilename = `ZooNotify_${getFormattedTime()}.csv`;
+    const ZNFilename = `ZooNotify_${getFormattedTime()}.csv`;
+
+    const mainFilterLabels = [
+        t("QueryPage:Drawer.Filters.Pathogen"),
+        t("QueryPage:Drawer.Filters.Matrix"),
+    ] as string[];
+    const allFilterLabel = t("QueryPage:Drawer.Filters.All") as string;
 
     return (
         <div css={dataStyle}>
             <DownloadButton size="small" css={ButtonStyle}>
                 <DownloadLink
                     label={buttonLabel}
-                    filename={znFilename}
+                    filename={ZNFilename}
                     exportFile={() =>
                         objectToCsv({
                             data: data.ZNData,
                             keyValues: data.keyValues,
+                            filter,
+                            allFilterLabel,
+                            mainFilterLabels,
                         })
                     }
                     css={ButtonLinkStyle}
