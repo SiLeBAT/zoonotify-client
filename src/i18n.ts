@@ -1,28 +1,26 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
- 
-import Backend from 'i18next-xhr-backend';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import Backend from "i18next-xhr-backend";
 
+const languages = ["de", "en"];
 
-const languages = ['de', 'en']
+i18n.use(Backend)
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        debug: true,
+        detection: {
+            order: ["localStorage"],
+            lookupLocalStorage: "i18nextLng",
+        },
+        fallbackLng: "de",
+        whitelist: languages,
 
-i18n
-  // learn more: https://github.com/i18next/i18next-xhr-backend
-  .use(Backend)
-  // connect with React
-  .use(initReactI18next)
-  // for all options read: https://www.i18next.com/overview/configuration-options
-  .init({
-    debug: true,
- 
-    lng: 'de',
-    fallbackLng: 'de',
-    whitelist: languages,
- 
-    interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
-    },
-});
+        interpolation: {
+            escapeValue: false,
+        },
+    });
 
 // eslint-disable-next-line import/no-default-export
 export default i18n;
