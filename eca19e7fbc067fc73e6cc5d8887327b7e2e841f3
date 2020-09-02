@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22b65157_86a1cab3",
+        "filename": "src/app/Main/Header/TranslationButtons.component.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-09-02T13:32:19Z",
+      "side": 1,
+      "message": "Please Use a switch statement and make the default \u0027de\u0027",
+      "range": {
+        "startLine": 53,
+        "startChar": 31,
+        "endLine": 53,
+        "endChar": 32
+      },
+      "revId": "eca19e7fbc067fc73e6cc5d8887327b7e2e841f3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
