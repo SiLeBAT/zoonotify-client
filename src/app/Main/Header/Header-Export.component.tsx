@@ -11,6 +11,8 @@ import {
 } from "../../Shared/Style/Style-MainTheme.component";
 import { DBentry, DBtype } from "../../Shared/Isolat.model";
 import { DataContext } from "../../Shared/Context/DataContext";
+import { FilterContext } from "../../Shared/Context/FilterContext";
+import { FilterInterface, FilterType } from "../../Shared/Filter.model";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -65,10 +67,26 @@ function getFormattedTime(): string {
 interface ObjectToCsvProps {
     data: DBentry[];
     keyValues: DBtype[];
+    filter: FilterInterface;
 }
 
 function objectToCsv(props: ObjectToCsvProps): string {
     const csvRows: string[] = [];
+
+    csvRows.push("\uFEFF")
+    csvRows.push("####################")
+    csvRows.push("#####Parameter:")
+
+    Object.keys(props.filter).forEach((element): void => {
+        const e = element as FilterType;
+        if (props.filter[e].length !== 0) {
+            csvRows.push(`###${element}:"${props.filter[e].join('""')}"`);
+        } else {
+            csvRows.push(`###${element}:alle_Werte`);
+        }
+    });
+    csvRows.push("####################")
+
     const headers: DBtype[] = props.keyValues;
     csvRows.push(headers.join(","));
 
@@ -88,6 +106,7 @@ function objectToCsv(props: ObjectToCsvProps): string {
 
 export function ExportDataComponent(): JSX.Element {
     const { data } = useContext(DataContext);
+    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["Header"]);
 
     const buttonLabel = (
@@ -108,6 +127,7 @@ export function ExportDataComponent(): JSX.Element {
                         objectToCsv({
                             data: data.ZNData,
                             keyValues: data.keyValues,
+                            filter
                         })
                     }
                     css={ButtonLinkStyle}
