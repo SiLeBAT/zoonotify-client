@@ -21,7 +21,7 @@
         "Selector": "--Bitte auswählen--",
         "Filters": {
             "All": "Alle Werte",
-            "Pathogen": "Erreger",
+            "Erreger": "Erreger",
             "Matrix": "Lebensmittel",
             "Serovar": "Serovar"
         },
