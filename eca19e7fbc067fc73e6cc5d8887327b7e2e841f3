@@ -22,6 +22,30 @@
       "revId": "eca19e7fbc067fc73e6cc5d8887327b7e2e841f3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d8958c6_a124289f",
+        "filename": "src/app/Main/Header/TranslationButtons.component.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1017946
+      },
+      "writtenOn": "2020-09-02T14:32:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22b65157_86a1cab3",
+      "range": {
+        "startLine": 53,
+        "startChar": 31,
+        "endLine": 53,
+        "endChar": 32
+      },
+      "revId": "eca19e7fbc067fc73e6cc5d8887327b7e2e841f3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
