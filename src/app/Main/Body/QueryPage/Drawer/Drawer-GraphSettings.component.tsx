@@ -96,7 +96,7 @@ export function GraphSettingsComponent(): JSX.Element {
                     >
                         <option value="">{t("Drawer.Selector")}</option>
                         <option value="pathogen">
-                            {t("Drawer.Filters.Pathogen")}
+                            {t("Drawer.Filters.Erreger")}
                         </option>
                         <option value="serovar">
                             {t("Drawer.Filters.Serovar")}
@@ -124,7 +124,7 @@ export function GraphSettingsComponent(): JSX.Element {
                     >
                         <option value="">{t("Drawer.Selector")}</option>
                         <option value="pathogen">
-                            {t("Drawer.Filters.Pathogen")}
+                            {t("Drawer.Filters.Erreger")}
                         </option>
                         <option value="serovar">
                             {t("Drawer.Filters.Serovar")}

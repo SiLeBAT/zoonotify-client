@@ -9,8 +9,9 @@ import {
     onPrimaryColor,
     secondaryColor,
 } from "../../Shared/Style/Style-MainTheme.component";
-import { DBentry, DBtype } from "../../Shared/Isolat.model";
 import { DataContext } from "../../Shared/Context/DataContext";
+import { FilterContext } from "../../Shared/Context/FilterContext";
+import { objectToCsv } from "../../Core/DBEntriesToCSV.service";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -62,52 +63,38 @@ function getFormattedTime(): string {
     return `${y}-${m}-${d}T${h}${mi}${s}`;
 }
 
-interface ObjectToCsvProps {
-    data: DBentry[];
-    keyValues: DBtype[];
-}
-
-function objectToCsv(props: ObjectToCsvProps): string {
-    const csvRows: string[] = [];
-    const headers: DBtype[] = props.keyValues;
-    csvRows.push(headers.join(","));
-
-    props.data.forEach((row: DBentry) => {
-        const values: string[] = headers.map((header: DBtype) => {
-            const escaped: string = `${row[header]}`
-                .replace(/"/g, '\\"')
-                .replace("undefined", "");
-            return `"${escaped}"`;
-        });
-        csvRows.push(values.join(","));
-    });
-    const csvData: string = csvRows.join("\n");
-
-    return csvData;
-}
-
 export function ExportDataComponent(): JSX.Element {
     const { data } = useContext(DataContext);
-    const { t } = useTranslation(["Header"]);
+    const { filter } = useContext(FilterContext);
+    const { t } = useTranslation(["Header", "QueryPage"]);
 
     const buttonLabel = (
         <div css={ButtonLableStyle}>
             <GetAppIcon fontSize="small" />
-            {t("Export")}
+            {t("Header:Export")}
         </div>
     );
-    const znFilename = `ZooNotify_${getFormattedTime()}.csv`;
+    const ZNFilename = `ZooNotify_${getFormattedTime()}.csv`;
+
+    const mainFilterLabels = {
+        Erreger: t("QueryPage:Drawer.Filters.Erreger"),
+        Matrix: t("QueryPage:Drawer.Filters.Matrix")
+    };
+    const allFilterLabel: string = t("QueryPage:Drawer.Filters.All");
 
     return (
         <div css={dataStyle}>
             <DownloadButton size="small" css={ButtonStyle}>
                 <DownloadLink
                     label={buttonLabel}
-                    filename={znFilename}
+                    filename={ZNFilename}
                     exportFile={() =>
                         objectToCsv({
                             data: data.ZNData,
                             keyValues: data.keyValues,
+                            filter,
+                            allFilterLabel,
+                            mainFilterLabels
                         })
                     }
                     css={ButtonLinkStyle}

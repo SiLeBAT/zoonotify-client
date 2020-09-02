@@ -78,7 +78,6 @@ export function FilterSettingsComponent(): JSX.Element {
         });
     };
 
-    const mainFilterLabels = [t("Drawer.Filters.Pathogen"), t("Drawer.Filters.Matrix")]
     const totalNumberOfFilters: number = mainFilterAttributes.length;
 
     return (
@@ -93,7 +92,7 @@ export function FilterSettingsComponent(): JSX.Element {
                     elements.push(
                         <FormControl className={classes.formControl}>
                             <InputLabel id={`label${i}`}>
-                                {mainFilterLabels[i]}
+                                {t(`Drawer.Filters.${filterAttribute}`)}
                             </InputLabel>
                             <Select
                                 labelId={`label${i}`}

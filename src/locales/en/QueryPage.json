@@ -21,7 +21,7 @@
         "Selector": "--Please select an option--",
         "Filters": {
             "All": "All values",
-            "Pathogen": "Pathogens",
+            "Erreger": "Pathogens",
             "Matrix": "Food products",
             "Serovar": "Serovar"
         },
