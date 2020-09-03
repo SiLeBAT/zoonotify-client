@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9da98a8a_cd9d6599",
+        "filename": "src/app/Main/Header/TranslationButtons.component.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-09-03T06:45:49Z",
+      "side": 1,
+      "message": "In addition to \u0027de\u0027 as default, please also mention it as a case explicitly.",
+      "range": {
+        "startLine": 54,
+        "startChar": 18,
+        "endLine": 54,
+        "endChar": 20
+      },
+      "revId": "c75cf05db28ac29eceeb90f76faa45f5f56af1e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
