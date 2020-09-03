@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "be295d2e_1633077d",
+        "filename": "src/app/Main/Header/Header-Export.component.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1017946
+      },
+      "writtenOn": "2020-09-03T13:07:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand what you mean. I cannot use functions of React (like \"useTranslation\") in objectToCSV, because it is not a React component. Therefore I have to do the translation previously. \nBut I have converted the list into an object to not have to work with the index. I also removed the mainFilterLabels from other components, where they were not essential.",
+      "parentUuid": "6907335e_7bae20ac",
+      "revId": "4e0325012fb834df7a1f22cf5b0d93c46fa32c40",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3b01dc2_94db5444",
         "filename": "src/app/Main/Header/ObjectToCSV.component.ts",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "4e0325012fb834df7a1f22cf5b0d93c46fa32c40",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fec9c72c_13816e6c",
+        "filename": "src/app/Main/Header/ObjectToCSV.component.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1017946
+      },
+      "writtenOn": "2020-09-03T13:07:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3b01dc2_94db5444",
+      "revId": "4e0325012fb834df7a1f22cf5b0d93c46fa32c40",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
