@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6907335e_7bae20ac",
+        "filename": "src/app/Main/Header/Header-Export.component.tsx",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-09-03T06:51:11Z",
+      "side": 1,
+      "message": "Are these casts necessary?  Please discuss with Isaak or Marco.",
+      "revId": "4e0325012fb834df7a1f22cf5b0d93c46fa32c40",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3b01dc2_94db5444",
+        "filename": "src/app/Main/Header/ObjectToCSV.component.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-09-03T06:51:11Z",
+      "side": 1,
+      "message": "Rename this file: It#S not a component.  Maybe call it \u0027DBENtriesToCSV.service\"",
+      "revId": "4e0325012fb834df7a1f22cf5b0d93c46fa32c40",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
