@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import i18next from "i18next";
 import { changeAppLanguage } from "../../Core/localization.service";
 import { primaryColor } from "../../Shared/Style/Style-MainTheme.component";
 
@@ -48,6 +49,20 @@ const selectedFlagStyle = css`
 export function TranslationButtonsComponent(): JSX.Element {
     const [selectedFlag, setSelectedFlag] = useState(true);
 
+    useEffect((): void => {
+        switch (i18next.language) {
+            case "de":
+                setSelectedFlag(true);
+                break;
+            case "en":
+                setSelectedFlag(false);
+                break;
+            default:
+                setSelectedFlag(true);
+                break;
+        }
+    });
+
     return (
         <div css={buttonAreaStyle}>
             <Button
@@ -55,8 +70,8 @@ export function TranslationButtonsComponent(): JSX.Element {
                 css={selectedFlag ? selectedFlagStyle : "none"}
                 bgImage="url('/assets/germany_flag_icon.png')"
                 onClick={() => {
+                    localStorage.setItem("i18nextLng", "de");
                     changeAppLanguage("de");
-                    setSelectedFlag(true);
                 }}
             >
                 &nbsp;
@@ -66,8 +81,8 @@ export function TranslationButtonsComponent(): JSX.Element {
                 css={selectedFlag ? "none" : selectedFlagStyle}
                 bgImage="url('/assets/united_kingdom_flag_icon.png')"
                 onClick={() => {
+                    localStorage.setItem("i18nextLng", "en");
                     changeAppLanguage("en");
-                    setSelectedFlag(false);
                 }}
             >
                 &nbsp;
