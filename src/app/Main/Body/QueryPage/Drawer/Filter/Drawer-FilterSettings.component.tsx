@@ -70,8 +70,8 @@ export function FilterSettingsComponent(): JSX.Element {
         )
     ));
 
-    const inputElement = (index: number): JSX.Element => (
-        <Input id={`select-multiple-chip-${index}`} />
+    const inputElement = (key: FilterType): JSX.Element => (
+        <Input id={`select-multiple-chip-id-${key}`} />
     ); 
     
     const mainFilterLabels = [t("Drawer.Filters.Pathogen"), t("Drawer.Filters.Matrix")];
@@ -89,11 +89,12 @@ export function FilterSettingsComponent(): JSX.Element {
                     const filterValues: string[] = filter[filterAttribute];
                     elements.push(
                         <FilterSelectorComponent
+                            key={`filter-selector-${filterAttribute}`}
                             index={i}
                             label={mainFilterLabels[i]}
                             filterAttribute={filterAttribute}
                             filterValues={filterValues}
-                            inputElement={inputElement(i)}
+                            inputElement={inputElement(filterAttribute)}
                             randerValues={randerValues}
                             child={mainItemChild(data.uniqueValues[filterAttribute])}
                         />

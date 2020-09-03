@@ -57,6 +57,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
                                     const e = element as FilterType;
                                     elements.push(
                                         <ParameterListComponent
+                                            key={`parameter-list-${element}`}
                                             label={mainFilterLabels[i]}
                                             keyName={keyName}
                                             listElements={displayFilter[e]}
