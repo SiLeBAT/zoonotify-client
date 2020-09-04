@@ -21,10 +21,6 @@ const parameterBlockStyle = css`
 export function QueryPageParameterContentComponent(): JSX.Element {
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
-    const mainFilterLabels = [
-        t("Drawer.Filters.Pathogen"),
-        t("Drawer.Filters.Matrix"),
-    ];
 
     const displayFilter = _.cloneDeep(filter);
     const filterKeys = Object.keys(filter);
@@ -52,13 +48,13 @@ export function QueryPageParameterContentComponent(): JSX.Element {
                         <tbody>
                             {(function AddParameterElement(): JSX.Element[] {
                                 const elements: JSX.Element[] = [];
-                                filterKeys.forEach((element, i): void => {
+                                filterKeys.forEach((element): void => {
                                     const keyName = element.replace(" ", "_");
                                     const e = element as FilterType;
                                     elements.push(
                                         <ParameterListComponent
                                             key={`parameter-list-${element}`}
-                                            label={mainFilterLabels[i]}
+                                            label={t(`Drawer.Filters.${e}`)}
                                             keyName={keyName}
                                             listElements={displayFilter[e]}
                                         />
