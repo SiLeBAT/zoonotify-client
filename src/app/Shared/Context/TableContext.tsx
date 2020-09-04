@@ -8,7 +8,7 @@ export interface TableInterface {
     column: FilterType;
 }
 
-const defaultFilter: TableInterface = {
+const defaultTable: TableInterface = {
     row: "" as FilterType,
     column: "" as FilterType,
 };
@@ -18,17 +18,17 @@ interface ProfileState {
     setTable: React.Dispatch<React.SetStateAction<TableInterface>>;
 }
 
-const defaultFilterState: ProfileState = {
-    table: defaultFilter,
+const defaultTableState: ProfileState = {
+    table: defaultTable,
     setTable: (): void => {},
 };
 
-export const TableContext = createContext<ProfileState>(defaultFilterState);
+export const TableContext = createContext<ProfileState>(defaultTableState);
 
 export const TableProvider = (props: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [table, setTable] = useState(defaultFilter);
+    const [table, setTable] = useState(defaultTable);
 
     return (
         <TableContext.Provider

@@ -5,12 +5,10 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "./node_modules/.bin/eslint . --fix --ext .js,.jsx,.ts,.tsx",
-    "serve": "npx nodemon -e ts,tsx --exec \"npm run serve:pipe\"",
+    "serve": "npm run clean && npm run cp:all && webpack-dev-server --open",
     "build": "./node_modules/.bin/webpack && npm run cp:all",
     "prebuild": "npm run clean",
     "clean": "npx rimraf public/*",
-    "serve:pipe": "npm run build && npm run start",
-    "start": "webpack-dev-server --open",
     "cp:html": "npx copyfiles -u 1 ./src/**/*.html ./public",
     "cp:assets": "npx copyfiles -u 1 ./src/assets/* ./public",
     "cp:localesDe": "npx copyfiles -u 1 -E ./src/locales/de/* ./public",
@@ -93,7 +91,8 @@
     "ts-jest": "^25.4.0",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
   },
   "znConfig": {
     "lastChange": "2020-06-11 11:25:17 +0200"

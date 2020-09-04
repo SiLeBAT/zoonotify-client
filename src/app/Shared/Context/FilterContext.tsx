@@ -1,7 +1,7 @@
 import React, { useState, createContext } from "react";
 import { FilterInterface } from "../Filter.model";
 
-const defaultFilter: FilterInterface = {
+export const defaultFilter: FilterInterface = {
     Erreger: [],
     Matrix: [],
     Projektname: []

@@ -163,7 +163,7 @@ export function QueryPageComponent(): JSX.Element {
         } else {
             setIsTable(false);
         }
-    });
+    }, [filter, table]);
 
     return (
         <main css={mainStyle}>
