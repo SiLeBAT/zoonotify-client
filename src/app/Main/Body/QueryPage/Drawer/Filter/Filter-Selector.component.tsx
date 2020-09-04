@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { InputLabel } from "@material-ui/core";
 import { FilterType } from "../../../../../Shared/Filter.model";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import { createPathString } from "../../../../../Core/createFilterPath.service";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,20 +40,21 @@ const MenuProps = {
 };
 
 interface SelectorProps {
-    index: number,
-    label: string,
-    filterValues: string[],
-    filterAttribute: FilterType,
-    inputElement: JSX.Element,
-    randerValues: ((value: unknown) => React.ReactNode) | undefined,
-    child: JSX.Element[]
+    index: number;
+    label: string;
+    filterValues: string[];
+    filterAttribute: FilterType;
+    inputElement: JSX.Element;
+    randerValues: ((value: unknown) => React.ReactNode) | undefined;
+    child: JSX.Element[];
 }
 
 export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
+    const history = useHistory();
     const classes = useStyles();
     const {filter, setFilter} = useContext(FilterContext);
 
-    
+
     /**
      * @desc takes the current value of the selector with the onChange envent handler and sets it as filter value (in the Context).
      * @param React.ChangeEvent An onChange event handler returns a Synthetic Event object which contains meta data (target input’s id, name, current value)
@@ -65,6 +68,10 @@ export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
             [keyName]: event.target.value as string[],
         });
     };
+
+    useEffect((): void => {
+        history.push(`?${createPathString(filter)}`);
+    }, [filter]);
 
     return (
         <FormControl className={classes.formControl}>
