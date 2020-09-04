@@ -1,14 +1,12 @@
 import React, { useState, createContext } from "react";
 import { DBentry, DBtype } from "../Isolat.model";
+import { FilterInterface } from "../Filter.model";
 
 interface DataInterface {
     ZNData: DBentry[];
     ZNDataFiltered: DBentry[];
     keyValues: DBtype[];
-    uniqueValues: {
-        Erreger: string[],
-        Matrix: string[]
-    };
+    uniqueValues: FilterInterface
 }
 
 const defaultProfile: DataInterface = {
@@ -18,6 +16,7 @@ const defaultProfile: DataInterface = {
     uniqueValues: {
         Erreger: [],
         Matrix: [],
+        Projektname: [],
     },
 };
 
