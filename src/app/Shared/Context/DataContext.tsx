@@ -7,7 +7,8 @@ interface DataInterface {
     keyValues: DBtype[];
     uniqueValues: {
         Erreger: string[],
-        Matrix: string[]
+        Matrix: string[],
+        Projektname: string[]
     };
 }
 
@@ -18,6 +19,7 @@ const defaultProfile: DataInterface = {
     uniqueValues: {
         Erreger: [],
         Matrix: [],
+        Projektname: [],
     },
 };
 

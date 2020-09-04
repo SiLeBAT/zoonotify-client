@@ -6,7 +6,7 @@ interface ObjectToCsvProps {
     keyValues: DBtype[];
     filter: FilterInterface;
     allFilterLabel: string;
-    mainFilterLabels: { Erreger: string; Matrix: string; };
+    mainFilterLabels: { Erreger: string; Matrix: string; Projektname: string};
 }
 
 export function objectToCsv(props: ObjectToCsvProps): string {

@@ -3,7 +3,8 @@ import { FilterInterface } from "../Filter.model";
 
 const defaultFilter: FilterInterface = {
     Erreger: [],
-    Matrix: []
+    Matrix: [],
+    Projektname: []
 };
 
 interface ProfileState {

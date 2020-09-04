@@ -79,7 +79,8 @@ export function ExportDataComponent(): JSX.Element {
 
     const mainFilterLabels = {
         Erreger: t("QueryPage:Drawer.Filters.Erreger"),
-        Matrix: t("QueryPage:Drawer.Filters.Matrix")
+        Matrix: t("QueryPage:Drawer.Filters.Matrix"),
+        Projektname: t("QueryPage:Drawer.Filters.Projektname")
     };
     const allFilterLabel: string = t("QueryPage:Drawer.Filters.All");
 
