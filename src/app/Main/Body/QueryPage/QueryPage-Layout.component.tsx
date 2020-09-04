@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useState, useContext, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
@@ -18,7 +19,8 @@ import {
     bfrLightblue,
 } from "../../../Shared/Style/Style-MainTheme.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../Shared/Filter.model";
+import { FilterType, FilterInterface } from "../../../Shared/Filter.model";
+
 
 const drawerWidth = 433;
 
@@ -132,10 +134,22 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+function getParams(path: string): FilterInterface {
+    const searchParams = new URLSearchParams(path);
+    const e = searchParams.get("Erreger") || "";
+    const m = searchParams.get("Matrix") || "";
+    return {
+        Erreger: e.split("_"),
+        Matrix: m.split("_"),
+    };
+}
+
+
 export function QueryPageLayoutComponent(): JSX.Element {
+    const history = useHistory();
     const [open, setOpen] = useState(true);
     const [isFilter, setIsFilter] = useState(false);
-    const { filter } = useContext(FilterContext);
+    const { filter, setFilter } = useContext(FilterContext);
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
 
@@ -147,6 +161,22 @@ export function QueryPageLayoutComponent(): JSX.Element {
         }
     };
 
+    /**
+     * @desc check path for filter settings and define them in the context, every time the component did mount (Lifecycle methode: componentDidMount)
+     */
+    useEffect((): void => {
+        const filterFromPath = getParams(history.location.search);
+        Object.keys(filterFromPath).forEach((element) => {
+            const e = element as FilterType;
+            if (filterFromPath[e][0] !== "alle Werte" && filterFromPath[e][0] !== "all values") {
+                setFilter(filterFromPath);
+            } 
+        });
+    }, []);
+
+    /**
+     * @desc check if filter are set, every time the component did update (Lifecycle methode: componentDidUpdate)
+     */
     useEffect((): void => {
         Object.keys(filter).forEach((element): void => {
             const e = element as FilterType;
