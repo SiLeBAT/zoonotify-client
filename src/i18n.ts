@@ -9,6 +9,7 @@ i18n.use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
+        ns: ['DataProtection', 'Footer', 'Header', 'HomePage', 'QueryPage'],
         debug: true,
         detection: {
             order: ["localStorage"],
