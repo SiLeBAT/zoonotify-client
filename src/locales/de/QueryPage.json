@@ -1,7 +1,7 @@
 {
     "Content": {
         "Title": "Abfrageergebnisse",
-        "MainText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque orci, ultricies sit amet posuere sit amet, lacinia nec arcu. Cras sed purus sodales, condimentum mi vitae, tincidunt velit. Phasellus tincidunt semper lectus non bibendum. Duis tellus ex, convallis quis risus mattis, eleifend ultrices elit. Curabitur blandit neque nulla, non porta dui facilisis et. Cras laoreet velit consectetur elementum tincidunt. Cras fringilla, tellus vitae aliquam eleifend, massa ex sodales est, a pretium magna ligula vel enim. Proin erat dolor, dignissim ut magna in, pellentesque interdum massa. Nulla ultrices tincidunt lacus id luctus. Vivamus sed neque at diam pharetra rutrum. Donec neque lorem, molestie fringilla urna ac, dignissim pretium metus. Morbi quis scelerisque eros. Pellentesque elementum aliquet gravida. Ut vel commodo augue."
+        "MainText": "ZooNotify ermöglicht, eine Auswahl der Typisierungsergebnisse der an die Nationalen Referenzlaboratorien am BfR gesendeten Isolate abzufragen. Hierbei handelt es sich um Zoonoseereger und Kommensale, die im Rahmen des nationalen Zoonosen-Monitorings nach AVV Zoonosen Lebensmittelkette sowie der Salmonellen-Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden. Sie können eigene Abfragen mit der Filterfunktion links erstellen oder Beispielabfragen [LINK] abrufen und bearbeiten. Dabei erzeugt ZooNotify für Sie downloadbare Tabellen und Grafiken. Abfragen können Sie über die URL reproduzieren und teilen."
     },
     "Results": {
         "Parameter": "Parameter",
