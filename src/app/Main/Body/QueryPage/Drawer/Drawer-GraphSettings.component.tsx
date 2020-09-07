@@ -4,11 +4,13 @@ import { useContext } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 import { TableSelectorComponent } from "./Table-Selector.component";
 import { SelectorItem } from "./Drawer-SelectorItem.component";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../../Shared/Context/TableContext";
+
 
 const filterSubHeaderStyle = css`
     margin: 2.5em 0 0 0;
@@ -46,6 +48,10 @@ export function GraphSettingsComponent(): JSX.Element {
         });
     };
 
+    const mainFilterAttributes = Object.keys(filter)
+    const offeredAttributesRow = _.difference(mainFilterAttributes, [table.column])
+    const offeredAttributesColumn = _.difference(mainFilterAttributes, [table.row])
+
     return (
         <div>
             <h4 css={filterSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</h4>
@@ -55,7 +61,7 @@ export function GraphSettingsComponent(): JSX.Element {
                     name: "row",
                     id: `selector-id-row`,
                 }}
-                child={mainItemChild(Object.keys(filter))}
+                child={mainItemChild(offeredAttributesRow)}
             />
             <div css={centerIconButtonStyle}>
                 <IconButton css={iconButtonStyle} onClick={handleSwap}>
@@ -68,7 +74,7 @@ export function GraphSettingsComponent(): JSX.Element {
                     name: "column",
                     id: `selector-id-column`,
                 }}
-                child={mainItemChild(Object.keys(filter))}
+                child={mainItemChild(offeredAttributesColumn)}
             />
         </div>
     );
