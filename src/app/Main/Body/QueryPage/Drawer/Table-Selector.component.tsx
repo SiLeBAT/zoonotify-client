@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { InputLabel } from "@material-ui/core";
+import { TableContext, TableType } from "../../../../Shared/Context/TableContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,44 +20,38 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface SelectorProps {
-    index: string;
     label: string;
     inputProps: {
-        name: string;
+        name: TableType;
         id: string;
     };
     child: JSX.Element[];
 }
 
 export function TableSelectorComponent(props: SelectorProps): JSX.Element {
-    const [state, setState] = React.useState<{
-        row: string;
-        column: string;
-    }>({
-        row: "",
-        column: "",
-    });
+    const { table, setTable } = useContext(TableContext)
     const classes = useStyles();
 
     const handleChange = (
-        event: React.ChangeEvent<{ name?: string; value: unknown }>
+        event: React.ChangeEvent<{ name?: string; value: unknown }>,
+        keyName: TableType
     ): void => {
-        setState({
-            ...state,
-            row: event.target.value as string,
+        setTable({
+            ...table,
+            [keyName]: event.target.value as string,
         });
     };
 
     return (
         <div>
             <FormControl className={classes.formControl}>
-                <InputLabel id={`label-${props.index}`}>
+                <InputLabel id={`label-${props.inputProps.name}`}>
                     {props.label}
                 </InputLabel>
                 <Select
                     native
-                    value={state.row}
-                    onChange={(e) => handleChange(e)}
+                    value={table[props.inputProps.name]}
+                    onChange={(e) => handleChange(e, props.inputProps.name)}
                     inputProps={props.inputProps}
                 >
                     <option aria-label="None" value="" />

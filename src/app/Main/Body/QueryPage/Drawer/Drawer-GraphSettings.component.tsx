@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,7 @@ import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component
 import { TableSelectorComponent } from "./Table-Selector.component";
 import { SelectorItem } from "./Drawer-SelectorItem.component";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
+import { TableContext } from "../../../../Shared/Context/TableContext";
 
 const filterSubHeaderStyle = css`
     margin: 2.5em 0 0 0;
@@ -33,21 +34,15 @@ const mainItemChild = (values: string[]): JSX.Element[] =>
     );
 
 export function GraphSettingsComponent(): JSX.Element {
-    const [state, setState] = React.useState<{
-        row: string;
-        column: string;
-    }>({
-        row: "",
-        column: "",
-    });
+    const { table, setTable } = useContext(TableContext)
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleSwap = (): void => {
-        setState({
-            ...state,
-            row: state.column,
-            column: state.row,
+        setTable({
+            ...table,
+            row: table.column,
+            column: table.row,
         });
     };
 
@@ -55,7 +50,6 @@ export function GraphSettingsComponent(): JSX.Element {
         <div>
             <h4 css={filterSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</h4>
             <TableSelectorComponent
-                index="row"
                 label={t("Drawer.Graphs.Row")}
                 inputProps={{
                     name: "row",
@@ -69,7 +63,6 @@ export function GraphSettingsComponent(): JSX.Element {
                 </IconButton>
             </div>
             <TableSelectorComponent
-                index="column"
                 label={t("Drawer.Graphs.Column")}
                 inputProps={{
                     name: "column",
