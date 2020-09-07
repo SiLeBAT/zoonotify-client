@@ -16,7 +16,7 @@
         "Title": "Graph Controls",
         "Subtitles": {
             "Filter": "Filters",
-            "Graph": "Graph Axes"
+            "Graph": "Displayed features"
         },
         "Selector": "--Please select an option--",
         "Filters": {
@@ -27,8 +27,8 @@
             "Serovar": "Serovar"
         },
         "Graphs": {
-            "Row": "Rows",
-            "Column": "Columns"
+            "Row": "in rows",
+            "Column": "in columns"
         }
     }
 }

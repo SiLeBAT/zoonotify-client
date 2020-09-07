@@ -16,7 +16,7 @@
         "Title": "Grafikeinstellungen",
         "Subtitles": {
             "Filter": "Filter",
-            "Graph": "Diagrammachsen"
+            "Graph": "Anzuzeigende Merkmale"
         },
         "Selector": "--Bitte auswählen--",
         "Filters": {
@@ -27,8 +27,8 @@
             "Serovar": "Serovar"
         },
         "Graphs": {
-            "Row": "Reihen",
-            "Column": "Spalten"
+            "Row": "in Zeilen",
+            "Column": "in Spalten"
         }
     }
 }
