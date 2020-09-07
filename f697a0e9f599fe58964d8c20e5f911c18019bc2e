@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57a91d3b_aa03074e",
+        "filename": "src/app/Shared/Context/DataContext.tsx",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1013694
+      },
+      "writtenOn": "2020-09-07T08:42:35Z",
+      "side": 1,
+      "message": "uniqueValues should be of type Filterinterface?",
+      "revId": "f697a0e9f599fe58964d8c20e5f911c18019bc2e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
