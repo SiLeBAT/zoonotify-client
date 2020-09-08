@@ -34,12 +34,12 @@ export function TableSelectorComponent(props: SelectorProps): JSX.Element {
     const classes = useStyles();
 
     const handleChange = (
-        event: React.ChangeEvent<{ name?: string; value: unknown }>,
+        event: React.ChangeEvent<{ value: unknown }>,
         keyName: TableType
     ): void => {
         setTable({
             ...table,
-            [keyName]: [event.target.value] as FilterType[],
+            [keyName]: event.target.value as FilterType,
         });
     };
 

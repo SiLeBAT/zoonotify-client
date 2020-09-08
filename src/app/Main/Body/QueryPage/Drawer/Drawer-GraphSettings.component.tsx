@@ -42,15 +42,14 @@ export function GraphSettingsComponent(): JSX.Element {
 
     const handleSwap = (): void => {
         setTable({
-            ...table,
             row: table.column,
             column: table.row,
         });
     };
 
     const mainFilterAttributes = Object.keys(filter)
-    const offeredAttributesRow = _.difference(mainFilterAttributes, table.column)
-    const offeredAttributesColumn = _.difference(mainFilterAttributes, table.row)
+    const offeredAttributesRow: string[] = _.difference(mainFilterAttributes, [table.column])
+    const offeredAttributesColumn: string[] = _.difference(mainFilterAttributes, [table.row])
 
     return (
         <div>

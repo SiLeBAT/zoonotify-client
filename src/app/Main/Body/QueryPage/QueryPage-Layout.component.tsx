@@ -19,6 +19,7 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { FilterType } from "../../../Shared/Filter.model";
+import { TableContext, TableType } from "../../../Shared/Context/TableContext";
 import { QueryPageTableRestultComponent } from "./QueryPage-ResultData.component";
 
 const drawerWidth = 433;
@@ -136,7 +137,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export function QueryPageLayoutComponent(): JSX.Element {
     const [open, setOpen] = useState(true);
     const [isFilter, setIsFilter] = useState(false);
+    const [isTable, setIsTable] = useState(false);
     const { filter } = useContext(FilterContext);
+    const { table } = useContext(TableContext);
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
 
@@ -153,6 +156,12 @@ export function QueryPageLayoutComponent(): JSX.Element {
             const e = element as FilterType;
             if (filter[e].length !== 0) {
                 setIsFilter(true);
+            }
+        });
+        Object.keys(table).forEach((element): void => {
+            const e = element as TableType;
+            if (table[e].length !== 0) {
+                setIsTable(true);
             }
         });
     });
@@ -190,8 +199,11 @@ export function QueryPageLayoutComponent(): JSX.Element {
                     )}
                     <Divider variant="middle" css={deviderStyle} />
                     <h3 css={subHeadingTextStyle}>{t("Results.Title")}</h3>
-                    <DataContent />
-                    <QueryPageTableRestultComponent />
+                    {isTable ? (
+                        <QueryPageTableRestultComponent />
+                    ) : (
+                        <DataContent />
+                    )}
                 </div>
             </div>
         </main>

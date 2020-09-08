@@ -4,13 +4,13 @@ import { FilterType } from "../Filter.model";
 export type TableType = "row" | "column";
 
 export interface TableInterface {
-    row: FilterType[];
-    column: FilterType[];
+    row: FilterType;
+    column: FilterType;
 }
 
 const defaultFilter: TableInterface = {
-    row: [],
-    column: [],
+    row: "" as FilterType,
+    column: "" as FilterType,
 };
 
 interface ProfileState {

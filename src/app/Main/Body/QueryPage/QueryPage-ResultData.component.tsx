@@ -18,6 +18,7 @@ import {
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
+import { FilterType } from "../../../Shared/Filter.model";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -26,7 +27,8 @@ const dataStyle = css`
 `;
 const tableRowHeader = css`
     margin: 0;
-    padding-top: 1rem;
+    display: flex;
+    justify-content: center;
     transform: rotate(180deg);
     writing-mode: vertical-lr;
     font-weight: normal;
@@ -83,8 +85,8 @@ export function QueryPageTableRestultComponent(): JSX.Element {
     const { table } = useContext(TableContext);
     const classes = useStyles();
 
-    const rowAttribute = table.row[0];
-    const colAttribute = table.column[0];
+    const rowAttribute: FilterType = table.row;
+    const colAttribute: FilterType = table.column;
 
     const countIsolates = (colValue: string, rowValue: string): string => {
         return (_.filter(data.ZNData, {
