@@ -4,6 +4,7 @@ import Select from "@material-ui/core/Select";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { InputLabel } from "@material-ui/core";
 import { TableContext, TableType } from "../../../../Shared/Context/TableContext";
+import { FilterType } from "../../../../Shared/Filter.model";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,7 +39,7 @@ export function TableSelectorComponent(props: SelectorProps): JSX.Element {
     ): void => {
         setTable({
             ...table,
-            [keyName]: event.target.value as string,
+            [keyName]: [event.target.value] as FilterType[],
         });
     };
 

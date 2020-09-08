@@ -17,6 +17,7 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { DataContext } from "../../../Shared/Context/DataContext";
+import { TableContext } from "../../../Shared/Context/TableContext";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -79,45 +80,51 @@ export function QueryPageTableRestultComponent(): JSX.Element {
     );
     const { filter } = useContext(FilterContext);
     const { data } = useContext(DataContext);
+    const { table } = useContext(TableContext);
     const classes = useStyles();
 
-    const countIsolates = (matrix: string, project: string): string => {
-        return (_.filter(data.ZNData, { Matrix: matrix, Projektname: project })
-            .length as unknown) as string;
+    const rowAttribute = table.row[0];
+    const colAttribute = table.column[0];
+
+    const countIsolates = (colValue: string, rowValue: string): string => {
+        return (_.filter(data.ZNData, {
+            [colAttribute]: colValue,
+            [rowAttribute]: rowValue,
+        }).length as unknown) as string;
     };
 
     const getAllIsolates = async (): Promise<void> => {
         setAllIsolates([]);
         const newIsolates: Record<string, string>[] = [];
-        let rowAttributes = data.uniqueValues.Projektname;
-        if (!_.isEmpty(filter.Projektname)) {
-            rowAttributes = filter.Projektname;
+        let rowValues = data.uniqueValues[rowAttribute];
+        if (!_.isEmpty(filter[rowAttribute])) {
+            rowValues = filter[rowAttribute];
         }
-        let colAttributes = data.uniqueValues.Matrix;
-        if (!_.isEmpty(filter.Matrix)) {
-            colAttributes = filter.Matrix;
+        let colValues = data.uniqueValues[colAttribute];
+        if (!_.isEmpty(filter[colAttribute])) {
+            colValues = filter[colAttribute];
         }
-        rowAttributes.forEach((project) => {
-            const isolates: Record<string, string> = { name: project };
-            colAttributes.forEach((matrix) => {
-                const count = countIsolates(matrix, project);
-                isolates[matrix] = count;
+        rowValues.forEach((rowValue) => {
+            const isolates: Record<string, string> = { name: rowValue };
+            colValues.forEach((colValue) => {
+                const count = countIsolates(colValue, rowValue);
+                isolates[colValue] = count;
             });
             newIsolates.push(isolates);
         });
         setAllIsolates(newIsolates);
-        setColumnAttributes(colAttributes);
+        setColumnAttributes(colValues);
     };
 
     useEffect((): void => {
         getAllIsolates();
-    }, [filter]);
+    }, [filter, table]);
 
     return (
         <div css={dataStyle}>
-            <h4 css={tableColumnHeader}>Matrix</h4>
+            <h4 css={tableColumnHeader}>{colAttribute}</h4>
             <div css={tableDivStyle}>
-                <h4 css={tableRowHeader}>Projektname</h4>
+                <h4 css={tableRowHeader}>{rowAttribute}</h4>
                 <TableContainer component={Paper} css={tableStyle}>
                     <Table stickyHeader aria-label="simple table" css={tableStyle}>
                         <TableHead>

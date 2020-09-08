@@ -1,15 +1,16 @@
 import React, { useState, createContext } from "react";
+import { FilterType } from "../Filter.model";
 
-export type TableType = "row" | "column"
+export type TableType = "row" | "column";
 
 export interface TableInterface {
-    row: string
-    column: string;
+    row: FilterType[];
+    column: FilterType[];
 }
 
 const defaultFilter: TableInterface = {
-    row: "",
-    column: ""
+    row: [],
+    column: [],
 };
 
 interface ProfileState {

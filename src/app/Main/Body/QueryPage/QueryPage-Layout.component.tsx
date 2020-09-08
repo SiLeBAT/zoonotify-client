@@ -19,6 +19,7 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { FilterType } from "../../../Shared/Filter.model";
+import { QueryPageTableRestultComponent } from "./QueryPage-ResultData.component";
 
 const drawerWidth = 433;
 
@@ -190,6 +191,7 @@ export function QueryPageLayoutComponent(): JSX.Element {
                     <Divider variant="middle" css={deviderStyle} />
                     <h3 css={subHeadingTextStyle}>{t("Results.Title")}</h3>
                     <DataContent />
+                    <QueryPageTableRestultComponent />
                 </div>
             </div>
         </main>

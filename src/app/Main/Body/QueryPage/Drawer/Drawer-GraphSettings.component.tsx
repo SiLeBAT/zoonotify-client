@@ -49,8 +49,8 @@ export function GraphSettingsComponent(): JSX.Element {
     };
 
     const mainFilterAttributes = Object.keys(filter)
-    const offeredAttributesRow = _.difference(mainFilterAttributes, [table.column])
-    const offeredAttributesColumn = _.difference(mainFilterAttributes, [table.row])
+    const offeredAttributesRow = _.difference(mainFilterAttributes, table.column)
+    const offeredAttributesColumn = _.difference(mainFilterAttributes, table.row)
 
     return (
         <div>
