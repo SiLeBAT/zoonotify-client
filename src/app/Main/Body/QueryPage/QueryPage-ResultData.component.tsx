@@ -47,6 +47,7 @@ const tableDivStyle = css`
 
 const tableStyle = css`
     box-sizing: inherit;
+    min-height: 110px;
 `;
 
 const useStyles = makeStyles({
@@ -72,6 +73,7 @@ const StyledTableCell = withStyles(() =>
 )(TableCell);
 
 export function QueryPageTableRestultComponent(): JSX.Element {
+    const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
     const [allIsolates, setAllIsolates] = useState<Record<string, string>[]>(
         []
     );
@@ -87,15 +89,24 @@ export function QueryPageTableRestultComponent(): JSX.Element {
     const getAllIsolates = async (): Promise<void> => {
         setAllIsolates([]);
         const newIsolates: Record<string, string>[] = [];
-        filter.Projektname.forEach((project) => {
+        let rowAttributes = data.uniqueValues.Projektname;
+        if (!_.isEmpty(filter.Projektname)) {
+            rowAttributes = filter.Projektname;
+        }
+        let colAttributes = data.uniqueValues.Matrix;
+        if (!_.isEmpty(filter.Matrix)) {
+            colAttributes = filter.Matrix;
+        }
+        rowAttributes.forEach((project) => {
             const isolates: Record<string, string> = { name: project };
-            filter.Matrix.forEach((matrix) => {
+            colAttributes.forEach((matrix) => {
                 const count = countIsolates(matrix, project);
                 isolates[matrix] = count;
             });
             newIsolates.push(isolates);
         });
         setAllIsolates(newIsolates);
+        setColumnAttributes(colAttributes);
     };
 
     useEffect((): void => {
@@ -108,7 +119,7 @@ export function QueryPageTableRestultComponent(): JSX.Element {
             <div css={tableDivStyle}>
                 <h4 css={tableRowHeader}>Projektname</h4>
                 <TableContainer component={Paper} css={tableStyle}>
-                    <Table stickyHeader aria-label="simple table">
+                    <Table stickyHeader aria-label="simple table" css={tableStyle}>
                         <TableHead>
                             <TableRow key="headerRow">
                                 <StyledTableCell key="header-blank">
@@ -116,15 +127,16 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                                 </StyledTableCell>
                                 {(function AddHeader(): JSX.Element[] {
                                     const elements: JSX.Element[] = [];
-                                    filter.Matrix.forEach((element): void => {
-                                        elements.push(
-                                            <StyledTableCell
-                                                key={`header-${element}`}
-                                            >
-                                                {element}
-                                            </StyledTableCell>
-                                        );
-                                    });
+                                    columnAttributes.forEach(
+                                        (element): void => {
+                                            elements.push(
+                                                <StyledTableCell
+                                                    key={`header-${element}`}
+                                                >
+                                                    {element}
+                                                </StyledTableCell>
+                                            );
+                                        });
                                     return elements;
                                 })()}
                             </TableRow>
