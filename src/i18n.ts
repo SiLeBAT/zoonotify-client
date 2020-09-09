@@ -10,7 +10,7 @@ i18n.use(Backend)
     .use(initReactI18next)
     .init({
         ns: ['DataProtection', 'Footer', 'Header', 'HomePage', 'QueryPage'],
-        debug: true,
+        debug: false,
         detection: {
             order: ["localStorage"],
             lookupLocalStorage: "i18nextLng",
