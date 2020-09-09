@@ -5,11 +5,11 @@ import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { TableSelectorComponent } from "./Table-Selector.component";
-import { SelectorItem } from "./Drawer-SelectorItem.component";
-import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import { TableContext } from "../../../../Shared/Context/TableContext";
+import { SelectorItem } from "./SimpleSelectorItem.component";
+import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import { TableContext } from "../../../../../Shared/Context/TableContext";
 
 
 const filterSubHeaderStyle = css`

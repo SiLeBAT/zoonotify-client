@@ -7,8 +7,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../Shared/Filter.model";
+import { FilterContext } from "../../../../Shared/Context/FilterContext";
+import { FilterType } from "../../../../Shared/Filter.model";
 import { ParameterListComponent } from "./Parameter-List.component";
 
 const subHeadingStyle = css`
