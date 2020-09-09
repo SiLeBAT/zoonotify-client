@@ -19,7 +19,7 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { FilterType } from "../../../Shared/Filter.model";
-import { TableContext, TableType } from "../../../Shared/Context/TableContext";
+import { TableContext } from "../../../Shared/Context/TableContext";
 import { QueryPageTableRestultComponent } from "./Results/QueryPage-ResultData.component";
 
 const drawerWidth = 433;
@@ -158,14 +158,11 @@ export function QueryPageComponent(): JSX.Element {
                 setIsFilter(true);
             }
         });
-        Object.keys(table).forEach((element): void => {
-            const e = element as TableType;
-            if (table[e].length !== 0) {
-                setIsTable(true);
-            } else {
-                setIsTable(false);
-            }
-        });
+        if (table.row.length !== 0 || table.column.length !== 0) {
+            setIsTable(true);
+        } else {
+            setIsTable(false);
+        }
     });
 
     return (

@@ -11,7 +11,7 @@ import { DataContext } from "../../../../Shared/Context/DataContext";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { FilterType } from "../../../../Shared/Filter.model";
 import { ResultsTableComponent } from "./Results-Table.component";
-
+import { getIsolatesRows } from "./Results-CountIsolates.service";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -50,50 +50,67 @@ export function QueryPageTableRestultComponent(): JSX.Element {
     const { data } = useContext(DataContext);
     const { table } = useContext(TableContext);
 
-
     const rowAttribute: FilterType = table.row;
     const colAttribute: FilterType = table.column;
 
-    const countIsolates = (colValue: string, rowValue: string): string => {
-        return (_.filter(data.ZNData, {
-            [colAttribute]: colValue,
-            [rowAttribute]: rowValue,
-        }).length as unknown) as string;
+    const getValuesFromData = (attribute: FilterType): string[] => {
+        let values = data.uniqueValues[attribute];
+        if (!_.isEmpty(filter[attribute])) {
+            values = filter[attribute];
+        }
+        return values;
     };
 
     const getAllIsolates = async (): Promise<void> => {
         setAllIsolates([]);
-        const newIsolates: Record<string, string>[] = [];
-        let rowValues = data.uniqueValues[rowAttribute];
-        if (!_.isEmpty(filter[rowAttribute])) {
-            rowValues = filter[rowAttribute];
+        const rowValues = getValuesFromData(rowAttribute);
+        const colValues = getValuesFromData(colAttribute);
+        if (rowAttribute.length !== 0 && colAttribute.length !== 0) {
+            const rowsWithIsolates = getIsolatesRows(
+                data.ZNData,
+                colAttribute,
+                rowAttribute,
+                rowValues,
+                colValues,
+                "both"
+            );
+            setAllIsolates(rowsWithIsolates);
+            setColumnAttributes(colValues);
+        } else if (rowAttribute.length === 0) {
+            const rowsWithIsolates = getIsolatesRows(
+                data.ZNData,
+                colAttribute,
+                rowAttribute,
+                ["Number of Isolates"],
+                colValues,
+                "col"
+            );
+            setAllIsolates(rowsWithIsolates);
+            setColumnAttributes(colValues);
+        } else if (colAttribute.length === 0) {
+            const rowsWithIsolates = getIsolatesRows(
+                data.ZNData,
+                colAttribute,
+                rowAttribute,
+                rowValues,
+                ["Number of Isolates"],
+                "row"
+            );
+            setAllIsolates(rowsWithIsolates);
+            setColumnAttributes(["Number of Isolates"]);
         }
-        let colValues = data.uniqueValues[colAttribute];
-        if (!_.isEmpty(filter[colAttribute])) {
-            colValues = filter[colAttribute];
-        }
-        rowValues.forEach((rowValue) => {
-            const isolates: Record<string, string> = { name: rowValue };
-            colValues.forEach((colValue) => {
-                const count = countIsolates(colValue, rowValue);
-                isolates[colValue] = count;
-            });
-            newIsolates.push(isolates);
-        });
-        setAllIsolates(newIsolates);
-        setColumnAttributes(colValues);
     };
 
     useEffect((): void => {
         getAllIsolates();
     }, [filter, table]);
-    
+
     return (
         <div css={dataStyle}>
             <h4 css={tableColumnHeader}>{colAttribute}</h4>
             <div css={tableDivStyle}>
                 <h4 css={tableRowHeader}>{rowAttribute}</h4>
-                <ResultsTableComponent 
+                <ResultsTableComponent
                     columnAttributes={columnAttributes}
                     allIsolates={allIsolates}
                 />
