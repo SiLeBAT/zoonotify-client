@@ -16,8 +16,9 @@ import { getIsolatesRows } from "./Results-CountIsolates.service";
 
 const dataStyle = css`
     box-sizing: inherit;
-    width: fit-content;
+    width: inherit;
     margin-left: 2em;
+    overflow: auto;
 `;
 const tableDivStyle = css`
     display: flex;
