@@ -78,11 +78,11 @@ export function ExportDataComponent(): JSX.Element {
     const ZNFilename = `ZooNotify_${getFormattedTime()}.csv`;
 
     const mainFilterLabels = {
-        Erreger: t("QueryPage:Drawer.Filters.Erreger"),
-        Matrix: t("QueryPage:Drawer.Filters.Matrix"),
-        Projektname: t("QueryPage:Drawer.Filters.Projektname")
+        Erreger: t("QueryPage:Filters.Erreger"),
+        Matrix: t("QueryPage:Filters.Matrix"),
+        Projektname: t("QueryPage:Filters.Projektname")
     };
-    const allFilterLabel: string = t("QueryPage:Drawer.Filters.All");
+    const allFilterLabel: string = t("QueryPage:Filters.All");
 
     return (
         <div css={dataStyle}>

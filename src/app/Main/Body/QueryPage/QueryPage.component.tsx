@@ -189,7 +189,7 @@ export function QueryPageComponent(): JSX.Element {
             <div css={contentStyle}>
                 <h1 css={headingStyle}>{t("Content.Title")}</h1>
                 <div css={contentBoxStyle}>
-                    {isFilter ? (
+                    {(isFilter || isTable ) ? (
                         <ParameterContent />
                     ) : (
                         <div>

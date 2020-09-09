@@ -1,6 +1,7 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
     primaryColor,
@@ -18,37 +19,40 @@ const dataStyle = css`
     width: fit-content;
     margin-left: 2em;
 `;
-const tableRowHeader = css`
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    transform: rotate(180deg);
-    writing-mode: vertical-lr;
-    font-weight: normal;
-    background-color: ${primaryColor};
-    color: ${onPrimaryColor};
-`;
-const tableColumnHeader = css`
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    font-weight: normal;
-    background-color: ${primaryColor};
-    color: ${onPrimaryColor};
-`;
 const tableDivStyle = css`
     display: flex;
     flex-direction: row;
 `;
+const tableTitleStyle = (
+    isTitle: boolean,
+    isRow: boolean
+): SerializedStyles => css`
+    display: ${isTitle ? "flex" : "none"};
+    margin: 0;
+    justify-content: center;
+    font-weight: normal;
+    background-color: ${primaryColor};
+    color: ${onPrimaryColor};
+    transform: ${isRow ? "rotate(180deg)" : "none"};
+    writing-mode: ${isRow ? "vertical-lr" : "none"};
+`;
 
 export function QueryPageTableRestultComponent(): JSX.Element {
-    const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
-    const [allIsolates, setAllIsolates] = useState<Record<string, string>[]>(
-        []
-    );
+    const [state, setState] = useState<{
+        isCol: boolean;
+        isRow: boolean;
+        columnAttributes: string[];
+        allIsolates: Record<string, string>[];
+    }>({
+        isCol: false,
+        isRow: false,
+        columnAttributes: [],
+        allIsolates: [],
+    });
     const { filter } = useContext(FilterContext);
     const { data } = useContext(DataContext);
     const { table } = useContext(TableContext);
+    const { t } = useTranslation(["QueryPage"]);
 
     const rowAttribute: FilterType = table.row;
     const colAttribute: FilterType = table.column;
@@ -62,7 +66,7 @@ export function QueryPageTableRestultComponent(): JSX.Element {
     };
 
     const getAllIsolates = async (): Promise<void> => {
-        setAllIsolates([]);
+        setState({ ...state, allIsolates: [] });
         const rowValues = getValuesFromData(rowAttribute);
         const colValues = getValuesFromData(colAttribute);
         if (rowAttribute.length !== 0 && colAttribute.length !== 0) {
@@ -74,45 +78,61 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                 colValues,
                 "both"
             );
-            setAllIsolates(rowsWithIsolates);
-            setColumnAttributes(colValues);
+            setState({
+                isCol: true,
+                isRow: true,
+                columnAttributes: colValues,
+                allIsolates: rowsWithIsolates,
+            });
         } else if (rowAttribute.length === 0) {
             const rowsWithIsolates = getIsolatesRows(
                 data.ZNData,
                 colAttribute,
                 rowAttribute,
-                ["Number of Isolates"],
+                [t("Results.TableHead")],
                 colValues,
                 "col"
             );
-            setAllIsolates(rowsWithIsolates);
-            setColumnAttributes(colValues);
+            setState({
+                isCol: true,
+                isRow: false,
+                columnAttributes: colValues,
+                allIsolates: rowsWithIsolates,
+            });
         } else if (colAttribute.length === 0) {
             const rowsWithIsolates = getIsolatesRows(
                 data.ZNData,
                 colAttribute,
                 rowAttribute,
                 rowValues,
-                ["Number of Isolates"],
+                [t("Results.TableHead")],
                 "row"
             );
-            setAllIsolates(rowsWithIsolates);
-            setColumnAttributes(["Number of Isolates"]);
+            setState({
+                isCol: false,
+                isRow: true,
+                columnAttributes: [t("Results.TableHead")],
+                allIsolates: rowsWithIsolates,
+            });
         }
     };
 
     useEffect((): void => {
         getAllIsolates();
-    }, [filter, table]);
+    }, [filter, table, localStorage.getItem("i18nextLng")]);
 
     return (
         <div css={dataStyle}>
-            <h4 css={tableColumnHeader}>{colAttribute}</h4>
+            <h4 css={tableTitleStyle(state.isCol, false)}>
+                {t(`Filters.${colAttribute}`)}
+            </h4>
             <div css={tableDivStyle}>
-                <h4 css={tableRowHeader}>{rowAttribute}</h4>
+                <h4 css={tableTitleStyle(state.isRow, true)}>
+                    {t(`Filters.${rowAttribute}`)}
+                </h4>
                 <ResultsTableComponent
-                    columnAttributes={columnAttributes}
-                    allIsolates={allIsolates}
+                    columnAttributes={state.columnAttributes}
+                    allIsolates={state.allIsolates}
                 />
             </div>
         </div>

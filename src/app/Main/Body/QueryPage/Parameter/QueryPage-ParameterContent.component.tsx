@@ -27,7 +27,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     filterKeys.forEach((element) => {
         const e = element as FilterType;
         if (filter[e].length === 0) {
-            displayFilter[e] = [t("Drawer.Filters.All")];
+            displayFilter[e] = [t("Filters.All")];
         } else {
             displayFilter[e] = filter[e];
         }
@@ -54,7 +54,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
                                     elements.push(
                                         <ParameterListComponent
                                             key={`parameter-list-${element}`}
-                                            label={t(`Drawer.Filters.${e}`)}
+                                            label={t(`Filters.${e}`)}
                                             keyName={keyName}
                                             listElements={displayFilter[e]}
                                         />

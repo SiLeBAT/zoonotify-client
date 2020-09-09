@@ -6,7 +6,7 @@
     "Results": {
         "Parameter": "Parameter",
         "Title": "Result",
-        "TableHead": "Number of isolates:"
+        "TableHead": "Number of isolates"
     },
     "Buttons": {
         "Submit": "Submit",
@@ -19,16 +19,16 @@
             "Graph": "Displayed features"
         },
         "Selector": "--Please select an option--",
-        "Filters": {
-            "All": "All values",
-            "Erreger": "Pathogens",
-            "Matrix": "Food products",
-            "Projektname": "Project name",
-            "Serovar": "Serovar"
-        },
         "Graphs": {
             "Row": "in rows",
             "Column": "in columns"
         }
+    },
+    "Filters": {
+        "All": "All values",
+        "Erreger": "Pathogens",
+        "Matrix": "Food products",
+        "Projektname": "Project name",
+        "Serovar": "Serovar"
     }
 }
