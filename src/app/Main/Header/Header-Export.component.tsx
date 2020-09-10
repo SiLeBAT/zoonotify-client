@@ -92,7 +92,7 @@ export function ExportDataComponent(): JSX.Element {
                     filename={ZNFilename}
                     exportFile={() =>
                         objectToCsv({
-                            data: data.ZNData,
+                            data: data.ZNDataFiltered,
                             keyValues: data.keyValues,
                             filter,
                             allFilterLabel,

@@ -53,7 +53,6 @@ const StyledTableCell = withStyles(() =>
     })
 )(TableCell);
 
-
 export function QueryPageTableComponent(): JSX.Element {
     const [isolates, setIsolates] = useState<number>();
     const classes = useStyles();
@@ -61,27 +60,25 @@ export function QueryPageTableComponent(): JSX.Element {
     const { data, setData } = useContext(DataContext);
     const { t } = useTranslation(["QueryPage"]);
     let filterData: DBentry[] = [];
-    
-    const useFilter = async (): Promise<void> => {
-        filterData = data.ZNData;
+
+    const useFilter = (): void => {
         const filterKeyValues = Object.keys(filter) as FilterType[];
-        await Promise.all(
-            filterKeyValues.map(async (attribute: FilterType) => {
-                const filterValues: string[] = filter[attribute];
-                let newFilterData: DBentry[] = [];
-                await Promise.all(
-                    filterValues.map(async (value: string) => {
-                        const partialFilterData: DBentry[] = _.filter(filterData, {
-                            [attribute]: value,
-                        });
-                        newFilterData = newFilterData.concat(partialFilterData);
-                    })
-                );
-                filterData = newFilterData;
-            })
-        );
-        setData({...data, ZNDataFiltered: filterData})
-        setIsolates(Object.keys(filterData).length);
+        let filteredData: DBentry[] = data.ZNData;
+        filterKeyValues.map(async (attribute: FilterType) => {
+            if (!_.isEmpty(filter[attribute])) {
+                let tempFilteredData: DBentry[] = [];
+                filter[attribute].forEach((element) => {
+                    tempFilteredData = tempFilteredData.concat(
+                        _.filter(filteredData, {
+                            [attribute]: element,
+                        })
+                    );
+                });
+                filteredData = tempFilteredData;
+            }
+        });
+        setData({ ...data, ZNDataFiltered: filteredData });
+        setIsolates(Object.keys(filteredData).length);
     };
 
     const noFilter = Object.keys(filter).every(function emptyArray(
@@ -95,7 +92,7 @@ export function QueryPageTableComponent(): JSX.Element {
     useEffect((): void => {
         if (noFilter) {
             filterData = data.ZNData;
-            setData({...data, ZNDataFiltered: data.ZNData})
+            setData({ ...data, ZNDataFiltered: data.ZNData });
             setIsolates(Object.keys(filterData).length);
         } else {
             useFilter();
