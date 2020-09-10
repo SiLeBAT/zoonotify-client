@@ -5,14 +5,17 @@ import { MainContainerComponent } from "./Main/Main-Container.component";
 import "../i18n";
 import { FilterProvider } from "./Shared/Context/FilterContext";
 import { DataProvider } from "./Shared/Context/DataContext";
+import { TableProvider } from "./Shared/Context/TableContext";
 
 ReactDOM.render(
     <Suspense fallback={<div>Loading</div>}>
         <FilterProvider>
             <DataProvider>
-                <StylesProvider injectFirst>
-                    <MainContainerComponent />
-                </StylesProvider>
+                <TableProvider>
+                    <StylesProvider injectFirst>
+                        <MainContainerComponent />
+                    </StylesProvider>
+                </TableProvider>
             </DataProvider>
         </FilterProvider>
     </Suspense>,

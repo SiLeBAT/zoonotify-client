@@ -90,7 +90,7 @@ export function FilterSettingsComponent(): JSX.Element {
                         <FilterSelectorComponent
                             key={`filter-selector-${filterAttribute}`}
                             index={i}
-                            label={t(`Drawer.Filters.${filterAttribute}`)}
+                            label={t(`Filters.${filterAttribute}`)}
                             filterAttribute={filterAttribute}
                             filterValues={filterValues}
                             inputElement={inputElement(filterAttribute)}

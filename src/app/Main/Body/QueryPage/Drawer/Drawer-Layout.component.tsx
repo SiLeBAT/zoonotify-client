@@ -4,7 +4,7 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import { FilterSettingsComponent as FilterSettings } from "./Filter/Drawer-FilterSettings.component";
-import { GraphSettingsComponent as GraphSettings } from "./Drawer-GraphSettings.component";
+import { GraphSettingsComponent as GraphSettings } from "./Displayed_Features/Drawer-GraphSettings.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const drawerWidth = 433;
