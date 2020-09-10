@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { QueryPageLayoutComponent as QueryPage } from "./QueryPage/QueryPage-Layout.component";
+import { QueryPageComponent as QueryPage } from "./QueryPage/QueryPage.component";
 import { HomePageLayoutComponent as HomePage } from "./HomePage/HomePage.component";
 import { DataProtectionPageComponent as DataProtection } from "./DataProtectionPage/DataProtectionPage.component";
 import { ZNPaths } from "../../Shared/URLs";

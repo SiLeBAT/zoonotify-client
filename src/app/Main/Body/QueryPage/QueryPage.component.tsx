@@ -10,8 +10,8 @@ import IconButton from "@material-ui/core/IconButton";
 import { useTranslation } from "react-i18next";
 import { ClippedDrawer as DrawerMenu } from "./Drawer/Drawer-Layout.component";
 import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
-import { QueryPageParameterContentComponent as ParameterContent } from "./QueryPage-ParameterContent.component";
-import { QueryPageTableComponent as DataContent } from "./QueryPage-Data.component";
+import { QueryPageParameterContentComponent as ParameterContent } from "./Parameter/QueryPage-ParameterContent.component";
+import { QueryPageTableComponent as DataContent } from "./QueryPage-IsolatesTable.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -19,6 +19,8 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { FilterType } from "../../../Shared/Filter.model";
+import { TableContext } from "../../../Shared/Context/TableContext";
+import { QueryPageTableRestultComponent } from "./Results/QueryPage-ResultData.component";
 
 const drawerWidth = 433;
 
@@ -132,10 +134,12 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export function QueryPageLayoutComponent(): JSX.Element {
+export function QueryPageComponent(): JSX.Element {
     const [open, setOpen] = useState(true);
     const [isFilter, setIsFilter] = useState(false);
+    const [isTable, setIsTable] = useState(false);
     const { filter } = useContext(FilterContext);
+    const { table } = useContext(TableContext);
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
 
@@ -154,6 +158,11 @@ export function QueryPageLayoutComponent(): JSX.Element {
                 setIsFilter(true);
             }
         });
+        if (table.row.length !== 0 || table.column.length !== 0) {
+            setIsTable(true);
+        } else {
+            setIsTable(false);
+        }
     });
 
     return (
@@ -180,7 +189,7 @@ export function QueryPageLayoutComponent(): JSX.Element {
             <div css={contentStyle}>
                 <h1 css={headingStyle}>{t("Content.Title")}</h1>
                 <div css={contentBoxStyle}>
-                    {isFilter ? (
+                    {(isFilter || isTable ) ? (
                         <ParameterContent />
                     ) : (
                         <div>
@@ -189,7 +198,11 @@ export function QueryPageLayoutComponent(): JSX.Element {
                     )}
                     <Divider variant="middle" css={deviderStyle} />
                     <h3 css={subHeadingTextStyle}>{t("Results.Title")}</h3>
-                    <DataContent />
+                    {isTable ? (
+                        <QueryPageTableRestultComponent />
+                    ) : (
+                        <DataContent />
+                    )}
                 </div>
             </div>
         </main>

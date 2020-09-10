@@ -7,8 +7,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../Shared/Filter.model";
+import { FilterContext } from "../../../../Shared/Context/FilterContext";
+import { FilterType } from "../../../../Shared/Filter.model";
 import { ParameterListComponent } from "./Parameter-List.component";
 
 const subHeadingStyle = css`
@@ -27,7 +27,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     filterKeys.forEach((element) => {
         const e = element as FilterType;
         if (filter[e].length === 0) {
-            displayFilter[e] = [t("Drawer.Filters.All")];
+            displayFilter[e] = [t("Filters.All")];
         } else {
             displayFilter[e] = filter[e];
         }
@@ -54,7 +54,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
                                     elements.push(
                                         <ParameterListComponent
                                             key={`parameter-list-${element}`}
-                                            label={t(`Drawer.Filters.${e}`)}
+                                            label={t(`Filters.${e}`)}
                                             keyName={keyName}
                                             listElements={displayFilter[e]}
                                         />

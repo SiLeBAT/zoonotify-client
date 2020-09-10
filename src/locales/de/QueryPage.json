@@ -6,7 +6,7 @@
     "Results": {
         "Parameter": "Parameter",
         "Title": "Ergbnis",
-        "TableHead": "Anzahl Isolate:"
+        "TableHead": "Anzahl Isolate"
     },
     "Buttons": {
         "Submit": "Ergbenisse anzeigen",
@@ -16,19 +16,19 @@
         "Title": "Grafikeinstellungen",
         "Subtitles": {
             "Filter": "Filter",
-            "Graph": "Diagrammachsen"
+            "Graph": "Anzuzeigende Merkmale"
         },
         "Selector": "--Bitte auswählen--",
-        "Filters": {
-            "All": "Alle Werte",
-            "Erreger": "Erreger",
-            "Matrix": "Lebensmittel",
-            "Projektname": "Projektname",
-            "Serovar": "Serovar"
-        },
         "Graphs": {
-            "Row": "Reihen",
-            "Column": "Spalten"
+            "Row": "in Zeilen",
+            "Column": "in Spalten"
         }
+    }, 
+    "Filters": {
+        "All": "Alle Werte",
+        "Erreger": "Erreger",
+        "Matrix": "Lebensmittel",
+        "Projektname": "Projektname",
+        "Serovar": "Serovar"
     }
 }
