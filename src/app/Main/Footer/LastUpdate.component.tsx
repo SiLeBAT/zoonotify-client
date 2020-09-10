@@ -27,10 +27,10 @@ export function LastUpdate(): JSX.Element {
                 {t("Date.Text")}{" "}
                 {moment(
                     lastChange,
-                    "YYYY-MM-DD HH:mm:ss Z",
+                    "YYYY-MM-DD HH:mm:ss ZZ",
                     dateLayout,
                     true
-                ).format("L")}
+                ).format("DD.MM.YYYY")}
             </p>
         </div>
     );
