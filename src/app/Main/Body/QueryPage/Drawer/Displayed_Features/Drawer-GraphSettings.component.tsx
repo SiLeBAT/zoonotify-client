@@ -8,8 +8,8 @@ import _ from "lodash";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { TableSelectorComponent } from "./Table-Selector.component";
 import { SelectorItem } from "./SimpleSelectorItem.component";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
+import { mainFilterAttributes } from "../../../../../Shared/Filter.model";
 
 
 const filterSubHeaderStyle = css`
@@ -37,7 +37,6 @@ const mainItemChild = (values: string[]): JSX.Element[] =>
 
 export function GraphSettingsComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext)
-    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleSwap = (): void => {
@@ -47,7 +46,6 @@ export function GraphSettingsComponent(): JSX.Element {
         });
     };
 
-    const mainFilterAttributes = Object.keys(filter)
     const offeredAttributesRow: string[] = _.difference(mainFilterAttributes, [table.column])
     const offeredAttributesColumn: string[] = _.difference(mainFilterAttributes, [table.row])
 

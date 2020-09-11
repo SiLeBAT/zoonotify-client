@@ -18,7 +18,7 @@ import {
     bfrLightblue,
 } from "../../../Shared/Style/Style-MainTheme.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../Shared/Filter.model";
+import { mainFilterAttributes } from "../../../Shared/Filter.model";
 import { TableContext } from "../../../Shared/Context/TableContext";
 import { QueryPageTableRestultComponent } from "./Results/QueryPage-ResultData.component";
 
@@ -152,9 +152,8 @@ export function QueryPageComponent(): JSX.Element {
     };
 
     useEffect((): void => {
-        Object.keys(filter).forEach((element): void => {
-            const e = element as FilterType;
-            if (filter[e].length !== 0) {
+        mainFilterAttributes.forEach((element): void => {
+            if (filter[element].length !== 0) {
                 setIsFilter(true);
             }
         });
