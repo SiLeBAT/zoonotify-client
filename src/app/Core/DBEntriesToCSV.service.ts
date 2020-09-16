@@ -1,5 +1,5 @@
 import { DBentry, DBtype } from "../Shared/Isolat.model";
-import { FilterInterface, FilterType } from "../Shared/Filter.model";
+import { FilterInterface, mainFilterAttributes } from "../Shared/Filter.model";
 
 interface ObjectToCsvProps {
     data: DBentry[];
@@ -16,13 +16,11 @@ export function objectToCsv(props: ObjectToCsvProps): string {
     csvRows.push("####################");
     csvRows.push("#####Parameter:");
 
-    Object.keys(props.filter).forEach((element): void => {
-        const e = element as FilterType;
-
-        if (props.filter[e].length !== 0) {
-            csvRows.push(`###${props.mainFilterLabels[e]}:"${props.filter[e].join('""')}"`);
+    mainFilterAttributes.forEach((element): void => {
+        if (props.filter[element].length !== 0) {
+            csvRows.push(`###${props.mainFilterLabels[element]}:"${props.filter[element].join('""')}"`);
         } else {
-            csvRows.push(`###${props.mainFilterLabels[e]}:${props.allFilterLabel}`);
+            csvRows.push(`###${props.mainFilterLabels[element]}:${props.allFilterLabel}`);
         }
     });
     csvRows.push("####################");

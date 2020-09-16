@@ -18,7 +18,7 @@ import {
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { DBentry } from "../../../Shared/Isolat.model";
-import { FilterType } from "../../../Shared/Filter.model";
+import { FilterType, mainFilterAttributes } from "../../../Shared/Filter.model";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -62,9 +62,8 @@ export function QueryPageTableComponent(): JSX.Element {
     let filterData: DBentry[] = [];
 
     const useFilter = (): void => {
-        const filterKeyValues = Object.keys(filter) as FilterType[];
         let filteredData: DBentry[] = data.ZNData;
-        filterKeyValues.map(async (attribute: FilterType) => {
+        mainFilterAttributes.map(async (attribute: FilterType) => {
             if (!_.isEmpty(filter[attribute])) {
                 let tempFilteredData: DBentry[] = [];
                 filter[attribute].forEach((element) => {
@@ -81,11 +80,10 @@ export function QueryPageTableComponent(): JSX.Element {
         setIsolates(Object.keys(filteredData).length);
     };
 
-    const noFilter = Object.keys(filter).every(function emptyArray(
+    const noFilter = mainFilterAttributes.every(function emptyArray(
         key
     ): boolean {
-        const k = key as FilterType;
-        const empty: boolean = _.isEmpty(filter[k]);
+        const empty: boolean = _.isEmpty(filter[key]);
         return empty;
     });
 

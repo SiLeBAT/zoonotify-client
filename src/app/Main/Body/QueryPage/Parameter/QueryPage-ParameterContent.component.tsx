@@ -8,7 +8,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../../Shared/Filter.model";
+import { mainFilterAttributes } from "../../../../Shared/Filter.model";
 import { ParameterListComponent } from "./Parameter-List.component";
 
 const subHeadingStyle = css`
@@ -23,13 +23,11 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const displayFilter = _.cloneDeep(filter);
-    const filterKeys = Object.keys(filter);
-    filterKeys.forEach((element) => {
-        const e = element as FilterType;
-        if (filter[e].length === 0) {
-            displayFilter[e] = [t("Filters.All")];
+    mainFilterAttributes.forEach((element) => {
+        if (filter[element].length === 0) {
+            displayFilter[element] = [t("Filters.All")];
         } else {
-            displayFilter[e] = filter[e];
+            displayFilter[element] = filter[element];
         }
     });
 
@@ -48,15 +46,14 @@ export function QueryPageParameterContentComponent(): JSX.Element {
                         <tbody>
                             {(function AddParameterElement(): JSX.Element[] {
                                 const elements: JSX.Element[] = [];
-                                filterKeys.forEach((element): void => {
+                                mainFilterAttributes.forEach((element): void => {
                                     const keyName = element.replace(" ", "_");
-                                    const e = element as FilterType;
                                     elements.push(
                                         <ParameterListComponent
                                             key={`parameter-list-${element}`}
-                                            label={t(`Filters.${e}`)}
+                                            label={t(`Filters.${element}`)}
                                             keyName={keyName}
-                                            listElements={displayFilter[e]}
+                                            listElements={displayFilter[element]}
                                         />
                                     );
                                 });
