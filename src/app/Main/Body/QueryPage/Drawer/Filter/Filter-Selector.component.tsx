@@ -51,7 +51,7 @@ export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
     const classes = useStyles();
     const {filter, setFilter} = useContext(FilterContext);
 
-    
+
     /**
      * @desc takes the current value of the selector with the onChange envent handler and sets it as filter value (in the Context).
      * @param React.ChangeEvent An onChange event handler returns a Synthetic Event object which contains meta data (target input’s id, name, current value)

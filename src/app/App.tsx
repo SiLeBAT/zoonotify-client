@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import * as ReactDOM from "react-dom";
 import { StylesProvider } from "@material-ui/core/styles";
-import { MainContainerComponent } from "./Main/Main-Container.component";
+import { MainLayoutComponent } from "./Main/Main-Layout.component";
 import "../i18n";
 import { FilterProvider } from "./Shared/Context/FilterContext";
 import { DataProvider } from "./Shared/Context/DataContext";
@@ -13,7 +13,7 @@ ReactDOM.render(
             <DataProvider>
                 <TableProvider>
                     <StylesProvider injectFirst>
-                        <MainContainerComponent />
+                        <MainLayoutComponent />
                     </StylesProvider>
                 </TableProvider>
             </DataProvider>
