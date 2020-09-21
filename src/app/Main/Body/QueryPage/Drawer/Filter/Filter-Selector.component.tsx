@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import React, { useContext } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -5,6 +7,11 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { InputLabel } from "@material-ui/core";
 import { FilterType } from "../../../../../Shared/Filter.model";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import { RemoveFilterComponent } from "./Filter-RemoveFilter.component";
+
+const selectorStyle = css`
+    flex-grow: 2;
+`;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -13,6 +20,8 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: "16px",
             marginRight: "16px",
             width: "23em",
+            display: "flex",
+            flexDirection: "row",
         },
         chips: {
             display: "flex",
@@ -51,7 +60,7 @@ export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
     const classes = useStyles();
     const {filter, setFilter} = useContext(FilterContext);
 
-
+    
     /**
      * @desc takes the current value of the selector with the onChange envent handler and sets it as filter value (in the Context).
      * @param React.ChangeEvent An onChange event handler returns a Synthetic Event object which contains meta data (target input’s id, name, current value)
@@ -78,9 +87,14 @@ export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
                 input={props.inputElement}
                 renderValue={props.randerValues}
                 MenuProps={MenuProps}
+                css={selectorStyle}
             >
                 {props.child}
             </Select>
+            <RemoveFilterComponent
+                mainButton={false}
+                filterAttribute={props.filterAttribute}
+            />
         </FormControl>
     );
 }

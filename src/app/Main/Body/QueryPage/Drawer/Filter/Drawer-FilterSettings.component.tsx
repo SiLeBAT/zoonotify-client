@@ -12,6 +12,7 @@ import {
     mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
 import { FilterSelectorComponent } from "./Filter-Selector.component";
+import { RemoveFilterComponent } from "./Filter-RemoveFilter.component";
 
 const filterHeadingStyle = css`
     margin-top: 0.5em;
@@ -20,6 +21,10 @@ const filterHeadingStyle = css`
     font-size: 1.5rem;
     line-height: 2rem;
     color: ${primaryColor};
+`;
+const filterAreaStyle = css`
+    display: flex;
+    flex-direction: row;
 `;
 const filterSubheadingStyle = css`
     margin: 2.5em 0 0 0;
@@ -72,15 +77,20 @@ export function FilterSettingsComponent(): JSX.Element {
 
     const inputElement = (key: FilterType): JSX.Element => (
         <Input id={`select-multiple-chip-id-${key}`} />
-    ); 
-    
-    const totalNumberOfFilters: number = mainFilterAttributes.length;
-    
+    );
 
+    const totalNumberOfFilters: number = mainFilterAttributes.length;
+
+    
     return (
         <div>
             <h3 css={filterHeadingStyle}>{t("Drawer.Title")}</h3>
-            <h4 css={filterSubheadingStyle}>{t("Drawer.Subtitles.Filter")}</h4>
+            <div css={filterAreaStyle}>
+                <h4 css={filterSubheadingStyle}>
+                    {t("Drawer.Subtitles.Filter")}
+                </h4>
+                <RemoveFilterComponent mainButton filterAttribute="all"/>
+            </div>
             {(function AddSelectorElements(): JSX.Element[] {
                 const elements: JSX.Element[] = [];
                 for (let i = 0; i < totalNumberOfFilters; i += 1) {
