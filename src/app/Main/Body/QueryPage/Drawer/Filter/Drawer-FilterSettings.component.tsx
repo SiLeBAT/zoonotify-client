@@ -12,7 +12,7 @@ import {
     mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
 import { FilterSelectorComponent } from "./Filter-Selector.component";
-import { RemoveFilterComponent } from "./Filter-RemoveFilter.component";
+import { ClearSelectorComponent as ClearSelectorButton} from "../../../../../Shared/ClearSelectorButton.component";
 
 const filterHeadingStyle = css`
     margin-top: 0.5em;
@@ -87,7 +87,12 @@ export function FilterSettingsComponent(): JSX.Element {
                 <h4 css={filterSubheadingStyle}>
                     {t("Drawer.Subtitles.Filter")}
                 </h4>
-                <RemoveFilterComponent mainButton filterAttribute="all" />
+                <ClearSelectorButton
+                    mainButton
+                    filterAttribute="all"
+                    isFilter
+                    isTabel={false}
+                />
             </div>
             {(function AddSelectorElements(): JSX.Element[] {
                 const elements: JSX.Element[] = [];

@@ -10,11 +10,15 @@ import { TableSelectorComponent } from "./Table-Selector.component";
 import { SelectorItem } from "./SimpleSelectorItem.component";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
 import { mainFilterAttributes } from "../../../../../Shared/Filter.model";
-
+import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 
 const filterSubHeaderStyle = css`
     margin: 2.5em 0 0 0;
     font-size: 1rem;
+`;
+const filterAreaStyle = css`
+    display: flex;
+    flex-direction: row;
 `;
 const iconButtonStyle = css`
     margin: 1em;
@@ -36,7 +40,7 @@ const mainItemChild = (values: string[]): JSX.Element[] =>
     );
 
 export function GraphSettingsComponent(): JSX.Element {
-    const { table, setTable } = useContext(TableContext)
+    const { table, setTable } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleSwap = (): void => {
@@ -46,12 +50,27 @@ export function GraphSettingsComponent(): JSX.Element {
         });
     };
 
-    const offeredAttributesRow: string[] = _.difference(mainFilterAttributes, [table.column])
-    const offeredAttributesColumn: string[] = _.difference(mainFilterAttributes, [table.row])
+    const offeredAttributesRow: string[] = _.difference(mainFilterAttributes, [
+        table.column,
+    ]);
+    const offeredAttributesColumn: string[] = _.difference(
+        mainFilterAttributes,
+        [table.row]
+    );
 
     return (
         <div>
-            <h4 css={filterSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</h4>
+            <div css={filterAreaStyle}>
+                <h4 css={filterSubHeaderStyle}>
+                    {t("Drawer.Subtitles.Graph")}
+                </h4>
+                <ClearSelectorButton
+                    mainButton
+                    filterAttribute="all"
+                    isFilter={false}
+                    isTabel
+                />
+            </div>
             <TableSelectorComponent
                 label={t("Drawer.Graphs.Row")}
                 inputProps={{

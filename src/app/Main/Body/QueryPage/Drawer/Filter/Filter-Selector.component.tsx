@@ -7,7 +7,7 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { InputLabel } from "@material-ui/core";
 import { FilterType } from "../../../../../Shared/Filter.model";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
-import { RemoveFilterComponent } from "./Filter-RemoveFilter.component";
+import { ClearSelectorComponent as ClearSelectorButton} from "../../../../../Shared/ClearSelectorButton.component";
 
 const selectorStyle = css`
     flex-grow: 2;
@@ -90,9 +90,11 @@ export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
             >
                 {props.child}
             </Select>
-            <RemoveFilterComponent
+            <ClearSelectorButton
                 mainButton={false}
                 filterAttribute={props.filterAttribute}
+                isFilter
+                isTabel={false}
             />
         </FormControl>
     );
