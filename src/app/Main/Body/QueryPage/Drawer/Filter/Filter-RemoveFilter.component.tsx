@@ -9,6 +9,7 @@ import {
     FilterContext,
 } from "../../../../../Shared/Context/FilterContext";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { defaultTable, TableContext, TableType } from "../../../../../Shared/Context/TableContext";
 
 const buttonAreaStyle = (isMainButton: boolean): SerializedStyles => css`
     margin-top: ${isMainButton ? "auto" : "11px"};
@@ -25,20 +26,34 @@ const iconButtonStyle = css`
 
 interface RemoveButtonProps {
     mainButton: boolean;
-    filterAttribute: FilterType | "all";
+    filterAttribute: FilterType | "all" | TableType;
+    isFilter: boolean;
+    isTabel: boolean;
 }
 
 export function RemoveFilterComponent(props: RemoveButtonProps): JSX.Element {
     const { filter, setFilter } = useContext(FilterContext);
+    const { table, setTable } = useContext(TableContext);
 
-    const handleRemove = (keyName: FilterType | "all"): void => {
-        if (keyName === "all") {
-            setFilter(defaultFilter);
-        } else {
-            setFilter({
-                ...filter,
-                [keyName]: [],
-            });
+    const handleRemove = (keyName: FilterType | "all" | TableType): void => {
+        if (props.isFilter) {
+            if (keyName === "all") {
+                setFilter(defaultFilter);
+            } else {
+                setFilter({
+                    ...filter,
+                    [keyName]: [],
+                });
+            }
+        } else if (props.isTabel) {
+            if (keyName === "all") {
+                setTable(defaultTable);
+            } else {
+                setTable({
+                    ...table,
+                    [keyName]: "",
+                });
+            }
         }
     };
 

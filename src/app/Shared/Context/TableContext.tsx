@@ -8,7 +8,7 @@ export interface TableInterface {
     column: FilterType;
 }
 
-const defaultTable: TableInterface = {
+export const defaultTable: TableInterface = {
     row: "" as FilterType,
     column: "" as FilterType,
 };

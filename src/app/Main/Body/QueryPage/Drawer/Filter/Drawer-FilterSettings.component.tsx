@@ -87,7 +87,7 @@ export function FilterSettingsComponent(): JSX.Element {
                 <h4 css={filterSubheadingStyle}>
                     {t("Drawer.Subtitles.Filter")}
                 </h4>
-                <RemoveFilterComponent mainButton filterAttribute="all" />
+                <RemoveFilterComponent mainButton filterAttribute="all" isFilter isTabel={false}/>
             </div>
             {(function AddSelectorElements(): JSX.Element[] {
                 const elements: JSX.Element[] = [];

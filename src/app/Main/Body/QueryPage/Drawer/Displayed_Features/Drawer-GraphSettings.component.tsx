@@ -10,11 +10,16 @@ import { TableSelectorComponent } from "./Table-Selector.component";
 import { SelectorItem } from "./SimpleSelectorItem.component";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
 import { mainFilterAttributes } from "../../../../../Shared/Filter.model";
+import { RemoveFilterComponent } from "../Filter/Filter-RemoveFilter.component";
 
 
 const filterSubHeaderStyle = css`
     margin: 2.5em 0 0 0;
     font-size: 1rem;
+`;
+const filterAreaStyle = css`
+    display: flex;
+    flex-direction: row;
 `;
 const iconButtonStyle = css`
     margin: 1em;
@@ -51,7 +56,17 @@ export function GraphSettingsComponent(): JSX.Element {
 
     return (
         <div>
-            <h4 css={filterSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</h4>
+            <div css={filterAreaStyle}>
+                <h4 css={filterSubHeaderStyle}>
+                    {t("Drawer.Subtitles.Graph")}
+                </h4>
+                <RemoveFilterComponent
+                    mainButton
+                    filterAttribute="all"
+                    isFilter={false}
+                    isTabel
+                />
+            </div>
             <TableSelectorComponent
                 label={t("Drawer.Graphs.Row")}
                 inputProps={{

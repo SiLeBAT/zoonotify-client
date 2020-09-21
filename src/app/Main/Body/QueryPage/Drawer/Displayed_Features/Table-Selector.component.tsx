@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import React, { useContext } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -5,6 +7,11 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { InputLabel } from "@material-ui/core";
 import { TableContext, TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterType } from "../../../../../Shared/Filter.model";
+import { RemoveFilterComponent } from "../Filter/Filter-RemoveFilter.component";
+
+const selectorStyle = css`
+    flex-grow: 2;
+`;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -13,6 +20,8 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: "16px",
             marginRight: "16px",
             width: "23em",
+            display: "flex",
+            flexDirection: "row",
         },
         selectEmpty: {
             marginTop: theme.spacing(2),
@@ -54,10 +63,12 @@ export function TableSelectorComponent(props: SelectorProps): JSX.Element {
                     value={table[props.inputProps.name]}
                     onChange={(e) => handleChange(e, props.inputProps.name)}
                     inputProps={props.inputProps}
+                    css={selectorStyle}
                 >
                     <option aria-label="None" value="" />
                     {props.child}
                 </Select>
+                <RemoveFilterComponent mainButton={false} filterAttribute={props.inputProps.name} isFilter={false} isTabel />
             </FormControl>
         </div>
     );

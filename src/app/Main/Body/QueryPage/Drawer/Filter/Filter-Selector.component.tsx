@@ -93,6 +93,8 @@ export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
             <RemoveFilterComponent
                 mainButton={false}
                 filterAttribute={props.filterAttribute}
+                isFilter 
+                isTabel={false}
             />
         </FormControl>
     );
