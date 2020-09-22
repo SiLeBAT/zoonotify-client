@@ -52,7 +52,7 @@ export function QueryPageTableRestultComponent(): JSX.Element {
     });
     const { filter } = useContext(FilterContext);
     const { data } = useContext(DataContext);
-    const { table } = useContext(TableContext);
+    const { table, setTable } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
     const rowAttribute: FilterType = table.row;
@@ -84,6 +84,10 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                 isRow: true,
                 columnAttributes: colValues,
                 allIsolates: rowsWithIsolates,
+            })
+            setTable({
+                ...table,
+                statisticData: state.allIsolates,
             });
         } else if (rowAttribute.length === 0) {
             const rowsWithIsolates = getIsolatesRows(
@@ -100,6 +104,11 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                 columnAttributes: colValues,
                 allIsolates: rowsWithIsolates,
             });
+
+            setTable({
+                ...table,
+                statisticData: state.allIsolates,
+            });
         } else if (colAttribute.length === 0) {
             const rowsWithIsolates = getIsolatesRows(
                 data.ZNData,
@@ -115,12 +124,16 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                 columnAttributes: [t("Results.TableHead")],
                 allIsolates: rowsWithIsolates,
             });
+            setTable({
+                ...table,
+                statisticData: state.allIsolates,
+            });
         }
     };
 
     useEffect((): void => {
         getAllIsolates();
-    }, [filter, table, localStorage.getItem("i18nextLng")]);
+    }, [filter, table.column, table.row, localStorage.getItem("i18nextLng")]);
 
     return (
         <div css={dataStyle}>
