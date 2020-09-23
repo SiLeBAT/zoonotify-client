@@ -3,7 +3,7 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ExportDataComponent } from "./Header-Export.component";
+import { ExportDataComponent } from "./Export/Header-Export.component";
 import { TranslationButtonsComponent as TranslationButtons } from "./TranslationButtons.component";
 import {
     primaryColor,
@@ -87,18 +87,12 @@ export function HeaderLayoutComponent(): JSX.Element {
         <header css={headerStyle}>
             <div css={mainHeaderStyle}>
                 <div css={leftHeaderStyle}>
-                    <NavLink
-                        to={ZNPaths.homePagePath}
-                        css={appNameStyle}
-                    >
+                    <NavLink to={ZNPaths.homePagePath} css={appNameStyle}>
                         ZooNotify
                     </NavLink>
                     <TranslationButtons />
                 </div>
-                <NavLink
-                    to={ZNPaths.queryPagePath}
-                    css={queryStyle(open)}
-                >
+                <NavLink to={ZNPaths.queryPagePath} css={queryStyle(open)}>
                     {t("Query")}
                 </NavLink>
             </div>

@@ -10,14 +10,13 @@ export interface ExportInterface {
     };
     rawDataSet: {
         rawData: DBentry[];
-        rawKeys: DBtype[]; 
-    }; 
+        rawKeys: DBtype[];
+    };
     statDataSet: {
         statData: Record<string, string>[];
-        statKeys:string[];
+        statKeys: string[];
     };
 }
-
 
 export const defaultExport = {
     raw: true,
@@ -33,5 +32,11 @@ export const defaultExport = {
     statDataSet: {
         statData: [],
         statKeys: [],
-    }
+    },
 };
+
+export interface MainFilterLabelInterface {
+    Erreger: string;
+    Matrix: string;
+    Projektname: string;
+}
