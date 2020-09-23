@@ -87,7 +87,7 @@ export function QueryPageTableRestultComponent(): JSX.Element {
             })
             setTable({
                 ...table,
-                statisticData: state.allIsolates,
+                statisticData: rowsWithIsolates,
             });
         } else if (rowAttribute.length === 0) {
             const rowsWithIsolates = getIsolatesRows(
@@ -107,7 +107,7 @@ export function QueryPageTableRestultComponent(): JSX.Element {
 
             setTable({
                 ...table,
-                statisticData: state.allIsolates,
+                statisticData: rowsWithIsolates,
             });
         } else if (colAttribute.length === 0) {
             const rowsWithIsolates = getIsolatesRows(
@@ -126,7 +126,7 @@ export function QueryPageTableRestultComponent(): JSX.Element {
             });
             setTable({
                 ...table,
-                statisticData: state.allIsolates,
+                statisticData: rowsWithIsolates,
             });
         }
     };

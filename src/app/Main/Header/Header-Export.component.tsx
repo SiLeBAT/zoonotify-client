@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DownloadLink from "react-download-link";
 import {
     Button,
@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 import {
     onPrimaryColor,
     primaryColor,
@@ -23,6 +24,9 @@ import {
 import { DataContext } from "../../Shared/Context/DataContext";
 import { FilterContext } from "../../Shared/Context/FilterContext";
 import { objectToCsv } from "../../Core/DBEntriesToCSV.service";
+import { TableContext } from "../../Shared/Context/TableContext";
+import { DBentry, DBtype } from "../../Shared/Isolat.model";
+import { defaultExport, ExportInterface } from "../../Shared/Export.model";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -79,16 +83,45 @@ function getFormattedTime(): string {
     return `${y}-${m}-${d}T${h}${mi}${s}`;
 }
 
-
 export function ExportDataComponent(): JSX.Element {
     const [open, setOpen] = useState(false);
-    const [setting, setSetting] = useState({
-        raw: true,
-        sum: true,
-    });
+    const [setting, setSetting] = useState<ExportInterface>(defaultExport);
     const { data } = useContext(DataContext);
     const { filter } = useContext(FilterContext);
+    const { table } = useContext(TableContext);
     const { t } = useTranslation(["Header", "QueryPage"]);
+
+    const chooseData = (raw: boolean, stat: boolean): void => {
+        const rawData: DBentry[] = raw ? data.ZNDataFiltered : [];
+        const rawKeys: DBtype[] = raw ? data.keyValues : [];
+        const statData: Record<string, string>[] = stat
+            ? table.statisticData
+            : [];
+        const statKeys: string[] =
+            stat && !_.isEmpty(table.statisticData)
+                ? Object.keys(table.statisticData[0])
+                : [];
+
+        setSetting({
+            ...setting,
+            tableAttributes: {
+                row: table.row,
+                column: table.column,
+            },
+            rawDataSet: {
+                rawData,
+                rawKeys,
+            },
+            statDataSet: {
+                statData,
+                statKeys,
+            },
+        });
+    };
+
+    useEffect(() => {
+        chooseData(setting.raw, setting.stat);
+    }, [table.statisticData, setting.raw, setting.stat]);
 
     const handleClickOpen = (): void => {
         setOpen(true);
@@ -113,7 +146,7 @@ export function ExportDataComponent(): JSX.Element {
     const mainFilterLabels = {
         Erreger: t("QueryPage:Filters.Erreger"),
         Matrix: t("QueryPage:Filters.Matrix"),
-        Projektname: t("QueryPage:Filters.Projektname")
+        Projektname: t("QueryPage:Filters.Projektname"),
     };
     const allFilterLabel: string = t("QueryPage:Filters.All");
 
@@ -154,9 +187,9 @@ export function ExportDataComponent(): JSX.Element {
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={setting.sum}
+                                    checked={setting.stat}
                                     onChange={handleChange}
-                                    name="sum"
+                                    name="stat"
                                     color="primary"
                                 />
                             }
@@ -178,8 +211,7 @@ export function ExportDataComponent(): JSX.Element {
                             filename={ZNFilename}
                             exportFile={() =>
                                 objectToCsv({
-                                    data: data.ZNDataFiltered,
-                                    keyValues: data.keyValues,
+                                    setting,
                                     filter,
                                     allFilterLabel,
                                     mainFilterLabels,
