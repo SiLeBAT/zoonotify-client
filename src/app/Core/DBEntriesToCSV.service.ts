@@ -4,7 +4,7 @@ import { FilterInterface, mainFilterAttributes } from "../Shared/Filter.model";
 import { ExportInterface } from "../Shared/Export.model";
 
 function stringModification(inputString: string): string {
-    return inputString.replace(/"/g, '\\"').replace("undefined", "");
+    return `"${inputString.replace(/"/g, '\\"').replace("undefined", "")}"`;
 }
 
 function generateCSVString<
