@@ -1,8 +1,8 @@
-import { FilterInterface } from "../Shared/Filter.model";
-import { ExportInterface } from "../Shared/Export.model";
-import { generateParameterHeader } from "./ExportServices/generateParameterHeader.service";
-import { RAWDataStringGenerator } from "./ExportServices/generateRAWString.service";
-import { statDataStringGenerator } from "./ExportServices/generateStatString.service";
+import { FilterInterface } from "../../Shared/Filter.model";
+import { ExportInterface } from "../../Shared/Export.model";
+import { generateParameterHeader } from "./generateParameterHeader.service";
+import { RAWDataStringGenerator } from "./generateRAWString.service";
+import { statDataStringGenerator } from "./generateStatString.service";
 
 interface ObjectToCsvProps {
     setting: ExportInterface;

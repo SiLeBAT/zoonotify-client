@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { Button, withStyles } from "@material-ui/core";
 import { onPrimaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 
-const ButtonStyle = css`
+const downloadButtonStyle = css`
     margin-right: 1em;
     padding: 2px 4px;
     line-height: 0px;
@@ -39,7 +39,7 @@ export function ExportButtonComponent(props: ExportButtonProps): JSX.Element {
     return (
         <DownloadButton
             size="small"
-            css={ButtonStyle}
+            css={downloadButtonStyle}
             onClick={handleClickOpen}
         >
             {props.buttonLabel}

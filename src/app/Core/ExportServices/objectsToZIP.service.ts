@@ -55,7 +55,7 @@ export function objectToZIP(props: ObjectToCsvBothProps): void {
     zip.generateAsync({ type: "blob", comment: folderName })
         .then((content) => {
             saveAs(content, folderName);
-            return Promise;
+            return true;
         })
         .catch(() => {
             return false;

@@ -3,7 +3,7 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { CSVLink } from "react-csv";
 import { useTranslation } from "react-i18next";
 import { Button, DialogActions } from "@material-ui/core";
-import { objectToCsv } from "../../../Core/DBEntriesToCSV.service";
+import { objectToCsv } from "../../../Core/ExportServices/objectToCSV.service";
 import { objectToZIP } from "../../../Core/ExportServices/objectsToZIP.service";
 import {
     ExportInterface,
@@ -12,7 +12,7 @@ import {
 import { FilterInterface } from "../../../Shared/Filter.model";
 import { errorColor } from "../../../Shared/Style/Style-MainTheme.component";
 
-const ButtonLinkStyle = css`
+const buttonLinkStyle = css`
     all: inherit !important;
 `;
 
@@ -48,6 +48,14 @@ export function ExportActionButtonComponent(
         fileIsSelect = false;
     }
 
+    let subFileName = "";
+    if (props.setting.raw && !props.setting.stat) {
+        subFileName = "RAW-Data";
+    }
+    if (!props.setting.raw && props.setting.stat) {
+        subFileName = "Statistic-Data";
+    }
+
     return (
         <div>
             <p css={warningStyle(fileIsSelect)}>{t("Warning")}</p>
@@ -63,7 +71,7 @@ export function ExportActionButtonComponent(
                             allFilterLabel: props.allFilterLabel,
                             mainFilterLabels: props.mainFilterLabels,
                         })}
-                        filename={props.ZNFilename}
+                        filename={`${subFileName}_${props.ZNFilename}`}
                         target="_blank"
                         onClick={() => {
                             if (props.setting.raw && props.setting.stat) {
@@ -78,7 +86,7 @@ export function ExportActionButtonComponent(
                             }
                             return true;
                         }}
-                        css={ButtonLinkStyle}
+                        css={buttonLinkStyle}
                     >
                         {props.buttonLabel}
                     </CSVLink>
