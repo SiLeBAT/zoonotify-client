@@ -1,7 +1,17 @@
 import React from "react";
 import TableCell from "@material-ui/core/TableCell";
 
-export function RowValues(row: Record<string, string>, classes: Record<"tableCell", string>): JSX.Element[] {
+function chooseAlignment(element: string): "left" | "right" {
+    if (element === "name") {
+        return "left";
+    }
+    return "right";
+}
+
+export function RowValues(
+    row: Record<string, string>,
+    classes: Record<"tableCell", string>
+): JSX.Element[] {
     const elements: JSX.Element[] = [];
     const k = Object.keys(row);
     k.forEach((element): void => {
@@ -11,7 +21,7 @@ export function RowValues(row: Record<string, string>, classes: Record<"tableCel
                 className={classes.tableCell}
                 component="th"
                 scope="row"
-                align="right"
+                align={chooseAlignment(element)}
             >
                 {row[element]}
             </TableCell>
