@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import DownloadLink from "react-download-link";
+import { CSVLink } from "react-csv";
 import { Button, DialogActions } from "@material-ui/core";
 import { objectToCsv } from "../../../Core/DBEntriesToCSV.service";
+import { objectToZIP } from "../../../Core/ExportServices/objectsToZIP.service";
 import {
     ExportInterface,
     MainFilterLabelInterface,
@@ -54,19 +55,32 @@ export function ExportActionButtonComponent(
                     Cancel
                 </Button>
                 <Button color="primary" disabled={!fileIsSelect}>
-                    <DownloadLink
-                        label={props.buttonLabel}
+                    <CSVLink
+                        data={objectToCsv({
+                            setting: props.setting,
+                            filter: props.filter,
+                            allFilterLabel: props.allFilterLabel,
+                            mainFilterLabels: props.mainFilterLabels,
+                        })}
                         filename={props.ZNFilename}
-                        exportFile={() =>
-                            objectToCsv({
-                                setting: props.setting,
-                                filter: props.filter,
-                                allFilterLabel: props.allFilterLabel,
-                                mainFilterLabels: props.mainFilterLabels,
-                            })
-                        }
+                        target="_blank"
+                        onClick={() => {
+                            if (props.setting.raw && props.setting.stat) {
+                                objectToZIP({
+                                    setting: props.setting,
+                                    ZNFilename: props.ZNFilename,
+                                    filter: props.filter,
+                                    allFilterLabel: props.allFilterLabel,
+                                    mainFilterLabels: props.mainFilterLabels,
+                                });
+                                return false;
+                            }
+                            return true;
+                        }}
                         css={ButtonLinkStyle}
-                    />
+                    >
+                        {props.buttonLabel}
+                    </CSVLink>
                 </Button>
             </DialogActions>
         </div>
