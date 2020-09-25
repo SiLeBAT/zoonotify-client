@@ -13,7 +13,7 @@
         "Delete": "Delete all filter"
     },
     "Drawer": {
-        "Title": "Graph Controls",
+        "Title": "Filter settings",
         "Subtitles": {
             "Filter": "Filters",
             "Graph": "Displayed features"
