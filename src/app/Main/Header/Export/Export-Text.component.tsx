@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
     DialogContent,
     DialogContentText,
@@ -6,14 +7,13 @@ import {
 } from "@material-ui/core";
 
 export function DialogContentComponent(): JSX.Element {
+    const { t } = useTranslation(["Export"]);
+
     return (
         <div>
-            <DialogTitle id="form-dialog-title">Export Settings</DialogTitle>
+            <DialogTitle>{t("Content.Title")}</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    You can choose whether to download the complete data set or
-                    the displayed statistics or both.
-                </DialogContentText>
+                <DialogContentText>{t("Content.Text")}</DialogContentText>
             </DialogContent>
         </div>
     );

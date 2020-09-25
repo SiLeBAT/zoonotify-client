@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import { CSVLink } from "react-csv";
+import { useTranslation } from "react-i18next";
 import { Button, DialogActions } from "@material-ui/core";
 import { objectToCsv } from "../../../Core/DBEntriesToCSV.service";
 import { objectToZIP } from "../../../Core/ExportServices/objectsToZIP.service";
@@ -36,6 +37,8 @@ interface ExportActionButtonProps {
 export function ExportActionButtonComponent(
     props: ExportActionButtonProps
 ): JSX.Element {
+    const { t } = useTranslation(["Export"]);
+
     const handleClose = (event: unknown): void => {
         props.onClick(event);
     };
@@ -47,12 +50,10 @@ export function ExportActionButtonComponent(
 
     return (
         <div>
-            <p css={warningStyle(fileIsSelect)}>
-                Please select at least one option or cancel the export
-            </p>
+            <p css={warningStyle(fileIsSelect)}>{t("Warning")}</p>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
-                    Cancel
+                    {t("Button.Cancel")}
                 </Button>
                 <Button color="primary" disabled={!fileIsSelect}>
                     <CSVLink

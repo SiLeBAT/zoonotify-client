@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const checkboxStyle = css`
     margin-left: 2rem;
@@ -13,6 +14,8 @@ interface CheckboxProps {
 }
 
 export function CheckBoxComponent(props: CheckboxProps): JSX.Element {
+    const { t } = useTranslation(["Export"]);
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         props.onChange(event);
     };
@@ -28,7 +31,7 @@ export function CheckBoxComponent(props: CheckboxProps): JSX.Element {
                         color="primary"
                     />
                 }
-                label="Dataset"
+                label={t("Checkbox.RAW")}
             />
             <FormControlLabel
                 control={
@@ -39,7 +42,7 @@ export function CheckBoxComponent(props: CheckboxProps): JSX.Element {
                         color="primary"
                     />
                 }
-                label="Number of Isolates"
+                label={t("Checkbox.Stat")}
             />
         </FormGroup>
     );
