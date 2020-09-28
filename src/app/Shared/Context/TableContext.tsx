@@ -9,7 +9,7 @@ export interface TableInterface {
     statisticData: Record<string, string>[]
 }
 
-const defaultTable: TableInterface = {
+export const defaultTable: TableInterface = {
     row: "" as FilterType,
     column: "" as FilterType,
     statisticData: []
