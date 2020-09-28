@@ -41,6 +41,7 @@ export function GraphSettingsComponent(): JSX.Element {
 
     const handleSwap = (): void => {
         setTable({
+            ...table,
             row: table.column,
             column: table.row,
         });

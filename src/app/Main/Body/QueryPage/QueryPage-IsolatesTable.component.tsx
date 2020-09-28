@@ -19,6 +19,7 @@ import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { DBentry } from "../../../Shared/Isolat.model";
 import { FilterType, mainFilterAttributes } from "../../../Shared/Filter.model";
+import { TableContext } from "../../../Shared/Context/TableContext";
 
 const dataStyle = css`
     box-sizing: inherit;
@@ -58,6 +59,7 @@ export function QueryPageTableComponent(): JSX.Element {
     const classes = useStyles();
     const { filter } = useContext(FilterContext);
     const { data, setData } = useContext(DataContext);
+    const { table, setTable } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
     let filterData: DBentry[] = [];
 
@@ -78,6 +80,7 @@ export function QueryPageTableComponent(): JSX.Element {
         });
         setData({ ...data, ZNDataFiltered: filteredData });
         setIsolates(Object.keys(filteredData).length);
+        setTable({...table, statisticData: [{"Number of isolates": String(Object.keys(filteredData).length)}]})
     };
 
     const noFilter = mainFilterAttributes.every(function emptyArray(
@@ -92,6 +95,7 @@ export function QueryPageTableComponent(): JSX.Element {
             filterData = data.ZNData;
             setData({ ...data, ZNDataFiltered: data.ZNData });
             setIsolates(Object.keys(filterData).length);
+            setTable({...table, statisticData: [{"Number of isolates": String(Object.keys(filterData).length)}]})
         } else {
             useFilter();
         }
