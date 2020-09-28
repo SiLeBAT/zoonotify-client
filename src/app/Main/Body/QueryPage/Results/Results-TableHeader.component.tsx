@@ -20,9 +20,11 @@ const StyledTableCell = withStyles(() =>
     })
 )(TableCell);
 
+// TODO: Hier mache ich den Header und mache ein Leerzeichen davor - das brauche ich bei allen Isolaten nicht
+
 export function Header(headerValues: string[]): JSX.Element[] {
     const elements: JSX.Element[] = [];
-    elements.push(<StyledTableCell key="header-blank">&nbsp;</StyledTableCell>);
+    /* elements.push(<StyledTableCell key="header-blank">&nbsp;</StyledTableCell>); */
     headerValues.forEach((element): void => {
         elements.push(
             <StyledTableCell key={`header-${element}`}>

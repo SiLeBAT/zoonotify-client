@@ -1,27 +1,27 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { useContext, useState, useEffect } from "react";
-import { withStyles, createStyles, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
+/* import { css, jsx } from "@emotion/core";
+ */import { useContext,/*  useState, */ useEffect } from "react";
+/* import { withStyles, createStyles,  makeStyles } from "@material-ui/core/styles"; */
+/* import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import Paper from "@material-ui/core/Paper"; */
 import _ from "lodash";
-import { useTranslation } from "react-i18next";
-import {
+/* import { useTranslation } from "react-i18next";
+ */ /* import {
     primaryColor,
     onBackgroundColor,
-} from "../../../Shared/Style/Style-MainTheme.component";
+} from "../../../Shared/Style/Style-MainTheme.component"; */
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { DBentry } from "../../../Shared/Isolat.model";
 import { FilterType, mainFilterAttributes } from "../../../Shared/Filter.model";
 import { TableContext } from "../../../Shared/Context/TableContext";
 
-const dataStyle = css`
+/* const dataStyle = css`
     box-sizing: inherit;
     width: fit-content;
     margin-left: 2em;
@@ -29,18 +29,18 @@ const dataStyle = css`
 
 const tableStyle = css`
     box-sizing: inherit;
-`;
+`; */
 
-const useStyles = makeStyles({
+/* const useStyles = makeStyles({
     tableCell: {
         wordWrap: "break-word",
         textAlign: "center",
         padding: "0.75em",
         color: onBackgroundColor,
     },
-});
+}); */
 
-const StyledTableCell = withStyles(() =>
+/* const StyledTableCell = withStyles(() =>
     createStyles({
         head: {
             padding: "0.75em",
@@ -52,16 +52,18 @@ const StyledTableCell = withStyles(() =>
             fontSize: 14,
         },
     })
-)(TableCell);
+)(TableCell); */
 
-export function QueryPageTableComponent(): JSX.Element {
-    const [isolates, setIsolates] = useState<number>();
-    const classes = useStyles();
+// Tabelle nur für Isolate
+
+export function QueryPageTableComponent(): void {
+/*     const [isolates, setIsolates] = useState<number>();
+ *//*     const classes = useStyles(); */
     const { filter } = useContext(FilterContext);
     const { data, setData } = useContext(DataContext);
     const { table, setTable } = useContext(TableContext);
-    const { t } = useTranslation(["QueryPage"]);
-    let filterData: DBentry[] = [];
+/*     const { t } = useTranslation(["QueryPage"]);
+ */    let filterData: DBentry[] = [];
 
     const useFilter = (): void => {
         let filteredData: DBentry[] = data.ZNData;
@@ -79,8 +81,8 @@ export function QueryPageTableComponent(): JSX.Element {
             }
         });
         setData({ ...data, ZNDataFiltered: filteredData });
-        setIsolates(Object.keys(filteredData).length);
-        setTable({...table, statisticData: [{"Number of isolates": String(Object.keys(filteredData).length)}]})
+/*         setIsolates(Object.keys(filteredData).length);
+ */        setTable({...table, statisticData: [{"Number of isolates": String(Object.keys(filteredData).length)}]})
     };
 
     const noFilter = mainFilterAttributes.every(function emptyArray(
@@ -94,14 +96,15 @@ export function QueryPageTableComponent(): JSX.Element {
         if (noFilter) {
             filterData = data.ZNData;
             setData({ ...data, ZNDataFiltered: data.ZNData });
-            setIsolates(Object.keys(filterData).length);
-            setTable({...table, statisticData: [{"Number of isolates": String(Object.keys(filterData).length)}]})
+/*             setIsolates(Object.keys(filterData).length);
+ */            setTable({...table, statisticData: [{"Number of isolates": String(Object.keys(filterData).length)}]})
         } else {
             useFilter();
         }
     }, [filter]);
 
-    return (
+
+    /* return (
         <div css={dataStyle}>
             <TableContainer component={Paper} css={tableStyle}>
                 <Table stickyHeader aria-label="simple table">
@@ -127,5 +130,5 @@ export function QueryPageTableComponent(): JSX.Element {
                 </Table>
             </TableContainer>
         </div>
-    );
+    ); */
 }

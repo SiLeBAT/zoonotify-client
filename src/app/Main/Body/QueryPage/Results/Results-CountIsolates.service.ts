@@ -25,12 +25,21 @@ const selectFilterObject = (
     return filterObject;
 };
 
+
 const countIsolates = (
     data: DBentry[],
     filterObject: { [x: string]: string }
-): string => {
-    return (_.filter(data, filterObject).length as unknown) as string;
+): number => {
+    return _.filter(data, filterObject).length /* as unknown) as string */;
 };
+
+// TODO: SUMME aus den countIsolates ist Gesamtzahl
+// muss nur noch dargestellt werden, auch wenn nicht 
+// die gezählte nummer an isolaten als Table.statisticData setzten
+// dann haben alle zugriff
+// dann ist nur noch das problem: wann und wie geschieht der aufruf? 
+// evtl. doch zwei funktionen? aber das wäre sehr redundant
+// aber man braucht immer nur eine der beiden Varianten, es wird nie beides dargestellt - also vielleicht doch okay
 
 /**
  * genaerte a list of objects with an object for each row, with the name of the row and the countet isolates for the corresponding values in the column.
@@ -52,6 +61,7 @@ export function getIsolatesRows(
     check: "both" | "row" | "col"
 ): Record<string, string>[] {
     const rowsWithIsolates: Record<string, string>[] = [];
+    let sumOfIsolates = 0;
     rowValues.forEach((rowValue) => {
         const isolatesRow: Record<string, string> = { name: rowValue };
         colValues.forEach((colValue) => {
@@ -62,10 +72,14 @@ export function getIsolatesRows(
                 rowValue,
                 check
             );
-            const count = countIsolates(data, filterObject);
+            const countNumber = countIsolates(data, filterObject);
+            const count = (countNumber as unknown) as string;
+            sumOfIsolates += countNumber
             isolatesRow[colValue] = count;
         });
         rowsWithIsolates.push(isolatesRow);
     });
+    // eslint-disable-next-line no-console
+    console.log(sumOfIsolates)
     return rowsWithIsolates;
 }

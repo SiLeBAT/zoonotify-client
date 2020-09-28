@@ -8,6 +8,8 @@ function chooseAlignment(element: string): "left" | "right" {
     return "right";
 }
 
+// Hier wird jede einzelne Reihe erstellt
+
 export function RowValues(
     row: Record<string, string>,
     classes: Record<"tableCell", string>

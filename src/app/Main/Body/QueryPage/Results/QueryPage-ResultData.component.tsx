@@ -84,12 +84,12 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                 isRow: true,
                 columnAttributes: colValues,
                 allIsolates: rowsWithIsolates,
-            })
+            });
             setTable({
                 ...table,
                 statisticData: rowsWithIsolates,
             });
-        } else if (rowAttribute.length === 0) {
+        } else if (rowAttribute.length === 0 && colAttribute.length !== 0) {
             const rowsWithIsolates = getIsolatesRows(
                 data.ZNData,
                 colAttribute,
@@ -109,7 +109,7 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                 ...table,
                 statisticData: rowsWithIsolates,
             });
-        } else if (colAttribute.length === 0) {
+        } else if (colAttribute.length === 0 && rowAttribute.length !== 0) {
             const rowsWithIsolates = getIsolatesRows(
                 data.ZNData,
                 colAttribute,
@@ -128,12 +128,31 @@ export function QueryPageTableRestultComponent(): JSX.Element {
                 ...table,
                 statisticData: rowsWithIsolates,
             });
+        } else if (rowAttribute.length === 0 && colAttribute.length === 0) {
+            // eslint-disable-next-line no-console
+            console.log("hallo ich bin hier");
+            setState({
+                isCol: false,
+                isRow: false,
+                columnAttributes: ["all isolates"],
+                allIsolates: table.statisticData,
+            });
+
+
+            // TODO: Muss allIsolates wieder zurückgesetzt werden, wenn keine Filter und keine Merkmale?
+
+            // eslint-disable-next-line no-console
+            console.log(table.statisticData);
         }
     };
 
     useEffect((): void => {
+        // eslint-disable-next-line no-console
+        console.log(rowAttribute.length, colAttribute.length);
         getAllIsolates();
     }, [filter, table.column, table.row, localStorage.getItem("i18nextLng")]);
+
+    // Hier wird die große Tabelle aufgerufen
 
     return (
         <div css={dataStyle}>
