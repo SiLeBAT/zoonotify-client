@@ -7,26 +7,23 @@ import { FilterSettingsComponent as FilterSettings } from "./Filter/Drawer-Filte
 import { GraphSettingsComponent as GraphSettings } from "./Displayed_Features/Drawer-GraphSettings.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
-const drawerWidth = 433;
-
 const deviderStyle = css`
     height: 0.15em;
     background: ${primaryColor};
 `;
 const useStyles = makeStyles(() =>
     createStyles({
-        drawer: {
-            width: drawerWidth,
+        drawer: (newWidth: string) => ({
+            width: `${newWidth}px`,
+            minWidth: "325px",
             position: "relative",
             height: "100%",
             zIndex: 0,
-        },
+        }),
         drawerPaper: {
-            width: drawerWidth,
+            width: "inherit",
             zIndex: 0,
             position: "relative",
-            boxSizing: "border-box",
-            borderRight: `2px solid ${primaryColor}`,
         },
         drawerContainer: {
             overflow: "auto",
@@ -37,10 +34,11 @@ const useStyles = makeStyles(() =>
 
 interface DrawerProps {
     isOpen: boolean;
+    newWidth: number;
 }
 
 export function ClippedDrawer(props: DrawerProps): JSX.Element {
-    const classes = useStyles();
+    const classes = useStyles((props.newWidth as unknown) as string);
 
     return (
         <Drawer

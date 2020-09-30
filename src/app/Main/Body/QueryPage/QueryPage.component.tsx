@@ -12,6 +12,7 @@ import { ClippedDrawer as DrawerMenu } from "./Drawer/Drawer-Layout.component";
 import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
 import { QueryPageParameterContentComponent as ParameterContent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageTableComponent as DataContent } from "./QueryPage-IsolatesTable.component";
+import { ResizeBarComponent as ResizeBar } from "./Drawer/Drawer-Resize.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -21,8 +22,6 @@ import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { mainFilterAttributes } from "../../../Shared/Filter.model";
 import { TableContext } from "../../../Shared/Context/TableContext";
 import { QueryPageTableRestultComponent } from "./Results/QueryPage-ResultData.component";
-
-const drawerWidth = 433;
 
 const mainStyle = css`
     height: 100%;
@@ -113,35 +112,36 @@ const subHeadingTextStyle = css`
     margin-top: 2em;
 `;
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        content: {
-            flexGrow: 1,
-            padding: 0,
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginLeft: -drawerWidth,
-        },
-        contentShift: {
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: 0,
-        },
-    })
-);
-
 export function QueryPageComponent(): JSX.Element {
+    const [drawerWidth, setDrawerWidth] = useState(433);
     const [open, setOpen] = useState(true);
     const [isFilter, setIsFilter] = useState(false);
     const [isTable, setIsTable] = useState(false);
     const { filter } = useContext(FilterContext);
     const { table } = useContext(TableContext);
-    const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
+
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+            content: {
+                flexGrow: 1,
+                padding: 0,
+                transition: theme.transitions.create("margin", {
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.leavingScreen,
+                }),
+                marginLeft: -drawerWidth,
+            },
+            contentShift: {
+                transition: theme.transitions.create("margin", {
+                    easing: theme.transitions.easing.easeOut,
+                    duration: theme.transitions.duration.enteringScreen,
+                }),
+                marginLeft: 0,
+            },
+        })
+    );
+    const classes = useStyles();
 
     const handleDrawer = (): void => {
         if (open) {
@@ -164,9 +164,13 @@ export function QueryPageComponent(): JSX.Element {
         }
     }, [filter, table]);
 
+    const handleResize = (newWidth: number): void => {
+        setDrawerWidth(newWidth);
+    };
+
     return (
         <main css={mainStyle}>
-            <DrawerMenu isOpen={open} />
+            <DrawerMenu isOpen={open} newWidth={drawerWidth} />
             <div
                 className={clsx(classes.content, {
                     [classes.contentShift]: open,
@@ -176,6 +180,10 @@ export function QueryPageComponent(): JSX.Element {
                 <div css={open ? drawerOpenBarStyle : drawerClosedBarStyle}>
                     <p css={drawerTextStyle}>{t("Drawer.Title")}</p>
                 </div>
+                <div css={open ? css`display: flex` : css`display: none`}>
+                    <ResizeBar onChange={handleResize} />
+                </div>
+                
                 <IconButton css={iconButtonStyle} onClick={handleDrawer}>
                     {open ? (
                         <ChevronLeftIcon css={drawerIconStyle} />
@@ -188,7 +196,7 @@ export function QueryPageComponent(): JSX.Element {
             <div css={contentStyle}>
                 <h1 css={headingStyle}>{t("Content.Title")}</h1>
                 <div css={contentBoxStyle}>
-                    {(isFilter || isTable ) ? (
+                    {isFilter || isTable ? (
                         <ParameterContent />
                     ) : (
                         <div>

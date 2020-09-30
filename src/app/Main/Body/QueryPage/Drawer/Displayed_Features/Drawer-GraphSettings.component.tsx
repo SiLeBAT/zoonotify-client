@@ -12,11 +12,15 @@ import { TableContext } from "../../../../../Shared/Context/TableContext";
 import { mainFilterAttributes } from "../../../../../Shared/Filter.model";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 
+const drawerWidthStyle = css`
+    width: inherit;
+`;
 const filterSubHeaderStyle = css`
     margin: 2.5em 0 0 0;
     font-size: 1rem;
 `;
 const filterAreaStyle = css`
+    width: inherit;
     display: flex;
     flex-direction: row;
 `;
@@ -60,7 +64,7 @@ export function GraphSettingsComponent(): JSX.Element {
     );
 
     return (
-        <div>
+        <div css={drawerWidthStyle}>
             <div css={filterAreaStyle}>
                 <h4 css={filterSubHeaderStyle}>
                     {t("Drawer.Subtitles.Graph")}

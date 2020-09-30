@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(1),
             marginLeft: "16px",
             marginRight: "16px",
-            width: "23em",
+            width: "inherit",
             display: "flex",
             flexDirection: "row",
         },
