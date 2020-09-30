@@ -12,8 +12,11 @@ import {
     mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
 import { FilterSelectorComponent } from "./Filter-Selector.component";
-import { ClearSelectorComponent as ClearSelectorButton} from "../../../../../Shared/ClearSelectorButton.component";
+import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 
+const drawerWidthStyle = css`
+    width: inherit;
+`;
 const filterHeadingStyle = css`
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -23,6 +26,7 @@ const filterHeadingStyle = css`
     color: ${primaryColor};
 `;
 const filterAreaStyle = css`
+    width: inherit;
     display: flex;
     flex-direction: row;
 `;
@@ -81,7 +85,7 @@ export function FilterSettingsComponent(): JSX.Element {
     const totalNumberOfFilters: number = mainFilterAttributes.length;
 
     return (
-        <div>
+        <div css={drawerWidthStyle}>
             <h3 css={filterHeadingStyle}>{t("Drawer.Title")}</h3>
             <div css={filterAreaStyle}>
                 <h4 css={filterSubheadingStyle}>

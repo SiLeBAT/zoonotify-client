@@ -7,7 +7,7 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { InputLabel } from "@material-ui/core";
 import { FilterType } from "../../../../../Shared/Filter.model";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
-import { ClearSelectorComponent as ClearSelectorButton} from "../../../../../Shared/ClearSelectorButton.component";
+import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 
 const selectorStyle = css`
     flex-grow: 2;
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(1),
             marginLeft: "16px",
             marginRight: "16px",
-            width: "23em",
+            width: "inherit",
             display: "flex",
             flexDirection: "row",
         },
