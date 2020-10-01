@@ -20,9 +20,16 @@ const StyledTableCell = withStyles(() =>
     })
 )(TableCell);
 
-export function Header(headerValues: string[]): JSX.Element[] {
+export function Header(
+    headerValues: string[],
+    isIsolates: boolean
+): JSX.Element[] {
     const elements: JSX.Element[] = [];
-    elements.push(<StyledTableCell key="header-blank">&nbsp;</StyledTableCell>);
+    if (!isIsolates) {
+        elements.push(
+            <StyledTableCell key="header-blank">&nbsp;</StyledTableCell>
+        );
+    }
     headerValues.forEach((element): void => {
         elements.push(
             <StyledTableCell key={`header-${element}`}>

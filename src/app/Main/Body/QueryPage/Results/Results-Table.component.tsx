@@ -27,8 +27,9 @@ const useStyles = makeStyles({
 });
 
 interface ResultTableProps {
-    columnAttributes: string[];
     allIsolates: Record<string, string>[];
+    isIsolates: boolean;
+    columnAttributes: string[];
 }
 
 export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
@@ -39,7 +40,7 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
             <Table stickyHeader aria-label="simple table" css={tableStyle}>
                 <TableHead>
                     <TableRow key="headerRow">
-                        {Header(props.columnAttributes)}
+                        {Header(props.columnAttributes, props.isIsolates)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
