@@ -8,12 +8,14 @@ import {
 } from "../../../../Shared/Style/Style-MainTheme.component";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { FilterType } from "../../../../Shared/Filter.model";
-import { ResultsTableComponent as ResultsTable} from "./Results-Table.component";
+import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
 
 const dataStyle = css`
+    max-width: fit-content;
+    margin: auto;
     box-sizing: inherit;
-    width: inherit;
-    margin-left: 2em;
+`;
+const dataTableStyle = css`
     overflow: auto;
 `;
 const tableDivStyle = css`
@@ -66,11 +68,13 @@ export function QueryPageTableRestultComponent(
                 <h4 css={tableTitleStyle(props.displayRowCol.isRow, true)}>
                     {t(`Filters.${rowAttribute}`)}
                 </h4>
-                <ResultsTable
-                    allIsolates={table.statisticData}
-                    isIsolates={isIsolates}
-                    columnAttributes={props.columnAttributes}
-                />
+                <div css={dataTableStyle}>
+                    <ResultsTable
+                        allIsolates={table.statisticData}
+                        isIsolates={isIsolates}
+                        columnAttributes={props.columnAttributes}
+                    />
+                </div>
             </div>
         </div>
     );

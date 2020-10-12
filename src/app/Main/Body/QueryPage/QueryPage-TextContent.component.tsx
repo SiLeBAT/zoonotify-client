@@ -7,10 +7,10 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 
 const mainTextStyle = css`
+    margin: auto;
+    padding: 1em;
     line-height: 1.6;
     text-align: justify;
-    margin: 2em;
-    padding: 1em;
     box-sizing: border-box;
     border: 1px solid ${surfaceColor};
     box-shadow: 0 3px 1px -2px ${shadowPalette.shadow1},

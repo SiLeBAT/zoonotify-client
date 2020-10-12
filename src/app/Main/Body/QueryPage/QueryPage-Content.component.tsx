@@ -13,16 +13,18 @@ import { TableContext } from "../../../Shared/Context/TableContext";
 
 const contentStyle = css`
     width: 0;
-    min-width: 500px;
+    height: inherit;
+    margin-right: 1em;
+    margin-left: 1em;
     padding: 2em;
     flex: 1 1 0;
     hyphens: auto;
-    height: inherit;
     box-sizing: border-box;
+    overflow: auto;
 `;
 const contentBoxStyle = css`
-    max-width: 50%;
-    min-width: 40em;
+    max-width: 60em;
+    min-width: 20em;
     margin: auto;
     display: flex;
     flex: 0 1 auto;
@@ -31,6 +33,7 @@ const contentBoxStyle = css`
     box-sizing: border-box;
 `;
 const headingStyle = css`
+    min-width: 7em;
     font-size: 3rem;
     text-align: center;
     font-weight: normal;
@@ -71,15 +74,11 @@ export function QueryPageContentComponent(): JSX.Element {
         <div css={contentStyle}>
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
             <div css={contentBoxStyle}>
-                {isFilter || isTable ? (
-                    <ParameterContent />
-                ) : (
-                    <TextContent />
-                )}
+                {isFilter || isTable ? <ParameterContent /> : <TextContent />}
                 <Divider variant="middle" css={deviderStyle} />
                 <h3 css={subHeadingTextStyle}>{t("Results.Title")}</h3>
-                <Results />
             </div>
+            <Results />
         </div>
     );
 }
