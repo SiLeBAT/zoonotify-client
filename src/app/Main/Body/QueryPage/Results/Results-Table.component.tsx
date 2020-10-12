@@ -16,6 +16,8 @@ import { onBackgroundColor } from "../../../../Shared/Style/Style-MainTheme.comp
 const tableStyle = css`
     box-sizing: inherit;
     min-height: 110px;
+    width: fit-content;
+    min-width: 20em; 
 `;
 
 const useStyles = makeStyles({
