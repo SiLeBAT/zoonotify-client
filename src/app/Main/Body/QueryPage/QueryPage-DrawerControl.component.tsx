@@ -13,7 +13,6 @@ import {
     bfrLightblue,
 } from "../../../Shared/Style/Style-MainTheme.component";
 
-const drawerWidth = 433;
 
 const drawerStyle = css`
     flex: 0 0 auto;
@@ -63,36 +62,37 @@ const drawerIconStyle = css`
     }
 `;
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        content: {
-            flexGrow: 1,
-            padding: 0,
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginLeft: -drawerWidth,
-        },
-        contentShift: {
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: 0,
-        },
-    })
-);
-
 interface DrawerControlProps {
     isOpen: boolean;
+    newWidth: number;
     handleDrawer: () => void;
     handleResize: (newWidth: number) => void;
 }
 
 export function DrawerControlComponent(props: DrawerControlProps): JSX.Element {
-    const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
+
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+            content: {
+                flexGrow: 1,
+                padding: 0,
+                transition: theme.transitions.create("margin", {
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.leavingScreen,
+                }),
+                marginLeft: -props.newWidth,
+            },
+            contentShift: {
+                transition: theme.transitions.create("margin", {
+                    easing: theme.transitions.easing.easeOut,
+                    duration: theme.transitions.duration.enteringScreen,
+                }),
+                marginLeft: 0,
+            },
+        })
+    );
+    const classes = useStyles();
 
     return (
         <div

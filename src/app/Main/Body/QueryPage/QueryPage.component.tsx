@@ -31,7 +31,7 @@ export function QueryPageComponent(): JSX.Element {
     return (
         <main css={mainStyle}>
             <DrawerMenu isOpen={open} newWidth={drawerWidth}/>
-            <DrawerControl isOpen={open} handleDrawer={handleDrawer} handleResize={handleResize}/>
+            <DrawerControl isOpen={open} newWidth={drawerWidth} handleDrawer={handleDrawer} handleResize={handleResize}/>
             <QueryPageContent />
         </main>
     );
