@@ -1,31 +1,27 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext } from "react";
+import { ValueType } from "react-select";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
-import { ValueType } from "react-select";
-import _ from "lodash";
-import { FilterSelectorComponent } from "../Filter/Filter-Selector.component";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
     TableContext,
     TableType,
 } from "../../../../../Shared/Context/TableContext";
-import {
-    FilterType,
-    mainFilterAttributes,
-} from "../../../../../Shared/Filter.model";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
+import { DisplayedFeatureSelectorComponent as TableSelector } from "./Feature-SelectorElement.component";
+import { FilterType } from "../../../../../Shared/Filter.model";
 
 const drawerWidthStyle = css`
     width: inherit;
 `;
-const filterSubHeaderStyle = css`
+const featureSubHeaderStyle = css`
     margin: 2.5em 0 0 0;
     font-size: 1rem;
 `;
-const filterAreaStyle = css`
+const featureAreaStyle = css`
     width: inherit;
     display: flex;
     flex-direction: row;
@@ -44,26 +40,9 @@ const iconStyle = css`
     height: 36px;
 `;
 
-function gernerateSettings(tableValue: FilterType): [boolean, FilterType[]] {
-    const noValues: boolean = _.isEmpty(tableValue);
-    let selectedValuesList: FilterType[] = [tableValue];
-    if (noValues) {
-        selectedValuesList = [];
-    }
-    return [noValues, selectedValuesList];
-}
-
-export function GraphSettingsComponent(): JSX.Element {
+export function DisplayedFeaturesComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
-
-    const handleSwap = (): void => {
-        setTable({
-            ...table,
-            row: table.column,
-            column: table.row,
-        });
-    };
 
     const handleChange = (
         selectedOption: ValueType<Record<string, string>>,
@@ -85,60 +64,47 @@ export function GraphSettingsComponent(): JSX.Element {
         }
     };
 
-    const offeredAttributesRow: string[] = _.difference(mainFilterAttributes, [
-        table.column,
-    ]);
-    const offeredAttributesColumn: string[] = _.difference(
-        mainFilterAttributes,
-        [table.row]
-    );
-
-    const [noRow, selectedValuesRow]: [
-        boolean,
-        FilterType[]
-    ] = gernerateSettings(table.row);
-    const [noColumn, selectedValuesColumn]: [
-        boolean,
-        FilterType[]
-    ] = gernerateSettings(table.column);
+    const handleSwap = (): void => {
+        setTable({
+            ...table,
+            row: table.column,
+            column: table.row,
+        });
+    };
 
     return (
         <div css={drawerWidthStyle}>
-            <div css={filterAreaStyle}>
-                <h4 css={filterSubHeaderStyle}>
+            <div css={featureAreaStyle}>
+                <h4 css={featureSubHeaderStyle}>
                     {t("Drawer.Subtitles.Graph")}
                 </h4>
                 <ClearSelectorButton
                     mainButton
-                    filterAttribute="all"
+                    selectAttribute="all"
                     isFilter={false}
                     isTabel
                 />
             </div>
-            <FilterSelectorComponent
-                key="table-selector-row"
+            <TableSelector
+                keyValue="table-selector-row"
                 label={t("Drawer.Graphs.Row")}
-                filterAttribute="row"
-                filterValues={offeredAttributesRow}
+                activeFeature={table.row}
+                otherFeature={table.column}
+                selectAttribute="row"
                 handleChange={handleChange}
-                selectedValues={selectedValuesRow}
-                isMulti={false}
-                isNotSelect={noRow}
             />
             <div css={centerIconButtonStyle}>
                 <IconButton css={iconButtonStyle} onClick={handleSwap}>
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>
-            <FilterSelectorComponent
-                key="table-selector-column"
+            <TableSelector
+                keyValue="table-selector-column"
                 label={t("Drawer.Graphs.Column")}
-                filterAttribute="column"
-                filterValues={offeredAttributesColumn}
+                activeFeature={table.column}
+                otherFeature={table.row}
+                selectAttribute="column"
                 handleChange={handleChange}
-                selectedValues={selectedValuesColumn}
-                isMulti={false}
-                isNotSelect={noColumn}
             />
         </div>
     );

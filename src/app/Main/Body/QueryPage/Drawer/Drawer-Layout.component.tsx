@@ -4,7 +4,7 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import { FilterSettingsComponent as FilterSettings } from "./Filter/Drawer-FilterSettings.component";
-import { GraphSettingsComponent as GraphSettings } from "./Displayed_Features/Drawer-GraphSettings.component";
+import { DisplayedFeaturesComponent as DisplayedFeatures } from "./Displayed_Features/Drawer-GraphSettings.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const deviderStyle = css`
@@ -54,7 +54,7 @@ export function ClippedDrawer(props: DrawerProps): JSX.Element {
             <div className={classes.drawerContainer}>
                 <FilterSettings />
                 <Divider variant="middle" css={deviderStyle} />
-                <GraphSettings />
+                <DisplayedFeatures />
             </div>
         </Drawer>
     );

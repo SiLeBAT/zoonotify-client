@@ -1,19 +1,14 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { ValueType } from "react-select";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { ValueType } from "react-select";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import { AddSelectorElements } from "./Filter-SelectorList.component";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import {
-    FilterType,
-    mainFilterAttributes,
-} from "../../../../../Shared/Filter.model";
-import { TableType } from "../../../../../Shared/Context/TableContext";
-import { FilterSelectorComponent } from "./Filter-Selector.component";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
-import { DataContext } from "../../../../../Shared/Context/DataContext";
-import { CheckIfSingleFilterIsSet } from "../../../../../Core/FilterServices/checkIfFilter.service";
+import { FilterType } from "../../../../../Shared/Filter.model";
+import { TableType } from "../../../../../Shared/Context/TableContext";
+import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 
 const drawerWidthStyle = css`
     width: inherit;
@@ -38,14 +33,13 @@ const filterSubheadingStyle = css`
 `;
 
 export function FilterSettingsComponent(): JSX.Element {
-    const { data } = useContext(DataContext);
     const { filter, setFilter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
     /**
      * @desc takes the current values of the selector with the onChange envent handler and sets it as filter values (in the Context).
-     * @param selectedOption current values of the slector
-     * @param keyName name of the current main filter attribute
+     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the slector
+     * @param {FilterType | TableType}             keyName              name of the current main filter attribute
      */
     const handleChange = (
         selectedOption: ValueType<Record<string, string>>,
@@ -62,8 +56,6 @@ export function FilterSettingsComponent(): JSX.Element {
         });
     };
 
-    const totalNumberOfFilters: number = mainFilterAttributes.length;
-
     return (
         <div css={drawerWidthStyle}>
             <h3 css={filterHeadingStyle}>{t("Drawer.Title")}</h3>
@@ -73,37 +65,12 @@ export function FilterSettingsComponent(): JSX.Element {
                 </h4>
                 <ClearSelectorButton
                     mainButton
-                    filterAttribute="all"
+                    selectAttribute="all"
                     isFilter
                     isTabel={false}
                 />
             </div>
-            {(function AddSelectorElements(): JSX.Element[] {
-                const elements: JSX.Element[] = [];
-                for (let i = 0; i < totalNumberOfFilters; i += 1) {
-                    const filterAttribute: FilterType = mainFilterAttributes[i];
-                    const filterValues: string[] = filter[filterAttribute];
-                    const allFilterValues: string[] =
-                        data.uniqueValues[filterAttribute];
-                    const noFilter: boolean = CheckIfSingleFilterIsSet(
-                        filter,
-                        filterAttribute
-                    );
-                    elements.push(
-                        <FilterSelectorComponent
-                            key={`filter-selector-${filterAttribute}`}
-                            label={t(`Filters.${filterAttribute}`)}
-                            filterAttribute={filterAttribute}
-                            handleChange={handleChange}
-                            selectedValues={filterValues}
-                            filterValues={allFilterValues}
-                            isMulti
-                            isNotSelect={noFilter}
-                        />
-                    );
-                }
-                return elements;
-            })()}
+            {AddSelectorElements(handleChange)}
         </div>
     );
 }
