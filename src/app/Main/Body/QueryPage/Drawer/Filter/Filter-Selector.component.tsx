@@ -4,6 +4,7 @@ import Select, { ValueType, StylesConfig } from "react-select";
 import { InputLabel } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { FilterType } from "../../../../../Shared/Filter.model";
+import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
     primaryColor,
     bfrDarkgrey,
@@ -79,10 +80,10 @@ const selectStyle: StylesConfig = {
 interface SelectorProps {
     label: string;
     filterValues: string[];
-    filterAttribute: FilterType;
+    filterAttribute: FilterType | TableType;
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,
-        keyName: FilterType
+        keyName: FilterType | TableType
     ) => void;
     selectedValues: string[];
     isMulti: boolean;

@@ -4,12 +4,18 @@ import { useContext } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
+import { ValueType } from "react-select";
 import _ from "lodash";
+import { FilterSelectorComponent } from "../Filter/Filter-Selector.component";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { TableSelectorComponent } from "./Table-Selector.component";
-import { SelectorItem } from "./SimpleSelectorItem.component";
-import { TableContext } from "../../../../../Shared/Context/TableContext";
-import { mainFilterAttributes } from "../../../../../Shared/Filter.model";
+import {
+    TableContext,
+    TableType,
+} from "../../../../../Shared/Context/TableContext";
+import {
+    FilterType,
+    mainFilterAttributes,
+} from "../../../../../Shared/Filter.model";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 
 const drawerWidthStyle = css`
@@ -38,10 +44,14 @@ const iconStyle = css`
     height: 36px;
 `;
 
-const mainItemChild = (values: string[]): JSX.Element[] =>
-    values.map((mainFilterValue: string) =>
-        SelectorItem({ item: mainFilterValue })
-    );
+function gernerateSettings(tableValue: FilterType): [boolean, FilterType[]] {
+    const noValues: boolean = _.isEmpty(tableValue);
+    let selectedValuesList: FilterType[] = [tableValue];
+    if (noValues) {
+        selectedValuesList = [];
+    }
+    return [noValues, selectedValuesList];
+}
 
 export function GraphSettingsComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
@@ -55,6 +65,26 @@ export function GraphSettingsComponent(): JSX.Element {
         });
     };
 
+    const handleChange = (
+        selectedOption: ValueType<Record<string, string>>,
+        keyName: FilterType | TableType
+    ): void => {
+        if (selectedOption) {
+            const selectedFeature: string[] = [];
+            const selectedOptionObj = selectedOption as Record<string, string>;
+            selectedFeature.push(Object.values(selectedOptionObj)[0]);
+            setTable({
+                ...table,
+                [keyName]: selectedFeature[0] as FilterType,
+            });
+        } else {
+            setTable({
+                ...table,
+                [keyName]: [],
+            });
+        }
+    };
+
     const offeredAttributesRow: string[] = _.difference(mainFilterAttributes, [
         table.column,
     ]);
@@ -62,6 +92,15 @@ export function GraphSettingsComponent(): JSX.Element {
         mainFilterAttributes,
         [table.row]
     );
+
+    const [noRow, selectedValuesRow]: [
+        boolean,
+        FilterType[]
+    ] = gernerateSettings(table.row);
+    const [noColumn, selectedValuesColumn]: [
+        boolean,
+        FilterType[]
+    ] = gernerateSettings(table.column);
 
     return (
         <div css={drawerWidthStyle}>
@@ -76,26 +115,30 @@ export function GraphSettingsComponent(): JSX.Element {
                     isTabel
                 />
             </div>
-            <TableSelectorComponent
+            <FilterSelectorComponent
+                key="table-selector-row"
                 label={t("Drawer.Graphs.Row")}
-                inputProps={{
-                    name: "row",
-                    id: `selector-id-row`,
-                }}
-                child={mainItemChild(offeredAttributesRow)}
+                filterAttribute="row"
+                filterValues={offeredAttributesRow}
+                handleChange={handleChange}
+                selectedValues={selectedValuesRow}
+                isMulti={false}
+                isNotSelect={noRow}
             />
             <div css={centerIconButtonStyle}>
                 <IconButton css={iconButtonStyle} onClick={handleSwap}>
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>
-            <TableSelectorComponent
+            <FilterSelectorComponent
+                key="table-selector-column"
                 label={t("Drawer.Graphs.Column")}
-                inputProps={{
-                    name: "column",
-                    id: `selector-id-column`,
-                }}
-                child={mainItemChild(offeredAttributesColumn)}
+                filterAttribute="column"
+                filterValues={offeredAttributesColumn}
+                handleChange={handleChange}
+                selectedValues={selectedValuesColumn}
+                isMulti={false}
+                isNotSelect={noColumn}
             />
         </div>
     );
