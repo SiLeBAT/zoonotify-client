@@ -18,7 +18,7 @@
             "Filter": "Filters",
             "Graph": "Displayed features"
         },
-        "Selector": "--Please select an option--",
+        "Selector": "--no options--",
         "Graphs": {
             "Row": "in rows",
             "Column": "in columns"
