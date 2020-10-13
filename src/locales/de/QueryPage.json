@@ -18,12 +18,12 @@
             "Filter": "Filter",
             "Graph": "Anzuzeigende Merkmale"
         },
-        "Selector": "--Bitte auswählen--",
+        "Selector": "--keine weiteren Optionen--",
         "Graphs": {
             "Row": "in Zeilen",
             "Column": "in Spalten"
         }
-    }, 
+    },
     "Filters": {
         "All": "Alle Werte",
         "Erreger": "Erreger",

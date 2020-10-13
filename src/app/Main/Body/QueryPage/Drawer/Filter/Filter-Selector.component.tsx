@@ -1,101 +1,144 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import React, { useContext } from "react";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { css, jsx, keyframes, SerializedStyles } from "@emotion/core";
+import Select, { ValueType, StylesConfig } from "react-select";
 import { InputLabel } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 import { FilterType } from "../../../../../Shared/Filter.model";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
-import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
+import {
+    primaryColor,
+    bfrDarkgrey,
+} from "../../../../../Shared/Style/Style-MainTheme.component";
 
-const selectorStyle = css`
-    flex-grow: 2;
+const selectAreaStyle = css`
+    margin: 0.25em 1em 1em 16px;
+`;
+const openText = keyframes`
+      0%   {color:white; left:0px; top:20px;}
+    100% {left:0px; top:0px;}
+`;
+const closeText = keyframes`
+    0% {left:0px; top:0px;}
+    100%   {color:white; left:0px; top:20px;}
+`;
+const lableStyle = (noFilter: boolean): SerializedStyles => css`
+    position: relative;
+    animation-name: ${noFilter ? closeText : openText};
+    animation-duration: 0.25s;
+    animation-delay: 0s;
+    color: ${noFilter ? "white" : bfrDarkgrey};
+    font-size: 0.75rem;
+    margin-left: 16px;
+    margin-top: 1em;
 `;
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        formControl: {
-            margin: theme.spacing(1),
-            marginLeft: "16px",
-            marginRight: "16px",
-            width: "inherit",
-            display: "flex",
-            flexDirection: "row",
+const selectStyle: StylesConfig = {
+    control: (styles) => ({
+        ...styles,
+        backgroundColor: "white",
+        borderRadius: "0px",
+        borderTop: "0 !important",
+        borderLeft: "0 !important",
+        borderRight: "0 !important",
+        boxShadow: "0 !important",
+        ":hover": {
+            borderBottom: `1.5px solid ${primaryColor}`,
         },
-        chips: {
-            display: "flex",
-            flexWrap: "wrap",
-        },
-        chip: {
-            margin: 2,
-        },
-        noLabel: {
-            marginTop: theme.spacing(3),
-        },
-    })
-);
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
+    }),
+
+    multiValue: (styles) => {
+        return {
+            ...styles,
+            borderRadius: "25px",
+            padding: "0.25em",
+        };
     },
+
+    multiValueRemove: (styles) => ({
+        ...styles,
+        ":hover": {
+            backgroundColor: bfrDarkgrey,
+            color: "white",
+            borderRadius: "25px",
+        },
+    }),
+    dropdownIndicator: (styles) => ({
+        ...styles,
+        ":hover": {
+            color: primaryColor,
+        },
+    }),
+
+    clearIndicator: (styles) => ({
+        ...styles,
+        ":hover": {
+            color: primaryColor,
+        },
+    }),
 };
 
 interface SelectorProps {
-    index: number;
     label: string;
     filterValues: string[];
     filterAttribute: FilterType;
-    inputElement: JSX.Element;
-    randerValues: ((value: unknown) => React.ReactNode) | undefined;
-    child: JSX.Element[];
+    handleChange: (
+        selectedOption: ValueType<Record<string, string>>,
+        keyName: FilterType
+    ) => void;
+    selectedValues: string[];
+    isMulti: boolean;
+    isNotSelect: boolean;
+}
+
+function generateSelectorObject(
+    selectorArray: string[]
+): Record<string, string>[] {
+    const selectorObject: Record<string, string>[] = [];
+    selectorArray.forEach((element: string) => {
+        selectorObject.push({ value: element, label: element });
+    });
+    return selectorObject;
 }
 
 export function FilterSelectorComponent(props: SelectorProps): JSX.Element {
-    const classes = useStyles();
-    const { filter, setFilter } = useContext(FilterContext);
+    const { t } = useTranslation(["QueryPage"]);
+    const filterValuesObj: Record<string, string>[] = generateSelectorObject(
+        props.filterValues
+    );
+    const valueObject: Record<string, string>[] = generateSelectorObject(
+        props.selectedValues
+    );
 
-    /**
-     * @desc takes the current value of the selector with the onChange envent handler and sets it as filter value (in the Context).
-     * @param React.ChangeEvent An onChange event handler returns a Synthetic Event object which contains meta data (target input’s id, name, current value)
-     */
-    const handleChange = (
-        event: React.ChangeEvent<{ value: unknown }>,
-        keyName: FilterType
-    ): void => {
-        setFilter({
-            ...filter,
-            [keyName]: event.target.value as string[],
-        });
-    };
+    const noOptionText = t("Drawer.Selector");
 
     return (
-        <FormControl className={classes.formControl}>
-            <InputLabel id={`label${props.index}`}>{props.label}</InputLabel>
-            <Select
-                labelId={`label${props.index}`}
-                id={`selector-id-${props.index}`}
-                multiple
-                value={props.filterValues}
-                onChange={(e) => handleChange(e, props.filterAttribute)}
-                input={props.inputElement}
-                renderValue={props.randerValues}
-                MenuProps={MenuProps}
-                css={selectorStyle}
+        <div>
+            <InputLabel
+                css={lableStyle(props.isNotSelect)}
+                id={`label${props.label}`}
             >
-                {props.child}
-            </Select>
-            <ClearSelectorButton
-                mainButton={false}
-                filterAttribute={props.filterAttribute}
-                isFilter
-                isTabel={false}
+                {props.label}
+            </InputLabel>
+            <Select
+                css={selectAreaStyle}
+                closeMenuOnSelect={false}
+                isMulti={props.isMulti}
+                noOptionsMessage={() => noOptionText}
+                options={filterValuesObj}
+                placeholder={props.label}
+                onChange={(selectedOption) =>
+                    props.handleChange(selectedOption, props.filterAttribute)
+                }
+                styles={selectStyle}
+                value={valueObject}
+                theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                        ...theme.colors,
+                        primary: primaryColor,
+                    },
+                })}
+                isClearable
             />
-        </FormControl>
+        </div>
     );
 }

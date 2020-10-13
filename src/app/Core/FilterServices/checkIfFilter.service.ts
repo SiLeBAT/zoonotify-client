@@ -1,6 +1,7 @@
 import _ from "lodash";
 import {
     FilterInterface,
+    FilterType,
     mainFilterAttributes,
 } from "../../Shared/Filter.model";
 
@@ -12,5 +13,13 @@ export function CheckIfFilterIsSet(filter: FilterInterface): boolean {
         return empty;
     });
 
+    return noFilter;
+}
+
+export function CheckIfSingleFilterIsSet(
+    filter: FilterInterface,
+    attribute: FilterType
+): boolean {
+    const noFilter = _.isEmpty(filter[attribute]);
     return noFilter;
 }

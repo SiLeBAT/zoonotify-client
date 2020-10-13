@@ -1,18 +1,18 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useContext, ReactNode } from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Chip, MenuItem, Input } from "@material-ui/core";
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { DataContext } from "../../../../../Shared/Context/DataContext";
+import { ValueType } from "react-select";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
     FilterType,
     mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
 import { FilterSelectorComponent } from "./Filter-Selector.component";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
+import { DataContext } from "../../../../../Shared/Context/DataContext";
+import { CheckIfSingleFilterIsSet } from "../../../../../Core/FilterServices/checkIfFilter.service";
 
 const drawerWidthStyle = css`
     width: inherit;
@@ -36,51 +36,30 @@ const filterSubheadingStyle = css`
     font-size: 1rem;
 `;
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        formControl: {
-            margin: theme.spacing(1),
-            marginLeft: "16px",
-            marginRight: "16px",
-            width: "23em",
-        },
-        chips: {
-            display: "flex",
-            flexWrap: "wrap",
-        },
-        chip: {
-            margin: 2,
-        },
-        noLabel: {
-            marginTop: theme.spacing(3),
-        },
-    })
-);
-
 export function FilterSettingsComponent(): JSX.Element {
-    const classes = useStyles();
     const { data } = useContext(DataContext);
-    const { filter } = useContext(FilterContext);
+    const { filter, setFilter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const randerValues = (selected: unknown): ReactNode => (
-        <div className={classes.chips}>
-            {(selected as string[]).map((value) => (
-                <Chip key={value} label={value} className={classes.chip} />
-            ))}
-        </div>
-    );
-
-    const mainItemChild = (values: string[]): JSX.Element[] =>
-        values.map((mainFilterValue) => (
-            <MenuItem key={mainFilterValue} value={mainFilterValue}>
-                {mainFilterValue}
-            </MenuItem>
-        ));
-
-    const inputElement = (key: FilterType): JSX.Element => (
-        <Input id={`select-multiple-chip-id-${key}`} />
-    );
+    /**
+     * @desc takes the current values of the selector with the onChange envent handler and sets it as filter values (in the Context).
+     * @param selectedOption current values of the slector
+     * @param keyName name of the current main filter attribute
+     */
+    const handleChange = (
+        selectedOption: ValueType<Record<string, string>>,
+        keyName: FilterType
+    ): void => {
+        const selectedFilter: string[] = [];
+        const selectedOptionObj = selectedOption as Record<string, string>[];
+        selectedOptionObj.forEach((element: Record<string, string>) => {
+            selectedFilter.push(Object.values(element)[0]);
+        });
+        setFilter({
+            ...filter,
+            [keyName]: selectedFilter,
+        });
+    };
 
     const totalNumberOfFilters: number = mainFilterAttributes.length;
 
@@ -103,18 +82,22 @@ export function FilterSettingsComponent(): JSX.Element {
                 for (let i = 0; i < totalNumberOfFilters; i += 1) {
                     const filterAttribute: FilterType = mainFilterAttributes[i];
                     const filterValues: string[] = filter[filterAttribute];
+                    const allFilterValues: string[] =
+                        data.uniqueValues[filterAttribute];
+                    const noFilter: boolean = CheckIfSingleFilterIsSet(
+                        filter,
+                        filterAttribute
+                    );
                     elements.push(
                         <FilterSelectorComponent
                             key={`filter-selector-${filterAttribute}`}
-                            index={i}
                             label={t(`Filters.${filterAttribute}`)}
                             filterAttribute={filterAttribute}
-                            filterValues={filterValues}
-                            inputElement={inputElement(filterAttribute)}
-                            randerValues={randerValues}
-                            child={mainItemChild(
-                                data.uniqueValues[filterAttribute]
-                            )}
+                            handleChange={handleChange}
+                            selectedValues={filterValues}
+                            filterValues={allFilterValues}
+                            isMulti
+                            isNotSelect={noFilter}
                         />
                     );
                 }
