@@ -9,6 +9,7 @@ import {
     FilterType,
     mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
+import { TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterSelectorComponent } from "./Filter-Selector.component";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 import { DataContext } from "../../../../../Shared/Context/DataContext";
@@ -48,7 +49,7 @@ export function FilterSettingsComponent(): JSX.Element {
      */
     const handleChange = (
         selectedOption: ValueType<Record<string, string>>,
-        keyName: FilterType
+        keyName: FilterType | TableType
     ): void => {
         const selectedFilter: string[] = [];
         const selectedOptionObj = selectedOption as Record<string, string>[];

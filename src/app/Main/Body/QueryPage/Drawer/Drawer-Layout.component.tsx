@@ -28,6 +28,7 @@ const useStyles = makeStyles(() =>
         drawerContainer: {
             overflow: "auto",
             padding: "1em",
+            height: "100%",
         },
     })
 );
