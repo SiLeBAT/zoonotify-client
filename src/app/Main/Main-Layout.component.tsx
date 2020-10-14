@@ -36,15 +36,22 @@ const contentWrapperStyle = css`
     overflow: auto;
 `;
 
-
-export function MainLayoutComponent(): JSX.Element {
+export function MainLayoutComponent(props: {
+    isConnected: boolean;
+}): JSX.Element {
     return (
         <div css={wrapperStyle}>
             <BrowserRouter>
-                <div css={headerStyle}><Header /></div>
+                <div css={headerStyle}>
+                    <Header isConnected={props.isConnected} />
+                </div>
                 <div css={contentWrapperStyle}>
-                    <div css={bodyStyle}><Body /></div>
-                    <div css={footerStyle}><Footer /></div>
+                    <div css={bodyStyle}>
+                        <Body />
+                    </div>
+                    <div css={footerStyle}>
+                        <Footer />
+                    </div>
                 </div>
             </BrowserRouter>
         </div>

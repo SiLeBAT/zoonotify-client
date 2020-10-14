@@ -10,6 +10,7 @@ import {
     onPrimaryColor,
     secondaryColor,
     bfrPrimaryPalette,
+    surfaceColor,
 } from "../../Shared/Style/Style-MainTheme.component";
 import { ZNPaths } from "../../Shared/URLs";
 
@@ -38,7 +39,14 @@ const appNameStyle = css`
         outline: none;
     }
 `;
-
+const disabledQueryStlye = css`
+    margin-right: 8em;
+    padding: 0.5em 1em 0.5em 1em;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: auto;
+    color: ${surfaceColor};
+`;
 const queryStyle = (open: boolean): SerializedStyles => css`
     margin-right: 8em;
     padding: 0.5em 1em 0.5em 1em;
@@ -70,7 +78,9 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
     box-shadow: 0 2px 6px 0 grey;
 `;
 
-export function HeaderLayoutComponent(): JSX.Element {
+export function HeaderLayoutComponent(props: {
+    isConnected: boolean;
+}): JSX.Element {
     const [open, setOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
 
@@ -83,6 +93,10 @@ export function HeaderLayoutComponent(): JSX.Element {
         }
     });
 
+    const handleClick = (e: { preventDefault: () => void }): void => {
+        if (!props.isConnected) e.preventDefault();
+    };
+
     return (
         <header css={headerStyle}>
             <div css={mainHeaderStyle}>
@@ -92,7 +106,15 @@ export function HeaderLayoutComponent(): JSX.Element {
                     </NavLink>
                     <TranslationButtons />
                 </div>
-                <NavLink to={ZNPaths.queryPagePath} css={queryStyle(open)}>
+                <NavLink
+                    onClick={handleClick}
+                    to={ZNPaths.queryPagePath}
+                    css={
+                        props.isConnected
+                            ? queryStyle(open)
+                            : disabledQueryStlye
+                    }
+                >
                     {t("Query")}
                 </NavLink>
             </div>
