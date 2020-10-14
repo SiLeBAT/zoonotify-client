@@ -1,44 +1,39 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { CardContent, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { primaryColor, onBackgroundColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 
-const textStyle = css`
-    display: flex;
-    flex: 0 1 auto;
-    flex-direction: column;
-    justify-content: space-between;
-    align-self: flex-start;
-    hyphens: auto;
-    text-align: justify;
-    box-sizing: border-box;
-`;
 const appNameStyle = css`
     margin-bottom: 1rem;
     font-size: 3rem;
-    align-self: center;
+    text-align: center;
     font-weight: normal;
     color: ${primaryColor};
 `;
 const appSubtitleStyle = css`
     margin: 1em 0;
-    font-size: 1rem;
-    align-self: center;
+    font-size: 0.85rem;
     font-weight: normal;
     text-align: center;
-    color: ${onBackgroundColor};
 `;
 const normalTextStyle = css`
+    font-size: 0.85rem;
     line-height: 1.6;
+    text-align: justify;
 `;
 
 export function HomePageTextContentComponent(): JSX.Element {
     const { t } = useTranslation(["HomePage"]);
     return (
-        <div css={textStyle}>
-            <h1 css={appNameStyle}>ZooNotify</h1>
-            <h2 css={appSubtitleStyle}> {t("Subtitle")}</h2>
-            <p css={normalTextStyle}>{t("MainText")}</p>
-        </div>
+        <CardContent>
+            <Typography variant="h1" css={appNameStyle}>
+                ZooNotify
+            </Typography>
+            <Typography variant="h2" css={appSubtitleStyle}>
+                {t("Subtitle")}
+            </Typography>
+            <Typography css={normalTextStyle}>{t("MainText")}</Typography>
+        </CardContent>
     );
 }
