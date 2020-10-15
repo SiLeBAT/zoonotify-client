@@ -1,37 +1,46 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import moment from "moment";
-import { useTranslation } from "react-i18next";
-import { onBackgroundColor } from "../../Shared/Style/Style-MainTheme.component";
+import React from "react";
+import { List, Tooltip, withStyles } from "@material-ui/core";
+import {
+    onBackgroundColor,
+    onPrimaryColor,
+    primaryColor,
+} from "../../Shared/Style/Style-MainTheme.component";
 import { environment } from "../../../environment";
+import { LastUpdateComponent } from "./LastUpdate-Date.component";
+import { VersionListItemComponent as ListItem } from "./LastUpdate-VerstionItem.component";
 
-const footerDateStyle = css`
-    font-size: 0.75rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: ${onBackgroundColor};
-`;
-const dateStyle = css`
-    margin: 0;
-    padding: 1em;
-`;
+const HtmlTooltip = withStyles(() => ({
+    tooltip: {
+        maxWidth: 200,
+        marginBottom: "1.5em",
+        marginLeft: "10px",
+        color: onPrimaryColor,
+        backgroundColor: primaryColor,
+        border: `2px solid ${onBackgroundColor}`,
+    },
+    arrow: {
+        fontSize: "20px",
+        color: primaryColor,
+    },
+}))(Tooltip);
 
 export function LastUpdate(): JSX.Element {
-    const { lastChange } = environment;
-    const { t } = useTranslation(["Footer"]);
-    const dateLayout = t("Date.Layout");
+    const { version } = environment;
     return (
-        <div css={footerDateStyle}>
-            <p css={dateStyle}>
-                {t("Date.Text")}{" "}
-                {moment(
-                    lastChange,
-                    "YYYY-MM-DD HH:mm:ss ZZ",
-                    dateLayout,
-                    true
-                ).format("DD.MM.YYYY")}
-            </p>
-        </div>
+        <HtmlTooltip
+            arrow
+            title={
+                <>
+                    <List dense>
+                        <ListItem text={`client version@${version}`} />
+                        <ListItem text={`client version@${version}`} />
+                    </List>
+                </>
+            }
+        >
+            <span>
+                <LastUpdateComponent />
+            </span>
+        </HtmlTooltip>
     );
 }
