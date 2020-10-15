@@ -45,15 +45,23 @@ export function FilterSettingsComponent(): JSX.Element {
         selectedOption: ValueType<Record<string, string>>,
         keyName: FilterType | TableType
     ): void => {
-        const selectedFilter: string[] = [];
-        const selectedOptionObj = selectedOption as Record<string, string>[];
-        selectedOptionObj.forEach((element: Record<string, string>) => {
-            selectedFilter.push(Object.values(element)[0]);
-        });
-        setFilter({
-            ...filter,
-            [keyName]: selectedFilter,
-        });
+        if (selectedOption) {
+            const selectedFilter: string[] = [];
+            const selectedOptionObj = selectedOption as Record<string, string>[];
+            selectedOptionObj.forEach((element: Record<string, string>) => {
+                selectedFilter.push(Object.values(element)[0]);
+            });
+            setFilter({
+                ...filter,
+                [keyName]: selectedFilter,
+            });
+        } else {
+            setFilter({
+                ...filter,
+                [keyName]: [],
+            });
+        }
+        
     };
 
     return (
