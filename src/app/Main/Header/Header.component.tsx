@@ -20,7 +20,7 @@ const headerStyle = css`
     flex-direction: column;
     box-sizing: border-box;
 `;
-const mainHeaderStyle = css`
+const mainHeaderStyle = (open: boolean): SerializedStyles => css`
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -29,6 +29,7 @@ const mainHeaderStyle = css`
     box-sizing: border-box;
     box-shadow: 0 2px 6px 0 grey;
     background-color: ${primaryColor};
+    border-bottom: ${open ? `24px solid ${bfrPrimaryPalette[300]}` : "none"};
 `;
 const appNameStyle = css`
     padding: 0.5em 1em 0.5em 1em;
@@ -47,8 +48,7 @@ const disabledQueryStlye = css`
     cursor: auto;
     color: ${surfaceColor};
 `;
-const queryStyle = (open: boolean): SerializedStyles => css`
-    margin-right: 8em;
+const navLinkStyle = (open: boolean): SerializedStyles => css`
     padding: 0.5em 1em 0.5em 1em;
     font-size: 1rem;
     text-decoration: none;
@@ -66,7 +66,10 @@ const leftHeaderStyle = css`
     flex-direction: row;
     justify-content: space-around;
 `;
-
+const rightHeaderStyle = css`
+    margin-right: 8em;
+    padding: 0.5em 1em 0.5em 1em;
+`;
 const subheaderStyle = (open: boolean): SerializedStyles => css`
     width: 100%;
     display: ${open ? "flex" : "none"};
@@ -81,15 +84,21 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
 export function HeaderLayoutComponent(props: {
     isConnected: boolean;
 }): JSX.Element {
-    const [open, setOpen] = useState<boolean>(false);
+    const [queryOpen, setQueryOpen] = useState<boolean>(false);
+    const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
 
     const { pathname } = useLocation();
     useEffect(() => {
         if (pathname === ZNPaths.queryPagePath) {
-            setOpen(true);
+            setQueryOpen(true);
         } else {
-            setOpen(false);
+            setQueryOpen(false);
+        }
+        if (pathname === ZNPaths.infoPagePath) {
+            setInfoOpen(true);
+        } else {
+            setInfoOpen(false);
         }
     });
 
@@ -99,27 +108,35 @@ export function HeaderLayoutComponent(props: {
 
     return (
         <header css={headerStyle}>
-            <div css={mainHeaderStyle}>
+            <div css={mainHeaderStyle(infoOpen)}>
                 <div css={leftHeaderStyle}>
                     <NavLink to={ZNPaths.homePagePath} css={appNameStyle}>
                         ZooNotify
                     </NavLink>
                     <TranslationButtons />
                 </div>
-                <NavLink
-                    onClick={handleClick}
-                    to={ZNPaths.queryPagePath}
-                    css={
-                        props.isConnected
-                            ? queryStyle(open)
-                            : disabledQueryStlye
-                    }
-                >
-                    {t("Query")}
-                </NavLink>
+                <div css={rightHeaderStyle}>
+                    <NavLink
+                        to={ZNPaths.infoPagePath}
+                        css={navLinkStyle(infoOpen)}
+                    >
+                        {t("Info")}
+                    </NavLink>
+                    <NavLink
+                        onClick={handleClick}
+                        to={ZNPaths.queryPagePath}
+                        css={
+                            props.isConnected
+                                ? navLinkStyle(queryOpen)
+                                : disabledQueryStlye
+                        }
+                    >
+                        {t("Query")}
+                    </NavLink>
+                </div>
             </div>
 
-            <div css={subheaderStyle(open)}>
+            <div css={subheaderStyle(queryOpen)}>
                 <ExportDataComponent />
             </div>
         </header>
