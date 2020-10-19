@@ -1,5 +1,6 @@
 export const ZNPaths = {
     homePagePath: "/",
+    infoPagePath: "/explanations",
     queryPagePath: "/query",
     dpdPagePath: "/dataProtectionDeclaration",
 };
