@@ -32,7 +32,7 @@ export function LastUpdate(): JSX.Element {
             title={
                 <>
                     <List dense>
-                        <ListItem text={`client version@${version}`} />
+                        <ListItem text={`server version@${version}`} />
                         <ListItem text={`client version@${version}`} />
                     </List>
                 </>
