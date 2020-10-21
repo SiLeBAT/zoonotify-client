@@ -59,7 +59,7 @@ export function QueryPageContentComponent(): JSX.Element {
 
     useEffect((): void => {
         mainFilterAttributes.forEach((element): void => {
-            if (filter[element].length !== 0) {
+            if (filter.selectedFilter[element].length !== 0) {
                 setIsFilter(true);
             }
         });

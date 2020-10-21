@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 import {
     FilterType,
     mainFilterAttributes,
@@ -33,9 +34,12 @@ export function SelectorElement(props: FilterSelectorProps): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const filterAttribute: FilterType = mainFilterAttributes[props.index];
-    const filterValues: string[] = filter[filterAttribute];
+    let filterValues: string[] = []
+    if (!_.isEmpty(filter.selectedFilter)) {
+        filterValues = filter.selectedFilter[filterAttribute];
+    }
     const allFilterValues: string[] = data.uniqueValues[filterAttribute];
-    const noFilter: boolean = CheckIfSingleFilterIsSet(filter, filterAttribute);
+    const noFilter: boolean = CheckIfSingleFilterIsSet(filter.selectedFilter, filterAttribute);
     return (
         <Select
             key={`filter-selector-${filterAttribute}`}

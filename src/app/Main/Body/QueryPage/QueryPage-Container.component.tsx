@@ -10,7 +10,6 @@ import {
     mainFilterAttributes,
 } from "../../../Shared/Filter.model";
 import {
-    defaultFilter,
     FilterContext,
 } from "../../../Shared/Context/FilterContext";
 import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
@@ -26,7 +25,7 @@ export function QueryPageContainer(): JSX.Element {
         const r: Response = await fetch(BASE_URL);
         const dataProp: DBentry[] = await r.json();
         const keyValueProps = Object.keys(dataProp[0]) as DBtype[]
-        const uniqueValuesObject: FilterInterface = { ...defaultFilter };
+        const uniqueValuesObject: FilterInterface = {};
 
         mainFilterAttributes.forEach((filterElement) => {
             const uniqueValuesPerElement: string[] = _.uniq(
@@ -35,6 +34,19 @@ export function QueryPageContainer(): JSX.Element {
             uniqueValuesObject[filterElement] = uniqueValuesPerElement;
         });
 
+        const emptyFilter = {} as FilterInterface;
+        mainFilterAttributes.forEach((element) => {
+            emptyFilter[element] = [];
+        });
+
+        setFilter({
+            mainFilter: mainFilterAttributes,
+            selectedFilter: getFilterFromPath(
+                history.location.search,
+                mainFilterAttributes
+            ),
+            emptyFilter,
+        });
         setData({
             ZNData: dataProp,
             ZNDataFiltered: dataProp,
@@ -45,13 +57,10 @@ export function QueryPageContainer(): JSX.Element {
 
     useEffect(() => {
         getData();
-        setFilter(
-            getFilterFromPath(history.location.search, mainFilterAttributes)
-        );
     }, []);
 
     useEffect((): void => {
-        history.push(`?${createPathString(filter)}`);
+        history.push(`?${createPathString(filter.selectedFilter)}`);
     }, [filter]);
 
     let returnValue = <h1> Loading data ... </h1>;

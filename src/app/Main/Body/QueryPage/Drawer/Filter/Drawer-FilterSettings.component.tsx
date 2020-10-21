@@ -53,12 +53,18 @@ export function FilterSettingsComponent(): JSX.Element {
             });
             setFilter({
                 ...filter,
-                [keyName]: selectedFilter,
+                selectedFilter: {
+                    ...filter.selectedFilter,
+                    [keyName]: selectedFilter,
+                },
             });
         } else {
             setFilter({
                 ...filter,
-                [keyName]: [],
+                selectedFilter: {
+                    ...filter.selectedFilter,
+                    [keyName]: [],
+                },
             });
         }
         

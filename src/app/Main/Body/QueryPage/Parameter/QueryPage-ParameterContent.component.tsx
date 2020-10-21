@@ -22,13 +22,18 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const displayFilter = _.cloneDeep(filter);
+    const displayFilter = _.cloneDeep(filter.selectedFilter);
     mainFilterAttributes.forEach((element) => {
-        if (filter[element].length === 0) {
-            displayFilter[element] = [t("Filters.All")];
+        if (!_.isEmpty(filter.selectedFilter)) {
+            if (filter.selectedFilter[element].length === 0 ) {
+                displayFilter[element] = [t("Filters.All")];
+            } else {
+                displayFilter[element] = filter.selectedFilter[element];
+            }
         } else {
-            displayFilter[element] = filter[element];
+            displayFilter[element] = [t("Filters.All")];
         }
+        
     });
 
     return (

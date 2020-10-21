@@ -92,7 +92,7 @@ export function ExportDataComponent(): JSX.Element {
                     onClick={handleClose}
                     open={open}
                     setting={setting}
-                    filter={filter}
+                    filter={filter.selectedFilter}
                     buttonLabel={buttonLabel}
                     ZNFilename={ZNFilename}
                     mainFilterLabels={mainFilterLabels}

@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { IconButton } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Filter.model";
-import { defaultFilter, FilterContext } from "./Context/FilterContext";
+import { FilterContext } from "./Context/FilterContext";
 import { primaryColor } from "./Style/Style-MainTheme.component";
 import { defaultTable, TableContext, TableType } from "./Context/TableContext";
 
@@ -35,11 +35,14 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
     const handleRemove = (keyName: FilterType | "all" | TableType): void => {
         if (props.isFilter) {
             if (keyName === "all") {
-                setFilter(defaultFilter);
+                setFilter({...filter, selectedFilter: filter.emptyFilter});
             } else {
                 setFilter({
                     ...filter,
-                    [keyName]: [],
+                    selectedFilter: {
+                        ...filter.selectedFilter,
+                        [keyName]: [],
+                    }
                 });
             }
         } else if (props.isTabel) {

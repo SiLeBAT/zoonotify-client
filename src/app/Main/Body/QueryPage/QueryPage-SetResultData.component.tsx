@@ -34,12 +34,12 @@ export function SetDataComponent(): JSX.Element {
         const rowValues = getValuesFromData(
             rowAttribute,
             data.uniqueValues,
-            filter
+            filter.selectedFilter
         );
         const colValues = getValuesFromData(
             colAttribute,
             data.uniqueValues,
-            filter
+            filter.selectedFilter
         );
         if (rowAttribute.length !== 0 && colAttribute.length !== 0) {
             const rowsWithIsolates = getIsolatesRows(
@@ -115,11 +115,11 @@ export function SetDataComponent(): JSX.Element {
     };
 
     useEffect((): void => {
-        if (CheckIfFilterIsSet(filter)) {
+        if (CheckIfFilterIsSet(filter.selectedFilter)) {
             setData({ ...data, ZNDataFiltered: data.ZNData });
             getAllIsolates(data.ZNData);
         } else {
-            const filteredData = useFilter(data.ZNData, filter);
+            const filteredData = useFilter(data.ZNData, filter.selectedFilter);
             setData({ ...data, ZNDataFiltered: filteredData });
             getAllIsolates(filteredData);
         }

@@ -1,5 +1,4 @@
 import { FilterInterface, FilterType } from "../Shared/Filter.model";
-import { defaultFilter } from "../Shared/Context/FilterContext";
 
 function getFilterList(filterParameter: string | null): string[] {
     let filterList: string[] = [];
@@ -20,7 +19,7 @@ export function getFilterFromPath(
     filterKeys: readonly FilterType[]
 ): FilterInterface {
     const searchParams = new URLSearchParams(path);
-    const filterFromPath: FilterInterface = { ...defaultFilter };
+    const filterFromPath: FilterInterface = {};
 
     filterKeys.forEach((filterElement) => {
         const paramsOfKey: string[] = getFilterList(searchParams.get(filterElement));
