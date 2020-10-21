@@ -84,7 +84,7 @@ export function FilterSettingsComponent(): JSX.Element {
                     isTabel={false}
                 />
             </div>
-            {AddSelectorElements(handleChange)}
+            {AddSelectorElements(filter.mainFilter, handleChange)}
         </div>
     );
 }

@@ -9,6 +9,7 @@ interface ObjectToCsvProps {
     filter: FilterInterface;
     allFilterLabel: string;
     mainFilterLabels: MainFilterLabelInterface;
+    mainFilterAttributes: string[];
 }
 
 export function objectToCsv(props: ObjectToCsvProps): string {
@@ -18,6 +19,7 @@ export function objectToCsv(props: ObjectToCsvProps): string {
             filter: props.filter,
             allFilterLabel: props.allFilterLabel,
             mainFilterLabels: props.mainFilterLabels,
+            mainFilterAttributes: props.mainFilterAttributes
         })
     );
 

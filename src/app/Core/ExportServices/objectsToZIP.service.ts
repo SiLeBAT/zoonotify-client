@@ -12,6 +12,7 @@ interface ObjectToCsvBothProps {
     ZNFilename: string;
     allFilterLabel: string;
     mainFilterLabels: MainFilterLabelInterface;
+    mainFilterAttributes: string[];
 }
 
 export function objectToZIP(props: ObjectToCsvBothProps): void {
@@ -24,6 +25,7 @@ export function objectToZIP(props: ObjectToCsvBothProps): void {
             filter: props.filter,
             allFilterLabel: props.allFilterLabel,
             mainFilterLabels: props.mainFilterLabels,
+            mainFilterAttributes: props.mainFilterAttributes
         })
     );
     csvRowsRAW.push(statDataStringGenerator(props.setting));
@@ -34,6 +36,7 @@ export function objectToZIP(props: ObjectToCsvBothProps): void {
             filter: props.filter,
             allFilterLabel: props.allFilterLabel,
             mainFilterLabels: props.mainFilterLabels,
+            mainFilterAttributes: props.mainFilterAttributes
         })
     );
     csvRowsStat.push(

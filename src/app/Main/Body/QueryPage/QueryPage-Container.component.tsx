@@ -7,7 +7,6 @@ import { mockDataURL } from "../../../Shared/URLs";
 import { QueryPageComponent as QPComp } from "./QueryPage.component";
 import {
     FilterInterface,
-    mainFilterAttributes,
 } from "../../../Shared/Filter.model";
 import {
     FilterContext,
@@ -26,6 +25,12 @@ export function QueryPageContainer(): JSX.Element {
         const dataProp: DBentry[] = await r.json();
         const keyValueProps = Object.keys(dataProp[0]) as DBtype[]
         const uniqueValuesObject: FilterInterface = {};
+
+        const mainFilterAttributes = [
+            "Erreger",
+            "Matrix",
+            "Projektname",
+        ];
 
         mainFilterAttributes.forEach((filterElement) => {
             const uniqueValuesPerElement: string[] = _.uniq(
@@ -60,7 +65,7 @@ export function QueryPageContainer(): JSX.Element {
     }, []);
 
     useEffect((): void => {
-        history.push(`?${createPathString(filter.selectedFilter)}`);
+        history.push(`?${createPathString(filter.selectedFilter, filter.mainFilter)}`);
     }, [filter]);
 
     let returnValue = <h1> Loading data ... </h1>;

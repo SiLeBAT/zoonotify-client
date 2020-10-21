@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { secondaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { getFormattedDate } from "../../../Core/getCurrentDate.service";
 import { MainFilterLabelInterface } from "../../../Shared/Export.model";
-import { mainFilterAttributes } from "../../../Shared/Filter.model";
 
 const buttonLableStyle = (open: boolean): SerializedStyles => css`
     display: flex;
@@ -16,7 +15,8 @@ const buttonLableStyle = (open: boolean): SerializedStyles => css`
 `;
 
 export function generateExportLabels(
-    open: boolean
+    open: boolean,
+    mainFilterAttributes: string[]
 ): [JSX.Element, string, MainFilterLabelInterface, string] {
     const { t } = useTranslation(["Header", "QueryPage"]);
 

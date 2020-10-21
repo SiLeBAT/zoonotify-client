@@ -8,7 +8,6 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import { mainFilterAttributes } from "../../../../Shared/Filter.model";
 import { ParameterListComponent } from "./Parameter-List.component";
 
 const subHeadingStyle = css`
@@ -23,7 +22,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const displayFilter = _.cloneDeep(filter.selectedFilter);
-    mainFilterAttributes.forEach((element) => {
+    filter.mainFilter.forEach((element) => {
         if (!_.isEmpty(filter.selectedFilter)) {
             if (filter.selectedFilter[element].length === 0 ) {
                 displayFilter[element] = [t("Filters.All")];
@@ -51,7 +50,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
                         <tbody>
                             {(function AddParameterElement(): JSX.Element[] {
                                 const elements: JSX.Element[] = [];
-                                mainFilterAttributes.forEach((element): void => {
+                                filter.mainFilter.forEach((element): void => {
                                     const keyName = element.replace(" ", "_");
                                     elements.push(
                                         <ParameterListComponent

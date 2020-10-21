@@ -68,7 +68,7 @@ export function ExportDataComponent(): JSX.Element {
         ZNFilename,
         mainFilterLabels,
         allFilterLabel,
-    ] = generateExportLabels(open);
+    ] = generateExportLabels(open, filter.mainFilter);
 
     return (
         <div>
@@ -97,6 +97,7 @@ export function ExportDataComponent(): JSX.Element {
                     ZNFilename={ZNFilename}
                     mainFilterLabels={mainFilterLabels}
                     allFilterLabel={allFilterLabel}
+                    mainFilterAttributes={filter.mainFilter}
                 />
             </Dialog>
         </div>

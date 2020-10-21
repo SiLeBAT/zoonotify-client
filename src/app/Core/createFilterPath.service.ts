@@ -1,9 +1,5 @@
 import _ from "lodash";
-import {
-    FilterType,
-    FilterInterface,
-    mainFilterAttributes,
-} from "../Shared/Filter.model";
+import { FilterType, FilterInterface } from "../Shared/Filter.model";
 
 function setParams(key: string, value: string): string {
     const searchParams = new URLSearchParams();
@@ -11,7 +7,10 @@ function setParams(key: string, value: string): string {
     return searchParams.toString();
 }
 
-export const createPathString = (filter: FilterInterface): string => {
+export const createPathString = (
+    filter: FilterInterface,
+    mainFilterAttributes: string[]
+): string => {
     let newPath = "";
     mainFilterAttributes.forEach(
         (attribute: FilterType, index: number): void => {

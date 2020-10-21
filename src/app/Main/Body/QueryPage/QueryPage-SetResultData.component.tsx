@@ -115,11 +115,11 @@ export function SetDataComponent(): JSX.Element {
     };
 
     useEffect((): void => {
-        if (CheckIfFilterIsSet(filter.selectedFilter)) {
+        if (CheckIfFilterIsSet(filter.selectedFilter, filter.mainFilter)) {
             setData({ ...data, ZNDataFiltered: data.ZNData });
             getAllIsolates(data.ZNData);
         } else {
-            const filteredData = useFilter(data.ZNData, filter.selectedFilter);
+            const filteredData = useFilter(data.ZNData, filter.selectedFilter, filter.mainFilter);
             setData({ ...data, ZNDataFiltered: filteredData });
             getAllIsolates(filteredData);
         }

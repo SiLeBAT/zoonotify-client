@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
     FilterType,
-    mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent as Select } from "../../../../../Shared/Selector.component";
@@ -14,6 +13,7 @@ import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 
 interface FilterSelectorProps {
     index: number;
+    mainFilterAttributes: string[];
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,
         keyName: FilterType | TableType
@@ -33,7 +33,7 @@ export function SelectorElement(props: FilterSelectorProps): JSX.Element {
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const filterAttribute: FilterType = mainFilterAttributes[props.index];
+    const filterAttribute: FilterType = props.mainFilterAttributes[props.index];
     let filterValues: string[] = []
     if (!_.isEmpty(filter.selectedFilter)) {
         filterValues = filter.selectedFilter[filterAttribute];

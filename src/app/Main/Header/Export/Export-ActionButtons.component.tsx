@@ -32,6 +32,7 @@ interface ExportActionButtonProps {
     ZNFilename: string;
     mainFilterLabels: MainFilterLabelInterface;
     allFilterLabel: string;
+    mainFilterAttributes: string[];
 }
 
 export function ExportActionButtonComponent(
@@ -70,6 +71,7 @@ export function ExportActionButtonComponent(
                             filter: props.filter,
                             allFilterLabel: props.allFilterLabel,
                             mainFilterLabels: props.mainFilterLabels,
+                            mainFilterAttributes: props.mainFilterAttributes
                         })}
                         filename={`${subFileName}_${props.ZNFilename}`}
                         target="_blank"
@@ -81,6 +83,7 @@ export function ExportActionButtonComponent(
                                     filter: props.filter,
                                     allFilterLabel: props.allFilterLabel,
                                     mainFilterLabels: props.mainFilterLabels,
+                                    mainFilterAttributes: props.mainFilterAttributes
                                 });
                                 return false;
                             }

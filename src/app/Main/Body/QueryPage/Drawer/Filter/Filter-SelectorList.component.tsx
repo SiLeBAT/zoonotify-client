@@ -1,7 +1,6 @@
 import { ValueType } from "react-select";
 import {
     FilterType,
-    mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
 import { SelectorElement } from "./Filter-SelectorElement.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
@@ -11,6 +10,7 @@ import { TableType } from "../../../../../Shared/Context/TableContext";
  * @return {JSX.Element[]} selector-elements in a list
  */
 export function AddSelectorElements(
+    mainFilterAttributes: string[],
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,
         keyName: FilterType | TableType
@@ -22,6 +22,7 @@ export function AddSelectorElements(
         elements.push(
             SelectorElement({
                 index: i,
+                mainFilterAttributes,
                 handleChange,
             })
         );
