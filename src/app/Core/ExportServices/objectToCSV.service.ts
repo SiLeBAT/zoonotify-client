@@ -1,5 +1,5 @@
 import { FilterInterface } from "../../Shared/Filter.model";
-import { ExportInterface } from "../../Shared/Export.model";
+import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 import { statDataStringGenerator } from "./generateStatString.service";
@@ -8,7 +8,7 @@ interface ObjectToCsvProps {
     setting: ExportInterface;
     filter: FilterInterface;
     allFilterLabel: string;
-    mainFilterLabels: { Erreger: string; Matrix: string; Projektname: string };
+    mainFilterLabels: MainFilterLabelInterface;
 }
 
 export function objectToCsv(props: ObjectToCsvProps): string {

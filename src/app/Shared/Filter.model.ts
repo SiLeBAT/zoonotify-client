@@ -1,9 +1,9 @@
-export interface FilterInterface {
-    Erreger: string[];
-    Matrix: string[];
-    Projektname: string[];
-}
+export const mainFilterAttributes = [
+    "Erreger",
+    "Matrix",
+    "Projektname",
+] as const;
 
-export type FilterType = "Erreger" | "Matrix" | "Projektname";
+export type FilterType = typeof mainFilterAttributes[number];
 
-export const mainFilterAttributes: FilterType[] = ["Erreger", "Matrix", "Projektname"];
+export type FilterInterface = Record<FilterType, string[]>;

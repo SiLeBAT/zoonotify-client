@@ -1,3 +1,4 @@
+import { MainFilterLabelInterface } from "../../Shared/Export.model";
 import {
     FilterInterface,
     mainFilterAttributes,
@@ -6,7 +7,7 @@ import {
 interface ParameterHeaderProps {
     filter: FilterInterface;
     allFilterLabel: string;
-    mainFilterLabels: { Erreger: string; Matrix: string; Projektname: string };
+    mainFilterLabels: MainFilterLabelInterface;
 }
 
 export function generateParameterHeader(props: ParameterHeaderProps): string {

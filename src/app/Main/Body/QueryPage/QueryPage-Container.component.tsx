@@ -20,67 +20,12 @@ export function QueryPageContainer(): JSX.Element {
     const { data, setData } = useContext(DataContext);
     const { filter, setFilter } = useContext(FilterContext);
     const history = useHistory();
-
-    const keyValueProps: DBtype[] = [
-        "Erreger",
-        "BfR_Isolat_Nr",
-        "Projektname",
-        "ESBL_AmpC_Carb",
-        "Spa_Typ",
-        "Entero_Spez",
-        "Campy_Spez",
-        "Serovar",
-        "Serotyp",
-        "O_Gruppe",
-        "H_Gruppe",
-        "stx1",
-        "stx2",
-        "Shigatoxin",
-        "eae",
-        "e_hly_gen",
-        "AMP_Res",
-        "ZI_Res",
-        "HL_Res",
-        "IP_Res",
-        "LI_Res",
-        "COL_Res",
-        "RY_Res",
-        "FOT_Res",
-        "OX_Res",
-        "FUS_Res",
-        "GEN_Res",
-        "AN_Res",
-        "LZD_Res",
-        "MERO_Res",
-        "UP_Res",
-        "NAL_Res",
-        "EN_Res",
-        "RIF_Res",
-        "SMX_Res",
-        "TR_Res",
-        "SYN_Res",
-        "TAZ_Res",
-        "ET_Res",
-        "GC_Res",
-        "IA_Res",
-        "TMP_Res",
-        "AN_Res",
-        "Programm",
-        "OriginalnrDesEinsenders",
-        "Matrix",
-        "Land",
-    ];
-
     const BASE_URL: string = mockDataURL;
 
     const getData = async (): Promise<void> => {
         const r: Response = await fetch(BASE_URL);
         const dataProp: DBentry[] = await r.json();
-        let i = 0;
-        for (i; i < dataProp.length; i += 1) {
-            dataProp[i].uniqueId = i + 1;
-        }
-
+        const keyValueProps = Object.keys(dataProp[0]) as DBtype[]
         const uniqueValuesObject: FilterInterface = { ...defaultFilter };
 
         mainFilterAttributes.forEach((filterElement) => {

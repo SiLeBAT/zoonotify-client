@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { secondaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { getFormattedDate } from "../../../Core/getCurrentDate.service";
 import { MainFilterLabelInterface } from "../../../Shared/Export.model";
+import { mainFilterAttributes } from "../../../Shared/Filter.model";
 
 const buttonLableStyle = (open: boolean): SerializedStyles => css`
     display: flex;
@@ -27,11 +28,12 @@ export function generateExportLabels(
     );
     const ZNFilename = `ZooNotify_${getFormattedDate()}.csv`;
 
-    const mainFilterLabels = {
-        Erreger: t("QueryPage:Filters.Erreger"),
-        Matrix: t("QueryPage:Filters.Matrix"),
-        Projektname: t("QueryPage:Filters.Projektname"),
-    };
+    const mainFilterLabels = {} as MainFilterLabelInterface
+
+    mainFilterAttributes.forEach(mainFilter => {
+        mainFilterLabels[mainFilter] =  t(`QueryPage:Filters.${mainFilter}`)
+    });
+
     const allFilterLabel: string = t("QueryPage:Filters.All");
 
     return [buttonLabel, ZNFilename, mainFilterLabels, allFilterLabel];

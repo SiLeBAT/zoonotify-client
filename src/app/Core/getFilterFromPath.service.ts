@@ -17,7 +17,7 @@ function getFilterList(filterParameter: string | null): string[] {
 
 export function getFilterFromPath(
     path: string,
-    filterKeys: FilterType[]
+    filterKeys: readonly FilterType[]
 ): FilterInterface {
     const searchParams = new URLSearchParams(path);
     const filterFromPath: FilterInterface = { ...defaultFilter };
