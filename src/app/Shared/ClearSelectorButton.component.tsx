@@ -16,7 +16,6 @@ const buttonAreaStyle = (isMainButton: boolean): SerializedStyles => css`
 
 const iconButtonStyle = css`
     height: fit-content;
-    margin-left: 0.5em;
     padding: 0;
     color: ${primaryColor};
 `;
@@ -60,7 +59,7 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
                 css={iconButtonStyle}
                 onClick={() => handleRemove(props.selectAttribute)}
             >
-                <CancelIcon />
+                <CancelIcon css={css`height: 20px; width: 20px`}/>
             </IconButton>
         </div>
     );
