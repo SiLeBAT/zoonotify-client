@@ -6,7 +6,11 @@ import { IconButton, Tooltip, withStyles } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Filter.model";
 import { defaultFilter, FilterContext } from "./Context/FilterContext";
-import { backgroundColor, onBackgroundColor, primaryColor } from "./Style/Style-MainTheme.component";
+import {
+    backgroundColor,
+    onBackgroundColor,
+    primaryColor,
+} from "./Style/Style-MainTheme.component";
 import { TableContext } from "./Context/TableContext";
 
 const buttonAreaStyle = css`
@@ -17,20 +21,19 @@ const buttonAreaStyle = css`
 
 const iconButtonStyle = css`
     height: fit-content;
-    margin-left: 0.5em;
     padding: 0;
     color: ${primaryColor};
 `;
 
 const LightTooltip = withStyles(() => ({
     tooltip: {
-      backgroundColor,
-      color: onBackgroundColor,
-      fontSize: 9,
-      margin: "2px",
-      padding: "2px 1px",
+        backgroundColor,
+        color: onBackgroundColor,
+        fontSize: 9,
+        margin: "2px",
+        padding: "2px 1px",
     },
-  }))(Tooltip);
+}))(Tooltip);
 
 interface RemoveButtonProps {
     isFilter: boolean;
@@ -40,9 +43,8 @@ interface RemoveButtonProps {
 export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
     const { setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
-    
-    const { t } = useTranslation(["QueryPage"]);
 
+    const { t } = useTranslation(["QueryPage"]);
 
     const handleRemove = (): void => {
         if (props.isFilter) {
@@ -56,14 +58,22 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
         }
     };
 
-    const mouseOverText = t("QueryPage:Buttons.Delete")
+    const mouseOverText = t("QueryPage:Buttons.Delete");
 
     return (
         <div css={buttonAreaStyle}>
-        <LightTooltip title={mouseOverText} placement="top">
-            <IconButton css={iconButtonStyle} onClick={() => handleRemove()}>
-                <CancelIcon />
-            </IconButton>
+            <LightTooltip title={mouseOverText} placement="top">
+                <IconButton
+                    css={iconButtonStyle}
+                    onClick={() => handleRemove()}
+                >
+                    <CancelIcon
+                        css={css`
+                            height: 20px;
+                            width: 20px;
+                        `}
+                    />
+                </IconButton>
             </LightTooltip>
         </div>
     );
