@@ -2,16 +2,12 @@ import { FilterInterface, FilterType } from "../Shared/Filter.model";
 import { defaultFilter } from "../Shared/Context/FilterContext";
 
 function getFilterList(filterParameter: string | null): string[] {
-    let filterList: string[] = [];
-    if (
+    const filterList: string[] =
         filterParameter !== null &&
         filterParameter !== "" &&
         filterParameter !== "alle Werte"
-    ) {
-        filterList = filterParameter.split("_");
-    } else {
-        filterList = [];
-    }
+            ? filterParameter.split("_")
+            : [];
     return filterList;
 }
 
@@ -23,7 +19,9 @@ export function getFilterFromPath(
     const filterFromPath: FilterInterface = { ...defaultFilter };
 
     filterKeys.forEach((filterElement) => {
-        const paramsOfKey: string[] = getFilterList(searchParams.get(filterElement));
+        const paramsOfKey: string[] = getFilterList(
+            searchParams.get(filterElement)
+        );
         filterFromPath[filterElement] = paramsOfKey;
     });
 
