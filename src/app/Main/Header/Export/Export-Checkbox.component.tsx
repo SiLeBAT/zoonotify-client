@@ -31,7 +31,7 @@ export function CheckBoxComponent(props: CheckboxProps): JSX.Element {
                         color="primary"
                     />
                 }
-                label={t("Checkbox.RAW")}
+                label={t("Checkbox.DataSet")}
             />
             <FormControlLabel
                 control={
