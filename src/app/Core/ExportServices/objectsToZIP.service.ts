@@ -44,7 +44,7 @@ export function objectToZIP(props: ObjectToCsvBothProps): void {
     );
     csvRows.push(csvRowsStat.join("\n"));
 
-    const subNames = ["Statistic-Data", "RAW-Data"];
+    const subNames = ["statistic-data", "filtered-data-set"];
     const zip = new JSZip();
     csvRows.forEach((CSV, i): void => {
         zip.file(`${subNames[i]}_${props.ZNFilename}`, CSV);

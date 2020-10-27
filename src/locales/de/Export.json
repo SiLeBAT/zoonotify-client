@@ -4,7 +4,7 @@
         "Text": "Sie können wählen, ob der komplette Datensatz, die angezeigte Statistik oder beides herunterladen werden soll."
     },
     "Checkbox": {
-        "RAW": "RAW-Datensatz ",
+        "DataSet": "Gefilteter Datensatz",
         "Stat": "Statistik der Isolate"
     },
     "Warning": "Bitte wählen Sie mindestens eine Option, oder brechen Sie den Export ab.",

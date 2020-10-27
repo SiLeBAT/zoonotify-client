@@ -50,10 +50,10 @@ export function ExportActionButtonComponent(
 
     let subFileName = "";
     if (props.setting.raw && !props.setting.stat) {
-        subFileName = "RAW-Data";
+        subFileName = "filtered-data-set";
     }
     if (!props.setting.raw && props.setting.stat) {
-        subFileName = "Statistic-Data";
+        subFileName = "statistic-data";
     }
 
     return (
