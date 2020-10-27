@@ -25,6 +25,7 @@ const useStyles = makeStyles({
         wordWrap: "break-word",
         padding: "0.75em",
         color: onBackgroundColor,
+        letterSpacing: 0,
     },
 });
 
