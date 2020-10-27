@@ -24,6 +24,7 @@ const drawerClosedBarStyle = css`
     width: 35px;
     box-sizing: border-box;
     background: ${primaryColor};
+    display: flex;
 `;
 const drawerOpenBarStyle = css`
     display: none;
@@ -31,7 +32,6 @@ const drawerOpenBarStyle = css`
 const drawerTextStyle = css`
     margin: auto;
     margin-top: 50px;
-    font-weight: bold;
     font-size: 20px;
     letter-spacing: 1px;
     writing-mode: vertical-lr;
