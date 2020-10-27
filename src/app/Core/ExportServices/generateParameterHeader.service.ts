@@ -17,13 +17,13 @@ export function generateParameterHeader(props: ParameterHeaderProps): string {
     mainFilterAttributes.forEach((element): void => {
         if (props.filter[element].length !== 0) {
             HeaderRows.push(
-                `"#${props.mainFilterLabels[element]}:${props.filter[
+                `"#${props.mainFilterLabels[element]}: ${props.filter[
                     element
-                ].join("#")}"`
+                ].join(";")}"`
             );
         } else {
             HeaderRows.push(
-                `#${props.mainFilterLabels[element]}:${props.allFilterLabel}`
+                `#${props.mainFilterLabels[element]}: ${props.allFilterLabel}`
             );
         }
     });
