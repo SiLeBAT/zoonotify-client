@@ -16,6 +16,11 @@ const tableStyle = css`
 const parameterLabel = css`
     margin: 0;
 `;
+const parameterValue = css`
+    span {
+        letter-spacing: 0;
+    }
+`;
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -37,7 +42,11 @@ function AddParameterToList(parameterList: string[]): JSX.Element[] {
         const keyName = element.replace(" ", "_");
         elements.push(
             <ListItem key={`listItem-${keyName}`}>
-                <ListItemText id={`labelId-${keyName}`} primary={element} />
+                <ListItemText
+                    id={`labelId-${keyName}`}
+                    primary={element}
+                    css={parameterValue}
+                />
             </ListItem>
         );
     });
@@ -45,9 +54,9 @@ function AddParameterToList(parameterList: string[]): JSX.Element[] {
 }
 
 interface ParameterListProps {
-    label: string,
-    keyName: string,
-    listElements: string[],
+    label: string;
+    keyName: string;
+    listElements: string[];
 }
 
 export function ParameterListComponent(props: ParameterListProps): JSX.Element {
@@ -59,7 +68,11 @@ export function ParameterListComponent(props: ParameterListProps): JSX.Element {
                 <h4 css={parameterLabel}>{props.label}:</h4>
             </td>
             <td key={`tr-list-${props.keyName}`}>
-                <List dense className={classes.root} key={`list-${props.keyName}`}>
+                <List
+                    dense
+                    className={classes.root}
+                    key={`list-${props.keyName}`}
+                >
                     {AddParameterToList(props.listElements)}
                 </List>
             </td>

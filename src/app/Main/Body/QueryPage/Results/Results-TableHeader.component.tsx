@@ -13,6 +13,7 @@ const StyledTableCell = withStyles(() =>
             padding: "0.75em",
             color: onBackgroundColor,
             borderBottom: `1px solid ${primaryColor}`,
+            letterSpacing: 0,
         },
         body: {
             color: onBackgroundColor,
