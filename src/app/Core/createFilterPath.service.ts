@@ -24,21 +24,16 @@ export const createPathString = (
     let newPath = "";
     mainFilterAttributes.forEach(
         (attribute: FilterType, index: number): void => {
-            let filterString = "alle Werte";
-            if (!_.isEmpty(filter[attribute])) {
-                filterString = filter[attribute].join("_");
-            }
-            const paramsString: string = setParams(attribute, filterString);
-            if (index === mainFilterAttributes.length - 1) {
-                newPath = newPath.concat(`${paramsString}`);
-            } else {
-                newPath = newPath.concat(`${paramsString}&`);
-            }
+            const filterString: string = _.isEmpty(filter[attribute])
+                ? "alle Werte"
+                : filter[attribute].join("_");
+
+            newPath += index <= mainFilterAttributes.length - 1 ? "&" : "";
+            newPath += setParams(attribute, filterString);
         }
     );
-
-    newPath = newPath.concat(getTableParam("row", table.row));
-    newPath = newPath.concat(getTableParam("column", table.column));
+    newPath += getTableParam("row", table.row);
+    newPath += getTableParam("column", table.column);
 
     return newPath;
 };
