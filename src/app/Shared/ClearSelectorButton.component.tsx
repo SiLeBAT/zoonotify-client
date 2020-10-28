@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { IconButton, Tooltip, withStyles } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Filter.model";
@@ -41,6 +42,9 @@ interface RemoveButtonProps {
 export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
     const { filter, setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
+    
+    const { t } = useTranslation(["QueryPage"]);
+
 
     const handleRemove = (keyName: FilterType | "all" | TableType): void => {
         if (props.isFilter) {
@@ -64,9 +68,11 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
         }
     };
 
+    const mouseOverText = t("QueryPage:Buttons.Delete")
+
     return (
         <div css={buttonAreaStyle(props.mainButton)}>
-            <LightTooltip title="Alles abwählen" placement="top">
+            <LightTooltip title={mouseOverText} placement="top">
                 <IconButton
                     css={iconButtonStyle}
                     onClick={() => handleRemove(props.selectAttribute)}
