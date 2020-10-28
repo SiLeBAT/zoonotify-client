@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useContext } from "react";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Tooltip, withStyles } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Filter.model";
 import { defaultFilter, FilterContext } from "./Context/FilterContext";
-import { primaryColor } from "./Style/Style-MainTheme.component";
+import { backgroundColor, onBackgroundColor, primaryColor } from "./Style/Style-MainTheme.component";
 import { defaultTable, TableContext, TableType } from "./Context/TableContext";
 
 const buttonAreaStyle = (isMainButton: boolean): SerializedStyles => css`
@@ -20,6 +20,16 @@ const iconButtonStyle = css`
     padding: 0;
     color: ${primaryColor};
 `;
+
+const LightTooltip = withStyles(() => ({
+    tooltip: {
+      backgroundColor,
+      color: onBackgroundColor,
+      fontSize: 9,
+      margin: "2px",
+      padding: "2px 1px",
+    },
+  }))(Tooltip);
 
 interface RemoveButtonProps {
     mainButton: boolean;
@@ -56,12 +66,14 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
 
     return (
         <div css={buttonAreaStyle(props.mainButton)}>
-            <IconButton
-                css={iconButtonStyle}
-                onClick={() => handleRemove(props.selectAttribute)}
-            >
-                <CancelIcon />
-            </IconButton>
+            <LightTooltip title="Alles abwählen" placement="top">
+                <IconButton
+                    css={iconButtonStyle}
+                    onClick={() => handleRemove(props.selectAttribute)}
+                >
+                    <CancelIcon />
+                </IconButton>
+            </LightTooltip>
         </div>
     );
 }
