@@ -22,12 +22,18 @@ const StyledTableCell = withStyles(() =>
 
 export function Header(
     headerValues: string[],
-    isIsolates: boolean
+    isIsolates: boolean,
+    getSize: (node: HTMLElement | null, key: string) => void
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
     if (!isIsolates) {
         elements.push(
-            <StyledTableCell key="header-blank">&nbsp;</StyledTableCell>
+            <StyledTableCell
+                key="header-blank"
+                ref={(node: HTMLElement | null) => getSize(node, "smallWidth")}
+            >
+                &nbsp;
+            </StyledTableCell>
         );
     }
     headerValues.forEach((element): void => {

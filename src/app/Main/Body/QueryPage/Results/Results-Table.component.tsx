@@ -32,6 +32,7 @@ interface ResultTableProps {
     allIsolates: Record<string, string>[];
     isIsolates: boolean;
     columnAttributes: string[];
+    getSize: (node: HTMLElement | null, key: string) => void;
 }
 
 export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
@@ -41,11 +42,24 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
         <TableContainer component={Paper} css={tableStyle}>
             <Table stickyHeader aria-label="simple table" css={tableStyle}>
                 <TableHead>
-                    <TableRow key="headerRow">
-                        {Header(props.columnAttributes, props.isIsolates)}
+                    <TableRow
+                        key="headerRow"
+                        ref={(node: HTMLElement | null) =>
+                            props.getSize(node, "wholeWidth")
+                        }
+                    >
+                        {Header(
+                            props.columnAttributes,
+                            props.isIsolates,
+                            props.getSize
+                        )}
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody
+                    ref={(node: HTMLElement | null) =>
+                        props.getSize(node, "height")
+                    }
+                >
                     {props.allIsolates.map((row) => (
                         <TableRow key={`row-${row.name}`}>
                             {RowValues(row, classes)}
