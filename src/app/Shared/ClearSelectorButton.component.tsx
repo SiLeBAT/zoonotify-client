@@ -7,7 +7,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Filter.model";
 import { defaultFilter, FilterContext } from "./Context/FilterContext";
 import { backgroundColor, onBackgroundColor, primaryColor } from "./Style/Style-MainTheme.component";
-import { defaultTable, TableContext, TableType } from "./Context/TableContext";
+import { TableContext, TableType } from "./Context/TableContext";
 
 const buttonAreaStyle = (isMainButton: boolean): SerializedStyles => css`
     margin-top: ${isMainButton ? "auto" : "11px"};
@@ -58,7 +58,11 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
             }
         } else if (props.isTabel) {
             if (keyName === "all") {
-                setTable(defaultTable);
+                setTable({
+                    ...table,
+                    row: "" as FilterType,
+                    column: "" as FilterType,
+                });
             } else {
                 setTable({
                     ...table,
