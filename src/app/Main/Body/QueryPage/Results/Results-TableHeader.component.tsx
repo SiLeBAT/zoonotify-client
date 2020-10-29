@@ -23,14 +23,17 @@ const StyledTableCell = withStyles(() =>
 export function Header(
     headerValues: string[],
     isIsolates: boolean,
-    getSize: (node: HTMLElement | null, key: string) => void
+    getSize: (
+        node: HTMLElement | null,
+        key: "height" | "totalWidth" | "partWidth"
+    ) => void
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
     if (!isIsolates) {
         elements.push(
             <StyledTableCell
                 key="header-blank"
-                ref={(node: HTMLElement | null) => getSize(node, "smallWidth")}
+                ref={(node: HTMLElement | null) => getSize(node, "partWidth")}
             >
                 &nbsp;
             </StyledTableCell>

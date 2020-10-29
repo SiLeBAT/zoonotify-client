@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
@@ -30,29 +30,49 @@ interface TestInterface {
 export function QueryPageTableRestultComponent(
     props: TestInterface
 ): JSX.Element {
-    const [height, setHeight] = useState<number>(0);
-    const [wholeWidth, setWidth] = useState<number>(0);
-    const [smallWidth, setSmallWidth] = useState<number>(0);
+    const [windowSize, setWindowSize] = useState({
+        width: 0,
+        height: 0,
+    });
+    const [tableHeight, setTableHeight] = useState<number>(0);
+    const [totalWidth, setTotalWidth] = useState<number>(0);
+    const [partWidth, setPartWidth] = useState<number>(0);
     const { table } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
+    useEffect(() => {
+        window.addEventListener("resize", () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        });
+    }, []);
+
     const div = useCallback(
-        (node: HTMLElement | null, key: string) => {
+        (
+            node: HTMLElement | null,
+            key: "height" | "totalWidth" | "partWidth"
+        ) => {
             if (node !== null) {
                 if (key === "height") {
-                    setHeight(node.getBoundingClientRect().height);
+                    const { height } = node.getBoundingClientRect();
+                    setTableHeight(height);
                 }
-                if (key === "wholeWidth") {
-                    setWidth(node.getBoundingClientRect().width);
+                if (key === "totalWidth") {
+                    const { width } = node.getBoundingClientRect();
+                    setTotalWidth(width);
                 }
-                if (key === "smallWidth")
-                    setSmallWidth(node.getBoundingClientRect().width);
+                if (key === "partWidth") {
+                    const { width } = node.getBoundingClientRect();
+                    setPartWidth(width);
+                }
             }
         },
-        [table]
+        [table, windowSize]
     );
 
-    const width: number = wholeWidth - smallWidth;
+    const headerWidth: number = totalWidth - partWidth;
 
     const rowMainHeader: string = t(`Filters.${table.row}`);
     const colMainHeader: string = t(`Filters.${table.column}`);
@@ -68,19 +88,22 @@ export function QueryPageTableRestultComponent(
             <TableMainHeaderComponent
                 isTitle={props.displayRowCol.isCol}
                 isRow={false}
-                height={height}
-                width={width}
+                height={tableHeight}
+                width={headerWidth}
                 text={colMainHeader}
             />
             <div css={tableDivStyle}>
                 <TableMainHeaderComponent
                     isTitle={props.displayRowCol.isRow}
                     isRow
-                    height={height}
-                    width={width}
+                    height={tableHeight}
+                    width={headerWidth}
                     text={rowMainHeader}
                 />
-                <div css={dataTableStyle}>
+                <div
+                    css={dataTableStyle}
+                    ref={(node: HTMLElement | null) => div(node, "totalWidth")}
+                >
                     <ResultsTable
                         allIsolates={table.statisticData}
                         isIsolates={isIsolates}
