@@ -83,8 +83,6 @@ export function DisplayedFeaturesComponent(): JSX.Element {
                     {t("Drawer.Subtitles.Graph")}
                 </h4>
                 <ClearSelectorButton
-                    mainButton
-                    selectAttribute="all"
                     isFilter={false}
                     isTabel
                 />

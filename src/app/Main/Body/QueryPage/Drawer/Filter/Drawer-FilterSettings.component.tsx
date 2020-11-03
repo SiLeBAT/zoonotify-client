@@ -76,8 +76,6 @@ export function FilterSettingsComponent(): JSX.Element {
                     {t("Drawer.Subtitles.Filter")}
                 </h4>
                 <ClearSelectorButton
-                    mainButton
-                    selectAttribute="all"
                     isFilter
                     isTabel={false}
                 />
