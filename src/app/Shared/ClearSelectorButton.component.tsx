@@ -30,8 +30,7 @@ const LightTooltip = withStyles(() => ({
         backgroundColor,
         color: onBackgroundColor,
         fontSize: 9,
-        margin: "2px",
-        padding: "2px 1px",
+        margin: "0.2em",
     },
 }))(Tooltip);
 
@@ -43,9 +42,6 @@ interface RemoveButtonProps {
 export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
     const { setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
-    
-    const { t } = useTranslation(["QueryPage"]);
-
 
     const { t } = useTranslation(["QueryPage"]);
 
@@ -61,11 +57,8 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
         }
     };
 
-<<<<<<< HEAD
+
     const mouseOverText = t("QueryPage:Buttons.Delete");
-=======
-    const mouseOverText = t("QueryPage:Buttons.Delete")
->>>>>>> 8902628... Add translation to the remove-button-mouseover
 
     return (
         <div css={buttonAreaStyle}>
