@@ -13,12 +13,15 @@ import {
     defaultFilter,
     FilterContext,
 } from "../../../Shared/Context/FilterContext";
+import { TableContext } from "../../../Shared/Context/TableContext";
 import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
 import { createPathString } from "../../../Core/createFilterPath.service";
+import { getTableFromPath } from "../../../Core/getTableFromPath.service";
 
 export function QueryPageContainer(): JSX.Element {
     const { data, setData } = useContext(DataContext);
     const { filter, setFilter } = useContext(FilterContext);
+    const { table, setTable } = useContext(TableContext);
     const history = useHistory();
 
     const keyValueProps: DBtype[] = [
@@ -103,11 +106,19 @@ export function QueryPageContainer(): JSX.Element {
         setFilter(
             getFilterFromPath(history.location.search, mainFilterAttributes)
         );
+        const [rowFromPath, colFromPath] = getTableFromPath(
+            history.location.search
+        );
+        setTable({
+            ...table,
+            row: rowFromPath,
+            column: colFromPath,
+        });
     }, []);
 
     useEffect((): void => {
-        history.push(`?${createPathString(filter)}`);
-    }, [filter]);
+        history.push(`?${createPathString(filter, table)}`);
+    }, [filter, table]);
 
     let returnValue = <h1> Loading data ... </h1>;
     if (_.isEmpty(data.ZNData) === false) {

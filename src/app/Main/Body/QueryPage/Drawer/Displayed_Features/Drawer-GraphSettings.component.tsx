@@ -18,13 +18,17 @@ const drawerWidthStyle = css`
     width: inherit;
 `;
 const featureSubHeaderStyle = css`
-    margin: 2.5em 0 0 0;
+    margin: 0; 
     font-size: 1rem;
 `;
 const featureAreaStyle = css`
     width: inherit;
+    margin: 2.5em 16px 0 0;
+    padding-right: 8px;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 `;
 const iconButtonStyle = css`
     margin: 1em;

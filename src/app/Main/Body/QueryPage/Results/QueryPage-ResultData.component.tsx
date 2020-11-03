@@ -10,10 +10,11 @@ import { TableContext } from "../../../../Shared/Context/TableContext";
 import { FilterType } from "../../../../Shared/Filter.model";
 import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
 
-const dataStyle = css`
+const dataStyle = (isRowAndCol: boolean): SerializedStyles => css`
     max-width: fit-content;
     margin: auto;
     box-sizing: inherit;
+    border-right: ${isRowAndCol ? `1px solid ${primaryColor}` : "none"};
 `;
 const dataTableStyle = css`
     overflow: auto;
@@ -53,14 +54,18 @@ export function QueryPageTableRestultComponent(
     const rowAttribute: FilterType = table.row;
     const colAttribute: FilterType = table.column;
 
-    let isIsolates = false;
-
-    if (!props.displayRowCol.isCol && !props.displayRowCol.isRow) {
-        isIsolates = true;
-    }
+    const isIsolates = !!(
+        !props.displayRowCol.isCol && !props.displayRowCol.isRow
+    );
+    const isRowAndCol = !!(
+        props.displayRowCol.isCol && props.displayRowCol.isRow
+    );
+    const isRowNotCol = !!(
+        !props.displayRowCol.isCol && props.displayRowCol.isRow
+    );
 
     return (
-        <div css={dataStyle}>
+        <div css={dataStyle(isRowAndCol)}>
             <h4 css={tableTitleStyle(props.displayRowCol.isCol, false)}>
                 {t(`Filters.${colAttribute}`)}
             </h4>
@@ -73,6 +78,7 @@ export function QueryPageTableRestultComponent(
                         allIsolates={table.statisticData}
                         isIsolates={isIsolates}
                         columnAttributes={props.columnAttributes}
+                        isRowNotCol={isRowNotCol}
                     />
                 </div>
             </div>
