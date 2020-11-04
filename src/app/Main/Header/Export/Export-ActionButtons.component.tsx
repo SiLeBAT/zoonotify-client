@@ -25,7 +25,6 @@ const warningStyle = (isSelect: boolean): SerializedStyles => css`
 
 interface ExportActionButtonProps {
     onClick: (event: unknown) => void;
-    open: boolean;
     setting: ExportInterface;
     filter: FilterInterface;
     buttonLabel: JSX.Element;
@@ -59,7 +58,7 @@ export function ExportActionButtonComponent(
                 <Button onClick={handleClose} color="primary">
                     {t("Button.Cancel")}
                 </Button>
-                <Button color="primary" disabled={!fileIsSelect}>
+                <Button onClick={handleClose} color="primary" disabled={!fileIsSelect}>
                     <CSVLink
                         data={objectToCsv({
                             setting: props.setting,
