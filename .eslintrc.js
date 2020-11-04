@@ -7,6 +7,7 @@ module.exports = {
         "jest",
         "promise",
         "unicorn",
+        "cypress",
     ],
     extends: [
         "airbnb-typescript",
