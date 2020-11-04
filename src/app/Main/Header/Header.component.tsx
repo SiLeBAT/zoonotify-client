@@ -16,18 +16,19 @@ import { ZNPaths } from "../../Shared/URLs";
 
 const headerStyle = css`
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
 `;
 const mainHeaderStyle = (open: boolean): SerializedStyles => css`
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-end;
     box-sizing: border-box;
-    box-shadow: 0 2px 6px 0 grey;
+    box-shadow: 0 8px 6px -6px grey;
     background-color: ${primaryColor};
     border-bottom: ${open ? `24px solid ${bfrPrimaryPalette[300]}` : "none"};
 `;
@@ -64,21 +65,21 @@ const navLinkStyle = (open: boolean): SerializedStyles => css`
 const leftHeaderStyle = css`
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
 `;
 const rightHeaderStyle = css`
+    height: 100%;
     margin-right: 8em;
-    padding: 0.5em 1em 0.5em 1em;
+    display: flex; 
+    align-items: flex-end;
 `;
 const subheaderStyle = (open: boolean): SerializedStyles => css`
     width: 100%;
     display: ${open ? "flex" : "none"};
     justify-content: flex-end;
     align-items: center;
-    box-sizing: border-box;
     background-color: ${bfrPrimaryPalette[300]};
     box-sizing: border-box;
-    box-shadow: 0 2px 6px 0 grey;
+    box-shadow: 0 8px 6px -6px grey;
 `;
 
 export function HeaderLayoutComponent(props: {

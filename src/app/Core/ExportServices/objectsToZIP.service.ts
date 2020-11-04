@@ -12,6 +12,7 @@ interface ObjectToCsvBothProps {
     ZNFilename: string;
     allFilterLabel: string;
     mainFilterLabels: { Erreger: string; Matrix: string; Projektname: string };
+    subFileNames: string[];
 }
 
 export function objectToZIP(props: ObjectToCsvBothProps): void {
@@ -44,10 +45,9 @@ export function objectToZIP(props: ObjectToCsvBothProps): void {
     );
     csvRows.push(csvRowsStat.join("\n"));
 
-    const subNames = ["Statistic-Data", "RAW-Data"];
     const zip = new JSZip();
     csvRows.forEach((CSV, i): void => {
-        zip.file(`${subNames[i]}_${props.ZNFilename}`, CSV);
+        zip.file(`${props.subFileNames[i]}_${props.ZNFilename}`, CSV);
     });
 
     const folderName: string = props.ZNFilename.replace(".csv", ".zip");

@@ -4,8 +4,12 @@
         "Text": "You can choose whether to download the complete data set, the displayed statistics or both."
     },
     "Checkbox": {
-        "RAW": "RAW data set",
+        "DataSet": "Filtered data set",
         "Stat": "Statistics of isolates"
+    },
+    "FileName": {
+        "DataSet": "filtered-data-set",
+        "Stat": "statistics-isolates"
     },
     "Warning": "Please select at least one option or cancel the export.",
     "Button": {
