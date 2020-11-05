@@ -1,6 +1,6 @@
 describe("Test navigation", function () {
     it("check navigation on ZN", function () {
-        cy.visit("https://nolar-dev.bfr.berlin/");
+        cy.visit("http://localhost:8080/");
         cy.contains("Abfrage").click();
         cy.url().should("include", "/query");
         cy.contains("ZooNotify").click();
