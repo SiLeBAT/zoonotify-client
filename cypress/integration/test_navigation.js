@@ -1,6 +1,6 @@
 describe("Test navigation", function () {
     it("check navigation on ZN", function () {
-        cy.visit("http://localhost:8080/");
+        cy.visit("https://nolar-dev.bfr.berlin/");
         cy.contains("Abfrage").click();
         cy.url().should("include", "/query");
         cy.contains("ZooNotify").click();
@@ -13,12 +13,9 @@ describe("Test navigation", function () {
     it("check external links ", function () {
         cy.get('a[href="https://www.bfr.bund.de/de/start.html"]')
             .should("have.attr", "target", "_blank")
-            .click();
         cy.get('a[href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/"]')
             .should("have.attr", "target", "_blank")
-            .click();
         cy.get('a[href="/api-docs/v1/"]')
             .should("have.attr", "target", "_blank")
-            .click();
     });
 });
