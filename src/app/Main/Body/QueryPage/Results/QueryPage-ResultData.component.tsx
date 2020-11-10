@@ -41,12 +41,14 @@ export function QueryPageTableRestultComponent(
     const { t } = useTranslation(["QueryPage"]);
 
     useEffect(() => {
-        window.addEventListener("resize", () => {
+        const handleSize = ():void => {
             setWindowSize({
                 width: window.innerWidth,
                 height: window.innerHeight,
             });
-        });
+        }
+        window.addEventListener("resize", handleSize);
+        return () => window.removeEventListener("resize", handleSize);
     }, []);
 
     const div = useCallback(
