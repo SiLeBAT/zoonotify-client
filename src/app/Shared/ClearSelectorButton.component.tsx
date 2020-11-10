@@ -1,11 +1,16 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext } from "react";
-import { IconButton } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+import { IconButton, Tooltip, withStyles } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Filter.model";
 import { defaultFilter, FilterContext } from "./Context/FilterContext";
-import { primaryColor } from "./Style/Style-MainTheme.component";
+import {
+    backgroundColor,
+    onBackgroundColor,
+    primaryColor,
+} from "./Style/Style-MainTheme.component";
 import { TableContext } from "./Context/TableContext";
 
 const buttonAreaStyle = css`
@@ -20,6 +25,15 @@ const iconButtonStyle = css`
     color: ${primaryColor};
 `;
 
+const LightTooltip = withStyles(() => ({
+    tooltip: {
+        backgroundColor,
+        color: onBackgroundColor,
+        fontSize: 9,
+        margin: "0.2em",
+    },
+}))(Tooltip);
+
 interface RemoveButtonProps {
     isFilter: boolean;
     isTabel: boolean;
@@ -28,6 +42,9 @@ interface RemoveButtonProps {
 export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
     const { setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
+
+    const { t } = useTranslation(["QueryPage"]);
+    const mouseOverText = t("QueryPage:Buttons.Delete");
 
     const handleRemove = (): void => {
         if (props.isFilter) {
@@ -43,9 +60,19 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
 
     return (
         <div css={buttonAreaStyle}>
-            <IconButton css={iconButtonStyle} onClick={() => handleRemove()}>
-                <CancelIcon css={css`height: 20px; width: 20px`}/>
-            </IconButton>
+            <LightTooltip title={mouseOverText} placement="top">
+                <IconButton
+                    css={iconButtonStyle}
+                    onClick={() => handleRemove()}
+                >
+                    <CancelIcon
+                        css={css`
+                            height: 20px;
+                            width: 20px;
+                        `}
+                    />
+                </IconButton>
+            </LightTooltip>
         </div>
     );
 }
