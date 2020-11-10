@@ -74,7 +74,6 @@ export function ExportDataComponent(): JSX.Element {
         <div>
             <ExportButton
                 onClick={handleClickOpen}
-                open={open}
                 buttonLabel={buttonLabel}
             />
             <Dialog
@@ -90,7 +89,6 @@ export function ExportDataComponent(): JSX.Element {
                 />
                 <ActionButtons
                     onClick={handleClose}
-                    open={open}
                     setting={setting}
                     filter={filter}
                     buttonLabel={buttonLabel}
