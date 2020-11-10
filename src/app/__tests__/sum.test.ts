@@ -1,3 +1,6 @@
+
+/// <reference types="jest" />
+
 import { sum } from './sum';
 
 test('basic', () => {
