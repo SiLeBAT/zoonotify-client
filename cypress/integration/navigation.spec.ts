@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe("Test navigation", function () {
     it("check navigation on ZN", function () {
         cy.visit("https://nolar-dev.bfr.berlin/");

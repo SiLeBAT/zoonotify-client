@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe("Test langugae setting in local storage", function () {
     it("check english language storage", function () {
         cy.visit("https://nolar-dev.bfr.berlin/");
