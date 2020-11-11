@@ -84,7 +84,7 @@ export function DisplayedFeaturesComponent(): JSX.Element {
                 </h4>
                 <ClearSelectorButton
                     isFilter={false}
-                    isTabel
+                    isTable
                 />
             </div>
             <TableSelector
