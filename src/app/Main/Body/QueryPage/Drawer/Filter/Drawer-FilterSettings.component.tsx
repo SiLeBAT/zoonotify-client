@@ -77,7 +77,7 @@ export function FilterSettingsComponent(): JSX.Element {
                 </h4>
                 <ClearSelectorButton
                     isFilter
-                    isTabel={false}
+                    isTable={false}
                 />
             </div>
             {AddSelectorElements(handleChange)}

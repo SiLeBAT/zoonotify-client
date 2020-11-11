@@ -29,14 +29,14 @@ const LightTooltip = withStyles(() => ({
     tooltip: {
         backgroundColor,
         color: onBackgroundColor,
-        fontSize: 9,
+        fontSize: "9px",
         margin: "0.2em",
     },
 }))(Tooltip);
 
 interface RemoveButtonProps {
     isFilter: boolean;
-    isTabel: boolean;
+    isTable: boolean;
 }
 
 export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
@@ -49,7 +49,7 @@ export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
     const handleRemove = (): void => {
         if (props.isFilter) {
             setFilter(defaultFilter);
-        } else if (props.isTabel) {
+        } else if (props.isTable) {
             setTable({
                 ...table,
                 row: "" as FilterType,
