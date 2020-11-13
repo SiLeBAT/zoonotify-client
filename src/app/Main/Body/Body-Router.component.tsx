@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { QueryPageContainer as QueryPage } from "./QueryPage/QueryPage-Container.component";
 import { HomePageLayoutComponent as HomePage } from "./HomePage/HomePage.component";
+import { LinkPageComponent as LinkPage } from "./LinkPage/LinkPage.component";
 import { InfoPageComponent as InfoPage } from "./InfoPage/InfoPage.component";
 import { DataProtectionPageComponent as DataProtection } from "./DataProtectionPage/DataProtectionPage.component";
 import { ZNPaths } from "../../Shared/URLs";
@@ -18,6 +19,7 @@ export function BodyRouterComponent(): JSX.Element {
             <Route exact path={ZNPaths.homePagePath} component={HomePage} />
             <Route path={ZNPaths.infoPagePath} component={InfoPage} />
             <Route path={ZNPaths.queryPagePath} component={QueryPage} />
+            <Route path={ZNPaths.linkPagePath} component={LinkPage} />
             <Route path={ZNPaths.dpdPagePath} component={DataProtection} />
             <Route component={PageNotFound} />
         </Switch>

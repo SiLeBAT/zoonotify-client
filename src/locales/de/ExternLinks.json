@@ -1,0 +1,30 @@
+{
+    "TextContent": {
+        "Heading": "Weitere Informationsquellen",
+        "Text": "Hier finden Sie Links auf nationale und internationale Einrichtungen des gesundheitlichen Verbraucherschutzes und der Krankheitsüberwachung und –prävention sowie auf hilfreiche Tools in diesem Themenereich. Die Liste erhebt keinen Anspruch auf Vollständigkeit. Das BfR übernimmt keine Verantwortung für die Inhalte der hier aufgeführten Internet-Seiten."
+    },
+    "Guidelines": {
+        "Title": "Richtlinien",
+        "AVV": "AVV Zoonosen Lebensmittelkette",
+        "RL": "RL 2003/99/EG"
+    },
+    "Reports": {
+        "Title": "Berichte",
+        "ZoonosenBfR": "Zoonosenberichterstattung durch das BfR",
+        "ZoonosenMonitoring": "Berichte zum Zoonosen-Monitoring"
+    },
+    "Institutes": {
+        "Title": "Organisationen und Institute",
+        "RKI": "Robert Koch Institut (RKI)",
+        "BVL": "Bundesamt für Verbraucherschutz und Lebensmittelsicherheit (BVL)",
+        "EFSA": "Europäische Behörde für Lebensmittelsicherheit (EFSA)",
+        "ECDC": "European Centre for Disease Prevention and Control (ECDC)",
+        "BMEL": "Bundesministerium für Ernährung und Landwirtschaft (BMEL)"
+    },
+    "Platforms": {
+        "Title": "Online Plattformen",
+        "Survstat": "Survstat@RKI 2.0",
+        "ArEFSA": "Antibiotikaresistenzen in Europa - EFSA",
+        "SurveillanceAtlas": "Surveillance Atlas of Infectious Diseases"
+    }
+}

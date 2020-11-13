@@ -85,6 +85,7 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
 export function HeaderLayoutComponent(props: {
     isConnected: boolean;
 }): JSX.Element {
+    const [linkOpen, setLinkOpen] = useState<boolean>(false);
     const [queryOpen, setQueryOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
@@ -101,6 +102,11 @@ export function HeaderLayoutComponent(props: {
         } else {
             setInfoOpen(false);
         }
+        if (pathname === ZNPaths.linkPagePath) {
+            setLinkOpen(true);
+        } else {
+            setLinkOpen(false);
+        }
     });
 
     const handleClick = (e: { preventDefault: () => void }): void => {
@@ -109,7 +115,7 @@ export function HeaderLayoutComponent(props: {
 
     return (
         <header css={headerStyle}>
-            <div css={mainHeaderStyle(infoOpen)}>
+            <div css={mainHeaderStyle(infoOpen || linkOpen)}>
                 <div css={leftHeaderStyle}>
                     <NavLink to={ZNPaths.homePagePath} css={appNameStyle}>
                         ZooNotify
@@ -133,6 +139,12 @@ export function HeaderLayoutComponent(props: {
                         }
                     >
                         {t("Query")}
+                    </NavLink>
+                    <NavLink
+                        to={ZNPaths.linkPagePath}
+                        css={navLinkStyle(linkOpen)}
+                    >
+                        {t("Links")}
                     </NavLink>
                 </div>
             </div>
