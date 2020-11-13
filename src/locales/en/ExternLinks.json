@@ -1,0 +1,30 @@
+{
+    "TextContent": {
+        "Heading": "Further Information",
+        "Text": "Here you will find links to national and international institutions for consumer health protection and disease surveillance and prevention as well as helpful tools in this subject area. The list makes no claim to completeness. The BfR does not assume any responsibility for the contents of the Internet sites listed here."
+    },
+    "Guidelines": {
+        "Title": "Guidelines",
+        "AVV": "AVV Zoonosen Lebensmittelkette",
+        "RL": "RL 2003/99/EG"
+    },
+    "Reports": {
+        "Title": "Reports",
+        "ZoonosenBfR": "Zoonoses reporting by the BfR",
+        "ZoonosenMonitoring": "Reports on zoonoses monitoring"
+    },
+    "Institutes": {
+        "Title": "Organizations and Institutes",
+        "RKI": "Robert Koch Institute (RKI)",
+        "BVL": "Federal Office of Consumer Protection and Food Safety (BVL)",
+        "EFSA": "European Food Safety Authority (EFSA)",
+        "ECDC": "European Centre for Disease Prevention and Control (ECDC)",
+        "BMEL": "Federal Ministry of Food and Agriculture (BMEL)"
+    },
+    "Platforms": {
+        "Title": "Online Platforms",
+        "Survstat": "Survstat@RKI 2.0",
+        "ArEFSA": "Antimicrobial resistance in Europe - EFSA",
+        "SurveillanceAtlas": "Surveillance Atlas of Infectious Diseases"
+    }
+}
