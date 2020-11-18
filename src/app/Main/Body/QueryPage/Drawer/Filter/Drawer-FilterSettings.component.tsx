@@ -23,11 +23,15 @@ const filterHeadingStyle = css`
 `;
 const filterAreaStyle = css`
     width: inherit;
+    margin: 2.5em 16px 0 0;
+    padding-right: 8px;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 `;
 const filterSubheadingStyle = css`
-    margin: 2.5em 0 0 0;
+    margin: 0;
     font-weight: bold;
     font-size: 1rem;
 `;
@@ -72,10 +76,8 @@ export function FilterSettingsComponent(): JSX.Element {
                     {t("Drawer.Subtitles.Filter")}
                 </h4>
                 <ClearSelectorButton
-                    mainButton
-                    selectAttribute="all"
                     isFilter
-                    isTabel={false}
+                    isTable={false}
                 />
             </div>
             {AddSelectorElements(handleChange)}

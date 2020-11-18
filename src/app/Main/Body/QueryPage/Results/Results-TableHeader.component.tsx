@@ -1,4 +1,5 @@
-import React from "react";
+/** @jsx jsx */
+import { jsx, SerializedStyles } from "@emotion/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import {
@@ -12,6 +13,7 @@ const StyledTableCell = withStyles(() =>
             padding: "0.75em",
             color: onBackgroundColor,
             borderBottom: `1px solid ${primaryColor}`,
+            letterSpacing: 0,
         },
         body: {
             color: onBackgroundColor,
@@ -27,6 +29,8 @@ export function Header(
         node: HTMLElement | null,
         key: "height" | "totalWidth" | "partWidth"
     ) => void
+    isRowNotCol: boolean,
+    style: (isIsolates: boolean, isRow: boolean) => SerializedStyles
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
     if (!isIsolates) {
@@ -34,6 +38,7 @@ export function Header(
             <StyledTableCell
                 key="header-blank"
                 ref={(node: HTMLElement | null) => getSize(node, "partWidth")}
+                css={style(isIsolates, isRowNotCol)}
             >
                 &nbsp;
             </StyledTableCell>
@@ -41,7 +46,10 @@ export function Header(
     }
     headerValues.forEach((element): void => {
         elements.push(
-            <StyledTableCell key={`header-${element}`}>
+            <StyledTableCell
+                key={`header-${element}`}
+                css={style(isIsolates, isRowNotCol)}
+            >
                 {element}
             </StyledTableCell>
         );

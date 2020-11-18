@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import { css, jsx, SerializedStyles } from "@emotion/core";
 import {
     makeStyles,
     Table,
@@ -19,12 +19,25 @@ const tableStyle = css`
     width: fit-content;
     min-width: 20em;
 `;
+const tabelCellStyle = (
+    isIsolates: boolean,
+    isRow: boolean
+): SerializedStyles => css`
+    box-sizing: border-box;
+    border-right: 1px solid lightgrey;
+    :last-child {
+        border-right: none;
+    }
+    text-align: ${isIsolates ? "center" : "right"};
+    white-space: ${isRow ? "nowrap" : "normal"};
+`;
 
 const useStyles = makeStyles({
     tableCell: {
         wordWrap: "break-word",
         padding: "0.75em",
         color: onBackgroundColor,
+        letterSpacing: 0,
     },
 });
 
@@ -36,6 +49,7 @@ interface ResultTableProps {
         node: HTMLElement | null,
         key: "height" | "totalWidth" | "partWidth"
     ) => void;
+    isRowNotCol: boolean;
 }
 
 export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
@@ -50,6 +64,8 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
                             props.columnAttributes,
                             props.isIsolates,
                             props.getSize
+                            props.isRowNotCol,
+                            tabelCellStyle
                         )}
                     </TableRow>
                 </TableHead>
@@ -60,7 +76,12 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
                 >
                     {props.allIsolates.map((row) => (
                         <TableRow key={`row-${row.name}`}>
-                            {RowValues(row, classes)}
+                            {RowValues(
+                                row,
+                                classes,
+                                props.isIsolates,
+                                tabelCellStyle
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>

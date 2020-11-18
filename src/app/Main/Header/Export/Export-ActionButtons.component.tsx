@@ -25,7 +25,6 @@ const warningStyle = (isSelect: boolean): SerializedStyles => css`
 
 interface ExportActionButtonProps {
     onClick: (event: unknown) => void;
-    open: boolean;
     setting: ExportInterface;
     filter: FilterInterface;
     buttonLabel: JSX.Element;
@@ -43,18 +42,14 @@ export function ExportActionButtonComponent(
         props.onClick(event);
     };
 
-    let fileIsSelect = true;
-    if (!props.setting.raw && !props.setting.stat) {
-        fileIsSelect = false;
-    }
-
-    let subFileName = "";
-    if (props.setting.raw && !props.setting.stat) {
-        subFileName = "RAW-Data";
-    }
-    if (!props.setting.raw && props.setting.stat) {
-        subFileName = "Statistic-Data";
-    }
+    const fileIsSelect = !(!props.setting.raw && !props.setting.stat);
+    const subFileNames = [t("FileName.Stat"), t("FileName.DataSet")];
+    const subFileName =
+        props.setting.raw && !props.setting.stat
+            ? subFileNames[1]
+            : (!props.setting.raw && props.setting.stat
+            ? subFileNames[0]
+            : "");
 
     return (
         <div>
@@ -63,7 +58,7 @@ export function ExportActionButtonComponent(
                 <Button onClick={handleClose} color="primary">
                     {t("Button.Cancel")}
                 </Button>
-                <Button color="primary" disabled={!fileIsSelect}>
+                <Button onClick={handleClose} color="primary" disabled={!fileIsSelect}>
                     <CSVLink
                         data={objectToCsv({
                             setting: props.setting,
@@ -81,6 +76,7 @@ export function ExportActionButtonComponent(
                                     filter: props.filter,
                                     allFilterLabel: props.allFilterLabel,
                                     mainFilterLabels: props.mainFilterLabels,
+                                    subFileNames,
                                 });
                                 return false;
                             }

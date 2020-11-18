@@ -10,7 +10,7 @@ import { ExportButtonComponent as ExportButton } from "./Header-ExportButton.com
 import { CheckBoxComponent as CheckBoxes } from "./Export-Checkbox.component";
 import { DialogContentComponent as DialogContent } from "./Export-Text.component";
 import { ExportActionButtonComponent as ActionButtons } from "./Export-ActionButtons.component";
-import { generateExportLabels } from "./Export-Labels.service";
+import { generateExportLabels } from "../../../Core/ExportServices/Export-Labels.service";
 
 export function ExportDataComponent(): JSX.Element {
     const [open, setOpen] = useState(false);
@@ -74,7 +74,6 @@ export function ExportDataComponent(): JSX.Element {
         <div>
             <ExportButton
                 onClick={handleClickOpen}
-                open={open}
                 buttonLabel={buttonLabel}
             />
             <Dialog
@@ -90,7 +89,6 @@ export function ExportDataComponent(): JSX.Element {
                 />
                 <ActionButtons
                     onClick={handleClose}
-                    open={open}
                     setting={setting}
                     filter={filter}
                     buttonLabel={buttonLabel}

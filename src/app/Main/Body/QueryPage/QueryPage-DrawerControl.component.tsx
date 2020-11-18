@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import { css, jsx, SerializedStyles } from "@emotion/core";
 import clsx from "clsx";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { IconButton } from "@material-ui/core";
@@ -13,26 +13,22 @@ import {
     bfrLightblue,
 } from "../../../Shared/Style/Style-MainTheme.component";
 
-
 const drawerStyle = css`
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
 `;
-const drawerClosedBarStyle = css`
-    width: 35px;
+const drawerBarStyle = (open: boolean): SerializedStyles => css`
+    display: ${open ? "none" : "flex"};
+    width: 41px;
     box-sizing: border-box;
     background: ${primaryColor};
-`;
-const drawerOpenBarStyle = css`
-    display: none;
 `;
 const drawerTextStyle = css`
     margin: auto;
     margin-top: 50px;
-    font-weight: bold;
-    font-size: 20px;
+    font-size: 1.2rem;
     letter-spacing: 1px;
     writing-mode: vertical-lr;
     transform: rotate(180deg);
@@ -101,7 +97,7 @@ export function DrawerControlComponent(props: DrawerControlProps): JSX.Element {
             })}
             css={drawerStyle}
         >
-            <div css={props.isOpen ? drawerOpenBarStyle : drawerClosedBarStyle}>
+            <div css={drawerBarStyle(props.isOpen)}>
                 <p css={drawerTextStyle}>{t("Drawer.Title")}</p>
             </div>
             <div

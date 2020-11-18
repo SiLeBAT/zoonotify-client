@@ -16,14 +16,16 @@ export function generateParameterHeader(props: ParameterHeaderProps): string {
 
     mainFilterAttributes.forEach((element): void => {
         if (props.filter[element].length !== 0) {
-            HeaderRows.push(
-                `"#${props.mainFilterLabels[element]}:${props.filter[
-                    element
-                ].join("#")}"`
-            );
+            const headerFilterArray: string[] = [];
+            props.filter[element].forEach((filterValue) => {
+                headerFilterArray.push(`"${filterValue}"`);
+            });
+            const headerFilterString = headerFilterArray.join(";");
+            const completeHeaderString = `#${props.mainFilterLabels[element]}: ${headerFilterString}`;
+            HeaderRows.push(completeHeaderString);
         } else {
             HeaderRows.push(
-                `#${props.mainFilterLabels[element]}:${props.allFilterLabel}`
+                `#${props.mainFilterLabels[element]}: "${props.allFilterLabel}"`
             );
         }
     });
