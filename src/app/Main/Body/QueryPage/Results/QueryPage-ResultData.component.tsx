@@ -6,11 +6,10 @@ import { TableContext } from "../../../../Shared/Context/TableContext";
 import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
 import { TableMainHeaderComponent } from "./Result-MainHeader.component";
 
-const dataStyle = (isRowAndCol: boolean): SerializedStyles => css`
+const dataStyle = css`
     max-width: fit-content;
     margin: auto;
     box-sizing: inherit;
-    border-right: ${isRowAndCol ? `1px solid ${primaryColor}` : "none"};
 `;
 const dataTableStyle = css`
     overflow: auto;
@@ -42,12 +41,12 @@ export function QueryPageTableRestultComponent(
     const { t } = useTranslation(["QueryPage"]);
 
     useEffect(() => {
-        const handleSize = ():void => {
+        const handleSize = (): void => {
             setWindowSize({
                 width: window.innerWidth,
                 height: window.innerHeight,
             });
-        }
+        };
         window.addEventListener("resize", handleSize);
         return () => window.removeEventListener("resize", handleSize);
     }, []);
@@ -91,7 +90,7 @@ export function QueryPageTableRestultComponent(
     );
 
     return (
-        <div css={dataStyle(isRowAndCol)}>
+        <div css={dataStyle}>
             <TableMainHeaderComponent
                 isTitle={props.displayRowCol.isCol}
                 isRow={false}
@@ -117,6 +116,7 @@ export function QueryPageTableRestultComponent(
                         columnAttributes={props.columnAttributes}
                         getSize={div}
                         isRowNotCol={isRowNotCol}
+                        isRowAndCol={isRowAndCol}
                     />
                 </div>
             </div>

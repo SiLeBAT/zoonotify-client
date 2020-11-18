@@ -28,9 +28,14 @@ export function Header(
     getSize: (
         node: HTMLElement | null,
         key: "height" | "totalWidth" | "partWidth"
-    ) => void
+    ) => void,
     isRowNotCol: boolean,
-    style: (isIsolates: boolean, isRow: boolean) => SerializedStyles
+    isRowAndCol: boolean,
+    style: (
+        isIsolates: boolean,
+        isRow: boolean,
+        isRowAndCol: boolean
+    ) => SerializedStyles
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
     if (!isIsolates) {
@@ -38,7 +43,7 @@ export function Header(
             <StyledTableCell
                 key="header-blank"
                 ref={(node: HTMLElement | null) => getSize(node, "partWidth")}
-                css={style(isIsolates, isRowNotCol)}
+                css={style(isIsolates, isRowNotCol, isRowAndCol)}
             >
                 &nbsp;
             </StyledTableCell>
@@ -48,7 +53,7 @@ export function Header(
         elements.push(
             <StyledTableCell
                 key={`header-${element}`}
-                css={style(isIsolates, isRowNotCol)}
+                css={style(isIsolates, isRowNotCol, isRowAndCol)}
             >
                 {element}
             </StyledTableCell>
