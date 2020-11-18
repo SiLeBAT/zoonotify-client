@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import {
-    makeStyles,
     Table,
     TableBody,
     TableContainer,
@@ -9,6 +8,7 @@ import {
     TableRow,
     Paper,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { RowValues } from "./Results-TableRows.component";
 import { Header } from "./Results-TableHeader.component";
 import { onBackgroundColor } from "../../../../Shared/Style/Style-MainTheme.component";
@@ -21,12 +21,13 @@ const tableStyle = css`
 `;
 const tabelCellStyle = (
     isIsolates: boolean,
-    isRow: boolean
+    isRow: boolean,
+    isRowAndCol: boolean
 ): SerializedStyles => css`
     box-sizing: border-box;
     border-right: 1px solid lightgrey;
     :last-child {
-        border-right: none;
+        border-right: ${isRowAndCol ? `1px solid lightgrey` : "none"};
     }
     text-align: ${isIsolates ? "center" : "right"};
     white-space: ${isRow ? "nowrap" : "normal"};
@@ -50,6 +51,7 @@ interface ResultTableProps {
         key: "height" | "totalWidth" | "partWidth"
     ) => void;
     isRowNotCol: boolean;
+    isRowAndCol: boolean;
 }
 
 export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
@@ -63,8 +65,9 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
                         {Header(
                             props.columnAttributes,
                             props.isIsolates,
-                            props.getSize
+                            props.getSize,
                             props.isRowNotCol,
+                            props.isRowAndCol,
                             tabelCellStyle
                         )}
                     </TableRow>
@@ -80,6 +83,7 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
                                 row,
                                 classes,
                                 props.isIsolates,
+                                props.isRowAndCol,
                                 tabelCellStyle
                             )}
                         </TableRow>

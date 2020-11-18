@@ -13,7 +13,12 @@ export function RowValues(
     row: Record<string, string>,
     classes: Record<"tableCell", string>,
     isIsolates: boolean,
-    style: (isIsolates: boolean, isRow: boolean) => SerializedStyles
+    isRowAndCol: boolean,
+    style: (
+        isIsolates: boolean,
+        isRow: boolean,
+        isRowAndCol: boolean
+    ) => SerializedStyles
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
     const k = Object.keys(row);
@@ -25,7 +30,7 @@ export function RowValues(
                 component="th"
                 scope="row"
                 align={chooseAlignment(element)}
-                css={style(isIsolates, true)}
+                css={style(isIsolates, true, isRowAndCol)}
             >
                 {row[element]}
             </TableCell>
