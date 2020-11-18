@@ -25,6 +25,10 @@ const StyledTableCell = withStyles(() =>
 export function Header(
     headerValues: string[],
     isIsolates: boolean,
+    getSize: (
+        node: HTMLElement | null,
+        key: "height" | "totalWidth" | "partWidth"
+    ) => void
     isRowNotCol: boolean,
     style: (isIsolates: boolean, isRow: boolean) => SerializedStyles
 ): JSX.Element[] {
@@ -33,6 +37,7 @@ export function Header(
         elements.push(
             <StyledTableCell
                 key="header-blank"
+                ref={(node: HTMLElement | null) => getSize(node, "partWidth")}
                 css={style(isIsolates, isRowNotCol)}
             >
                 &nbsp;

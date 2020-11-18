@@ -1,14 +1,10 @@
 /** @jsx jsx */
-import { css, jsx, SerializedStyles } from "@emotion/core";
-import { useContext } from "react";
+import { css, jsx } from "@emotion/core";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-    primaryColor,
-    onPrimaryColor,
-} from "../../../../Shared/Style/Style-MainTheme.component";
 import { TableContext } from "../../../../Shared/Context/TableContext";
-import { FilterType } from "../../../../Shared/Filter.model";
 import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
+import { TableMainHeaderComponent } from "./Result-MainHeader.component";
 
 const dataStyle = (isRowAndCol: boolean): SerializedStyles => css`
     max-width: fit-content;
@@ -23,19 +19,6 @@ const tableDivStyle = css`
     display: flex;
     flex-direction: row;
 `;
-const tableTitleStyle = (
-    isTitle: boolean,
-    isRow: boolean
-): SerializedStyles => css`
-    display: ${isTitle ? "flex" : "none"};
-    margin: 0;
-    justify-content: center;
-    font-weight: normal;
-    background-color: ${primaryColor};
-    color: ${onPrimaryColor};
-    transform: ${isRow ? "rotate(180deg)" : "none"};
-    writing-mode: ${isRow ? "vertical-lr" : "none"};
-`;
 
 interface TestInterface {
     displayRowCol: {
@@ -48,11 +31,54 @@ interface TestInterface {
 export function QueryPageTableRestultComponent(
     props: TestInterface
 ): JSX.Element {
+    const [windowSize, setWindowSize] = useState({
+        width: 0,
+        height: 0,
+    });
+    const [tableHeight, setTableHeight] = useState<number>(0);
+    const [totalWidth, setTotalWidth] = useState<number>(0);
+    const [partWidth, setPartWidth] = useState<number>(0);
     const { table } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const rowAttribute: FilterType = table.row;
-    const colAttribute: FilterType = table.column;
+    useEffect(() => {
+        const handleSize = ():void => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        }
+        window.addEventListener("resize", handleSize);
+        return () => window.removeEventListener("resize", handleSize);
+    }, []);
+
+    const div = useCallback(
+        (
+            node: HTMLElement | null,
+            key: "height" | "totalWidth" | "partWidth"
+        ) => {
+            if (node !== null) {
+                if (key === "height") {
+                    const { height } = node.getBoundingClientRect();
+                    setTableHeight(height);
+                }
+                if (key === "totalWidth") {
+                    const { width } = node.getBoundingClientRect();
+                    setTotalWidth(width);
+                }
+                if (key === "partWidth") {
+                    const { width } = node.getBoundingClientRect();
+                    setPartWidth(width);
+                }
+            }
+        },
+        [table, windowSize]
+    );
+
+    const headerWidth: number = totalWidth - partWidth;
+
+    const rowMainHeader: string = t(`Filters.${table.row}`);
+    const colMainHeader: string = t(`Filters.${table.column}`);
 
     const isIsolates = !!(
         !props.displayRowCol.isCol && !props.displayRowCol.isRow
@@ -66,18 +92,30 @@ export function QueryPageTableRestultComponent(
 
     return (
         <div css={dataStyle(isRowAndCol)}>
-            <h4 css={tableTitleStyle(props.displayRowCol.isCol, false)}>
-                {t(`Filters.${colAttribute}`)}
-            </h4>
+            <TableMainHeaderComponent
+                isTitle={props.displayRowCol.isCol}
+                isRow={false}
+                height={tableHeight}
+                width={headerWidth}
+                text={colMainHeader}
+            />
             <div css={tableDivStyle}>
-                <h4 css={tableTitleStyle(props.displayRowCol.isRow, true)}>
-                    {t(`Filters.${rowAttribute}`)}
-                </h4>
-                <div css={dataTableStyle}>
+                <TableMainHeaderComponent
+                    isTitle={props.displayRowCol.isRow}
+                    isRow
+                    height={tableHeight}
+                    width={headerWidth}
+                    text={rowMainHeader}
+                />
+                <div
+                    css={dataTableStyle}
+                    ref={(node: HTMLElement | null) => div(node, "totalWidth")}
+                >
                     <ResultsTable
                         allIsolates={table.statisticData}
                         isIsolates={isIsolates}
                         columnAttributes={props.columnAttributes}
+                        getSize={div}
                         isRowNotCol={isRowNotCol}
                     />
                 </div>
