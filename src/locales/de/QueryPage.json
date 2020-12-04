@@ -30,5 +30,10 @@
         "Matrix": "Lebensmittel",
         "Projektname": "Projektname",
         "Serovar": "Serovar"
+    },
+    "NrOfIsolates": {
+        "Title": "Anzahl Isolate",
+        "Total": "Gesamtanzahl Isolate:",
+        "Selected": "Anzahl ausgewählter Isolate:"
     }
 }
