@@ -33,12 +33,16 @@ const contentBoxStyle = css`
     box-sizing: border-box;
 `;
 const headingStyle = css`
+    margin: 0;
     min-width: 7em;
     font-size: 3rem;
     text-align: center;
     font-weight: normal;
     color: ${primaryColor};
 `;
+const statusStyle = css`
+    text-align: center;
+`
 const deviderStyle = css`
     width: 100%;
     height: 0.15em;
@@ -73,6 +77,7 @@ export function QueryPageContentComponent(): JSX.Element {
     return (
         <div css={contentStyle}>
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
+            <p css={statusStyle}>{t("Content.DataStatus")}</p>
             <div css={contentBoxStyle}>
                 {isFilter || isTable ? <ParameterContent /> : <TextContent />}
                 <Divider variant="middle" css={deviderStyle} />
