@@ -32,5 +32,10 @@
         "Matrix": "Food products",
         "Projektname": "Project name",
         "Serovar": "Serovar"
+    },
+    "NrOfIsolates": {
+        "Title": "Number of isolates",
+        "Total": "Total number of isolates:",
+        "Selected": "Number of selected isolates:"
     }
 }

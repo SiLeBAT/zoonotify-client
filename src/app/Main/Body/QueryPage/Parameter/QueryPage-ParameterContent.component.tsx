@@ -32,37 +32,35 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     });
 
     return (
-        <div>
-            <Accordion defaultExpanded>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <h3 css={subHeadingStyle}>{t("Results.Parameter")}</h3>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <table css={parameterBlockStyle}>
-                        <tbody>
-                            {(function AddParameterElement(): JSX.Element[] {
-                                const elements: JSX.Element[] = [];
-                                mainFilterAttributes.forEach((element): void => {
-                                    const keyName = element.replace(" ", "_");
-                                    elements.push(
-                                        <ParameterListComponent
-                                            key={`parameter-list-${element}`}
-                                            label={t(`Filters.${element}`)}
-                                            keyName={keyName}
-                                            listElements={displayFilter[element]}
-                                        />
-                                    );
-                                });
-                                return elements;
-                            })()}
-                        </tbody>
-                    </table>
-                </AccordionDetails>
-            </Accordion>
-        </div>
+        <Accordion defaultExpanded>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <h3 css={subHeadingStyle}>{t("Results.Parameter")}</h3>
+            </AccordionSummary>
+            <AccordionDetails>
+                <table css={parameterBlockStyle}>
+                    <tbody>
+                        {(function AddParameterElement(): JSX.Element[] {
+                            const elements: JSX.Element[] = [];
+                            mainFilterAttributes.forEach((element): void => {
+                                const keyName = element.replace(" ", "_");
+                                elements.push(
+                                    <ParameterListComponent
+                                        key={`parameter-list-${element}`}
+                                        label={t(`Filters.${element}`)}
+                                        keyName={keyName}
+                                        listElements={displayFilter[element]}
+                                    />
+                                );
+                            });
+                            return elements;
+                        })()}
+                    </tbody>
+                </table>
+            </AccordionDetails>
+        </Accordion>
     );
 }

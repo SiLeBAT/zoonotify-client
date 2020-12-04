@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { SetDataComponent as Results } from "./QueryPage-SetResultData.component";
 import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
 import { QueryPageParameterContentComponent as ParameterContent } from "./Parameter/QueryPage-ParameterContent.component";
+import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { mainFilterAttributes } from "../../../Shared/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
@@ -80,6 +81,7 @@ export function QueryPageContentComponent(): JSX.Element {
             <p css={statusStyle}>{t("Content.DataStatus")}</p>
             <div css={contentBoxStyle}>
                 {isFilter || isTable ? <ParameterContent /> : <TextContent />}
+                <QueryPageNrOfIsolatesComponent />
                 <Divider variant="middle" css={deviderStyle} />
                 <h3 css={subHeadingTextStyle}>{t("Results.Title")}</h3>
             </div>
