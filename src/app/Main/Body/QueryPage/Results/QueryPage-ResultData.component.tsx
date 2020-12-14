@@ -2,10 +2,22 @@
 import { css, jsx } from "@emotion/core";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
 import { TableMainHeaderComponent } from "./Result-MainHeader.component";
 
+const subHeadingStyle = css`
+    margin: 0;
+`;
+const accordionStyle = css`
+    display: block;
+`;
 const dataStyle = css`
     max-width: fit-content;
     margin: auto;
@@ -90,36 +102,49 @@ export function QueryPageTableRestultComponent(
     );
 
     return (
-        <div css={dataStyle}>
-            <TableMainHeaderComponent
-                isTitle={props.displayRowCol.isCol}
-                isRow={false}
-                height={tableHeight}
-                width={headerWidth}
-                text={colMainHeader}
-            />
-            <div css={tableDivStyle}>
-                <TableMainHeaderComponent
-                    isTitle={props.displayRowCol.isRow}
-                    isRow
-                    height={tableHeight}
-                    width={headerWidth}
-                    text={rowMainHeader}
-                />
-                <div
-                    css={dataTableStyle}
-                    ref={(node: HTMLElement | null) => div(node, "totalWidth")}
-                >
-                    <ResultsTable
-                        allIsolates={table.statisticData}
-                        isIsolates={isIsolates}
-                        columnAttributes={props.columnAttributes}
-                        getSize={div}
-                        isRowNotCol={isRowNotCol}
-                        isRowAndCol={isRowAndCol}
+        <Accordion defaultExpanded>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="table-accordion-content"
+                id="table-accordion-header"
+            >
+                <h3 css={subHeadingStyle}>Tabelle</h3>
+            </AccordionSummary>
+            <AccordionDetails css={accordionStyle}>
+                <div css={dataStyle}>
+                    <TableMainHeaderComponent
+                        isTitle={props.displayRowCol.isCol}
+                        isRow={false}
+                        height={tableHeight}
+                        width={headerWidth}
+                        text={colMainHeader}
                     />
+                    <div css={tableDivStyle}>
+                        <TableMainHeaderComponent
+                            isTitle={props.displayRowCol.isRow}
+                            isRow
+                            height={tableHeight}
+                            width={headerWidth}
+                            text={rowMainHeader}
+                        />
+                        <div
+                            css={dataTableStyle}
+                            ref={(node: HTMLElement | null) =>
+                                div(node, "totalWidth")
+                            }
+                        >
+                            <ResultsTable
+                                allIsolates={table.statisticData}
+                                isIsolates={isIsolates}
+                                columnAttributes={props.columnAttributes}
+                                getSize={div}
+                                isRowNotCol={isRowNotCol}
+                                isRowAndCol={isRowAndCol}
+                            />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </AccordionDetails>
+        </Accordion>
     );
 }
