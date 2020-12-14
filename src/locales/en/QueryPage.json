@@ -6,7 +6,8 @@
     "Results": {
         "Parameter": "Parameter",
         "Title": "Result",
-        "TableHead": "Number of isolates"
+        "TableHead": "Number of isolates",
+        "Table": "Table"
     },
     "Buttons": {
         "Submit": "Submit",
