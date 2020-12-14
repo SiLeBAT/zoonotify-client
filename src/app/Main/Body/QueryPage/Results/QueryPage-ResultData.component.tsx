@@ -88,6 +88,7 @@ export function QueryPageTableRestultComponent(
 
     const headerWidth: number = totalWidth - partWidth;
 
+    const accordionHeader: string = t(`Results.Table`)
     const rowMainHeader: string = t(`Filters.${table.row}`);
     const colMainHeader: string = t(`Filters.${table.column}`);
 
@@ -108,7 +109,7 @@ export function QueryPageTableRestultComponent(
                 aria-controls="table-accordion-content"
                 id="table-accordion-header"
             >
-                <h3 css={subHeadingStyle}>Tabelle</h3>
+                <h3 css={subHeadingStyle}>{accordionHeader}</h3>
             </AccordionSummary>
             <AccordionDetails css={accordionStyle}>
                 <div css={dataStyle}>
