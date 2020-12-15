@@ -10,7 +10,7 @@ const logoStyle = css`
 const useStyles = makeStyles({
     root: {
         padding: "1em",
-        margin: "4rem auto",
+        margin: "2.5em auto",
         width: "50%",
     },
 });
