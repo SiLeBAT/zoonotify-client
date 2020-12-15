@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import {
-    backgroundColor,
+    bfrPrimaryPalette,
+    onPrimaryColor,
     primaryColor,
 } from "../../../../Shared/Style/Style-MainTheme.component";
 
@@ -12,13 +13,8 @@ const titleDivStyle = (
     display: ${isTitle ? "flex" : "none"};
     align-items: ${isRow ? "flex-end" : "center"};
     justify-content: ${isRow ? "center" : "flex-end"};
-    background-color: ${backgroundColor};
-    border-right: ${isRow
-        ? `double ${primaryColor}`
-        : `1px solid ${primaryColor}`};
-    border-bottom: ${isRow
-        ? `1px solid ${primaryColor}`
-        : `double ${primaryColor}`};
+    background-color: ${primaryColor};
+    border-bottom: ${isRow ? "none" : `solid ${bfrPrimaryPalette[300]}`}
 `;
 const tableTitleStyle = (
     isTitle: boolean,
@@ -29,13 +25,17 @@ const tableTitleStyle = (
     display: ${isTitle ? "flex" : "none"};
     width: ${isRow ? "inherit" : `${width}px`};
     height: ${isRow ? `${height}px` : "inherit"};
-    margin: 0;
-    padding: ${isRow ? "0 0.3em" : "0.2em 0"};
+    min-height: max-content;
+    min-width: max-content;
+    margin: ${isRow ? "0.3em 0" : "0"};
+    padding: ${isRow ? "0 0.2em" : "0.2em 0"};
     justify-content: center;
     align-items: center;
     font-weight: normal;
-    background-color: ${backgroundColor};
-    color: ${primaryColor};
+    background-color: ${primaryColor};
+    color: ${onPrimaryColor};
+    writing-mode: ${isRow ? "vertical-lr" : "none"}; 
+    transform: ${isRow ? "rotate(180deg)" : "none"};
 `;
 
 interface TestInterface {
