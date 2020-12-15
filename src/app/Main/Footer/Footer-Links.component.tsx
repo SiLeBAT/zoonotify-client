@@ -18,8 +18,7 @@ const footerContentStyle = css`
     box-sizing: inherit;
 `;
 const footerElementStyle = css`
-    min-width: 18.75em;
-    padding: 0.25em;
+    padding: 0.5em;
     display: flex;
     flex-grow: 1;
     justify-content: center;
@@ -68,7 +67,11 @@ export function FooterLinksComponent(): JSX.Element {
                     FoodRisk-Labs
                 </a>
             </li>
-            <li css={footerElementStyle}>{t("Content.Faq")}</li>
+            <li css={footerElementStyle}>
+                <span css={linkStyle}>
+                    {t("Content.Faq")}
+                </span>
+            </li>
             <li css={footerElementStyle}>
                 <a
                     href={apiURL}

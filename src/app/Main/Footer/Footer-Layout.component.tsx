@@ -10,6 +10,7 @@ import {
 const footerStyle = css`
     width: 100%;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
     background-color: ${surfaceColor};

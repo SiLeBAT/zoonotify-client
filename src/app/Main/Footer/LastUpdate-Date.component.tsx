@@ -6,7 +6,7 @@ import { environment } from "../../../environment";
 import { onBackgroundColor } from "../../Shared/Style/Style-MainTheme.component";
 
 const dateStyle = css`
-    margin: 1em;
+    margin: 0;
     margin-left: 15px;
     padding: 0;
     line-height: 1.05;
