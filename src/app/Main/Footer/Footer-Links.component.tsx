@@ -19,10 +19,8 @@ const footerContentStyle = css`
 `;
 const footerElementStyle = css`
     padding: 0.5em;
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
-    align-self: center;
+    flex: 1 1 auto;
+    list-style-type: none;
     cursor: pointer;
     transition: 0.3s;
     color: ${primaryColor};
