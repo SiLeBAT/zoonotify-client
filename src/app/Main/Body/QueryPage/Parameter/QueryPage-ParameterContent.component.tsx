@@ -8,7 +8,11 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import { mainFilterAttributes } from "../../../../Shared/Filter.model";
+import {
+    FilterInterface,
+    FilterType,
+    mainFilterAttributes,
+} from "../../../../Shared/Filter.model";
 import { ParameterListComponent } from "./Parameter-List.component";
 
 const subHeadingStyle = css`
@@ -16,7 +20,17 @@ const subHeadingStyle = css`
 `;
 const parameterBlockStyle = css`
     margin-left: 2em;
+    width: 100%;
 `;
+
+function pairwise(
+    arr: FilterType[],
+    func: { (current: FilterType, next: FilterType): void }
+): void {
+    for (let i = 0; i < arr.length; i += 2) {
+        func(arr[i], arr[i + 1]);
+    }
+}
 
 export function QueryPageParameterContentComponent(): JSX.Element {
     const { filter } = useContext(FilterContext);
@@ -31,6 +45,25 @@ export function QueryPageParameterContentComponent(): JSX.Element {
         }
     });
 
+    const AddParameterElement = ((filterAttributes: FilterType[], filterValues: FilterInterface): JSX.Element[] => {
+        const elements: JSX.Element[] = [];
+        pairwise(filterAttributes, function func(
+            current: FilterType,
+            next: FilterType
+        ): void {
+            elements.push(
+                <ParameterListComponent
+                    key={`parameter-list-${current}-${next}`}
+                    element1={current}
+                    element2={next}
+                    listElements1={filterValues[current]}
+                    listElements2={filterValues[next]}
+                />
+            );
+        });
+        return elements;
+    })
+
     return (
         <Accordion defaultExpanded>
             <AccordionSummary
@@ -41,25 +74,9 @@ export function QueryPageParameterContentComponent(): JSX.Element {
                 <h3 css={subHeadingStyle}>{t("Results.Parameter")}</h3>
             </AccordionSummary>
             <AccordionDetails>
-                <table css={parameterBlockStyle}>
-                    <tbody>
-                        {(function AddParameterElement(): JSX.Element[] {
-                            const elements: JSX.Element[] = [];
-                            mainFilterAttributes.forEach((element): void => {
-                                const keyName = element.replace(" ", "_");
-                                elements.push(
-                                    <ParameterListComponent
-                                        key={`parameter-list-${element}`}
-                                        label={t(`Filters.${element}`)}
-                                        keyName={keyName}
-                                        listElements={displayFilter[element]}
-                                    />
-                                );
-                            });
-                            return elements;
-                        })()}
-                    </tbody>
-                </table>
+                <div css={parameterBlockStyle}>
+                    {AddParameterElement(mainFilterAttributes, displayFilter)}
+                </div>
             </AccordionDetails>
         </Accordion>
     );
