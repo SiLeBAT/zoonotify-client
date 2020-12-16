@@ -7,7 +7,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { DataContext } from "../../../../Shared/Context/DataContext";
-import { countNrOfIsolates } from "./countNrOfIsolates.component";
 
 const subHeadingStyle = css`
     margin: 0;
@@ -30,8 +29,8 @@ export function QueryPageNrOfIsolatesComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const { data } = useContext(DataContext);
 
-    const totalNrOfIsolates = countNrOfIsolates(data.ZNData);
-    const nrOfSelectedIsolates = countNrOfIsolates(data.ZNDataFiltered);
+    const totalNrOfIsolates = data.ZNData.length;
+    const nrOfSelectedIsolates = data.ZNDataFiltered.length;
 
     return (
         <Accordion defaultExpanded>
