@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext, useEffect, useState } from "react";
-import { Divider } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { SetDataComponent as Results } from "./QueryPage-SetResultData.component";
 import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
@@ -44,16 +43,6 @@ const headingStyle = css`
 const statusStyle = css`
     text-align: center;
 `
-const deviderStyle = css`
-    width: 100%;
-    height: 0.15em;
-    background: ${primaryColor};
-    padding: 0;
-    margin: 2em 0;
-`;
-const subHeadingTextStyle = css`
-    margin-top: 2em;
-`;
 
 export function QueryPageContentComponent(): JSX.Element {
     const [isFilter, setIsFilter] = useState(false);
@@ -82,8 +71,6 @@ export function QueryPageContentComponent(): JSX.Element {
             <div css={contentBoxStyle}>
                 {isFilter || isTable ? <ParameterContent /> : <TextContent />}
                 <QueryPageNrOfIsolatesComponent />
-                <Divider variant="middle" css={deviderStyle} />
-                <h3 css={subHeadingTextStyle}>{t("Results.Title")}</h3>
             </div>
             <Results />
         </div>
