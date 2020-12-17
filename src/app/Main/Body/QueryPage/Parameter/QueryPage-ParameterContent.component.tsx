@@ -8,11 +8,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import {
-    FilterInterface,
-    FilterType,
-    mainFilterAttributes,
-} from "../../../../Shared/Filter.model";
+import { mainFilterAttributes } from "../../../../Shared/Filter.model";
 import { ParameterListComponent } from "./Parameter-List.component";
 
 const subHeadingStyle = css`
@@ -21,16 +17,11 @@ const subHeadingStyle = css`
 const parameterBlockStyle = css`
     margin-left: 2em;
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-grow: 1;
 `;
-
-function pairwise(
-    arr: FilterType[],
-    func: { (current: FilterType, next: FilterType): void }
-): void {
-    for (let i = 0; i < arr.length; i += 2) {
-        func(arr[i], arr[i + 1]);
-    }
-}
 
 export function QueryPageParameterContentComponent(): JSX.Element {
     const { filter } = useContext(FilterContext);
@@ -45,19 +36,13 @@ export function QueryPageParameterContentComponent(): JSX.Element {
         }
     });
 
-    const createParameterComponent = (
-        filterAttributes: FilterType[],
-        filterValues: FilterInterface
-    ): JSX.Element[] => {
+    const createParameterComponent = (): JSX.Element[] => {
         const elements: JSX.Element[] = [];
-        pairwise(filterAttributes, (current, next): void => {
+        mainFilterAttributes.forEach((element): void => {
             elements.push(
                 <ParameterListComponent
-                    key={`parameter-list-${current}-${next}`}
-                    element1={current}
-                    element2={next}
-                    listElements1={filterValues[current]}
-                    listElements2={filterValues[next]}
+                    element={element}
+                    listElements={displayFilter[element]}
                 />
             );
         });
@@ -75,10 +60,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
             </AccordionSummary>
             <AccordionDetails>
                 <div css={parameterBlockStyle}>
-                    {createParameterComponent(
-                        mainFilterAttributes,
-                        displayFilter
-                    )}
+                    {createParameterComponent()}
                 </div>
             </AccordionDetails>
         </Accordion>

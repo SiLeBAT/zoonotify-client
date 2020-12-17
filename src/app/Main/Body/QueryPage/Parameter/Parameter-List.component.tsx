@@ -18,12 +18,12 @@ const spaceStyle = css`
 `;
 const listStyle = css`
     padding: 0;
-    margin: 0;
-    width: 50%;
+    margin: 0 3em 0 2em;
 `;
 const parameterValue = css`
     margin-top: 0;
     margin-left: 2em;
+    white-space: nowrap;
     span {
         letter-spacing: 0;
     }
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             flexGrow: 1,
             maxWidth: 752,
+            flex: "1 1 auto",
         },
         demo: {
             backgroundColor: theme.palette.background.paper,
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function AddParameterToList(parameterList: string[]): JSX.Element[] {
+function createListItemComponent(parameterList: string[]): JSX.Element[] {
     const elements: JSX.Element[] = [];
     parameterList.forEach((element): void => {
         const keyName = element.replace(" ", "_");
@@ -64,56 +65,34 @@ function AddParameterToList(parameterList: string[]): JSX.Element[] {
 }
 
 interface ParameterListProps {
-    element1: FilterType;
-    element2: FilterType;
-    listElements1: string[];
-    listElements2: string[];
+    element: FilterType;
+    listElements: string[];
 }
 
 export function ParameterListComponent(props: ParameterListProps): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
 
-    const ListElement = (
-        element: FilterType,
-        attributeList: string[]
-    ): JSX.Element => {
-        if (element !== undefined) {
-            const keyName = element.replace(" ", "_");
-            const label = t(`Filters.${element}`);
-
-            return (
-                <List
-                    dense
-                    className={classes.root}
-                    key={`list-${keyName}`}
-                    css={listStyle}
-                    subheader={
-                        <ListSubheader
-                            component="div"
-                            id="nested-list-subheader"
-                            className={classes.nested}
-                        >
-                            {label}
-                        </ListSubheader>
-                    }
-                >
-                    {AddParameterToList(attributeList)}
-                </List>
-            );
-        }
-        return <p css={listStyle}>&nbsp;</p>;
-    };
+    const keyName = props.element.replace(" ", "_");
+    const label = t(`Filters.${props.element}`);
 
     return (
-        <div
-            css={css`
-                display: flex;
-                flex-direction: row;
-            `}
+        <List
+            dense
+            className={classes.root}
+            key={`list-${keyName}`}
+            css={listStyle}
+            subheader={
+                <ListSubheader
+                    component="div"
+                    id="nested-list-subheader"
+                    className={classes.nested}
+                >
+                    {label}
+                </ListSubheader>
+            }
         >
-            {ListElement(props.element1, props.listElements1)}
-            {ListElement(props.element2, props.listElements2)}
-        </div>
+            {createListItemComponent(props.listElements)}
+        </List>
     );
 }
