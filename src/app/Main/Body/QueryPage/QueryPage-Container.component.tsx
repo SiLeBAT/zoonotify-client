@@ -120,7 +120,7 @@ export function QueryPageContainer(): JSX.Element {
         history.push(`?${createPathString(filter, table)}`);
     }, [filter, table]);
 
-    let returnValue = <h1> Loading data ... </h1>;
+    let returnValue = <p> Loading data ... </p>;
     if (_.isEmpty(data.ZNData) === false) {
         returnValue = <QPComp />;
     }

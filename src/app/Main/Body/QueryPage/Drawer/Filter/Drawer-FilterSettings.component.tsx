@@ -70,11 +70,11 @@ export function FilterSettingsComponent(): JSX.Element {
 
     return (
         <div css={drawerWidthStyle}>
-            <h3 css={filterHeadingStyle}>{t("Drawer.Title")}</h3>
+            <p css={filterHeadingStyle}>{t("Drawer.Title")}</p>
             <div css={filterAreaStyle}>
-                <h4 css={filterSubheadingStyle}>
+                <p css={filterSubheadingStyle}>
                     {t("Drawer.Subtitles.Filter")}
-                </h4>
+                </p>
                 <ClearSelectorButton
                     isFilter
                     isTable={false}
