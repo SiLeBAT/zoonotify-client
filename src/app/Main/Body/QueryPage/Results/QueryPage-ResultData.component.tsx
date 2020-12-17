@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { TableContext } from "../../../../Shared/Context/TableContext";
-import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
+import { TableContentComponent as TableContent } from "./Result-Content.component";
 import { TableMainHeaderComponent } from "./Result-MainHeader.component";
 
 const subHeadingStyle = css`
@@ -22,9 +22,6 @@ const dataStyle = css`
     max-width: fit-content;
     margin: auto;
     box-sizing: inherit;
-`;
-const dataTableStyle = css`
-    overflow: auto;
 `;
 const tableDivStyle = css`
     display: flex;
@@ -88,19 +85,9 @@ export function QueryPageTableRestultComponent(
 
     const headerWidth: number = totalWidth - partWidth;
 
-    const accordionHeader: string = t(`Results.Table`)
+    const accordionHeader: string = t(`Results.Table`);
     const rowMainHeader: string = t(`Filters.${table.row}`);
     const colMainHeader: string = t(`Filters.${table.column}`);
-
-    const isIsolates = !!(
-        !props.displayRowCol.isCol && !props.displayRowCol.isRow
-    );
-    const isRowAndCol = !!(
-        props.displayRowCol.isCol && props.displayRowCol.isRow
-    );
-    const isRowNotCol = !!(
-        !props.displayRowCol.isCol && props.displayRowCol.isRow
-    );
 
     return (
         <Accordion defaultExpanded>
@@ -128,21 +115,11 @@ export function QueryPageTableRestultComponent(
                             width={headerWidth}
                             text={rowMainHeader}
                         />
-                        <div
-                            css={dataTableStyle}
-                            ref={(node: HTMLElement | null) =>
-                                div(node, "totalWidth")
-                            }
-                        >
-                            <ResultsTable
-                                allIsolates={table.statisticData}
-                                isIsolates={isIsolates}
-                                columnAttributes={props.columnAttributes}
-                                getSize={div}
-                                isRowNotCol={isRowNotCol}
-                                isRowAndCol={isRowAndCol}
-                            />
-                        </div>
+                        <TableContent
+                            displayRowCol={props.displayRowCol}
+                            columnAttributes={props.columnAttributes}
+                            getSize={div}
+                        />
                     </div>
                 </div>
             </AccordionDetails>

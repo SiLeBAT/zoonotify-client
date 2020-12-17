@@ -20,7 +20,6 @@ const tableStyle = css`
     min-width: 20em;
 `;
 const tabelCellStyle = (
-    isIsolates: boolean,
     isRow: boolean,
     isRowAndCol: boolean
 ): SerializedStyles => css`
@@ -29,7 +28,7 @@ const tabelCellStyle = (
     :last-child {
         border-right: ${isRowAndCol ? `1px solid lightgrey` : "none"};
     }
-    text-align: ${isIsolates ? "center" : "right"};
+    text-align: right;
     white-space: ${isRow ? "nowrap" : "normal"};
 `;
 
@@ -44,7 +43,6 @@ const useStyles = makeStyles({
 
 interface ResultTableProps {
     allIsolates: Record<string, string>[];
-    isIsolates: boolean;
     columnAttributes: string[];
     getSize: (
         node: HTMLElement | null,
@@ -64,7 +62,6 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
                     <TableRow key="headerRow">
                         {Header(
                             props.columnAttributes,
-                            props.isIsolates,
                             props.getSize,
                             props.isRowNotCol,
                             props.isRowAndCol,
@@ -82,7 +79,6 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
                             {RowValues(
                                 row,
                                 classes,
-                                props.isIsolates,
                                 props.isRowAndCol,
                                 tabelCellStyle
                             )}

@@ -24,36 +24,29 @@ const StyledTableCell = withStyles(() =>
 
 export function Header(
     headerValues: string[],
-    isIsolates: boolean,
     getSize: (
         node: HTMLElement | null,
         key: "height" | "totalWidth" | "partWidth"
     ) => void,
     isRowNotCol: boolean,
     isRowAndCol: boolean,
-    style: (
-        isIsolates: boolean,
-        isRow: boolean,
-        isRowAndCol: boolean
-    ) => SerializedStyles
+    style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
-    if (!isIsolates) {
-        elements.push(
-            <StyledTableCell
-                key="header-blank"
-                ref={(node: HTMLElement | null) => getSize(node, "partWidth")}
-                css={style(isIsolates, isRowNotCol, isRowAndCol)}
-            >
-                &nbsp;
-            </StyledTableCell>
-        );
-    }
+    elements.push(
+        <StyledTableCell
+            key="header-blank"
+            ref={(node: HTMLElement | null) => getSize(node, "partWidth")}
+            css={style(isRowNotCol, isRowAndCol)}
+        >
+            &nbsp;
+        </StyledTableCell>
+    );
     headerValues.forEach((element): void => {
         elements.push(
             <StyledTableCell
                 key={`header-${element}`}
-                css={style(isIsolates, isRowNotCol, isRowAndCol)}
+                css={style(isRowNotCol, isRowAndCol)}
             >
                 {element}
             </StyledTableCell>
