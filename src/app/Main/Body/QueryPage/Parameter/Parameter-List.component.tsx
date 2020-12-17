@@ -72,15 +72,12 @@ interface ParameterListProps {
 export function ParameterListComponent(props: ParameterListProps): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
-
-    const keyName = props.element.replace(" ", "_");
     const label = t(`Filters.${props.element}`);
 
     return (
         <List
             dense
             className={classes.root}
-            key={`list-${keyName}`}
             css={listStyle}
             subheader={
                 <ListSubheader

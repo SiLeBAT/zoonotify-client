@@ -34,7 +34,6 @@ export function DisplayedFeatureSelectorComponent(
 
     return (
         <Select
-            key={props.keyValue}
             label={props.label}
             selectAttribute={props.selectAttribute}
             selectValues={offeredAttributes}

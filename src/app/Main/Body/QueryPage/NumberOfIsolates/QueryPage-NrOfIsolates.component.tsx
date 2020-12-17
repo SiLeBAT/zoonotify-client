@@ -30,18 +30,14 @@ export function QueryPageNrOfIsolatesComponent(): JSX.Element {
                 <table css={tableStyle}>
                     <tbody>
                         <tr>
-                            <td key="tableText-total" css={tableTextStyle}>
+                            <td css={tableTextStyle}>
                                 {t("NrOfIsolates.Total")}
                             </td>
-                            <td key="tableNr-total" css={tableNumberStyle}>
-                                {totalNrOfIsolates}
-                            </td>
-                            <td key="tableText-selected" css={tableTextStyle}>
+                            <td css={tableNumberStyle}>{totalNrOfIsolates}</td>
+                            <td css={tableTextStyle}>
                                 {t("NrOfIsolates.Selected")}
                             </td>
-                            <td key="tableNr-selected">
-                                {nrOfSelectedIsolates}
-                            </td>
+                            <td>{nrOfSelectedIsolates}</td>
                         </tr>
                     </tbody>
                 </table>
