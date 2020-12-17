@@ -35,8 +35,4 @@ export const defaultExport = {
     },
 };
 
-export interface MainFilterLabelInterface {
-    Erreger: string;
-    Matrix: string;
-    Projektname: string;
-}
+export type MainFilterLabelInterface = Record<FilterType, string>

@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { FilterInterface } from "../../Shared/Filter.model";
-import { ExportInterface } from "../../Shared/Export.model";
+import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { statDataStringGenerator } from "./generateStatString.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
@@ -11,7 +11,7 @@ interface ObjectToCsvBothProps {
     filter: FilterInterface;
     ZNFilename: string;
     allFilterLabel: string;
-    mainFilterLabels: { Erreger: string; Matrix: string; Projektname: string };
+    mainFilterLabels: MainFilterLabelInterface;
     subFileNames: string[];
 }
 

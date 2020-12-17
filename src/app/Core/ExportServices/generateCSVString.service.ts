@@ -1,11 +1,9 @@
-import { DBentry } from "../../Shared/Isolat.model";
-
 function stringModification(inputString: string): string {
     return `"${inputString.replace(/"/g, '\\"').replace("undefined", "")}"`;
 }
 
 export function generateCSVString<
-    T extends Record<string, string> | DBentry,
+    T extends Record<string, string>,
     K extends keyof T
 >(dataArray: T[], headers: K[]): string {
     const csvTable: string[] = [];
