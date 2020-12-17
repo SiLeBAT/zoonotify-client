@@ -12,10 +12,8 @@ function chooseAlignment(element: string): "left" | "right" {
 export function RowValues(
     row: Record<string, string>,
     classes: Record<"tableCell", string>,
-    isIsolates: boolean,
     isRowAndCol: boolean,
     style: (
-        isIsolates: boolean,
         isRow: boolean,
         isRowAndCol: boolean
     ) => SerializedStyles
@@ -30,7 +28,7 @@ export function RowValues(
                 component="th"
                 scope="row"
                 align={chooseAlignment(element)}
-                css={style(isIsolates, true, isRowAndCol)}
+                css={style(true, isRowAndCol)}
             >
                 {row[element]}
             </TableCell>
