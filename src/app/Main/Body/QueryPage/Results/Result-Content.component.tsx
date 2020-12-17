@@ -24,15 +24,9 @@ interface ContentInterface {
 export function TableContentComponent(props: ContentInterface): JSX.Element {
     const { table } = useContext(TableContext);
 
-    const noRowAndCol = !!(
-        !props.displayRowCol.isCol && !props.displayRowCol.isRow
-    );
-    const isRowAndCol = !!(
-        props.displayRowCol.isCol && props.displayRowCol.isRow
-    );
-    const isRowNotCol = !!(
-        !props.displayRowCol.isCol && props.displayRowCol.isRow
-    );
+    const noRowAndCol = !props.displayRowCol.isCol && !props.displayRowCol.isRow;
+    const isRowAndCol = props.displayRowCol.isCol && props.displayRowCol.isRow;
+    const isRowNotCol = !props.displayRowCol.isCol && props.displayRowCol.isRow;
 
     if (noRowAndCol) {
         return <ExplanationText />;
