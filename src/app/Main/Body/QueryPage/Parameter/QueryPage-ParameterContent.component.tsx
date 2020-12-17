@@ -34,6 +34,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
         mainFilterAttributes.forEach((element): void => {
             elements.push(
                 <ParameterListComponent
+                    key={`parameter_list_${element}`}
                     element={element}
                     listElements={displayFilter[element]}
                 />

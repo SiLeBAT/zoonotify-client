@@ -59,7 +59,7 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
         <TableContainer component={Paper} css={tableStyle}>
             <Table stickyHeader aria-label="simple table" css={tableStyle}>
                 <TableHead>
-                    <TableRow key="headerRow">
+                    <TableRow>
                         {Header(
                             props.columnAttributes,
                             props.getSize,
