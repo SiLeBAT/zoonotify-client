@@ -9,7 +9,7 @@ import { ZNPaths } from "../../Shared/URLs";
 
 const PageNotFound = (): JSX.Element => (
     <div>
-        <h3>404! Page Not Found</h3>
+        <p>404! Page Not Found</p>
     </div>
 );
 

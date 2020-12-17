@@ -20,6 +20,7 @@ const drawerWidthStyle = css`
 const featureSubHeaderStyle = css`
     margin: 0; 
     font-size: 1rem;
+    font-weight: bold;
 `;
 const featureAreaStyle = css`
     width: inherit;
@@ -79,9 +80,9 @@ export function DisplayedFeaturesComponent(): JSX.Element {
     return (
         <div css={drawerWidthStyle}>
             <div css={featureAreaStyle}>
-                <h4 css={featureSubHeaderStyle}>
+                <p css={featureSubHeaderStyle}>
                     {t("Drawer.Subtitles.Graph")}
-                </h4>
+                </p>
                 <ClearSelectorButton
                     isFilter={false}
                     isTable

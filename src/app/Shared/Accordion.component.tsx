@@ -8,6 +8,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const titleStyle = css`
     margin: 0;
+    font-weight: bold;
+    font-size: 1rem;
 `;
 const contentStyle = css`
     margin-left: 2em;
@@ -27,7 +29,7 @@ export function AccordionComponent(props: AccordionProps): JSX.Element {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <h3 css={titleStyle}>{props.title}</h3>
+                <p css={titleStyle}>{props.title}</p>
             </AccordionSummary>
             <AccordionDetails css={contentStyle}>
                 {props.content}

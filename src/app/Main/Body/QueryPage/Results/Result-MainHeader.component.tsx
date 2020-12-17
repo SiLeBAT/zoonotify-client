@@ -49,7 +49,7 @@ interface TestInterface {
 export function TableMainHeaderComponent(props: TestInterface): JSX.Element {
     return (
         <div css={titleDivStyle(props.isTitle, props.isRow)}>
-            <h4
+            <p
                 css={tableTitleStyle(
                     props.isTitle,
                     props.isRow,
@@ -58,7 +58,7 @@ export function TableMainHeaderComponent(props: TestInterface): JSX.Element {
                 )}
             >
                 {props.text}
-            </h4>
+            </p>
         </div>
     );
 }
