@@ -45,12 +45,12 @@ export function QueryPageParameterContentComponent(): JSX.Element {
         }
     });
 
-    const AddParameterElement = ((filterAttributes: FilterType[], filterValues: FilterInterface): JSX.Element[] => {
+    const createParameterComponent = (
+        filterAttributes: FilterType[],
+        filterValues: FilterInterface
+    ): JSX.Element[] => {
         const elements: JSX.Element[] = [];
-        pairwise(filterAttributes, function func(
-            current: FilterType,
-            next: FilterType
-        ): void {
+        pairwise(filterAttributes, (current, next): void => {
             elements.push(
                 <ParameterListComponent
                     key={`parameter-list-${current}-${next}`}
@@ -62,7 +62,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
             );
         });
         return elements;
-    })
+    };
 
     return (
         <Accordion defaultExpanded>
@@ -75,7 +75,10 @@ export function QueryPageParameterContentComponent(): JSX.Element {
             </AccordionSummary>
             <AccordionDetails>
                 <div css={parameterBlockStyle}>
-                    {AddParameterElement(mainFilterAttributes, displayFilter)}
+                    {createParameterComponent(
+                        mainFilterAttributes,
+                        displayFilter
+                    )}
                 </div>
             </AccordionDetails>
         </Accordion>
