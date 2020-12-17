@@ -36,5 +36,6 @@
         "Title": "Number of isolates",
         "Total": "Total number of isolates:",
         "Selected": "Number of selected isolates:"
-    }
+    }, 
+    "Explanation": "- Please select a row/column to display a statistic table -"
 }
