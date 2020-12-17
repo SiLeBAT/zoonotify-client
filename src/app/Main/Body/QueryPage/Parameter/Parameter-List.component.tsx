@@ -18,7 +18,7 @@ const spaceStyle = css`
 `;
 const listStyle = css`
     padding: 0;
-    margin: 0 3em 0 2em;
+    margin: 0 4em 0 0;
 `;
 const parameterValue = css`
     margin-top: 0;

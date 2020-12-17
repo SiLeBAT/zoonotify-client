@@ -2,22 +2,11 @@
 import { css, jsx } from "@emotion/core";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { TableContentComponent as TableContent } from "./Result-Content.component";
 import { TableMainHeaderComponent } from "./Result-MainHeader.component";
+import { AccordionComponent as Accordion } from "../../../../Shared/Accordion.component";
 
-const subHeadingStyle = css`
-    margin: 0;
-`;
-const accordionStyle = css`
-    display: block;
-`;
 const dataStyle = css`
     max-width: fit-content;
     margin: auto;
@@ -90,15 +79,9 @@ export function QueryPageTableRestultComponent(
     const colMainHeader: string = t(`Filters.${table.column}`);
 
     return (
-        <Accordion defaultExpanded>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="table-accordion-content"
-                id="table-accordion-header"
-            >
-                <h3 css={subHeadingStyle}>{accordionHeader}</h3>
-            </AccordionSummary>
-            <AccordionDetails css={accordionStyle}>
+        <Accordion
+            title={accordionHeader}
+            content={
                 <div css={dataStyle}>
                     <TableMainHeaderComponent
                         isTitle={props.displayRowCol.isCol}
@@ -122,7 +105,7 @@ export function QueryPageTableRestultComponent(
                         />
                     </div>
                 </div>
-            </AccordionDetails>
-        </Accordion>
+            }
+        />
     );
 }
