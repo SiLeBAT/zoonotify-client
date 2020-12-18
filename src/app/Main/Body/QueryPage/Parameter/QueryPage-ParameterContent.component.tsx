@@ -5,7 +5,7 @@ import { useContext } from "react";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
 import { mainFilterAttributes } from "../../../../Shared/Filter.model";
-import { ParameterListComponent } from "./ParameterContent-List.component";
+import { ParameterContentListComponent as ParameterList } from "./ParameterContent-List.component";
 import { AccordionComponent as Accordion } from "../../../../Shared/Accordion.component";
 
 const parameterBlockStyle = css`
@@ -33,7 +33,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
         const elements: JSX.Element[] = [];
         mainFilterAttributes.forEach((element): void => {
             elements.push(
-                <ParameterListComponent
+                <ParameterList
                     key={`parameter_list_${element}`}
                     element={element}
                     listElements={displayFilter[element]}

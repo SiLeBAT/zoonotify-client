@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
+import { CheckIfSingleFilterIsSet } from "../../../../../Core/FilterServices/checkIfFilter.service";
+import { DataContext } from "../../../../../Shared/Context/DataContext";
+import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import {
     FilterType,
     mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
-import { SelectorComponent as Select } from "../../../../../Shared/Selector.component";
-import { CheckIfSingleFilterIsSet } from "../../../../../Core/FilterServices/checkIfFilter.service";
-import { DataContext } from "../../../../../Shared/Context/DataContext";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import { SelectorComponent as Selector } from "../../../../../Shared/Selector.component";
 
 interface FilterSelectorProps {
     index: number;
@@ -27,7 +27,7 @@ interface FilterSelectorProps {
  * @param   {( selectedOption: ValueType<Record<string, string>>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
  * @return  {JSX.Element}                     new selector-element
  */
-export function SelectorElement(props: FilterSelectorProps): JSX.Element {
+export function SelectorListSelectorComponent(props: FilterSelectorProps): JSX.Element {
     const { data } = useContext(DataContext);
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
@@ -37,7 +37,7 @@ export function SelectorElement(props: FilterSelectorProps): JSX.Element {
     const allFilterValues: string[] = data.uniqueValues[filterAttribute];
     const noFilter: boolean = CheckIfSingleFilterIsSet(filter, filterAttribute);
     return (
-        <Select
+        <Selector
             key={`filter-selector-${filterAttribute}`}
             label={t(`Filters.${filterAttribute}`)}
             selectAttribute={filterAttribute}

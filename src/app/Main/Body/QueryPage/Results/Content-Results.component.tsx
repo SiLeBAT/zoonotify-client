@@ -8,10 +8,10 @@ import { DBentry } from "../../../../Shared/Isolat.model";
 import { useFilter } from "../../../../Core/FilterServices/filterData.service";
 import { getValuesFromData } from "../../../../Core/FilterServices/getValuesFromData.service";
 import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilter.service";
-import { QueryPageTableRestultComponent as ResultsData } from "./TableResults/Results-TableResults.component";
-import { getIsolatesRows } from "./Results-CountIsolates.service";
+import { ResultsTableRestultsComponent as TableResults } from "./TableResults/Results-TableResults.component";
+import { generateRowsWithIsolates } from "./Results-RowsWithIsolates.service";
 
-export function SetDataComponent(): JSX.Element {
+export function ContentResultsComponent(): JSX.Element {
     const [state, setState] = useState<{
         isCol: boolean;
         isRow: boolean;
@@ -42,7 +42,7 @@ export function SetDataComponent(): JSX.Element {
             filter
         );
         if (rowAttribute.length !== 0 && colAttribute.length !== 0) {
-            const rowsWithIsolates = getIsolatesRows(
+            const rowsWithIsolates = generateRowsWithIsolates(
                 dataToCountIsolates,
                 colAttribute,
                 rowAttribute,
@@ -60,7 +60,7 @@ export function SetDataComponent(): JSX.Element {
                 statisticData: rowsWithIsolates,
             });
         } else if (rowAttribute.length === 0 && colAttribute.length !== 0) {
-            const rowsWithIsolates = getIsolatesRows(
+            const rowsWithIsolates = generateRowsWithIsolates(
                 dataToCountIsolates,
                 colAttribute,
                 rowAttribute,
@@ -78,7 +78,7 @@ export function SetDataComponent(): JSX.Element {
                 statisticData: rowsWithIsolates,
             });
         } else if (colAttribute.length === 0 && rowAttribute.length !== 0) {
-            const rowsWithIsolates = getIsolatesRows(
+            const rowsWithIsolates = generateRowsWithIsolates(
                 dataToCountIsolates,
                 colAttribute,
                 rowAttribute,
@@ -126,7 +126,7 @@ export function SetDataComponent(): JSX.Element {
     }, [filter, table.column, table.row, localStorage.getItem("i18nextLng")]);
 
     return (
-        <ResultsData
+        <TableResults
             displayRowCol={state}
             columnAttributes={columnAttributes}
         />

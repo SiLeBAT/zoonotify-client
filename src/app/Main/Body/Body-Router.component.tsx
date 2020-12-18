@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { QueryPageContainer as QueryPage } from "./QueryPage/QueryPage-Container.component";
+import { QueryPageContainerComponent as QueryPage } from "./QueryPage/QueryPage-Container.component";
 import { HomePageLayoutComponent as HomePage } from "./HomePage/HomePage.component";
 import { LinkPageComponent as LinkPage } from "./LinkPage/LinkPage.component";
 import { InfoPageComponent as InfoPage } from "./InfoPage/InfoPage.component";

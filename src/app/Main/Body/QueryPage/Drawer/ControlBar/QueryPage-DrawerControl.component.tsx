@@ -6,7 +6,7 @@ import { IconButton } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { useTranslation } from "react-i18next";
-import { ResizeBarComponent as ResizeBar } from "./DrawerControl-ResizeBar.component";
+import { DrawerControlResizeBarComponent as ResizeBar } from "./DrawerControl-ResizeBar.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -65,7 +65,7 @@ interface DrawerControlProps {
     handleResize: (newWidth: number) => void;
 }
 
-export function DrawerControlComponent(props: DrawerControlProps): JSX.Element {
+export function QueryPageDrawerControlComponent(props: DrawerControlProps): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const useStyles = makeStyles((theme: Theme) =>
