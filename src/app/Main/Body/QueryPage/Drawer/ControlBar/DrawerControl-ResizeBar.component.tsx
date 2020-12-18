@@ -4,11 +4,6 @@ import { useCallback } from "react";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import { primaryColor, secondaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
-const iconButtonStyle = css`
-    width: 17px;
-    color: ${primaryColor};
-`;
-
 const resizeBarStyle = css`
     margin: 0;
     padding: 0;
@@ -21,12 +16,16 @@ const resizeBarStyle = css`
         outline: 0;
     }
 `;
+const iconButtonStyle = css`
+    width: 17px;
+    color: ${primaryColor};
+`;
 
-interface ResizeProps {
+interface ResizeBarProps {
     onChange: (newWidth: number) => void;
 }
 
-export function ResizeBarComponent(props: ResizeProps): JSX.Element {
+export function DrawerControlResizeBarComponent(props: ResizeBarProps): JSX.Element {
     const minDrawerWidth = 325;
 
     const handleMouseMove = useCallback((e): void => {

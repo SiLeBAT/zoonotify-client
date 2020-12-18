@@ -43,7 +43,7 @@ const countIsolates = (
  * @returns {Record<string, string>[]} - one object for each row inside a list
  */
 
-export function getIsolatesRows(
+export function generateRowsWithIsolates(
     data: DBentry[],
     colAttribute: FilterType,
     rowAttribute: FilterType,

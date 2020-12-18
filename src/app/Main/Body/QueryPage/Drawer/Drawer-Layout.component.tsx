@@ -3,8 +3,8 @@ import { css, jsx } from "@emotion/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
-import { FilterSettingsComponent as FilterSettings } from "./Filter/Drawer-Filter.component";
-import { DisplayedFeaturesComponent as DisplayedFeatures } from "./Displayed_Features/Drawer-DisplFeatures.component";
+import { DrawerFilterComponent as Filter } from "./Filter/Drawer-Filter.component";
+import { DrawerDisplayedFeaturesComponent as DisplFeatures } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const deviderStyle = css`
@@ -33,12 +33,12 @@ const useStyles = makeStyles(() =>
     })
 );
 
-interface DrawerProps {
+interface DrawerLayoutProps {
     isOpen: boolean;
     newWidth: number;
 }
 
-export function ClippedDrawer(props: DrawerProps): JSX.Element {
+export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     const classes = useStyles((props.newWidth as unknown) as string);
 
     return (
@@ -52,9 +52,9 @@ export function ClippedDrawer(props: DrawerProps): JSX.Element {
             }}
         >
             <div className={classes.drawerContainer}>
-                <FilterSettings />
+                <Filter />
                 <Divider variant="middle" css={deviderStyle} />
-                <DisplayedFeatures />
+                <DisplFeatures />
             </div>
         </Drawer>
     );

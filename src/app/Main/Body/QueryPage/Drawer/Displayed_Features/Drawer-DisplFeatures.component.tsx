@@ -11,7 +11,7 @@ import {
     TableType,
 } from "../../../../../Shared/Context/TableContext";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
-import { DisplayedFeatureSelectorComponent as TableSelector } from "./DisplFeatures-Selector.component";
+import { DisplayedFeatureSelectorComponent as DisplFeatureSelector } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Filter.model";
 
 const drawerWidthStyle = css`
@@ -45,7 +45,7 @@ const iconStyle = css`
     height: 36px;
 `;
 
-export function DisplayedFeaturesComponent(): JSX.Element {
+export function DrawerDisplayedFeaturesComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
@@ -88,7 +88,7 @@ export function DisplayedFeaturesComponent(): JSX.Element {
                     isTable
                 />
             </div>
-            <TableSelector
+            <DisplFeatureSelector
                 keyValue="table-selector-row"
                 label={t("Drawer.Graphs.Row")}
                 activeFeature={table.row}
@@ -101,7 +101,7 @@ export function DisplayedFeaturesComponent(): JSX.Element {
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>
-            <TableSelector
+            <DisplFeatureSelector
                 keyValue="table-selector-column"
                 label={t("Drawer.Graphs.Column")}
                 activeFeature={table.column}

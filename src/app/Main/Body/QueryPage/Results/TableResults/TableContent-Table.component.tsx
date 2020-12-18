@@ -9,8 +9,8 @@ import {
     Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { RowValues } from "./TableContent-Rows.component";
-import { Header } from "./TableContent-Header.component";
+import { TableContentRowsComponent as TableRows } from "./TableContent-Rows.component";
+import { TableContentHeaderComponent as TableHeader } from "./TableContent-Header.component";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const tableStyle = css`
@@ -52,7 +52,9 @@ interface ResultTableProps {
     isRowAndCol: boolean;
 }
 
-export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
+export function TableContentTableComponent(
+    props: ResultTableProps
+): JSX.Element {
     const classes = useStyles();
 
     return (
@@ -60,13 +62,13 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
             <Table stickyHeader aria-label="simple table" css={tableStyle}>
                 <TableHead>
                     <TableRow>
-                        {Header(
-                            props.columnAttributes,
-                            props.getSize,
-                            props.isRowNotCol,
-                            props.isRowAndCol,
-                            tabelCellStyle
-                        )}
+                        {TableHeader({
+                            headerValues: props.columnAttributes,
+                            getSize: props.getSize,
+                            isRowNotCol: props.isRowNotCol,
+                            isRowAndCol: props.isRowAndCol,
+                            style: tabelCellStyle,
+                        })}
                     </TableRow>
                 </TableHead>
                 <TableBody
@@ -76,12 +78,12 @@ export function ResultsTableComponent(props: ResultTableProps): JSX.Element {
                 >
                     {props.allIsolates.map((row) => (
                         <TableRow key={`row-${row.name}`}>
-                            {RowValues(
+                            {TableRows({
                                 row,
                                 classes,
-                                props.isRowAndCol,
-                                tabelCellStyle
-                            )}
+                                isRowAndCol: props.isRowAndCol,
+                                style: tabelCellStyle,
+                            })}
                         </TableRow>
                     ))}
                 </TableBody>

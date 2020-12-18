@@ -15,7 +15,7 @@ import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
 import { createPathString } from "../../../Core/createFilterPath.service";
 import { getTableFromPath } from "../../../Core/getTableFromPath.service";
 
-export function QueryPageContainer(): JSX.Element {
+export function QueryPageContainerComponent(): JSX.Element {
     const { data, setData } = useContext(DataContext);
     const { filter, setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);

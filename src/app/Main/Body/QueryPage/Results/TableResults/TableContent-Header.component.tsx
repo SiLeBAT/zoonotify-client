@@ -22,7 +22,7 @@ const StyledTableCell = withStyles(() =>
     })
 )(TableCell);
 
-export function Header(
+interface TableHeaderProps {
     headerValues: string[],
     getSize: (
         node: HTMLElement | null,
@@ -31,22 +31,24 @@ export function Header(
     isRowNotCol: boolean,
     isRowAndCol: boolean,
     style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles
-): JSX.Element[] {
+}
+
+export function TableContentHeaderComponent(props: TableHeaderProps): JSX.Element[] {
     const elements: JSX.Element[] = [];
     elements.push(
         <StyledTableCell
             key="header-blank"
-            ref={(node: HTMLElement | null) => getSize(node, "partWidth")}
-            css={style(isRowNotCol, isRowAndCol)}
+            ref={(node: HTMLElement | null) => props.getSize(node, "partWidth")}
+            css={props.style(props.isRowNotCol, props.isRowAndCol)}
         >
             &nbsp;
         </StyledTableCell>
     );
-    headerValues.forEach((element): void => {
+    props.headerValues.forEach((element): void => {
         elements.push(
             <StyledTableCell
                 key={`header-${element}`}
-                css={style(isRowNotCol, isRowAndCol)}
+                css={props.style(props.isRowNotCol, props.isRowAndCol)}
             >
                 {element}
             </StyledTableCell>

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext } from "react";
-import { ResultsTableComponent as ResultsTable } from "./TableContent-Table.component";
+import { TableContentTableComponent as ResultsTable } from "./TableContent-Table.component";
 import { ExplanationTextComponent as ExplanationText } from "../../../../../Shared/ExplanationText.component";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
 
@@ -9,7 +9,7 @@ const dataTableStyle = css`
     overflow: auto;
 `;
 
-interface ContentInterface {
+interface TableContentInterface {
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;
@@ -21,7 +21,7 @@ interface ContentInterface {
     ) => void;
 }
 
-export function TableContentComponent(props: ContentInterface): JSX.Element {
+export function TabelResultTableContentComponent(props: TableContentInterface): JSX.Element {
     const { table } = useContext(TableContext);
 
     const noRowAndCol = !props.displayRowCol.isCol && !props.displayRowCol.isRow;

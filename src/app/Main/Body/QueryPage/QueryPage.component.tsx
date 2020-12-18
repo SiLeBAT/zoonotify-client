@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useState } from "react";
-import { ClippedDrawer as DrawerMenu } from "./Drawer/Drawer-Layout.component";
-import { DrawerControlComponent as DrawerControl} from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
+import { DrawerLayoutComponent as DrawerMenu } from "./Drawer/Drawer-Layout.component";
+import { QueryPageDrawerControlComponent as DrawerControl} from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentComponent as QueryPageContent} from "./QueryPage-Content.component";
 
 const mainStyle = css`

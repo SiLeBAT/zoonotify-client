@@ -3,12 +3,12 @@ import { css, jsx } from "@emotion/core";
 import { ValueType } from "react-select";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { AddSelectorElements } from "./Filter-SelectorList.component";
-import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { FilterSelectorListComponent as FilterSelectorList } from "./Filter-SelectorList.component";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 import { FilterType } from "../../../../../Shared/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
+import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const drawerWidthStyle = css`
     width: inherit;
@@ -36,7 +36,7 @@ const filterSubheadingStyle = css`
     font-size: 1rem;
 `;
 
-export function FilterSettingsComponent(): JSX.Element {
+export function DrawerFilterComponent(): JSX.Element {
     const { filter, setFilter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
@@ -80,7 +80,7 @@ export function FilterSettingsComponent(): JSX.Element {
                     isTable={false}
                 />
             </div>
-            {AddSelectorElements(handleChange)}
+            {FilterSelectorList(handleChange)}
         </div>
     );
 }

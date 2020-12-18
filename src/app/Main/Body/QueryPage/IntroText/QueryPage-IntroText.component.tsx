@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     },
 });
 
-export function QueryPageTextContentComponent(): JSX.Element {
+export function QueryPageIntroTextComponent(): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
     return (

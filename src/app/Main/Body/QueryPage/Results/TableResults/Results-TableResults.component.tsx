@@ -2,10 +2,10 @@
 import { css, jsx } from "@emotion/core";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TableContext } from "../../../../../Shared/Context/TableContext";
-import { TableContentComponent as TableContent } from "./TableResult-TableContent.component";
-import { TableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
+import { TabelResultTableContentComponent as TableContent } from "./TableResult-TableContent.component";
+import { TableResultsTableMainHeaderComponent as TableMainHeader } from "./TableResults-TableMainHeader.component";
 import { AccordionComponent as Accordion } from "../../../../../Shared/Accordion.component";
+import { TableContext } from "../../../../../Shared/Context/TableContext";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -17,7 +17,7 @@ const tableDivStyle = css`
     flex-direction: row;
 `;
 
-interface TestInterface {
+interface TableResultsInterface {
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;
@@ -25,8 +25,8 @@ interface TestInterface {
     columnAttributes: string[];
 }
 
-export function QueryPageTableRestultComponent(
-    props: TestInterface
+export function ResultsTableRestultsComponent(
+    props: TableResultsInterface
 ): JSX.Element {
     const [windowSize, setWindowSize] = useState({
         width: 0,
@@ -83,7 +83,7 @@ export function QueryPageTableRestultComponent(
             title={accordionHeader}
             content={
                 <div css={dataStyle}>
-                    <TableMainHeaderComponent
+                    <TableMainHeader
                         isTitle={props.displayRowCol.isCol}
                         isRow={false}
                         height={tableHeight}
@@ -91,7 +91,7 @@ export function QueryPageTableRestultComponent(
                         text={colMainHeader}
                     />
                     <div css={tableDivStyle}>
-                        <TableMainHeaderComponent
+                        <TableMainHeader
                             isTitle={props.displayRowCol.isRow}
                             isRow
                             height={tableHeight}

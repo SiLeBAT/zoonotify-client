@@ -69,7 +69,7 @@ interface ParameterListProps {
     listElements: string[];
 }
 
-export function ParameterListComponent(props: ParameterListProps): JSX.Element {
+export function ParameterContentListComponent(props: ParameterListProps): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
     const label = t(`Filters.${props.element}`);

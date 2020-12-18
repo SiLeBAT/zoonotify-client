@@ -9,7 +9,7 @@ function chooseAlignment(element: string): "left" | "right" {
     return "right";
 }
 
-export function RowValues(
+interface TableRowInterface {
     row: Record<string, string>,
     classes: Record<"tableCell", string>,
     isRowAndCol: boolean,
@@ -17,20 +17,22 @@ export function RowValues(
         isRow: boolean,
         isRowAndCol: boolean
     ) => SerializedStyles
-): JSX.Element[] {
+}
+
+export function TableContentRowsComponent(props: TableRowInterface): JSX.Element[] {
     const elements: JSX.Element[] = [];
-    const k = Object.keys(row);
+    const k = Object.keys(props.row);
     k.forEach((element): void => {
         elements.push(
             <TableCell
-                key={`isolates-${row.name}-${element}`}
-                className={classes.tableCell}
+                key={`isolates-${props.row.name}-${element}`}
+                className={props.classes.tableCell}
                 component="th"
                 scope="row"
                 align={chooseAlignment(element)}
-                css={style(true, isRowAndCol)}
+                css={props.style(true, props.isRowAndCol)}
             >
-                {row[element]}
+                {props.row[element]}
             </TableCell>
         );
     });
