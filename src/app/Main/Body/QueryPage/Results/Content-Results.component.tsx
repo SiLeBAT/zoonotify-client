@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../Shared/Filter.model";
-import { TableContext } from "../../../Shared/Context/TableContext";
-import { DataContext } from "../../../Shared/Context/DataContext";
-import { DBentry } from "../../../Shared/Isolat.model";
-import { useFilter } from "../../../Core/FilterServices/filterData.service";
-import { getValuesFromData } from "../../../Core/FilterServices/getValuesFromData.service";
-import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilter.service";
-import { QueryPageTableRestultComponent as ResultsData } from "./Results/QueryPage-ResultData.component";
-import { getIsolatesRows } from "./Results/Results-CountIsolates.service";
+import { FilterContext } from "../../../../Shared/Context/FilterContext";
+import { FilterType } from "../../../../Shared/Filter.model";
+import { TableContext } from "../../../../Shared/Context/TableContext";
+import { DataContext } from "../../../../Shared/Context/DataContext";
+import { DBentry } from "../../../../Shared/Isolat.model";
+import { useFilter } from "../../../../Core/FilterServices/filterData.service";
+import { getValuesFromData } from "../../../../Core/FilterServices/getValuesFromData.service";
+import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilter.service";
+import { QueryPageTableRestultComponent as ResultsData } from "./TableResults/Results-TableResults.component";
+import { getIsolatesRows } from "./Results-CountIsolates.service";
 
 export function SetDataComponent(): JSX.Element {
     const [state, setState] = useState<{

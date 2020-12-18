@@ -4,7 +4,7 @@ import {
     bfrPrimaryPalette,
     onPrimaryColor,
     primaryColor,
-} from "../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const titleDivStyle = (
     isTitle: boolean,

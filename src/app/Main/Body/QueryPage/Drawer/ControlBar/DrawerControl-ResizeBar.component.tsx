@@ -2,7 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { useCallback } from "react";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-import { primaryColor, secondaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor, secondaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const iconButtonStyle = css`
     width: 17px;

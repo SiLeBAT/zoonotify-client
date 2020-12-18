@@ -9,9 +9,9 @@ import {
     Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { RowValues } from "./Results-TableRows.component";
-import { Header } from "./Results-TableHeader.component";
-import { onBackgroundColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { RowValues } from "./TableContent-Rows.component";
+import { Header } from "./TableContent-Header.component";
+import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const tableStyle = css`
     box-sizing: inherit;

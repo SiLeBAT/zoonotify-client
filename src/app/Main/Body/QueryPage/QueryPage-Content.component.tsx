@@ -2,8 +2,8 @@
 import { css, jsx } from "@emotion/core";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SetDataComponent as Results } from "./QueryPage-SetResultData.component";
-import { QueryPageTextContentComponent as TextContent } from "./QueryPage-TextContent.component";
+import { SetDataComponent as Results } from "./Results/Content-Results.component";
+import { QueryPageTextContentComponent as TextContent } from "./IntroductionText/QueryPage-IntroductionText.component";
 import { QueryPageParameterContentComponent as ParameterContent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";

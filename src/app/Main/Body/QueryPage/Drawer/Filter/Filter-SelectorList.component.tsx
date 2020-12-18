@@ -3,7 +3,7 @@ import {
     FilterType,
     mainFilterAttributes,
 } from "../../../../../Shared/Filter.model";
-import { SelectorElement } from "./Filter-SelectorElement.component";
+import { SelectorElement } from "./SelectorList-Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 
 /**

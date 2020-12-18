@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext } from "react";
-import { ResultsTableComponent as ResultsTable } from "./Results-Table.component";
-import { ExplanationTextComponent as ExplanationText } from "../../../../Shared/ExplanationText.component";
-import { TableContext } from "../../../../Shared/Context/TableContext";
+import { ResultsTableComponent as ResultsTable } from "./TableContent-Table.component";
+import { ExplanationTextComponent as ExplanationText } from "../../../../../Shared/ExplanationText.component";
+import { TableContext } from "../../../../../Shared/Context/TableContext";
 
 const dataTableStyle = css`
     overflow: auto;

@@ -3,8 +3,8 @@ import { css, jsx } from "@emotion/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
-import { FilterSettingsComponent as FilterSettings } from "./Filter/Drawer-FilterSettings.component";
-import { DisplayedFeaturesComponent as DisplayedFeatures } from "./Displayed_Features/Drawer-GraphSettings.component";
+import { FilterSettingsComponent as FilterSettings } from "./Filter/Drawer-Filter.component";
+import { DisplayedFeaturesComponent as DisplayedFeatures } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const deviderStyle = css`
