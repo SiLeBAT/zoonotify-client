@@ -5,7 +5,7 @@ import TableCell from "@material-ui/core/TableCell";
 import {
     primaryColor,
     onBackgroundColor,
-} from "../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const StyledTableCell = withStyles(() =>
     createStyles({

@@ -6,12 +6,12 @@ import { IconButton } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { useTranslation } from "react-i18next";
-import { ResizeBarComponent as ResizeBar } from "./Drawer/Drawer-Resize.component";
+import { ResizeBarComponent as ResizeBar } from "./DrawerControl-ResizeBar.component";
 import {
     primaryColor,
     onPrimaryColor,
     bfrLightblue,
-} from "../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const drawerStyle = css`
     flex: 0 0 auto;

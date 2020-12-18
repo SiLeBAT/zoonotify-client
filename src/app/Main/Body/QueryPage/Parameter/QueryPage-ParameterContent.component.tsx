@@ -5,7 +5,7 @@ import { useContext } from "react";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
 import { mainFilterAttributes } from "../../../../Shared/Filter.model";
-import { ParameterListComponent } from "./Parameter-List.component";
+import { ParameterListComponent } from "./ParameterContent-List.component";
 import { AccordionComponent as Accordion } from "../../../../Shared/Accordion.component";
 
 const parameterBlockStyle = css`

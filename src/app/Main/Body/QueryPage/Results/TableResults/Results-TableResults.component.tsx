@@ -2,10 +2,10 @@
 import { css, jsx } from "@emotion/core";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TableContext } from "../../../../Shared/Context/TableContext";
-import { TableContentComponent as TableContent } from "./Result-Content.component";
-import { TableMainHeaderComponent } from "./Result-MainHeader.component";
-import { AccordionComponent as Accordion } from "../../../../Shared/Accordion.component";
+import { TableContext } from "../../../../../Shared/Context/TableContext";
+import { TableContentComponent as TableContent } from "./TableResult-TableContent.component";
+import { TableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
+import { AccordionComponent as Accordion } from "../../../../../Shared/Accordion.component";
 
 const dataStyle = css`
     max-width: fit-content;

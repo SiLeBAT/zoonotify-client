@@ -11,7 +11,7 @@ import {
     TableType,
 } from "../../../../../Shared/Context/TableContext";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
-import { DisplayedFeatureSelectorComponent as TableSelector } from "./Feature-SelectorElement.component";
+import { DisplayedFeatureSelectorComponent as TableSelector } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Filter.model";
 
 const drawerWidthStyle = css`
