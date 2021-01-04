@@ -12,7 +12,7 @@ import {
 } from "../../../../../Shared/Context/TableContext";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
 import { DisplayedFeatureSelectorComponent as DisplFeatureSelector } from "./DisplFeatures-Selector.component";
-import { FilterType } from "../../../../../Shared/Filter.model";
+import { FilterType } from "../../../../../Shared/Model/Filter.model";
 
 const drawerWidthStyle = css`
     width: inherit;

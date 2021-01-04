@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useContext } from "react";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import { mainFilterAttributes } from "../../../../Shared/Filter.model";
+import { mainFilterAttributes } from "../../../../Shared/Model/Filter.model";
 import { ParameterContentListComponent as ParameterList } from "./ParameterContent-List.component";
 import { AccordionComponent as Accordion } from "../../../../Shared/Accordion.component";
 

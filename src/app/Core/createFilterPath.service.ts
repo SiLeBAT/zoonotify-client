@@ -3,7 +3,7 @@ import {
     FilterType,
     FilterInterface,
     mainFilterAttributes,
-} from "../Shared/Filter.model";
+} from "../Shared/Model/Filter.model";
 import { TableInterface } from "../Shared/Context/TableContext";
 
 function setParams(key: string, value: string): string {

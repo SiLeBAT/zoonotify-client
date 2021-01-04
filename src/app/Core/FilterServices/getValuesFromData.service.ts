@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { FilterType, FilterInterface } from "../../Shared/Filter.model";
+import { FilterType, FilterInterface } from "../../Shared/Model/Filter.model";
 
 export function getValuesFromData(
     attribute: FilterType,

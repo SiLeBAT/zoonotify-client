@@ -29,7 +29,7 @@ interface VersionProps {
     text: string;
 }
 
-export function VersionListItemComponent(props: VersionProps): JSX.Element {
+export function LastUpdateVersionComponent(props: VersionProps): JSX.Element {
     return (
         <ListItem css={distanceStyle}>
             <ListItemIcon css={listIconStyle}>

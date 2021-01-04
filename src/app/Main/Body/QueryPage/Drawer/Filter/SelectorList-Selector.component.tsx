@@ -7,7 +7,7 @@ import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import {
     FilterType,
     mainFilterAttributes,
-} from "../../../../../Shared/Filter.model";
+} from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent as Selector } from "../../../../../Shared/Selector.component";
 

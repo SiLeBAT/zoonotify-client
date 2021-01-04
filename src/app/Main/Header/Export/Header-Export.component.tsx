@@ -4,15 +4,15 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
-import { DBentry, DBtype } from "../../../Shared/Isolat.model";
-import { defaultExport, ExportInterface } from "../../../Shared/Export.model";
-import { ExportButtonComponent as ExportButton } from "./Header-ExportButton.component";
-import { CheckBoxComponent as CheckBoxes } from "./Export-Checkbox.component";
-import { DialogContentComponent as DialogContent } from "./Export-Text.component";
-import { ExportActionButtonComponent as ActionButtons } from "./Export-ActionButtons.component";
+import { DBentry, DBtype } from "../../../Shared/Model/Isolat.model";
+import { defaultExport, ExportInterface } from "../../../Shared/Model/Export.model";
+import { HeaderExportButtonComponent as ExportButton } from "./Header-ExportButton.component";
+import { ExportCheckboxesComponent as Checkboxes } from "./Export-Checkboxes.component";
+import { ExportTextContentComponent as TextContent } from "./Export-TextContent.component";
+import { ExportActionButtonsComponent as ActionButtons } from "./Export-ActionButtons.component";
 import { generateExportLabels } from "../../../Core/ExportServices/Export-Labels.service";
 
-export function ExportDataComponent(): JSX.Element {
+export function HeaderExportComponent(): JSX.Element {
     const [open, setOpen] = useState(false);
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
     const { data } = useContext(DataContext);
@@ -81,8 +81,8 @@ export function ExportDataComponent(): JSX.Element {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogContent />
-                <CheckBoxes
+                <TextContent />
+                <Checkboxes
                     onChange={handleChange}
                     raw={setting.raw}
                     stat={setting.stat}

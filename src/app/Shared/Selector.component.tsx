@@ -3,7 +3,7 @@ import { css, jsx, keyframes, SerializedStyles } from "@emotion/core";
 import Select, { ValueType, StylesConfig } from "react-select";
 import { InputLabel } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { FilterType } from "./Filter.model";
+import { FilterType } from "./Model/Filter.model";
 import { TableType } from "./Context/TableContext";
 import { primaryColor, bfrDarkgrey } from "./Style/Style-MainTheme.component";
 

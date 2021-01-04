@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
-import { LinkListComponent as LinkList} from "./LinkPage-List.component";
+import { LinkPageListComponent as LinkList} from "./LinkPage-LinkList.component";
 
 const appNameStyle = css`
     margin-bottom: 1rem;

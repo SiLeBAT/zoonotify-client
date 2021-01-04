@@ -14,7 +14,7 @@ const dateStyle = css`
     color: ${onBackgroundColor};
 `;
 
-export function LastUpdateComponent(): JSX.Element {
+export function LastUpdateDateComponent(): JSX.Element {
     const { lastChange } = environment;
     const { t } = useTranslation(["Footer"]);
     const dateLayout = t("Date.Layout");

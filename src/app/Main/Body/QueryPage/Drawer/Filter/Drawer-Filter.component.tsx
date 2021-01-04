@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { FilterSelectorListComponent as FilterSelectorList } from "./Filter-SelectorList.component";
 import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
-import { FilterType } from "../../../../../Shared/Filter.model";
+import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";

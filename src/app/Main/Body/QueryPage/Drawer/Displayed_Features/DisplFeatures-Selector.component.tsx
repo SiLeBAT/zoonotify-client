@@ -6,7 +6,7 @@ import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
     FilterType,
     mainFilterAttributes,
-} from "../../../../../Shared/Filter.model";
+} from "../../../../../Shared/Model/Filter.model";
 import { gernerateSettings } from "../../../../../Core/generateFeatureSettings.service";
 
 interface FeatureSelectorProps {

@@ -3,8 +3,8 @@ import {
     FilterInterface,
     FilterType,
     mainFilterAttributes,
-} from "../../Shared/Filter.model";
-import { DBentry } from "../../Shared/Isolat.model";
+} from "../../Shared/Model/Filter.model";
+import { DBentry } from "../../Shared/Model/Isolat.model";
 
 export function useFilter(data: DBentry[], filter: FilterInterface): DBentry[] {
     let filteredData: DBentry[] = data;

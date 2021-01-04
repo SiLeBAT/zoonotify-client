@@ -1,6 +1,6 @@
 import React, { useState, createContext } from "react";
-import { DBentry, DBtype } from "../Isolat.model";
-import { FilterInterface } from "../Filter.model";
+import { DBentry, DBtype } from "../Model/Isolat.model";
+import { FilterInterface } from "../Model/Filter.model";
 import { defaultFilter } from "./FilterContext";
 
 interface DataInterface {

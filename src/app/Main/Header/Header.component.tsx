@@ -3,7 +3,7 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ExportDataComponent } from "./Export/Header-Export.component";
+import { HeaderExportComponent as Export } from "./Export/Header-Export.component";
 import { TranslationButtonsComponent as TranslationButtons } from "./TranslationButtons.component";
 import {
     primaryColor,
@@ -82,7 +82,7 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
     box-shadow: 0 8px 6px -6px grey;
 `;
 
-export function HeaderLayoutComponent(props: {
+export function HeaderComponent(props: {
     isConnected: boolean;
 }): JSX.Element {
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
@@ -150,7 +150,7 @@ export function HeaderLayoutComponent(props: {
             </div>
 
             <div css={subheaderStyle(queryOpen)}>
-                <ExportDataComponent />
+                <Export />
             </div>
         </header>
     );

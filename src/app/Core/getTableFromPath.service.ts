@@ -1,4 +1,4 @@
-import { FilterType } from "../Shared/Filter.model";
+import { FilterType } from "../Shared/Model/Filter.model";
 
 export function getTableFromPath(path: string): FilterType[] {
     const searchParams = new URLSearchParams(path);

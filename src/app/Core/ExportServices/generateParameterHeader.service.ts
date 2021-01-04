@@ -1,8 +1,8 @@
-import { MainFilterLabelInterface } from "../../Shared/Export.model";
+import { MainFilterLabelInterface } from "../../Shared/Model/Export.model";
 import {
     FilterInterface,
     mainFilterAttributes,
-} from "../../Shared/Filter.model";
+} from "../../Shared/Model/Filter.model";
 
 interface ParameterHeaderProps {
     filter: FilterInterface;

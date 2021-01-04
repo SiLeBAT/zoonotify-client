@@ -30,7 +30,7 @@ interface ExportButtonProps {
     buttonLabel: JSX.Element;
 }
 
-export function ExportButtonComponent(props: ExportButtonProps): JSX.Element {
+export function HeaderExportButtonComponent(props: ExportButtonProps): JSX.Element {
     const handleClickOpen = (event: unknown): void => {
         props.onClick(event);
     };

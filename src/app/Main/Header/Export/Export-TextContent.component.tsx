@@ -6,7 +6,7 @@ import {
     DialogTitle,
 } from "@material-ui/core";
 
-export function DialogContentComponent(): JSX.Element {
+export function ExportTextContentComponent(): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
     return (

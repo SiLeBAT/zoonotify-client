@@ -1,5 +1,5 @@
-import { FilterInterface } from "../../Shared/Filter.model";
-import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Export.model";
+import { FilterInterface } from "../../Shared/Model/Filter.model";
+import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 import { statDataStringGenerator } from "./generateStatString.service";

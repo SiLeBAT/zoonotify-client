@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import { FilterType } from "../Filter.model";
+import { FilterType } from "../Model/Filter.model";
 
 export type TableType = "row" | "column";
 

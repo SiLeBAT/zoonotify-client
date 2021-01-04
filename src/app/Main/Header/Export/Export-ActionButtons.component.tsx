@@ -8,8 +8,8 @@ import { objectToZIP } from "../../../Core/ExportServices/objectsToZIP.service";
 import {
     ExportInterface,
     MainFilterLabelInterface,
-} from "../../../Shared/Export.model";
-import { FilterInterface } from "../../../Shared/Filter.model";
+} from "../../../Shared/Model/Export.model";
+import { FilterInterface } from "../../../Shared/Model/Filter.model";
 import { errorColor } from "../../../Shared/Style/Style-MainTheme.component";
 
 const buttonLinkStyle = css`
@@ -33,7 +33,7 @@ interface ExportActionButtonProps {
     allFilterLabel: string;
 }
 
-export function ExportActionButtonComponent(
+export function ExportActionButtonsComponent(
     props: ExportActionButtonProps
 ): JSX.Element {
     const { t } = useTranslation(["Export"]);

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { ExportInterface } from "../../Shared/Export.model";
+import { ExportInterface } from "../../Shared/Model/Export.model";
 import { generateCSVString } from "./generateCSVString.service";
 
 export function statDataStringGenerator(settings: ExportInterface): string {
