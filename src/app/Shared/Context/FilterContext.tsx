@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import { FilterInterface, mainFilterAttributes } from "../Filter.model";
+import { FilterInterface, mainFilterAttributes } from "../Model/Filter.model";
 
 const generateEmptyFilter = ():  FilterInterface => {
     const defaultFilter = {} as FilterInterface

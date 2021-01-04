@@ -3,7 +3,7 @@ import {
     FilterInterface,
     FilterType,
     mainFilterAttributes,
-} from "../../Shared/Filter.model";
+} from "../../Shared/Model/Filter.model";
 
 export function CheckIfFilterIsSet(filter: FilterInterface): boolean {
     const noFilter = mainFilterAttributes.every(function emptyArray(

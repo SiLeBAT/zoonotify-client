@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton, Tooltip, withStyles } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { FilterType } from "./Filter.model";
+import { FilterType } from "./Model/Filter.model";
 import { defaultFilter, FilterContext } from "./Context/FilterContext";
 import {
     backgroundColor,

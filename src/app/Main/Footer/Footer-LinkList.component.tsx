@@ -41,7 +41,7 @@ const linkStyle = css`
     }
 `;
 
-export function FooterLinksComponent(): JSX.Element {
+export function FooterLinkListComponent(): JSX.Element {
     const { t } = useTranslation(["Footer"]);
     return (
         <ul css={footerContentStyle}>

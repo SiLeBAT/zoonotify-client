@@ -10,7 +10,7 @@ import {
     ListSubheader,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { FilterType } from "../../../../Shared/Filter.model";
+import { FilterType } from "../../../../Shared/Model/Filter.model";
 
 const spaceStyle = css`
     padding: 0;

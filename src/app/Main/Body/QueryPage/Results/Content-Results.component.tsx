@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../../Shared/Filter.model";
+import { FilterType } from "../../../../Shared/Model/Filter.model";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { DataContext } from "../../../../Shared/Context/DataContext";
-import { DBentry } from "../../../../Shared/Isolat.model";
+import { DBentry } from "../../../../Shared/Model/Isolat.model";
 import { useFilter } from "../../../../Core/FilterServices/filterData.service";
 import { getValuesFromData } from "../../../../Core/FilterServices/getValuesFromData.service";
 import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilter.service";

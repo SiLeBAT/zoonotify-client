@@ -7,7 +7,7 @@ import { QueryPageIntroTextComponent as IntroText } from "./IntroText/QueryPage-
 import { QueryPageParameterContentComponent as ParameterContent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageNrOfIsolatesComponent as NrOfIsolates } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
-import { mainFilterAttributes } from "../../../Shared/Filter.model";
+import { mainFilterAttributes } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
 

@@ -1,4 +1,4 @@
-import { FilterInterface, FilterType } from "../Shared/Filter.model";
+import { FilterInterface, FilterType } from "../Shared/Model/Filter.model";
 import { defaultFilter } from "../Shared/Context/FilterContext";
 
 function getFilterList(filterParameter: string | null): string[] {

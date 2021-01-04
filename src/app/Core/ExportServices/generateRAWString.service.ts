@@ -1,4 +1,4 @@
-import { DBentry, DBtype } from "../../Shared/Isolat.model";
+import { DBentry, DBtype } from "../../Shared/Model/Isolat.model";
 import { generateCSVString } from "./generateCSVString.service";
 
 export function RAWDataStringGenerator(

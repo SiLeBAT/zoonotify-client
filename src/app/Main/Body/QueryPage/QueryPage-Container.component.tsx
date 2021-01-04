@@ -2,10 +2,10 @@ import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
-import { DBentry, DBtype } from "../../../Shared/Isolat.model";
+import { DBentry, DBtype } from "../../../Shared/Model/Isolat.model";
 import { mockDataURL } from "../../../Shared/URLs";
 import { QueryPageComponent as QPComp } from "./QueryPage.component";
-import { FilterInterface, mainFilterAttributes } from "../../../Shared/Filter.model";
+import { FilterInterface, mainFilterAttributes } from "../../../Shared/Model/Filter.model";
 import {
     defaultFilter,
     FilterContext,

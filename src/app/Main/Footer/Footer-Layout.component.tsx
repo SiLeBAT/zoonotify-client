@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { FooterLinksComponent as Links } from "./Footer-Links.component";
-import { LastUpdate } from "./LastUpdate.component";
+import { FooterLinkListComponent as LinkList } from "./Footer-LinkList.component";
+import { LastUpdateComponent as LastUpdate } from "./LastUpdate.component";
 import {
     surfaceColor,
     primaryColor,
@@ -21,7 +21,7 @@ export function FooterLayoutComponent(): JSX.Element {
     return (
         <footer css={footerStyle}>
             <LastUpdate />
-            <Links />
+            <LinkList />
         </footer>
     );
 }

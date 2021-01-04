@@ -13,7 +13,7 @@ interface CheckboxProps {
     stat: boolean;
 }
 
-export function CheckBoxComponent(props: CheckboxProps): JSX.Element {
+export function ExportCheckboxesComponent(props: CheckboxProps): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {

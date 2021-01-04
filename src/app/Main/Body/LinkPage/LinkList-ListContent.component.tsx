@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ListItemComponent as ListItem} from "./LinkPage-ListItem.component";
+import { ListContentListItemComponent as ListItem} from "./ListContent-ListItem.component";
 
 export function LinkListContentComponent(
     category: string,

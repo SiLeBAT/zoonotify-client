@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { BrowserRouter } from "react-router-dom";
-import { HeaderLayoutComponent as Header } from "./Header/Header.component";
+import { HeaderComponent as Header } from "./Header/Header.component";
 import { BodyRouterComponent as Body } from "./Body/Body-Router.component";
 import { FooterLayoutComponent as Footer } from "./Footer/Footer-Layout.component";
 

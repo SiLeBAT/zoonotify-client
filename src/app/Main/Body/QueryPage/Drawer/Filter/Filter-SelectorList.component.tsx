@@ -4,7 +4,7 @@ import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
     FilterType,
     mainFilterAttributes,
-} from "../../../../../Shared/Filter.model";
+} from "../../../../../Shared/Model/Filter.model";
 
 /**
  * @desc generate a selector-element for each main filter

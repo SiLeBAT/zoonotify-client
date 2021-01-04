@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { FilterType } from "../Shared/Filter.model";
+import { FilterType } from "../Shared/Model/Filter.model";
 
 export function gernerateSettings(
     tableValue: FilterType

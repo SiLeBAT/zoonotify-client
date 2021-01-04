@@ -7,7 +7,7 @@ interface ListItemsProps {
     text: string;
 }
 
-export function ListItemComponent(props: ListItemsProps): JSX.Element {
+export function ListContentListItemComponent(props: ListItemsProps): JSX.Element {
     return (
         <ListItem
             button
