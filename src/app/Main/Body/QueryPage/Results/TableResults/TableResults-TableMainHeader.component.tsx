@@ -38,7 +38,7 @@ const tableTitleStyle = (
     transform: ${isRow ? "rotate(180deg)" : "none"};
 `;
 
-interface TableMainHeaderInterface {
+interface TableMainHeaderProps {
     isTitle: boolean;
     isRow: boolean;
     height: number;
@@ -46,7 +46,7 @@ interface TableMainHeaderInterface {
     text: string;
 }
 
-export function TableResultsTableMainHeaderComponent(props: TableMainHeaderInterface): JSX.Element {
+export function TableResultsTableMainHeaderComponent(props: TableMainHeaderProps): JSX.Element {
     return (
         <div css={titleDivStyle(props.isTitle, props.isRow)}>
             <p

@@ -4,14 +4,14 @@ import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 import { statDataStringGenerator } from "./generateStatString.service";
 
-interface ObjectToCsvProps {
+interface ObjectToCSVProps {
     setting: ExportInterface;
     filter: FilterInterface;
     allFilterLabel: string;
     mainFilterLabels: MainFilterLabelInterface;
 }
 
-export function objectToCsv(props: ObjectToCsvProps): string {
+export function objectToCSV(props: ObjectToCSVProps): string {
     const csvRows: string[] = [];
     csvRows.push(
         generateParameterHeader({

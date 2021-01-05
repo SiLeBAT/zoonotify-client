@@ -64,12 +64,12 @@ function createListItemComponent(parameterList: string[]): JSX.Element[] {
     return elements;
 }
 
-interface ParameterListProps {
+interface ListProps {
     element: FilterType;
     listElements: string[];
 }
 
-export function ParameterContentListComponent(props: ParameterListProps): JSX.Element {
+export function ParameterContentListComponent(props: ListProps): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
     const label = t(`Filters.${props.element}`);

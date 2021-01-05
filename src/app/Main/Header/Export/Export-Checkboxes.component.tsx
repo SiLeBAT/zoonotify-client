@@ -7,13 +7,13 @@ const checkboxStyle = css`
     margin-left: 2rem;
 `;
 
-interface CheckboxProps {
+interface CheckboxesProps {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     raw: boolean;
     stat: boolean;
 }
 
-export function ExportCheckboxesComponent(props: CheckboxProps): JSX.Element {
+export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {

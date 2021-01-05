@@ -2,12 +2,12 @@ import React from "react";
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 
-interface ListItemsProps {
+interface ListItemProps {
     link: string;
     text: string;
 }
 
-export function ListContentListItemComponent(props: ListItemsProps): JSX.Element {
+export function ListContentListItemComponent(props: ListItemProps): JSX.Element {
     return (
         <ListItem
             button
