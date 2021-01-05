@@ -34,12 +34,12 @@ const LightTooltip = withStyles(() => ({
     },
 }))(Tooltip);
 
-interface RemoveButtonProps {
+interface ClearSelectorProps {
     isFilter: boolean;
     isTable: boolean;
 }
 
-export function ClearSelectorComponent(props: RemoveButtonProps): JSX.Element {
+export function ClearSelectorComponent(props: ClearSelectorProps): JSX.Element {
     const { setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
 

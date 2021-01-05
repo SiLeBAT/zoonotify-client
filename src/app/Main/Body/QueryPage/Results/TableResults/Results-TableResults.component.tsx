@@ -17,7 +17,7 @@ const tableDivStyle = css`
     flex-direction: row;
 `;
 
-interface TableResultsInterface {
+interface TableResultsProps {
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;
@@ -26,7 +26,7 @@ interface TableResultsInterface {
 }
 
 export function ResultsTableRestultsComponent(
-    props: TableResultsInterface
+    props: TableResultsProps
 ): JSX.Element {
     const [windowSize, setWindowSize] = useState({
         width: 0,

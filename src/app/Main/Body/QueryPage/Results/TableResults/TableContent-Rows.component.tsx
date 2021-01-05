@@ -9,7 +9,7 @@ function chooseAlignment(element: string): "left" | "right" {
     return "right";
 }
 
-interface TableRowInterface {
+interface TableRowsProps {
     row: Record<string, string>,
     classes: Record<"tableCell", string>,
     isRowAndCol: boolean,
@@ -19,7 +19,7 @@ interface TableRowInterface {
     ) => SerializedStyles
 }
 
-export function TableContentRowsComponent(props: TableRowInterface): JSX.Element[] {
+export function TableContentRowsComponent(props: TableRowsProps): JSX.Element[] {
     const elements: JSX.Element[] = [];
     const k = Object.keys(props.row);
     k.forEach((element): void => {

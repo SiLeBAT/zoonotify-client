@@ -9,7 +9,7 @@ const dataTableStyle = css`
     overflow: auto;
 `;
 
-interface TableContentInterface {
+interface TableContentProps {
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;
@@ -21,7 +21,7 @@ interface TableContentInterface {
     ) => void;
 }
 
-export function TabelResultTableContentComponent(props: TableContentInterface): JSX.Element {
+export function TabelResultTableContentComponent(props: TableContentProps): JSX.Element {
     const { table } = useContext(TableContext);
 
     const noRowAndCol = !props.displayRowCol.isCol && !props.displayRowCol.isRow;

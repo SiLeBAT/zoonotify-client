@@ -11,7 +11,7 @@ import {
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent as Selector } from "../../../../../Shared/Selector.component";
 
-interface FilterSelectorProps {
+interface SelectorProps {
     index: number;
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,
@@ -27,7 +27,7 @@ interface FilterSelectorProps {
  * @param   {( selectedOption: ValueType<Record<string, string>>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
  * @return  {JSX.Element}                     new selector-element
  */
-export function SelectorListSelectorComponent(props: FilterSelectorProps): JSX.Element {
+export function SelectorListSelectorComponent(props: SelectorProps): JSX.Element {
     const { data } = useContext(DataContext);
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);

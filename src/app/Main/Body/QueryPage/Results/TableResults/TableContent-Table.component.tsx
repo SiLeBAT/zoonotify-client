@@ -41,7 +41,7 @@ const useStyles = makeStyles({
     },
 });
 
-interface ResultTableProps {
+interface TableProps {
     allIsolates: Record<string, string>[];
     columnAttributes: string[];
     getSize: (
@@ -53,7 +53,7 @@ interface ResultTableProps {
 }
 
 export function TableContentTableComponent(
-    props: ResultTableProps
+    props: TableProps
 ): JSX.Element {
     const classes = useStyles();
 
