@@ -15,6 +15,16 @@ interface ObjectToZIPProps {
     subFileNames: string[];
 }
 
+/**
+ * @desc Convert the data table and the statistic table to one ZIP folder
+ * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
+ * @param {FilterInterface} filter - object with the selected filters
+ * @param {string} ZNFilename - main filename 
+ * @param {string} allFilterLabel - "all values" / "Alle Werte"
+ * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters 
+ * @param {string[]} subFileNames - names of the two different files (data, statistic)
+ * @returns {void} 
+ */
 export function objectToZIP(props: ObjectToZIPProps): void {
     const csvRows: string[] = [];
     const csvRowsRAW: string[] = [];

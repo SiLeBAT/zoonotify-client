@@ -6,6 +6,12 @@ import {
 } from "../../Shared/Model/Filter.model";
 import { DBentry } from "../../Shared/Model/Isolat.model";
 
+/**
+ * @desc Filter the dataset with the selected filters
+ * @param {DBentry[]} - dataset 
+ * @param {FilterInterface} filter - object of selected filters
+ * @returns {DBentry[]} - filtered dataset
+ */
 export function useFilter(data: DBentry[], filter: FilterInterface): DBentry[] {
     let filteredData: DBentry[] = data;
     mainFilterAttributes.map(async (attribute: FilterType) => {

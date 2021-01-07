@@ -38,6 +38,12 @@ interface DrawerLayoutProps {
     newWidth: number;
 }
 
+/**
+ * @desc Resturns the Drawer
+ * @param {boolean} isOpen - true if Drawer is open
+ * @param {number} newWidth - width of the Drawer (also after resize)
+ * @returns {JSX.Element} - Drawer component
+ */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     const classes = useStyles((props.newWidth as unknown) as string);
 

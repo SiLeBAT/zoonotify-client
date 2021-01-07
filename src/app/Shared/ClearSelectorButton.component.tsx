@@ -39,6 +39,12 @@ interface ClearSelectorProps {
     isTable: boolean;
 }
 
+/**
+ * @desc Button and tooltip to clear all selected settings.
+ * @param {boolean} isFilter - true if button should clear all filter settings
+ * @param {boolean} isTable - true if button should clear all row/column
+ * @returns {JSX.Element} - button component with tooltip
+ */
 export function ClearSelectorComponent(props: ClearSelectorProps): JSX.Element {
     const { setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);

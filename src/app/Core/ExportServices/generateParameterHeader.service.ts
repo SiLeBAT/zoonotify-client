@@ -10,6 +10,13 @@ interface ParameterHeaderProps {
     mainFilterLabels: MainFilterLabelInterface;
 }
 
+/**
+ * @desc Convert the selected filter/parameter to save them as a header in the CSV file
+ * @param {FilterInterface} filter - object with the selected filters
+ * @param {string} allFilterLabel - "all values" / "Alle Werte"
+ * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters 
+ * @returns {string} - selected filter/parameter as header string
+ */
 export function generateParameterHeader(props: ParameterHeaderProps): string {
     const HeaderRows: string[] = [];
     HeaderRows.push("\uFEFF");

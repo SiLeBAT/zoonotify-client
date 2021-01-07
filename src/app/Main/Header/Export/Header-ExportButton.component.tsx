@@ -30,6 +30,12 @@ interface ExportButtonProps {
     buttonLabel: JSX.Element;
 }
 
+/**
+ * @desc Retruns the export button inside the header.
+ * @param {(event: unknown) => void} onClick - function to handle the open/close of the export dialog
+ * @param {JSX.Element} buttonLabel - component for the button label
+ * @returns {JSX.Element} - export button component
+ */
 export function HeaderExportButtonComponent(props: ExportButtonProps): JSX.Element {
     const handleClickOpen = (event: unknown): void => {
         props.onClick(event);

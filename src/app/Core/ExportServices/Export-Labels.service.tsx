@@ -15,6 +15,11 @@ const buttonLableStyle = (open: boolean): SerializedStyles => css`
     }
 `;
 
+/**
+ * @desc Resturns all labels for the file export in the rigth language
+ * @param {boolean} open - true if export dialog is open
+ * @returns {[JSX.Element, string, MainFilterLabelInterface, string]} - list of labels: for the export button, for the file, of the mainfilters, for "all values"
+ */
 export function generateExportLabels(
     open: boolean
 ): [JSX.Element, string, MainFilterLabelInterface, string] {
