@@ -7,7 +7,7 @@ import {
 } from "../../../../../Shared/Model/Filter.model";
 
 /**
- * @desc generate a selector-element for each main filter
+ * @desc Generate a selector-element for each main filter
  * @return {JSX.Element[]} selector-elements in a list
  */
 export function FilterSelectorListComponent(

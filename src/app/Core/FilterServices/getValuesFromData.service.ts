@@ -1,6 +1,13 @@
 import _ from "lodash";
 import { FilterType, FilterInterface } from "../../Shared/Model/Filter.model";
 
+/**
+ * @desc Get the unique values of one filter attribute. If filters are selected, only return the selected unique values.
+ * @param {FilterType} attribute - on specific filter attribute 
+ * @param {FilterInterface} uniqueValues - object of unique velues of every filter attribute
+ * @param {FilterInterface} filter - object of selected filters
+ * @returns {string[]} - corresponding unique values to the filter attribute
+ */
 export function getValuesFromData(
     attribute: FilterType,
     uniqueValues: FilterInterface,

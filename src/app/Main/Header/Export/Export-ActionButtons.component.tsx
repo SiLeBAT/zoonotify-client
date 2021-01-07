@@ -33,6 +33,17 @@ interface ExportActionButtonProps {
     allFilterLabel: string;
 }
 
+/**
+ * @desc Returns action buttons for the export dialog
+ * @param {(event: unknown) => void} onClick - onClick function to close the export dialog
+ * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
+ * @param {FilterInterface} filter - object with the selected filters
+ * @param {JSX.Element} buttonLabel - component for the export button label
+ * @param {string} ZNFilename - main filename 
+ * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters 
+ * @param {string} allFilterLabel - "all values" / "Alle Werte"
+ * @returns {JSX.Element} - action buttons componenet
+ */
 export function ExportActionButtonsComponent(
     props: ExportActionButtonProps
 ): JSX.Element {

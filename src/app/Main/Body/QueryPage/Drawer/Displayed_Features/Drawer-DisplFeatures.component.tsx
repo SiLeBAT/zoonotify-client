@@ -49,6 +49,11 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
+    /**
+     * @desc Takes the current values of the selector with the onChange envent handler and sets it as row/column.
+     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the slector
+     * @param {FilterType | TableType}             keyName              "row" or "column"
+     */
     const handleChange = (
         selectedOption: ValueType<Record<string, string>>,
         keyName: FilterType | TableType
@@ -89,7 +94,6 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                 />
             </div>
             <DisplFeatureSelector
-                keyValue="table-selector-row"
                 label={t("Drawer.Graphs.Row")}
                 activeFeature={table.row}
                 otherFeature={table.column}
@@ -102,7 +106,6 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                 </IconButton>
             </div>
             <DisplFeatureSelector
-                keyValue="table-selector-column"
                 label={t("Drawer.Graphs.Column")}
                 activeFeature={table.column}
                 otherFeature={table.row}

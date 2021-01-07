@@ -46,6 +46,15 @@ interface TableMainHeaderProps {
     text: string;
 }
 
+/**
+ * @desc Retruns one main header to wrap the result table
+ * @param {boolean} isTitle - true if row/column is selected
+ * @param {boolean} isRow - true if row is selected
+ * @param {number} height - height of the main header
+ * @param {number} width - width of the main header
+ * @param {string} text - text content of the main header 
+ * @returns {JSX.Element} - one main header component
+ */
 export function TableResultsTableMainHeaderComponent(props: TableMainHeaderProps): JSX.Element {
     return (
         <div css={titleDivStyle(props.isTitle, props.isRow)}>

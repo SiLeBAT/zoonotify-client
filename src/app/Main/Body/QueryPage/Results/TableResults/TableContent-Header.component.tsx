@@ -33,6 +33,15 @@ interface TableHeaderProps {
     style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles
 }
 
+/**
+ * @desc Returns list of table cells for the table header
+ * @param {string[]} headerValues - object with two boolans, true if row/column is selected
+ * @param {(node: HTMLElement | null, key: "height" | "totalWidth" | "partWidth") => void} getSize - callback function to get the size of the header for the position of the main header
+ * @param {boolean} isRowNotCol - true if row and no column is selected
+ * @param {boolean} isRowAndCol - true if row and column is selected
+ * @param {(isRow: boolean, isRowAndCol: boolean) => SerializedStyles} - style of the header
+ * @returns {JSX.Element[]} - list of table cell components
+ */
 export function TableContentHeaderComponent(props: TableHeaderProps): JSX.Element[] {
     const elements: JSX.Element[] = [];
     elements.push(

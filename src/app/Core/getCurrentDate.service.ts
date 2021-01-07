@@ -1,3 +1,7 @@
+/**
+ * @desc Generate the current date and time in a fixed format (YYYY-MM-DDThhmmss)
+ * @returns {string} - string with the current date and time
+ */
 export function getFormattedDate(): string {
     const today = new Date();
     const y = today.getFullYear();

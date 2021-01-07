@@ -2,22 +2,28 @@ import _ from "lodash";
 import { ExportInterface } from "../../Shared/Model/Export.model";
 import { generateCSVString } from "./generateCSVString.service";
 
-export function statDataStringGenerator(settings: ExportInterface): string {
+/**
+ * @desc Resturns the table header and the statistic table as a string to save it as CSV
+ * @param {{row: FilterType; column: FilterType;}} tableAttributes - selected row and column
+ * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
+ * @returns {string} - header and statistic table as string
+ */
+export function statDataStringGenerator(props: ExportInterface): string {
     const StatDataString: string[] = [];
-    if (!_.isEmpty(settings.tableAttributes.column)) {
-        StatDataString.push(`,${settings.tableAttributes.column}`);
+    if (!_.isEmpty(props.tableAttributes.column)) {
+        StatDataString.push(`,${props.tableAttributes.column}`);
     }
-    const headers: string[] = settings.statDataSet.statKeys;
-    if (!_.isEmpty(settings.tableAttributes.row)) {
+    const headers: string[] = props.statDataSet.statKeys;
+    if (!_.isEmpty(props.tableAttributes.row)) {
         const headerToPrint: string[] = [...headers];
-        headerToPrint[0] = settings.tableAttributes.row;
+        headerToPrint[0] = props.tableAttributes.row;
         StatDataString.push(headerToPrint.join(","));
     } else {
         StatDataString.push(headers.join(","));
     }
 
     StatDataString.push(
-        generateCSVString(settings.statDataSet.statData, headers)
+        generateCSVString(props.statDataSet.statData, headers)
     );
 
     return StatDataString.join("\n");

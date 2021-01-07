@@ -82,6 +82,12 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
     box-shadow: 0 8px 6px -6px grey;
 `;
 
+
+/**
+ * @desc Header of the page with navigation
+ * @param {boolean} isConnected - true if client is connected to the server
+ * @returns {JSX.Element} - header component 
+ */
 export function HeaderComponent(props: {
     isConnected: boolean;
 }): JSX.Element {

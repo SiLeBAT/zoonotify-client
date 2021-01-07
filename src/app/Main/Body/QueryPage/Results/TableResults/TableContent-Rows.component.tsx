@@ -19,6 +19,14 @@ interface TableRowsProps {
     ) => SerializedStyles
 }
 
+/**
+ * @desc Returns list of table cells for one table row
+ * @param {Record<string, string>} row - object with the values for the row
+ * @param {Record<"tableCell", string>,} classes - material-ui styling of one table cell
+ * @param {boolean} isRowAndCol - true if row and column is selected
+ * @param {(isRow: boolean, isRowAndCol: boolean) => SerializedStyles} - style of the row
+ * @returns {JSX.Element} - list of table cell components
+ */
 export function TableContentRowsComponent(props: TableRowsProps): JSX.Element[] {
     const elements: JSX.Element[] = [];
     const k = Object.keys(props.row);

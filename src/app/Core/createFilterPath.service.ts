@@ -6,17 +6,35 @@ import {
 } from "../Shared/Model/Filter.model";
 import { TableInterface } from "../Shared/Context/TableContext";
 
+/**
+ * @desc Generate partial path containing the selected filter
+ * @param {string} key - filter attribute
+ * @param {string} value - corresponding filter value
+ * @returns {string} - partial path one mainfilter
+ */
 function setParams(key: string, value: string): string {
     const searchParams = new URLSearchParams();
     searchParams.set(key, value);
     return searchParams.toString();
 }
 
+/**
+ * @desc Generate partial path containing the selected row/column
+ * @param {string} key - "row" or "column"
+ * @param {string} value - corresponding value to the row or column
+ * @returns {string} - partial path for row or column
+ */
 function getTableParam(key: string, value: string): string {
     const tableParam = _.isEmpty(value) ? "" : `&${setParams(key, value)}`;
     return tableParam;
 }
 
+/**
+ * @desc Convert selected filter and row/column to URL-Path
+ * @param {FilterInterface} filter - object of selected filters
+ * @param {TableInterface} table - object of selected row/column
+ * @returns {string} - path including selected filters and row/column 
+ */
 export const createPathString = (
     filter: FilterInterface,
     table: TableInterface

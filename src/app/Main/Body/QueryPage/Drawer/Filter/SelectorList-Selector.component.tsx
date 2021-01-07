@@ -20,10 +20,10 @@ interface SelectorProps {
 }
 
 /**
- * @desc generate a new selector-element
+ * @desc Generate a new selector-element for one main filter
  * @param   {number}            index         number of the element
- * @param   {FilterInterface}   filter        Object with selected filters
- * @param   {FilterInterface}   uniqueValues  all possible filters;
+ * @param   {FilterInterface}   filter        object with selected filters
+ * @param   {FilterInterface}   uniqueValues  all possible filter values;
  * @param   {( selectedOption: ValueType<Record<string, string>>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
  * @return  {JSX.Element}                     new selector-element
  */

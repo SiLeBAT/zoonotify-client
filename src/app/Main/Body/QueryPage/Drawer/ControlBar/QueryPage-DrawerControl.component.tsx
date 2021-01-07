@@ -65,6 +65,14 @@ interface DrawerControlProps {
     handleResize: (newWidth: number) => void;
 }
 
+/**
+ * @desc Display the control bar of the Drawer
+ * @param {boolean} isOpen - true if Drawer is open
+ * @param {number} newWidth - width of the Drawer after resizeing
+ * @param {() => void} handleDrawer - handle open/close of the Drawer
+ * @param {(newWidth: number) => void} handleResize - onChange-function for changeing the size of the Drawer
+ * @returns {JSX.Element} - control bar component of the Drawer
+ */
 export function QueryPageDrawerControlComponent(props: DrawerControlProps): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 

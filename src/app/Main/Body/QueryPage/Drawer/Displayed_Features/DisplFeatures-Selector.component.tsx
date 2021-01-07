@@ -10,7 +10,6 @@ import {
 import { gernerateSettings } from "../../../../../Core/generateFeatureSettings.service";
 
 interface FeatureSelectorProps {
-    keyValue: string;
     activeFeature: FilterType;
     otherFeature: FilterType;
     label: string;
@@ -21,6 +20,15 @@ interface FeatureSelectorProps {
     ) => void;
 }
 
+/**
+ * @desc Selector to select the displayed features in row/column
+ * @param {FilterType} activeFeature - feature of the corresponding selector (row/colum)
+ * @param {FilterTyoe} otherFeature - feature of the other selector (row/column)
+ * @param {string} label - label for the selector in the right language
+ * @param {FilterType | TableType} selectedAttribute - "row" or "column"
+ * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle the change of the row/colum 
+ * @returns {JSX.Element} - selector component
+ */
 export function DisplayedFeatureSelectorComponent(
     props: FeatureSelectorProps
 ): JSX.Element {

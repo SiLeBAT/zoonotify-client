@@ -52,6 +52,15 @@ interface TableProps {
     isRowAndCol: boolean;
 }
 
+/**
+ * @desc Returns TableContainer for the results
+ * @param {Record<string, string>[]} allIsolates - list of objects with the counted isolates
+ * @param {string[]} columnAttributes - column attributes for the table header
+ * @param {(node: HTMLElement | null, key: "height" | "totalWidth" | "partWidth") => void} getSize - callback function to get the size of the header for the position of the main header
+ * @param {boolean} isRowNotCol - true if row and no column is selected
+ * @param {boolean} isRowAndCol - true if row and column is selected
+ * @returns {JSX.Element} - table container component
+ */
 export function TableContentTableComponent(
     props: TableProps
 ): JSX.Element {

@@ -29,6 +29,10 @@ export function QueryPageParameterContentComponent(): JSX.Element {
         }
     });
 
+    /**
+     * @desc Create a ParameterList for each mainfilter
+     * @returns {JSX.Element[]} - List of ParameterList-components
+     */
     const createParameterComponent = (): JSX.Element[] => {
         const elements: JSX.Element[] = [];
         mainFilterAttributes.forEach((element): void => {
