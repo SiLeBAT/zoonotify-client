@@ -2,7 +2,7 @@ import { FilterInterface } from "../../Shared/Model/Filter.model";
 import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
-import { statDataStringGenerator } from "./generateStatString.service";
+import { generateStatDataString } from "./generateStatDataString.service";
 
 interface ObjectToCSVProps {
     setting: ExportInterface;
@@ -39,7 +39,7 @@ export function objectToCSV(props: ObjectToCSVProps): string {
     }
 
     if (props.setting.stat && !props.setting.raw) {
-        csvRows.push(statDataStringGenerator(props.setting));
+        csvRows.push(generateStatDataString(props.setting));
     }
 
     return csvRows.join("\n");

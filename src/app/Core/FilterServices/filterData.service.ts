@@ -12,7 +12,7 @@ import { DBentry } from "../../Shared/Model/Isolat.model";
  * @param {FilterInterface} filter - object of selected filters
  * @returns {DBentry[]} - filtered dataset
  */
-export function useFilter(data: DBentry[], filter: FilterInterface): DBentry[] {
+export function filterData(data: DBentry[], filter: FilterInterface): DBentry[] {
     let filteredData: DBentry[] = data;
     mainFilterAttributes.map(async (attribute: FilterType) => {
         if (!_.isEmpty(filter[attribute])) {

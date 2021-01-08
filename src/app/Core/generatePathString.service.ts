@@ -35,7 +35,7 @@ function getTableParam(key: string, value: string): string {
  * @param {TableInterface} table - object of selected row/column
  * @returns {string} - path including selected filters and row/column 
  */
-export const createPathString = (
+export const generatePathString = (
     filter: FilterInterface,
     table: TableInterface
 ): string => {

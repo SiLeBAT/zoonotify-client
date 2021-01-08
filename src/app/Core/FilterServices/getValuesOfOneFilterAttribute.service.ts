@@ -8,7 +8,7 @@ import { FilterType, FilterInterface } from "../../Shared/Model/Filter.model";
  * @param {FilterInterface} filter - object of selected filters
  * @returns {string[]} - corresponding unique values to the filter attribute
  */
-export function getValuesFromData(
+export function getValuesOfOneFilterAttribute(
     attribute: FilterType,
     uniqueValues: FilterInterface,
     filter: FilterInterface

@@ -7,7 +7,7 @@ import {
     FilterType,
     mainFilterAttributes,
 } from "../../../../../Shared/Model/Filter.model";
-import { gernerateSettings } from "../../../../../Core/generateFeatureSettings.service";
+import { gernerateFeatureList } from "../../../../../Core/gernerateFeatureList.service";
 
 interface FeatureSelectorProps {
     activeFeature: FilterType;
@@ -38,7 +38,7 @@ export function DisplayedFeatureSelectorComponent(
     const [isNotSelect, selectedValues]: [
         boolean,
         FilterType[]
-    ] = gernerateSettings(props.activeFeature);
+    ] = gernerateFeatureList(props.activeFeature);
 
     return (
         <Select

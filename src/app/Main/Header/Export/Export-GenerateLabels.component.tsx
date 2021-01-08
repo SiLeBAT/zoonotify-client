@@ -2,10 +2,10 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { useTranslation } from "react-i18next";
-import { secondaryColor } from "../../Shared/Style/Style-MainTheme.component";
-import { getFormattedDate } from "../getCurrentDate.service";
-import { MainFilterLabelInterface } from "../../Shared/Model/Export.model";
-import { mainFilterAttributes } from "../../Shared/Model/Filter.model";
+import { secondaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { getCurrentDate } from "../../../Core/getCurrentDate.service";
+import { MainFilterLabelInterface } from "../../../Shared/Model/Export.model";
+import { mainFilterAttributes } from "../../../Shared/Model/Filter.model";
 
 const buttonLableStyle = (open: boolean): SerializedStyles => css`
     display: flex;
@@ -20,7 +20,7 @@ const buttonLableStyle = (open: boolean): SerializedStyles => css`
  * @param {boolean} open - true if export dialog is open
  * @returns {[JSX.Element, string, MainFilterLabelInterface, string]} - list of labels: for the export button, for the file, of the mainfilters, for "all values"
  */
-export function generateExportLabels(
+export function ExportGenerateLabelsComponent(
     open: boolean
 ): [JSX.Element, string, MainFilterLabelInterface, string] {
     const { t } = useTranslation(["Header", "QueryPage"]);
@@ -31,7 +31,7 @@ export function generateExportLabels(
             {t("Header:Export")}
         </div>
     );
-    const ZNFilename = `ZooNotify_${getFormattedDate()}.csv`;
+    const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
 
     const mainFilterLabels = {} as MainFilterLabelInterface
     mainFilterAttributes.forEach(mainFilter => {
