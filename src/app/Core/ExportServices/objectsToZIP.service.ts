@@ -3,7 +3,7 @@ import { saveAs } from "file-saver";
 import { FilterInterface } from "../../Shared/Model/Filter.model";
 import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
-import { statDataStringGenerator } from "./generateStatString.service";
+import { generateStatDataString } from "./generateStatDataString.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 
 interface ObjectToZIPProps {
@@ -37,7 +37,7 @@ export function objectToZIP(props: ObjectToZIPProps): void {
             mainFilterLabels: props.mainFilterLabels,
         })
     );
-    csvRowsRAW.push(statDataStringGenerator(props.setting));
+    csvRowsRAW.push(generateStatDataString(props.setting));
     csvRows.push(csvRowsRAW.join("\n"));
 
     csvRowsStat.push(

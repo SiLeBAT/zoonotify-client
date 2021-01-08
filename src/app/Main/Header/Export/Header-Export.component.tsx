@@ -10,7 +10,7 @@ import { HeaderExportButtonComponent as ExportButton } from "./Header-ExportButt
 import { ExportCheckboxesComponent as Checkboxes } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent as TextContent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent as ActionButtons } from "./Export-ActionButtons.component";
-import { generateExportLabels } from "../../../Core/ExportServices/Export-Labels.service";
+import { ExportGenerateLabelsComponent as generateExportLabels } from "./Export-GenerateLabels.component";
 
 export function HeaderExportComponent(): JSX.Element {
     const [open, setOpen] = useState(false);

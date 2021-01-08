@@ -5,9 +5,9 @@ import { FilterType } from "../../../../Shared/Model/Filter.model";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { DataContext } from "../../../../Shared/Context/DataContext";
 import { DBentry } from "../../../../Shared/Model/Isolat.model";
-import { useFilter } from "../../../../Core/FilterServices/filterData.service";
-import { getValuesFromData } from "../../../../Core/FilterServices/getValuesFromData.service";
-import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilter.service";
+import { filterData } from "../../../../Core/FilterServices/filterData.service";
+import { getValuesOfOneFilterAttribute } from "../../../../Core/FilterServices/getValuesOfOneFilterAttribute.service";
+import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { ResultsTableRestultsComponent as TableResults } from "./TableResults/Results-TableResults.component";
 import { generateRowsWithIsolates } from "./Results-RowsWithIsolates.service";
 
@@ -31,12 +31,12 @@ export function ContentResultsComponent(): JSX.Element {
     const getAllIsolates = async (
         dataToCountIsolates: DBentry[]
     ): Promise<void> => {
-        const rowValues = getValuesFromData(
+        const rowValues = getValuesOfOneFilterAttribute(
             rowAttribute,
             data.uniqueValues,
             filter
         );
-        const colValues = getValuesFromData(
+        const colValues = getValuesOfOneFilterAttribute(
             colAttribute,
             data.uniqueValues,
             filter
@@ -119,7 +119,7 @@ export function ContentResultsComponent(): JSX.Element {
             setData({ ...data, ZNDataFiltered: data.ZNData });
             getAllIsolates(data.ZNData);
         } else {
-            const filteredData = useFilter(data.ZNData, filter);
+            const filteredData = filterData(data.ZNData, filter);
             setData({ ...data, ZNDataFiltered: filteredData });
             getAllIsolates(filteredData);
         }

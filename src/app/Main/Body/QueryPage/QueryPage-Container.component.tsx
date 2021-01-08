@@ -12,8 +12,8 @@ import {
 } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
 import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
-import { createPathString } from "../../../Core/createFilterPath.service";
-import { getTableFromPath } from "../../../Core/getTableFromPath.service";
+import { generatePathString } from "../../../Core/generatePathString.service";
+import { getFeaturesFromPath } from "../../../Core/getTableFromPath.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const { data, setData } = useContext(DataContext);
@@ -51,7 +51,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilter(
             getFilterFromPath(history.location.search, mainFilterAttributes)
         );
-        const [rowFromPath, colFromPath] = getTableFromPath(
+        const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
         );
         setTable({
@@ -62,7 +62,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     }, []);
 
     useEffect((): void => {
-        history.push(`?${createPathString(filter, table)}`);
+        history.push(`?${generatePathString(filter, table)}`);
     }, [filter, table]);
 
     let returnValue = <p> Loading data ... </p>;
