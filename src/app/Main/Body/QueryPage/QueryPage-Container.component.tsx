@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
-import { DBentry, DBtype } from "../../../Shared/Model/Isolat.model";
+import { DBentry, DBkey} from "../../../Shared/Model/Isolat.model";
 import { mockDataURL } from "../../../Shared/URLs";
 import { QueryPageComponent as QPComp } from "./QueryPage.component";
 import { FilterInterface, mainFilterAttributes } from "../../../Shared/Model/Filter.model";
@@ -27,7 +27,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const getData = async (): Promise<void> => {
         const r: Response = await fetch(BASE_URL);
         const dataProp: DBentry[] = await r.json();
-        const keyValueProps = Object.keys(dataProp[0]) as DBtype[]
+        const keyValueProps = Object.keys(dataProp[0]) as DBkey[]
 
         const uniqueValuesObject: FilterInterface = { ...defaultFilter };
 
