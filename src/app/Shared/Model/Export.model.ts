@@ -1,5 +1,5 @@
 import { FilterType } from "./Filter.model";
-import { DBentry, DBtype } from "./Isolat.model";
+import { DBentry, DBkey} from "./Isolat.model";
 
 export interface ExportInterface {
     raw: boolean;
@@ -10,7 +10,7 @@ export interface ExportInterface {
     };
     rawDataSet: {
         rawData: DBentry[];
-        rawKeys: DBtype[];
+        rawKeys: DBkey[];
     };
     statDataSet: {
         statData: Record<string, string>[];

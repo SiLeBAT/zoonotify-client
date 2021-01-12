@@ -4,7 +4,7 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
-import { DBentry, DBtype } from "../../../Shared/Model/Isolat.model";
+import { DBentry, DBkey} from "../../../Shared/Model/Isolat.model";
 import { defaultExport, ExportInterface } from "../../../Shared/Model/Export.model";
 import { HeaderExportButtonComponent as ExportButton } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent as Checkboxes } from "./Export-Checkboxes.component";
@@ -21,7 +21,7 @@ export function HeaderExportComponent(): JSX.Element {
 
     const chooseData = (raw: boolean, stat: boolean): void => {
         const rawData: DBentry[] = raw ? data.ZNDataFiltered : [];
-        const rawKeys: DBtype[] = raw ? data.keyValues : [];
+        const rawKeys: DBkey[] = raw ? data.keyValues : [];
         const statData: Record<string, string>[] = stat
             ? table.statisticData
             : [];

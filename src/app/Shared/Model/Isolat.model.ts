@@ -1,3 +1,3 @@
-export type DBtype = string;
+export type DBkey= string;
 
-export type DBentry = Record<DBtype, string>;
+export type DBentry = Record<DBkey, string>;
