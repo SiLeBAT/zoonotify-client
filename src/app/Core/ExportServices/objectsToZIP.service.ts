@@ -6,7 +6,7 @@ import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 
-interface ObjectToZIPProps {
+interface ObjectToZipProps {
     setting: ExportInterface;
     filter: FilterInterface;
     ZNFilename: string;
@@ -25,7 +25,7 @@ interface ObjectToZIPProps {
  * @param {string[]} subFileNames - names of the two different files (data, statistic)
  * @returns {void} 
  */
-export function objectToZIP(props: ObjectToZIPProps): void {
+export function objectToZip(props: ObjectToZipProps): void {
     const csvRows: string[] = [];
     const csvRowsRAW: string[] = [];
     const csvRowsStat: string[] = [];
