@@ -4,7 +4,7 @@ import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 
-interface ObjectToCSVProps {
+interface ObjectToCsvProps {
     setting: ExportInterface;
     filter: FilterInterface;
     allFilterLabel: string;
@@ -19,7 +19,7 @@ interface ObjectToCSVProps {
  * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters 
  * @returns {string} - converted data as csv string
  */
-export function objectToCSV(props: ObjectToCSVProps): string {
+export function objectToCsv(props: ObjectToCsvProps): string {
     const csvRows: string[] = [];
     csvRows.push(
         generateParameterHeader({
