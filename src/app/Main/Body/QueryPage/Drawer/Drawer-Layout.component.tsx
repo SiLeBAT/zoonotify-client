@@ -7,7 +7,7 @@ import { DrawerFilterComponent as Filter } from "./Filter/Drawer-Filter.componen
 import { DrawerDisplayedFeaturesComponent as DisplFeatures } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
-const deviderStyle = css`
+const dividerStyle = css`
     height: 0.15em;
     background: ${primaryColor};
 `;
@@ -39,7 +39,7 @@ interface DrawerLayoutProps {
 }
 
 /**
- * @desc Resturns the Drawer
+ * @desc Returns the Drawer
  * @param {boolean} isOpen - true if Drawer is open
  * @param {number} newWidth - width of the Drawer (also after resize)
  * @returns {JSX.Element} - Drawer component
@@ -59,7 +59,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         >
             <div className={classes.drawerContainer}>
                 <Filter />
-                <Divider variant="middle" css={deviderStyle} />
+                <Divider variant="middle" css={dividerStyle} />
                 <DisplFeatures />
             </div>
         </Drawer>

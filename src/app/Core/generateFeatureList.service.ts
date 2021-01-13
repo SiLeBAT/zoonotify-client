@@ -6,7 +6,7 @@ import { FilterType } from "../Shared/Model/Filter.model";
  * @param {FilterType} tableValue - string of table values
  * @returns {[boolean, FilterType[]]} - true if no tableValues, List of selected values 
  */
-export function gernerateFeatureList(
+export function generateFeatureList(
     tableValue: FilterType
 ): [boolean, FilterType[]] {
     const noValues: boolean = _.isEmpty(tableValue);

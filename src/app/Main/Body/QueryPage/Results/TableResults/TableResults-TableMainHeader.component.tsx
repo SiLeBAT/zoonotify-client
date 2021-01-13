@@ -47,7 +47,7 @@ interface TableMainHeaderProps {
 }
 
 /**
- * @desc Retruns one main header to wrap the result table
+ * @desc Returns one main header to wrap the result table
  * @param {boolean} isTitle - true if row/column is selected
  * @param {boolean} isRow - true if row is selected
  * @param {number} height - height of the main header

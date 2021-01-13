@@ -10,7 +10,7 @@ import { TableInterface } from "../Shared/Context/TableContext";
  * @desc Generate partial path containing the selected filter
  * @param {string} key - filter attribute
  * @param {string} value - corresponding filter value
- * @returns {string} - partial path one mainfilter
+ * @returns {string} - partial path one main filter
  */
 function setParams(key: string, value: string): string {
     const searchParams = new URLSearchParams();

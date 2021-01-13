@@ -18,7 +18,7 @@ const closeText = keyframes`
     0% {left:0px; top:0px;}
     100%   {color:white; left:0px; top:20px;}
 `;
-const lableStyle = (noSelect: boolean): SerializedStyles => css`
+const labelStyle = (noSelect: boolean): SerializedStyles => css`
     position: relative;
     animation-name: ${noSelect ? closeText : openText};
     animation-duration: 0.25s;
@@ -115,7 +115,7 @@ interface SelectorProps {
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
-    const slectValuesObj: Record<string, string>[] = generateSelectorObject(
+    const selectValuesObj: Record<string, string>[] = generateSelectorObject(
         props.selectValues
     );
     const valueObject: Record<string, string>[] = generateSelectorObject(
@@ -127,7 +127,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
     return (
         <div>
             <InputLabel
-                css={lableStyle(props.isNotSelect)}
+                css={labelStyle(props.isNotSelect)}
                 id={`label${props.label}`}
             >
                 {props.label}
@@ -137,7 +137,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
                 closeMenuOnSelect={false}
                 isMulti={props.isMulti}
                 noOptionsMessage={() => noOptionText}
-                options={slectValuesObj}
+                options={selectValuesObj}
                 placeholder={props.label}
                 onChange={(selectedOption) =>
                     props.handleChange(selectedOption, props.selectAttribute)

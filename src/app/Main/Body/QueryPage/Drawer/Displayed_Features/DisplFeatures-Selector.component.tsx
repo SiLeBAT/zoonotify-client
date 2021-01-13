@@ -7,7 +7,7 @@ import {
     FilterType,
     mainFilterAttributes,
 } from "../../../../../Shared/Model/Filter.model";
-import { gernerateFeatureList } from "../../../../../Core/gernerateFeatureList.service";
+import { generateFeatureList } from "../../../../../Core/generateFeatureList.service";
 
 interface FeatureSelectorProps {
     activeFeature: FilterType;
@@ -23,7 +23,7 @@ interface FeatureSelectorProps {
 /**
  * @desc Selector to select the displayed features in row/column
  * @param {FilterType} activeFeature - feature of the corresponding selector (row/colum)
- * @param {FilterTyoe} otherFeature - feature of the other selector (row/column)
+ * @param {FilterType} otherFeature - feature of the other selector (row/column)
  * @param {string} label - label for the selector in the right language
  * @param {FilterType | TableType} selectedAttribute - "row" or "column"
  * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle the change of the row/colum 
@@ -38,7 +38,7 @@ export function DisplayedFeatureSelectorComponent(
     const [isNotSelect, selectedValues]: [
         boolean,
         FilterType[]
-    ] = gernerateFeatureList(props.activeFeature);
+    ] = generateFeatureList(props.activeFeature);
 
     return (
         <Select

@@ -26,12 +26,12 @@ interface TableResultsProps {
 }
 
 /**
- * @desc Retunrns accordion to display the results in a table
- * @param {{isCol: boolean; isRow: boolean;}} displayRowCol - object with two boolans, true if row/column is selected
+ * @desc Returns accordion to display the results in a table
+ * @param {{isCol: boolean; isRow: boolean;}} displayRowCol - object with two booleans, true if row/column is selected
  * @param {string[]} columnAttributes - attributes of the columns
  * @returns {JSX.Element} - accordion with the result table
  */
-export function ResultsTableRestultsComponent(
+export function ResultsTableResultsComponent(
     props: TableResultsProps
 ): JSX.Element {
     const [windowSize, setWindowSize] = useState({

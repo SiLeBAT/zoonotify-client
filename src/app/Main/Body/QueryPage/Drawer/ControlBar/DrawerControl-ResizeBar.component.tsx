@@ -26,8 +26,8 @@ interface ResizeBarProps {
 }
 
 /**
- * @desc Handles the resize of the Drawer and retrun the resize bar 
- * @param {(newWidth: number) => void} onChange - onChange-function for changeing the size of the Drawer
+ * @desc Handles the resize of the Drawer and return the resize bar 
+ * @param {(newWidth: number) => void} onChange - onChange-function for changing the size of the Drawer
  * @returns {JSX.Element} - resize bar component
  */
 export function DrawerControlResizeBarComponent(props: ResizeBarProps): JSX.Element {

@@ -22,8 +22,8 @@ interface TableContentProps {
 }
 
 /**
- * @desc Desices if row/colum is selected and return result table or explanation text
- * @param {{isCol: boolean;isRow: boolean;}} displayRowCol -  object with two boolans, true if row/column is selected
+ * @desc Decides if row/colum is selected and return result table or explanation text
+ * @param {{isCol: boolean;isRow: boolean;}} displayRowCol -  object with two booleans, true if row/column is selected
  * @param {string[]} columnAttributes - column attributes for the table header
  * @param {(node: HTMLElement | null, key: "height" | "totalWidth" | "partWidth") => void} getSize - callback function to get the size of the header for the main header
  * @returns {JSX.Element} - result table

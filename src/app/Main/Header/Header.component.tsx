@@ -41,7 +41,7 @@ const appNameStyle = css`
         outline: none;
     }
 `;
-const disabledQueryStlye = css`
+const disabledQueryStyle = css`
     margin-right: 8em;
     padding: 0.5em 1em 0.5em 1em;
     font-size: 1rem;
@@ -141,7 +141,7 @@ export function HeaderComponent(props: {
                         css={
                             props.isConnected
                                 ? navLinkStyle(queryOpen)
-                                : disabledQueryStlye
+                                : disabledQueryStyle
                         }
                     >
                         {t("Query")}

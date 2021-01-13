@@ -3,7 +3,7 @@ import { ExportInterface } from "../../Shared/Model/Export.model";
 import { generateCSVString } from "./generateCSVString.service";
 
 /**
- * @desc Resturns the table header and the statistic table as a string to save it as CSV
+ * @desc Returns the table header and the statistic table as a string to save it as CSV
  * @param {{row: FilterType; column: FilterType;}} tableAttributes - selected row and column
  * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
  * @returns {string} - header and statistic table as string

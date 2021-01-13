@@ -7,7 +7,7 @@ import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 import { MainFilterLabelInterface } from "../../../Shared/Model/Export.model";
 import { mainFilterAttributes } from "../../../Shared/Model/Filter.model";
 
-const buttonLableStyle = (open: boolean): SerializedStyles => css`
+const buttonLabelStyle = (open: boolean): SerializedStyles => css`
     display: flex;
     align-items: center;
     &:hover {
@@ -16,9 +16,9 @@ const buttonLableStyle = (open: boolean): SerializedStyles => css`
 `;
 
 /**
- * @desc Resturns all labels for the file export in the rigth language
+ * @desc Returns all labels for the file export in the right language
  * @param {boolean} open - true if export dialog is open
- * @returns {[JSX.Element, string, MainFilterLabelInterface, string]} - list of labels: for the export button, for the file, of the mainfilters, for "all values"
+ * @returns {[JSX.Element, string, MainFilterLabelInterface, string]} - list of labels: for the export button, for the file, of the main filters, for "all values"
  */
 export function ExportGenerateLabelsComponent(
     open: boolean
@@ -26,7 +26,7 @@ export function ExportGenerateLabelsComponent(
     const { t } = useTranslation(["Header", "QueryPage"]);
 
     const buttonLabel = (
-        <div css={buttonLableStyle(open)}>
+        <div css={buttonLabelStyle(open)}>
             <GetAppIcon fontSize="small" />
             {t("Header:Export")}
         </div>

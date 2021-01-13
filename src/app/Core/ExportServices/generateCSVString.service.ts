@@ -1,5 +1,5 @@
 /**
- * @desc escape all quotes and repalces "undefinded" with an empty string
+ * @desc escape all quotes and replaces "undefined" with an empty string
  * @param {string} inputString - string to be modified
  * @returns {string} - modified string
  */
@@ -8,7 +8,7 @@ function stringModification(inputString: string): string {
 }
 
 /**
- * @desc Transform the data to a string for the CSV file. Elements of one row are separeted by comma. 
+ * @desc Transform the data to a string for the CSV file. Elements of one row are separated by comma. 
  * @param {Record<string, string>[]} dataArray - data object to export in a csv file
  * @param {k[]} headers - keys of the data
  * @returns {string} - data in one csv string 

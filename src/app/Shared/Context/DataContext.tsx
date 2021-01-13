@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import { DBentry, DBkey} from "../Model/Isolat.model";
+import { DBentry, DBkey} from "../Model/Isolate.model";
 import { FilterInterface } from "../Model/Filter.model";
 import { defaultFilter } from "./FilterContext";
 

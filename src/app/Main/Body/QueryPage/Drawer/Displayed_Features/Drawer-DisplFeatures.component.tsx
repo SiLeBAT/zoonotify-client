@@ -50,8 +50,8 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     /**
-     * @desc Takes the current values of the selector with the onChange envent handler and sets it as row/column.
-     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the slector
+     * @desc Takes the current values of the selector with the onChange event handler and sets it as row/column.
+     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the selector
      * @param {FilterType | TableType}             keyName              "row" or "column"
      */
     const handleChange = (
