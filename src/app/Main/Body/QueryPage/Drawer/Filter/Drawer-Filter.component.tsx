@@ -41,8 +41,8 @@ export function DrawerFilterComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     /**
-     * @desc takes the current values of the selector with the onChange envent handler and sets it as filter values (in the Context).
-     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the slector
+     * @desc takes the current values of the selector with the onChange event handler and sets it as filter values (in the Context).
+     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the selector
      * @param {FilterType | TableType}             keyName              name of the current main filter attribute
      */
     const handleChange = (

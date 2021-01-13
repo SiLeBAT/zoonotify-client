@@ -19,7 +19,7 @@ const tableStyle = css`
     width: fit-content;
     min-width: 20em;
 `;
-const tabelCellStyle = (
+const tableCellStyle = (
     isRow: boolean,
     isRowAndCol: boolean
 ): SerializedStyles => css`
@@ -76,7 +76,7 @@ export function TableContentTableComponent(
                             getSize: props.getSize,
                             isRowNotCol: props.isRowNotCol,
                             isRowAndCol: props.isRowAndCol,
-                            style: tabelCellStyle,
+                            style: tableCellStyle,
                         })}
                     </TableRow>
                 </TableHead>
@@ -91,7 +91,7 @@ export function TableContentTableComponent(
                                 row,
                                 classes,
                                 isRowAndCol: props.isRowAndCol,
-                                style: tabelCellStyle,
+                                style: tableCellStyle,
                             })}
                         </TableRow>
                     ))}

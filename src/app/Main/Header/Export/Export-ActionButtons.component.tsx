@@ -42,7 +42,7 @@ interface ExportActionButtonProps {
  * @param {string} ZNFilename - main filename 
  * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters 
  * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @returns {JSX.Element} - action buttons componenet
+ * @returns {JSX.Element} - action buttons component
  */
 export function ExportActionButtonsComponent(
     props: ExportActionButtonProps

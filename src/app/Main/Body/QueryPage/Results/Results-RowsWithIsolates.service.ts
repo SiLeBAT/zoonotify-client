@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { FilterType } from "../../../../Shared/Model/Filter.model";
-import { DBentry } from "../../../../Shared/Model/Isolat.model";
+import { DBentry } from "../../../../Shared/Model/Isolate.model";
 
 const selectFilterObject = (
     colAttribute: FilterType,
@@ -34,12 +34,12 @@ const countIsolates = (
 
 /**
  * @desc Generates a list of objects with an object for each row, with the name of the row and the counted isolates for the corresponding values in the column.
- * @param {DBentry[]} data - a list of DBentries like database.
+ * @param {DBentry[]} data - a list of DB entries like database.
  * @param {FilterType} colAttribute - selected attribute for the column.
  * @param {FilterType} rowAttribute - selected attribute for the row.
  * @param {string[]} colValues - unique values or the selected filter values of the selected column-attribute
  * @param {string[]} rowValues - unique values or the selected filter values of the selected row-attribute
- * @param {"both" | "row" | "col"} check - decide if only an attriute for the row or column is set, or both
+ * @param {"both" | "row" | "col"} check - decide if only an attribute for the row or column is set, or both
  * @returns {Record<string, string>[]} - one object for each row inside a list
  */
 export function generateRowsWithIsolates(

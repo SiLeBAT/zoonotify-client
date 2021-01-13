@@ -4,7 +4,7 @@ import {
     FilterType,
     mainFilterAttributes,
 } from "../../Shared/Model/Filter.model";
-import { DBentry } from "../../Shared/Model/Isolat.model";
+import { DBentry } from "../../Shared/Model/Isolate.model";
 
 /**
  * @desc Filter the dataset with the selected filters

@@ -22,10 +22,10 @@ interface AccordionProps {
 }
 
 /**
- * @desc Returns an accrordion wrapper
+ * @desc Returns an accordion wrapper
  * @param {string} title - title of the accordion
  * @param {JSX.Element} content - content of the accordion
- * @returns {JSX.Element} - accorion with title and content
+ * @returns {JSX.Element} - accordion with title and content
  */
 export function AccordionComponent(props: AccordionProps): JSX.Element {
     return (

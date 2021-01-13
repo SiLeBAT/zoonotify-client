@@ -4,7 +4,7 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
-import { DBentry, DBkey} from "../../../Shared/Model/Isolat.model";
+import { DBentry, DBkey} from "../../../Shared/Model/Isolate.model";
 import { defaultExport, ExportInterface } from "../../../Shared/Model/Export.model";
 import { HeaderExportButtonComponent as ExportButton } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent as Checkboxes } from "./Export-Checkboxes.component";

@@ -35,7 +35,7 @@ interface TableHeaderProps {
 
 /**
  * @desc Returns list of table cells for the table header
- * @param {string[]} headerValues - object with two boolans, true if row/column is selected
+ * @param {string[]} headerValues - object with two booleans, true if row/column is selected
  * @param {(node: HTMLElement | null, key: "height" | "totalWidth" | "partWidth") => void} getSize - callback function to get the size of the header for the position of the main header
  * @param {boolean} isRowNotCol - true if row and no column is selected
  * @param {boolean} isRowAndCol - true if row and column is selected
