@@ -4,7 +4,7 @@ import { List, ListSubheader } from "@material-ui/core";
 import links from "../../../../assets/external_links.json";
 import { LinkListContentComponent as LinkListContent} from "./LinkList-ListContent.component";
 
-export function LinkPageListComponent(): JSX.Element[] {
+export function LinkPageLinkListComponent(): JSX.Element[] {
     const { t } = useTranslation(["ExternLinks"]);
     const linkJson = links;
     const elements: JSX.Element[] = [];
