@@ -6,7 +6,7 @@ import { IconButton } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { useTranslation } from "react-i18next";
-import { DrawerControlResizeBarComponent as ResizeBar } from "./DrawerControl-ResizeBar.component";
+import { DrawerControlResizeBarComponent } from "./DrawerControl-ResizeBar.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -119,7 +119,7 @@ export function QueryPageDrawerControlComponent(props: DrawerControlProps): JSX.
                           `
                 }
             >
-                <ResizeBar onChange={props.handleResize} />
+                <DrawerControlResizeBarComponent onChange={props.handleResize} />
             </div>
             <IconButton css={iconButtonStyle} onClick={props.handleDrawer}>
                 {props.isOpen ? (

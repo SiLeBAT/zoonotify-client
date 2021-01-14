@@ -2,9 +2,9 @@
 import { css, jsx } from "@emotion/core";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TabelResultTableContentComponent as TableContent } from "./TableResult-TableContent.component";
-import { TableResultsTableMainHeaderComponent as TableMainHeader } from "./TableResults-TableMainHeader.component";
-import { AccordionComponent as Accordion } from "../../../../../Shared/Accordion.component";
+import { TableResultsTableContentComponent } from "./TableResults-TableContent.component";
+import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
+import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
 
 const dataStyle = css`
@@ -85,11 +85,11 @@ export function ResultsTableResultsComponent(
     const colMainHeader: string = t(`Filters.${table.column}`);
 
     return (
-        <Accordion
+        <AccordionComponent
             title={accordionHeader}
             content={
                 <div css={dataStyle}>
-                    <TableMainHeader
+                    <TableResultsTableMainHeaderComponent
                         isTitle={props.displayRowCol.isCol}
                         isRow={false}
                         height={tableHeight}
@@ -97,14 +97,14 @@ export function ResultsTableResultsComponent(
                         text={colMainHeader}
                     />
                     <div css={tableDivStyle}>
-                        <TableMainHeader
+                        <TableResultsTableMainHeaderComponent
                             isTitle={props.displayRowCol.isRow}
                             isRow
                             height={tableHeight}
                             width={headerWidth}
                             text={rowMainHeader}
                         />
-                        <TableContent
+                        <TableResultsTableContentComponent
                             displayRowCol={props.displayRowCol}
                             columnAttributes={props.columnAttributes}
                             getSize={div}

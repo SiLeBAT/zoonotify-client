@@ -4,7 +4,7 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { DBentry, DBkey} from "../../../Shared/Model/Isolate.model";
 import { mockDataURL } from "../../../Shared/URLs";
-import { QueryPageComponent as QPComp } from "./QueryPage.component";
+import { QueryPageComponent } from "./QueryPage.component";
 import { FilterInterface, mainFilterAttributes } from "../../../Shared/Model/Filter.model";
 import {
     defaultFilter,
@@ -67,7 +67,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     let returnValue = <p> Loading data ... </p>;
     if (_.isEmpty(data.ZNData) === false) {
-        returnValue = <QPComp />;
+        returnValue = <QueryPageComponent />;
     }
 
     return returnValue;

@@ -1,5 +1,5 @@
 import { ValueType } from "react-select";
-import { SelectorListSelectorComponent as Selector} from "./SelectorList-Selector.component";
+import { SelectorListSelectorComponent } from "./SelectorList-Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
     FilterType,
@@ -20,7 +20,7 @@ export function FilterSelectorListComponent(
     const elements: JSX.Element[] = [];
     for (let i = 0; i < totalNumberOfFilters; i += 1) {
         elements.push(
-            Selector({
+            SelectorListSelectorComponent({
                 index: i,
                 handleChange,
             })

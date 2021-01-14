@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { QueryPageContainerComponent as QueryPage } from "./QueryPage/QueryPage-Container.component";
-import { HomePageLayoutComponent as HomePage } from "./HomePage/HomePage-Layout.component";
-import { LinkPageComponent as LinkPage } from "./LinkPage/LinkPage.component";
-import { InfoPageComponent as InfoPage } from "./InfoPage/InfoPage.component";
-import { DataProtectionPageComponent as DataProtection } from "./DataProtectionPage/DataProtectionPage.component";
+import { QueryPageContainerComponent } from "./QueryPage/QueryPage-Container.component";
+import { HomePageLayoutComponent } from "./HomePage/HomePage-Layout.component";
+import { LinkPageComponent } from "./LinkPage/LinkPage.component";
+import { InfoPageComponent } from "./InfoPage/InfoPage.component";
+import { DataProtectionPageComponent } from "./DataProtectionPage/DataProtectionPage.component";
 import { ZNPaths } from "../../Shared/URLs";
 
 const PageNotFound = (): JSX.Element => (
@@ -16,11 +16,11 @@ const PageNotFound = (): JSX.Element => (
 export function BodyRouterComponent(): JSX.Element {
     return (
         <Switch>
-            <Route exact path={ZNPaths.homePagePath} component={HomePage} />
-            <Route path={ZNPaths.infoPagePath} component={InfoPage} />
-            <Route path={ZNPaths.queryPagePath} component={QueryPage} />
-            <Route path={ZNPaths.linkPagePath} component={LinkPage} />
-            <Route path={ZNPaths.dpdPagePath} component={DataProtection} />
+            <Route exact path={ZNPaths.homePagePath} component={HomePageLayoutComponent} />
+            <Route path={ZNPaths.infoPagePath} component={InfoPageComponent} />
+            <Route path={ZNPaths.queryPagePath} component={QueryPageContainerComponent} />
+            <Route path={ZNPaths.linkPagePath} component={LinkPageComponent} />
+            <Route path={ZNPaths.dpdPagePath} component={DataProtectionPageComponent} />
             <Route component={PageNotFound} />
         </Switch>
     );

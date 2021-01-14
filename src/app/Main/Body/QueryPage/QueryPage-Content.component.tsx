@@ -2,10 +2,10 @@
 import { css, jsx } from "@emotion/core";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ContentResultsComponent as Results } from "./Results/Content-Results.component";
-import { QueryPageIntroTextComponent as IntroText } from "./IntroText/QueryPage-IntroText.component";
-import { QueryPageParameterContentComponent as ParameterContent } from "./Parameter/QueryPage-ParameterContent.component";
-import { QueryPageNrOfIsolatesComponent as NrOfIsolates } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
+import { ContentResultsComponent } from "./Results/Content-Results.component";
+import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.component";
+import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
+import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { mainFilterAttributes } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
@@ -69,10 +69,10 @@ export function QueryPageContentComponent(): JSX.Element {
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
             <p css={statusStyle}>{t("Content.DataStatus")}</p>
             <div css={contentBoxStyle}>
-                {isFilter || isTable ? <ParameterContent /> : <IntroText />}
-                <NrOfIsolates />
+                {isFilter || isTable ? <QueryPageParameterContentComponent /> : <QueryPageIntroTextComponent />}
+                <QueryPageNrOfIsolatesComponent />
             </div>
-            <Results />
+            <ContentResultsComponent />
         </div>
     );
 }

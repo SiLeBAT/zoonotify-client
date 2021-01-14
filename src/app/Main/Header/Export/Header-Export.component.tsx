@@ -6,11 +6,11 @@ import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
 import { DBentry, DBkey} from "../../../Shared/Model/Isolate.model";
 import { defaultExport, ExportInterface } from "../../../Shared/Model/Export.model";
-import { HeaderExportButtonComponent as ExportButton } from "./Header-ExportButton.component";
-import { ExportCheckboxesComponent as Checkboxes } from "./Export-Checkboxes.component";
-import { ExportTextContentComponent as TextContent } from "./Export-TextContent.component";
-import { ExportActionButtonsComponent as ActionButtons } from "./Export-ActionButtons.component";
-import { ExportGenerateLabelsComponent as generateExportLabels } from "./Export-GenerateLabels.component";
+import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
+import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
+import { ExportTextContentComponent } from "./Export-TextContent.component";
+import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
+import { ExportGenerateLabelsComponent } from "./Export-GenerateLabels.component";
 
 export function HeaderExportComponent(): JSX.Element {
     const [open, setOpen] = useState(false);
@@ -68,11 +68,11 @@ export function HeaderExportComponent(): JSX.Element {
         ZNFilename,
         mainFilterLabels,
         allFilterLabel,
-    ] = generateExportLabels(open);
+    ] = ExportGenerateLabelsComponent(open);
 
     return (
         <div>
-            <ExportButton
+            <HeaderExportButtonComponent
                 onClick={handleClickOpen}
                 buttonLabel={buttonLabel}
             />
@@ -81,13 +81,13 @@ export function HeaderExportComponent(): JSX.Element {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <TextContent />
-                <Checkboxes
+                <ExportTextContentComponent />
+                <ExportCheckboxesComponent
                     onChange={handleChange}
                     raw={setting.raw}
                     stat={setting.stat}
                 />
-                <ActionButtons
+                <ExportActionButtonsComponent
                     onClick={handleClose}
                     setting={setting}
                     filter={filter}

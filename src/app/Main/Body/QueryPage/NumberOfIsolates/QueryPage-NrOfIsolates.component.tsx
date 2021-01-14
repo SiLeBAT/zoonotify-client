@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
 import { DataContext } from "../../../../Shared/Context/DataContext";
-import { AccordionComponent as Accordion } from "../../../../Shared/Accordion.component";
+import { AccordionComponent } from "../../../../Shared/Accordion.component";
 
 const tableStyle = css`
     table-layout: auto;
@@ -24,7 +24,7 @@ export function QueryPageNrOfIsolatesComponent(): JSX.Element {
     const nrOfSelectedIsolates = data.ZNDataFiltered.length;
 
     return (
-        <Accordion
+        <AccordionComponent
             title={t("NrOfIsolates.Title")}
             content={
                 <table css={tableStyle}>

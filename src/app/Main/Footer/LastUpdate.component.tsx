@@ -6,8 +6,8 @@ import {
     primaryColor,
 } from "../../Shared/Style/Style-MainTheme.component";
 import { environment } from "../../../environment";
-import { LastUpdateDateComponent as LastUpdateDate } from "./LastUpdate-Date.component";
-import { LastUpdateVersionComponent as LastUpdateVersion } from "./LastUpdate-Version.component";
+import { LastUpdateDateComponent } from "./LastUpdate-Date.component";
+import { LastUpdateVersionComponent } from "./LastUpdate-Version.component";
 
 const HtmlTooltip = withStyles(() => ({
     tooltip: {
@@ -32,14 +32,14 @@ export function LastUpdateComponent(): JSX.Element {
             title={
                 <>
                     <List dense>
-                        <LastUpdateVersion text={`server version@${version}`} />
-                        <LastUpdateVersion text={`client version@${version}`} />
+                        <LastUpdateVersionComponent text={`server version@${version}`} />
+                        <LastUpdateVersionComponent text={`client version@${version}`} />
                     </List>
                 </>
             }
         >
             <span>
-                <LastUpdateDate />
+                <LastUpdateDateComponent />
             </span>
         </HtmlTooltip>
     );

@@ -8,7 +8,7 @@ import { DBentry } from "../../../../Shared/Model/Isolate.model";
 import { filterData } from "../../../../Core/FilterServices/filterData.service";
 import { getValuesOfOneFilterAttribute } from "../../../../Core/FilterServices/getValuesOfOneFilterAttribute.service";
 import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilterIsSet.service";
-import { ResultsTableResultsComponent as TableResults } from "./TableResults/Results-TableResults.component";
+import { ResultsTableResultsComponent } from "./TableResults/Results-TableResults.component";
 import { generateRowsWithIsolates } from "./Results-RowsWithIsolates.service";
 
 export function ContentResultsComponent(): JSX.Element {
@@ -126,7 +126,7 @@ export function ContentResultsComponent(): JSX.Element {
     }, [filter, table.column, table.row, localStorage.getItem("i18nextLng")]);
 
     return (
-        <TableResults
+        <ResultsTableResultsComponent
             displayRowCol={state}
             columnAttributes={columnAttributes}
         />

@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
-import { LinkPageLinkListComponent as LinkList} from "./LinkPage-LinkList.component";
+import { LinkPageLinkListComponent } from "./LinkPage-LinkList.component";
 
 const appNameStyle = css`
     margin-bottom: 1rem;
@@ -37,7 +37,7 @@ export function LinkPageComponent(): JSX.Element {
                 <Typography css={normalTextStyle}>
                     {t("TextContent.Text")}
                 </Typography>
-                {LinkList()}
+                {LinkPageLinkListComponent()}
             </CardContent>
         </Card>
     );
