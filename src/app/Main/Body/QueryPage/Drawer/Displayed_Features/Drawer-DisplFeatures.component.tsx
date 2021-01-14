@@ -10,8 +10,8 @@ import {
     TableContext,
     TableType,
 } from "../../../../../Shared/Context/TableContext";
-import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
-import { DisplayedFeatureSelectorComponent as DisplFeatureSelector } from "./DisplFeatures-Selector.component";
+import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
+import { DisplayedFeatureSelectorComponent } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
 
 const drawerWidthStyle = css`
@@ -88,12 +88,12 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                 <p css={featureSubHeaderStyle}>
                     {t("Drawer.Subtitles.Graph")}
                 </p>
-                <ClearSelectorButton
+                <ClearSelectorComponent
                     isFilter={false}
                     isTable
                 />
             </div>
-            <DisplFeatureSelector
+            <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Row")}
                 activeFeature={table.row}
                 otherFeature={table.column}
@@ -105,7 +105,7 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>
-            <DisplFeatureSelector
+            <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Column")}
                 activeFeature={table.column}
                 otherFeature={table.row}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ListContentListItemComponent as ListItem} from "./ListContent-ListItem.component";
+import { ListContentListItemComponent} from "./ListContent-ListItem.component";
 
 /**
  * @desc Returns ListItems for each link
@@ -16,7 +16,7 @@ export function LinkListContentComponent(
     const elements: JSX.Element[] = [];
     linkList.forEach((linkObject) => {
         elements.push(
-            <ListItem
+            <ListContentListItemComponent
                 link={linkObject.Link}
                 text={t(`${category}.${linkObject.Text}`)}
             />

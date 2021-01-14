@@ -3,8 +3,8 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { HeaderExportComponent as Export } from "./Export/Header-Export.component";
-import { TranslationButtonsComponent as TranslationButtons } from "./TranslationButtons.component";
+import { HeaderExportComponent } from "./Export/Header-Export.component";
+import { TranslationButtonsComponent } from "./TranslationButtons.component";
 import {
     primaryColor,
     onPrimaryColor,
@@ -126,7 +126,7 @@ export function HeaderComponent(props: {
                     <NavLink to={ZNPaths.homePagePath} css={appNameStyle}>
                         ZooNotify
                     </NavLink>
-                    <TranslationButtons />
+                    <TranslationButtonsComponent />
                 </div>
                 <div css={rightHeaderStyle}>
                     <NavLink
@@ -156,7 +156,7 @@ export function HeaderComponent(props: {
             </div>
 
             <div css={subheaderStyle(queryOpen)}>
-                <Export />
+                <HeaderExportComponent />
             </div>
         </header>
     );

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Card, CardMedia, makeStyles } from "@material-ui/core";
-import { HomePageTextContentComponent as TextContent } from "./HomePage-TextContent.component";
+import { HomePageTextContentComponent } from "./HomePage-TextContent.component";
 
 const logoStyle = css`
     height: auto;
@@ -19,7 +19,7 @@ export function HomePageLayoutComponent(): JSX.Element {
     const classes = useStyles();
     return (
         <Card className={classes.root}>
-            <TextContent />
+            <HomePageTextContentComponent />
             <CardMedia
                 component="img"
                 alt="Contemplative Reptile"

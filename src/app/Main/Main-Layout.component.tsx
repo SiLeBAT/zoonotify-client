@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { BrowserRouter } from "react-router-dom";
-import { HeaderComponent as Header } from "./Header/Header.component";
-import { BodyRouterComponent as Body } from "./Body/Body-Router.component";
-import { FooterLayoutComponent as Footer } from "./Footer/Footer-Layout.component";
+import { HeaderComponent } from "./Header/Header.component";
+import { BodyRouterComponent } from "./Body/Body-Router.component";
+import { FooterLayoutComponent } from "./Footer/Footer-Layout.component";
 
 const wrapperStyle = css`
     height: 100%;
@@ -48,14 +48,14 @@ export function MainLayoutComponent(props: {
         <div css={wrapperStyle}>
             <BrowserRouter>
                 <div css={headerStyle}>
-                    <Header isConnected={props.isConnected} />
+                    <HeaderComponent isConnected={props.isConnected} />
                 </div>
                 <div css={contentWrapperStyle}>
                     <div css={bodyStyle}>
-                        <Body />
+                        <BodyRouterComponent />
                     </div>
                     <div css={footerStyle}>
-                        <Footer />
+                        <FooterLayoutComponent />
                     </div>
                 </div>
             </BrowserRouter>

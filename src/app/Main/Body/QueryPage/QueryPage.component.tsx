@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useState } from "react";
-import { DrawerLayoutComponent as DrawerMenu } from "./Drawer/Drawer-Layout.component";
-import { QueryPageDrawerControlComponent as DrawerControl} from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
-import { QueryPageContentComponent as QueryPageContent} from "./QueryPage-Content.component";
+import { DrawerLayoutComponent } from "./Drawer/Drawer-Layout.component";
+import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
+import { QueryPageContentComponent } from "./QueryPage-Content.component";
 
 const mainStyle = css`
     height: 100%;
@@ -30,9 +30,9 @@ export function QueryPageComponent(): JSX.Element {
 
     return (
         <main css={mainStyle}>
-            <DrawerMenu isOpen={open} newWidth={drawerWidth}/>
-            <DrawerControl isOpen={open} newWidth={drawerWidth} handleDrawer={handleDrawer} handleResize={handleResize}/>
-            <QueryPageContent />
+            <DrawerLayoutComponent isOpen={open} newWidth={drawerWidth}/>
+            <QueryPageDrawerControlComponent isOpen={open} newWidth={drawerWidth} handleDrawer={handleDrawer} handleResize={handleResize}/>
+            <QueryPageContentComponent />
         </main>
     );
 }

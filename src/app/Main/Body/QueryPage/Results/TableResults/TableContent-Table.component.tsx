@@ -9,8 +9,8 @@ import {
     Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { TableContentRowsComponent as TableRows } from "./TableContent-Rows.component";
-import { TableContentHeaderComponent as TableHeader } from "./TableContent-Header.component";
+import { TableContentRowsComponent } from "./TableContent-Rows.component";
+import { TableContentHeaderComponent } from "./TableContent-Header.component";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const tableStyle = css`
@@ -71,7 +71,7 @@ export function TableContentTableComponent(
             <Table stickyHeader aria-label="simple table" css={tableStyle}>
                 <TableHead>
                     <TableRow>
-                        {TableHeader({
+                        {TableContentHeaderComponent({
                             headerValues: props.columnAttributes,
                             getSize: props.getSize,
                             isRowNotCol: props.isRowNotCol,
@@ -87,7 +87,7 @@ export function TableContentTableComponent(
                 >
                     {props.allIsolates.map((row) => (
                         <TableRow key={`row-${row.name}`}>
-                            {TableRows({
+                            {TableContentRowsComponent({
                                 row,
                                 classes,
                                 isRowAndCol: props.isRowAndCol,

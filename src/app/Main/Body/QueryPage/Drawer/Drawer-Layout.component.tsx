@@ -3,8 +3,8 @@ import { css, jsx } from "@emotion/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
-import { DrawerFilterComponent as Filter } from "./Filter/Drawer-Filter.component";
-import { DrawerDisplayedFeaturesComponent as DisplFeatures } from "./Displayed_Features/Drawer-DisplFeatures.component";
+import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
+import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const dividerStyle = css`
@@ -58,9 +58,9 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
             }}
         >
             <div className={classes.drawerContainer}>
-                <Filter />
+                <DrawerFilterComponent />
                 <Divider variant="middle" css={dividerStyle} />
-                <DisplFeatures />
+                <DrawerDisplayedFeaturesComponent />
             </div>
         </Drawer>
     );

@@ -3,8 +3,8 @@ import { css, jsx } from "@emotion/core";
 import { ValueType } from "react-select";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { FilterSelectorListComponent as FilterSelectorList } from "./Filter-SelectorList.component";
-import { ClearSelectorComponent as ClearSelectorButton } from "../../../../../Shared/ClearSelectorButton.component";
+import { FilterSelectorListComponent } from "./Filter-SelectorList.component";
+import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
@@ -75,12 +75,12 @@ export function DrawerFilterComponent(): JSX.Element {
                 <p css={filterSubheadingStyle}>
                     {t("Drawer.Subtitles.Filter")}
                 </p>
-                <ClearSelectorButton
+                <ClearSelectorComponent
                     isFilter
                     isTable={false}
                 />
             </div>
-            {FilterSelectorList(handleChange)}
+            {FilterSelectorListComponent(handleChange)}
         </div>
     );
 }

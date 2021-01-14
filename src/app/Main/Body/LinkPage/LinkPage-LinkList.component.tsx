@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { List, ListSubheader } from "@material-ui/core";
 import links from "../../../../assets/external_links.json";
-import { LinkListContentComponent as LinkListContent} from "./LinkList-ListContent.component";
+import { LinkListContentComponent } from "./LinkList-ListContent.component";
 
 export function LinkPageLinkListComponent(): JSX.Element[] {
     const { t } = useTranslation(["ExternLinks"]);
@@ -18,7 +18,7 @@ export function LinkPageLinkListComponent(): JSX.Element[] {
                 }
                 dense
             >
-                {LinkListContent(category.Title, category.Links)}
+                {LinkListContentComponent(category.Title, category.Links)}
             </List>
         );
     });

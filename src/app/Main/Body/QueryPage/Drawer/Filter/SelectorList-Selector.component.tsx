@@ -9,7 +9,7 @@ import {
     mainFilterAttributes,
 } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
-import { SelectorComponent as Selector } from "../../../../../Shared/Selector.component";
+import { SelectorComponent } from "../../../../../Shared/Selector.component";
 
 interface SelectorProps {
     index: number;
@@ -37,7 +37,7 @@ export function SelectorListSelectorComponent(props: SelectorProps): JSX.Element
     const allFilterValues: string[] = data.uniqueValues[filterAttribute];
     const noFilter: boolean = CheckIfSingleFilterIsSet(filter, filterAttribute);
     return (
-        <Selector
+        <SelectorComponent
             key={`filter-selector-${filterAttribute}`}
             label={t(`Filters.${filterAttribute}`)}
             selectAttribute={filterAttribute}

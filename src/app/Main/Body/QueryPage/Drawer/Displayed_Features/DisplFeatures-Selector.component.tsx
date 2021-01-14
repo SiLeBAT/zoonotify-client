@@ -1,7 +1,7 @@
 import React from "react";
 import { ValueType } from "react-select";
 import _ from "lodash";
-import { SelectorComponent as Select } from "../../../../../Shared/Selector.component";
+import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
     FilterType,
@@ -41,7 +41,7 @@ export function DisplayedFeatureSelectorComponent(
     ] = generateFeatureList(props.activeFeature);
 
     return (
-        <Select
+        <SelectorComponent
             label={props.label}
             selectAttribute={props.selectAttribute}
             selectValues={offeredAttributes}
