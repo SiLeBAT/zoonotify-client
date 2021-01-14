@@ -4,7 +4,7 @@ import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 
-interface ObjectToCsvProps {
+interface ObjectToCsvParameter {
     setting: ExportInterface;
     filter: FilterInterface;
     allFilterLabel: string;
@@ -19,27 +19,27 @@ interface ObjectToCsvProps {
  * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters 
  * @returns {string} - converted data as csv string
  */
-export function objectToCsv(props: ObjectToCsvProps): string {
+export function objectToCsv(csvParameter: ObjectToCsvParameter): string {
     const csvRows: string[] = [];
     csvRows.push(
-        generateParameterHeader({
-            filter: props.filter,
-            allFilterLabel: props.allFilterLabel,
-            mainFilterLabels: props.mainFilterLabels,
-        })
+        generateParameterHeader(
+            csvParameter.filter,
+            csvParameter.allFilterLabel,
+            csvParameter.mainFilterLabels,
+        )
     );
 
-    if (props.setting.raw && !props.setting.stat) {
+    if (csvParameter.setting.raw && !csvParameter.setting.stat) {
         csvRows.push(
             RAWDataStringGenerator(
-                props.setting.rawDataSet.rawKeys,
-                props.setting.rawDataSet.rawData
+                csvParameter.setting.rawDataSet.rawKeys,
+                csvParameter.setting.rawDataSet.rawData
             )
         );
     }
 
-    if (props.setting.stat && !props.setting.raw) {
-        csvRows.push(generateStatDataString(props.setting));
+    if (csvParameter.setting.stat && !csvParameter.setting.raw) {
+        csvRows.push(generateStatDataString(csvParameter.setting));
     }
 
     return csvRows.join("\n");
