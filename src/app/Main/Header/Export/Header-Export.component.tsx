@@ -10,7 +10,8 @@ import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
-import { ExportGenerateLabelsComponent } from "./Export-GenerateLabels.component";
+import { ExportLabels, generateExportLabels } from "../../../Core/ExportServices/generateExportLabels.service";
+import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
 
 export function HeaderExportComponent(): JSX.Element {
     const [open, setOpen] = useState(false);
@@ -63,12 +64,9 @@ export function HeaderExportComponent(): JSX.Element {
         setSetting({ ...setting, [event.target.name]: event.target.checked });
     };
 
-    const [
-        buttonLabel,
-        ZNFilename,
-        mainFilterLabels,
-        allFilterLabel,
-    ] = ExportGenerateLabelsComponent(open);
+    const buttonLabel: JSX.Element = ExportButtonLabelComponent(open)
+
+    const exportLabels: ExportLabels = generateExportLabels();
 
     return (
         <div>
@@ -92,9 +90,9 @@ export function HeaderExportComponent(): JSX.Element {
                     setting={setting}
                     filter={filter}
                     buttonLabel={buttonLabel}
-                    ZNFilename={ZNFilename}
-                    mainFilterLabels={mainFilterLabels}
-                    allFilterLabel={allFilterLabel}
+                    ZNFilename={exportLabels.ZNFilename}
+                    mainFilterLabels={exportLabels.mainFilterLabels}
+                    allFilterLabel={exportLabels.allFilterLabel}
                 />
             </Dialog>
         </div>
