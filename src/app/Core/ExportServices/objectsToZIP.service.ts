@@ -6,7 +6,7 @@ import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 
-interface ObjectToZipProps {
+interface ObjectToZipParameter {
     setting: ExportInterface;
     filter: FilterInterface;
     ZNFilename: string;
@@ -14,6 +14,8 @@ interface ObjectToZipProps {
     mainFilterLabels: MainFilterLabelInterface;
     subFileNames: string[];
 }
+
+// TODO
 
 /**
  * @desc Convert the data table and the statistic table to one ZIP folder
@@ -25,42 +27,42 @@ interface ObjectToZipProps {
  * @param {string[]} subFileNames - names of the two different files (data, statistic)
  * @returns {void} 
  */
-export function objectToZip(props: ObjectToZipProps): void {
+export function objectToZip(zipParameter: ObjectToZipParameter): void {
     const csvRows: string[] = [];
     const csvRowsRAW: string[] = [];
     const csvRowsStat: string[] = [];
 
     csvRowsRAW.push(
-        generateParameterHeader({
-            filter: props.filter,
-            allFilterLabel: props.allFilterLabel,
-            mainFilterLabels: props.mainFilterLabels,
-        })
+        generateParameterHeader(
+            zipParameter.filter,
+            zipParameter.allFilterLabel,
+            zipParameter.mainFilterLabels,
+        )
     );
-    csvRowsRAW.push(generateStatDataString(props.setting));
+    csvRowsRAW.push(generateStatDataString(zipParameter.setting));
     csvRows.push(csvRowsRAW.join("\n"));
 
     csvRowsStat.push(
-        generateParameterHeader({
-            filter: props.filter,
-            allFilterLabel: props.allFilterLabel,
-            mainFilterLabels: props.mainFilterLabels,
-        })
+        generateParameterHeader(
+            zipParameter.filter,
+            zipParameter.allFilterLabel,
+            zipParameter.mainFilterLabels,
+        )
     );
     csvRowsStat.push(
         RAWDataStringGenerator(
-            props.setting.rawDataSet.rawKeys,
-            props.setting.rawDataSet.rawData
+            zipParameter.setting.rawDataSet.rawKeys,
+            zipParameter.setting.rawDataSet.rawData
         )
     );
     csvRows.push(csvRowsStat.join("\n"));
 
     const zip = new JSZip();
     csvRows.forEach((CSV, i): void => {
-        zip.file(`${props.subFileNames[i]}_${props.ZNFilename}`, CSV);
+        zip.file(`${zipParameter.subFileNames[i]}_${zipParameter.ZNFilename}`, CSV);
     });
 
-    const folderName: string = props.ZNFilename.replace(".csv", ".zip");
+    const folderName: string = zipParameter.ZNFilename.replace(".csv", ".zip");
 
     zip.generateAsync({ type: "blob", comment: folderName })
         .then((content) => {

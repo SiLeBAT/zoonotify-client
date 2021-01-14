@@ -8,22 +8,22 @@ import { generateCSVString } from "./generateCSVString.service";
  * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
  * @returns {string} - header and statistic table as string
  */
-export function generateStatDataString(props: ExportInterface): string {
+export function generateStatDataString(exportParameter: ExportInterface): string {
     const StatDataString: string[] = [];
-    if (!_.isEmpty(props.tableAttributes.column)) {
-        StatDataString.push(`,${props.tableAttributes.column}`);
+    if (!_.isEmpty(exportParameter.tableAttributes.column)) {
+        StatDataString.push(`,${exportParameter.tableAttributes.column}`);
     }
-    const headers: string[] = props.statDataSet.statKeys;
-    if (!_.isEmpty(props.tableAttributes.row)) {
+    const headers: string[] = exportParameter.statDataSet.statKeys;
+    if (!_.isEmpty(exportParameter.tableAttributes.row)) {
         const headerToPrint: string[] = [...headers];
-        headerToPrint[0] = props.tableAttributes.row;
+        headerToPrint[0] = exportParameter.tableAttributes.row;
         StatDataString.push(headerToPrint.join(","));
     } else {
         StatDataString.push(headers.join(","));
     }
 
     StatDataString.push(
-        generateCSVString(props.statDataSet.statData, headers)
+        generateCSVString(exportParameter.statDataSet.statData, headers)
     );
 
     return StatDataString.join("\n");
