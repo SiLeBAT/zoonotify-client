@@ -7,7 +7,6 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Model/Filter.model";
 import { defaultFilter, FilterContext } from "./Context/FilterContext";
 import {
-    backgroundColor,
     onBackgroundColor,
     primaryColor,
 } from "./Style/Style-MainTheme.component";
@@ -27,7 +26,7 @@ const iconButtonStyle = css`
 
 const LightTooltip = withStyles(() => ({
     tooltip: {
-        backgroundColor,
+        backgroundColor: "transparent",
         color: onBackgroundColor,
         fontSize: "9px",
         margin: "0.2em",
