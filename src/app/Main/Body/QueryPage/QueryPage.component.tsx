@@ -30,8 +30,13 @@ export function QueryPageComponent(): JSX.Element {
 
     return (
         <main css={mainStyle}>
-            <DrawerLayoutComponent isOpen={open} newWidth={drawerWidth}/>
-            <QueryPageDrawerControlComponent isOpen={open} newWidth={drawerWidth} handleDrawer={handleDrawer} handleResize={handleResize}/>
+            <DrawerLayoutComponent isOpen={open} newWidth={drawerWidth} />
+            <QueryPageDrawerControlComponent
+                isOpen={open}
+                newWidth={drawerWidth}
+                handleDrawer={handleDrawer}
+                handleResize={handleResize}
+            />
             <QueryPageContentComponent />
         </main>
     );

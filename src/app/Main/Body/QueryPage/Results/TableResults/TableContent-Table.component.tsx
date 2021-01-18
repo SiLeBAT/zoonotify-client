@@ -61,9 +61,7 @@ interface TableProps {
  * @param {boolean} isRowAndCol - true if row and column is selected
  * @returns {JSX.Element} - table container component
  */
-export function TableContentTableComponent(
-    props: TableProps
-): JSX.Element {
+export function TableContentTableComponent(props: TableProps): JSX.Element {
     const classes = useStyles();
 
     return (

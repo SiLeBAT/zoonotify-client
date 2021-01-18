@@ -1,8 +1,4 @@
-export const mainFilterAttributes = [
-    "Erreger",
-    "Matrix",
-    "Projektname",
-];
+export const mainFilterAttributes = ["Erreger", "Matrix", "Projektname"];
 
 export type FilterType = typeof mainFilterAttributes[number];
 

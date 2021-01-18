@@ -33,7 +33,7 @@ function getTableParam(key: string, value: string): string {
  * @desc Convert selected filter and row/column to URL-Path
  * @param {FilterInterface} filter - object of selected filters
  * @param {TableInterface} table - object of selected row/column
- * @returns {string} - path including selected filters and row/column 
+ * @returns {string} - path including selected filters and row/column
  */
 export const generatePathString = (
     filter: FilterInterface,

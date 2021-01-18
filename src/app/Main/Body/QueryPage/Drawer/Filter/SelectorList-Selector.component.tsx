@@ -27,7 +27,9 @@ interface SelectorProps {
  * @param   {( selectedOption: ValueType<Record<string, string>>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
  * @return  {JSX.Element}                     new selector-element
  */
-export function SelectorListSelectorComponent(props: SelectorProps): JSX.Element {
+export function SelectorListSelectorComponent(
+    props: SelectorProps
+): JSX.Element {
     const { data } = useContext(DataContext);
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);

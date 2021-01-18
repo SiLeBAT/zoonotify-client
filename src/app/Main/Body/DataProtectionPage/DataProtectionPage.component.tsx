@@ -47,7 +47,9 @@ export function DataProtectionPageComponent(): JSX.Element {
             <h1 css={dataProtectionMainHeaderStyle}>{t("Heading")}</h1>
             <p>
                 {t("Description.DescriptionText1")}
-                <a href={ZNPaths.homePagePath}>{t("Description.DescriptionLink")}</a>
+                <a href={ZNPaths.homePagePath}>
+                    {t("Description.DescriptionLink")}
+                </a>
                 {t("Description.DescriptionText2")}
             </p>
 

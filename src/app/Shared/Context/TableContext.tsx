@@ -6,13 +6,13 @@ export type TableType = "row" | "column";
 export interface TableInterface {
     row: FilterType;
     column: FilterType;
-    statisticData: Record<string, string>[]
+    statisticData: Record<string, string>[];
 }
 
 export const defaultTable: TableInterface = {
     row: "" as FilterType,
     column: "" as FilterType,
-    statisticData: []
+    statisticData: [],
 };
 
 interface ProfileState {

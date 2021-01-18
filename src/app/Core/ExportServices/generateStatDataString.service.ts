@@ -8,7 +8,9 @@ import { generateCSVString } from "./generateCSVString.service";
  * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
  * @returns {string} - header and statistic table as string
  */
-export function generateStatDataString(exportParameter: ExportInterface): string {
+export function generateStatDataString(
+    exportParameter: ExportInterface
+): string {
     const StatDataString: string[] = [];
     if (!_.isEmpty(exportParameter.tableAttributes.column)) {
         StatDataString.push(`,${exportParameter.tableAttributes.column}`);

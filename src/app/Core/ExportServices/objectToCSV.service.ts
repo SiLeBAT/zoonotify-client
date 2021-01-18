@@ -1,5 +1,8 @@
 import { FilterInterface } from "../../Shared/Model/Filter.model";
-import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Model/Export.model";
+import {
+    ExportInterface,
+    MainFilterLabelInterface,
+} from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 import { generateStatDataString } from "./generateStatDataString.service";
@@ -16,7 +19,7 @@ interface ObjectToCsvParameter {
  * @param {ExportInterface} setting - all info for export (raw/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
  * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters 
+ * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters
  * @returns {string} - converted data as csv string
  */
 export function objectToCsv(csvParameter: ObjectToCsvParameter): string {
@@ -25,7 +28,7 @@ export function objectToCsv(csvParameter: ObjectToCsvParameter): string {
         generateParameterHeader(
             csvParameter.filter,
             csvParameter.allFilterLabel,
-            csvParameter.mainFilterLabels,
+            csvParameter.mainFilterLabels
         )
     );
 

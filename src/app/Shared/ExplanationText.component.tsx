@@ -8,9 +8,5 @@ const explanationTextStyle = css`
 
 export function ExplanationTextComponent(): JSX.Element {
     const { t } = useTranslation("QueryPage");
-    return (
-        <p css={explanationTextStyle}>
-            {t("Explanation")}
-        </p>
-    );
+    return <p css={explanationTextStyle}>{t("Explanation")}</p>;
 }

@@ -10,13 +10,10 @@ function chooseAlignment(element: string): "left" | "right" {
 }
 
 interface TableRowsProps {
-    row: Record<string, string>,
-    classes: Record<"tableCell", string>,
-    isRowAndCol: boolean,
-    style: (
-        isRow: boolean,
-        isRowAndCol: boolean
-    ) => SerializedStyles
+    row: Record<string, string>;
+    classes: Record<"tableCell", string>;
+    isRowAndCol: boolean;
+    style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles;
 }
 
 /**
@@ -27,7 +24,9 @@ interface TableRowsProps {
  * @param {(isRow: boolean, isRowAndCol: boolean) => SerializedStyles} - style of the row
  * @returns {JSX.Element} - list of table cell components
  */
-export function TableContentRowsComponent(props: TableRowsProps): JSX.Element[] {
+export function TableContentRowsComponent(
+    props: TableRowsProps
+): JSX.Element[] {
     const elements: JSX.Element[] = [];
     const k = Object.keys(props.row);
     k.forEach((element): void => {

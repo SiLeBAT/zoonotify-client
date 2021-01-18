@@ -17,9 +17,7 @@ const buttonLabelStyle = (open: boolean): SerializedStyles => css`
  * @param {boolean} open - true if export dialog is open
  * @returns {JSX.Element} - label with icon for the export button component
  */
-export function ExportButtonLabelComponent(
-    open: boolean
-): JSX.Element {
+export function ExportButtonLabelComponent(open: boolean): JSX.Element {
     const { t } = useTranslation(["Header"]);
     return (
         <div css={buttonLabelStyle(open)}>

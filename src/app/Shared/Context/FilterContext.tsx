@@ -1,15 +1,15 @@
 import React, { useState, createContext } from "react";
 import { FilterInterface, mainFilterAttributes } from "../Model/Filter.model";
 
-const generateEmptyFilter = ():  FilterInterface => {
-    const defaultFilter = {} as FilterInterface
-    mainFilterAttributes.forEach(element => {
-        defaultFilter[element] = []
+const generateEmptyFilter = (): FilterInterface => {
+    const defaultFilter = {} as FilterInterface;
+    mainFilterAttributes.forEach((element) => {
+        defaultFilter[element] = [];
     });
-    return defaultFilter
-}
+    return defaultFilter;
+};
 
-export const defaultFilter = generateEmptyFilter()
+export const defaultFilter = generateEmptyFilter();
 
 interface ProfileState {
     filter: FilterInterface;

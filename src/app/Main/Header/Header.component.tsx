@@ -69,7 +69,7 @@ const leftHeaderStyle = css`
 const rightHeaderStyle = css`
     height: 100%;
     margin-right: 8em;
-    display: flex; 
+    display: flex;
     align-items: flex-end;
 `;
 const subheaderStyle = (open: boolean): SerializedStyles => css`
@@ -82,15 +82,12 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
     box-shadow: 0 8px 6px -6px grey;
 `;
 
-
 /**
  * @desc Header of the page with navigation
  * @param {boolean} isConnected - true if client is connected to the server
- * @returns {JSX.Element} - header component 
+ * @returns {JSX.Element} - header component
  */
-export function HeaderComponent(props: {
-    isConnected: boolean;
-}): JSX.Element {
+export function HeaderComponent(props: { isConnected: boolean }): JSX.Element {
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
     const [queryOpen, setQueryOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);

@@ -28,10 +28,13 @@ interface TableContentProps {
  * @param {(node: HTMLElement | null, key: "height" | "totalWidth" | "partWidth") => void} getSize - callback function to get the size of the header for the main header
  * @returns {JSX.Element} - result table
  */
-export function TableResultsTableContentComponent(props: TableContentProps): JSX.Element {
+export function TableResultsTableContentComponent(
+    props: TableContentProps
+): JSX.Element {
     const { table } = useContext(TableContext);
 
-    const noRowAndCol = !props.displayRowCol.isCol && !props.displayRowCol.isRow;
+    const noRowAndCol =
+        !props.displayRowCol.isCol && !props.displayRowCol.isRow;
     const isRowAndCol = props.displayRowCol.isCol && props.displayRowCol.isRow;
     const isRowNotCol = !props.displayRowCol.isCol && props.displayRowCol.isRow;
 

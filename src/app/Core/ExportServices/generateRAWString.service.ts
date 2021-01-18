@@ -1,4 +1,4 @@
-import { DBentry, DBkey} from "../../Shared/Model/Isolate.model";
+import { DBentry, DBkey } from "../../Shared/Model/Isolate.model";
 import { generateCSVString } from "./generateCSVString.service";
 
 /**
