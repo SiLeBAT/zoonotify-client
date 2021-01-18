@@ -9,7 +9,7 @@ const dataTableStyle = css`
     overflow: auto;
 `;
 
-interface TableContentProps {
+export interface TableContentProps {
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;

@@ -34,7 +34,7 @@ const LightTooltip = withStyles(() => ({
     },
 }))(Tooltip);
 
-interface ClearSelectorProps {
+export interface ClearSelectorProps {
     isFilter: boolean;
     isTable: boolean;
 }

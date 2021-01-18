@@ -9,7 +9,7 @@ import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 
-interface ObjectToZipParameter {
+export interface ObjectToZipParameter {
     setting: ExportInterface;
     filter: FilterInterface;
     ZNFilename: string;

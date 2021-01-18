@@ -24,7 +24,7 @@ const iconButtonStyle = css`
     color: ${primaryColor};
 `;
 
-interface ResizeBarProps {
+export interface ResizeBarProps {
     onChange: (newWidth: number) => void;
 }
 

@@ -15,7 +15,7 @@ const contentStyle = css`
     display: block;
 `;
 
-interface AccordionProps {
+export interface AccordionProps {
     title: string;
     content: JSX.Element;
 }

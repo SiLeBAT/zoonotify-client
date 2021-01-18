@@ -25,7 +25,7 @@ const dotIconStyle = css`
     fill: ${onPrimaryColor};
 `;
 
-interface VersionProps {
+export interface VersionProps {
     text: string;
 }
 

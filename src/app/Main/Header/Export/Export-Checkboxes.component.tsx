@@ -7,7 +7,7 @@ const checkboxStyle = css`
     margin-left: 2rem;
 `;
 
-interface CheckboxesProps {
+export interface CheckboxesProps {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     raw: boolean;
     stat: boolean;

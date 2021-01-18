@@ -58,7 +58,7 @@ const drawerIconStyle = css`
     }
 `;
 
-interface DrawerControlProps {
+export interface DrawerControlProps {
     isOpen: boolean;
     newWidth: number;
     handleDrawer: () => void;

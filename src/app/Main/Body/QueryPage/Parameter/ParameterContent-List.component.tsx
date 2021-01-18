@@ -69,7 +69,7 @@ function createListItemComponent(parameterList: string[]): JSX.Element[] {
     return elements;
 }
 
-interface ListProps {
+export interface ListProps {
     element: FilterType;
     listElements: string[];
 }

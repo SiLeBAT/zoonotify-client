@@ -7,7 +7,7 @@ import { generateParameterHeader } from "./generateParameterHeader.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 
-interface ObjectToCsvParameter {
+export interface ObjectToCsvParameter {
     setting: ExportInterface;
     filter: FilterInterface;
     allFilterLabel: string;
