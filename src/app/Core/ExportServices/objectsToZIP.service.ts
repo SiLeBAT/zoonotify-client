@@ -18,8 +18,6 @@ export interface ObjectToZipParameter {
     subFileNames: string[];
 }
 
-// TODO
-
 /**
  * @desc Convert the data table and the statistic table to one ZIP folder
  * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
