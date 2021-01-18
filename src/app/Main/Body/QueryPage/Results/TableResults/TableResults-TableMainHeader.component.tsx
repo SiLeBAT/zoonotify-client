@@ -38,7 +38,7 @@ const tableTitleStyle = (
     transform: ${isRow ? "rotate(180deg)" : "none"};
 `;
 
-interface TableMainHeaderProps {
+export interface TableMainHeaderProps {
     isTitle: boolean;
     isRow: boolean;
     height: number;

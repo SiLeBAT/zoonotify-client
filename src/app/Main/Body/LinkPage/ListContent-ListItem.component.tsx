@@ -2,7 +2,7 @@ import React from "react";
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 
-interface ListItemProps {
+export interface ListItemProps {
     link: string;
     text: string;
 }

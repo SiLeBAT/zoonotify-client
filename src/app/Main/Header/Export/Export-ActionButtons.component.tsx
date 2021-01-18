@@ -23,7 +23,7 @@ const warningStyle = (isSelect: boolean): SerializedStyles => css`
     font-size: 0.75rem;
 `;
 
-interface ExportActionButtonProps {
+export interface ExportActionButtonProps {
     onClick: (event: unknown) => void;
     setting: ExportInterface;
     filter: FilterInterface;

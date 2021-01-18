@@ -11,7 +11,7 @@ import {
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 
-interface SelectorProps {
+export interface SelectorProps {
     index: number;
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,

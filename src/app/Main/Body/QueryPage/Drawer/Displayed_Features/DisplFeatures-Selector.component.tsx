@@ -9,7 +9,7 @@ import {
 } from "../../../../../Shared/Model/Filter.model";
 import { generateFeatureList } from "../../../../../Core/generateFeatureList.service";
 
-interface FeatureSelectorProps {
+export interface FeatureSelectorProps {
     activeFeature: FilterType;
     otherFeature: FilterType;
     label: string;

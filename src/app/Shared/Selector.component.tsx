@@ -89,7 +89,7 @@ function generateSelectorObject(
     return selectorObject;
 }
 
-interface SelectorProps {
+export interface SelectorProps {
     label: string;
     selectValues: string[];
     selectAttribute: FilterType | TableType;

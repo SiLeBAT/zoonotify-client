@@ -25,7 +25,7 @@ const DownloadButton = withStyles({
     },
 })(Button);
 
-interface ExportButtonProps {
+export interface ExportButtonProps {
     onClick: (event: unknown) => void;
     buttonLabel: JSX.Element;
 }

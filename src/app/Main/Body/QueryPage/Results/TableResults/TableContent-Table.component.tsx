@@ -41,7 +41,7 @@ const useStyles = makeStyles({
     },
 });
 
-interface TableProps {
+export interface TableProps {
     allIsolates: Record<string, string>[];
     columnAttributes: string[];
     getSize: (

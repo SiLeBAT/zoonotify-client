@@ -22,7 +22,7 @@ const StyledTableCell = withStyles(() =>
     })
 )(TableCell);
 
-interface TableHeaderProps {
+export interface TableContentHeaderProps {
     headerValues: string[];
     getSize: (
         node: HTMLElement | null,
@@ -43,7 +43,7 @@ interface TableHeaderProps {
  * @returns {JSX.Element[]} - list of table cell components
  */
 export function TableContentHeaderComponent(
-    props: TableHeaderProps
+    props: TableContentHeaderProps
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
     elements.push(

@@ -33,7 +33,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-interface DrawerLayoutProps {
+export interface DrawerLayoutProps {
     isOpen: boolean;
     newWidth: number;
 }

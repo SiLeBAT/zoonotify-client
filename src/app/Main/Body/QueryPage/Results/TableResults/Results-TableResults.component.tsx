@@ -17,7 +17,7 @@ const tableDivStyle = css`
     flex-direction: row;
 `;
 
-interface TableResultsProps {
+export interface TableResultsProps {
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;
