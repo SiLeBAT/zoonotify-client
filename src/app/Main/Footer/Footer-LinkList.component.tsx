@@ -66,9 +66,7 @@ export function FooterLinkListComponent(): JSX.Element {
                 </a>
             </li>
             <li css={footerElementStyle}>
-                <span css={linkStyle}>
-                    {t("Content.Faq")}
-                </span>
+                <span css={linkStyle}>{t("Content.Faq")}</span>
             </li>
             <li css={footerElementStyle}>
                 <a

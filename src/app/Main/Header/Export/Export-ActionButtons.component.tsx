@@ -39,8 +39,8 @@ interface ExportActionButtonProps {
  * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
  * @param {JSX.Element} buttonLabel - component for the export button label
- * @param {string} ZNFilename - main filename 
- * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters 
+ * @param {string} ZNFilename - main filename
+ * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters
  * @param {string} allFilterLabel - "all values" / "Alle Werte"
  * @returns {JSX.Element} - action buttons component
  */
@@ -69,7 +69,11 @@ export function ExportActionButtonsComponent(
                 <Button onClick={handleClose} color="primary">
                     {t("Button.Cancel")}
                 </Button>
-                <Button onClick={handleClose} color="primary" disabled={!fileIsSelect}>
+                <Button
+                    onClick={handleClose}
+                    color="primary"
+                    disabled={!fileIsSelect}
+                >
                     <CSVLink
                         data={objectToCsv({
                             setting: props.setting,

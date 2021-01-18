@@ -14,7 +14,7 @@ const titleDivStyle = (
     align-items: ${isRow ? "flex-end" : "center"};
     justify-content: ${isRow ? "center" : "flex-end"};
     background-color: ${primaryColor};
-    border-bottom: ${isRow ? "none" : `solid ${bfrPrimaryPalette[300]}`}
+    border-bottom: ${isRow ? "none" : `solid ${bfrPrimaryPalette[300]}`};
 `;
 const tableTitleStyle = (
     isTitle: boolean,
@@ -34,7 +34,7 @@ const tableTitleStyle = (
     font-weight: normal;
     background-color: ${primaryColor};
     color: ${onPrimaryColor};
-    writing-mode: ${isRow ? "vertical-lr" : "none"}; 
+    writing-mode: ${isRow ? "vertical-lr" : "none"};
     transform: ${isRow ? "rotate(180deg)" : "none"};
 `;
 
@@ -52,10 +52,12 @@ interface TableMainHeaderProps {
  * @param {boolean} isRow - true if row is selected
  * @param {number} height - height of the main header
  * @param {number} width - width of the main header
- * @param {string} text - text content of the main header 
+ * @param {string} text - text content of the main header
  * @returns {JSX.Element} - one main header component
  */
-export function TableResultsTableMainHeaderComponent(props: TableMainHeaderProps): JSX.Element {
+export function TableResultsTableMainHeaderComponent(
+    props: TableMainHeaderProps
+): JSX.Element {
     return (
         <div css={titleDivStyle(props.isTitle, props.isRow)}>
             <p

@@ -16,11 +16,21 @@ const PageNotFound = (): JSX.Element => (
 export function BodyRouterComponent(): JSX.Element {
     return (
         <Switch>
-            <Route exact path={ZNPaths.homePagePath} component={HomePageLayoutComponent} />
+            <Route
+                exact
+                path={ZNPaths.homePagePath}
+                component={HomePageLayoutComponent}
+            />
             <Route path={ZNPaths.infoPagePath} component={InfoPageComponent} />
-            <Route path={ZNPaths.queryPagePath} component={QueryPageContainerComponent} />
+            <Route
+                path={ZNPaths.queryPagePath}
+                component={QueryPageContainerComponent}
+            />
             <Route path={ZNPaths.linkPagePath} component={LinkPageComponent} />
-            <Route path={ZNPaths.dpdPagePath} component={DataProtectionPageComponent} />
+            <Route
+                path={ZNPaths.dpdPagePath}
+                component={DataProtectionPageComponent}
+            />
             <Route component={PageNotFound} />
         </Switch>
     );

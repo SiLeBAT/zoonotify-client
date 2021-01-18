@@ -17,7 +17,7 @@ function getFilterList(filterParameter: string | null): string[] {
 }
 
 /**
- * @desc Extract the selected filter from the given URL path 
+ * @desc Extract the selected filter from the given URL path
  * @param {string} path - URL path
  * @param {FilterType[]} filterKeys - list of possible filter attributes
  * @returns {FilterInterface} - object with the filter form the URL path

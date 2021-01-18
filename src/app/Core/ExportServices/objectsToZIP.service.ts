@@ -1,7 +1,10 @@
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { FilterInterface } from "../../Shared/Model/Filter.model";
-import { ExportInterface, MainFilterLabelInterface } from "../../Shared/Model/Export.model";
+import {
+    ExportInterface,
+    MainFilterLabelInterface,
+} from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 import { RAWDataStringGenerator } from "./generateRAWString.service";
@@ -21,11 +24,11 @@ interface ObjectToZipParameter {
  * @desc Convert the data table and the statistic table to one ZIP folder
  * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
- * @param {string} ZNFilename - main filename 
+ * @param {string} ZNFilename - main filename
  * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters 
+ * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters
  * @param {string[]} subFileNames - names of the two different files (data, statistic)
- * @returns {void} 
+ * @returns {void}
  */
 export function objectToZip(zipParameter: ObjectToZipParameter): void {
     const csvRows: string[] = [];
@@ -36,7 +39,7 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
         generateParameterHeader(
             zipParameter.filter,
             zipParameter.allFilterLabel,
-            zipParameter.mainFilterLabels,
+            zipParameter.mainFilterLabels
         )
     );
     csvRowsRAW.push(generateStatDataString(zipParameter.setting));
@@ -46,7 +49,7 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
         generateParameterHeader(
             zipParameter.filter,
             zipParameter.allFilterLabel,
-            zipParameter.mainFilterLabels,
+            zipParameter.mainFilterLabels
         )
     );
     csvRowsStat.push(
@@ -59,7 +62,10 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
 
     const zip = new JSZip();
     csvRows.forEach((CSV, i): void => {
-        zip.file(`${zipParameter.subFileNames[i]}_${zipParameter.ZNFilename}`, CSV);
+        zip.file(
+            `${zipParameter.subFileNames[i]}_${zipParameter.ZNFilename}`,
+            CSV
+        );
     });
 
     const folderName: string = zipParameter.ZNFilename.replace(".csv", ".zip");

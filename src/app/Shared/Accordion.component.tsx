@@ -5,7 +5,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-
 const titleStyle = css`
     margin: 0;
     font-weight: bold;
@@ -18,7 +17,7 @@ const contentStyle = css`
 
 interface AccordionProps {
     title: string;
-    content: JSX.Element
+    content: JSX.Element;
 }
 
 /**

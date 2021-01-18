@@ -1,5 +1,5 @@
 import { FilterType } from "./Filter.model";
-import { DBentry, DBkey} from "./Isolate.model";
+import { DBentry, DBkey } from "./Isolate.model";
 
 export interface ExportInterface {
     raw: boolean;
@@ -35,4 +35,4 @@ export const defaultExport = {
     },
 };
 
-export type MainFilterLabelInterface = Record<FilterType, string>
+export type MainFilterLabelInterface = Record<FilterType, string>;

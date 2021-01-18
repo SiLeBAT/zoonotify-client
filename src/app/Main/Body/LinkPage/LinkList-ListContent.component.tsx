@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ListContentListItemComponent} from "./ListContent-ListItem.component";
+import { ListContentListItemComponent } from "./ListContent-ListItem.component";
 
 /**
  * @desc Returns ListItems for each link

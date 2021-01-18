@@ -75,7 +75,7 @@ const selectStyle: StylesConfig = {
 };
 
 /**
- * @desc Transforms a string array to an object. 
+ * @desc Transforms a string array to an object.
  * @param {string[]} selectorArray - array with selector values
  * @returns {Record<string, string>[]} - object with value und label from the string array
  */
@@ -104,11 +104,11 @@ interface SelectorProps {
 
 /**
  * @desc Returns one selector for filter or row/column.
- * @param {string} label - label for the selector 
+ * @param {string} label - label for the selector
  * @param {string[]} selectValues - all possible values for the selector
- * @param {FilterType | TableType} selectAttribute - attribute for the selector 
+ * @param {FilterType | TableType} selectAttribute - attribute for the selector
  * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle change of the selector
- * @param {string[]} selectedValues - values that are already selected in other selectors 
+ * @param {string[]} selectedValues - values that are already selected in other selectors
  * @param {boolean} isMulti - true if the user can select multiple values
  * @param {boolean} isNotSelect - true if no selector is selected so far
  * @returns {JSX.Element} - selector component

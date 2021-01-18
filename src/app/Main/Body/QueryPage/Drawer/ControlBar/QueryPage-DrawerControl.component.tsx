@@ -73,7 +73,9 @@ interface DrawerControlProps {
  * @param {(newWidth: number) => void} handleResize - onChange-function for changing the size of the Drawer
  * @returns {JSX.Element} - control bar component of the Drawer
  */
-export function QueryPageDrawerControlComponent(props: DrawerControlProps): JSX.Element {
+export function QueryPageDrawerControlComponent(
+    props: DrawerControlProps
+): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const useStyles = makeStyles((theme: Theme) =>
@@ -119,7 +121,9 @@ export function QueryPageDrawerControlComponent(props: DrawerControlProps): JSX.
                           `
                 }
             >
-                <DrawerControlResizeBarComponent onChange={props.handleResize} />
+                <DrawerControlResizeBarComponent
+                    onChange={props.handleResize}
+                />
             </div>
             <IconButton css={iconButtonStyle} onClick={props.handleDrawer}>
                 {props.isOpen ? (

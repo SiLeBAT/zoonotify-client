@@ -4,13 +4,19 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
-import { DBentry, DBkey} from "../../../Shared/Model/Isolate.model";
-import { defaultExport, ExportInterface } from "../../../Shared/Model/Export.model";
+import { DBentry, DBkey } from "../../../Shared/Model/Isolate.model";
+import {
+    defaultExport,
+    ExportInterface,
+} from "../../../Shared/Model/Export.model";
 import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
-import { ExportLabels, generateExportLabels } from "../../../Core/ExportServices/generateExportLabels.service";
+import {
+    ExportLabels,
+    generateExportLabels,
+} from "../../../Core/ExportServices/generateExportLabels.service";
 import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
 
 export function HeaderExportComponent(): JSX.Element {
@@ -64,7 +70,7 @@ export function HeaderExportComponent(): JSX.Element {
         setSetting({ ...setting, [event.target.name]: event.target.checked });
     };
 
-    const buttonLabel: JSX.Element = ExportButtonLabelComponent(open)
+    const buttonLabel: JSX.Element = ExportButtonLabelComponent(open);
 
     const exportLabels: ExportLabels = generateExportLabels();
 

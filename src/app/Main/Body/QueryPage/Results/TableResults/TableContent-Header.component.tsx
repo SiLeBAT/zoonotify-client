@@ -23,14 +23,14 @@ const StyledTableCell = withStyles(() =>
 )(TableCell);
 
 interface TableHeaderProps {
-    headerValues: string[],
+    headerValues: string[];
     getSize: (
         node: HTMLElement | null,
         key: "height" | "totalWidth" | "partWidth"
-    ) => void,
-    isRowNotCol: boolean,
-    isRowAndCol: boolean,
-    style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles
+    ) => void;
+    isRowNotCol: boolean;
+    isRowAndCol: boolean;
+    style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles;
 }
 
 /**
@@ -42,7 +42,9 @@ interface TableHeaderProps {
  * @param {(isRow: boolean, isRowAndCol: boolean) => SerializedStyles} - style of the header
  * @returns {JSX.Element[]} - list of table cell components
  */
-export function TableContentHeaderComponent(props: TableHeaderProps): JSX.Element[] {
+export function TableContentHeaderComponent(
+    props: TableHeaderProps
+): JSX.Element[] {
     const elements: JSX.Element[] = [];
     elements.push(
         <StyledTableCell

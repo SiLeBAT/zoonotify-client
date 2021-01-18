@@ -37,7 +37,7 @@ const contentWrapperStyle = css`
 `;
 
 /**
- * @desc Layout of the Page (Header, Body Footer,) - content of the body depends on the BrowserRouter 
+ * @desc Layout of the Page (Header, Body Footer,) - content of the body depends on the BrowserRouter
  * @param {boolean} isConnected - true if client is connected to the server
  * @returns {JSX.Element} - main page component
  */

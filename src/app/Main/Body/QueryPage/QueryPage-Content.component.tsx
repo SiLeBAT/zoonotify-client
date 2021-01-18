@@ -42,7 +42,7 @@ const headingStyle = css`
 `;
 const statusStyle = css`
     text-align: center;
-`
+`;
 
 export function QueryPageContentComponent(): JSX.Element {
     const [isFilter, setIsFilter] = useState(false);
@@ -69,7 +69,11 @@ export function QueryPageContentComponent(): JSX.Element {
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
             <p css={statusStyle}>{t("Content.DataStatus")}</p>
             <div css={contentBoxStyle}>
-                {isFilter || isTable ? <QueryPageParameterContentComponent /> : <QueryPageIntroTextComponent />}
+                {isFilter || isTable ? (
+                    <QueryPageParameterContentComponent />
+                ) : (
+                    <QueryPageIntroTextComponent />
+                )}
                 <QueryPageNrOfIsolatesComponent />
             </div>
             <ContentResultsComponent />

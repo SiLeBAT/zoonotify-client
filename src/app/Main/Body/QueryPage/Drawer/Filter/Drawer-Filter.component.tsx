@@ -51,7 +51,10 @@ export function DrawerFilterComponent(): JSX.Element {
     ): void => {
         if (selectedOption) {
             const selectedFilter: string[] = [];
-            const selectedOptionObj = selectedOption as Record<string, string>[];
+            const selectedOptionObj = selectedOption as Record<
+                string,
+                string
+            >[];
             selectedOptionObj.forEach((element: Record<string, string>) => {
                 selectedFilter.push(Object.values(element)[0]);
             });
@@ -65,7 +68,6 @@ export function DrawerFilterComponent(): JSX.Element {
                 [keyName]: [],
             });
         }
-        
     };
 
     return (
@@ -75,10 +77,7 @@ export function DrawerFilterComponent(): JSX.Element {
                 <p css={filterSubheadingStyle}>
                     {t("Drawer.Subtitles.Filter")}
                 </p>
-                <ClearSelectorComponent
-                    isFilter
-                    isTable={false}
-                />
+                <ClearSelectorComponent isFilter isTable={false} />
             </div>
             {FilterSelectorListComponent(handleChange)}
         </div>

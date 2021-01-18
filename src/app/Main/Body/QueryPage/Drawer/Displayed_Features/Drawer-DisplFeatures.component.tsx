@@ -18,7 +18,7 @@ const drawerWidthStyle = css`
     width: inherit;
 `;
 const featureSubHeaderStyle = css`
-    margin: 0; 
+    margin: 0;
     font-size: 1rem;
     font-weight: bold;
 `;
@@ -85,13 +85,8 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
     return (
         <div css={drawerWidthStyle}>
             <div css={featureAreaStyle}>
-                <p css={featureSubHeaderStyle}>
-                    {t("Drawer.Subtitles.Graph")}
-                </p>
-                <ClearSelectorComponent
-                    isFilter={false}
-                    isTable
-                />
+                <p css={featureSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</p>
+                <ClearSelectorComponent isFilter={false} isTable />
             </div>
             <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Row")}
