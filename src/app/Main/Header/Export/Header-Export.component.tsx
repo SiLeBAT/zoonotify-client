@@ -30,11 +30,11 @@ export function HeaderExportComponent(): JSX.Element {
         const rawData: DBentry[] = raw ? data.ZNDataFiltered : [];
         const rawKeys: DBkey[] = raw ? data.keyValues : [];
         const statData: Record<string, string>[] = stat
-            ? table.statisticData
+            ? table.statisticDataAbsolute
             : [];
         const statKeys: string[] =
-            stat && !_.isEmpty(table.statisticData)
-                ? Object.keys(table.statisticData[0])
+            stat && !_.isEmpty(table.statisticDataAbsolute)
+                ? Object.keys(table.statisticDataAbsolute[0])
                 : [];
 
         setSetting({
@@ -56,7 +56,7 @@ export function HeaderExportComponent(): JSX.Element {
 
     useEffect(() => {
         chooseData(setting.raw, setting.stat);
-    }, [table.statisticData, setting.raw, setting.stat]);
+    }, [table.statisticDataAbsolute, setting.raw, setting.stat]);
 
     const handleClickOpen = (): void => {
         setOpen(true);

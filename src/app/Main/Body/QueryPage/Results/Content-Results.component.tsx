@@ -10,6 +10,7 @@ import { getValuesOfOneFilterAttribute } from "../../../../Core/FilterServices/g
 import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { ResultsTableResultsComponent } from "./TableResults/Results-TableResults.component";
 import { generateRowsWithIsolates } from "./Results-RowsWithIsolates.service";
+import { calculateRowsWithPercent } from "../../../../Core/calculateRowsWithPercent.service";
 
 export function ContentResultsComponent(): JSX.Element {
     const [state, setState] = useState<{
@@ -50,6 +51,7 @@ export function ContentResultsComponent(): JSX.Element {
                 colValues,
                 "both"
             );
+            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates)
             setState({
                 isCol: true,
                 isRow: true,
@@ -57,7 +59,8 @@ export function ContentResultsComponent(): JSX.Element {
             setColumnAttributes(colValues);
             setTable({
                 ...table,
-                statisticData: rowsWithIsolates,
+                statisticDataAbsolute: rowsWithIsolates,
+                statisticDataPercent: rowsWithPercent,
             });
         } else if (rowAttribute.length === 0 && colAttribute.length !== 0) {
             const rowsWithIsolates = generateRowsWithIsolates(
@@ -68,6 +71,7 @@ export function ContentResultsComponent(): JSX.Element {
                 colValues,
                 "col"
             );
+            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates)
             setState({
                 isCol: true,
                 isRow: false,
@@ -75,7 +79,8 @@ export function ContentResultsComponent(): JSX.Element {
             setColumnAttributes(colValues);
             setTable({
                 ...table,
-                statisticData: rowsWithIsolates,
+                statisticDataAbsolute: rowsWithIsolates,
+                statisticDataPercent: rowsWithPercent,
             });
         } else if (colAttribute.length === 0 && rowAttribute.length !== 0) {
             const rowsWithIsolates = generateRowsWithIsolates(
@@ -86,6 +91,7 @@ export function ContentResultsComponent(): JSX.Element {
                 [t("Results.TableHead")],
                 "row"
             );
+            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates)
             setState({
                 isCol: false,
                 isRow: true,
@@ -93,7 +99,8 @@ export function ContentResultsComponent(): JSX.Element {
             setColumnAttributes([t("Results.TableHead")]);
             setTable({
                 ...table,
-                statisticData: rowsWithIsolates,
+                statisticDataAbsolute: rowsWithIsolates,
+                statisticDataPercent: rowsWithPercent,
             });
         } else if (rowAttribute.length === 0 && colAttribute.length === 0) {
             setState({
@@ -103,7 +110,7 @@ export function ContentResultsComponent(): JSX.Element {
             setColumnAttributes([t("Results.TableHead")]);
             setTable({
                 ...table,
-                statisticData: [
+                statisticDataAbsolute: [
                     {
                         "Number of isolates": String(
                             Object.keys(dataToCountIsolates).length
