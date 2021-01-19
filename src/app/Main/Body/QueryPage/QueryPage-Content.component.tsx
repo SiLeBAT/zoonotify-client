@@ -43,6 +43,9 @@ const headingStyle = css`
 const statusStyle = css`
     text-align: center;
 `;
+const resultsBoxStyle = css`
+    margin-top: 2em;
+`;
 
 export function QueryPageContentComponent(): JSX.Element {
     const [isFilter, setIsFilter] = useState(false);
@@ -76,7 +79,9 @@ export function QueryPageContentComponent(): JSX.Element {
                 )}
                 <QueryPageNrOfIsolatesComponent />
             </div>
-            <ContentResultsComponent />
+            <div css={resultsBoxStyle}>
+                <ContentResultsComponent />
+            </div>
         </div>
     );
 }
