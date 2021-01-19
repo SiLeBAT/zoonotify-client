@@ -6,6 +6,7 @@ import { TableResultsTableContentComponent } from "./TableResults-TableContent.c
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
+import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -89,6 +90,7 @@ export function ResultsTableResultsComponent(
             title={accordionHeader}
             content={
                 <div css={dataStyle}>
+                    <ResultsTableOptionsComponent />
                     <TableResultsTableMainHeaderComponent
                         isTitle={props.displayRowCol.isCol}
                         isRow={false}
