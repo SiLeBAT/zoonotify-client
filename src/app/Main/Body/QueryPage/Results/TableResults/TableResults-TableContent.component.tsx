@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-console */
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext } from "react";
@@ -49,7 +51,7 @@ export function TableResultsTableContentComponent(
             }
         >
             <ResultsTable
-                allIsolates={table.statisticData}
+                allIsolates={table.statisticDataAbsolute}
                 columnAttributes={props.columnAttributes}
                 getSize={props.getSize}
                 isRowNotCol={isRowNotCol}

@@ -2,17 +2,22 @@ import React, { useState, createContext } from "react";
 import { FilterType } from "../Model/Filter.model";
 
 export type TableType = "row" | "column";
+export type OptionType = "absolute" | "percent"
 
 export interface TableInterface {
     row: FilterType;
     column: FilterType;
-    statisticData: Record<string, string>[];
+    option: OptionType;
+    statisticDataAbsolute: Record<string, string>[];
+    statisticDataPercent: Record<string, string>[];
 }
 
 export const defaultTable: TableInterface = {
     row: "" as FilterType,
     column: "" as FilterType,
-    statisticData: [],
+    option: "absolute",
+    statisticDataAbsolute: [],
+    statisticDataPercent: [],
 };
 
 interface ProfileState {
