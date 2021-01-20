@@ -43,6 +43,10 @@ export function TableResultsTableContentComponent(
     if (noRowAndCol) {
         return <ExplanationText />;
     }
+    let tableData = table.statisticDataAbsolute
+    if (table.option === "percent") {
+        tableData = table.statisticDataPercent
+    } 
     return (
         <div
             css={dataTableStyle}
@@ -51,7 +55,7 @@ export function TableResultsTableContentComponent(
             }
         >
             <ResultsTable
-                allIsolates={table.statisticDataAbsolute}
+                tableData={tableData}
                 columnAttributes={props.columnAttributes}
                 getSize={props.getSize}
                 isRowNotCol={isRowNotCol}

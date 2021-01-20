@@ -29,13 +29,22 @@ export function HeaderExportComponent(): JSX.Element {
     const chooseData = (raw: boolean, stat: boolean): void => {
         const rawData: DBentry[] = raw ? data.ZNDataFiltered : [];
         const rawKeys: DBkey[] = raw ? data.keyValues : [];
-        const statData: Record<string, string>[] = stat
-            ? table.statisticDataAbsolute
-            : [];
-        const statKeys: string[] =
-            stat && !_.isEmpty(table.statisticDataAbsolute)
-                ? Object.keys(table.statisticDataAbsolute[0])
-                : [];
+        let statData: Record<string, string>[] = [];
+        let statKeys: string[] = [];
+        if (stat) {
+            if (table.option === "absolute") {
+                statData = table.statisticDataAbsolute;
+                if (!_.isEmpty(statData)) {
+                    statKeys = Object.keys(table.statisticDataAbsolute[0]);
+                }
+            }
+            if (table.option === "percent") {
+                statData = table.statisticDataPercent;
+                if (!_.isEmpty(statData)) {
+                    statKeys = Object.keys(table.statisticDataPercent[0]);
+                }
+            }
+        }
 
         setSetting({
             ...setting,

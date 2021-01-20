@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 });
 
 export interface TableProps {
-    allIsolates: Record<string, string>[];
+    tableData: Record<string, string>[];
     columnAttributes: string[];
     getSize: (
         node: HTMLElement | null,
@@ -83,7 +83,7 @@ export function TableContentTableComponent(props: TableProps): JSX.Element {
                         props.getSize(node, "height")
                     }
                 >
-                    {props.allIsolates.map((row) => (
+                    {props.tableData.map((row) => (
                         <TableRow key={`row-${row.name}`}>
                             {TableContentRowsComponent({
                                 row,

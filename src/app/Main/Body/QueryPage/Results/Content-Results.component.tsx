@@ -29,7 +29,7 @@ export function ContentResultsComponent(): JSX.Element {
 
     const { t } = useTranslation(["QueryPage"]);
 
-    const getAllIsolates = async (
+    const getTableContext = async (
         dataToCountIsolates: DBentry[]
     ): Promise<void> => {
         const rowValues = getValuesOfOneFilterAttribute(
@@ -124,11 +124,11 @@ export function ContentResultsComponent(): JSX.Element {
     useEffect((): void => {
         if (CheckIfFilterIsSet(filter)) {
             setData({ ...data, ZNDataFiltered: data.ZNData });
-            getAllIsolates(data.ZNData);
+            getTableContext(data.ZNData);
         } else {
             const filteredData = filterData(data.ZNData, filter);
             setData({ ...data, ZNDataFiltered: filteredData });
-            getAllIsolates(filteredData);
+            getTableContext(filteredData);
         }
     }, [filter, table.column, table.row, localStorage.getItem("i18nextLng")]);
 
