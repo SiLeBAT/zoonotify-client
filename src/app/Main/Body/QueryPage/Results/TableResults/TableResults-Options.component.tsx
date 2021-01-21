@@ -15,6 +15,8 @@ import {
 } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { OptionType, TableContext } from "../../../../../Shared/Context/TableContext";
 
+const size = 0.75;
+
 const optionsStyle = (
     isTable: boolean
 ): SerializedStyles => css`
@@ -23,9 +25,20 @@ const optionsStyle = (
     flex-direction: row;
 `;
 const optionsHeadingStyle = css`
-    margin: auto 1em auto 0;
+    margin: auto 2em auto 0;
     font-weight: bold;
+    font-size: ${size}rem;
 `;
+const sizeStyle = css`
+    span {
+        font-size: ${size}rem;
+    }
+    svg {
+        width: ${size}em;
+        height: ${size}em;
+    }
+`;
+
 const BlueRadio = withStyles(() =>
     createStyles({
         root: {
@@ -62,11 +75,13 @@ export function ResultsTableOptionsComponent(props: {isTable: boolean}): JSX.Ele
             <FormControl component="fieldset">
                 <RadioGroup row aria-label="options" name="options" value={table.option} onChange={handleRadioChange}>
                     <FormControlLabel
+                        css={sizeStyle}
                         value="absolute"
                         control={<BlueRadio color="default" size="small" />}
                         label="Absolute numbers"
                     />
                     <FormControlLabel
+                        css={sizeStyle}
                         value="percent"
                         control={<BlueRadio color="default" size="small" />}
                         label="Percent"
