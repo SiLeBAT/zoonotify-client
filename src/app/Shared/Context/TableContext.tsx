@@ -2,7 +2,7 @@ import React, { useState, createContext } from "react";
 import { FilterType } from "../Model/Filter.model";
 
 export type TableType = "row" | "column";
-export type OptionType = "absolute" | "percent"
+export type OptionType = "absolute" | "percent";
 
 export interface TableInterface {
     row: FilterType;

@@ -81,7 +81,8 @@ export function ResultsTableResultsComponent(
 
     const headerWidth: number = totalWidth - partWidth;
 
-    const isTable: boolean = props.displayRowCol.isCol || props.displayRowCol.isRow
+    const isTable: boolean =
+        props.displayRowCol.isCol || props.displayRowCol.isRow;
 
     const accordionHeader: string = t(`Results.Table`);
     const rowMainHeader: string = t(`Filters.${table.row}`);

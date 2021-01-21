@@ -13,13 +13,14 @@ import {
     bfrDarkgrey,
     primaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { OptionType, TableContext } from "../../../../../Shared/Context/TableContext";
+import {
+    OptionType,
+    TableContext,
+} from "../../../../../Shared/Context/TableContext";
 
 const size = 0.75;
 
-const optionsStyle = (
-    isTable: boolean
-): SerializedStyles => css`
+const optionsStyle = (isTable: boolean): SerializedStyles => css`
     display: ${isTable ? "flex" : "none"};
     margin-top: 0;
     flex-direction: row;
@@ -46,9 +47,9 @@ const BlueRadio = withStyles(() =>
             "&$checked": {
                 color: primaryColor,
             },
-            'input:hover ~ &': {
-                backgroundColor: 'green',
-              },
+            "input:hover ~ &": {
+                backgroundColor: "green",
+            },
         },
         checked: {},
     })
@@ -58,22 +59,33 @@ const BlueRadio = withStyles(() =>
  * @desc Returns the option bar to display the table numbers as absolute numbers or in percent
  * @returns {JSX.Element} - option bar component
  */
-export function ResultsTableOptionsComponent(props: {isTable: boolean}): JSX.Element {
-    const { table, setTable } = useContext(TableContext); 
+export function ResultsTableOptionsComponent(props: {
+    isTable: boolean;
+}): JSX.Element {
+    const { table, setTable } = useContext(TableContext);
 
-    const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        const optionValue = (event.target as HTMLInputElement).value as OptionType
+    const handleRadioChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+        const optionValue = (event.target as HTMLInputElement)
+            .value as OptionType;
         setTable({
             ...table,
             option: optionValue,
-        })
+        });
     };
 
     return (
         <div css={optionsStyle(props.isTable)}>
             <p css={optionsHeadingStyle}>Display options:</p>
             <FormControl component="fieldset">
-                <RadioGroup row aria-label="options" name="options" value={table.option} onChange={handleRadioChange}>
+                <RadioGroup
+                    row
+                    aria-label="options"
+                    name="options"
+                    value={table.option}
+                    onChange={handleRadioChange}
+                >
                     <FormControlLabel
                         css={sizeStyle}
                         value="absolute"
