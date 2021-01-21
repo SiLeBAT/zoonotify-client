@@ -19,7 +19,7 @@ function calculatePercent(part: number, total: number): string {
 /**
  * @desc Calculate the percentage of an objectList with absolute numbers
  * @param {Record<string, string>[]} objList - objectList with one object for every table row with absolute numbers
- * @returns {Record<string, string>[]} - one object for each row inside a list 
+ * @returns {Record<string, string>[]} - one object for each row inside a list
  */
 export function calculateRowsWithPercent(
     objList: Record<string, string>[]

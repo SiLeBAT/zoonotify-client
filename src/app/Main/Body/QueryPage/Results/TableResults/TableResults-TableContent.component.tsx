@@ -43,10 +43,10 @@ export function TableResultsTableContentComponent(
     if (noRowAndCol) {
         return <ExplanationText />;
     }
-    let tableData = table.statisticDataAbsolute
+    let tableData = table.statisticDataAbsolute;
     if (table.option === "percent") {
-        tableData = table.statisticDataPercent
-    } 
+        tableData = table.statisticDataPercent;
+    }
     return (
         <div
             css={dataTableStyle}
