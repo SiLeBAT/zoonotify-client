@@ -35,12 +35,12 @@ export function ContentResultsComponent(): JSX.Element {
         const rowValues = getValuesOfOneFilterAttribute(
             rowAttribute,
             data.uniqueValues,
-            filter
+            filter.selectedFilter
         );
         const colValues = getValuesOfOneFilterAttribute(
             colAttribute,
             data.uniqueValues,
-            filter
+            filter.selectedFilter
         );
         const nrOfSelectedIsolates = dataToCountIsolates.length;
         if (rowAttribute.length !== 0 && colAttribute.length !== 0) {
@@ -112,11 +112,11 @@ export function ContentResultsComponent(): JSX.Element {
     };
 
     useEffect((): void => {
-        if (CheckIfFilterIsSet(filter)) {
+        if (CheckIfFilterIsSet(filter.selectedFilter)) {
             setData({ ...data, ZNDataFiltered: data.ZNData });
             getTableContext(data.ZNData);
         } else {
-            const filteredData = filterData(data.ZNData, filter);
+            const filteredData = filterData(data.ZNData, filter.selectedFilter);
             setData({ ...data, ZNDataFiltered: filteredData });
             getTableContext(filteredData);
         }

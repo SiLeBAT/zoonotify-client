@@ -10,7 +10,6 @@ import {
     mainFilterAttributes,
 } from "../../../Shared/Model/Filter.model";
 import {
-    defaultFilter,
     FilterContext,
 } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
@@ -31,7 +30,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         const dataProp: DBentry[] = await r.json();
         const keyValueProps = Object.keys(dataProp[0]) as DBkey[];
 
-        const uniqueValuesObject: FilterInterface = { ...defaultFilter };
+        const uniqueValuesObject: FilterInterface = {};
 
         mainFilterAttributes.forEach((filterElement) => {
             const uniqueValuesPerElement: string[] = _.uniq(
@@ -50,9 +49,10 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     useEffect(() => {
         getData();
-        setFilter(
-            getFilterFromPath(history.location.search, mainFilterAttributes)
-        );
+        setFilter({
+            ...filter,
+            selectedFilter: getFilterFromPath(history.location.search, mainFilterAttributes)
+        });
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
         );
@@ -64,7 +64,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     }, []);
 
     useEffect((): void => {
-        history.push(`?${generatePathString(filter, table)}`);
+        history.push(`?${generatePathString(filter.selectedFilter, table)}`);
     }, [filter, table]);
 
     let returnValue = <p> Loading data ... </p>;

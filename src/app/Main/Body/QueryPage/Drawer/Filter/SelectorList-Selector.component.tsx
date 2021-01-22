@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 import { CheckIfSingleFilterIsSet } from "../../../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { DataContext } from "../../../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
@@ -35,9 +36,12 @@ export function SelectorListSelectorComponent(
     const { t } = useTranslation(["QueryPage"]);
 
     const filterAttribute: FilterType = mainFilterAttributes[props.index];
-    const filterValues: string[] = filter[filterAttribute];
+    let filterValues: string[] = []
+    if (!_.isEmpty(filter.selectedFilter)) {
+        filterValues = filter.selectedFilter[filterAttribute];
+    }
     const allFilterValues: string[] = data.uniqueValues[filterAttribute];
-    const noFilter: boolean = CheckIfSingleFilterIsSet(filter, filterAttribute);
+    const noFilter: boolean = CheckIfSingleFilterIsSet(filter.selectedFilter, filterAttribute);
     return (
         <SelectorComponent
             key={`filter-selector-${filterAttribute}`}

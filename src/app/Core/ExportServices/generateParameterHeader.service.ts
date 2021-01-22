@@ -20,10 +20,10 @@ export function generateParameterHeader(
     HeaderRows.push("\uFEFF");
     HeaderRows.push("#Parameter:");
 
-    mainFilterAttributes.forEach((element): void => {
+    mainFilterAttributes.forEach((element: string): void => {
         if (filter[element].length !== 0) {
             const headerFilterArray: string[] = [];
-            filter[element].forEach((filterValue) => {
+            filter[element].forEach((filterValue: string) => {
                 headerFilterArray.push(`"${filterValue}"`);
             });
             const headerFilterString = headerFilterArray.join(";");

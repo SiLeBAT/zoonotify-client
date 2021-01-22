@@ -100,7 +100,7 @@ export function HeaderExportComponent(): JSX.Element {
                 <ExportActionButtonsComponent
                     onClick={handleClose}
                     setting={setting}
-                    filter={filter}
+                    filter={filter.selectedFilter}
                     buttonLabel={buttonLabel}
                     ZNFilename={exportLabels.ZNFilename}
                     mainFilterLabels={exportLabels.mainFilterLabels}

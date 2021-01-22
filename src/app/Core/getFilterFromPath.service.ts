@@ -1,5 +1,4 @@
 import { FilterInterface, FilterType } from "../Shared/Model/Filter.model";
-import { defaultFilter } from "../Shared/Context/FilterContext";
 
 /**
  * @desc Split the URL path filter string to a list of filters
@@ -27,7 +26,7 @@ export function getFilterFromPath(
     filterKeys: FilterType[]
 ): FilterInterface {
     const searchParams = new URLSearchParams(path);
-    const filterFromPath: FilterInterface = { ...defaultFilter };
+    const filterFromPath: FilterInterface = {};
 
     filterKeys.forEach((filterElement) => {
         const paramsOfKey: string[] = getFilterList(
