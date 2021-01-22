@@ -1,10 +1,7 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable no-console */
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext } from "react";
-import { TableContentTableComponent as ResultsTable } from "./TableContent-Table.component";
-import { ExplanationTextComponent as ExplanationText } from "../../../../../Shared/ExplanationText.component";
+import { TableContentTableComponent } from "./TableContent-Table.component";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
 
 const dataTableStyle = css`
@@ -35,14 +32,9 @@ export function TableResultsTableContentComponent(
 ): JSX.Element {
     const { table } = useContext(TableContext);
 
-    const noRowAndCol =
-        !props.displayRowCol.isCol && !props.displayRowCol.isRow;
     const isRowAndCol = props.displayRowCol.isCol && props.displayRowCol.isRow;
     const isRowNotCol = !props.displayRowCol.isCol && props.displayRowCol.isRow;
 
-    if (noRowAndCol) {
-        return <ExplanationText />;
-    }
     let tableData = table.statisticDataAbsolute;
     if (table.option === "percent") {
         tableData = table.statisticDataPercent;
@@ -54,7 +46,7 @@ export function TableResultsTableContentComponent(
                 props.getSize(node, "totalWidth")
             }
         >
-            <ResultsTable
+            <TableContentTableComponent
                 tableData={tableData}
                 columnAttributes={props.columnAttributes}
                 getSize={props.getSize}

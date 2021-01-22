@@ -10,7 +10,7 @@ import { getValuesOfOneFilterAttribute } from "../../../../Core/FilterServices/g
 import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { ResultsTableResultsComponent } from "./TableResults/Results-TableResults.component";
 import { generateRowsWithIsolates } from "./Results-RowsWithIsolates.service";
-import { calculateRowsWithPercent } from "../../../../Core/calculateRowsWithPercent.service";
+import { calculateRowsWithPercent } from "./calculateRowsWithPercent.service";
 
 export function ContentResultsComponent(): JSX.Element {
     const [state, setState] = useState<{
@@ -42,6 +42,7 @@ export function ContentResultsComponent(): JSX.Element {
             data.uniqueValues,
             filter
         );
+        const nrOfSelectedIsolates = dataToCountIsolates.length;
         if (rowAttribute.length !== 0 && colAttribute.length !== 0) {
             const rowsWithIsolates = generateRowsWithIsolates(
                 dataToCountIsolates,
@@ -51,7 +52,7 @@ export function ContentResultsComponent(): JSX.Element {
                 colValues,
                 "both"
             );
-            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates)
+            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates, nrOfSelectedIsolates)
             setState({
                 isCol: true,
                 isRow: true,
@@ -71,7 +72,7 @@ export function ContentResultsComponent(): JSX.Element {
                 colValues,
                 "col"
             );
-            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates)
+            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates, nrOfSelectedIsolates)
             setState({
                 isCol: true,
                 isRow: false,
@@ -91,7 +92,7 @@ export function ContentResultsComponent(): JSX.Element {
                 [t("Results.TableHead")],
                 "row"
             );
-            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates)
+            const rowsWithPercent = calculateRowsWithPercent(rowsWithIsolates, nrOfSelectedIsolates)
             setState({
                 isCol: false,
                 isRow: true,
@@ -106,17 +107,6 @@ export function ContentResultsComponent(): JSX.Element {
             setState({
                 isCol: false,
                 isRow: false,
-            });
-            setColumnAttributes([t("Results.TableHead")]);
-            setTable({
-                ...table,
-                statisticDataAbsolute: [
-                    {
-                        "Number of isolates": String(
-                            Object.keys(dataToCountIsolates).length
-                        ),
-                    },
-                ],
             });
         }
     };
