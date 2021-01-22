@@ -85,7 +85,7 @@ export function DrawerFilterComponent(): JSX.Element {
                 </p>
                 <ClearSelectorComponent isFilter isTable={false} />
             </div>
-            {FilterSelectorListComponent(handleChange)}
+            {FilterSelectorListComponent(filter.mainFilter, handleChange)}
         </div>
     );
 }

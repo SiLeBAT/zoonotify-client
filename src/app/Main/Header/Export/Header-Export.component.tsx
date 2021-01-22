@@ -78,7 +78,7 @@ export function HeaderExportComponent(): JSX.Element {
 
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(open);
 
-    const exportLabels: ExportLabels = generateExportLabels();
+    const exportLabels: ExportLabels = generateExportLabels(filter.mainFilter);
 
     return (
         <div>
@@ -101,6 +101,7 @@ export function HeaderExportComponent(): JSX.Element {
                     onClick={handleClose}
                     setting={setting}
                     filter={filter.selectedFilter}
+                    mainFilterAttributes={filter.mainFilter}
                     buttonLabel={buttonLabel}
                     ZNFilename={exportLabels.ZNFilename}
                     mainFilterLabels={exportLabels.mainFilterLabels}

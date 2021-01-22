@@ -12,6 +12,7 @@ import { RAWDataStringGenerator } from "./generateRAWString.service";
 export interface ObjectToZipParameter {
     setting: ExportInterface;
     filter: FilterInterface;
+    mainFilterAttributes: string[];
     ZNFilename: string;
     allFilterLabel: string;
     mainFilterLabels: MainFilterLabelInterface;
@@ -37,7 +38,8 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
         generateParameterHeader(
             zipParameter.filter,
             zipParameter.allFilterLabel,
-            zipParameter.mainFilterLabels
+            zipParameter.mainFilterLabels, 
+            zipParameter.mainFilterAttributes
         )
     );
     csvRowsRAW.push(generateStatDataString(zipParameter.setting));
@@ -47,7 +49,8 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
         generateParameterHeader(
             zipParameter.filter,
             zipParameter.allFilterLabel,
-            zipParameter.mainFilterLabels
+            zipParameter.mainFilterLabels,
+            zipParameter.mainFilterAttributes
         )
     );
     csvRowsStat.push(

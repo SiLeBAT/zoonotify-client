@@ -1,7 +1,6 @@
 import { MainFilterLabelInterface } from "../../Shared/Model/Export.model";
 import {
     FilterInterface,
-    mainFilterAttributes,
 } from "../../Shared/Model/Filter.model";
 
 /**
@@ -14,7 +13,8 @@ import {
 export function generateParameterHeader(
     filter: FilterInterface,
     allFilterLabel: string,
-    mainFilterLabels: MainFilterLabelInterface
+    mainFilterLabels: MainFilterLabelInterface,
+    mainFilterAttributes: string[],
 ): string {
     const HeaderRows: string[] = [];
     HeaderRows.push("\uFEFF");

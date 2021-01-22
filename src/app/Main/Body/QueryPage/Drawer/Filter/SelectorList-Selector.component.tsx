@@ -7,7 +7,6 @@ import { DataContext } from "../../../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import {
     FilterType,
-    mainFilterAttributes,
 } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
@@ -35,7 +34,7 @@ export function SelectorListSelectorComponent(
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const filterAttribute: FilterType = mainFilterAttributes[props.index];
+    const filterAttribute: FilterType = filter.mainFilter[props.index];
     let filterValues: string[] = []
     if (!_.isEmpty(filter.selectedFilter)) {
         filterValues = filter.selectedFilter[filterAttribute];

@@ -12,6 +12,7 @@ export interface ObjectToCsvParameter {
     filter: FilterInterface;
     allFilterLabel: string;
     mainFilterLabels: MainFilterLabelInterface;
+    mainFilterAttributes: string[];
 }
 
 /**
@@ -28,7 +29,8 @@ export function objectToCsv(csvParameter: ObjectToCsvParameter): string {
         generateParameterHeader(
             csvParameter.filter,
             csvParameter.allFilterLabel,
-            csvParameter.mainFilterLabels
+            csvParameter.mainFilterLabels,
+            csvParameter.mainFilterAttributes
         )
     );
 

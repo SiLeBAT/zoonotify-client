@@ -3,7 +3,6 @@ import { SelectorListSelectorComponent } from "./SelectorList-Selector.component
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
     FilterType,
-    mainFilterAttributes,
 } from "../../../../../Shared/Model/Filter.model";
 
 /**
@@ -11,6 +10,7 @@ import {
  * @return {JSX.Element[]} selector-elements in a list
  */
 export function FilterSelectorListComponent(
+    mainFilterAttributes: string[],
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,
         keyName: FilterType | TableType

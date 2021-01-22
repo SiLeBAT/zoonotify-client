@@ -7,7 +7,6 @@ import { mockDataURL } from "../../../Shared/URLs";
 import { QueryPageComponent } from "./QueryPage.component";
 import {
     FilterInterface,
-    mainFilterAttributes,
 } from "../../../Shared/Model/Filter.model";
 import {
     FilterContext,
@@ -32,7 +31,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
         const uniqueValuesObject: FilterInterface = {};
 
-        mainFilterAttributes.forEach((filterElement) => {
+        filter.mainFilter.forEach((filterElement) => {
             const uniqueValuesPerElement: string[] = _.uniq(
                 _.map(dataProp, filterElement)
             );
@@ -51,7 +50,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         getData();
         setFilter({
             ...filter,
-            selectedFilter: getFilterFromPath(history.location.search, mainFilterAttributes)
+            selectedFilter: getFilterFromPath(history.location.search, filter.mainFilter)
         });
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
@@ -64,7 +63,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     }, []);
 
     useEffect((): void => {
-        history.push(`?${generatePathString(filter.selectedFilter, table)}`);
+        history.push(`?${generatePathString(filter.selectedFilter, table, filter.mainFilter)}`);
     }, [filter, table]);
 
     let returnValue = <p> Loading data ... </p>;

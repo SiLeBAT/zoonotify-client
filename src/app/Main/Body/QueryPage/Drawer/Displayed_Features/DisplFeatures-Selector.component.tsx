@@ -5,7 +5,6 @@ import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
     FilterType,
-    mainFilterAttributes,
 } from "../../../../../Shared/Model/Filter.model";
 import { generateFeatureList } from "../../../../../Core/generateFeatureList.service";
 
@@ -14,6 +13,7 @@ export interface FeatureSelectorProps {
     otherFeature: FilterType;
     label: string;
     selectAttribute: FilterType | TableType;
+    mainFilterAttributes: string[];
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,
         keyName: FilterType | TableType
@@ -32,7 +32,7 @@ export interface FeatureSelectorProps {
 export function DisplayedFeatureSelectorComponent(
     props: FeatureSelectorProps
 ): JSX.Element {
-    const offeredAttributes: string[] = _.difference(mainFilterAttributes, [
+    const offeredAttributes: string[] = _.difference(props.mainFilterAttributes, [
         props.otherFeature,
     ]);
     const [isNotSelect, selectedValues]: [

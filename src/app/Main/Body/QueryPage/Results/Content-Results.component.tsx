@@ -112,11 +112,11 @@ export function ContentResultsComponent(): JSX.Element {
     };
 
     useEffect((): void => {
-        if (CheckIfFilterIsSet(filter.selectedFilter)) {
+        if (CheckIfFilterIsSet(filter.selectedFilter, filter.mainFilter)) {
             setData({ ...data, ZNDataFiltered: data.ZNData });
             getTableContext(data.ZNData);
         } else {
-            const filteredData = filterData(data.ZNData, filter.selectedFilter);
+            const filteredData = filterData(data.ZNData, filter.selectedFilter, filter.mainFilter);
             setData({ ...data, ZNDataFiltered: filteredData });
             getTableContext(filteredData);
         }

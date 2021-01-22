@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useContext } from "react";
 import _ from "lodash";
 import { FilterContext } from "../../../../Shared/Context/FilterContext";
-import { mainFilterAttributes } from "../../../../Shared/Model/Filter.model";
 import { ParameterContentListComponent } from "./ParameterContent-List.component";
 import { AccordionComponent } from "../../../../Shared/Accordion.component";
 
@@ -21,7 +20,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const displayFilter = _.cloneDeep(filter.selectedFilter);
-    mainFilterAttributes.forEach((element) => {
+    filter.mainFilter.forEach((element) => {
         if (!_.isEmpty(filter.selectedFilter) || filter.selectedFilter[element].length === 0) {
             displayFilter[element] = [t("Filters.All")];
         } else {
@@ -35,7 +34,7 @@ export function QueryPageParameterContentComponent(): JSX.Element {
      */
     const createParameterComponent = (): JSX.Element[] => {
         const elements: JSX.Element[] = [];
-        mainFilterAttributes.forEach((element): void => {
+        filter.mainFilter.forEach((element): void => {
             elements.push(
                 <ParameterContentListComponent
                     key={`parameter_list_${element}`}
