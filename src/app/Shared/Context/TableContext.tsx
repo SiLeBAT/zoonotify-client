@@ -2,12 +2,12 @@ import React, { useState, createContext } from "react";
 import { FilterType } from "../Model/Filter.model";
 
 export type TableType = "row" | "column";
-export type OptionType = "absolute" | "percent";
+export type DisplayOptionType = "absolute" | "percent";
 
 export interface TableInterface {
     row: FilterType;
     column: FilterType;
-    option: OptionType;
+    option: DisplayOptionType;
     statisticDataAbsolute: Record<string, string>[];
     statisticDataPercent: Record<string, string>[];
 }

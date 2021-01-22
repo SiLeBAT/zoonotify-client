@@ -34,16 +34,13 @@ export function HeaderExportComponent(): JSX.Element {
         if (stat) {
             if (table.option === "absolute") {
                 statData = table.statisticDataAbsolute;
-                if (!_.isEmpty(statData)) {
-                    statKeys = Object.keys(table.statisticDataAbsolute[0]);
-                }
             }
             if (table.option === "percent") {
                 statData = table.statisticDataPercent;
-                if (!_.isEmpty(statData)) {
-                    statKeys = Object.keys(table.statisticDataPercent[0]);
-                }
             }
+        }
+        if (!_.isEmpty(statData)) {
+            statKeys = Object.keys(statData[0]);
         }
 
         setSetting({

@@ -7,6 +7,7 @@ import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHe
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { TableContext } from "../../../../../Shared/Context/TableContext";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
+import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -81,42 +82,51 @@ export function ResultsTableResultsComponent(
 
     const headerWidth: number = totalWidth - partWidth;
 
-    const isTable: boolean =
-        props.displayRowCol.isCol || props.displayRowCol.isRow;
-
     const accordionHeader: string = t(`Results.Table`);
     const rowMainHeader: string = t(`Filters.${table.row}`);
     const colMainHeader: string = t(`Filters.${table.column}`);
 
+    let tableAccordionContent = (
+        <div css={dataStyle}>
+            <ExplanationTextComponent />
+        </div>
+    );
+    const isTable: boolean =
+        props.displayRowCol.isCol || props.displayRowCol.isRow;
+
+    if (isTable) {
+        tableAccordionContent = (
+            <div css={dataStyle}>
+                <ResultsTableOptionsComponent isTable={isTable} />
+                <TableResultsTableMainHeaderComponent
+                    isTitle={props.displayRowCol.isCol}
+                    isRow={false}
+                    height={tableHeight}
+                    width={headerWidth}
+                    text={colMainHeader}
+                />
+                <div css={tableDivStyle}>
+                    <TableResultsTableMainHeaderComponent
+                        isTitle={props.displayRowCol.isRow}
+                        isRow
+                        height={tableHeight}
+                        width={headerWidth}
+                        text={rowMainHeader}
+                    />
+                    <TableResultsTableContentComponent
+                        displayRowCol={props.displayRowCol}
+                        columnAttributes={props.columnAttributes}
+                        getSize={div}
+                    />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <AccordionComponent
             title={accordionHeader}
-            content={
-                <div css={dataStyle}>
-                    <ResultsTableOptionsComponent isTable={isTable} />
-                    <TableResultsTableMainHeaderComponent
-                        isTitle={props.displayRowCol.isCol}
-                        isRow={false}
-                        height={tableHeight}
-                        width={headerWidth}
-                        text={colMainHeader}
-                    />
-                    <div css={tableDivStyle}>
-                        <TableResultsTableMainHeaderComponent
-                            isTitle={props.displayRowCol.isRow}
-                            isRow
-                            height={tableHeight}
-                            width={headerWidth}
-                            text={rowMainHeader}
-                        />
-                        <TableResultsTableContentComponent
-                            displayRowCol={props.displayRowCol}
-                            columnAttributes={props.columnAttributes}
-                            getSize={div}
-                        />
-                    </div>
-                </div>
-            }
+            content={tableAccordionContent}
         />
     );
 }

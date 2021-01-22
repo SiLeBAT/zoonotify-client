@@ -14,7 +14,7 @@ import {
     primaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
-    OptionType,
+    DisplayOptionType,
     TableContext,
 } from "../../../../../Shared/Context/TableContext";
 
@@ -30,7 +30,7 @@ const optionsHeadingStyle = css`
     font-weight: bold;
     font-size: ${size}rem;
 `;
-const sizeStyle = css`
+const radioButtonSizeStyle = css`
     span {
         font-size: ${size}rem;
     }
@@ -68,7 +68,7 @@ export function ResultsTableOptionsComponent(props: {
         event: React.ChangeEvent<HTMLInputElement>
     ): void => {
         const optionValue = (event.target as HTMLInputElement)
-            .value as OptionType;
+            .value as DisplayOptionType;
         setTable({
             ...table,
             option: optionValue,
@@ -87,13 +87,13 @@ export function ResultsTableOptionsComponent(props: {
                     onChange={handleRadioChange}
                 >
                     <FormControlLabel
-                        css={sizeStyle}
+                        css={radioButtonSizeStyle}
                         value="absolute"
                         control={<BlueRadio color="default" size="small" />}
                         label="Absolute numbers"
                     />
                     <FormControlLabel
-                        css={sizeStyle}
+                        css={radioButtonSizeStyle}
                         value="percent"
                         control={<BlueRadio color="default" size="small" />}
                         label="Percent"
