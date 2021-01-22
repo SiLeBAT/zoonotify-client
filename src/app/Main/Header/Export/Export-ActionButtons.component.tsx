@@ -3,8 +3,8 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { CSVLink } from "react-csv";
 import { useTranslation } from "react-i18next";
 import { Button, DialogActions } from "@material-ui/core";
-import { objectToCsv } from "../../../Core/ExportServices/objectToCsv.service";
-import { objectToZip } from "../../../Core/ExportServices/objectsToZip.service";
+import { objectToCsv } from "../../../Core/ExportServices/parameterAndDataToCsvString.service";
+import { objectToZip } from "../../../Core/ExportServices/dataAndStatisticToZipFile.service";
 import {
     ExportInterface,
     MainFilterLabelInterface,

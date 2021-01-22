@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import {
-    bfrPrimaryPalette,
     onPrimaryColor,
     primaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
@@ -14,7 +13,6 @@ const titleDivStyle = (
     align-items: ${isRow ? "flex-end" : "center"};
     justify-content: ${isRow ? "center" : "flex-end"};
     background-color: ${primaryColor};
-    border-bottom: ${isRow ? "none" : `solid ${bfrPrimaryPalette[300]}`};
 `;
 const tableTitleStyle = (
     isTitle: boolean,
