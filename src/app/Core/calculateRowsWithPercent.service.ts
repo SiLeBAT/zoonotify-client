@@ -4,7 +4,7 @@ function getSumOfIsolates(objList: Record<string, string>[]): number {
         const k = Object.keys(obj);
         k.forEach((element) => {
             if (element !== "name") {
-                sum += (obj[element] as unknown) as number;
+                sum += Number.parseInt(obj[element], 10);
             }
         });
     });
@@ -12,7 +12,7 @@ function getSumOfIsolates(objList: Record<string, string>[]): number {
 }
 
 function calculatePercent(part: number, total: number): string {
-    const percent = (part / total) * 100;
+    const percent = total === 0 ? 0 : (part / total) * 100;
     const percentRounded = percent.toFixed(2);
     return percentRounded;
 }
@@ -32,7 +32,7 @@ export function calculateRowsWithPercent(
         k.forEach((element) => {
             if (element !== "name") {
                 percentRow[element] = calculatePercent(
-                    (obj[element] as unknown) as number,
+                    Number.parseInt(obj[element], 10),
                     sumOfIsolates
                 );
             }
