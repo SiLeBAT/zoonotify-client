@@ -7,5 +7,6 @@ export const ZNPaths = {
 };
 
 export const mockDataURL = "/v1/mockdata";
+export const filterURL = "/v1/filterconfig";
 
 export const apiURL = "/api-docs/v1/";
