@@ -2,7 +2,6 @@ import _ from "lodash";
 import {
     FilterInterface,
     FilterType,
-    mainFilterAttributes,
 } from "../../Shared/Model/Filter.model";
 
 /**
@@ -10,7 +9,7 @@ import {
  * @param {FilterInterface} filter - object of filters
  * @returns {boolean} - true if no filter is selected
  */
-export function CheckIfFilterIsSet(filter: FilterInterface): boolean {
+export function CheckIfFilterIsSet(filter: FilterInterface, mainFilterAttributes: string[]): boolean {
     const noFilter = mainFilterAttributes.every(function emptyArray(
         key
     ): boolean {

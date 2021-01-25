@@ -2,7 +2,6 @@ import _ from "lodash";
 import {
     FilterInterface,
     FilterType,
-    mainFilterAttributes,
 } from "../../Shared/Model/Filter.model";
 import { DBentry } from "../../Shared/Model/Isolate.model";
 
@@ -14,7 +13,8 @@ import { DBentry } from "../../Shared/Model/Isolate.model";
  */
 export function filterData(
     data: DBentry[],
-    filter: FilterInterface
+    filter: FilterInterface, 
+    mainFilterAttributes: string[]
 ): DBentry[] {
     let filteredData: DBentry[] = data;
     mainFilterAttributes.map(async (attribute: FilterType) => {

@@ -27,6 +27,7 @@ export interface ExportActionButtonProps {
     onClick: (event: unknown) => void;
     setting: ExportInterface;
     filter: FilterInterface;
+    mainFilterAttributes: string[];
     buttonLabel: JSX.Element;
     ZNFilename: string;
     mainFilterLabels: MainFilterLabelInterface;
@@ -38,6 +39,7 @@ export interface ExportActionButtonProps {
  * @param {(event: unknown) => void} onClick - onClick function to close the export dialog
  * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
+ * @param {sting[]} mainFilterAttributes - list of main filters
  * @param {JSX.Element} buttonLabel - component for the export button label
  * @param {string} ZNFilename - main filename
  * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters
@@ -80,6 +82,7 @@ export function ExportActionButtonsComponent(
                             filter: props.filter,
                             allFilterLabel: props.allFilterLabel,
                             mainFilterLabels: props.mainFilterLabels,
+                            mainFilterAttributes: props.mainFilterAttributes,
                         })}
                         filename={`${subFileName}_${props.ZNFilename}`}
                         target="_blank"
@@ -92,6 +95,7 @@ export function ExportActionButtonsComponent(
                                     allFilterLabel: props.allFilterLabel,
                                     mainFilterLabels: props.mainFilterLabels,
                                     subFileNames,
+                                    mainFilterAttributes: props.mainFilterAttributes
                                 });
                                 return false;
                             }

@@ -60,12 +60,18 @@ export function DrawerFilterComponent(): JSX.Element {
             });
             setFilter({
                 ...filter,
-                [keyName]: selectedFilter,
+                selectedFilter: {
+                    ...filter.selectedFilter,
+                    [keyName]: selectedFilter,
+                },
             });
         } else {
             setFilter({
                 ...filter,
-                [keyName]: [],
+                selectedFilter: {
+                    ...filter.selectedFilter,
+                    [keyName]: [],
+                },
             });
         }
     };
@@ -79,7 +85,7 @@ export function DrawerFilterComponent(): JSX.Element {
                 </p>
                 <ClearSelectorComponent isFilter isTable={false} />
             </div>
-            {FilterSelectorListComponent(handleChange)}
+            {FilterSelectorListComponent(filter.mainFilter, handleChange)}
         </div>
     );
 }

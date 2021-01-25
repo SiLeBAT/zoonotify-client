@@ -26,10 +26,9 @@
     },
     "Filters": {
         "All": "Alle Werte",
-        "Erreger": "Erreger",
-        "Matrix": "Lebensmittel",
-        "Projektname": "Projektname",
-        "Serovar": "Serovar"
+        "microorganism": "Erreger",
+        "matrix": "Matrix",
+        "sLocation": "Probenahmegrund"
     },
     "NrOfIsolates": {
         "Title": "Anzahl Isolate",

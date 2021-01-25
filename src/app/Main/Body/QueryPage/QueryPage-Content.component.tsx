@@ -7,7 +7,6 @@ import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.com
 import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
-import { mainFilterAttributes } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
 
@@ -55,8 +54,8 @@ export function QueryPageContentComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     useEffect((): void => {
-        mainFilterAttributes.forEach((element): void => {
-            if (filter[element].length !== 0) {
+        filter.mainFilter.forEach((element): void => {
+            if (filter.selectedFilter[element].length !== 0) {
                 setIsFilter(true);
             }
         });

@@ -26,10 +26,9 @@
     },
     "Filters": {
         "All": "All values",
-        "Erreger": "Pathogens",
-        "Matrix": "Food products",
-        "Projektname": "Project name",
-        "Serovar": "Serovar"
+        "microorganism": "Microorganism",
+        "matrix": "Matrix",
+        "sLocation": "Sampling context"
     },
     "NrOfIsolates": {
         "Title": "Number of isolates",

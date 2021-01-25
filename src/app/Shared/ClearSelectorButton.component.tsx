@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { IconButton, Tooltip, withStyles } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Model/Filter.model";
-import { defaultFilter, FilterContext } from "./Context/FilterContext";
+import { FilterContext } from "./Context/FilterContext";
 import {
     onBackgroundColor,
     primaryColor,
@@ -45,7 +45,7 @@ export interface ClearSelectorProps {
  * @returns {JSX.Element} - button component with tooltip
  */
 export function ClearSelectorComponent(props: ClearSelectorProps): JSX.Element {
-    const { setFilter } = useContext(FilterContext);
+    const { filter, setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
 
     const { t } = useTranslation(["QueryPage"]);
@@ -53,7 +53,7 @@ export function ClearSelectorComponent(props: ClearSelectorProps): JSX.Element {
 
     const handleRemove = (): void => {
         if (props.isFilter) {
-            setFilter(defaultFilter);
+            setFilter({...filter, selectedFilter: filter.emptyFilter});
         } else if (props.isTable) {
             setTable({
                 ...table,

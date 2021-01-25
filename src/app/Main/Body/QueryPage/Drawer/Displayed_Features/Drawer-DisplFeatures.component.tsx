@@ -13,6 +13,7 @@ import {
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import { DisplayedFeatureSelectorComponent } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 
 const drawerWidthStyle = css`
     width: inherit;
@@ -47,6 +48,7 @@ const iconStyle = css`
 
 export function DrawerDisplayedFeaturesComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
+    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
     /**
@@ -93,6 +95,7 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                 activeFeature={table.row}
                 otherFeature={table.column}
                 selectAttribute="row"
+                mainFilterAttributes={filter.mainFilter}
                 handleChange={handleChange}
             />
             <div css={centerIconButtonStyle}>
@@ -105,6 +108,7 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                 activeFeature={table.column}
                 otherFeature={table.row}
                 selectAttribute="column"
+                mainFilterAttributes={filter.mainFilter}
                 handleChange={handleChange}
             />
         </div>
