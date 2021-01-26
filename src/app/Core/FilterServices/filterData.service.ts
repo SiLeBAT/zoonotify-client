@@ -7,19 +7,19 @@ import { DBentry } from "../../Shared/Model/Isolate.model";
 
 /**
  * @desc Filter the dataset with the selected filters
- * @param {DBentry[]} - dataset
+ * @param {DBentry} - dataset
  * @param {FilterInterface} filter - object of selected filters
- * @returns {DBentry[]} - filtered dataset
+ * @returns {DBentry} - filtered dataset
  */
 export function filterData(
-    data: DBentry[],
+    data: DBentry,
     filter: FilterInterface, 
     mainFilterAttributes: string[]
-): DBentry[] {
-    let filteredData: DBentry[] = data;
+): DBentry {
+    let filteredData: DBentry = data;
     mainFilterAttributes.map(async (attribute: FilterType) => {
         if (!_.isEmpty(filter[attribute])) {
-            let tempFilteredData: DBentry[] = [];
+            let tempFilteredData: DBentry = [];
             filter[attribute].forEach((element) => {
                 tempFilteredData = tempFilteredData.concat(
                     _.filter(filteredData, {

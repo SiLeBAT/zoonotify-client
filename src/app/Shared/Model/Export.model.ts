@@ -9,7 +9,7 @@ export interface ExportInterface {
         column: FilterType;
     };
     rawDataSet: {
-        rawData: DBentry[];
+        rawData: DBentry;
         rawKeys: DBkey[];
     };
     statDataSet: {

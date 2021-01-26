@@ -3,8 +3,8 @@ import { DBentry, DBkey } from "../Model/Isolate.model";
 import { FilterInterface } from "../Model/Filter.model";
 
 interface DataInterface {
-    ZNData: DBentry[];
-    ZNDataFiltered: DBentry[];
+    ZNData: DBentry;
+    ZNDataFiltered: DBentry;
     keyValues: DBkey[];
     uniqueValues: FilterInterface;
 }

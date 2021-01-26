@@ -14,14 +14,19 @@ function stringModification(inputString: string): string {
  * @returns {string} - data in one csv string
  */
 export function generateCSVString<
-    T extends Record<string, string>,
+    T extends Record<string, unknown>,
     K extends keyof T
 >(dataArray: T[], headers: K[]): string {
     const csvTable: string[] = [];
 
-    dataArray.forEach((row) => {
-        const values: string[] = headers.map((header) => {
-            return stringModification(`${row[header]}`);
+    dataArray.forEach((row: T) => {
+        const values: string[] = headers.map((header: K) => {
+            const rowValue = row[header];
+            const rowValueType = typeof rowValue;
+            if (rowValueType === "string" || rowValueType === "number") {
+                return stringModification(`${rowValue}`);
+            }
+            return "";
         });
         csvTable.push(values.join(","));
     });

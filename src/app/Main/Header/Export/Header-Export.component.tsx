@@ -27,7 +27,7 @@ export function HeaderExportComponent(): JSX.Element {
     const { table } = useContext(TableContext);
 
     const chooseData = (raw: boolean, stat: boolean): void => {
-        const rawData: DBentry[] = raw ? data.ZNDataFiltered : [];
+        const rawData: DBentry = raw ? data.ZNDataFiltered : [];
         const rawKeys: DBkey[] = raw ? data.keyValues : [];
         let statData: Record<string, string>[] = [];
         let statKeys: string[] = [];

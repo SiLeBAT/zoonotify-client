@@ -26,7 +26,7 @@ const selectFilterObject = (
 };
 
 const countIsolates = (
-    data: DBentry[],
+    data: DBentry,
     filterObject: { [x: string]: string }
 ): string => {
     return (_.filter(data, filterObject).length as unknown) as string;
@@ -34,7 +34,7 @@ const countIsolates = (
 
 /**
  * @desc Generates a list of objects with an object for each row, with the name of the row and the counted isolates for the corresponding values in the column.
- * @param {DBentry[]} data - a list of DB entries like database.
+ * @param {DBentry} data - a list of DB entries like database.
  * @param {FilterType} colAttribute - selected attribute for the column.
  * @param {FilterType} rowAttribute - selected attribute for the row.
  * @param {string[]} colValues - unique values or the selected filter values of the selected column-attribute
@@ -43,7 +43,7 @@ const countIsolates = (
  * @returns {Record<string, string>[]} - one object for each row inside a list
  */
 export function generateRowsWithIsolates(
-    data: DBentry[],
+    data: DBentry,
     colAttribute: FilterType,
     rowAttribute: FilterType,
     rowValues: string[],

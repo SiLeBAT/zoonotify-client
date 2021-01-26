@@ -30,7 +30,7 @@ export function ContentResultsComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const getTableContext = async (
-        dataToCountIsolates: DBentry[]
+        dataToCountIsolates: DBentry
     ): Promise<void> => {
         const rowValues = getValuesOfOneFilterAttribute(
             rowAttribute,

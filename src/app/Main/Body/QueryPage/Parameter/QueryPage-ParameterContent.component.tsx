@@ -19,12 +19,15 @@ export function QueryPageParameterContentComponent(): JSX.Element {
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const displayFilter = _.cloneDeep(filter.selectedFilter);
-    filter.mainFilter.forEach((element) => {
-        if (!_.isEmpty(filter.selectedFilter) || filter.selectedFilter[element].length === 0) {
-            displayFilter[element] = [t("Filters.All")];
+    const displayFilter: Record<string, string[]> = _.cloneDeep(filter.selectedFilter);
+    filter.mainFilter.forEach((filterElement: string) => {
+        if (
+            _.isEmpty(filter.selectedFilter) ||
+            filter.selectedFilter[filterElement].length === 0
+        ) {
+            displayFilter[filterElement] = [t("Filters.All")];
         } else {
-            displayFilter[element] = filter.selectedFilter[element];
+            displayFilter[filterElement] = filter.selectedFilter[filterElement];
         }
     });
 
