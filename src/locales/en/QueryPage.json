@@ -13,7 +13,7 @@
         "Delete": "Delete all"
     },
     "Drawer": {
-        "Title": "Filter settings",
+        "Title": "Settings",
         "Subtitles": {
             "Filter": "Filters",
             "Graph": "Displayed features"
