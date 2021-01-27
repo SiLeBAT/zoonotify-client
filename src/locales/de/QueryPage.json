@@ -28,7 +28,7 @@
         "All": "Alle Werte",
         "microorganism": "Erreger",
         "matrix": "Matrix",
-        "sLocation": "Probenahmegrund"
+        "samplingContext": "Probenahmegrund"
     },
     "NrOfIsolates": {
         "Title": "Anzahl Isolate",

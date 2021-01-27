@@ -55,7 +55,7 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
     );
     csvRowsStat.push(
         RAWDataStringGenerator(
-            zipParameter.setting.rawDataSet.rawKeys,
+            zipParameter.mainFilterAttributes,
             zipParameter.setting.rawDataSet.rawData
         )
     );

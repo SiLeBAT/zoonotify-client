@@ -36,6 +36,13 @@ export function QueryPageContainerComponent(): JSX.Element {
         const filterResponse: Response = await fetch(FILTER_URL);
         const filterProp: FilterConfigApiInterface = await filterResponse.json();
 
+        filterProp.filters.forEach((element, index) => {
+            if (element.id === "sContext") {
+                filterProp.filters[index].id = "samplingContext";
+                filterProp.filters[index].name = "samplingContext";
+            }
+        });
+
         const mainFilter: FilterType[] = [];
         const uniqueValuesObject: FilterInterface = {};
         const emptyFilter = {} as FilterInterface;

@@ -14,7 +14,7 @@ function stringModification(inputString: string): string {
  * @returns {string} - data in one csv string
  */
 export function generateCSVString<
-    T extends Record<string, unknown>,
+    T extends Record<string, string>,
     K extends keyof T
 >(dataArray: T[], headers: K[]): string {
     const csvTable: string[] = [];

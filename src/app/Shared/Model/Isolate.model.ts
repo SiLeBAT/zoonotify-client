@@ -11,7 +11,7 @@ export interface IsolateApiInterface {
         matrixDetail: string;
         supercategory: string;
         production: string;
-        characteristics: {
+        /* characteristics: {
             sepecies: string;
             serovar: string;
             serotype: string;
@@ -165,7 +165,7 @@ export interface IsolateApiInterface {
                 value: string;
                 active: boolean;
             };
-        };
+        }; */
     }[];
 }
 
