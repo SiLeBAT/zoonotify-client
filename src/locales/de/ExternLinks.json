@@ -15,16 +15,16 @@
     },
     "Institutes": {
         "Title": "Organisationen und Institute",
-        "RKI": "Robert Koch Institut (RKI)",
+        "RKI": "Robert Koch-Institut (RKI)",
         "BVL": "Bundesamt für Verbraucherschutz und Lebensmittelsicherheit (BVL)",
         "EFSA": "Europäische Behörde für Lebensmittelsicherheit (EFSA)",
         "ECDC": "European Centre for Disease Prevention and Control (ECDC)",
         "BMEL": "Bundesministerium für Ernährung und Landwirtschaft (BMEL)"
     },
     "Platforms": {
-        "Title": "Online Plattformen",
+        "Title": "Online Tools",
         "Survstat": "Survstat@RKI 2.0",
         "ArEFSA": "Antibiotikaresistenzen in Europa - EFSA",
-        "SurveillanceAtlas": "Surveillance Atlas of Infectious Diseases"
+        "SurveillanceAtlas": "Surveillance Atlas of Infectious Diseases - ECDC"
     }
 }
