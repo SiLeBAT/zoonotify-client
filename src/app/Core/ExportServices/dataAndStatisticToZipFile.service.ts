@@ -7,7 +7,7 @@ import {
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatDataString } from "./generateStatDataString.service";
-import { RAWDataStringGenerator } from "./generateRAWString.service";
+import { generateFilteredDataString } from "./generateFilteredDataString.service";
 
 export interface ObjectToZipParameter {
     setting: ExportInterface;
@@ -29,12 +29,12 @@ export interface ObjectToZipParameter {
  * @param {string[]} subFileNames - names of the two different files (data, statistic)
  * @returns {void}
  */
-export function objectToZip(zipParameter: ObjectToZipParameter): void {
+export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): void {
     const csvRows: string[] = [];
-    const csvRowsRAW: string[] = [];
+    const csvRowsFilteredData: string[] = [];
     const csvRowsStat: string[] = [];
 
-    csvRowsRAW.push(
+    csvRowsFilteredData.push(
         generateParameterHeader(
             zipParameter.filter,
             zipParameter.allFilterLabel,
@@ -42,8 +42,8 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
             zipParameter.mainFilterAttributes
         )
     );
-    csvRowsRAW.push(generateStatDataString(zipParameter.setting));
-    csvRows.push(csvRowsRAW.join("\n"));
+    csvRowsFilteredData.push(generateStatDataString(zipParameter.setting));
+    csvRows.push(csvRowsFilteredData.join("\n"));
 
     csvRowsStat.push(
         generateParameterHeader(
@@ -54,7 +54,7 @@ export function objectToZip(zipParameter: ObjectToZipParameter): void {
         )
     );
     csvRowsStat.push(
-        RAWDataStringGenerator(
+        generateFilteredDataString(
             zipParameter.mainFilterAttributes,
             zipParameter.setting.rawDataSet.rawData
         )

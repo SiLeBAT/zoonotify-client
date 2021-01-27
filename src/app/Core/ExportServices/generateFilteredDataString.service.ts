@@ -6,14 +6,14 @@ import { generateCSVString } from "./generateCSVString.service";
  * @param {Record<string, string>[]} rawData - dataset
  * @returns {string} - dataset as string
  */
-export function RAWDataStringGenerator(
+export function generateFilteredDataString(
     rawKeys: string[],
     rawData: Record<string, string>[]
 ): string {
-    const RAWDataString: string[] = [];
+    const FilteredDataString: string[] = [];
     const headers: string[] = rawKeys;
-    RAWDataString.push(headers.join(","));
-    RAWDataString.push(generateCSVString(rawData, headers));
+    FilteredDataString.push(headers.join(","));
+    FilteredDataString.push(generateCSVString(rawData, headers));
 
-    return RAWDataString.join("\n");
+    return FilteredDataString.join("\n");
 }
