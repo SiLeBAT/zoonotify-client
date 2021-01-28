@@ -22,11 +22,7 @@ export function generateCSVString<
     dataArray.forEach((row: T) => {
         const values: string[] = headers.map((header: K) => {
             const rowValue = row[header];
-            const rowValueType = typeof rowValue;
-            if (rowValueType === "string" || rowValueType === "number") {
-                return stringModification(`${rowValue}`);
-            }
-            return "";
+            return stringModification(`${rowValue}`);
         });
         csvTable.push(values.join(","));
     });
