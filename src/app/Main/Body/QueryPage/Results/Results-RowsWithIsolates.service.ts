@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { FilterType } from "../../../../Shared/Model/Filter.model";
-import { DbCollection } from "../../../../Shared/Model/Isolate.model";
+import { DbCollection } from "../../../../Shared/Model/Client_Isolate.model";
 
 const selectFilterObject = (
     colAttribute: FilterType,

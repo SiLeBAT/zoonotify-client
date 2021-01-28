@@ -3,7 +3,7 @@ import {
     FilterInterface,
     FilterType,
 } from "../../Shared/Model/Filter.model";
-import { DbCollection } from "../../Shared/Model/Isolate.model";
+import { DbCollection } from "../../Shared/Model/Client_Isolate.model";
 
 /**
  * @desc Filter the dataset with the selected filters

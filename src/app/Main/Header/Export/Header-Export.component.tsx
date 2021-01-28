@@ -4,7 +4,7 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
-import { DbCollection, DbKey } from "../../../Shared/Model/Isolate.model";
+import { DbCollection, DbKey } from "../../../Shared/Model/Client_Isolate.model";
 import {
     defaultExport,
     ExportInterface,

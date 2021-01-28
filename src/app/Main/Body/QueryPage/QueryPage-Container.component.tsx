@@ -2,11 +2,11 @@ import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
+import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
 import {
     DbCollection,
     DbValues,
-    IsolateDTO,
-} from "../../../Shared/Model/Isolate.model";
+} from "../../../Shared/Model/Client_Isolate.model";
 import { filterURL, isolateURL } from "../../../Shared/URLs";
 import { QueryPageComponent } from "./QueryPage.component";
 import {
@@ -44,8 +44,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         const filterResponse: Response = await fetch(FILTER_URL);
         const filterProp: FilterConfigDTO = await filterResponse.json();
 
-        const adaptedFilterProp = filterProp.filters.map(filterObj => {
-            const tempFilterProp = { ...filterObj};
+        const adaptedFilterProp = filterProp.filters.map((filterObj) => {
+            const tempFilterProp = { ...filterObj };
             if (tempFilterProp.id === "sContext") {
                 tempFilterProp.id = "samplingContext";
                 tempFilterProp.name = "samplingContext";

@@ -1,5 +1,5 @@
 import { FilterType } from "./Filter.model";
-import { DbCollection, DbKey } from "./Isolate.model";
+import { DbCollection, DbKey } from "./Client_Isolate.model";
 
 export interface ExportInterface {
     raw: boolean;

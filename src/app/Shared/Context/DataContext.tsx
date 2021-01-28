@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import { DbCollection, DbKey } from "../Model/Isolate.model";
+import { DbCollection, DbKey } from "../Model/Client_Isolate.model";
 import { FilterInterface } from "../Model/Filter.model";
 
 interface DataInterface {
