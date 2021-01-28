@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
-    DBkey,
+    DbKey,
     IsolateDTO,
 } from "../../../Shared/Model/Isolate.model";
 import { filterURL, isolateURL } from "../../../Shared/URLs";
@@ -25,13 +25,13 @@ export function QueryPageContainerComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
     const history = useHistory();
 
-    const BASE_URL: string = isolateURL;
+    const ISOLATE_URL: string = isolateURL;
     const FILTER_URL: string = filterURL;
 
     const fetchAndSetDataAndFilter = async (): Promise<void> => {
-        const isolateResponse: Response = await fetch(BASE_URL);
+        const isolateResponse: Response = await fetch(ISOLATE_URL);
         const isolateProp: IsolateDTO = await isolateResponse.json();
-        const keyValueProps = Object.keys(isolateProp.isolates[0]) as DBkey[];
+        const keyValueProps = Object.keys(isolateProp.isolates[0]) as DbKey[];
 
         const filterResponse: Response = await fetch(FILTER_URL);
         const filterProp: FilterConfigDTO = await filterResponse.json();

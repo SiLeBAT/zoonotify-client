@@ -2,18 +2,18 @@ import { generateCSVString } from "./generateCSVString.service";
 
 /**
  * @desc Returns the table header and the filtered dataset as string to save it as csv
- * @param {string[]} rawKeys - keys of the dataset
- * @param {Record<string, string>[]} rawData - dataset
+ * @param {string[]} keys - keys of the dataset
+ * @param {Record<string, string>[]} data - dataset
  * @returns {string} - dataset as string
  */
-export function generateFilteredDataString(
-    rawKeys: string[],
-    rawData: Record<string, string>[]
+export function generateDataString(
+    keys: string[],
+    data: Record<string, string>[]
 ): string {
     const FilteredDataString: string[] = [];
-    const headers: string[] = rawKeys;
+    const headers: string[] = keys;
     FilteredDataString.push(headers.join(","));
-    FilteredDataString.push(generateCSVString(rawData, headers));
+    FilteredDataString.push(generateCSVString(data, headers));
 
     return FilteredDataString.join("\n");
 }

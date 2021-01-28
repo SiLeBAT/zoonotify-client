@@ -1,11 +1,11 @@
 import React, { useState, createContext } from "react";
-import { DBentry, DBkey } from "../Model/Isolate.model";
+import { DbCollection, DbKey } from "../Model/Isolate.model";
 import { FilterInterface } from "../Model/Filter.model";
 
 interface DataInterface {
-    ZNData: DBentry;
-    ZNDataFiltered: DBentry;
-    keyValues: DBkey[];
+    ZNData: DbCollection;
+    ZNDataFiltered: DbCollection;
+    keyValues: DbKey[];
     uniqueValues: FilterInterface;
 }
 

@@ -7,7 +7,7 @@ import {
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatDataString } from "./generateStatDataString.service";
-import { generateFilteredDataString } from "./generateFilteredDataString.service";
+import { generateDataString } from "./generateDataString.service";
 
 export interface ObjectToZipParameter {
     setting: ExportInterface;
@@ -21,7 +21,7 @@ export interface ObjectToZipParameter {
 
 /**
  * @desc Convert the data table and the statistic table to one ZIP folder
- * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
+ * @param {ExportInterface} setting -  all info for export (filtered/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
  * @param {string} ZNFilename - main filename
  * @param {string} allFilterLabel - "all values" / "Alle Werte"
@@ -54,7 +54,7 @@ export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): v
         )
     );
     csvRowsStat.push(
-        generateFilteredDataString(
+        generateDataString(
             zipParameter.mainFilterAttributes,
             zipParameter.setting.rawDataSet.rawData
         )

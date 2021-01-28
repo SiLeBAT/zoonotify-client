@@ -170,6 +170,6 @@ export interface IsolateDTO {
 }
 
 
-export type DBentry = IsolateDTO["isolates"];
+export type DbCollection = IsolateDTO["isolates"];
 
-export type DBkey = keyof IsolateDTO["isolates"][0];
+export type DbKey = keyof IsolateDTO["isolates"][0];

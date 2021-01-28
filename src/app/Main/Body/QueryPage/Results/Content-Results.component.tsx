@@ -4,7 +4,7 @@ import { FilterContext } from "../../../../Shared/Context/FilterContext";
 import { FilterType } from "../../../../Shared/Model/Filter.model";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { DataContext } from "../../../../Shared/Context/DataContext";
-import { DBentry } from "../../../../Shared/Model/Isolate.model";
+import { DbCollection } from "../../../../Shared/Model/Isolate.model";
 import { filterData } from "../../../../Core/FilterServices/filterData.service";
 import { getValuesOfOneFilterAttribute } from "../../../../Core/FilterServices/getValuesOfOneFilterAttribute.service";
 import { CheckIfFilterIsSet } from "../../../../Core/FilterServices/checkIfFilterIsSet.service";
@@ -30,7 +30,7 @@ export function ContentResultsComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const getTableContext = async (
-        dataToCountIsolates: DBentry
+        dataToCountIsolates: DbCollection
     ): Promise<void> => {
         const rowValues = getValuesOfOneFilterAttribute(
             rowAttribute,
