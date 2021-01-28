@@ -8,7 +8,7 @@ interface FilterContextInterface {
 }
 
 const defaultFilter: FilterContextInterface = {
-    mainFilter: ["erreger", "matrix", "probenahmegrund"],
+    mainFilter: [],
     selectedFilter: {},
     emptyFilter: {},
 };

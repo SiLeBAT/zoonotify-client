@@ -4,12 +4,12 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     DBkey,
-    IsolateApiInterface,
+    IsolateDTO,
 } from "../../../Shared/Model/Isolate.model";
 import { filterURL, isolateURL } from "../../../Shared/URLs";
 import { QueryPageComponent } from "./QueryPage.component";
 import {
-    FilterConfigApiInterface,
+    FilterConfigDTO,
     FilterInterface,
     FilterType,
 } from "../../../Shared/Model/Filter.model";
@@ -28,13 +28,13 @@ export function QueryPageContainerComponent(): JSX.Element {
     const BASE_URL: string = isolateURL;
     const FILTER_URL: string = filterURL;
 
-    const getData = async (): Promise<void> => {
+    const fetchAndSetDataAndFilter = async (): Promise<void> => {
         const isolateResponse: Response = await fetch(BASE_URL);
-        const isolateProp: IsolateApiInterface = await isolateResponse.json();
+        const isolateProp: IsolateDTO = await isolateResponse.json();
         const keyValueProps = Object.keys(isolateProp.isolates[0]) as DBkey[];
 
         const filterResponse: Response = await fetch(FILTER_URL);
-        const filterProp: FilterConfigApiInterface = await filterResponse.json();
+        const filterProp: FilterConfigDTO = await filterResponse.json();
 
         filterProp.filters.forEach((element, index) => {
             if (element.id === "sContext") {
@@ -45,7 +45,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
         const mainFilter: FilterType[] = [];
         const uniqueValuesObject: FilterInterface = {};
-        const emptyFilter = {} as FilterInterface;
+        const emptyFilter: FilterInterface = {};
 
         filterProp.filters.forEach((filterElement) => {
             const { name } = filterElement;
@@ -72,7 +72,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     useEffect(() => {
-        getData();
+        fetchAndSetDataAndFilter();
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
         );

@@ -1,4 +1,4 @@
-export interface IsolateApiInterface {
+export interface IsolateDTO {
     isolates: {
         id: string;
         microorganism: string;
@@ -170,6 +170,6 @@ export interface IsolateApiInterface {
 }
 
 
-export type DBentry = IsolateApiInterface["isolates"];
+export type DBentry = IsolateDTO["isolates"];
 
-export type DBkey = keyof IsolateApiInterface["isolates"][0];
+export type DBkey = keyof IsolateDTO["isolates"][0];
