@@ -3,7 +3,8 @@ import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
-    DbKey,
+    DbCollection,
+    DbValues,
     IsolateDTO,
 } from "../../../Shared/Model/Isolate.model";
 import { filterURL, isolateURL } from "../../../Shared/URLs";
@@ -31,23 +32,32 @@ export function QueryPageContainerComponent(): JSX.Element {
     const fetchAndSetDataAndFilter = async (): Promise<void> => {
         const isolateResponse: Response = await fetch(ISOLATE_URL);
         const isolateProp: IsolateDTO = await isolateResponse.json();
-        const keyValueProps = Object.keys(isolateProp.isolates[0]) as DbKey[];
+
+        const adaptedDbIsolates: DbCollection = isolateProp.isolates.map(
+            ({ microorganism, samplingContext, matrix }) => ({
+                microorganism,
+                samplingContext,
+                matrix,
+            })
+        );
 
         const filterResponse: Response = await fetch(FILTER_URL);
         const filterProp: FilterConfigDTO = await filterResponse.json();
 
-        filterProp.filters.forEach((element, index) => {
-            if (element.id === "sContext") {
-                filterProp.filters[index].id = "samplingContext";
-                filterProp.filters[index].name = "samplingContext";
+        const adaptedFilterProp = filterProp.filters.map(filterObj => {
+            const tempFilterProp = { ...filterObj};
+            if (tempFilterProp.id === "sContext") {
+                tempFilterProp.id = "samplingContext";
+                tempFilterProp.name = "samplingContext";
             }
+            return tempFilterProp;
         });
 
         const mainFilter: FilterType[] = [];
         const uniqueValuesObject: FilterInterface = {};
         const emptyFilter: FilterInterface = {};
 
-        filterProp.filters.forEach((filterElement) => {
+        adaptedFilterProp.forEach((filterElement) => {
             const { name } = filterElement;
             mainFilter.push(name);
             uniqueValuesObject[name] = filterElement.values;
@@ -64,9 +74,9 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
 
         setData({
-            ZNData: isolateProp.isolates,
-            ZNDataFiltered: isolateProp.isolates,
-            keyValues: keyValueProps,
+            ZNData: adaptedDbIsolates,
+            ZNDataFiltered: adaptedDbIsolates,
+            keyValues: DbValues,
             uniqueValues: uniqueValuesObject,
         });
     };

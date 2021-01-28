@@ -1,17 +1,16 @@
 export interface IsolateDTO {
     isolates: {
-        id: string;
         microorganism: string;
-        state: string;
-        year: string;
-        samplingReason: string;
-        samplingLocation: string;
-        samplingOrigin: string;
+        samplingYear: number;
+        federalState: string;
+        samplingContext: string;
+        samplingStage: string;
+        origin: string;
+        category: string;
+        productionType: string;
         matrix: string;
         matrixDetail: string;
-        supercategory: string;
-        production: string;
-        /* characteristics: {
+        characteristics: {
             sepecies: string;
             serovar: string;
             serotype: string;
@@ -165,11 +164,16 @@ export interface IsolateDTO {
                 value: string;
                 active: boolean;
             };
-        }; */
+        };
     }[];
 }
 
+export type DbCollection = {
+    microorganism: string;
+    samplingContext: string;
+    matrix: string;
+}[];
 
-export type DbCollection = IsolateDTO["isolates"];
+export type DbKey = "microorganism" | "samplingContext" | "matrix";
 
-export type DbKey = keyof IsolateDTO["isolates"][0];
+export const DbValues: DbKey[] = ["microorganism", "samplingContext", "matrix"];
