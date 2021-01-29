@@ -4,13 +4,15 @@ import { FilterInterface } from "../Model/Filter.model";
 interface FilterContextInterface {
     mainFilter: string[];
     selectedFilter: FilterInterface;
-    emptyFilter: FilterInterface;
 }
 
-const defaultFilter: FilterContextInterface = {
+export const defaultFilter: FilterContextInterface = {
     mainFilter: [],
-    selectedFilter: {},
-    emptyFilter: {},
+    selectedFilter: {
+        microorganism: [],
+        samplingContext: [],
+        matrix: []
+    },
 };
 interface ProfileState {
     filter: FilterContextInterface;

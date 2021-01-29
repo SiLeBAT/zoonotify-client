@@ -5,7 +5,7 @@ import { DataContext } from "../../../Shared/Context/DataContext";
 import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
 import {
     DbCollection,
-    DbValues,
+    DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { filterURL, isolateURL } from "../../../Shared/URLs";
 import { QueryPageComponent } from "./QueryPage.component";
@@ -55,13 +55,11 @@ export function QueryPageContainerComponent(): JSX.Element {
 
         const mainFilter: FilterType[] = [];
         const uniqueValuesObject: FilterInterface = {};
-        const emptyFilter: FilterInterface = {};
 
         adaptedFilterProp.forEach((filterElement) => {
             const { name } = filterElement;
             mainFilter.push(name);
             uniqueValuesObject[name] = filterElement.values;
-            emptyFilter[name] = [];
         });
 
         setFilter({
@@ -70,13 +68,12 @@ export function QueryPageContainerComponent(): JSX.Element {
                 history.location.search,
                 mainFilter
             ),
-            emptyFilter,
         });
 
         setData({
             ZNData: adaptedDbIsolates,
             ZNDataFiltered: adaptedDbIsolates,
-            keyValues: DbValues,
+            keyValues: DbKeyCollection,
             uniqueValues: uniqueValuesObject,
         });
     };

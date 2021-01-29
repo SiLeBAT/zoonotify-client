@@ -6,4 +6,4 @@ export type DbCollection = {
 
 export type DbKey = "microorganism" | "samplingContext" | "matrix";
 
-export const DbValues: DbKey[] = ["microorganism", "samplingContext", "matrix"];
+export const DbKeyCollection: DbKey[] = ["microorganism", "samplingContext", "matrix"];
