@@ -10,3 +10,10 @@ export interface FilterConfigDTO {
         values: string[];
     }[];
 }
+
+export interface SingleFilterConfig {
+    id: string;
+    name: string;
+    parent: string;
+    values: string[];
+}

@@ -13,12 +13,26 @@ import {
     FilterConfigDTO,
     FilterInterface,
     FilterType,
+    SingleFilterConfig,
 } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
 import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/getTableFromPath.service";
+
+function setAdaptedFilterProp(
+    filterObj: SingleFilterConfig,
+    idName: string
+): SingleFilterConfig {
+    const adaptedFilterProp = {
+        id: idName,
+        name: idName,
+        parent: filterObj.parent,
+        values: filterObj.values,
+    };
+    return adaptedFilterProp;
+}
 
 export function QueryPageContainerComponent(): JSX.Element {
     const { data, setData } = useContext(DataContext);
@@ -44,14 +58,14 @@ export function QueryPageContainerComponent(): JSX.Element {
         const filterResponse: Response = await fetch(FILTER_URL);
         const filterProp: FilterConfigDTO = await filterResponse.json();
 
-        const adaptedFilterProp = filterProp.filters.map((filterObj) => {
-            const tempFilterProp = { ...filterObj };
-            if (tempFilterProp.id === "sContext") {
-                tempFilterProp.id = "samplingContext";
-                tempFilterProp.name = "samplingContext";
+        const adaptedFilterProp: SingleFilterConfig[] = filterProp.filters.map(
+            (filterObj) => {
+                if (filterObj.id === "sContext") {
+                    return setAdaptedFilterProp(filterObj, "samplingContext");
+                }
+                return setAdaptedFilterProp(filterObj, filterObj.id);
             }
-            return tempFilterProp;
-        });
+        );
 
         const mainFilter: FilterType[] = [];
         const uniqueValuesObject: FilterInterface = {};
