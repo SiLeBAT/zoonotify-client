@@ -4,7 +4,7 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
-import { DBentry, DBkey } from "../../../Shared/Model/Isolate.model";
+import { DbCollection, DbKey } from "../../../Shared/Model/Client_Isolate.model";
 import {
     defaultExport,
     ExportInterface,
@@ -27,8 +27,8 @@ export function HeaderExportComponent(): JSX.Element {
     const { table } = useContext(TableContext);
 
     const chooseData = (raw: boolean, stat: boolean): void => {
-        const rawData: DBentry[] = raw ? data.ZNDataFiltered : [];
-        const rawKeys: DBkey[] = raw ? data.keyValues : [];
+        const rawData: DbCollection = raw ? data.ZNDataFiltered : [];
+        const rawKeys: DbKey[] = raw ? data.keyValues : [];
         let statData: Record<string, string>[] = [];
         let statKeys: string[] = [];
         if (stat) {

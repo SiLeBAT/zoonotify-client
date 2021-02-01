@@ -2,12 +2,18 @@ import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
-import { DBentry, DBkey } from "../../../Shared/Model/Isolate.model";
-import { filterURL, mockDataURL } from "../../../Shared/URLs";
+import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
+import {
+    DbCollection,
+    DbKeyCollection,
+} from "../../../Shared/Model/Client_Isolate.model";
+import { filterURL, isolateURL } from "../../../Shared/URLs";
 import { QueryPageComponent } from "./QueryPage.component";
 import {
+    FilterConfigDTO,
     FilterInterface,
     FilterType,
+    SingleFilterConfig,
 } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
@@ -15,13 +21,17 @@ import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/getTableFromPath.service";
 
-interface FilterConfigApiInterface {
-    filters: {
-        id: string;
-        name: string;
-        parent: string;
-        values: string[];
-    }[];
+function setAdaptedFilterProp(
+    filterObj: SingleFilterConfig,
+    idName: string
+): SingleFilterConfig {
+    const adaptedFilterProp = {
+        id: idName,
+        name: idName,
+        parent: filterObj.parent,
+        values: filterObj.values,
+    };
+    return adaptedFilterProp;
 }
 
 export function QueryPageContainerComponent(): JSX.Element {
@@ -30,26 +40,40 @@ export function QueryPageContainerComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
     const history = useHistory();
 
-    const BASE_URL: string = mockDataURL;
+    const ISOLATE_URL: string = isolateURL;
     const FILTER_URL: string = filterURL;
 
-    const getData = async (): Promise<void> => {
-        const r: Response = await fetch(BASE_URL);
-        const dataProp: DBentry[] = await r.json();
-        const keyValueProps = Object.keys(dataProp[0]) as DBkey[];
+    const fetchAndSetDataAndFilter = async (): Promise<void> => {
+        const isolateResponse: Response = await fetch(ISOLATE_URL);
+        const isolateProp: IsolateDTO = await isolateResponse.json();
+
+        const adaptedDbIsolates: DbCollection = isolateProp.isolates.map(
+            ({ microorganism, samplingContext, matrix }) => ({
+                microorganism,
+                samplingContext,
+                matrix,
+            })
+        );
 
         const filterResponse: Response = await fetch(FILTER_URL);
-        const filterProp: FilterConfigApiInterface = await filterResponse.json();
+        const filterProp: FilterConfigDTO = await filterResponse.json();
+
+        const adaptedFilterProp: SingleFilterConfig[] = filterProp.filters.map(
+            (filterObj) => {
+                if (filterObj.id === "sContext") {
+                    return setAdaptedFilterProp(filterObj, "samplingContext");
+                }
+                return setAdaptedFilterProp(filterObj, filterObj.id);
+            }
+        );
 
         const mainFilter: FilterType[] = [];
         const uniqueValuesObject: FilterInterface = {};
-        const emptyFilter = {} as FilterInterface;
 
-        filterProp.filters.forEach((filterElement) => {
+        adaptedFilterProp.forEach((filterElement) => {
             const { name } = filterElement;
             mainFilter.push(name);
             uniqueValuesObject[name] = filterElement.values;
-            emptyFilter[name] = [];
         });
 
         setFilter({
@@ -58,19 +82,18 @@ export function QueryPageContainerComponent(): JSX.Element {
                 history.location.search,
                 mainFilter
             ),
-            emptyFilter,
         });
 
         setData({
-            ZNData: dataProp,
-            ZNDataFiltered: dataProp,
-            keyValues: keyValueProps,
+            ZNData: adaptedDbIsolates,
+            ZNDataFiltered: adaptedDbIsolates,
+            keyValues: DbKeyCollection,
             uniqueValues: uniqueValuesObject,
         });
     };
 
     useEffect(() => {
-        getData();
+        fetchAndSetDataAndFilter();
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
         );

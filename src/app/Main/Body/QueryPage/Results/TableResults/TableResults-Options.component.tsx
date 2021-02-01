@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx, SerializedStyles } from "@emotion/core";
+import { css, jsx } from "@emotion/core";
 import {
     Radio,
     FormControl,
@@ -20,8 +20,8 @@ import {
 
 const size = 0.75;
 
-const optionsStyle = (isTable: boolean): SerializedStyles => css`
-    display: ${isTable ? "flex" : "none"};
+const optionsStyle = css`
+    display: "flex";
     margin-top: 0;
     flex-direction: row;
 `;
@@ -59,9 +59,7 @@ const BlueRadio = withStyles(() =>
  * @desc Returns the option bar to display the table numbers as absolute numbers or in percent
  * @returns {JSX.Element} - option bar component
  */
-export function ResultsTableOptionsComponent(props: {
-    isTable: boolean;
-}): JSX.Element {
+export function ResultsTableOptionsComponent(): JSX.Element {
     const { table, setTable } = useContext(TableContext);
 
     const handleRadioChange = (
@@ -76,7 +74,7 @@ export function ResultsTableOptionsComponent(props: {
     };
 
     return (
-        <div css={optionsStyle(props.isTable)}>
+        <div css={optionsStyle}>
             <p css={optionsHeadingStyle}>Display options:</p>
             <FormControl component="fieldset">
                 <RadioGroup

@@ -3,23 +3,23 @@ import {
     FilterInterface,
     FilterType,
 } from "../../Shared/Model/Filter.model";
-import { DBentry } from "../../Shared/Model/Isolate.model";
+import { DbCollection } from "../../Shared/Model/Client_Isolate.model";
 
 /**
  * @desc Filter the dataset with the selected filters
- * @param {DBentry[]} - dataset
+ * @param {DbCollection} - dataset
  * @param {FilterInterface} filter - object of selected filters
- * @returns {DBentry[]} - filtered dataset
+ * @returns {DbCollection} - filtered dataset
  */
 export function filterData(
-    data: DBentry[],
+    data: DbCollection,
     filter: FilterInterface, 
     mainFilterAttributes: string[]
-): DBentry[] {
-    let filteredData: DBentry[] = data;
+): DbCollection {
+    let filteredData: DbCollection = data;
     mainFilterAttributes.map(async (attribute: FilterType) => {
         if (!_.isEmpty(filter[attribute])) {
-            let tempFilteredData: DBentry[] = [];
+            let tempFilteredData: DbCollection = [];
             filter[attribute].forEach((element) => {
                 tempFilteredData = tempFilteredData.concat(
                     _.filter(filteredData, {

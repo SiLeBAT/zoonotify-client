@@ -83,7 +83,7 @@ function generateSelectorObject(
     selectorArray: string[]
 ): Record<string, string>[] {
     const selectorObject: Record<string, string>[] = [];
-    selectorArray.forEach((element: string) => {
+    selectorArray.forEach((element) => {
         selectorObject.push({ value: element, label: element });
     });
     return selectorObject;

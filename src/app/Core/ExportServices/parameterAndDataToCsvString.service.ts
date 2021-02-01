@@ -4,7 +4,7 @@ import {
     MainFilterLabelInterface,
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
-import { RAWDataStringGenerator } from "./generateRAWString.service";
+import { generateDataString } from "./generateDataString.service";
 import { generateStatDataString } from "./generateStatDataString.service";
 
 export interface ObjectToCsvParameter {
@@ -23,7 +23,7 @@ export interface ObjectToCsvParameter {
  * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters
  * @returns {string} - converted data as csv string
  */
-export function objectToCsv(csvParameter: ObjectToCsvParameter): string {
+export function parameterAndDataToCsvString(csvParameter: ObjectToCsvParameter): string {
     const csvRows: string[] = [];
     csvRows.push(
         generateParameterHeader(
@@ -36,7 +36,7 @@ export function objectToCsv(csvParameter: ObjectToCsvParameter): string {
 
     if (csvParameter.setting.raw && !csvParameter.setting.stat) {
         csvRows.push(
-            RAWDataStringGenerator(
+            generateDataString(
                 csvParameter.setting.rawDataSet.rawKeys,
                 csvParameter.setting.rawDataSet.rawData
             )

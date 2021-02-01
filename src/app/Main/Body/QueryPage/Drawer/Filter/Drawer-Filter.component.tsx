@@ -55,7 +55,7 @@ export function DrawerFilterComponent(): JSX.Element {
                 string,
                 string
             >[];
-            selectedOptionObj.forEach((element: Record<string, string>) => {
+            selectedOptionObj.forEach((element) => {
                 selectedFilter.push(Object.values(element)[0]);
             });
             setFilter({

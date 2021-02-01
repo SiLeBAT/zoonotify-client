@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { IconButton, Tooltip, withStyles } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { FilterType } from "./Model/Filter.model";
-import { FilterContext } from "./Context/FilterContext";
+import { defaultFilter, FilterContext } from "./Context/FilterContext";
 import {
     onBackgroundColor,
     primaryColor,
@@ -53,7 +53,7 @@ export function ClearSelectorComponent(props: ClearSelectorProps): JSX.Element {
 
     const handleRemove = (): void => {
         if (props.isFilter) {
-            setFilter({...filter, selectedFilter: filter.emptyFilter});
+            setFilter({...filter, selectedFilter: defaultFilter.selectedFilter});
         } else if (props.isTable) {
             setTable({
                 ...table,

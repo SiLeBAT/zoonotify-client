@@ -3,8 +3,8 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { CSVLink } from "react-csv";
 import { useTranslation } from "react-i18next";
 import { Button, DialogActions } from "@material-ui/core";
-import { objectToCsv } from "../../../Core/ExportServices/parameterAndDataToCsvString.service";
-import { objectToZip } from "../../../Core/ExportServices/dataAndStatisticToZipFile.service";
+import { parameterAndDataToCsvString } from "../../../Core/ExportServices/parameterAndDataToCsvString.service";
+import { dataAndStatisticToZipFile } from "../../../Core/ExportServices/dataAndStatisticToZipFile.service";
 import {
     ExportInterface,
     MainFilterLabelInterface,
@@ -77,7 +77,7 @@ export function ExportActionButtonsComponent(
                     disabled={!fileIsSelect}
                 >
                     <CSVLink
-                        data={objectToCsv({
+                        data={parameterAndDataToCsvString({
                             setting: props.setting,
                             filter: props.filter,
                             allFilterLabel: props.allFilterLabel,
@@ -88,7 +88,7 @@ export function ExportActionButtonsComponent(
                         target="_blank"
                         onClick={() => {
                             if (props.setting.raw && props.setting.stat) {
-                                objectToZip({
+                                dataAndStatisticToZipFile({
                                     setting: props.setting,
                                     ZNFilename: props.ZNFilename,
                                     filter: props.filter,

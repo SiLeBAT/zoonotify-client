@@ -19,9 +19,10 @@ export function generateCSVString<
 >(dataArray: T[], headers: K[]): string {
     const csvTable: string[] = [];
 
-    dataArray.forEach((row) => {
-        const values: string[] = headers.map((header) => {
-            return stringModification(`${row[header]}`);
+    dataArray.forEach((row: T) => {
+        const values: string[] = headers.map((header: K) => {
+            const rowValue = row[header];
+            return stringModification(`${rowValue}`);
         });
         csvTable.push(values.join(","));
     });

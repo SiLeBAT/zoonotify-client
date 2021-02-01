@@ -97,7 +97,7 @@ export function ResultsTableResultsComponent(
     if (isTable) {
         tableAccordionContent = (
             <div css={dataStyle}>
-                <ResultsTableOptionsComponent isTable={isTable} />
+                <ResultsTableOptionsComponent/>
                 <TableResultsTableMainHeaderComponent
                     isTitle={props.displayRowCol.isCol}
                     isRow={false}
