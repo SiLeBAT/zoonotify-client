@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx, keyframes, SerializedStyles } from "@emotion/core";
+import { TFunction } from "i18next";
 import Select, { ValueType, StylesConfig } from "react-select";
 import { InputLabel } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
@@ -80,11 +81,17 @@ const selectStyle: StylesConfig = {
  * @returns {Record<string, string>[]} - object with value und label from the string array
  */
 function generateSelectorObject(
-    selectorArray: string[]
+    selectorArray: string[],
+    translateFunction: TFunction,
+    isFeature: boolean
 ): Record<string, string>[] {
     const selectorObject: Record<string, string>[] = [];
     selectorArray.forEach((element) => {
-        selectorObject.push({ value: element, label: element });
+        let label = element;
+        if (isFeature) {
+            label = translateFunction(`Filters.${element}`);
+        }
+        selectorObject.push({ value: element, label });
     });
     return selectorObject;
 }
@@ -100,6 +107,7 @@ export interface SelectorProps {
     selectedValues: string[];
     isMulti: boolean;
     isNotSelect: boolean;
+    isFeature: boolean;
 }
 
 /**
@@ -111,15 +119,20 @@ export interface SelectorProps {
  * @param {string[]} selectedValues - values that are already selected in other selectors
  * @param {boolean} isMulti - true if the user can select multiple values
  * @param {boolean} isNotSelect - true if no selector is selected so far
+ * @param {boolean} isFeature - true if the selector display row/col features 
  * @returns {JSX.Element} - selector component
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const selectValuesObj: Record<string, string>[] = generateSelectorObject(
-        props.selectValues
+        props.selectValues,
+        t,
+        props.isFeature
     );
     const valueObject: Record<string, string>[] = generateSelectorObject(
-        props.selectedValues
+        props.selectedValues,
+        t,
+        props.isFeature
     );
 
     const noOptionText = t("Drawer.Selector");

@@ -49,6 +49,7 @@ export function DisplayedFeatureSelectorComponent(
             selectedValues={selectedValues}
             isMulti={false}
             isNotSelect={isNotSelect}
+            isFeature
         />
     );
 }

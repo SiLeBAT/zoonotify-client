@@ -47,6 +47,7 @@ export function SelectorListSelectorComponent(
             selectValues={allFilterValues}
             isMulti
             isNotSelect={noFilter}
+            isFeature={false}
         />
     );
 }
