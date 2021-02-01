@@ -1,32 +1,16 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { Card, CardMedia, makeStyles } from "@material-ui/core";
-import { HomePageTextContentComponent } from "./HomePage-TextContent.component";
-
-const logoStyle = css`
-    height: auto;
-    width: auto;
-`;
-const useStyles = makeStyles({
-    root: {
-        padding: "1em",
-        margin: "2.5em auto",
-        width: "50%",
-    },
-});
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { LogoCardComponent } from "../../../Shared/LogoCard.component";
 
 export function HomePageLayoutComponent(): JSX.Element {
-    const classes = useStyles();
+    const { t } = useTranslation(["HomePage"]);
+
     return (
-        <Card className={classes.root}>
-            <HomePageTextContentComponent />
-            <CardMedia
-                component="img"
-                alt="Contemplative Reptile"
-                image="/assets/bfr_logo.gif"
-                title="BfR Logo"
-                css={logoStyle}
-            />
-        </Card>
+        <LogoCardComponent
+            title="ZooNotify"
+            subtitle={t("Subtitle")}
+            text={t("MainText")}
+        />
     );
 }
+
