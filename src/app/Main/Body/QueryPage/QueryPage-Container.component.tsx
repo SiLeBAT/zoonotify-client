@@ -8,7 +8,7 @@ import {
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { filterURL, isolateURL } from "../../../Shared/URLs";
-import { ChooseComponent } from "./Container-ChooseComponent.component";
+import { ContainerChooseComponent } from "./Container-Choose.component";
 import {
     FilterConfigDTO,
     FilterInterface,
@@ -132,6 +132,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     }, [filter, table]);
 
     return (
-        <ChooseComponent status={status} dataIsSet={!_.isEmpty(data.ZNData)} />
+        <ContainerChooseComponent
+            status={status}
+            dataIsSet={!_.isEmpty(data.ZNData)}
+        />
     );
 }

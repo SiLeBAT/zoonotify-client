@@ -9,7 +9,7 @@ import { TableProvider } from "./Shared/Context/TableContext";
 import { LoadingProcessComponent } from "./Shared/LoadingProcess.component";
 
 ReactDOM.render(
-    <Suspense fallback={<LoadingProcessComponent/>}>
+    <Suspense fallback={<LoadingProcessComponent />}>
         <FilterProvider>
             <DataProvider>
                 <TableProvider>

@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { LogoCardComponent } from "../../../Shared/LogoCard.component";
 
-export function HomePageLayoutComponent(): JSX.Element {
+export function HomePageComponent(): JSX.Element {
     const { t } = useTranslation(["HomePage"]);
 
     return (
@@ -13,4 +13,3 @@ export function HomePageLayoutComponent(): JSX.Element {
         />
     );
 }
-
