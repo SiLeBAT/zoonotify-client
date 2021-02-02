@@ -42,12 +42,15 @@ export const generatePathString = (
     let newPath = "";
     mainFilterAttributes.forEach(
         (attribute: FilterType, index: number): void => {
-            const filterString: string = _.isEmpty(filter[attribute])
-                ? "alle Werte"
-                : filter[attribute].join("_");
-
-            newPath += index <= mainFilterAttributes.length - 1 ? "&" : "";
-            newPath += setParams(attribute, filterString);
+            newPath += index === 0 ? "" : "&";
+            if (_.isEmpty(filter[attribute])) {
+                newPath += setParams(attribute, "alle Werte");
+            } else {
+                filter[attribute].forEach((filterValue, i) => {
+                    newPath += i === 0 ? "" : "&";
+                    newPath += setParams(attribute, filterValue);
+                });
+            }
         }
     );
     newPath += getTableParam("row", table.row);
