@@ -1,8 +1,5 @@
 import _ from "lodash";
-import {
-    FilterType,
-    FilterInterface,
-} from "../Shared/Model/Filter.model";
+import { FilterType, FilterInterface } from "../Shared/Model/Filter.model";
 import { TableInterface } from "../Shared/Context/TableContext";
 
 /**
@@ -36,7 +33,7 @@ function getTableParam(key: string, value: string): string {
  */
 export const generatePathString = (
     filter: FilterInterface,
-    table: TableInterface, 
+    table: TableInterface,
     mainFilterAttributes: string[]
 ): string => {
     let newPath = "";
@@ -44,7 +41,7 @@ export const generatePathString = (
         (attribute: FilterType, index: number): void => {
             newPath += index === 0 ? "" : "&";
             if (_.isEmpty(filter[attribute])) {
-                newPath += setParams(attribute, "alle Werte");
+                newPath += setParams(attribute, "all values");
             } else {
                 filter[attribute].forEach((filterValue, i) => {
                     newPath += i === 0 ? "" : "&";

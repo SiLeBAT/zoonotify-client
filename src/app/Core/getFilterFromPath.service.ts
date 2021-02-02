@@ -14,12 +14,9 @@ export function getFilterFromPath(
     const filterFromPath: FilterInterface = {};
 
     filterKeys.forEach((filterKey) => {
-        const filterValues: string[] = searchParams.getAll(filterKey)
-        if (filterValues[0] === "alle Werte") {
-            filterFromPath[filterKey] = [];
-        } else {
-            filterFromPath[filterKey] = filterValues;
-        }
+        const filterValues: string[] = searchParams.getAll(filterKey);
+        filterFromPath[filterKey] =
+            filterValues[0] === "all values" ? [] : filterValues;
     });
 
     return filterFromPath;
