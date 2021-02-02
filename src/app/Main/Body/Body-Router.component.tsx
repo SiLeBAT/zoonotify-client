@@ -6,12 +6,7 @@ import { LinkPageComponent } from "./LinkPage/LinkPage.component";
 import { InfoPageComponent } from "./InfoPage/InfoPage.component";
 import { DataProtectionPageComponent } from "./DataProtectionPage/DataProtectionPage.component";
 import { ZNPaths } from "../../Shared/URLs";
-
-const PageNotFound = (): JSX.Element => (
-    <div>
-        <p>404! Page Not Found</p>
-    </div>
-);
+import { ErrorPagePageNotFoundComponent } from "./ErrorPage/ErrorPage-PageNotFound.component";
 
 export function BodyRouterComponent(): JSX.Element {
     return (
@@ -31,7 +26,7 @@ export function BodyRouterComponent(): JSX.Element {
                 path={ZNPaths.dpdPagePath}
                 component={DataProtectionPageComponent}
             />
-            <Route component={PageNotFound} />
+            <Route component={ErrorPagePageNotFoundComponent} />
         </Switch>
     );
 }

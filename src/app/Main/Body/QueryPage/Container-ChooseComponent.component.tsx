@@ -1,7 +1,7 @@
 import React from "react";
-import { ContainerPageNotFoundComponent } from "../ErrorPage/Container-PageNotFound.component";
-import { ContainerLoadingProcessComponent } from "./Container-LoadingProcess.component";
+import { ErrorPagePageNotFoundComponent } from "../ErrorPage/ErrorPage-PageNotFound.component";
 import { QueryPageComponent } from "./QueryPage.component";
+import { LoadingProcessComponent } from "../../../Shared/LoadingProcess.component";
 
 export function ChooseComponent(props: {
     status: {
@@ -12,7 +12,7 @@ export function ChooseComponent(props: {
 }): JSX.Element {
     if (props.status !== undefined) {
         if (props.status.isolateStatus === 404 || props.status.filterStatus === 404) {
-            return <ContainerPageNotFoundComponent />;
+            return <ErrorPagePageNotFoundComponent />;
         }
         if (
             props.dataIsSet === true &&
@@ -23,5 +23,5 @@ export function ChooseComponent(props: {
         }
     }
 
-    return <ContainerLoadingProcessComponent />;
+    return <LoadingProcessComponent />;
 }

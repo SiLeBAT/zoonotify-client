@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { LogoCardComponent } from "../../../Shared/LogoCard.component";
 
-export function ContainerPageNotFoundComponent(): JSX.Element {
+export function ErrorPagePageNotFoundComponent(): JSX.Element {
     const { t } = useTranslation(["ErrorPage"]);
 
     return (
