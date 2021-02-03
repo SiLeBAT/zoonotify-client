@@ -2,12 +2,21 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { LogoCardComponent } from "../../../Shared/LogoCard.component";
 
-export function ErrorPagePageNotFoundComponent(): JSX.Element {
+/**
+ * @desc Return an ErrorPage card with the current error status
+ * @param {number} errorStatus - status of the api fetch
+ * @returns {JSX.Element} - card with ErrorPage content
+ */
+export function ErrorPagePageNotFoundComponent(props: {
+    errorStatus: number;
+}): JSX.Element {
     const { t } = useTranslation(["ErrorPage"]);
+
+    const errorSting = props.errorStatus.toString();
 
     return (
         <LogoCardComponent
-            title="404"
+            title={errorSting}
             subtitle={t("Subtitle")}
             text={t("MainText")}
         />

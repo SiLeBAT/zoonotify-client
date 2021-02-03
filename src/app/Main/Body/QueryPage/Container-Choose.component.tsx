@@ -3,6 +3,12 @@ import { ErrorPagePageNotFoundComponent } from "../ErrorPage/ErrorPage-PageNotFo
 import { QueryPageComponent } from "./QueryPage.component";
 import { LoadingProcessComponent } from "../../../Shared/LoadingProcess.component";
 
+/**
+ * @desc Choose which content should be rendered on the query page
+ * @param {status: {isolateStatus: number; filterStatus: number;} | undefined } status - object with api fetch status (e.g. 200, 404)
+ * @param {boolean} dataIsSet - true if data is set
+ * @returns {JSX.Element} - ErrorPage / Loading sign / QueryPage
+ */
 export function ContainerChooseComponent(props: {
     status:
         | {
@@ -13,11 +19,19 @@ export function ContainerChooseComponent(props: {
     dataIsSet: boolean;
 }): JSX.Element {
     if (props.status !== undefined) {
-        if (
-            props.status.isolateStatus === 404 ||
-            props.status.filterStatus === 404
-        ) {
-            return <ErrorPagePageNotFoundComponent />;
+        if (props.status.isolateStatus !== 200) {
+            return (
+                <ErrorPagePageNotFoundComponent
+                    errorStatus={props.status.isolateStatus}
+                />
+            );
+        }
+        if (props.status.filterStatus !== 200) {
+            return (
+                <ErrorPagePageNotFoundComponent
+                    errorStatus={props.status.filterStatus}
+                />
+            );
         }
         if (
             props.dataIsSet === true &&
