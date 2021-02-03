@@ -7,16 +7,16 @@ import { LogoCardComponent } from "../../../Shared/LogoCard.component";
  * @param {number} errorStatus - status of the api fetch
  * @returns {JSX.Element} - card with ErrorPage content
  */
-export function ErrorPagePageNotFoundComponent(props: {
+export function ErrorPageComponent(props: {
     errorStatus: number;
 }): JSX.Element {
     const { t } = useTranslation(["ErrorPage"]);
 
-    const errorSting = props.errorStatus.toString();
+    const errorString = props.errorStatus.toString();
 
     return (
         <LogoCardComponent
-            title={errorSting}
+            title={errorString}
             subtitle={t("Subtitle")}
             text={t("MainText")}
         />

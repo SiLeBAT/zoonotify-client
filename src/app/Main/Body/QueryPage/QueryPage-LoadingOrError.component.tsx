@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorPagePageNotFoundComponent } from "../ErrorPage/ErrorPage-PageNotFound.component";
+import { ErrorPageComponent } from "../ErrorPage/ErrorPage.component";
 import { QueryPageComponent } from "./QueryPage.component";
 import { LoadingProcessComponent } from "../../../Shared/LoadingProcess.component";
 
@@ -9,7 +9,7 @@ import { LoadingProcessComponent } from "../../../Shared/LoadingProcess.componen
  * @param {boolean} dataIsSet - true if data is set
  * @returns {JSX.Element} - ErrorPage / Loading sign / QueryPage
  */
-export function ContainerChooseComponent(props: {
+export function QueryPageLoadingOrErrorComponent(props: {
     status:
         | {
               isolateStatus: number;
@@ -21,14 +21,14 @@ export function ContainerChooseComponent(props: {
     if (props.status !== undefined) {
         if (props.status.isolateStatus !== 200) {
             return (
-                <ErrorPagePageNotFoundComponent
+                <ErrorPageComponent
                     errorStatus={props.status.isolateStatus}
                 />
             );
         }
         if (props.status.filterStatus !== 200) {
             return (
-                <ErrorPagePageNotFoundComponent
+                <ErrorPageComponent
                     errorStatus={props.status.filterStatus}
                 />
             );

@@ -6,10 +6,10 @@ import { LinkPageComponent } from "./LinkPage/LinkPage.component";
 import { InfoPageComponent } from "./InfoPage/InfoPage.component";
 import { DataProtectionPageComponent } from "./DataProtectionPage/DataProtectionPage.component";
 import { ZNPaths } from "../../Shared/URLs";
-import { ErrorPagePageNotFoundComponent } from "./ErrorPage/ErrorPage-PageNotFound.component";
+import { ErrorPageComponent } from "./ErrorPage/ErrorPage.component";
 
 function ErrorPage(): JSX.Element {
-    return <ErrorPagePageNotFoundComponent errorStatus={404} />;
+    return <ErrorPageComponent errorStatus={404} />;
 }
 
 export function BodyRouterComponent(): JSX.Element {
