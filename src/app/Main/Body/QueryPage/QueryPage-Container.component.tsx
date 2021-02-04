@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
@@ -8,7 +8,7 @@ import {
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { filterURL, isolateURL } from "../../../Shared/URLs";
-import { QueryPageComponent } from "./QueryPage.component";
+import { QueryPageLoadingOrErrorComponent } from "./QueryPage-LoadingOrError.component";
 import {
     FilterConfigDTO,
     FilterInterface,
@@ -35,6 +35,10 @@ function setAdaptedFilterProp(
 }
 
 export function QueryPageContainerComponent(): JSX.Element {
+    const [status, setStatus] = useState<{
+        isolateStatus: number;
+        filterStatus: number;
+    }>();
     const { data, setData } = useContext(DataContext);
     const { filter, setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
@@ -45,51 +49,64 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const fetchAndSetDataAndFilter = async (): Promise<void> => {
         const isolateResponse: Response = await fetch(ISOLATE_URL);
-        const isolateProp: IsolateDTO = await isolateResponse.json();
-
-        const adaptedDbIsolates: DbCollection = isolateProp.isolates.map(
-            ({ microorganism, samplingContext, matrix }) => ({
-                microorganism,
-                samplingContext,
-                matrix,
-            })
-        );
-
         const filterResponse: Response = await fetch(FILTER_URL);
-        const filterProp: FilterConfigDTO = await filterResponse.json();
 
-        const adaptedFilterProp: SingleFilterConfig[] = filterProp.filters.map(
-            (filterObj) => {
-                if (filterObj.id === "sContext") {
-                    return setAdaptedFilterProp(filterObj, "samplingContext");
+        const isolateStatus = isolateResponse.status;
+        const filterStatus = filterResponse.status;
+
+        setStatus({
+            isolateStatus,
+            filterStatus,
+        });
+
+        if (isolateStatus === 200 && filterStatus === 200) {
+            const isolateProp: IsolateDTO = await isolateResponse.json();
+            const filterProp: FilterConfigDTO = await filterResponse.json();
+
+            const adaptedDbIsolates: DbCollection = isolateProp.isolates.map(
+                ({ microorganism, samplingContext, matrix }) => ({
+                    microorganism,
+                    samplingContext,
+                    matrix,
+                })
+            );
+
+            const adaptedFilterProp: SingleFilterConfig[] = filterProp.filters.map(
+                (filterObj) => {
+                    if (filterObj.id === "sContext") {
+                        return setAdaptedFilterProp(
+                            filterObj,
+                            "samplingContext"
+                        );
+                    }
+                    return setAdaptedFilterProp(filterObj, filterObj.id);
                 }
-                return setAdaptedFilterProp(filterObj, filterObj.id);
-            }
-        );
+            );
 
-        const mainFilter: FilterType[] = [];
-        const uniqueValuesObject: FilterInterface = {};
+            const mainFilter: FilterType[] = [];
+            const uniqueValuesObject: FilterInterface = {};
 
-        adaptedFilterProp.forEach((filterElement) => {
-            const { name } = filterElement;
-            mainFilter.push(name);
-            uniqueValuesObject[name] = filterElement.values;
-        });
+            adaptedFilterProp.forEach((filterElement) => {
+                const { name } = filterElement;
+                mainFilter.push(name);
+                uniqueValuesObject[name] = filterElement.values;
+            });
 
-        setFilter({
-            mainFilter,
-            selectedFilter: getFilterFromPath(
-                history.location.search,
-                mainFilter
-            ),
-        });
+            setFilter({
+                mainFilter,
+                selectedFilter: getFilterFromPath(
+                    history.location.search,
+                    mainFilter
+                ),
+            });
 
-        setData({
-            ZNData: adaptedDbIsolates,
-            ZNDataFiltered: adaptedDbIsolates,
-            keyValues: DbKeyCollection,
-            uniqueValues: uniqueValuesObject,
-        });
+            setData({
+                ZNData: adaptedDbIsolates,
+                ZNDataFiltered: adaptedDbIsolates,
+                keyValues: DbKeyCollection,
+                uniqueValues: uniqueValuesObject,
+            });
+        }
     };
 
     useEffect(() => {
@@ -114,10 +131,10 @@ export function QueryPageContainerComponent(): JSX.Element {
         );
     }, [filter, table]);
 
-    let returnValue = <p> Loading data ... </p>;
-    if (_.isEmpty(data.ZNData) === false) {
-        returnValue = <QueryPageComponent />;
-    }
-
-    return returnValue;
+    return (
+        <QueryPageLoadingOrErrorComponent
+            status={status}
+            dataIsSet={!_.isEmpty(data.ZNData)}
+        />
+    );
 }

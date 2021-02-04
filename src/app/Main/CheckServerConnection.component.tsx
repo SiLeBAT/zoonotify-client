@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MainLayoutComponent } from "./Main-Layout.component";
+import { LoadingProcessComponent } from "../Shared/LoadingProcess.component";
 
 export function CheckServerConnectionComponent(): JSX.Element {
     const [loading, setLoading] = useState(true);
@@ -25,7 +26,7 @@ export function CheckServerConnectionComponent(): JSX.Element {
     });
 
     if (loading) {
-        return <p> </p>;
+        return <LoadingProcessComponent />;
     }
 
     return <MainLayoutComponent isConnected={isConnected} />;

@@ -1,17 +1,16 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { QueryPageContainerComponent } from "./QueryPage/QueryPage-Container.component";
-import { HomePageLayoutComponent } from "./HomePage/HomePage-Layout.component";
+import { HomePageComponent } from "./HomePage/HomePage.component";
 import { LinkPageComponent } from "./LinkPage/LinkPage.component";
 import { InfoPageComponent } from "./InfoPage/InfoPage.component";
 import { DataProtectionPageComponent } from "./DataProtectionPage/DataProtectionPage.component";
 import { ZNPaths } from "../../Shared/URLs";
+import { ErrorPageComponent } from "./ErrorPage/ErrorPage.component";
 
-const PageNotFound = (): JSX.Element => (
-    <div>
-        <p>404! Page Not Found</p>
-    </div>
-);
+function ErrorPage(): JSX.Element {
+    return <ErrorPageComponent errorStatus={404} />;
+}
 
 export function BodyRouterComponent(): JSX.Element {
     return (
@@ -19,7 +18,7 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 exact
                 path={ZNPaths.homePagePath}
-                component={HomePageLayoutComponent}
+                component={HomePageComponent}
             />
             <Route path={ZNPaths.infoPagePath} component={InfoPageComponent} />
             <Route
@@ -31,7 +30,7 @@ export function BodyRouterComponent(): JSX.Element {
                 path={ZNPaths.dpdPagePath}
                 component={DataProtectionPageComponent}
             />
-            <Route component={PageNotFound} />
+            <Route component={ErrorPage} />
         </Switch>
     );
 }

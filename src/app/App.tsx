@@ -6,9 +6,10 @@ import "../i18n";
 import { FilterProvider } from "./Shared/Context/FilterContext";
 import { DataProvider } from "./Shared/Context/DataContext";
 import { TableProvider } from "./Shared/Context/TableContext";
+import { LoadingProcessComponent } from "./Shared/LoadingProcess.component";
 
 ReactDOM.render(
-    <Suspense fallback={<div>Loading</div>}>
+    <Suspense fallback={<LoadingProcessComponent />}>
         <FilterProvider>
             <DataProvider>
                 <TableProvider>
