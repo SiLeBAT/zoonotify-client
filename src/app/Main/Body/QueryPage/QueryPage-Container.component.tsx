@@ -12,7 +12,6 @@ import { QueryPageLoadingOrErrorComponent } from "./QueryPage-LoadingOrError.com
 import {
     FilterConfigDTO,
     FilterInterface,
-    FilterType,
     SingleFilterConfig,
 } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
@@ -83,21 +82,11 @@ export function QueryPageContainerComponent(): JSX.Element {
                 }
             );
 
-            const mainFilter: FilterType[] = [];
             const uniqueValuesObject: FilterInterface = {};
 
             adaptedFilterProp.forEach((filterElement) => {
                 const { name } = filterElement;
-                mainFilter.push(name);
                 uniqueValuesObject[name] = filterElement.values;
-            });
-
-            setFilter({
-                mainFilter,
-                selectedFilter: getFilterFromPath(
-                    history.location.search,
-                    mainFilter
-                ),
             });
 
             setData({
@@ -114,6 +103,13 @@ export function QueryPageContainerComponent(): JSX.Element {
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
         );
+        setFilter({
+            mainFilter: DbKeyCollection,
+            selectedFilter: getFilterFromPath(
+                history.location.search,
+                DbKeyCollection
+            ),
+        });
         setTable({
             ...table,
             row: rowFromPath,
