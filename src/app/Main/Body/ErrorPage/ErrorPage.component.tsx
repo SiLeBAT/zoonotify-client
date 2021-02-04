@@ -14,11 +14,19 @@ export function ErrorPageComponent(props: {
 
     const errorString = props.errorStatus.toString();
 
+    let errorText = "GeneralErrorText"
+    let errorTitle = "GeneralErrorTitle"
+
+    if (props.errorStatus === 404) {
+        errorText = "PageNotFoundText"
+        errorTitle = "PageNotFoundTitle"
+    }
+
     return (
         <LogoCardComponent
             title={errorString}
-            subtitle={t("Subtitle")}
-            text={t("MainText")}
+            subtitle={t(errorTitle)}
+            text={t(errorText)}
         />
     );
 }

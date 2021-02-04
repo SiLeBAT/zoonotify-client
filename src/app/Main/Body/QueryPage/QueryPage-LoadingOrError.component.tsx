@@ -21,23 +21,15 @@ export function QueryPageLoadingOrErrorComponent(props: {
     if (props.status !== undefined) {
         if (props.status.isolateStatus !== 200) {
             return (
-                <ErrorPageComponent
-                    errorStatus={props.status.isolateStatus}
-                />
+                <ErrorPageComponent errorStatus={props.status.isolateStatus} />
             );
         }
         if (props.status.filterStatus !== 200) {
             return (
-                <ErrorPageComponent
-                    errorStatus={props.status.filterStatus}
-                />
+                <ErrorPageComponent errorStatus={props.status.filterStatus} />
             );
         }
-        if (
-            props.dataIsSet === true &&
-            props.status.isolateStatus === 200 &&
-            props.status.filterStatus === 200
-        ) {
+        if (props.dataIsSet) {
             return <QueryPageComponent />;
         }
     }
