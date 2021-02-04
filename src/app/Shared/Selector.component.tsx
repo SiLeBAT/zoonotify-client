@@ -2,7 +2,6 @@
 import { css, jsx, keyframes, SerializedStyles } from "@emotion/core";
 import Select, { ValueType, StylesConfig } from "react-select";
 import { InputLabel } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
 import { FilterType } from "./Model/Filter.model";
 import { TableType } from "./Context/TableContext";
 import { primaryColor, bfrDarkgrey } from "./Style/Style-MainTheme.component";
@@ -74,30 +73,16 @@ const selectStyle: StylesConfig = {
     }),
 };
 
-/**
- * @desc Transforms a string array to an object.
- * @param {string[]} selectorArray - array with selector values
- * @returns {Record<string, string>[]} - object with value und label from the string array
- */
-function generateSelectorObject(
-    selectorArray: string[]
-): Record<string, string>[] {
-    const selectorObject: Record<string, string>[] = [];
-    selectorArray.forEach((element) => {
-        selectorObject.push({ value: element, label: element });
-    });
-    return selectorObject;
-}
-
 export interface SelectorProps {
     label: string;
-    selectValues: string[];
+    dropDownValuesObj: { value: string; label: string }[];
+    selectedValuesObj: { value: string; label: string }[];
+    noOptionLabel: string;
     selectAttribute: FilterType | TableType;
     handleChange: (
         selectedOption: ValueType<Record<string, string>>,
         keyName: FilterType | TableType
     ) => void;
-    selectedValues: string[];
     isMulti: boolean;
     isNotSelect: boolean;
 }
@@ -105,25 +90,15 @@ export interface SelectorProps {
 /**
  * @desc Returns one selector for filter or row/column.
  * @param {string} label - label for the selector
- * @param {string[]} selectValues - all possible values for the selector
+ * @param {{value: string, label: string}[]} dropDownValuesObj - all possible values for the selector with labels
+ * @param {{value: string, label: string}[]} selectedValuesObj - values that are already selected in other selectors with labels
  * @param {FilterType | TableType} selectAttribute - attribute for the selector
  * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle change of the selector
- * @param {string[]} selectedValues - values that are already selected in other selectors
  * @param {boolean} isMulti - true if the user can select multiple values
  * @param {boolean} isNotSelect - true if no selector is selected so far
  * @returns {JSX.Element} - selector component
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {
-    const { t } = useTranslation(["QueryPage"]);
-    const selectValuesObj: Record<string, string>[] = generateSelectorObject(
-        props.selectValues
-    );
-    const valueObject: Record<string, string>[] = generateSelectorObject(
-        props.selectedValues
-    );
-
-    const noOptionText = t("Drawer.Selector");
-
     return (
         <div>
             <InputLabel
@@ -136,14 +111,14 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
                 css={selectAreaStyle}
                 closeMenuOnSelect={false}
                 isMulti={props.isMulti}
-                noOptionsMessage={() => noOptionText}
-                options={selectValuesObj}
+                noOptionsMessage={() => props.noOptionLabel}
+                options={props.dropDownValuesObj}
                 placeholder={props.label}
                 onChange={(selectedOption) =>
                     props.handleChange(selectedOption, props.selectAttribute)
                 }
                 styles={selectStyle}
-                value={valueObject}
+                value={props.selectedValuesObj}
                 theme={(theme) => ({
                     ...theme,
                     colors: {

@@ -1,13 +1,22 @@
 import React from "react";
 import { ValueType } from "react-select";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
-import {
-    FilterType,
-} from "../../../../../Shared/Model/Filter.model";
+import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { generateFeatureList } from "../../../../../Core/generateFeatureList.service";
 
+function generateTranslatedSelectorObject(
+    selectorArray: string[],
+    translateFunction: TFunction
+): { value: string; label: string }[] {
+    return selectorArray.map((selectorElement: string) => {
+        const label: string = translateFunction(`Filters.${selectorElement}`);
+        return { value: selectorElement, label };
+    });
+}
 export interface FeatureSelectorProps {
     activeFeature: FilterType;
     otherFeature: FilterType;
@@ -32,21 +41,33 @@ export interface FeatureSelectorProps {
 export function DisplayedFeatureSelectorComponent(
     props: FeatureSelectorProps
 ): JSX.Element {
-    const offeredAttributes: string[] = _.difference(props.mainFilterAttributes, [
-        props.otherFeature,
-    ]);
+    const { t } = useTranslation(["QueryPage"]);
+    const offeredAttributes: string[] = _.difference(
+        props.mainFilterAttributes,
+        [props.otherFeature]
+    );
     const [isNotSelect, selectedValues]: [
         boolean,
         FilterType[]
     ] = generateFeatureList(props.activeFeature);
 
+    const dropDownValuesObj: {
+        value: string;
+        label: string;
+    }[] = generateTranslatedSelectorObject(offeredAttributes, t);
+    const selectedValuesObj: {
+        value: string;
+        label: string;
+    }[] = generateTranslatedSelectorObject(selectedValues, t);
+
     return (
         <SelectorComponent
             label={props.label}
+            noOptionLabel={t("Drawer.Selector")}
+            dropDownValuesObj={dropDownValuesObj}
+            selectedValuesObj={selectedValuesObj}
             selectAttribute={props.selectAttribute}
-            selectValues={offeredAttributes}
             handleChange={props.handleChange}
-            selectedValues={selectedValues}
             isMulti={false}
             isNotSelect={isNotSelect}
         />
