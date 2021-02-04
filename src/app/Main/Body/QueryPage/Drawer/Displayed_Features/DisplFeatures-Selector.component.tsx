@@ -12,14 +12,10 @@ function generateTranslatedSelectorObject(
     selectorArray: string[],
     translateFunction: TFunction
 ): { value: string; label: string }[] {
-    const selectorLabelObject: {
-        value: string;
-        label: string;
-    }[] = selectorArray.map((selectorElement: string) => {
+    return selectorArray.map((selectorElement: string) => {
         const label: string = translateFunction(`Filters.${selectorElement}`);
         return { value: selectorElement, label };
     });
-    return selectorLabelObject;
 }
 export interface FeatureSelectorProps {
     activeFeature: FilterType;

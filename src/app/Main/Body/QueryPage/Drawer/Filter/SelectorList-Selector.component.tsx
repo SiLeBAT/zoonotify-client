@@ -11,14 +11,9 @@ import { SelectorComponent } from "../../../../../Shared/Selector.component";
 function generateSelectorObject(
     selectorArray: string[]
 ): { value: string; label: string }[] {
-    const selectorLabelObject: {
-        value: string;
-        label: string;
-    }[] = selectorArray.map((filterValue) => {
+    return selectorArray.map((filterValue) => {
         return { value: filterValue, label: filterValue };
     });
-
-    return selectorLabelObject;
 }
 
 export interface SelectorProps {
