@@ -39,10 +39,8 @@ export const generatePathString = (
     let newPath = "";
     mainFilterAttributes.forEach(
         (attribute: FilterType, index: number): void => {
-            newPath += index === 0 ? "" : "&";
-            if (_.isEmpty(filter[attribute])) {
-                newPath += setParams(attribute, "all values");
-            } else {
+            if (!_.isEmpty(filter[attribute])) {
+                newPath += index === 0 ? "" : "&";
                 filter[attribute].forEach((filterValue, i) => {
                     newPath += i === 0 ? "" : "&";
                     newPath += setParams(attribute, filterValue);
