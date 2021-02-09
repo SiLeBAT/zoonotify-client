@@ -1,21 +1,6 @@
 import { FilterInterface, FilterType } from "../Shared/Model/Filter.model";
 
 /**
- * @desc Split the URL path filter string to a list of filters
- * @param {string | null} filterParameter - URL path filter string
- * @returns {string[]} - list of filters from the URL path
- */
-function getFilterList(filterParameter: string | null): string[] {
-    const filterList: string[] =
-        filterParameter !== null &&
-        filterParameter !== "" &&
-        filterParameter !== "alle Werte"
-            ? filterParameter.split("_")
-            : [];
-    return filterList;
-}
-
-/**
  * @desc Extract the selected filter from the given URL path
  * @param {string} path - URL path
  * @param {FilterType[]} filterKeys - list of possible filter attributes
@@ -28,11 +13,9 @@ export function getFilterFromPath(
     const searchParams = new URLSearchParams(path);
     const filterFromPath: FilterInterface = {};
 
-    filterKeys.forEach((filterElement) => {
-        const paramsOfKey: string[] = getFilterList(
-            searchParams.get(filterElement)
-        );
-        filterFromPath[filterElement] = paramsOfKey;
+    filterKeys.forEach((filterKey) => {
+        const filterValues: string[] = searchParams.getAll(filterKey);
+        filterFromPath[filterKey] = filterValues;
     });
 
     return filterFromPath;
