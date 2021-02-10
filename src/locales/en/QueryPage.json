@@ -28,7 +28,7 @@
         "All": "All values",
         "microorganism": "Microorganism",
         "matrix": "Matrix",
-        "samplingContext": "Sampling context"
+        "sContext": "Sampling context"
     },
     "NrOfIsolates": {
         "Title": "Number of isolates",

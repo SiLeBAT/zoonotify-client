@@ -12,7 +12,6 @@ import { QueryPageLoadingOrErrorComponent } from "./QueryPage-LoadingOrError.com
 import {
     FilterConfigDTO,
     FilterInterface,
-    SingleFilterConfig,
 } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
@@ -20,18 +19,6 @@ import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/getTableFromPath.service";
 
-function setAdaptedFilterProp(
-    filterObj: SingleFilterConfig,
-    idName: string
-): SingleFilterConfig {
-    const adaptedFilterProp = {
-        id: idName,
-        name: idName,
-        parent: filterObj.parent,
-        values: filterObj.values,
-    };
-    return adaptedFilterProp;
-}
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{
@@ -65,28 +52,16 @@ export function QueryPageContainerComponent(): JSX.Element {
             const adaptedDbIsolates: DbCollection = isolateProp.isolates.map(
                 ({ microorganism, samplingContext, matrix }) => ({
                     microorganism,
-                    samplingContext,
+                    sContext: samplingContext,
                     matrix,
                 })
             );
 
-            const adaptedFilterProp: SingleFilterConfig[] = filterProp.filters.map(
-                (filterObj) => {
-                    if (filterObj.id === "sContext") {
-                        return setAdaptedFilterProp(
-                            filterObj,
-                            "samplingContext"
-                        );
-                    }
-                    return setAdaptedFilterProp(filterObj, filterObj.id);
-                }
-            );
-
             const uniqueValuesObject: FilterInterface = {};
 
-            adaptedFilterProp.forEach((filterElement) => {
-                const { name } = filterElement;
-                uniqueValuesObject[name] = filterElement.values;
+            filterProp.filters.forEach((filterElement) => {
+                const { id } = filterElement;
+                uniqueValuesObject[id] = filterElement.values;
             });
 
             setData({

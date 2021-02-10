@@ -10,7 +10,7 @@ export const defaultFilter: FilterContextInterface = {
     mainFilter: [],
     selectedFilter: {
         microorganism: [],
-        samplingContext: [],
+        sContext: [],
         matrix: []
     },
 };
