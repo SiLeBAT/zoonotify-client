@@ -7,6 +7,7 @@ interface DataInterface {
     ZNDataFiltered: DbCollection;
     keyValues: DbKey[];
     uniqueValues: FilterInterface;
+    nrOfSelectedIsolates: number;
 }
 
 const defaultProfile: DataInterface = {
@@ -14,6 +15,7 @@ const defaultProfile: DataInterface = {
     ZNDataFiltered: [],
     keyValues: [],
     uniqueValues: {},
+    nrOfSelectedIsolates: 0
 };
 
 interface ProfileState {

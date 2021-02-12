@@ -2,12 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
-import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
+import {
+    IsolateCountedDTO,
+    IsolateDTO,
+} from "../../../Shared/Model/Api_Isolate.model";
 import {
     DbCollection,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
-import { filterURL, isolateURL } from "../../../Shared/URLs";
+import { filterURL, isolateCountURL, isolateURL } from "../../../Shared/URLs";
 import { QueryPageLoadingOrErrorComponent } from "./QueryPage-LoadingOrError.component";
 import {
     FilterConfigDTO,
@@ -18,7 +21,6 @@ import { TableContext } from "../../../Shared/Context/TableContext";
 import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/getTableFromPath.service";
-
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{
@@ -31,11 +33,13 @@ export function QueryPageContainerComponent(): JSX.Element {
     const history = useHistory();
 
     const ISOLATE_URL: string = isolateURL;
+    const ISOLATE_COUNT_URL: string = isolateCountURL + history.location.search;
     const FILTER_URL: string = filterURL;
 
     const fetchAndSetDataAndFilter = async (): Promise<void> => {
         const isolateResponse: Response = await fetch(ISOLATE_URL);
         const filterResponse: Response = await fetch(FILTER_URL);
+        const isolateCountResponse: Response = await fetch(ISOLATE_COUNT_URL);
 
         const isolateStatus = isolateResponse.status;
         const filterStatus = filterResponse.status;
@@ -48,11 +52,12 @@ export function QueryPageContainerComponent(): JSX.Element {
         if (isolateStatus === 200 && filterStatus === 200) {
             const isolateProp: IsolateDTO = await isolateResponse.json();
             const filterProp: FilterConfigDTO = await filterResponse.json();
+            const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
 
             const adaptedDbIsolates: DbCollection = isolateProp.isolates.map(
                 ({ microorganism, samplingContext, matrix }) => ({
                     microorganism,
-                    sContext: samplingContext,
+                    samplingContext,
                     matrix,
                 })
             );
@@ -64,13 +69,26 @@ export function QueryPageContainerComponent(): JSX.Element {
                 uniqueValuesObject[id] = filterElement.values;
             });
 
+            const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
+
             setData({
+                ...data,
                 ZNData: adaptedDbIsolates,
                 ZNDataFiltered: adaptedDbIsolates,
                 keyValues: DbKeyCollection,
                 uniqueValues: uniqueValuesObject,
+                nrOfSelectedIsolates,
             });
         }
+    };
+
+    const fetchIsolateCounted = async (): Promise<void> => {
+        const isolateCountResponse: Response = await fetch(ISOLATE_COUNT_URL);
+        const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
+        setData({
+            ...data,
+            nrOfSelectedIsolates: isolateCountProp.totalNumberOfIsolates,
+        });
     };
 
     useEffect(() => {
@@ -100,7 +118,9 @@ export function QueryPageContainerComponent(): JSX.Element {
                 filter.mainFilter
             )}`
         );
-    }, [filter, table]);
+
+        fetchIsolateCounted();
+    }, [filter, table, ISOLATE_COUNT_URL]);
 
     return (
         <QueryPageLoadingOrErrorComponent
