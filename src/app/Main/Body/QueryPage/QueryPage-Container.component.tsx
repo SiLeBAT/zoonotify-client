@@ -11,7 +11,7 @@ import {
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { filterURL, isolateCountURL, isolateURL } from "../../../Shared/URLs";
-import { QueryPageLoadingOrErrorComponent } from "./QueryPage-LoadingOrError.component";
+import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
     FilterConfigDTO,
     FilterInterface,
@@ -22,6 +22,7 @@ import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.
 import { generatePathString } from "../../../Core/PathServices/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
 import { QueryPageComponent } from "./QueryPage.component";
+import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{
@@ -33,6 +34,14 @@ export function QueryPageContainerComponent(): JSX.Element {
     const { filter, setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
     const history = useHistory();
+
+    const isCol: boolean = table.column !== "";
+    const isRow: boolean = table.row !== "";
+    const isFilter: boolean = CheckIfFilterIsSet(
+        filter.selectedFilter,
+        filter.mainFilter
+    );
+    const state = { isCol, isRow, isFilter };
 
     const ISOLATE_URL: string = isolateURL;
     const ISOLATE_COUNT_URL: string = isolateCountURL + history.location.search;
@@ -120,10 +129,16 @@ export function QueryPageContainerComponent(): JSX.Element {
     }, [filter, table, ISOLATE_COUNT_URL]);
 
     return (
-        <QueryPageLoadingOrErrorComponent
+        <LoadingOrErrorComponent
             status={status}
             dataIsSet={!_.isEmpty(data.ZNData)}
-            componentToDisplay={<QueryPageComponent />}
+            componentToDisplay={
+                <QueryPageComponent
+                    isCol={state.isCol}
+                    isRow={state.isRow}
+                    isFilter={state.isFilter}
+                />
+            }
         />
     );
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import { ErrorPageComponent } from "../ErrorPage/ErrorPage.component";
-import { LoadingProcessComponent } from "../../../Shared/LoadingProcess.component";
+import { ErrorPageComponent } from "../Main/Body/ErrorPage/ErrorPage.component";
+import { LoadingProcessComponent } from "./LoadingProcess.component";
 
 /**
  * @desc Choose which content should be rendered on the query page
@@ -8,7 +8,7 @@ import { LoadingProcessComponent } from "../../../Shared/LoadingProcess.componen
  * @param {boolean} dataIsSet - true if data is set
  * @returns {JSX.Element} - ErrorPage / Loading sign / QueryPage
  */
-export function QueryPageLoadingOrErrorComponent(props: {
+export function LoadingOrErrorComponent(props: {
     status:
         | {
               isolateStatus: number;

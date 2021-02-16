@@ -10,9 +10,13 @@ import { ResultsTableResultsComponent } from "./TableResults/Results-TableResult
 import { calculateRowsWithPercent } from "./calculateRowsWithPercent.service";
 import { isolateCountURL } from "../../../../Shared/URLs";
 import { IsolateCountedDTO } from "../../../../Shared/Model/Api_Isolate.model";
-import { QueryPageLoadingOrErrorComponent } from "../QueryPage-LoadingOrError.component";
+import { LoadingOrErrorComponent } from "../../../../Shared/LoadingOrError.component";
 
-export function ContentResultsComponent(): JSX.Element {
+export function ContentResultsContainerComponent(props: {
+    isCol: boolean;
+    isRow: boolean;
+    isFilter: boolean;
+}): JSX.Element {
     const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
     const [countedStatus, setCountedStatus] = useState<number>();
     const { filter } = useContext(FilterContext);
@@ -23,26 +27,23 @@ export function ContentResultsComponent(): JSX.Element {
 
     const rowAttribute: FilterType = table.row;
     const colAttribute: FilterType = table.column;
-    const isCol: boolean = colAttribute !== "";
-    const isRow: boolean = rowAttribute !== "";
-    const state = { isCol, isRow };
 
     const getTableContext = async (
         isolateCountProp: IsolateCountedDTO
     ): Promise<void> => {
-        if (!isCol && !isRow) {
+        if (!props.isCol && !props.isRow) {
             setTable({
                 ...table,
                 statisticDataAbsolute: [],
             });
         } else {
-            const rowValues: string[] = !isRow
+            const rowValues: string[] = !props.isRow
                 ? [t("Results.TableHead")]
                 : (_.isEmpty(filter.selectedFilter[rowAttribute])
                 ? data.uniqueValues[rowAttribute]
                 : filter.selectedFilter[rowAttribute]);
 
-            const colValues: string[] = !isCol
+            const colValues: string[] = !props.isCol
                 ? [t("Results.TableHead")]
                 : (_.isEmpty(filter.selectedFilter[colAttribute])
                 ? data.uniqueValues[colAttribute]
@@ -132,7 +133,7 @@ export function ContentResultsComponent(): JSX.Element {
     ]);
 
     return (
-        <QueryPageLoadingOrErrorComponent
+        <LoadingOrErrorComponent
             status={{
                 isolateStatus: 200,
                 isolateCountStatus: countedStatus,
@@ -141,7 +142,7 @@ export function ContentResultsComponent(): JSX.Element {
             dataIsSet={!_.isEmpty(data.ZNData)}
             componentToDisplay={
                 <ResultsTableResultsComponent
-                    displayRowCol={state}
+                    displayRowCol={{isCol: props.isCol, isRow: props.isRow}}
                     columnAttributes={columnAttributes}
                 />
             }

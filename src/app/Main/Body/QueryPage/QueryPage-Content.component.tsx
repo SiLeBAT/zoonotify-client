@@ -1,14 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ContentResultsComponent } from "./Results/Content-Results.component";
+import { ContentResultsContainerComponent } from "./Results/Content-ResultsContainer.component";
 import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.component";
 import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { TableContext } from "../../../Shared/Context/TableContext";
 
 const contentStyle = css`
     width: 0;
@@ -46,32 +43,19 @@ const resultsBoxStyle = css`
     margin-top: 2em;
 `;
 
-export function QueryPageContentComponent(): JSX.Element {
-    const [isFilter, setIsFilter] = useState(false);
-    const [isTable, setIsTable] = useState(false);
-    const { filter } = useContext(FilterContext);
-    const { table } = useContext(TableContext);
+export function QueryPageContentComponent(props: {
+    isCol: boolean;
+    isRow: boolean;
+    isFilter: boolean;
+}): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
-
-    useEffect((): void => {
-        filter.mainFilter.forEach((element): void => {
-            if (filter.selectedFilter[element].length !== 0) {
-                setIsFilter(true);
-            }
-        });
-        if (table.row.length !== 0 || table.column.length !== 0) {
-            setIsTable(true);
-        } else {
-            setIsTable(false);
-        }
-    }, [filter, table]);
 
     return (
         <div css={contentStyle}>
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
             <p css={statusStyle}>{t("Content.DataStatus")}</p>
             <div css={contentBoxStyle}>
-                {isFilter || isTable ? (
+                {props.isFilter || props.isCol || props.isRow ? (
                     <QueryPageParameterContentComponent />
                 ) : (
                     <QueryPageIntroTextComponent />
@@ -79,7 +63,11 @@ export function QueryPageContentComponent(): JSX.Element {
                 <QueryPageNrOfIsolatesComponent />
             </div>
             <div css={resultsBoxStyle}>
-                <ContentResultsComponent />
+                <ContentResultsContainerComponent
+                    isCol={props.isCol}
+                    isRow={props.isRow}
+                    isFilter={props.isFilter}
+                />
             </div>
         </div>
     );
