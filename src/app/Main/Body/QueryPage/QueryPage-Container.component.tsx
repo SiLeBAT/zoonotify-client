@@ -21,10 +21,12 @@ import { TableContext } from "../../../Shared/Context/TableContext";
 import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/PathServices/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
+import { QueryPageComponent } from "./QueryPage.component";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{
         isolateStatus: number;
+        isolateCountStatus: number;
         filterStatus: number;
     }>();
     const { data, setData } = useContext(DataContext);
@@ -42,14 +44,20 @@ export function QueryPageContainerComponent(): JSX.Element {
         const isolateCountResponse: Response = await fetch(ISOLATE_COUNT_URL);
 
         const isolateStatus = isolateResponse.status;
+        const isolateCountStatus = isolateCountResponse.status;
         const filterStatus = filterResponse.status;
 
         setStatus({
             isolateStatus,
+            isolateCountStatus,
             filterStatus,
         });
 
-        if (isolateStatus === 200 && filterStatus === 200) {
+        if (
+            isolateStatus === 200 &&
+            isolateCountStatus === 200 &&
+            filterStatus === 200
+        ) {
             const isolateProp: IsolateDTO = await isolateResponse.json();
             const filterProp: FilterConfigDTO = await filterResponse.json();
             const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
@@ -115,6 +123,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         <QueryPageLoadingOrErrorComponent
             status={status}
             dataIsSet={!_.isEmpty(data.ZNData)}
+            componentToDisplay={<QueryPageComponent />}
         />
     );
 }

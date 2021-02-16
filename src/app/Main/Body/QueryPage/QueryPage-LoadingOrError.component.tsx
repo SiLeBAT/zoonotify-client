@@ -1,6 +1,5 @@
 import React from "react";
 import { ErrorPageComponent } from "../ErrorPage/ErrorPage.component";
-import { QueryPageComponent } from "./QueryPage.component";
 import { LoadingProcessComponent } from "../../../Shared/LoadingProcess.component";
 
 /**
@@ -13,15 +12,22 @@ export function QueryPageLoadingOrErrorComponent(props: {
     status:
         | {
               isolateStatus: number;
+              isolateCountStatus: number | undefined;
               filterStatus: number;
           }
         | undefined;
     dataIsSet: boolean;
+    componentToDisplay: JSX.Element;
 }): JSX.Element {
     if (props.status !== undefined) {
         if (props.status.isolateStatus !== 200) {
             return (
                 <ErrorPageComponent errorStatus={props.status.isolateStatus} />
+            );
+        }
+        if (props.status.isolateCountStatus !== 200 && props.status.isolateCountStatus !== undefined) {
+            return (
+                <ErrorPageComponent errorStatus={props.status.isolateCountStatus} />
             );
         }
         if (props.status.filterStatus !== 200) {
@@ -30,7 +36,7 @@ export function QueryPageLoadingOrErrorComponent(props: {
             );
         }
         if (props.dataIsSet) {
-            return <QueryPageComponent />;
+            return props.componentToDisplay;
         }
     }
 

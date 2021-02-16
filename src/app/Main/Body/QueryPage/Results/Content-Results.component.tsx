@@ -10,9 +10,11 @@ import { ResultsTableResultsComponent } from "./TableResults/Results-TableResult
 import { calculateRowsWithPercent } from "./calculateRowsWithPercent.service";
 import { isolateCountURL } from "../../../../Shared/URLs";
 import { IsolateCountedDTO } from "../../../../Shared/Model/Api_Isolate.model";
+import { QueryPageLoadingOrErrorComponent } from "../QueryPage-LoadingOrError.component";
 
 export function ContentResultsComponent(): JSX.Element {
     const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
+    const [countedStatus, setCountedStatus] = useState<number>();
     const { filter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
     const { data, setData } = useContext(DataContext);
@@ -38,13 +40,13 @@ export function ContentResultsComponent(): JSX.Element {
                 ? [t("Results.TableHead")]
                 : (_.isEmpty(filter.selectedFilter[rowAttribute])
                 ? data.uniqueValues[rowAttribute]
-                : filter.selectedFilter[rowAttribute])
+                : filter.selectedFilter[rowAttribute]);
 
             const colValues: string[] = !isCol
                 ? [t("Results.TableHead")]
                 : (_.isEmpty(filter.selectedFilter[colAttribute])
                 ? data.uniqueValues[colAttribute]
-                : filter.selectedFilter[colAttribute])
+                : filter.selectedFilter[colAttribute]);
 
             const isolateColValues: string[] = [t("Results.TableHead")];
             const isolateRowValues: string[] = [t("Results.TableHead")];
@@ -106,13 +108,17 @@ export function ContentResultsComponent(): JSX.Element {
 
     const fetchIsolateCounted = async (): Promise<void> => {
         const isolateCountResponse: Response = await fetch(ISOLATE_COUNT_URL);
-        const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
+        const isolateCountStatus = isolateCountResponse.status;
+        setCountedStatus(isolateCountStatus);
 
-        getTableContext(isolateCountProp);
-        setData({
-            ...data,
-            nrOfSelectedIsolates: isolateCountProp.totalNumberOfIsolates,
-        });
+        if (isolateCountStatus === 200) {
+            const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
+            getTableContext(isolateCountProp);
+            setData({
+                ...data,
+                nrOfSelectedIsolates: isolateCountProp.totalNumberOfIsolates,
+            });
+        }
     };
 
     useEffect((): void => {
@@ -126,9 +132,19 @@ export function ContentResultsComponent(): JSX.Element {
     ]);
 
     return (
-        <ResultsTableResultsComponent
-            displayRowCol={state}
-            columnAttributes={columnAttributes}
+        <QueryPageLoadingOrErrorComponent
+            status={{
+                isolateStatus: 200,
+                isolateCountStatus: countedStatus,
+                filterStatus: 200,
+            }}
+            dataIsSet={!_.isEmpty(data.ZNData)}
+            componentToDisplay={
+                <ResultsTableResultsComponent
+                    displayRowCol={state}
+                    columnAttributes={columnAttributes}
+                />
+            }
         />
     );
 }
