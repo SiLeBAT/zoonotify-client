@@ -18,9 +18,9 @@ import {
 } from "../../../Shared/Model/Filter.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
-import { getFilterFromPath } from "../../../Core/getFilterFromPath.service";
-import { generatePathString } from "../../../Core/generatePathString.service";
-import { getFeaturesFromPath } from "../../../Core/getTableFromPath.service";
+import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
+import { generatePathString } from "../../../Core/PathServices/generatePathString.service";
+import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{

@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { FilterType, FilterInterface } from "../Shared/Model/Filter.model";
-import { TableInterface } from "../Shared/Context/TableContext";
+import { FilterType, FilterInterface } from "../../Shared/Model/Filter.model";
+import { TableInterface } from "../../Shared/Context/TableContext";
 
 /**
  * @desc Generate partial path containing the selected filter
