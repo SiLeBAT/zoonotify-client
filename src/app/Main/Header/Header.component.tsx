@@ -3,7 +3,6 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { HeaderExportComponent } from "./Export/Header-Export.component";
 import { TranslationButtonsComponent } from "./TranslationButtons.component";
 import {
     primaryColor,
@@ -13,6 +12,7 @@ import {
     surfaceColor,
 } from "../../Shared/Style/Style-MainTheme.component";
 import { ZNPaths } from "../../Shared/URLs";
+import { HeaderExportContainerComponent } from "./Export/Header-ExportContainer.component";
 
 const headerStyle = css`
     width: 100%;
@@ -153,7 +153,7 @@ export function HeaderComponent(props: { isConnected: boolean }): JSX.Element {
             </div>
 
             <div css={subheaderStyle(queryOpen)}>
-                <HeaderExportComponent />
+                <HeaderExportContainerComponent />
             </div>
         </header>
     );

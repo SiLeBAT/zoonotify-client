@@ -23,6 +23,7 @@ import { generatePathString } from "../../../Core/PathServices/generatePathStrin
 import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
 import { QueryPageComponent } from "./QueryPage.component";
 import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
+import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{
@@ -71,13 +72,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const filterProp: FilterConfigDTO = await filterResponse.json();
             const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
 
-            const adaptedDbIsolates: DbCollection = isolateProp.isolates.map(
-                ({ microorganism, samplingContext, matrix }) => ({
-                    microorganism,
-                    samplingContext,
-                    matrix,
-                })
-            );
+            const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(isolateProp);
 
             const uniqueValuesObject: FilterInterface = {};
 

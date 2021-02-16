@@ -15,7 +15,6 @@ import { LoadingOrErrorComponent } from "../../../../Shared/LoadingOrError.compo
 export function ContentResultsContainerComponent(props: {
     isCol: boolean;
     isRow: boolean;
-    isFilter: boolean;
 }): JSX.Element {
     const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
     const [countedStatus, setCountedStatus] = useState<number>();
@@ -142,7 +141,7 @@ export function ContentResultsContainerComponent(props: {
             dataIsSet={!_.isEmpty(data.ZNData)}
             componentToDisplay={
                 <ResultsTableResultsComponent
-                    displayRowCol={{isCol: props.isCol, isRow: props.isRow}}
+                    displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
                     columnAttributes={columnAttributes}
                 />
             }

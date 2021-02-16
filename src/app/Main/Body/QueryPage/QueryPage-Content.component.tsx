@@ -66,7 +66,6 @@ export function QueryPageContentComponent(props: {
                 <ContentResultsContainerComponent
                     isCol={props.isCol}
                     isRow={props.isRow}
-                    isFilter={props.isFilter}
                 />
             </div>
         </div>
