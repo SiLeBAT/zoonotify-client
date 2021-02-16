@@ -86,7 +86,6 @@ export function QueryPageContainerComponent(): JSX.Element {
             setData({
                 ...data,
                 ZNData: adaptedDbIsolates,
-                ZNDataFiltered: adaptedDbIsolates,
                 keyValues: DbKeyCollection,
                 uniqueValues: uniqueValuesObject,
                 nrOfSelectedIsolates,
