@@ -82,15 +82,6 @@ export function QueryPageContainerComponent(): JSX.Element {
         }
     };
 
-    const fetchIsolateCounted = async (): Promise<void> => {
-        const isolateCountResponse: Response = await fetch(ISOLATE_COUNT_URL);
-        const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
-        setData({
-            ...data,
-            nrOfSelectedIsolates: isolateCountProp.totalNumberOfIsolates,
-        });
-    };
-
     useEffect(() => {
         fetchAndSetDataAndFilter();
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
@@ -118,8 +109,6 @@ export function QueryPageContainerComponent(): JSX.Element {
                 filter.mainFilter
             )}`
         );
-
-        fetchIsolateCounted();
     }, [filter, table, ISOLATE_COUNT_URL]);
 
     return (

@@ -15,7 +15,7 @@ export function ContentResultsComponent(): JSX.Element {
     const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
     const { filter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
-    const { data } = useContext(DataContext);
+    const { data, setData } = useContext(DataContext);
     const history = useHistory();
     const { t } = useTranslation(["QueryPage"]);
 
@@ -109,6 +109,10 @@ export function ContentResultsComponent(): JSX.Element {
         const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
 
         getTableContext(isolateCountProp);
+        setData({
+            ...data,
+            nrOfSelectedIsolates: isolateCountProp.totalNumberOfIsolates,
+        });
     };
 
     useEffect((): void => {
