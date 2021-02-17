@@ -31,42 +31,63 @@ export function HeaderExportContainerComponent(): JSX.Element {
         const isolateFilteredResponse: Response = await fetch(
             ISOLATE_FILTERED_URL
         );
-        const isolateFilteredProp: IsolateDTO = await isolateFilteredResponse.json();
-        const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
-            isolateFilteredProp
-        );
 
-        const rawData: DbCollection = raw ? adaptedFilteredIsolates : [];
-        const rawKeys: DbKey[] = raw ? data.keyValues : [];
-        let statData: Record<string, string>[] = [];
-        let statKeys: string[] = [];
-        if (stat) {
-            if (table.option === "absolute") {
-                statData = table.statisticDataAbsolute;
-            }
-            if (table.option === "percent") {
-                statData = table.statisticDataPercent;
-            }
-        }
-        if (!_.isEmpty(statData)) {
-            statKeys = Object.keys(statData[0]);
-        }
+        const isolateFilteredStatus = isolateFilteredResponse.status;
 
-        setSetting({
-            ...setting,
-            tableAttributes: {
-                row: table.row,
-                column: table.column,
-            },
-            rawDataSet: {
-                rawData,
-                rawKeys,
-            },
-            statDataSet: {
-                statData,
-                statKeys,
-            },
-        });
+        if (isolateFilteredStatus === 200) {
+            const isolateFilteredProp: IsolateDTO = await isolateFilteredResponse.json();
+            const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
+                isolateFilteredProp
+            );
+
+            const rawData: DbCollection = raw ? adaptedFilteredIsolates : [];
+            const rawKeys: DbKey[] = raw ? data.keyValues : [];
+            let statData: Record<string, string>[] = [];
+            let statKeys: string[] = [];
+            if (stat) {
+                if (table.option === "absolute") {
+                    statData = table.statisticDataAbsolute;
+                }
+                if (table.option === "percent") {
+                    statData = table.statisticDataPercent;
+                }
+            }
+            if (!_.isEmpty(statData)) {
+                statKeys = Object.keys(statData[0]);
+            }
+
+            setSetting({
+                ...setting,
+                tableAttributes: {
+                    row: table.row,
+                    column: table.column,
+                },
+                rawDataSet: {
+                    rawData,
+                    rawKeys,
+                },
+                statDataSet: {
+                    statData,
+                    statKeys,
+                },
+            });
+        } else {
+            setSetting({
+                ...setting,
+                tableAttributes: {
+                    row: table.row,
+                    column: table.column,
+                },
+                rawDataSet: {
+                    rawData: [],
+                    rawKeys: [],
+                },
+                statDataSet: {
+                    statData: [],
+                    statKeys: [],
+                },
+            });
+        }
     };
 
     useEffect(() => {
