@@ -1,11 +1,27 @@
 /** @jsx jsx */
-import { jsx, SerializedStyles } from "@emotion/core";
+import { css, jsx } from "@emotion/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import {
     primaryColor,
     onBackgroundColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
+
+const blankCellStyle = css`
+    box-sizing: border-box;
+    border-right: 1px solid lightgrey;
+    width: 160px;
+    min-width: 160px;
+`
+const headerCellStyle = css`
+    box-sizing: border-box;
+    border-right: 1px solid lightgrey;
+    :last-child {
+        border-right: none;
+    }
+    text-align: right;
+    white-space: nowrap;
+`;
 
 const StyledTableCell = withStyles(() =>
     createStyles({
@@ -24,22 +40,12 @@ const StyledTableCell = withStyles(() =>
 
 export interface TableContentHeaderProps {
     headerValues: string[];
-    getSize: (
-        node: HTMLElement | null,
-        key: "height" | "totalWidth" | "partWidth"
-    ) => void;
-    isRowNotCol: boolean;
     isRowAndCol: boolean;
-    style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles;
 }
 
 /**
  * @desc Returns list of table cells for the table header
  * @param {string[]} headerValues - object with two booleans, true if row/column is selected
- * @param {(node: HTMLElement | null, key: "height" | "totalWidth" | "partWidth") => void} getSize - callback function to get the size of the header for the position of the main header
- * @param {boolean} isRowNotCol - true if row and no column is selected
- * @param {boolean} isRowAndCol - true if row and column is selected
- * @param {(isRow: boolean, isRowAndCol: boolean) => SerializedStyles} - style of the header
  * @returns {JSX.Element[]} - list of table cell components
  */
 export function TableContentHeaderComponent(
@@ -49,9 +55,7 @@ export function TableContentHeaderComponent(
     elements.push(
         <StyledTableCell
             key="header-blank"
-            ref={(node: HTMLElement | null) => props.getSize(node, "partWidth")}
-            css={props.style(props.isRowNotCol, props.isRowAndCol)}
-        >
+            css={blankCellStyle}        >
             &nbsp;
         </StyledTableCell>
     );
@@ -59,8 +63,7 @@ export function TableContentHeaderComponent(
         elements.push(
             <StyledTableCell
                 key={`header-${element}`}
-                css={props.style(props.isRowNotCol, props.isRowAndCol)}
-            >
+                css={headerCellStyle}            >
                 {element}
             </StyledTableCell>
         );

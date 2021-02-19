@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 import { TableResultsTableContentComponent } from "./TableResults-TableContent.component";
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
@@ -36,55 +37,16 @@ export interface TableResultsProps {
 export function ResultsTableResultsComponent(
     props: TableResultsProps
 ): JSX.Element {
-    const [windowSize, setWindowSize] = useState({
-        width: 0,
-        height: 0,
-    });
-    const [tableHeight, setTableHeight] = useState<number>(0);
-    const [totalWidth, setTotalWidth] = useState<number>(0);
-    const [partWidth, setPartWidth] = useState<number>(0);
     const { table } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    useEffect(() => {
-        const handleSize = (): void => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            });
-        };
-        window.addEventListener("resize", handleSize);
-        return () => window.removeEventListener("resize", handleSize);
-    }, []);
-
-    const div = useCallback(
-        (
-            node: HTMLElement | null,
-            key: "height" | "totalWidth" | "partWidth"
-        ) => {
-            if (node !== null) {
-                if (key === "height") {
-                    const { height } = node.getBoundingClientRect();
-                    setTableHeight(height);
-                }
-                if (key === "totalWidth") {
-                    const { width } = node.getBoundingClientRect();
-                    setTotalWidth(width);
-                }
-                if (key === "partWidth") {
-                    const { width } = node.getBoundingClientRect();
-                    setPartWidth(width);
-                }
-            }
-        },
-        [table, windowSize]
-    );
-
-    const headerWidth: number = totalWidth - partWidth;
-
     const accordionHeader: string = t(`Results.Table`);
-    const rowMainHeader: string = t(`Filters.${table.row}`);
-    const colMainHeader: string = t(`Filters.${table.column}`);
+    const rowMainHeader: string = _.isEmpty(table.row)
+        ? ""
+        : t(`Filters.${table.row}`);
+    const colMainHeader: string = _.isEmpty(table.column)
+        ? ""
+        : t(`Filters.${table.column}`);
 
     let tableAccordionContent = (
         <div css={dataStyle}>
@@ -93,30 +55,29 @@ export function ResultsTableResultsComponent(
     );
     const isTable: boolean =
         props.displayRowCol.isCol || props.displayRowCol.isRow;
+    const isRowAndCol: boolean =
+        props.displayRowCol.isCol && props.displayRowCol.isRow;
 
     if (isTable) {
         tableAccordionContent = (
             <div css={dataStyle}>
-                <ResultsTableOptionsComponent/>
+                <ResultsTableOptionsComponent />
                 <TableResultsTableMainHeaderComponent
                     isTitle={props.displayRowCol.isCol}
                     isRow={false}
-                    height={tableHeight}
-                    width={headerWidth}
                     text={colMainHeader}
+                    isRowAndCol={isRowAndCol}
                 />
                 <div css={tableDivStyle}>
                     <TableResultsTableMainHeaderComponent
                         isTitle={props.displayRowCol.isRow}
                         isRow
-                        height={tableHeight}
-                        width={headerWidth}
                         text={rowMainHeader}
+                        isRowAndCol={isRowAndCol}
                     />
                     <TableResultsTableContentComponent
-                        displayRowCol={props.displayRowCol}
                         columnAttributes={props.columnAttributes}
-                        getSize={div}
+                        isRowAndCol={isRowAndCol}
                     />
                 </div>
             </div>
