@@ -6,7 +6,7 @@ import { LinkPageComponent } from "./LinkPage/LinkPage.component";
 import { InfoPageComponent } from "./InfoPage/InfoPage.component";
 import { DataProtectionPageComponent } from "./DataProtectionPage/DataProtectionPage.component";
 import { ZNPaths } from "../../Shared/URLs";
-import { ErrorPageComponent } from "./ErrorPage/ErrorPage.component";
+import { ErrorPageComponent } from "../../Shared/ErrorPage.component";
 
 function ErrorPage(): JSX.Element {
     return <ErrorPageComponent errorStatus={404} />;

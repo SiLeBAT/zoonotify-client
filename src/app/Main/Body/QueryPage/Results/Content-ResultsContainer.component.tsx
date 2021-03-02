@@ -36,17 +36,16 @@ export function ContentResultsContainerComponent(props: {
                 statisticDataAbsolute: [],
             });
         } else {
-            const rowValues: string[] = !props.isRow
-                ? [t("Results.TableHead")]
-                : (_.isEmpty(filter.selectedFilter[rowAttribute])
-                ? data.uniqueValues[rowAttribute]
-                : filter.selectedFilter[rowAttribute]);
-
-            const colValues: string[] = !props.isCol
-                ? [t("Results.TableHead")]
-                : (_.isEmpty(filter.selectedFilter[colAttribute])
-                ? data.uniqueValues[colAttribute]
-                : filter.selectedFilter[colAttribute]);
+            let rowValues: string[] = [t("Results.TableHead")]
+            if (props.isRow) {
+                const isEmptyFilter = _.isEmpty(filter.selectedFilter[rowAttribute])
+                rowValues = isEmptyFilter ? data.uniqueValues[rowAttribute] : filter.selectedFilter[rowAttribute]
+            }
+            let colValues: string[] = [t("Results.TableHead")]
+            if (props.isCol) {
+                const isEmptyFilter = _.isEmpty(filter.selectedFilter[colAttribute])
+                colValues = isEmptyFilter ? data.uniqueValues[colAttribute] : filter.selectedFilter[colAttribute]
+            }
 
             const isolateColValues: string[] = [t("Results.TableHead")];
             const isolateRowValues: string[] = [t("Results.TableHead")];
@@ -80,7 +79,7 @@ export function ContentResultsContainerComponent(props: {
                                         : isolateGroup[colAttribute];
                                 tempStatTable[
                                     statTableKey
-                                ] = (isolateGroup.count as unknown) as string;
+                                ] = String(isolateGroup.count);
                             }
                         });
                     } else {

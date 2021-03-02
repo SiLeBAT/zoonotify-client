@@ -21,7 +21,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const { data } = useContext(DataContext);
     const { table } = useContext(TableContext);
     const history = useHistory();
-    
+
     const ISOLATE_FILTERED_URL: string = isolateURL + history.location.search;
 
     const fetchAndChooseData = async (
@@ -34,16 +34,16 @@ export function HeaderExportContainerComponent(): JSX.Element {
 
         const isolateFilteredStatus = isolateFilteredResponse.status;
 
+        let rawData: DbCollection = [];
+        let rawKeys: DbKey[] = [];
+        let statData: Record<string, string>[] = [];
+        let statKeys: string[] = [];
+
         if (isolateFilteredStatus === 200) {
             const isolateFilteredProp: IsolateDTO = await isolateFilteredResponse.json();
             const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
                 isolateFilteredProp
             );
-
-            const rawData: DbCollection = raw ? adaptedFilteredIsolates : [];
-            const rawKeys: DbKey[] = raw ? data.keyValues : [];
-            let statData: Record<string, string>[] = [];
-            let statKeys: string[] = [];
             if (stat) {
                 if (table.option === "absolute") {
                     statData = table.statisticDataAbsolute;
@@ -55,39 +55,26 @@ export function HeaderExportContainerComponent(): JSX.Element {
             if (!_.isEmpty(statData)) {
                 statKeys = Object.keys(statData[0]);
             }
-
-            setSetting({
-                ...setting,
-                tableAttributes: {
-                    row: table.row,
-                    column: table.column,
-                },
-                rawDataSet: {
-                    rawData,
-                    rawKeys,
-                },
-                statDataSet: {
-                    statData,
-                    statKeys,
-                },
-            });
-        } else {
-            setSetting({
-                ...setting,
-                tableAttributes: {
-                    row: table.row,
-                    column: table.column,
-                },
-                rawDataSet: {
-                    rawData: [],
-                    rawKeys: [],
-                },
-                statDataSet: {
-                    statData: [],
-                    statKeys: [],
-                },
-            });
+            if (raw) {
+                rawData = adaptedFilteredIsolates;
+                rawKeys = data.keyValues;
+            }
         }
+        setSetting({
+            ...setting,
+            tableAttributes: {
+                row: table.row,
+                column: table.column,
+            },
+            rawDataSet: {
+                rawData,
+                rawKeys,
+            },
+            statDataSet: {
+                statData,
+                statKeys,
+            },
+        });
     };
 
     useEffect(() => {

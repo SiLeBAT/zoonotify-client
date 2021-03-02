@@ -84,7 +84,6 @@ export function QueryPageContainerComponent(): JSX.Element {
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
 
             setData({
-                ...data,
                 ZNData: adaptedDbIsolates,
                 keyValues: DbKeyCollection,
                 uniqueValues: uniqueValuesObject,

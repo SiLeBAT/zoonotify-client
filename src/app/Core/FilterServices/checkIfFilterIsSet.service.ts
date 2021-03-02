@@ -5,19 +5,15 @@ import { FilterInterface, FilterType } from "../../Shared/Model/Filter.model";
  * @desc Check if one of all possible filters is selected
  * @param {FilterInterface} filter - object of filters
  * @param {string[]} mainFilterAttributes - list with all main filters
- * @returns {boolean} - true if no filter is selected
+ * @returns {boolean} - true if a filter is selected
  */
 export function CheckIfFilterIsSet(
     filter: FilterInterface,
     mainFilterAttributes: string[]
 ): boolean {
-    const isFilter = !mainFilterAttributes.every(function emptyArray(
-        key
-    ): boolean {
-        const empty: boolean = _.isEmpty(filter[key]);
-        return empty;
-    });
-
+    const isFilter = !mainFilterAttributes.every((key) =>
+        _.isEmpty(filter[key])
+    );
     return isFilter;
 }
 

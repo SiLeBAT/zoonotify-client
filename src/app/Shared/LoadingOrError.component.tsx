@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorPageComponent } from "../Main/Body/ErrorPage/ErrorPage.component";
+import { ErrorPageComponent } from "./ErrorPage.component";
 import { LoadingProcessComponent } from "./LoadingProcess.component";
 
 /**
