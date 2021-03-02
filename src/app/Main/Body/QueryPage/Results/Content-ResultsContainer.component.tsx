@@ -7,7 +7,7 @@ import { FilterType } from "../../../../Shared/Model/Filter.model";
 import { TableContext } from "../../../../Shared/Context/TableContext";
 import { DataContext } from "../../../../Shared/Context/DataContext";
 import { ResultsTableResultsComponent } from "./TableResults/Results-TableResults.component";
-import { calculateRowsWithPercent } from "./calculateRowsWithPercent.service";
+import { calculateRelativeTableData } from "./calculateRelativeTableData.service";
 import { isolateCountURL } from "../../../../Shared/URLs";
 import { IsolateCountedDTO } from "../../../../Shared/Model/Api_Isolate.model";
 import { LoadingOrErrorComponent } from "../../../../Shared/LoadingOrError.component";
@@ -90,7 +90,7 @@ export function ContentResultsContainerComponent(props: {
             });
 
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
-            const rowsWithPercent = calculateRowsWithPercent(
+            const statisticTableDataRel = calculateRelativeTableData(
                 statisticTableDataAbs,
                 nrOfSelectedIsolates
             );
@@ -98,7 +98,7 @@ export function ContentResultsContainerComponent(props: {
             setTable({
                 ...table,
                 statisticDataAbsolute: statisticTableDataAbs,
-                statisticDataPercent: rowsWithPercent,
+                statisticDataPercent: statisticTableDataRel,
             });
         }
     };
