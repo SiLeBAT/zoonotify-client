@@ -8,7 +8,7 @@ import { TableContext } from "../../../../Shared/Context/TableContext";
 import { DataContext } from "../../../../Shared/Context/DataContext";
 import { ResultsTableResultsComponent } from "./TableResults/Results-TableResults.component";
 import { calculateRelativeTableData } from "./calculateRelativeTableData.service";
-import { isolateCountURL } from "../../../../Shared/URLs";
+import { ISOLATE_COUNT_URL } from "../../../../Shared/URLs";
 import { IsolateCountedDTO } from "../../../../Shared/Model/Api_Isolate.model";
 import { LoadingOrErrorComponent } from "../../../../Shared/LoadingOrError.component";
 
@@ -103,10 +103,10 @@ export function ContentResultsContainerComponent(props: {
         }
     };
 
-    const ISOLATE_COUNT_URL: string = isolateCountURL + history.location.search;
+    const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        const isolateCountResponse: Response = await fetch(ISOLATE_COUNT_URL);
+        const isolateCountResponse: Response = await fetch(isolateCountUrl);
         const isolateCountStatus = isolateCountResponse.status;
         setCountedStatus(isolateCountStatus);
 
@@ -126,7 +126,7 @@ export function ContentResultsContainerComponent(props: {
         filter,
         table.column,
         table.row,
-        ISOLATE_COUNT_URL,
+        isolateCountUrl,
         localStorage.getItem("i18nextLng"),
     ]);
 

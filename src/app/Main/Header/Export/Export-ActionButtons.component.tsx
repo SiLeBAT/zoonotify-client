@@ -24,7 +24,7 @@ const warningStyle = (isSelect: boolean): SerializedStyles => css`
 `;
 
 export interface ExportActionButtonProps {
-    handleClickClose: (event: unknown) => void;
+    handleClickClose: () => void;
     setting: ExportInterface;
     filter: FilterInterface;
     mainFilterAttributes: string[];
@@ -36,7 +36,7 @@ export interface ExportActionButtonProps {
 
 /**
  * @desc Returns action buttons for the export dialog
- * @param {(event: unknown) => void} onClick - onClick function to close the export dialog
+ * @param {() => void} onClick - onClick function to close the export dialog
  * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
  * @param {sting[]} mainFilterAttributes - list of main filters

@@ -26,13 +26,13 @@ const DownloadButton = withStyles({
 })(Button);
 
 export interface ExportButtonProps {
-    handleClickOpen: (event: unknown) => void;
+    handleClickOpen: () => void;
     buttonLabel: JSX.Element;
 }
 
 /**
  * @desc Returns the export button inside the header.
- * @param {(event: unknown) => void} onClick - function to handle the open/close of the export dialog
+ * @param {() => void} onClick - function to handle the open/close of the export dialog
  * @param {JSX.Element} buttonLabel - component for the button label
  * @returns {JSX.Element} - export button component
  */

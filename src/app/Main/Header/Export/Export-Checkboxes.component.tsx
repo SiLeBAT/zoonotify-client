@@ -15,7 +15,7 @@ export interface CheckboxesProps {
 
 /**
  * @desc Returns the checkboxes to decide which data should be exported.
- * @param {(event: React.ChangeEvent<HTMLInputElement>) => void} onChange - function to select/deselect the checkbox
+ * @param {(name: string, checked: boolean) => void} onChange - function to select/deselect the checkbox
  * @param {boolean} raw - true if dataset is selected for export
  * @param {boolean} stat - true if statistic data is selected for export
  * @returns {JSX.Element} - checkboxes component

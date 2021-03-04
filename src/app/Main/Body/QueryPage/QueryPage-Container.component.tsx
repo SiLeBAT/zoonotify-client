@@ -10,7 +10,7 @@ import {
     DbCollection,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
-import { filterURL, isolateCountURL, isolateURL } from "../../../Shared/URLs";
+import { FILTER_URL, ISOLATE_COUNT_URL, ISOLATE_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
     FilterConfigDTO,
@@ -44,14 +44,12 @@ export function QueryPageContainerComponent(): JSX.Element {
     );
     const state = { isCol, isRow, isFilter };
 
-    const ISOLATE_URL: string = isolateURL;
-    const ISOLATE_COUNT_URL: string = isolateCountURL + history.location.search;
-    const FILTER_URL: string = filterURL;
+    const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
     const fetchAndSetDataAndFilter = async (): Promise<void> => {
         const isolateResponse: Response = await fetch(ISOLATE_URL);
         const filterResponse: Response = await fetch(FILTER_URL);
-        const isolateCountResponse: Response = await fetch(ISOLATE_COUNT_URL);
+        const isolateCountResponse: Response = await fetch(isolateCountUrl);
 
         const isolateStatus = isolateResponse.status;
         const isolateCountStatus = isolateCountResponse.status;
@@ -119,7 +117,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 filter.mainFilter
             )}`
         );
-    }, [filter, table, ISOLATE_COUNT_URL]);
+    }, [filter, table, isolateCountUrl]);
 
     return (
         <LoadingOrErrorComponent

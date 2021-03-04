@@ -6,7 +6,7 @@ import {
     generateExportLabels,
 } from "../../../Core/ExportServices/generateExportLabels.service";
 import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
-import { isolateURL } from "../../../Shared/URLs";
+import { ISOLATE_URL } from "../../../Shared/URLs";
 import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { DataContext } from "../../../Shared/Context/DataContext";
@@ -30,7 +30,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const { filter } = useContext(FilterContext);
     const history = useHistory();
 
-    const ISOLATE_FILTERED_URL: string = isolateURL + history.location.search;
+    const ISOLATE_FILTERED_URL: string = ISOLATE_URL + history.location.search;
 
     const fetchAndChooseData = async (
         raw: boolean,
