@@ -8,7 +8,7 @@ const checkboxStyle = css`
 `;
 
 export interface CheckboxesProps {
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleCheckbox: (name: string, checked: boolean) => void;
     raw: boolean;
     stat: boolean;
 }
@@ -23,17 +23,18 @@ export interface CheckboxesProps {
 export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        props.onChange(event);
-    };
-
     return (
         <FormGroup css={checkboxStyle}>
             <FormControlLabel
                 control={
                     <Checkbox
                         checked={props.raw}
-                        onChange={handleChange}
+                        onChange={(event) =>
+                            props.handleCheckbox(
+                                event.target.name,
+                                event.target.checked
+                            )
+                        }
                         name="raw"
                         color="primary"
                     />
@@ -44,7 +45,12 @@ export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
                 control={
                     <Checkbox
                         checked={props.stat}
-                        onChange={handleChange}
+                        onChange={(event) =>
+                            props.handleCheckbox(
+                                event.target.name,
+                                event.target.checked
+                            )
+                        }
                         name="stat"
                         color="primary"
                     />

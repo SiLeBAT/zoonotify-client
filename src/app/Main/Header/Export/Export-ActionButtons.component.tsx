@@ -24,7 +24,7 @@ const warningStyle = (isSelect: boolean): SerializedStyles => css`
 `;
 
 export interface ExportActionButtonProps {
-    onClick: (event: unknown) => void;
+    handleClickClose: (event: unknown) => void;
     setting: ExportInterface;
     filter: FilterInterface;
     mainFilterAttributes: string[];
@@ -51,11 +51,7 @@ export function ExportActionButtonsComponent(
 ): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
-    const handleClose = (event: unknown): void => {
-        props.onClick(event);
-    };
-
-    const fileIsSelect = !(!props.setting.raw && !props.setting.stat);
+    const fileIsSelect = props.setting.raw || props.setting.stat;
     const subFileNames = [t("FileName.Stat"), t("FileName.DataSet")];
     const subFileName =
         props.setting.raw && !props.setting.stat
@@ -68,11 +64,11 @@ export function ExportActionButtonsComponent(
         <div>
             <p css={warningStyle(fileIsSelect)}>{t("Warning")}</p>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={props.handleClickClose} color="primary">
                     {t("Button.Cancel")}
                 </Button>
                 <Button
-                    onClick={handleClose}
+                    onClick={props.handleClickClose}
                     color="primary"
                     disabled={!fileIsSelect}
                 >
