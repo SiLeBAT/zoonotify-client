@@ -13,8 +13,8 @@ export function HeaderExportComponent(props: {
     settings: ExportInterface;
     buttonLabel: JSX.Element;
     exportLabels: ExportLabels;
-    handleClickOpen: () => void;
-    handleClickClose: () => void;
+    onClickOpen: () => void;
+    onClickClose: () => void;
     handleCheckbox: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { filter } = useContext(FilterContext);
@@ -22,12 +22,12 @@ export function HeaderExportComponent(props: {
     return (
         <div>
             <HeaderExportButtonComponent
-                handleClickOpen={props.handleClickOpen}
+                onClickOpen={props.onClickOpen}
                 buttonLabel={props.buttonLabel}
             />
             <Dialog
                 open={props.isOpen}
-                onClose={props.handleClickClose}
+                onClose={props.onClickClose}
                 aria-labelledby="form-dialog-title"
             >
                 <ExportTextContentComponent />
@@ -37,7 +37,7 @@ export function HeaderExportComponent(props: {
                     stat={props.settings.stat}
                 />
                 <ExportActionButtonsComponent
-                    handleClickClose={props.handleClickClose}
+                    onClickClose={props.onClickClose}
                     setting={props.settings}
                     filter={filter.selectedFilter}
                     mainFilterAttributes={filter.mainFilter}

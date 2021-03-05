@@ -98,10 +98,10 @@ export function HeaderExportContainerComponent(): JSX.Element {
         setSetting({ ...setting, [name]: checked });
     };
 
-    const handleClickOpen = (): void => {
+    const onClickOpen = (): void => {
         setIsOpen(true);
     };
-    const handleClickClose = (): void => {
+    const onClickClose = (): void => {
         setIsOpen(false);
     };
 
@@ -114,8 +114,8 @@ export function HeaderExportContainerComponent(): JSX.Element {
             settings={setting}
             buttonLabel={buttonLabel}
             exportLabels={exportLabels}
-            handleClickOpen={handleClickOpen}
-            handleClickClose={handleClickClose}
+            onClickOpen={onClickOpen}
+            onClickClose={onClickClose}
             handleCheckbox={handleChange}
         />
     );

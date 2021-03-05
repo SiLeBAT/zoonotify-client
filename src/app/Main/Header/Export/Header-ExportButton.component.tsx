@@ -26,7 +26,7 @@ const DownloadButton = withStyles({
 })(Button);
 
 export interface ExportButtonProps {
-    handleClickOpen: () => void;
+    onClickOpen: () => void;
     buttonLabel: JSX.Element;
 }
 
@@ -39,11 +39,14 @@ export interface ExportButtonProps {
 export function HeaderExportButtonComponent(
     props: ExportButtonProps
 ): JSX.Element {
+
+    const handleClick = (): void => props.onClickOpen();
+
     return (
         <DownloadButton
             size="small"
             css={downloadButtonStyle}
-            onClick={props.handleClickOpen}
+            onClick={handleClick}
         >
             {props.buttonLabel}
         </DownloadButton>
