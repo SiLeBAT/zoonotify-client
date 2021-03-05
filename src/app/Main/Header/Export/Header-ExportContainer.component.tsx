@@ -30,14 +30,14 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const { filter } = useContext(FilterContext);
     const history = useHistory();
 
-    const ISOLATE_FILTERED_URL: string = ISOLATE_URL + history.location.search;
+    const isolateFilteredUrl: string = ISOLATE_URL + history.location.search;
 
     const fetchAndChooseData = async (
         raw: boolean,
         stat: boolean
     ): Promise<void> => {
         const isolateFilteredResponse: Response = await fetch(
-            ISOLATE_FILTERED_URL
+            isolateFilteredUrl
         );
 
         const isolateFilteredStatus = isolateFilteredResponse.status;
@@ -91,7 +91,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
         table.statisticDataAbsolute,
         setting.raw,
         setting.stat,
-        ISOLATE_FILTERED_URL,
+        isolateFilteredUrl,
     ]);
 
     const handleChange = (name: string, checked: boolean): void => {
