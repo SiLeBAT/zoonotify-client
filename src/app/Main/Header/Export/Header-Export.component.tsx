@@ -7,11 +7,11 @@ import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
 import { ExportLabels } from "../../../Core/ExportServices/generateExportLabels.service";
+import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
 
 export function HeaderExportComponent(props: {
     isOpen: boolean;
     settings: ExportInterface;
-    buttonLabel: JSX.Element;
     exportLabels: ExportLabels;
     onClickOpen: () => void;
     onClickClose: () => void;
@@ -19,15 +19,20 @@ export function HeaderExportComponent(props: {
 }): JSX.Element {
     const { filter } = useContext(FilterContext);
 
+    const handleClickOpen = (): void => props.onClickOpen();
+    const handleClickClose = (): void => props.onClickClose();
+
+    const buttonLabel: JSX.Element = ExportButtonLabelComponent(props.isOpen);
+
     return (
         <div>
             <HeaderExportButtonComponent
-                onClickOpen={props.onClickOpen}
-                buttonLabel={props.buttonLabel}
+                onClickOpen={handleClickOpen}
+                buttonLabel={buttonLabel}
             />
             <Dialog
                 open={props.isOpen}
-                onClose={props.onClickClose}
+                onClose={handleClickClose}
                 aria-labelledby="form-dialog-title"
             >
                 <ExportTextContentComponent />
@@ -37,11 +42,11 @@ export function HeaderExportComponent(props: {
                     stat={props.settings.stat}
                 />
                 <ExportActionButtonsComponent
-                    onClickClose={props.onClickClose}
+                    onClickClose={handleClickClose}
                     setting={props.settings}
                     filter={filter.selectedFilter}
                     mainFilterAttributes={filter.mainFilter}
-                    buttonLabel={props.buttonLabel}
+                    buttonLabel={buttonLabel}
                     ZNFilename={props.exportLabels.ZNFilename}
                     mainFilterLabels={props.exportLabels.mainFilterLabels}
                     allFilterLabel={props.exportLabels.allFilterLabel}

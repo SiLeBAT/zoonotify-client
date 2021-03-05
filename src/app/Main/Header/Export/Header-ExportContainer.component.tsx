@@ -20,7 +20,6 @@ import {
     ExportInterface,
 } from "../../../Shared/Model/Export.model";
 import { HeaderExportComponent } from "./Header-Export.component";
-import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
@@ -98,24 +97,22 @@ export function HeaderExportContainerComponent(): JSX.Element {
         setSetting({ ...setting, [name]: checked });
     };
 
-    const onClickOpen = (): void => {
+    const handleClickOpen = (): void => {
         setIsOpen(true);
     };
-    const onClickClose = (): void => {
+    const handleClickClose = (): void => {
         setIsOpen(false);
     };
 
-    const buttonLabel: JSX.Element = ExportButtonLabelComponent(isOpen);
     const exportLabels: ExportLabels = generateExportLabels(filter.mainFilter);
 
     return (
         <HeaderExportComponent
             isOpen={isOpen}
             settings={setting}
-            buttonLabel={buttonLabel}
             exportLabels={exportLabels}
-            onClickOpen={onClickOpen}
-            onClickClose={onClickClose}
+            onClickOpen={handleClickOpen}
+            onClickClose={handleClickClose}
             handleCheckbox={handleChange}
         />
     );
