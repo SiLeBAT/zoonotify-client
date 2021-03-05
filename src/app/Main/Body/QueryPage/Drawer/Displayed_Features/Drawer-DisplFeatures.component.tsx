@@ -71,7 +71,7 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
         } else {
             setTable({
                 ...table,
-                [keyName]: [],
+                [keyName]: "",
             });
         }
     };

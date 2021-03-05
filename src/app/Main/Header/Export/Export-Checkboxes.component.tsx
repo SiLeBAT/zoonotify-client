@@ -8,14 +8,14 @@ const checkboxStyle = css`
 `;
 
 export interface CheckboxesProps {
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleCheckbox: (name: string, checked: boolean) => void;
     raw: boolean;
     stat: boolean;
 }
 
 /**
  * @desc Returns the checkboxes to decide which data should be exported.
- * @param {(event: React.ChangeEvent<HTMLInputElement>) => void} onChange - function to select/deselect the checkbox
+ * @param {(name: string, checked: boolean) => void} onChange - function to select/deselect the checkbox
  * @param {boolean} raw - true if dataset is selected for export
  * @param {boolean} stat - true if statistic data is selected for export
  * @returns {JSX.Element} - checkboxes component
@@ -23,17 +23,18 @@ export interface CheckboxesProps {
 export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        props.onChange(event);
-    };
-
     return (
         <FormGroup css={checkboxStyle}>
             <FormControlLabel
                 control={
                     <Checkbox
                         checked={props.raw}
-                        onChange={handleChange}
+                        onChange={(event) =>
+                            props.handleCheckbox(
+                                event.target.name,
+                                event.target.checked
+                            )
+                        }
                         name="raw"
                         color="primary"
                     />
@@ -44,7 +45,12 @@ export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
                 control={
                     <Checkbox
                         checked={props.stat}
-                        onChange={handleChange}
+                        onChange={(event) =>
+                            props.handleCheckbox(
+                                event.target.name,
+                                event.target.checked
+                            )
+                        }
                         name="stat"
                         color="primary"
                     />

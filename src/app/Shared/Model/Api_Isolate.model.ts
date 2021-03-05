@@ -167,3 +167,10 @@ export interface IsolateDTO {
         };
     }[];
 }
+
+export interface IsolateCountedDTO {
+    totalNumberOfIsolates: number;
+    groups: (Record<string, string> & {
+        count: number;
+    })[];
+}

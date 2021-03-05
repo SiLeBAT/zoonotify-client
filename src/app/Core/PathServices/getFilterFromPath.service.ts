@@ -1,4 +1,4 @@
-import { FilterInterface, FilterType } from "../Shared/Model/Filter.model";
+import { FilterInterface, FilterType } from "../../Shared/Model/Filter.model";
 
 /**
  * @desc Extract the selected filter from the given URL path

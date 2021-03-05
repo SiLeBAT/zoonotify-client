@@ -4,16 +4,16 @@ import { FilterInterface } from "../Model/Filter.model";
 
 interface DataInterface {
     ZNData: DbCollection;
-    ZNDataFiltered: DbCollection;
     keyValues: DbKey[];
     uniqueValues: FilterInterface;
+    nrOfSelectedIsolates: number;
 }
 
 const defaultProfile: DataInterface = {
     ZNData: [],
-    ZNDataFiltered: [],
     keyValues: [],
     uniqueValues: {},
+    nrOfSelectedIsolates: 0
 };
 
 interface ProfileState {

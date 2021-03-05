@@ -21,7 +21,6 @@ export function QueryPageNrOfIsolatesComponent(): JSX.Element {
     const { data } = useContext(DataContext);
 
     const totalNrOfIsolates = data.ZNData.length;
-    const nrOfSelectedIsolates = data.ZNDataFiltered.length;
 
     return (
         <AccordionComponent
@@ -37,7 +36,7 @@ export function QueryPageNrOfIsolatesComponent(): JSX.Element {
                             <td css={tableTextStyle}>
                                 {t("NrOfIsolates.Selected")}
                             </td>
-                            <td>{nrOfSelectedIsolates}</td>
+                            <td>{data.nrOfSelectedIsolates}</td>
                         </tr>
                     </tbody>
                 </table>

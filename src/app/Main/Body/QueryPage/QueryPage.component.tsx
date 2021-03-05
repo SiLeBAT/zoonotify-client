@@ -12,7 +12,11 @@ const mainStyle = css`
     box-sizing: border-box;
 `;
 
-export function QueryPageComponent(): JSX.Element {
+export function QueryPageComponent(props: {
+    isCol: boolean;
+    isRow: boolean;
+    isFilter: boolean;
+}): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState(433);
     const [open, setOpen] = useState(true);
 
@@ -37,7 +41,11 @@ export function QueryPageComponent(): JSX.Element {
                 handleDrawer={handleDrawer}
                 handleResize={handleResize}
             />
-            <QueryPageContentComponent />
+            <QueryPageContentComponent
+                isCol={props.isCol}
+                isRow={props.isRow}
+                isFilter={props.isFilter}
+            />
         </main>
     );
 }

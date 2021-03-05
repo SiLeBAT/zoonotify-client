@@ -24,7 +24,7 @@ const warningStyle = (isSelect: boolean): SerializedStyles => css`
 `;
 
 export interface ExportActionButtonProps {
-    onClick: (event: unknown) => void;
+    onClickClose: () => void;
     setting: ExportInterface;
     filter: FilterInterface;
     mainFilterAttributes: string[];
@@ -36,7 +36,7 @@ export interface ExportActionButtonProps {
 
 /**
  * @desc Returns action buttons for the export dialog
- * @param {(event: unknown) => void} onClick - onClick function to close the export dialog
+ * @param {() => void} onClick - onClick function to close the export dialog
  * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
  * @param {sting[]} mainFilterAttributes - list of main filters
@@ -51,11 +51,9 @@ export function ExportActionButtonsComponent(
 ): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
-    const handleClose = (event: unknown): void => {
-        props.onClick(event);
-    };
+    const handleClick = (): void => props.onClickClose();
 
-    const fileIsSelect = !(!props.setting.raw && !props.setting.stat);
+    const fileIsSelect = props.setting.raw || props.setting.stat;
     const subFileNames = [t("FileName.Stat"), t("FileName.DataSet")];
     const subFileName =
         props.setting.raw && !props.setting.stat
@@ -68,11 +66,11 @@ export function ExportActionButtonsComponent(
         <div>
             <p css={warningStyle(fileIsSelect)}>{t("Warning")}</p>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleClick} color="primary">
                     {t("Button.Cancel")}
                 </Button>
                 <Button
-                    onClick={handleClose}
+                    onClick={handleClick}
                     color="primary"
                     disabled={!fileIsSelect}
                 >
