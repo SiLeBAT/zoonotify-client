@@ -1,5 +1,5 @@
 import { IsolateDTO } from "../Shared/Model/Api_Isolate.model";
-import { DbCollection } from "../Shared/Model/Client_Isolate.model";
+import { DbCollection, ResistantValues } from "../Shared/Model/Client_Isolate.model";
 
 export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
     const adaptedIsolates: DbCollection = isolateProp.isolates.map(
@@ -12,6 +12,7 @@ export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
             origin,
             category,
             productionType,
+            resistance,
         }) => ({
             microorganism,
             samplingContext,
@@ -21,6 +22,7 @@ export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
             origin,
             category,
             productionType,
+            resistance: Object.keys(resistance) as ResistantValues[]
         })
     );
 

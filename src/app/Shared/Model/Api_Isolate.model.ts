@@ -23,7 +23,7 @@ export interface IsolateDTO {
             e_hly: string;
             ampc_carba_phenotype: string;
         };
-        resistences: {
+        resistance: {
             amp: {
                 value: string;
                 active: boolean;

@@ -7,6 +7,7 @@ import {
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatDataString } from "./generateStatDataString.service";
+import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
 import { generateDataString } from "./generateDataString.service";
 
 export interface ObjectToZipParameter {
@@ -55,8 +56,10 @@ export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): v
     );
     csvRowsStat.push(
         generateDataString(
-            zipParameter.mainFilterAttributes,
-            zipParameter.setting.rawDataSet.rawData
+            zipParameter.setting.rawDataSet.rawData,
+            DbKeyCollection,
+            zipParameter.mainFilterLabels,
+            zipParameter.mainFilterAttributes
         )
     );
     csvRows.push(csvRowsStat.join("\n"));

@@ -4,8 +4,9 @@ import {
     MainFilterLabelInterface,
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
-import { generateDataString } from "./generateDataString.service";
 import { generateStatDataString } from "./generateStatDataString.service";
+import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
+import { generateDataString } from "./generateDataString.service";
 
 export interface ObjectToCsvParameter {
     setting: ExportInterface;
@@ -37,8 +38,10 @@ export function parameterAndDataToCsvString(csvParameter: ObjectToCsvParameter):
     if (csvParameter.setting.raw && !csvParameter.setting.stat) {
         csvRows.push(
             generateDataString(
-                csvParameter.setting.rawDataSet.rawKeys,
-                csvParameter.setting.rawDataSet.rawData
+                csvParameter.setting.rawDataSet.rawData,
+                DbKeyCollection,
+                csvParameter.mainFilterLabels,
+                csvParameter.mainFilterAttributes
             )
         );
     }

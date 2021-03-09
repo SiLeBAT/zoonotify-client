@@ -33,7 +33,8 @@
         "samplingStage": "Sampling stage",
         "origin": "Origin of sample",
         "category": "Animal species / food category",
-        "productionType": "Animal species production type / food"
+        "productionType": "Animal species production type / food", 
+        "resistance": "Antimicrobial resistance"
     },
     "NrOfIsolates": {
         "Title": "Number of isolates",

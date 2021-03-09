@@ -33,7 +33,8 @@
         "samplingStage": "Stufe der Lebensmittelgewinnung",
         "origin": "Probenherkunft",
         "category": "Tierart/Lebensmittel Oberkategorie",
-        "productionType": "Tierart Produktionsrichtung/Lebensmittel"
+        "productionType": "Tierart Produktionsrichtung/Lebensmittel",
+        "resistance": "Antimikrobielle Resistenz"
     },
     "NrOfIsolates": {
         "Title": "Anzahl Isolate",
