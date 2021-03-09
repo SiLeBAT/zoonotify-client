@@ -30,7 +30,9 @@ export interface ObjectToZipParameter {
  * @param {string[]} subFileNames - names of the two different files (data, statistic)
  * @returns {void}
  */
-export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): void {
+export function dataAndStatisticToZipFile(
+    zipParameter: ObjectToZipParameter
+): void {
     const csvRows: string[] = [];
     const csvRowsFilteredData: string[] = [];
     const csvRowsStat: string[] = [];
@@ -39,11 +41,16 @@ export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): v
         generateParameterHeader(
             zipParameter.filter,
             zipParameter.allFilterLabel,
-            zipParameter.mainFilterLabels, 
+            zipParameter.mainFilterLabels,
             zipParameter.mainFilterAttributes
         )
     );
-    csvRowsFilteredData.push(generateStatisticString(zipParameter.setting));
+    csvRowsFilteredData.push(
+        generateStatisticString(
+            zipParameter.setting.tableAttributes,
+            zipParameter.setting.statDataSet
+        )
+    );
     csvRows.push(csvRowsFilteredData.join("\n"));
 
     csvRowsStat.push(

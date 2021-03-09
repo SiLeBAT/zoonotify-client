@@ -6,11 +6,10 @@ import {
 } from "../../../Shared/Model/Client_Isolate.model";
 import { modifyTableDataStringService } from "../modifyTableDataString.service";
 
-
 /**
  * @desc Transform the data to a string for the CSV file. Elements of one row are separated by comma.
- * @param {Record<string, string>[]} dataArray - data object to export in a csv file
- * @param {k[]} headers - keys of the data
+ * @param {DbCollection} dataArray - data object to export in a csv file
+ * @param {DbKey[]} headers - keys of the data
  * @returns {string} - data in one csv string
  */
 export function generateDataCsvString(

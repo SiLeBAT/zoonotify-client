@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { ExportInterface } from "../../../Shared/Model/Export.model";
+import { FilterType } from "../../../Shared/Model/Filter.model";
 import { generateStatisticCsvString } from "./generateStatisticCsvString.service";
 
 /**
@@ -9,23 +9,24 @@ import { generateStatisticCsvString } from "./generateStatisticCsvString.service
  * @returns {string} - header and statistic table as string
  */
 export function generateStatisticString(
-    exportParameter: ExportInterface
+    tableAttributes: { row: FilterType; column: FilterType },
+    statDataSet: { statData: Record<string, string>[]; statKeys: string[] }
 ): string {
     const StatDataString: string[] = [];
-    if (!_.isEmpty(exportParameter.tableAttributes.column)) {
-        StatDataString.push(`,${exportParameter.tableAttributes.column}`);
+    if (!_.isEmpty(tableAttributes.column)) {
+        StatDataString.push(`,${tableAttributes.column}`);
     }
-    const headers: string[] = exportParameter.statDataSet.statKeys;
-    if (!_.isEmpty(exportParameter.tableAttributes.row)) {
+    const headers: string[] = statDataSet.statKeys;
+    if (!_.isEmpty(tableAttributes.row)) {
         const headerToPrint: string[] = [...headers];
-        headerToPrint[0] = exportParameter.tableAttributes.row;
+        headerToPrint[0] = tableAttributes.row;
         StatDataString.push(headerToPrint.join(","));
     } else {
         StatDataString.push(headers.join(","));
     }
 
     StatDataString.push(
-        generateStatisticCsvString(exportParameter.statDataSet.statData, headers)
+        generateStatisticCsvString(statDataSet.statData, headers)
     );
 
     return StatDataString.join("\n");

@@ -21,10 +21,13 @@ export interface ObjectToCsvParameter {
  * @param {ExportInterface} setting - all info for export (raw/stat, row&column, dataset)
  * @param {FilterInterface} filter - object with the selected filters
  * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters
+ * @param {MainFilterLabelInterface} mainFilterLabels - Obj with translated labels for the table header
+ * @param {string[]} - keys to get matching mainFilterLabel
  * @returns {string} - converted data as csv string
  */
-export function dataOrStatisticToCsvString(csvParameter: ObjectToCsvParameter): string {
+export function dataOrStatisticToCsvString(
+    csvParameter: ObjectToCsvParameter
+): string {
     const csvRows: string[] = [];
     csvRows.push(
         generateParameterHeader(
@@ -47,7 +50,12 @@ export function dataOrStatisticToCsvString(csvParameter: ObjectToCsvParameter): 
     }
 
     if (csvParameter.setting.stat && !csvParameter.setting.raw) {
-        csvRows.push(generateStatisticString(csvParameter.setting));
+        csvRows.push(
+            generateStatisticString(
+                csvParameter.setting.tableAttributes,
+                csvParameter.setting.statDataSet
+            )
+        );
     }
 
     return csvRows.join("\n");

@@ -10,9 +10,12 @@ export interface ExportLabels {
 
 /**
  * @desc Returns all labels for the file export in the right language
+ * @param {string[]} mainFilterAttributes - list of the main filters
  * @returns { ExportLabels } - object of labels: for the file, of the main filters, for "all values"
  */
-export function generateExportLabels(mainFilterAttributes: string[]): ExportLabels {
+export function generateExportLabels(
+    mainFilterAttributes: string[]
+): ExportLabels {
     const { t } = useTranslation(["QueryPage"]);
 
     const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
