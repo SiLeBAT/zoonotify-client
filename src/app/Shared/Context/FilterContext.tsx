@@ -11,7 +11,12 @@ export const defaultFilter: FilterContextInterface = {
     selectedFilter: {
         microorganism: [],
         samplingContext: [],
-        matrix: []
+        matrix: [],
+        federalState: [],
+        samplingStage: [],
+        origin: [],
+        category: [],
+        productionType: [],
     },
 };
 interface ProfileState {

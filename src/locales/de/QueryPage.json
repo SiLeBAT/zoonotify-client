@@ -28,7 +28,12 @@
         "All": "Alle Werte",
         "microorganism": "Erreger",
         "matrix": "Matrix",
-        "samplingContext": "Probenahmegrund"
+        "samplingContext": "Probenahmegrund",
+        "federalState": "Bundesland",
+        "samplingStage": "Stufe der Lebensmittelgewinnung",
+        "origin": "Probenherkunft",
+        "category": "Tierart/Lebensmittel Oberkategorie",
+        "productionType": "Tierart Produktionsrichtung/Lebensmittel"
     },
     "NrOfIsolates": {
         "Title": "Anzahl Isolate",
