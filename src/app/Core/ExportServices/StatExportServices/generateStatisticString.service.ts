@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { ExportInterface } from "../../Shared/Model/Export.model";
-import { generateCSVString } from "./generateCSVString.service";
+import { ExportInterface } from "../../../Shared/Model/Export.model";
+import { generateStatisticCsvString } from "./generateStatisticCsvString.service";
 
 /**
  * @desc Returns the table header and the statistic table as a string to save it as CSV
@@ -8,7 +8,7 @@ import { generateCSVString } from "./generateCSVString.service";
  * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
  * @returns {string} - header and statistic table as string
  */
-export function generateStatDataString(
+export function generateStatisticString(
     exportParameter: ExportInterface
 ): string {
     const StatDataString: string[] = [];
@@ -25,7 +25,7 @@ export function generateStatDataString(
     }
 
     StatDataString.push(
-        generateCSVString(exportParameter.statDataSet.statData, headers)
+        generateStatisticCsvString(exportParameter.statDataSet.statData, headers)
     );
 
     return StatDataString.join("\n");

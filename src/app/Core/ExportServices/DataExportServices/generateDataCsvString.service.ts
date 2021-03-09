@@ -1,11 +1,11 @@
-import { MainFilterLabelInterface } from "../../Shared/Model/Export.model";
 import {
     DbCollection,
     DbKey,
     DbStringKey,
     ResistantValues,
-} from "../../Shared/Model/Client_Isolate.model";
-import { modifyTableDataStringService } from "./modifyTableDataString.service";
+} from "../../../Shared/Model/Client_Isolate.model";
+import { modifyTableDataStringService } from "../modifyTableDataString.service";
+
 
 /**
  * @desc Transform the data to a string for the CSV file. Elements of one row are separated by comma.
@@ -13,7 +13,7 @@ import { modifyTableDataStringService } from "./modifyTableDataString.service";
  * @param {k[]} headers - keys of the data
  * @returns {string} - data in one csv string
  */
-function generateDataCSVString(
+export function generateDataCsvString(
     dataArray: DbCollection,
     headers: DbKey[]
 ): string {
@@ -37,27 +37,4 @@ function generateDataCSVString(
     );
     const csvTableData: string = csvTable.join("\n");
     return csvTableData;
-}
-
-/**
- * @desc Returns the table header and the filtered dataset as string to save it as csv
- * @param {string[]} keys - keys of the dataset
- * @param {Record<string, string>[]} data - dataset
- * @returns {string} - dataset as string
- */
-export function generateDataString(
-    data: DbCollection,
-    keys: DbKey[], 
-    mainFilterLabels: MainFilterLabelInterface,
-    mainFilterAttributes: string[],
-): string {
-    const FilteredDataString: string[] = [];
-    const headerArray: string[] = []
-    mainFilterAttributes.forEach(element => {
-        headerArray.push(mainFilterLabels[element])
-    });
-    FilteredDataString.push(headerArray.join(","));
-    FilteredDataString.push(generateDataCSVString(data, keys));
-
-    return FilteredDataString.join("\n");
 }
