@@ -1,13 +1,7 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
-
-function chooseAlignment(element: string): "left" | "right" {
-    if (element === "name") {
-        return "left";
-    }
-    return "right";
-}
+import _ from "lodash";
 
 export interface TableContentRowsProps {
     row: Record<string, string>;
@@ -28,15 +22,28 @@ export function TableContentRowsComponent(
     props: TableContentRowsProps
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
+    elements.push(
+        <TableCell
+            key={`isolates-${props.row.name}-name`}
+            className={props.classes.tableCell}
+            component="th"
+            scope="row"
+            align="left"
+            css={props.style(true, props.isRowAndCol)}
+        >
+            {props.row.name}
+        </TableCell>
+    );
     const k = Object.keys(props.row);
-    k.forEach((element): void => {
+    const colKeys = _.pull(k, "name")
+    colKeys.forEach((element): void => {
         elements.push(
             <TableCell
                 key={`isolates-${props.row.name}-${element}`}
                 className={props.classes.tableCell}
                 component="th"
                 scope="row"
-                align={chooseAlignment(element)}
+                align="right"
                 css={props.style(true, props.isRowAndCol)}
             >
                 {props.row[element]}

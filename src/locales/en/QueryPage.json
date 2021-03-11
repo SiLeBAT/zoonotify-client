@@ -34,7 +34,8 @@
         "origin": "Origin of sample",
         "category": "Animal species / food category",
         "productionType": "Animal species production type / food", 
-        "resistance": "Antimicrobial resistance"
+        "resistance": "Antimicrobial resistance",
+        "samplingYear": "Sampling year"
     },
     "NrOfIsolates": {
         "Title": "Number of isolates",

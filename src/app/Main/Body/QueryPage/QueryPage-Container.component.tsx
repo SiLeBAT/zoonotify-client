@@ -10,20 +10,24 @@ import {
     DbCollection,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
-import { FILTER_URL, ISOLATE_COUNT_URL, ISOLATE_URL } from "../../../Shared/URLs";
-import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
-    FilterConfigDTO,
-    FilterInterface,
-} from "../../../Shared/Model/Filter.model";
+    FILTER_URL,
+    ISOLATE_COUNT_URL,
+    ISOLATE_URL,
+} from "../../../Shared/URLs";
+import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
+import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
+import { ClientFilterConfig, ClientSingleFilterConfig, FilterInterface } from "../../../Shared/Model/Filter.model";
 import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/PathServices/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
 import { QueryPageComponent } from "./QueryPage.component";
 import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
+
+import { adaptFilterFromApiService } from "../../../Core/adaptFilterFromAPI.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{
@@ -70,16 +74,24 @@ export function QueryPageContainerComponent(): JSX.Element {
             const filterProp: FilterConfigDTO = await filterResponse.json();
             const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
 
-            const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(isolateProp);
+            const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(
+                isolateProp
+            );
+            const adaptedDbFilters: ClientFilterConfig = adaptFilterFromApiService(
+                filterProp
+            );
 
             const uniqueValuesObject: FilterInterface = {};
 
-            filterProp.filters.forEach((filterElement) => {
-                const { id } = filterElement;
-                uniqueValuesObject[id] = filterElement.values;
-            });
+            adaptedDbFilters.filters.forEach(
+                (filterElement: ClientSingleFilterConfig) => {
+                    const { id } = filterElement;
+                    uniqueValuesObject[id] = filterElement.values;
+                }
+            );
 
-            const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
+            const nrOfSelectedIsolates =
+                isolateCountProp.totalNumberOfIsolates;
 
             setData({
                 ZNData: adaptedDbIsolates,

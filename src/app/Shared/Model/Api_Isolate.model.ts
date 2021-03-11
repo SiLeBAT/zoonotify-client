@@ -1,7 +1,7 @@
 export interface IsolateDTO {
     isolates: {
         microorganism: string;
-        samplingYear: number;
+        samplingYear: Date;
         federalState: string;
         samplingContext: string;
         samplingStage: string;
@@ -170,7 +170,7 @@ export interface IsolateDTO {
 
 export interface IsolateCountedDTO {
     totalNumberOfIsolates: number;
-    groups: (Record<string, string> & {
+    groups?: (Record<string, string | Date> & {
         count: number;
     })[];
 }

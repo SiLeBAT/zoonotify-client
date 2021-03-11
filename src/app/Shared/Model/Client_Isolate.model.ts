@@ -43,7 +43,8 @@ export type DbStringKey =
     | "samplingStage"
     | "origin"
     | "category"
-    | "productionType";
+    | "productionType"
+    | "samplingYear"
 
 export type DbCollection = (Record<DbStringKey, string> & {
     resistance: ResistantValues[];
@@ -58,7 +59,8 @@ export type DbKey =
     | "origin"
     | "category"
     | "productionType"
-    | "resistance";
+    | "samplingYear"
+    | "resistance"
 
 export const DbKeyCollection: DbKey[] = [
     "microorganism",
@@ -69,12 +71,13 @@ export const DbKeyCollection: DbKey[] = [
     "origin",
     "category",
     "productionType",
-    "resistance",
+    "samplingYear",
+    "resistance"
 ];
 
-export interface ClientIsolateCountedDTO {
+export interface ClientIsolateCounted {
     totalNumberOfIsolates: number;
-    groups: (Record<string, string> & {
+    groups?: (Record<string, string> & {
         count: number;
     })[];
 }
