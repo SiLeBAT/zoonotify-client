@@ -10,7 +10,7 @@ import { modifyTableDataStringService } from "../modifyTableDataString.service";
  * @param {DbKey[]} headers - keys of the data
  * @returns {string} - data in one csv string
  */
-export function generateDataCsvString(
+export function generateDataRowsCsvString(
     dataArray: DbCollection,
     headers: DbKey[]
 ): string {

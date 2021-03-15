@@ -3,7 +3,7 @@ import {
     DbCollection,
     DbKey,
 } from "../../../Shared/Model/Client_Isolate.model";
-import { generateDataCsvString } from "./generateDataCsvString.service";
+import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
 
 /**
  * @desc Returns the table header and the filtered dataset as string to save it as csv
@@ -13,7 +13,7 @@ import { generateDataCsvString } from "./generateDataCsvString.service";
  * @param {string[]} mainFilterAttributes - keys to get matching mainFilterLabel
  * @returns {string} - dataset as string
  */
-export function generateDataString(
+export function generateDataTableCsvString(
     data: DbCollection,
     keys: DbKey[],
     mainFilterLabels: MainFilterLabelInterface,
@@ -24,7 +24,7 @@ export function generateDataString(
         (element) => mainFilterLabels[element]
     );
     FilteredDataString.push(headerArray.join(","));
-    FilteredDataString.push(generateDataCsvString(data, keys));
+    FilteredDataString.push(generateDataRowsCsvString(data, keys));
 
     return FilteredDataString.join("\n");
 }

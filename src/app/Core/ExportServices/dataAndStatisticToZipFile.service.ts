@@ -6,9 +6,9 @@ import {
     MainFilterLabelInterface,
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
-import { generateStatisticString } from "./StatExportServices/generateStatisticString.service";
+import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
 import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
-import { generateDataString } from "./DataExportServices/generateDataString.service";
+import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
 export interface ObjectToZipParameter {
     setting: ExportInterface;
@@ -46,7 +46,7 @@ export function dataAndStatisticToZipFile(
         )
     );
     csvRowsFilteredData.push(
-        generateStatisticString(
+        generateStatisticTableCsvString(
             zipParameter.setting.tableAttributes,
             zipParameter.setting.statDataSet
         )
@@ -62,7 +62,7 @@ export function dataAndStatisticToZipFile(
         )
     );
     csvRowsStat.push(
-        generateDataString(
+        generateDataTableCsvString(
             zipParameter.setting.rawDataSet.rawData,
             DbKeyCollection,
             zipParameter.mainFilterLabels,

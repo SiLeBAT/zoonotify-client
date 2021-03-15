@@ -6,7 +6,7 @@ import { modifyTableDataStringService } from "../modifyTableDataString.service";
  * @param {k[]} headers - keys of the data
  * @returns {string} - data in one csv string
  */
-export function generateStatisticCsvString<
+export function generateStatisticRowsCsvString<
     T extends Record<string, string>,
     K extends keyof T
 >(dataArray: T[], headers: K[]): string {

@@ -4,9 +4,9 @@ import {
     MainFilterLabelInterface,
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
-import { generateStatisticString } from "./StatExportServices/generateStatisticString.service";
+import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
 import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
-import { generateDataString } from "./DataExportServices/generateDataString.service";
+import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
 export interface ObjectToCsvParameter {
     setting: ExportInterface;
@@ -36,7 +36,7 @@ export function dataOrStatisticToCsvString(
 
     if (csvParameter.setting.raw && !csvParameter.setting.stat) {
         csvRows.push(
-            generateDataString(
+            generateDataTableCsvString(
                 csvParameter.setting.rawDataSet.rawData,
                 DbKeyCollection,
                 csvParameter.mainFilterLabels,
@@ -47,7 +47,7 @@ export function dataOrStatisticToCsvString(
 
     if (csvParameter.setting.stat && !csvParameter.setting.raw) {
         csvRows.push(
-            generateStatisticString(
+            generateStatisticTableCsvString(
                 csvParameter.setting.tableAttributes,
                 csvParameter.setting.statDataSet
             )

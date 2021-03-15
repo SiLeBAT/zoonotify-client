@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { FilterType } from "../../../Shared/Model/Filter.model";
-import { generateStatisticCsvString } from "./generateStatisticCsvString.service";
+import { generateStatisticRowsCsvString } from "./generateStatisticRowsCsvString.service";
 
 /**
  * @desc Returns the table header and the statistic table as a string to save it as CSV
@@ -8,7 +8,7 @@ import { generateStatisticCsvString } from "./generateStatisticCsvString.service
  * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
  * @returns {string} - header and statistic table as string
  */
-export function generateStatisticString(
+export function generateStatisticTableCsvString(
     tableAttributes: { row: FilterType; column: FilterType },
     statDataSet: { statData: Record<string, string>[]; statKeys: string[] }
 ): string {
@@ -26,7 +26,7 @@ export function generateStatisticString(
     }
 
     StatDataString.push(
-        generateStatisticCsvString(statDataSet.statData, headers)
+        generateStatisticRowsCsvString(statDataSet.statData, headers)
     );
 
     return StatDataString.join("\n");
