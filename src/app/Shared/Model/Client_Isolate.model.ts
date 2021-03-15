@@ -35,21 +35,6 @@ export type ResistantValues =
     | "t_c"
     | "van";
 
-export type DbStringKey =
-    | "microorganism"
-    | "samplingContext"
-    | "matrix"
-    | "federalState"
-    | "samplingStage"
-    | "origin"
-    | "category"
-    | "productionType"
-    | "samplingYear"
-
-export type DbCollection = (Record<DbStringKey, string> & {
-    resistance: ResistantValues[];
-})[];
-
 export type DbKey =
     | "microorganism"
     | "samplingContext"
@@ -60,7 +45,13 @@ export type DbKey =
     | "category"
     | "productionType"
     | "samplingYear"
-    | "resistance"
+    | "resistance";
+
+export type DbKeyWithStringValue = Exclude<DbKey, "resistance">;
+
+export type DbCollection = (Record<DbKeyWithStringValue, string> & {
+    resistance: ResistantValues[];
+})[];
 
 export const DbKeyCollection: DbKey[] = [
     "microorganism",
@@ -72,7 +63,7 @@ export const DbKeyCollection: DbKey[] = [
     "category",
     "productionType",
     "samplingYear",
-    "resistance"
+    "resistance",
 ];
 
 export interface ClientIsolateCounted {

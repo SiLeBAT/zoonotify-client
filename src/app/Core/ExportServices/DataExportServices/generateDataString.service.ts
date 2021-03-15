@@ -7,8 +7,8 @@ import { generateDataCsvString } from "./generateDataCsvString.service";
 
 /**
  * @desc Returns the table header and the filtered dataset as string to save it as csv
- * @param {string[]} keys - keys of the dataset
- * @param {Record<string, string>[]} data - dataset
+ * @param {DbCollection} data - dataset
+ * @param {DbKey[]} keys - keys of the dataset
  * @param {MainFilterLabelInterface} mainFilterLabels - Obj with translated labels for the table header
  * @param {string[]} mainFilterAttributes - keys to get matching mainFilterLabel
  * @returns {string} - dataset as string
@@ -20,10 +20,9 @@ export function generateDataString(
     mainFilterAttributes: string[]
 ): string {
     const FilteredDataString: string[] = [];
-    const headerArray: string[] = [];
-    mainFilterAttributes.forEach((element) => {
-        headerArray.push(mainFilterLabels[element]);
-    });
+    const headerArray: string[] = mainFilterAttributes.map(
+        (element) => mainFilterLabels[element]
+    );
     FilteredDataString.push(headerArray.join(","));
     FilteredDataString.push(generateDataCsvString(data, keys));
 

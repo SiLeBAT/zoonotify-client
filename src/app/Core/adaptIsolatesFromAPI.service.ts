@@ -1,10 +1,12 @@
 import { IsolateDTO } from "../Shared/Model/Api_Isolate.model";
-import { DbCollection, ResistantValues } from "../Shared/Model/Client_Isolate.model";
-
+import {
+    DbCollection,
+    ResistantValues,
+} from "../Shared/Model/Client_Isolate.model";
 
 /**
- * @desc Extracts the desired isolate properties from the api and converts them to a string if necessary.  
- * @param {IsolateDTO} isolateProp - isolates form api 
+ * @desc Extracts the desired isolate properties from the api and converts them to a string if necessary.
+ * @param {IsolateDTO} isolateProp - isolates form api
  * @returns {DbCollection} - desired isolate properties as string
  */
 export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
@@ -30,7 +32,7 @@ export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
             category,
             productionType,
             resistance: Object.keys(resistance) as ResistantValues[],
-            samplingYear: String(samplingYear)
+            samplingYear: String(samplingYear),
         })
     );
 

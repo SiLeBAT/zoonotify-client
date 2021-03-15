@@ -18,11 +18,7 @@ export interface ObjectToCsvParameter {
 
 /**
  * @desc Convert the chosen parameter and the resulting Data to a CSV string
- * @param {ExportInterface} setting - all info for export (raw/stat, row&column, dataset)
- * @param {FilterInterface} filter - object with the selected filters
- * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @param {MainFilterLabelInterface} mainFilterLabels - Obj with translated labels for the table header
- * @param {string[]} - keys to get matching mainFilterLabel
+ * @param {ObjectToCsvParameter} csvParameter
  * @returns {string} - converted data as csv string
  */
 export function dataOrStatisticToCsvString(

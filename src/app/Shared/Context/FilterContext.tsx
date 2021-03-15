@@ -17,7 +17,7 @@ export const defaultFilter: FilterContextInterface = {
         origin: [],
         category: [],
         productionType: [],
-        resistance: []
+        resistance: [],
     },
 };
 interface ProfileState {
