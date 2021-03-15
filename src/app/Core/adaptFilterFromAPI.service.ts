@@ -14,7 +14,7 @@ export function adaptFilterFromApiService(
             id,
             name,
             parent,
-            values: values.join().split(','),
+            values: (values as Array<string|Date>).map((element: string | Date) => String(element)),
         })
     )};
 
