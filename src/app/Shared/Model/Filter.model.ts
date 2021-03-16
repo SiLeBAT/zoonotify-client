@@ -2,7 +2,7 @@ export type FilterType = string;
 
 export type FilterInterface = Record<FilterType, string[]>;
 
-export interface ClientFilterConfig {
+export interface ClientFiltersConfig {
     filters: {
         id: string;
         name: string;

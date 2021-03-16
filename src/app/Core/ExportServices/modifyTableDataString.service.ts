@@ -1,5 +1,6 @@
 /**
- * @desc escape all quotes and replaces "undefined" with an empty string
+ * @desc Escape all quotes and replaces "undefined" with an empty string
+ * @desc Include commas by surrounding the string with quotes 
  * @param {string} inputString - string to be modified
  * @returns {string} - modified string
  */

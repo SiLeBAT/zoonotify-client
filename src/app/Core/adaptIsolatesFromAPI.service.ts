@@ -1,7 +1,7 @@
 import { IsolateDTO } from "../Shared/Model/Api_Isolate.model";
 import {
     DbCollection,
-    ResistantValues,
+    ResistantValue,
 } from "../Shared/Model/Client_Isolate.model";
 
 /**
@@ -31,7 +31,7 @@ export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
             origin,
             category,
             productionType,
-            resistance: Object.keys(resistance) as ResistantValues[],
+            resistance: Object.keys(resistance) as ResistantValue[],
             samplingYear: String(samplingYear),
         })
     );

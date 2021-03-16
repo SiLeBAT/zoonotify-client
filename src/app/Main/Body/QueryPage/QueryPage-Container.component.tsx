@@ -19,7 +19,7 @@ import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.componen
 import { FilterContext } from "../../../Shared/Context/FilterContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
-import { ClientFilterConfig, ClientSingleFilterConfig, FilterInterface } from "../../../Shared/Model/Filter.model";
+import { ClientFiltersConfig, ClientSingleFilterConfig, FilterInterface } from "../../../Shared/Model/Filter.model";
 import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/PathServices/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
@@ -77,7 +77,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(
                 isolateProp
             );
-            const adaptedDbFilters: ClientFilterConfig = adaptFilterFromApiService(
+            const adaptedDbFilters: ClientFiltersConfig = adaptFilterFromApiService(
                 filterProp
             );
 

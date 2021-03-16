@@ -1,4 +1,4 @@
-export type ResistantValues =
+export type ResistantValue =
     | "amp"
     | "azi"
     | "chl"
@@ -50,7 +50,7 @@ export type DbKey =
 export type DbKeyWithStringValue = Exclude<DbKey, "resistance">;
 
 export type DbCollection = (Record<DbKeyWithStringValue, string> & {
-    resistance: ResistantValues[];
+    resistance: ResistantValue[];
 })[];
 
 export const DbKeyCollection: DbKey[] = [
