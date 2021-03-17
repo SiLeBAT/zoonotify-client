@@ -3,7 +3,7 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { CSVLink } from "react-csv";
 import { useTranslation } from "react-i18next";
 import { Button, DialogActions } from "@material-ui/core";
-import { parameterAndDataToCsvString } from "../../../Core/ExportServices/parameterAndDataToCsvString.service";
+import { dataOrStatisticToCsvString } from "../../../Core/ExportServices/dataOrStatisticToCsvString.service";
 import { dataAndStatisticToZipFile } from "../../../Core/ExportServices/dataAndStatisticToZipFile.service";
 import {
     ExportInterface,
@@ -75,7 +75,7 @@ export function ExportActionButtonsComponent(
                     disabled={!fileIsSelect}
                 >
                     <CSVLink
-                        data={parameterAndDataToCsvString({
+                        data={dataOrStatisticToCsvString({
                             setting: props.setting,
                             filter: props.filter,
                             allFilterLabel: props.allFilterLabel,

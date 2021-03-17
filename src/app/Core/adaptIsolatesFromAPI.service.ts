@@ -1,14 +1,38 @@
 import { IsolateDTO } from "../Shared/Model/Api_Isolate.model";
-import { DbCollection } from "../Shared/Model/Client_Isolate.model";
+import {
+    DbCollection,
+    ResistantValue,
+} from "../Shared/Model/Client_Isolate.model";
 
-export function adaptIsolatesFromAPI(
-    isolateProp: IsolateDTO
-): DbCollection {
+/**
+ * @desc Extracts the desired isolate properties from the api and converts them to a string if necessary.
+ * @param {IsolateDTO} isolateProp - isolates form api
+ * @returns {DbCollection} - desired isolate properties as string
+ */
+export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
     const adaptedIsolates: DbCollection = isolateProp.isolates.map(
-        ({ microorganism, samplingContext, matrix }) => ({
+        ({
             microorganism,
             samplingContext,
             matrix,
+            federalState,
+            samplingStage,
+            origin,
+            category,
+            productionType,
+            resistance,
+            samplingYear,
+        }) => ({
+            microorganism,
+            samplingContext,
+            matrix,
+            federalState,
+            samplingStage,
+            origin,
+            category,
+            productionType,
+            resistance: Object.keys(resistance) as ResistantValue[],
+            samplingYear: String(samplingYear),
         })
     );
 

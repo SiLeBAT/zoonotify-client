@@ -11,6 +11,8 @@ import { calculateRelativeTableData } from "./calculateRelativeTableData.service
 import { ISOLATE_COUNT_URL } from "../../../../Shared/URLs";
 import { IsolateCountedDTO } from "../../../../Shared/Model/Api_Isolate.model";
 import { LoadingOrErrorComponent } from "../../../../Shared/LoadingOrError.component";
+import { adaptCountedIsolatesGroupsService } from "../../../../Core/adaptCountedIsolatesGroups.service";
+import { ClientIsolateCounted } from "../../../../Shared/Model/Client_Isolate.model";
 
 export function ContentResultsContainerComponent(props: {
     isCol: boolean;
@@ -28,9 +30,12 @@ export function ContentResultsContainerComponent(props: {
     const colAttribute: FilterType = table.column;
 
     const getTableContext = async (
-        isolateCountProp: IsolateCountedDTO
+        isolateCountProp: ClientIsolateCounted
     ): Promise<void> => {
-        if (!props.isCol && !props.isRow) {
+        if (
+            (!props.isCol && !props.isRow) ||
+            isolateCountProp.groups === undefined
+        ) {
             setTable({
                 ...table,
                 statisticDataAbsolute: [],
@@ -64,7 +69,8 @@ export function ContentResultsContainerComponent(props: {
                 colValues.forEach((colElement) => {
                     if (
                         _.includes(uniqIsolateColValues, colElement) &&
-                        _.includes(uniqIsolateRowValues, rowElement)
+                        _.includes(uniqIsolateRowValues, rowElement) &&
+                        isolateCountProp.groups !== undefined
                     ) {
                         isolateCountProp.groups.forEach((isolateGroup) => {
                             if (
@@ -112,7 +118,17 @@ export function ContentResultsContainerComponent(props: {
 
         if (isolateCountStatus === 200) {
             const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
-            getTableContext(isolateCountProp);
+            if (isolateCountProp.groups !== undefined) {
+                const adaptedIsolateCounts: ClientIsolateCounted = {
+                    totalNumberOfIsolates:
+                        isolateCountProp.totalNumberOfIsolates,
+                    groups: adaptCountedIsolatesGroupsService(
+                        isolateCountProp.groups
+                    ),
+                };
+                getTableContext(adaptedIsolateCounts);
+            }
+
             setData({
                 ...data,
                 nrOfSelectedIsolates: isolateCountProp.totalNumberOfIsolates,
