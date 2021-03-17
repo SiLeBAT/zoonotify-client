@@ -19,20 +19,16 @@ const tableCellStyle = (isName: boolean): SerializedStyles => css`
     min-width: ${isName ? "160px" : "auto"};
 `;
 
-export interface TableContentRowsProps {
-    row: Record<string, string>;
-    classes: Record<"tableCell", string>;
-}
-
 /**
  * @desc Returns list of table cells for one table row
  * @param {Record<string, string>} row - object with the values for the row
  * @param {Record<"tableCell", string>,} classes - material-ui styling of one table cell
  * @returns {JSX.Element} - list of table cell components
  */
-export function TableContentRowsComponent(
-    props: TableContentRowsProps
-): JSX.Element[] {
+export function TableContentRowsComponent(props: {
+    row: Record<string, string>;
+    classes: Record<"tableCell", string>;
+}): JSX.Element[] {
     const elements: JSX.Element[] = [];
     const k = Object.keys(props.row);
     k.forEach((element): void => {

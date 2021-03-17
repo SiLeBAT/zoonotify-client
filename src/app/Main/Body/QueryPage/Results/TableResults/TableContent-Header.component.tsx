@@ -38,18 +38,13 @@ const StyledTableCell = withStyles(() =>
     })
 )(TableCell);
 
-export interface TableContentHeaderProps {
-    headerValues: string[];
-    isRowAndCol: boolean;
-}
-
 /**
  * @desc Returns list of table cells for the table header
  * @param {string[]} headerValues - object with two booleans, true if row/column is selected
  * @returns {JSX.Element[]} - list of table cell components
  */
 export function TableContentHeaderComponent(
-    props: TableContentHeaderProps
+    headerValues: string[]
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
     elements.push(
@@ -59,7 +54,7 @@ export function TableContentHeaderComponent(
             &nbsp;
         </StyledTableCell>
     );
-    props.headerValues.forEach((element): void => {
+    headerValues.forEach((element): void => {
         elements.push(
             <StyledTableCell
                 key={`header-${element}`}

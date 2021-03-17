@@ -33,31 +33,24 @@ const useStyles = makeStyles({
     },
 });
 
-export interface TableProps {
-    tableData: Record<string, string>[];
-    columnAttributes: string[];
-    isRowAndCol: boolean;
-}
-
 /**
  * @desc Returns TableContainer for the results
- * @param {Record<string, string>[]} allIsolates - list of objects with the counted isolates
+ * @param {Record<string, string>[]} tableData - list of objects with the counted isolates
  * @param {string[]} columnAttributes - column attributes for the table header
- * @param {boolean} isRowAndCol - true if row and column is selected
  * @returns {JSX.Element} - table container component
  */
-export function TableContentTableComponent(props: TableProps): JSX.Element {
+export function TableContentTableComponent(props: {
+    tableData: Record<string, string>[];
+    columnAttributes: string[];
+}): JSX.Element {
     const classes = useStyles();
 
     return (
         <TableContainer component={Paper} css={tableContainerStyle}>
-            <Table stickyHeader aria-label="statistic table" >
+            <Table stickyHeader aria-label="statistic table">
                 <TableHead css={headerStyle}>
                     <TableRow css={headerStyle}>
-                        {TableContentHeaderComponent({
-                            headerValues: props.columnAttributes,
-                            isRowAndCol: props.isRowAndCol,
-                        })}
+                        {TableContentHeaderComponent(props.columnAttributes)}
                     </TableRow>
                 </TableHead>
                 <TableBody>

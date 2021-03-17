@@ -20,6 +20,10 @@ const tableDivStyle = css`
     flex-direction: row;
 `;
 
+/**
+ * @param {{isCol: boolean; isRow: boolean;}} displayRowCol - object with two booleans, true if row/column is selected
+ * @param {string[]} columnAttributes - attributes of the columns
+ */
 export interface TableResultsProps {
     displayRowCol: {
         isCol: boolean;
@@ -30,8 +34,7 @@ export interface TableResultsProps {
 
 /**
  * @desc Returns accordion to display the results in a table
- * @param {{isCol: boolean; isRow: boolean;}} displayRowCol - object with two booleans, true if row/column is selected
- * @param {string[]} columnAttributes - attributes of the columns
+ * @param {TableResultsProps} props - info about isCol/isRow and columnAttributes
  * @returns {JSX.Element} - accordion with the result table
  */
 export function ResultsTableResultsComponent(
@@ -62,22 +65,23 @@ export function ResultsTableResultsComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent />
-                <TableResultsTableMainHeaderComponent
-                    isTitle={props.displayRowCol.isCol}
-                    isRow={false}
-                    text={colMainHeader}
-                    isRowAndCol={isRowAndCol}
-                />
-                <div css={tableDivStyle}>
+                {props.displayRowCol.isCol && (
                     <TableResultsTableMainHeaderComponent
-                        isTitle={props.displayRowCol.isRow}
-                        isRow
-                        text={rowMainHeader}
+                        isRow={false}
+                        text={colMainHeader}
                         isRowAndCol={isRowAndCol}
                     />
+                )}
+                <div css={tableDivStyle}>
+                    {props.displayRowCol.isRow && (
+                        <TableResultsTableMainHeaderComponent
+                            isRow
+                            text={rowMainHeader}
+                            isRowAndCol={isRowAndCol}
+                        />
+                    )}
                     <TableResultsTableContentComponent
                         columnAttributes={props.columnAttributes}
-                        isRowAndCol={isRowAndCol}
                     />
                 </div>
             </div>
