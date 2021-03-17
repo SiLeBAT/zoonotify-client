@@ -15,8 +15,8 @@ export function adaptCountedIsolatesGroupsService(
     })[] = [];
 
     countedIsolatesGroups.forEach((element) => {
+        const adaptedGroup = _.cloneDeep(element);
         if (element.samplingYear !== undefined) {
-            const adaptedGroup = _.cloneDeep(element);
             adaptedGroup.samplingYear = String(adaptedGroup.samplingYear);
             adaptedGroups.push(
                 adaptedGroup as Record<string, string> & {
@@ -25,7 +25,7 @@ export function adaptCountedIsolatesGroupsService(
             );
         } else {
             adaptedGroups.push(
-                element as Record<string, string> & {
+                adaptedGroup as Record<string, string> & {
                     count: number;
                 }
             );

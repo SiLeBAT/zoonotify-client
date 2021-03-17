@@ -18,6 +18,7 @@ export const defaultFilter: FilterContextInterface = {
         category: [],
         productionType: [],
         resistance: [],
+        samplingYear: [],
     },
 };
 interface ProfileState {
