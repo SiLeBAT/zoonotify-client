@@ -1,4 +1,4 @@
-import { FilterType } from "../Shared/Model/Filter.model";
+import { FilterType } from "../../Shared/Model/Filter.model";
 
 /**
  * @desc Extract the selected row and column from the given URL path

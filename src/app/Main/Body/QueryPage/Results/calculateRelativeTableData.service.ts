@@ -8,11 +8,11 @@ function calculatePercent(part: number, total: number): string {
  * @param {Record<string, string>[]} objList - objectList with one object for every table row with absolute numbers
  * @returns {Record<string, string>[]} - one object for each row inside a list
  */
-export function calculateRowsWithPercent(
+export function calculateRelativeTableData(
     objList: Record<string, string>[], 
     nrOfSelectedIsolates: number,
 ): Record<string, string>[] {
-    const rowsWithPercent: Record<string, string>[] = [];
+    const statisticTableDataRel: Record<string, string>[] = [];
     objList.forEach((obj) => {
         const percentRow: Record<string, string> = { name: obj.name };
         const k = Object.keys(obj);
@@ -24,7 +24,7 @@ export function calculateRowsWithPercent(
                 );
             }
         });
-        rowsWithPercent.push(percentRow);
+        statisticTableDataRel.push(percentRow);
     });
-    return rowsWithPercent;
+    return statisticTableDataRel;
 }

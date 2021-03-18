@@ -1,11 +1,4 @@
-/**
- * @desc escape all quotes and replaces "undefined" with an empty string
- * @param {string} inputString - string to be modified
- * @returns {string} - modified string
- */
-function stringModification(inputString: string): string {
-    return `"${inputString.replace(/"/g, '\\"').replace("undefined", "")}"`;
-}
+import { modifyTableDataStringService } from "../modifyTableDataString.service";
 
 /**
  * @desc Transform the data to a string for the CSV file. Elements of one row are separated by comma.
@@ -13,7 +6,7 @@ function stringModification(inputString: string): string {
  * @param {k[]} headers - keys of the data
  * @returns {string} - data in one csv string
  */
-export function generateCSVString<
+export function generateStatisticRowsCsvString<
     T extends Record<string, string>,
     K extends keyof T
 >(dataArray: T[], headers: K[]): string {
@@ -22,7 +15,7 @@ export function generateCSVString<
     dataArray.forEach((row: T) => {
         const values: string[] = headers.map((header: K) => {
             const rowValue = row[header];
-            return stringModification(`${rowValue}`);
+            return modifyTableDataStringService(`${rowValue}`);
         });
         csvTable.push(values.join(","));
     });

@@ -6,8 +6,9 @@ import {
     MainFilterLabelInterface,
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
-import { generateStatDataString } from "./generateStatDataString.service";
-import { generateDataString } from "./generateDataString.service";
+import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
+import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
+import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
 export interface ObjectToZipParameter {
     setting: ExportInterface;
@@ -29,7 +30,9 @@ export interface ObjectToZipParameter {
  * @param {string[]} subFileNames - names of the two different files (data, statistic)
  * @returns {void}
  */
-export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): void {
+export function dataAndStatisticToZipFile(
+    zipParameter: ObjectToZipParameter
+): void {
     const csvRows: string[] = [];
     const csvRowsFilteredData: string[] = [];
     const csvRowsStat: string[] = [];
@@ -38,11 +41,16 @@ export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): v
         generateParameterHeader(
             zipParameter.filter,
             zipParameter.allFilterLabel,
-            zipParameter.mainFilterLabels, 
+            zipParameter.mainFilterLabels,
             zipParameter.mainFilterAttributes
         )
     );
-    csvRowsFilteredData.push(generateStatDataString(zipParameter.setting));
+    csvRowsFilteredData.push(
+        generateStatisticTableCsvString(
+            zipParameter.setting.tableAttributes,
+            zipParameter.setting.statDataSet
+        )
+    );
     csvRows.push(csvRowsFilteredData.join("\n"));
 
     csvRowsStat.push(
@@ -54,9 +62,11 @@ export function dataAndStatisticToZipFile(zipParameter: ObjectToZipParameter): v
         )
     );
     csvRowsStat.push(
-        generateDataString(
-            zipParameter.mainFilterAttributes,
-            zipParameter.setting.rawDataSet.rawData
+        generateDataTableCsvString(
+            zipParameter.setting.rawDataSet.rawData,
+            DbKeyCollection,
+            zipParameter.mainFilterLabels,
+            zipParameter.mainFilterAttributes
         )
     );
     csvRows.push(csvRowsStat.join("\n"));

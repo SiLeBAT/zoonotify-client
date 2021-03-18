@@ -28,7 +28,14 @@
         "All": "All values",
         "microorganism": "Microorganism",
         "matrix": "Matrix",
-        "samplingContext": "Sampling context"
+        "samplingContext": "Sampling context",
+        "federalState": "Federal state",
+        "samplingStage": "Sampling stage",
+        "origin": "Origin of sample",
+        "category": "Animal species / food category",
+        "productionType": "Animal species production type / food", 
+        "resistance": "Antimicrobial resistance",
+        "samplingYear": "Sampling year"
     },
     "NrOfIsolates": {
         "Title": "Number of isolates",

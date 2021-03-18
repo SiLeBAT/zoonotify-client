@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { LogoCardComponent } from "../../../Shared/LogoCard.component";
+import { LogoCardComponent } from "./LogoCard.component";
 
 /**
  * @desc Return an ErrorPage card with the current error status

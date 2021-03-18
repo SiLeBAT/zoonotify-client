@@ -4,8 +4,9 @@ import {
     MainFilterLabelInterface,
 } from "../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
-import { generateDataString } from "./generateDataString.service";
-import { generateStatDataString } from "./generateStatDataString.service";
+import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
+import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
+import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
 export interface ObjectToCsvParameter {
     setting: ExportInterface;
@@ -17,13 +18,12 @@ export interface ObjectToCsvParameter {
 
 /**
  * @desc Convert the chosen parameter and the resulting Data to a CSV string
- * @param {ExportInterface} setting - all info for export (raw/stat, row&column, dataset)
- * @param {FilterInterface} filter - object with the selected filters
- * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @param {MainFilterLabelInterface} mainFilterLabels - object with labels of the main filters
+ * @param {ObjectToCsvParameter} csvParameter
  * @returns {string} - converted data as csv string
  */
-export function parameterAndDataToCsvString(csvParameter: ObjectToCsvParameter): string {
+export function dataOrStatisticToCsvString(
+    csvParameter: ObjectToCsvParameter
+): string {
     const csvRows: string[] = [];
     csvRows.push(
         generateParameterHeader(
@@ -36,15 +36,22 @@ export function parameterAndDataToCsvString(csvParameter: ObjectToCsvParameter):
 
     if (csvParameter.setting.raw && !csvParameter.setting.stat) {
         csvRows.push(
-            generateDataString(
-                csvParameter.setting.rawDataSet.rawKeys,
-                csvParameter.setting.rawDataSet.rawData
+            generateDataTableCsvString(
+                csvParameter.setting.rawDataSet.rawData,
+                DbKeyCollection,
+                csvParameter.mainFilterLabels,
+                csvParameter.mainFilterAttributes
             )
         );
     }
 
     if (csvParameter.setting.stat && !csvParameter.setting.raw) {
-        csvRows.push(generateStatDataString(csvParameter.setting));
+        csvRows.push(
+            generateStatisticTableCsvString(
+                csvParameter.setting.tableAttributes,
+                csvParameter.setting.statDataSet
+            )
+        );
     }
 
     return csvRows.join("\n");

@@ -2,13 +2,6 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
 
-function checkIfElementIsName(element: string): ["left" | "right", boolean] {
-    if (element === "name") {
-        return ["left", true];
-    }
-    return ["right", false];
-}
-
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
     border-right: 1px solid lightgrey;
@@ -30,17 +23,29 @@ export function TableContentRowsComponent(props: {
     classes: Record<"tableCell", string>;
 }): JSX.Element[] {
     const elements: JSX.Element[] = [];
+    elements.push(
+        <TableCell
+            key={`isolates-${props.row.name}-name`}
+            className={props.classes.tableCell}
+            component="th"
+            scope="row"
+            align="left"
+            css={tableCellStyle(true)}
+        >
+            {props.row.name}
+        </TableCell>
+    );
     const k = Object.keys(props.row);
-    k.forEach((element): void => {
-        const [alignment, isName] = checkIfElementIsName(element);
+    const colKeys = _.pull(k, "name")
+    colKeys.forEach((element): void => {
         elements.push(
             <TableCell
                 key={`isolates-${props.row.name}-${element}`}
                 className={props.classes.tableCell}
                 component="th"
                 scope="row"
-                align={alignment}
-                css={tableCellStyle(isName)}
+                align="right"
+                css={tableCellStyle(false)}
             >
                 {props.row[element]}
             </TableCell>

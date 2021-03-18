@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { ExportInterface } from "../../Shared/Model/Export.model";
-import { generateCSVString } from "./generateCSVString.service";
+import { FilterType } from "../../../Shared/Model/Filter.model";
+import { generateStatisticRowsCsvString } from "./generateStatisticRowsCsvString.service";
 
 /**
  * @desc Returns the table header and the statistic table as a string to save it as CSV
@@ -8,24 +8,25 @@ import { generateCSVString } from "./generateCSVString.service";
  * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
  * @returns {string} - header and statistic table as string
  */
-export function generateStatDataString(
-    exportParameter: ExportInterface
+export function generateStatisticTableCsvString(
+    tableAttributes: { row: FilterType; column: FilterType },
+    statDataSet: { statData: Record<string, string>[]; statKeys: string[] }
 ): string {
     const StatDataString: string[] = [];
-    if (!_.isEmpty(exportParameter.tableAttributes.column)) {
-        StatDataString.push(`,${exportParameter.tableAttributes.column}`);
+    if (!_.isEmpty(tableAttributes.column)) {
+        StatDataString.push(`,${tableAttributes.column}`);
     }
-    const headers: string[] = exportParameter.statDataSet.statKeys;
-    if (!_.isEmpty(exportParameter.tableAttributes.row)) {
+    const headers: string[] = statDataSet.statKeys;
+    if (!_.isEmpty(tableAttributes.row)) {
         const headerToPrint: string[] = [...headers];
-        headerToPrint[0] = exportParameter.tableAttributes.row;
+        headerToPrint[0] = tableAttributes.row;
         StatDataString.push(headerToPrint.join(","));
     } else {
         StatDataString.push(headers.join(","));
     }
 
     StatDataString.push(
-        generateCSVString(exportParameter.statDataSet.statData, headers)
+        generateStatisticRowsCsvString(statDataSet.statData, headers)
     );
 
     return StatDataString.join("\n");

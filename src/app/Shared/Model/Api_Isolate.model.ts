@@ -1,7 +1,7 @@
 export interface IsolateDTO {
     isolates: {
         microorganism: string;
-        samplingYear: number;
+        samplingYear: Date;
         federalState: string;
         samplingContext: string;
         samplingStage: string;
@@ -23,7 +23,7 @@ export interface IsolateDTO {
             e_hly: string;
             ampc_carba_phenotype: string;
         };
-        resistences: {
+        resistance: {
             amp: {
                 value: string;
                 active: boolean;
@@ -166,4 +166,11 @@ export interface IsolateDTO {
             };
         };
     }[];
+}
+
+export interface IsolateCountedDTO {
+    totalNumberOfIsolates: number;
+    groups?: (Record<string, string | Date> & {
+        count: number;
+    })[];
 }

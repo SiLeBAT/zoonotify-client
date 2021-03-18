@@ -6,7 +6,7 @@ import {
     primaryColor,
     hoverColor,
 } from "../../Shared/Style/Style-MainTheme.component";
-import { ZNPaths, apiURL } from "../../Shared/URLs";
+import { ZNPaths } from "../../Shared/URLs";
 
 const footerContentStyle = css`
     margin: 0;
@@ -63,19 +63,6 @@ export function FooterLinkListComponent(): JSX.Element {
                     css={linkStyle}
                 >
                     FoodRisk-Labs
-                </a>
-            </li>
-            <li css={footerElementStyle}>
-                <span css={linkStyle}>{t("Content.Faq")}</span>
-            </li>
-            <li css={footerElementStyle}>
-                <a
-                    href={apiURL}
-                    target="_blank"
-                    rel="noreferrer"
-                    css={linkStyle}
-                >
-                    {t("Content.Api")}
                 </a>
             </li>
             <li css={footerElementStyle}>
