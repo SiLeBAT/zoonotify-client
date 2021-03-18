@@ -1,26 +1,27 @@
 /** @jsx jsx */
-import { jsx, SerializedStyles } from "@emotion/core";
+import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
-import _ from "lodash";
 
-export interface TableContentRowsProps {
-    row: Record<string, string>;
-    classes: Record<"tableCell", string>;
-    isRowAndCol: boolean;
-    style: (isRow: boolean, isRowAndCol: boolean) => SerializedStyles;
-}
+const tableCellStyle = (isName: boolean): SerializedStyles => css`
+    box-sizing: border-box;
+    border-right: 1px solid lightgrey;
+    :last-child {
+        border-right: none;
+    }
+    width: ${isName ? "160px" : "auto"};
+    min-width: ${isName ? "160px" : "auto"};
+`;
 
 /**
  * @desc Returns list of table cells for one table row
  * @param {Record<string, string>} row - object with the values for the row
  * @param {Record<"tableCell", string>,} classes - material-ui styling of one table cell
- * @param {boolean} isRowAndCol - true if row and column is selected
- * @param {(isRow: boolean, isRowAndCol: boolean) => SerializedStyles} - style of the row
  * @returns {JSX.Element} - list of table cell components
  */
-export function TableContentRowsComponent(
-    props: TableContentRowsProps
-): JSX.Element[] {
+export function TableContentRowsComponent(props: {
+    row: Record<string, string>;
+    classes: Record<"tableCell", string>;
+}): JSX.Element[] {
     const elements: JSX.Element[] = [];
     elements.push(
         <TableCell
@@ -29,7 +30,7 @@ export function TableContentRowsComponent(
             component="th"
             scope="row"
             align="left"
-            css={props.style(true, props.isRowAndCol)}
+            css={tableCellStyle(true)}
         >
             {props.row.name}
         </TableCell>
@@ -44,7 +45,7 @@ export function TableContentRowsComponent(
                 component="th"
                 scope="row"
                 align="right"
-                css={props.style(true, props.isRowAndCol)}
+                css={tableCellStyle(false)}
             >
                 {props.row[element]}
             </TableCell>
