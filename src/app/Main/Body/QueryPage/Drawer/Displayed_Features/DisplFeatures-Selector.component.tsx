@@ -24,7 +24,7 @@ export interface FeatureSelectorProps {
     selectAttribute: FilterType | TableType;
     mainFilterAttributes: string[];
     handleChange: (
-        selectedOption: ValueType<Record<string, string>>,
+        selectedOption: ValueType<{value: string, label: string}>,
         keyName: FilterType | TableType
     ) => void;
 }
@@ -35,7 +35,7 @@ export interface FeatureSelectorProps {
  * @param {FilterType} otherFeature - feature of the other selector (row/column)
  * @param {string} label - label for the selector in the right language
  * @param {FilterType | TableType} selectedAttribute - "row" or "column"
- * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle the change of the row/colum
+ * @param {(selectedOption: ValueType<{value: string, label: string}>,keyName: FilterType | TableType) => void} handleChange - function to handle the change of the row/colum
  * @returns {JSX.Element} - selector component
  */
 export function DisplayedFeatureSelectorComponent(
@@ -67,7 +67,7 @@ export function DisplayedFeatureSelectorComponent(
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={selectedValuesObj}
             selectAttribute={props.selectAttribute}
-            handleChange={props.handleChange}
+            onChange={props.handleChange}
             isMulti={false}
             isNotSelect={isNotSelect}
         />

@@ -17,6 +17,7 @@ import { ClientIsolateCounted } from "../../../../Shared/Model/Client_Isolate.mo
 export function ContentResultsContainerComponent(props: {
     isCol: boolean;
     isRow: boolean;
+    handleRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
     const [countedStatus, setCountedStatus] = useState<number>();
@@ -158,6 +159,7 @@ export function ContentResultsContainerComponent(props: {
                 <ResultsTableResultsComponent
                     displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
                     columnAttributes={columnAttributes}
+                    handleRadioChange={props.handleRadioChange}
                 />
             }
         />

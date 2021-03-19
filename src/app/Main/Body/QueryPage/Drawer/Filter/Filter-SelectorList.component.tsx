@@ -12,7 +12,7 @@ import {
 export function FilterSelectorListComponent(
     mainFilterAttributes: string[],
     handleChange: (
-        selectedOption: ValueType<Record<string, string>>,
+        selectedOption: ValueType<{value: string, label: string}>,
         keyName: FilterType | TableType
     ) => void
 ): JSX.Element[] {

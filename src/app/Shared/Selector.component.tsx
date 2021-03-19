@@ -79,8 +79,8 @@ export interface SelectorProps {
     selectedValuesObj: { value: string; label: string }[];
     noOptionLabel: string;
     selectAttribute: FilterType | TableType;
-    handleChange: (
-        selectedOption: ValueType<Record<string, string>>,
+    onChange: (
+        selectedOption: {value: string, label: string} | ValueType<{value: string, label: string}>,
         keyName: FilterType | TableType
     ) => void;
     isMulti: boolean;
@@ -93,12 +93,20 @@ export interface SelectorProps {
  * @param {{value: string, label: string}[]} dropDownValuesObj - all possible values for the selector with labels
  * @param {{value: string, label: string}[]} selectedValuesObj - values that are already selected in other selectors with labels
  * @param {FilterType | TableType} selectAttribute - attribute for the selector
- * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle change of the selector
+ * @param {(selectedOption: ValueType<{value: string, label: string}>,keyName: FilterType | TableType) => void} handleChange - function to handle change of the selector
  * @param {boolean} isMulti - true if the user can select multiple values
  * @param {boolean} isNotSelect - true if no selector is selected so far
  * @returns {JSX.Element} - selector component
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {
+    const handleChange = (
+        selectedOption: ValueType<{
+            value: string;
+            label: string;
+        }>,
+        keyName: FilterType | TableType
+    ): void => props.onChange(selectedOption, keyName);
+
     return (
         <div>
             <InputLabel
@@ -115,7 +123,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
                 options={props.dropDownValuesObj}
                 placeholder={props.label}
                 onChange={(selectedOption) =>
-                    props.handleChange(selectedOption, props.selectAttribute)
+                    handleChange(selectedOption, props.selectAttribute)
                 }
                 styles={selectStyle}
                 value={props.selectedValuesObj}

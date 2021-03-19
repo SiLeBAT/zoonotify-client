@@ -47,6 +47,7 @@ export function QueryPageContentComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
+    handleRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
@@ -66,6 +67,7 @@ export function QueryPageContentComponent(props: {
                 <ContentResultsContainerComponent
                     isCol={props.isCol}
                     isRow={props.isRow}
+                    handleRadioChange={props.handleRadioChange}
                 />
             </div>
         </div>

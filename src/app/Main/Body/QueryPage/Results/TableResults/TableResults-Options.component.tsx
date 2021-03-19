@@ -13,10 +13,7 @@ import {
     bfrDarkgrey,
     primaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
-import {
-    DisplayOptionType,
-    TableContext,
-} from "../../../../../Shared/Context/TableContext";
+import { TableContext } from "../../../../../Shared/Context/TableContext";
 
 const size = 0.75;
 
@@ -59,19 +56,13 @@ const BlueRadio = withStyles(() =>
  * @desc Returns the option bar to display the table numbers as absolute numbers or in percent
  * @returns {JSX.Element} - option bar component
  */
-export function ResultsTableOptionsComponent(): JSX.Element {
-    const { table, setTable } = useContext(TableContext);
+export function ResultsTableOptionsComponent(props: {
+    handleRadioChange: (eventTargetValue: string) => void;
+}): JSX.Element {
+    const { table } = useContext(TableContext);
 
-    const handleRadioChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        const optionValue = (event.target as HTMLInputElement)
-            .value as DisplayOptionType;
-        setTable({
-            ...table,
-            option: optionValue,
-        });
-    };
+    const handleChange = (eventTargetValue: string): void =>
+        props.handleRadioChange(eventTargetValue);
 
     return (
         <div css={optionsStyle}>
@@ -82,7 +73,7 @@ export function ResultsTableOptionsComponent(): JSX.Element {
                     aria-label="options"
                     name="options"
                     value={table.option}
-                    onChange={handleRadioChange}
+                    onChange={(event) => handleChange(event.target.value)}
                 >
                     <FormControlLabel
                         css={radioButtonSizeStyle}

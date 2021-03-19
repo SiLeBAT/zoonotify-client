@@ -46,49 +46,29 @@ const iconStyle = css`
     height: 36px;
 `;
 
-export function DrawerDisplayedFeaturesComponent(): JSX.Element {
-    const { table, setTable } = useContext(TableContext);
+interface DrawerDisplayedFeaturesInterface {
+    handleChangeDisplFeatures: (
+        selectedOption: ValueType<{value: string, label: string}>,
+        keyName: FilterType | TableType
+    ) => void;
+    handleSwapDisplFeatures: () => void;
+    handleRemoveAllDisplFeatures: () => void;
+}
+
+export function DrawerDisplayedFeaturesComponent(
+    props: DrawerDisplayedFeaturesInterface
+): JSX.Element {
+    const { table } = useContext(TableContext);
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    /**
-     * @desc Takes the current values of the selector with the onChange event handler and sets it as row/column.
-     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the selector
-     * @param {FilterType | TableType}             keyName              "row" or "column"
-     */
-    const handleChange = (
-        selectedOption: ValueType<Record<string, string>>,
-        keyName: FilterType | TableType
-    ): void => {
-        if (selectedOption) {
-            const selectedFeature: string[] = [];
-            const selectedOptionObj = selectedOption as Record<string, string>;
-            selectedFeature.push(Object.values(selectedOptionObj)[0]);
-            setTable({
-                ...table,
-                [keyName]: selectedFeature[0] as FilterType,
-            });
-        } else {
-            setTable({
-                ...table,
-                [keyName]: "",
-            });
-        }
-    };
-
-    const handleSwap = (): void => {
-        setTable({
-            ...table,
-            row: table.column,
-            column: table.row,
-        });
-    };
+    const handleClickSwap = (): void => props.handleSwapDisplFeatures();
 
     return (
         <div css={drawerWidthStyle}>
             <div css={featureAreaStyle}>
                 <p css={featureSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</p>
-                <ClearSelectorComponent isFilter={false} isTable />
+                <ClearSelectorComponent onClick={props.handleRemoveAllDisplFeatures} />
             </div>
             <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Row")}
@@ -96,10 +76,10 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                 otherFeature={table.column}
                 selectAttribute="row"
                 mainFilterAttributes={filter.mainFilter}
-                handleChange={handleChange}
+                handleChange={props.handleChangeDisplFeatures}
             />
             <div css={centerIconButtonStyle}>
-                <IconButton css={iconButtonStyle} onClick={handleSwap}>
+                <IconButton css={iconButtonStyle} onClick={handleClickSwap}>
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>
@@ -109,7 +89,7 @@ export function DrawerDisplayedFeaturesComponent(): JSX.Element {
                 otherFeature={table.row}
                 selectAttribute="column"
                 mainFilterAttributes={filter.mainFilter}
-                handleChange={handleChange}
+                handleChange={props.handleChangeDisplFeatures}
             />
         </div>
     );

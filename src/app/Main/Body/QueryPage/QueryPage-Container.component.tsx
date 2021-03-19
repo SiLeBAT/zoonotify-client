@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
+import { ValueType } from "react-select";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     IsolateCountedDTO,
@@ -16,18 +17,31 @@ import {
     ISOLATE_URL,
 } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { TableContext } from "../../../Shared/Context/TableContext";
+import {
+    defaultFilter,
+    FilterContext,
+} from "../../../Shared/Context/FilterContext";
+import {
+    DisplayOptionType,
+    TableContext,
+    TableType,
+} from "../../../Shared/Context/TableContext";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
-import { ClientFiltersConfig, ClientSingleFilterConfig, FilterInterface } from "../../../Shared/Model/Filter.model";
+import {
+    ClientFiltersConfig,
+    ClientSingleFilterConfig,
+    FilterInterface,
+    FilterType,
+} from "../../../Shared/Model/Filter.model";
 import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
 import { generatePathString } from "../../../Core/PathServices/generatePathString.service";
 import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
 import { QueryPageComponent } from "./QueryPage.component";
 import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
-
 import { adaptFilterFromApiService } from "../../../Core/adaptFilterFromAPI.service";
+import { handleChangeDisplayedFeatures } from "./ChangeDisplFeatures.service";
+import { changeFilter } from "./ChangeFilter.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [status, setStatus] = useState<{
@@ -46,9 +60,59 @@ export function QueryPageContainerComponent(): JSX.Element {
         filter.selectedFilter,
         filter.mainFilter
     );
-    const state = { isCol, isRow, isFilter };
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
+
+    const handleChangeDisplFeatures = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => {
+        setTable({
+            ...table,
+            [keyName]: handleChangeDisplayedFeatures(selectedOption),
+        });
+    };
+
+    const handleSwapDisplFeatures = (): void => {
+        setTable({
+            ...table,
+            row: table.column,
+            column: table.row,
+        });
+    };
+
+    const handleChangeFilter = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => {
+        setFilter({
+            ...filter,
+            selectedFilter: {
+                ...filter.selectedFilter,
+                [keyName]: changeFilter(selectedOption),
+            },
+        });
+    };
+
+    const handleRemoveAllFilter = (): void => {
+        setFilter({ ...filter, selectedFilter: defaultFilter.selectedFilter });
+    };
+
+    const handleRemoveAllDisplFeatures = (): void => {
+        setTable({
+            ...table,
+            row: "" as FilterType,
+            column: "" as FilterType,
+        });
+    };
+
+    const handleRadioChange = (eventTargetValue: string): void => {
+        const optionValue = eventTargetValue as DisplayOptionType;
+        setTable({
+            ...table,
+            option: optionValue,
+        });
+    };
 
     const fetchAndSetDataAndFilter = async (): Promise<void> => {
         const isolateResponse: Response = await fetch(ISOLATE_URL);
@@ -90,8 +154,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 }
             );
 
-            const nrOfSelectedIsolates =
-                isolateCountProp.totalNumberOfIsolates;
+            const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
 
             setData({
                 ZNData: adaptedDbIsolates,
@@ -137,9 +200,15 @@ export function QueryPageContainerComponent(): JSX.Element {
             dataIsSet={!_.isEmpty(data.ZNData)}
             componentToDisplay={
                 <QueryPageComponent
-                    isCol={state.isCol}
-                    isRow={state.isRow}
-                    isFilter={state.isFilter}
+                    isCol={isCol}
+                    isRow={isRow}
+                    isFilter={isFilter}
+                    handleChangeDisplFeatures={handleChangeDisplFeatures}
+                    handleSwapDisplFeatures={handleSwapDisplFeatures}
+                    handleRemoveAllDisplFeatures={handleRemoveAllDisplFeatures}
+                    handleChangeFilter={handleChangeFilter}
+                    handleRemoveAllFilter={handleRemoveAllFilter}
+                    handleRadioChange={handleRadioChange}
                 />
             }
         />

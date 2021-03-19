@@ -30,6 +30,7 @@ export interface TableResultsProps {
         isRow: boolean;
     };
     columnAttributes: string[];
+    handleRadioChange: (eventTargetValue: string) => void;
 }
 
 /**
@@ -64,7 +65,7 @@ export function ResultsTableResultsComponent(
     if (isTable) {
         tableAccordionContent = (
             <div css={dataStyle}>
-                <ResultsTableOptionsComponent />
+                <ResultsTableOptionsComponent handleRadioChange={props.handleRadioChange}/>
                 {props.displayRowCol.isCol && (
                     <TableResultsTableMainHeaderComponent
                         isRow={false}

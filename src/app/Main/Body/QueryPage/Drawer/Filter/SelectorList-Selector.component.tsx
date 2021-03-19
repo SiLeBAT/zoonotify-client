@@ -19,7 +19,7 @@ function generateSelectorObject(
 export interface SelectorProps {
     index: number;
     handleChange: (
-        selectedOption: ValueType<Record<string, string>>,
+        selectedOption: ValueType<{value: string, label: string}>,
         keyName: FilterType | TableType
     ) => void;
 }
@@ -29,7 +29,7 @@ export interface SelectorProps {
  * @param   {number}            index         number of the element
  * @param   {FilterInterface}   filter        object with selected filters
  * @param   {FilterInterface}   uniqueValues  all possible filter values;
- * @param   {( selectedOption: ValueType<Record<string, string>>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
+ * @param   {( selectedOption: ValueType<{value: string, label: string}>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
  * @return  {JSX.Element}                     new selector-element
  */
 export function SelectorListSelectorComponent(
@@ -65,7 +65,7 @@ export function SelectorListSelectorComponent(
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={selectedValuesObj}
             selectAttribute={filterAttribute}
-            handleChange={props.handleChange}
+            onChange={props.handleChange}
             isMulti
             isNotSelect={noFilter}
         />

@@ -1,11 +1,14 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { ValueType } from "react-select";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
 import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { FilterType } from "../../../../Shared/Model/Filter.model";
+import { TableType } from "../../../../Shared/Context/TableContext";
 
 const dividerStyle = css`
     height: 0.15em;
@@ -36,6 +39,17 @@ const useStyles = makeStyles(() =>
 export interface DrawerLayoutProps {
     isOpen: boolean;
     newWidth: number;
+    handleChangeDisplFeatures: (
+        selectedOption: ValueType<{value: string, label: string}>,
+        keyName: FilterType | TableType
+    ) => void;
+    handleSwapDisplFeatures: () => void;
+    handleChangeFilter: (
+        selectedOption: ValueType<{value: string, label: string}>,
+        keyName: FilterType | TableType
+    ) => void;
+    handleRemoveAllFilter: () => void;
+    handleRemoveAllDisplFeatures: () => void;
 }
 
 /**
@@ -58,9 +72,16 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
             }}
         >
             <div className={classes.drawerContainer}>
-                <DrawerFilterComponent />
+                <DrawerFilterComponent
+                    handleChangeFilter={props.handleChangeFilter}
+                    handleRemoveAllFilter={props.handleRemoveAllFilter}
+                />
                 <Divider variant="middle" css={dividerStyle} />
-                <DrawerDisplayedFeaturesComponent />
+                <DrawerDisplayedFeaturesComponent
+                    handleChangeDisplFeatures={props.handleChangeDisplFeatures}
+                    handleSwapDisplFeatures={props.handleSwapDisplFeatures}
+                    handleRemoveAllDisplFeatures={props.handleRemoveAllDisplFeatures}
+                />
             </div>
         </Drawer>
     );
