@@ -9,11 +9,11 @@ import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service
 import { ISOLATE_URL } from "../../../Shared/URLs";
 import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { DataContext } from "../../../Shared/Context/DataContext";
 import { TableContext } from "../../../Shared/Context/TableContext";
 import {
     DbCollection,
     DbKey,
+    DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import {
     defaultExport,
@@ -24,7 +24,6 @@ import { HeaderExportComponent } from "./Header-Export.component";
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
     const [isOpen, setIsOpen] = useState(false);
-    const { data } = useContext(DataContext);
     const { table } = useContext(TableContext);
     const { filter } = useContext(FilterContext);
     const history = useHistory();
@@ -64,7 +63,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
             }
             if (raw) {
                 rawData = adaptedFilteredIsolates;
-                rawKeys = data.keyValues;
+                rawKeys = DbKeyCollection;
             }
         }
         setSetting({

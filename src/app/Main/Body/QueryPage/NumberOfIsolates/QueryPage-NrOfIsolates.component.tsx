@@ -16,7 +16,7 @@ const tableNumberStyle = css`
     padding-right: 5em;
 `;
 
-export function QueryPageNrOfIsolatesComponent(): JSX.Element {
+export function QueryPageNrOfIsolatesComponent(props: {nrOfSelectedIsol: number}): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const { data } = useContext(DataContext);
 
@@ -36,7 +36,7 @@ export function QueryPageNrOfIsolatesComponent(): JSX.Element {
                             <td css={tableTextStyle}>
                                 {t("NrOfIsolates.Selected")}
                             </td>
-                            <td>{data.nrOfSelectedIsolates}</td>
+                            <td>{props.nrOfSelectedIsol}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -11,16 +11,15 @@ import { LoadingProcessComponent } from "./LoadingProcess.component";
 export function LoadingOrErrorComponent(props: {
     status:
         | {
-              isolateStatus: number;
+              isolateStatus: number | undefined;
               isolateCountStatus: number | undefined;
-              filterStatus: number;
+              filterStatus: number | undefined;
           }
-        | undefined;
     dataIsSet: boolean;
     componentToDisplay: JSX.Element;
 }): JSX.Element {
     if (props.status !== undefined) {
-        if (props.status.isolateStatus !== 200) {
+        if (props.status.isolateStatus !== 200 && props.status.isolateStatus) {
             return (
                 <ErrorPageComponent errorStatus={props.status.isolateStatus} />
             );
@@ -30,7 +29,7 @@ export function LoadingOrErrorComponent(props: {
                 <ErrorPageComponent errorStatus={props.status.isolateCountStatus} />
             );
         }
-        if (props.status.filterStatus !== 200) {
+        if (props.status.filterStatus !== 200 && props.status.filterStatus) {
             return (
                 <ErrorPageComponent errorStatus={props.status.filterStatus} />
             );

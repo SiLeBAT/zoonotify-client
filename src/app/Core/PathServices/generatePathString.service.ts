@@ -1,6 +1,7 @@
 import _ from "lodash";
-import { FilterType, FilterInterface } from "../../Shared/Model/Filter.model";
+import { FilterType } from "../../Shared/Model/Filter.model";
 import { TableInterface } from "../../Shared/Context/TableContext";
+import { FilterContextInterface } from "../../Shared/Context/FilterContext";
 
 /**
  * @desc Generate partial path containing the selected filter
@@ -31,20 +32,23 @@ function getTableParam(key: string, value: string): string {
  * @param {TableInterface} table - object of selected row/column
  * @returns {string} - path including selected filters and row/column
  */
-export const generatePathString = (
-    filter: FilterInterface,
+export const generatePathStringService = (
+    filter: FilterContextInterface,
     table: TableInterface,
-    mainFilterAttributes: string[]
 ): string => {
-    let newPath = "";
+    let newPath = "?";
+    const {selectedFilter} = filter
+    const mainFilterAttributes: string[] = filter.mainFilter
+    let isFirstAttributeWithValue = true
     mainFilterAttributes.forEach(
-        (attribute: FilterType, index: number): void => {
-            if (!_.isEmpty(filter[attribute])) {
-                newPath += index === 0 ? "" : "&";
-                filter[attribute].forEach((filterValue, i) => {
+        (attribute: FilterType): void => {
+            if (!_.isEmpty(selectedFilter[attribute])) {
+                newPath += isFirstAttributeWithValue ? "" : "&";
+                selectedFilter[attribute].forEach((filterValue, i) => {
                     newPath += i === 0 ? "" : "&";
                     newPath += setParams(attribute, filterValue);
                 });
+                isFirstAttributeWithValue = false
             }
         }
     );

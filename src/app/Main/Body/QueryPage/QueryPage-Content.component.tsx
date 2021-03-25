@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { ContentResultsContainerComponent } from "./Results/Content-ResultsContainer.component";
 import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.component";
 import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { ResultsTableResultsComponent } from "./Results/TableResults/Results-TableResults.component";
 
 const contentStyle = css`
     width: 0;
@@ -47,6 +47,8 @@ export function QueryPageContentComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
+    colAttributes: string[];
+    nrOfSelectedIsol: number;
     handleRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
@@ -61,12 +63,12 @@ export function QueryPageContentComponent(props: {
                 ) : (
                     <QueryPageIntroTextComponent />
                 )}
-                <QueryPageNrOfIsolatesComponent />
+                <QueryPageNrOfIsolatesComponent nrOfSelectedIsol={props.nrOfSelectedIsol}/>
             </div>
             <div css={resultsBoxStyle}>
-                <ContentResultsContainerComponent
-                    isCol={props.isCol}
-                    isRow={props.isRow}
+                <ResultsTableResultsComponent
+                    displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
+                    columnAttributes={props.colAttributes}
                     handleRadioChange={props.handleRadioChange}
                 />
             </div>

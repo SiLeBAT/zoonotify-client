@@ -1,19 +1,15 @@
 import React, { useState, createContext } from "react";
-import { DbCollection, DbKey } from "../Model/Client_Isolate.model";
+import { DbCollection } from "../Model/Client_Isolate.model";
 import { FilterInterface } from "../Model/Filter.model";
 
 interface DataInterface {
     ZNData: DbCollection;
-    keyValues: DbKey[];
     uniqueValues: FilterInterface;
-    nrOfSelectedIsolates: number;
 }
 
 const defaultProfile: DataInterface = {
     ZNData: [],
-    keyValues: [],
     uniqueValues: {},
-    nrOfSelectedIsolates: 0
 };
 
 interface ProfileState {

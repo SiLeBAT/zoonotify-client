@@ -19,6 +19,8 @@ export function QueryPageComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
+    colAttributes: string[];
+    nrOfSelectedIsol: number;
     handleChangeDisplFeatures: (
         selectedOption: ValueType<{value: string, label: string}>,
         keyName: FilterType | TableType
@@ -68,6 +70,8 @@ export function QueryPageComponent(props: {
                 isCol={props.isCol}
                 isRow={props.isRow}
                 isFilter={props.isFilter}
+                colAttributes={props.colAttributes}
+                nrOfSelectedIsol={props.nrOfSelectedIsol}
                 handleRadioChange={props.handleRadioChange}
             />
         </main>

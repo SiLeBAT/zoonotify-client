@@ -1,7 +1,7 @@
 import React, { useState, createContext } from "react";
 import { FilterInterface } from "../Model/Filter.model";
 
-interface FilterContextInterface {
+export interface FilterContextInterface {
     mainFilter: string[];
     selectedFilter: FilterInterface;
 }
