@@ -1,11 +1,11 @@
 import { FilterType } from "../../../Shared/Model/Filter.model";
 
-export function handleChangeDisplayedFeatures(
+export function chooseSelectedDisplayedFeaturesService(
     selectedOption: {value: string, label: string}
 ): FilterType {
     if (selectedOption !== undefined && selectedOption.value !== undefined) {
-        const selectedFeature: string = selectedOption.value;
-        return selectedFeature as FilterType;
+        const selectedFeature = selectedOption.value;
+        return selectedFeature;
     }
     return "";
 }

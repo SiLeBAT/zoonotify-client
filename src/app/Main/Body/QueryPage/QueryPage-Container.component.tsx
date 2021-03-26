@@ -39,8 +39,8 @@ import { generatePathStringService } from "../../../Core/PathServices/generatePa
 import { QueryPageComponent } from "./QueryPage.component";
 import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
-import { handleChangeDisplayedFeatures } from "./ChangeDisplFeatures.service";
-import { changeFilter } from "./ChangeFilter.service";
+import { chooseSelectedDisplayedFeaturesService } from "./chooseSelectedDisplFeatures.service";
+import { chooseSelectedFiltersService } from  "./chooseSelectedFilters.service"
 import { calculateRelativeTableData } from "./Results/calculateRelativeTableData.service";
 import { adaptCountedIsolatesGroupsService } from "../../../Core/adaptCountedIsolatesGroups.service";
 import { generateUniqueValuesService } from "./generateUniqueValues.service";
@@ -79,7 +79,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     ): void => {
         const newTable: TableInterface = {
             ...table,
-            [keyName]: handleChangeDisplayedFeatures(selectedOption),
+            [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
         };
         const newPath: string = generatePathStringService(filter, newTable);
         history.push(newPath);
@@ -116,7 +116,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...filter,
             selectedFilter: {
                 ...filter.selectedFilter,
-                [keyName]: changeFilter(selectedOption),
+                [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
         const newPath: string = generatePathStringService(newFilter, table);
