@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { ValueType } from "react-select";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
@@ -46,13 +45,13 @@ export interface DrawerLayoutProps {
      */
     newWidth: number;
     onDisplFeaturesChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ) => void;
     onDisplFeaturesSwap: () => void;
     onDisplFeaturesRemoveAll: () => void;
     onFilterChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
@@ -67,7 +66,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     const classes = useStyles((props.newWidth as unknown) as string);
 
     const handleChangeDisplFeatures = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
@@ -75,7 +74,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         props.onDisplFeaturesRemoveAll();
 
     const handleChangeFilter = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();

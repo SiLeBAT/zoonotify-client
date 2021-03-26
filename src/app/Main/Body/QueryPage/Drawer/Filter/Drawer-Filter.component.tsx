@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { ValueType } from "react-select";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { FilterSelectorListComponent } from "./Filter-SelectorList.component";
@@ -40,7 +39,7 @@ const filterSubheadingStyle = css`
 
 export function DrawerFilterComponent(props: {
     onFilterChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
@@ -49,7 +48,7 @@ export function DrawerFilterComponent(props: {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeFilter = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();

@@ -1,11 +1,10 @@
-import { ValueType } from "react-select";
 import { FilterType } from "../../../Shared/Model/Filter.model";
 
 export function handleChangeDisplayedFeatures(
-    selectedOption: ValueType<{value: string, label: string}>
+    selectedOption: {value: string, label: string}
 ): FilterType {
-    if (selectedOption) {
-        const selectedFeature: string = (Object.values(selectedOption)[0]);
+    if (selectedOption !== undefined && selectedOption.value !== undefined) {
+        const selectedFeature: string = selectedOption.value;
         return selectedFeature as FilterType;
     }
     return "";

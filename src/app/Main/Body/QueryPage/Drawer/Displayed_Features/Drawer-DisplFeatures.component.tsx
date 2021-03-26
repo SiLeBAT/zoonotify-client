@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useContext } from "react";
-import { ValueType } from "react-select";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
@@ -48,7 +47,7 @@ const iconStyle = css`
 
 interface DrawerDisplayedFeaturesProps {
     onDisplFeaturesChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ) => void;
     onDisplFeaturesSwap: () => void;
@@ -63,7 +62,7 @@ export function DrawerDisplayedFeaturesComponent(
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplFeatures = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();

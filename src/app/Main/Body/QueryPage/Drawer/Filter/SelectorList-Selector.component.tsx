@@ -22,7 +22,7 @@ export interface SelectorProps {
      */
     index: number;
     onChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ) => void;
 }
@@ -46,7 +46,7 @@ export function SelectorListSelectorComponent(
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
-    ): void => props.onChange(selectedOption, keyName);
+    ): void => props.onChange(selectedOption as { value: string; label: string }[], keyName);
 
     const noFilter: boolean = CheckIfSingleFilterIsSet(
         filter.selectedFilter,

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import { ValueType } from "react-select";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     IsolateCountedDTO,
@@ -35,7 +34,7 @@ import {
     FilterInterface,
     FilterType,
 } from "../../../Shared/Model/Filter.model";
-import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service"; 
+import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
 import { generatePathStringService } from "../../../Core/PathServices/generatePathString.service";
 import { QueryPageComponent } from "./QueryPage.component";
 import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
@@ -75,14 +74,14 @@ export function QueryPageContainerComponent(): JSX.Element {
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
     const handleChangeDisplFeatures = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ): void => {
         const newTable: TableInterface = {
             ...table,
             [keyName]: handleChangeDisplayedFeatures(selectedOption),
         };
-        const newPath: string = generatePathStringService(filter, newTable)
+        const newPath: string = generatePathStringService(filter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -93,7 +92,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: table.column,
             column: table.row,
         };
-        const newPath: string = generatePathStringService(filter, newTable)
+        const newPath: string = generatePathStringService(filter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -104,13 +103,13 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: "" as FilterType,
             column: "" as FilterType,
         };
-        const newPath: string = generatePathStringService(filter, newTable)
+        const newPath: string = generatePathStringService(filter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
 
     const handleChangeFilter = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ): void => {
         const newFilter: FilterContextInterface = {
@@ -245,9 +244,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        const isolateCountResponse: Response = await fetch(
-            isolateCountUrl
-        );
+        const isolateCountResponse: Response = await fetch(isolateCountUrl);
         setIsolateCountStatus(isolateCountResponse.status);
         if (isolateCountResponse.status === 200) {
             const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();

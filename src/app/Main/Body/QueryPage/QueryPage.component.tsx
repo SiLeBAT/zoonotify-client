@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useState } from "react";
-import { ValueType } from "react-select";
 import { DrawerLayoutComponent } from "./Drawer/Drawer-Layout.component";
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentComponent } from "./QueryPage-Content.component";
@@ -22,13 +21,13 @@ export function QueryPageComponent(props: {
     colAttributes: string[];
     nrOfSelectedIsol: number;
     onDisplFeaturesChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ) => void;
     onDisplFeaturesSwap: () => void;
     onDisplFeaturesRemoveAll: () => void;
     onFilterChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
@@ -38,7 +37,7 @@ export function QueryPageComponent(props: {
     const [open, setOpen] = useState(true);
 
     const handleChangeDisplFeatures = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
@@ -46,7 +45,7 @@ export function QueryPageComponent(props: {
         props.onDisplFeaturesRemoveAll();
 
     const handleChangeFilter = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();

@@ -1,4 +1,3 @@
-import { ValueType } from "react-select";
 import { SelectorListSelectorComponent } from "./SelectorList-Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
@@ -12,12 +11,12 @@ import { FilterType } from "../../../../../Shared/Model/Filter.model";
 export function FilterSelectorListComponent(
     mainFilterAttributes: string[],
     onChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ) => void
 ): JSX.Element[] {
     const handleChange = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string }[],
         keyName: FilterType | TableType
     ): void => onChange(selectedOption, keyName);
 

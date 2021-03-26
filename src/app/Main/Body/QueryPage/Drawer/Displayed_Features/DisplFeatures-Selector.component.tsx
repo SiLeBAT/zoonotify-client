@@ -39,7 +39,7 @@ export interface FeatureSelectorProps {
      */
     mainFilterAttributes: string[];
     onChange: (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: { value: string; label: string },
         keyName: FilterType | TableType
     ) => void;
 }
@@ -74,7 +74,7 @@ export function DisplayedFeatureSelectorComponent(
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
-    ): void => props.onChange(selectedOption, keyName);
+    ): void => props.onChange(selectedOption as { value: string; label: string }, keyName);
 
     return (
         <SelectorComponent
