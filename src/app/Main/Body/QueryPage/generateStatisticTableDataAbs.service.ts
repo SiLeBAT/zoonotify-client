@@ -1,3 +1,4 @@
+import { ClientIsolateCountedGroups } from "../../../Shared/Model/Client_Isolate.model";
 import { FilterInterface } from "../../../Shared/Model/Filter.model";
 import { generateOneTableRowObjService } from "./generateOneTableRowObj.service";
 import { generateTableHeaderValuesService } from "./generateTableHeaderValues.service";
@@ -9,9 +10,7 @@ export function generateStatisticTableDataAbsService(
     uniqueValues: FilterInterface,
     selectedFilters: FilterInterface,
     allValuesText: string,
-    isolateCountGroups: (Record<string, string> & {
-        count: number;
-    })[],
+    isolateCountGroups: ClientIsolateCountedGroups,
     colValues: string[],
     colAttribute: string,
     rowAttribute: string

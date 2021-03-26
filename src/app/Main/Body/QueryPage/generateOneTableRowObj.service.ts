@@ -1,13 +1,12 @@
 import _ from "lodash";
+import { ClientIsolateCountedGroups } from "../../../Shared/Model/Client_Isolate.model";
 
 export function generateOneTableRowObjService(
     rowElement: string,
     colValues: string[],
     uniqIsolateColValues: string[],
     uniqIsolateRowValues: string[],
-    isolateCountGroups: (Record<string, string> & {
-        count: number;
-    })[],
+    isolateCountGroups: ClientIsolateCountedGroups,
     rowAttribute: string,
     colAttribute: string,
     allValuesText: string

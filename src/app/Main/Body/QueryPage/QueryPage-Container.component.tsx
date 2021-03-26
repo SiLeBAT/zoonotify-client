@@ -4,12 +4,7 @@ import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
-    IsolateCountedDTO,
-    IsolateDTO,
-} from "../../../Shared/Model/Api_Isolate.model";
-import {
-    ClientIsolateCounted,
-    DbCollection,
+    ClientIsolateCountedGroups,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import {
@@ -29,24 +24,20 @@ import {
     TableInterface,
     TableType,
 } from "../../../Shared/Context/TableContext";
-import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
-import {
-    FilterInterface,
-    FilterType,
-} from "../../../Shared/Model/Filter.model";
+import { FilterType } from "../../../Shared/Model/Filter.model";
 import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
 import { generatePathStringService } from "../../../Core/PathServices/generatePathString.service";
 import { QueryPageComponent } from "./QueryPage.component";
 import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
-import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
 import { chooseSelectedDisplayedFeaturesService } from "./chooseSelectedDisplFeatures.service";
 import { chooseSelectedFiltersService } from "./chooseSelectedFilters.service";
 import { calculateRelativeTableData } from "./Results/calculateRelativeTableData.service";
 import { adaptCountedIsolatesGroupsService } from "../../../Core/adaptCountedIsolatesGroups.service";
-import { generateUniqueValuesService } from "./generateUniqueValues.service";
 import { generateTableHeaderValuesService } from "./generateTableHeaderValues.service";
 import { generateStatisticTableDataAbsService } from "./generateStatisticTableDataAbs.service";
 import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
+import { dataApiService } from "./dataApi.service";
+import { tableApiService } from "./tableApi.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -143,28 +134,15 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchAndSetData = async (): Promise<void> => {
-        const isolateResponse: Response = await fetch(ISOLATE_URL);
-        const filterResponse: Response = await fetch(FILTER_URL);
+        const dataResponse = await dataApiService(ISOLATE_URL, FILTER_URL);
 
-        const isolateStatusVar = isolateResponse.status;
-        const filterStatusVar = filterResponse.status;
+        setIsolateStatus(dataResponse.isolateStatus);
+        setFilterStatus(dataResponse.filterStatus);
 
-        setIsolateStatus(isolateStatusVar);
-        setFilterStatus(filterStatusVar);
-
-        if (isolateStatusVar === 200 && filterStatusVar === 200) {
-            const isolateProp: IsolateDTO = await isolateResponse.json();
-            const filterProp: FilterConfigDTO = await filterResponse.json();
-
-            const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(
-                isolateProp
-            );
-            const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
-                filterProp
-            );
+        if (dataResponse.adaptedDbIsolates && dataResponse.uniqueValuesObject) {
             setData({
-                ZNData: adaptedDbIsolates,
-                uniqueValues: uniqueValuesObject,
+                ZNData: dataResponse.adaptedDbIsolates,
+                uniqueValues: dataResponse.uniqueValuesObject,
             });
         }
     };
@@ -191,19 +169,23 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const setTableContext = (isolateCountProp: IsolateCountedDTO): void => {
-        if ((!isCol && !isRow) || isolateCountProp.groups === undefined) {
+    const setTableContext = (
+        isolateCountGroups:
+            | (Record<string, string | Date> & {
+                  count: number;
+              })[]
+            | undefined,
+        nrOfSelectedIsolates: number
+    ): void => {
+        if ((!isCol && !isRow) || isolateCountGroups === undefined) {
             setTable({
                 ...table,
                 statisticDataAbsolute: [],
             });
         } else {
-            const adaptedIsolateCounts: ClientIsolateCounted = {
-                totalNumberOfIsolates: isolateCountProp.totalNumberOfIsolates,
-                groups: adaptCountedIsolatesGroupsService(
-                    isolateCountProp.groups
-                ),
-            };
+            const adaptedIsolateCountGroups: ClientIsolateCountedGroups = adaptCountedIsolatesGroupsService(
+                isolateCountGroups
+            );
 
             const allValuesText = t("Results.TableHead");
 
@@ -222,14 +204,12 @@ export function QueryPageContainerComponent(): JSX.Element {
                 data.uniqueValues,
                 filter.selectedFilter,
                 allValuesText,
-                adaptedIsolateCounts.groups,
+                adaptedIsolateCountGroups,
                 colValues,
                 colAttribute,
                 rowAttribute
             );
 
-            const nrOfSelectedIsolates =
-                adaptedIsolateCounts.totalNumberOfIsolates;
             const statisticTableDataRel = calculateRelativeTableData(
                 statisticTableDataAbs,
                 nrOfSelectedIsolates
@@ -244,14 +224,21 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        const isolateCountResponse: Response = await fetch(isolateCountUrl);
-        setIsolateCountStatus(isolateCountResponse.status);
-        if (isolateCountResponse.status === 200) {
-            const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
-            if (isolateCountProp.groups !== undefined) {
-                setTableContext(isolateCountProp);
-            }
-            setNrOfSelectedIsol(isolateCountProp.totalNumberOfIsolates);
+        const tableResponse = await tableApiService(isolateCountUrl);
+
+        setIsolateCountStatus(tableResponse.isolateCountStatus);
+
+        if (
+            tableResponse.isolateCountGroups !== undefined &&
+            tableResponse.nrOfSelectedIsolates !== undefined
+        ) {
+            setTableContext(
+                tableResponse.isolateCountGroups,
+                tableResponse.nrOfSelectedIsolates
+            );
+        }
+        if (tableResponse.nrOfSelectedIsolates !== undefined) {
+            setNrOfSelectedIsol(tableResponse.nrOfSelectedIsolates);
         }
     };
 

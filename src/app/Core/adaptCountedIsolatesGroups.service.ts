@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { ClientIsolateCountedGroups } from "../Shared/Model/Client_Isolate.model";
 
 /**
  * @desc Transform the sampling year inside the pairs of counted isolates into a string
@@ -9,7 +10,7 @@ export function adaptCountedIsolatesGroupsService(
     countedIsolatesGroups: (Record<string, string | Date> & {
         count: number;
     })[]
-): (Record<string, string> & { count: number })[] {
+): ClientIsolateCountedGroups {
     const adaptedGroups: (Record<string, string> & {
         count: number;
     })[] = [];
