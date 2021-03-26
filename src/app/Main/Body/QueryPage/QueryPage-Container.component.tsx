@@ -290,12 +290,12 @@ export function QueryPageContainerComponent(): JSX.Element {
                     isFilter={isFilter}
                     colAttributes={columnAttributes}
                     nrOfSelectedIsol={nrOfSelectedIsol}
-                    handleChangeDisplFeatures={handleChangeDisplFeatures}
-                    handleSwapDisplFeatures={handleSwapDisplFeatures}
-                    handleRemoveAllDisplFeatures={handleRemoveAllDisplFeatures}
-                    handleChangeFilter={handleChangeFilter}
-                    handleRemoveAllFilter={handleRemoveAllFilter}
-                    handleRadioChange={handleRadioChange}
+                    onDisplFeaturesChange={handleChangeDisplFeatures}
+                    onDisplFeaturesSwap={handleSwapDisplFeatures}
+                    onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
+                    onFilterChange={handleChangeFilter}
+                    onFilterRemoveAll={handleRemoveAllFilter}
+                    onRadioChange={handleRadioChange}
                 />
             }
         />

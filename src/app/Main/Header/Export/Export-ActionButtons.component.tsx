@@ -25,25 +25,39 @@ const warningStyle = (isSelect: boolean): SerializedStyles => css`
 
 export interface ExportActionButtonProps {
     onClickClose: () => void;
+    /**
+     * all info for export (raw/stat, row&column, dataset)
+     */
     setting: ExportInterface;
+    /**
+     * object with the selected filters
+     */
     filter: FilterInterface;
+    /**
+     * list of main filters
+     */
     mainFilterAttributes: string[];
+    /**
+     * component for the export button label
+     */
     buttonLabel: JSX.Element;
+    /**
+     * main filename
+     */
     ZNFilename: string;
+    /**
+     * object with labels of the main filters
+     */
     mainFilterLabels: MainFilterLabelInterface;
+    /**
+     * "all values" / "Alle Werte"
+     */
     allFilterLabel: string;
 }
 
 /**
  * @desc Returns action buttons for the export dialog
- * @param {() => void} onClick - onClick function to close the export dialog
- * @param {ExportInterface} setting -  all info for export (raw/stat, row&column, dataset)
- * @param {FilterInterface} filter - object with the selected filters
- * @param {sting[]} mainFilterAttributes - list of main filters
- * @param {JSX.Element} buttonLabel - component for the export button label
- * @param {string} ZNFilename - main filename
- * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters
- * @param {string} allFilterLabel - "all values" / "Alle Werte"
+ * @param {ExportActionButtonProps} props
  * @returns {JSX.Element} - action buttons component
  */
 export function ExportActionButtonsComponent(
@@ -93,7 +107,8 @@ export function ExportActionButtonsComponent(
                                     allFilterLabel: props.allFilterLabel,
                                     mainFilterLabels: props.mainFilterLabels,
                                     subFileNames,
-                                    mainFilterAttributes: props.mainFilterAttributes
+                                    mainFilterAttributes:
+                                        props.mainFilterAttributes,
                                 });
                                 return false;
                             }

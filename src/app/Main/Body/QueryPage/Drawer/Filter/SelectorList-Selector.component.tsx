@@ -17,20 +17,20 @@ function generateSelectorObject(
 }
 
 export interface SelectorProps {
+    /**
+     * number of the element
+     */
     index: number;
-    handleChange: (
-        selectedOption: ValueType<{value: string, label: string}>,
+    onChange: (
+        selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
     ) => void;
 }
 
 /**
  * @desc Generate a new selector-element for one main filter
- * @param   {number}            index         number of the element
- * @param   {FilterInterface}   filter        object with selected filters
- * @param   {FilterInterface}   uniqueValues  all possible filter values;
- * @param   {( selectedOption: ValueType<{value: string, label: string}>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
- * @return  {JSX.Element}                     new selector-element
+ * @param {SelectorProps} props      
+ * @return {JSX.Element} new selector-element
  */
 export function SelectorListSelectorComponent(
     props: SelectorProps
@@ -42,6 +42,11 @@ export function SelectorListSelectorComponent(
     const filterAttribute: FilterType = filter.mainFilter[props.index];
     const filterValues: string[] = filter.selectedFilter[filterAttribute];
     const allFilterValues: string[] = data.uniqueValues[filterAttribute];
+
+    const handleChange = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => props.onChange(selectedOption, keyName);
 
     const noFilter: boolean = CheckIfSingleFilterIsSet(
         filter.selectedFilter,
@@ -65,7 +70,7 @@ export function SelectorListSelectorComponent(
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={selectedValuesObj}
             selectAttribute={filterAttribute}
-            onChange={props.handleChange}
+            onChange={handleChange}
             isMulti
             isNotSelect={noFilter}
         />

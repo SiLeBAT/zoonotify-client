@@ -15,12 +15,14 @@ export function HeaderExportComponent(props: {
     exportLabels: ExportLabels;
     onClickOpen: () => void;
     onClickClose: () => void;
-    handleCheckbox: (name: string, checked: boolean) => void;
+    onCheckboxChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { filter } = useContext(FilterContext);
 
     const handleClickOpen = (): void => props.onClickOpen();
     const handleClickClose = (): void => props.onClickClose();
+    const handleChangeCheckbox = (name: string, checked: boolean): void =>
+        props.onCheckboxChange(name, checked);
 
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(props.isOpen);
 
@@ -37,7 +39,7 @@ export function HeaderExportComponent(props: {
             >
                 <ExportTextContentComponent />
                 <ExportCheckboxesComponent
-                    handleCheckbox={props.handleCheckbox}
+                    onCheckboxChange={handleChangeCheckbox}
                     raw={props.settings.raw}
                     stat={props.settings.stat}
                 />

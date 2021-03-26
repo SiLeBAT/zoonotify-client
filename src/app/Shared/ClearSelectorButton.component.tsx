@@ -31,7 +31,7 @@ const LightTooltip = withStyles(() => ({
 
 /**
  * @desc Button and tooltip to clear all selected settings.
- * @param {() => void} handleRemove - onclick to remove the selected values
+ * @param {onClick: () => void;} props - onclick to remove the selected values
  * @returns {JSX.Element} - button component with tooltip
  */
 export function ClearSelectorComponent(props:  {

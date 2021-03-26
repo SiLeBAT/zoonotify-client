@@ -37,29 +37,48 @@ const useStyles = makeStyles(() =>
 );
 
 export interface DrawerLayoutProps {
+    /**
+     * true if Drawer is open
+     */
     isOpen: boolean;
+    /**
+     * width of the Drawer (also after resize)
+     */
     newWidth: number;
-    handleChangeDisplFeatures: (
-        selectedOption: ValueType<{value: string, label: string}>,
+    onDisplFeaturesChange: (
+        selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
     ) => void;
-    handleSwapDisplFeatures: () => void;
-    handleChangeFilter: (
-        selectedOption: ValueType<{value: string, label: string}>,
+    onDisplFeaturesSwap: () => void;
+    onDisplFeaturesRemoveAll: () => void;
+    onFilterChange: (
+        selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
     ) => void;
-    handleRemoveAllFilter: () => void;
-    handleRemoveAllDisplFeatures: () => void;
+    onFilterRemoveAll: () => void;
 }
 
 /**
  * @desc Returns the Drawer
- * @param {boolean} isOpen - true if Drawer is open
- * @param {number} newWidth - width of the Drawer (also after resize)
+ * @param {DrawerLayoutProps} props
  * @returns {JSX.Element} - Drawer component
  */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     const classes = useStyles((props.newWidth as unknown) as string);
+
+    const handleChangeDisplFeatures = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => props.onDisplFeaturesChange(selectedOption, keyName);
+    const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
+    const handleRemoveAllDisplFeatures = (): void =>
+        props.onDisplFeaturesRemoveAll();
+
+    const handleChangeFilter = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => props.onFilterChange(selectedOption, keyName);
+    const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
     return (
         <Drawer
@@ -73,14 +92,14 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         >
             <div className={classes.drawerContainer}>
                 <DrawerFilterComponent
-                    handleChangeFilter={props.handleChangeFilter}
-                    handleRemoveAllFilter={props.handleRemoveAllFilter}
+                    onFilterChange={handleChangeFilter}
+                    onFilterRemoveAll={handleRemoveAllFilter}
                 />
                 <Divider variant="middle" css={dividerStyle} />
                 <DrawerDisplayedFeaturesComponent
-                    handleChangeDisplFeatures={props.handleChangeDisplFeatures}
-                    handleSwapDisplFeatures={props.handleSwapDisplFeatures}
-                    handleRemoveAllDisplFeatures={props.handleRemoveAllDisplFeatures}
+                    onDisplFeaturesChange={handleChangeDisplFeatures}
+                    onDisplFeaturesSwap={handleSwapDisplFeatures}
+                    onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
                 />
             </div>
         </Drawer>

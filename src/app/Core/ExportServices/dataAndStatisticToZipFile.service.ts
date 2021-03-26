@@ -10,28 +10,44 @@ import { generateStatisticTableCsvString } from "./StatExportServices/generateSt
 import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
 import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
-export interface ObjectToZipParameter {
+export interface DataAndStatisticToZipParameter {
+    /**
+     * all info for export (filtered/stat, row&column, dataset)
+     */
     setting: ExportInterface;
+    /**
+     * object with the selected filters
+     */
     filter: FilterInterface;
+    /**
+     * list with all main filters
+     */
     mainFilterAttributes: string[];
+    /**
+     * main filename
+     */
     ZNFilename: string;
+    /**
+     * "all values" / "Alle Werte"
+     */
     allFilterLabel: string;
+    /**
+     * object with labels of the main filters
+     */
     mainFilterLabels: MainFilterLabelInterface;
+    /**
+     *  names of the two different files (data, statistic)
+     */
     subFileNames: string[];
 }
 
 /**
  * @desc Convert the data table and the statistic table to one ZIP folder
- * @param {ExportInterface} setting -  all info for export (filtered/stat, row&column, dataset)
- * @param {FilterInterface} filter - object with the selected filters
- * @param {string} ZNFilename - main filename
- * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters
- * @param {string[]} subFileNames - names of the two different files (data, statistic)
+ * @param {DataAndStatisticToZipParameter} zipParameter
  * @returns {void}
  */
 export function dataAndStatisticToZipFile(
-    zipParameter: ObjectToZipParameter
+    zipParameter: DataAndStatisticToZipParameter
 ): void {
     const csvRows: string[] = [];
     const csvRowsFilteredData: string[] = [];

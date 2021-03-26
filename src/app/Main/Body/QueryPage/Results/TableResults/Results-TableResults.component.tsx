@@ -20,17 +20,19 @@ const tableDivStyle = css`
     flex-direction: row;
 `;
 
-/**
- * @param {{isCol: boolean; isRow: boolean;}} displayRowCol - object with two booleans, true if row/column is selected
- * @param {string[]} columnAttributes - attributes of the columns
- */
 export interface TableResultsProps {
+    /**
+     * object with two booleans, true if row/column is selected
+     */
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;
     };
+    /**
+     * attributes of the columns
+     */
     columnAttributes: string[];
-    handleRadioChange: (eventTargetValue: string) => void;
+    onRadioChange: (eventTargetValue: string) => void;
 }
 
 /**
@@ -43,6 +45,9 @@ export function ResultsTableResultsComponent(
 ): JSX.Element {
     const { table } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
+
+    const handleChangeRadio = (eventTargetValue: string): void =>
+        props.onRadioChange(eventTargetValue);
 
     const accordionHeader: string = t(`Results.Table`);
     const rowMainHeader: string = _.isEmpty(table.row)
@@ -65,7 +70,9 @@ export function ResultsTableResultsComponent(
     if (isTable) {
         tableAccordionContent = (
             <div css={dataStyle}>
-                <ResultsTableOptionsComponent handleRadioChange={props.handleRadioChange}/>
+                <ResultsTableOptionsComponent
+                    onRadioChange={handleChangeRadio}
+                />
                 {props.displayRowCol.isCol && (
                     <TableResultsTableMainHeaderComponent
                         isRow={false}

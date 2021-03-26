@@ -39,14 +39,20 @@ const filterSubheadingStyle = css`
 `;
 
 export function DrawerFilterComponent(props: {
-    handleChangeFilter: (
-        selectedOption: ValueType<{value: string, label: string}>,
+    onFilterChange: (
+        selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
     ) => void;
-    handleRemoveAllFilter: () => void;
+    onFilterRemoveAll: () => void;
 }): JSX.Element {
     const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
+
+    const handleChangeFilter = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => props.onFilterChange(selectedOption, keyName);
+    const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
     return (
         <div css={drawerWidthStyle}>
@@ -55,9 +61,9 @@ export function DrawerFilterComponent(props: {
                 <p css={filterSubheadingStyle}>
                     {t("Drawer.Subtitles.Filter")}
                 </p>
-                <ClearSelectorComponent onClick={props.handleRemoveAllFilter} />
+                <ClearSelectorComponent onClick={handleRemoveAllFilter} />
             </div>
-            {FilterSelectorListComponent(filter.mainFilter, props.handleChangeFilter)}
+            {FilterSelectorListComponent(filter.mainFilter, handleChangeFilter)}
         </div>
     );
 }

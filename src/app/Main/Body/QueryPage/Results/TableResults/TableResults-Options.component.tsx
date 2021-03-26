@@ -54,15 +54,16 @@ const BlueRadio = withStyles(() =>
 
 /**
  * @desc Returns the option bar to display the table numbers as absolute numbers or in percent
+ * @param props - function to handle change of radio button
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
-    handleRadioChange: (eventTargetValue: string) => void;
+    onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const { table } = useContext(TableContext);
 
     const handleChange = (eventTargetValue: string): void =>
-        props.handleRadioChange(eventTargetValue);
+        props.onRadioChange(eventTargetValue);
 
     return (
         <div css={optionsStyle}>

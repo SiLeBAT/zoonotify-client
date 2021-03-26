@@ -49,9 +49,12 @@ export function QueryPageContentComponent(props: {
     isFilter: boolean;
     colAttributes: string[];
     nrOfSelectedIsol: number;
-    handleRadioChange: (eventTargetValue: string) => void;
+    onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
+
+    const handleChangeRadio = (eventTargetValue: string): void =>
+        props.onRadioChange(eventTargetValue);
 
     return (
         <div css={contentStyle}>
@@ -63,13 +66,15 @@ export function QueryPageContentComponent(props: {
                 ) : (
                     <QueryPageIntroTextComponent />
                 )}
-                <QueryPageNrOfIsolatesComponent nrOfSelectedIsol={props.nrOfSelectedIsol}/>
+                <QueryPageNrOfIsolatesComponent
+                    nrOfSelectedIsol={props.nrOfSelectedIsol}
+                />
             </div>
             <div css={resultsBoxStyle}>
                 <ResultsTableResultsComponent
                     displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
                     columnAttributes={props.colAttributes}
-                    handleRadioChange={props.handleRadioChange}
+                    onRadioChange={handleChangeRadio}
                 />
             </div>
         </div>

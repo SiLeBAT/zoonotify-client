@@ -74,28 +74,45 @@ const selectStyle: StylesConfig = {
 };
 
 export interface SelectorProps {
+    /**
+     * label for the selector
+     */
     label: string;
+    /**
+     * all possible values for the selector with labels
+     */
     dropDownValuesObj: { value: string; label: string }[];
+    /**
+     * values that are already selected in other selectors with labels
+     */
     selectedValuesObj: { value: string; label: string }[];
+    /**
+     * label if no option is available
+     */
     noOptionLabel: string;
+    /**
+     * attribute for the selector
+     */
     selectAttribute: FilterType | TableType;
     onChange: (
-        selectedOption: {value: string, label: string} | ValueType<{value: string, label: string}>,
+        selectedOption:
+            | { value: string; label: string }
+            | ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
     ) => void;
+    /**
+     * true if the user can select multiple values
+     */
     isMulti: boolean;
+    /**
+     * true if no selector is selected so far
+     */
     isNotSelect: boolean;
 }
 
 /**
  * @desc Returns one selector for filter or row/column.
- * @param {string} label - label for the selector
- * @param {{value: string, label: string}[]} dropDownValuesObj - all possible values for the selector with labels
- * @param {{value: string, label: string}[]} selectedValuesObj - values that are already selected in other selectors with labels
- * @param {FilterType | TableType} selectAttribute - attribute for the selector
- * @param {(selectedOption: ValueType<{value: string, label: string}>,keyName: FilterType | TableType) => void} handleChange - function to handle change of the selector
- * @param {boolean} isMulti - true if the user can select multiple values
- * @param {boolean} isNotSelect - true if no selector is selected so far
+ * @param {SelectorProps} props
  * @returns {JSX.Element} - selector component
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {

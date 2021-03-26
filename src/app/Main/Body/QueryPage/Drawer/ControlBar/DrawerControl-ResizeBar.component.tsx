@@ -30,7 +30,7 @@ export interface ResizeBarProps {
 
 /**
  * @desc Handles the resize of the Drawer and return the resize bar
- * @param {(newWidth: number) => void} onChange - onChange-function for changing the size of the Drawer
+ * @param {ResizeBarProps} props - onChange-function for changing the size of the Drawer
  * @returns {JSX.Element} - resize bar component
  */
 export function DrawerControlResizeBarComponent(
@@ -38,10 +38,12 @@ export function DrawerControlResizeBarComponent(
 ): JSX.Element {
     const minDrawerWidth = 325;
 
+    const handleChange = (newWith: number): void => props.onChange(newWith);
+
     const handleMouseMove = useCallback((e): void => {
         const newWidth = e.clientX - document.body.offsetLeft;
         if (newWidth > minDrawerWidth) {
-            props.onChange(newWidth);
+            handleChange(newWidth);
         }
     }, []);
 

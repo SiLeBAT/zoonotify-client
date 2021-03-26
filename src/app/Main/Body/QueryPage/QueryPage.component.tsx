@@ -21,23 +21,40 @@ export function QueryPageComponent(props: {
     isFilter: boolean;
     colAttributes: string[];
     nrOfSelectedIsol: number;
-    handleChangeDisplFeatures: (
-        selectedOption: ValueType<{value: string, label: string}>,
+    onDisplFeaturesChange: (
+        selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
     ) => void;
-    handleSwapDisplFeatures: () => void;
-    handleRemoveAllDisplFeatures: () => void;
-    handleChangeFilter: (
-        selectedOption: ValueType<{value: string, label: string}>,
+    onDisplFeaturesSwap: () => void;
+    onDisplFeaturesRemoveAll: () => void;
+    onFilterChange: (
+        selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
     ) => void;
-    handleRemoveAllFilter: () => void;
-    handleRadioChange: (eventTargetValue: string) => void;
+    onFilterRemoveAll: () => void;
+    onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState(433);
     const [open, setOpen] = useState(true);
 
-    const handleDrawer = (): void => {
+    const handleChangeDisplFeatures = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => props.onDisplFeaturesChange(selectedOption, keyName);
+    const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
+    const handleRemoveAllDisplFeatures = (): void =>
+        props.onDisplFeaturesRemoveAll();
+
+    const handleChangeFilter = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => props.onFilterChange(selectedOption, keyName);
+    const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
+
+    const handleRadioChange = (eventTargetValue: string): void =>
+        props.onRadioChange(eventTargetValue);
+
+    const handleClickOpenCloseDrawer = (): void => {
         if (open) {
             setOpen(false);
         } else {
@@ -45,7 +62,7 @@ export function QueryPageComponent(props: {
         }
     };
 
-    const handleResize = (newWidth: number): void => {
+    const handleChangeDrawerSize = (newWidth: number): void => {
         setDrawerWidth(newWidth);
     };
 
@@ -54,17 +71,17 @@ export function QueryPageComponent(props: {
             <DrawerLayoutComponent
                 isOpen={open}
                 newWidth={drawerWidth}
-                handleChangeDisplFeatures={props.handleChangeDisplFeatures}
-                handleSwapDisplFeatures={props.handleSwapDisplFeatures}
-                handleRemoveAllDisplFeatures={props.handleRemoveAllDisplFeatures}
-                handleChangeFilter={props.handleChangeFilter}
-                handleRemoveAllFilter={props.handleRemoveAllFilter}
+                onDisplFeaturesChange={handleChangeDisplFeatures}
+                onDisplFeaturesSwap={handleSwapDisplFeatures}
+                onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
+                onFilterChange={handleChangeFilter}
+                onFilterRemoveAll={handleRemoveAllFilter}
             />
             <QueryPageDrawerControlComponent
                 isOpen={open}
                 newWidth={drawerWidth}
-                handleDrawer={handleDrawer}
-                handleResize={handleResize}
+                onDrawerOpenCloseClick={handleClickOpenCloseDrawer}
+                onDrawerSizeChange={handleChangeDrawerSize}
             />
             <QueryPageContentComponent
                 isCol={props.isCol}
@@ -72,7 +89,7 @@ export function QueryPageComponent(props: {
                 isFilter={props.isFilter}
                 colAttributes={props.colAttributes}
                 nrOfSelectedIsol={props.nrOfSelectedIsol}
-                handleRadioChange={props.handleRadioChange}
+                onRadioChange={handleRadioChange}
             />
         </main>
     );
