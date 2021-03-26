@@ -46,7 +46,7 @@ const iconStyle = css`
     height: 36px;
 `;
 
-interface DrawerDisplayedFeaturesInterface {
+interface DrawerDisplayedFeaturesProps {
     onDisplFeaturesChange: (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
@@ -56,7 +56,7 @@ interface DrawerDisplayedFeaturesInterface {
 }
 
 export function DrawerDisplayedFeaturesComponent(
-    props: DrawerDisplayedFeaturesInterface
+    props: DrawerDisplayedFeaturesProps
 ): JSX.Element {
     const { table } = useContext(TableContext);
     const { filter } = useContext(FilterContext);

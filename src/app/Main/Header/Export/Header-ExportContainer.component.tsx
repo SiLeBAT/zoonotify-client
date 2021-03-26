@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import {
-    ExportLabels,
     generateExportLabels,
 } from "../../../Core/ExportServices/generateExportLabels.service";
 import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
@@ -103,7 +102,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
         setIsOpen(false);
     };
 
-    const exportLabels: ExportLabels = generateExportLabels(filter.mainFilter);
+    const exportLabels = generateExportLabels(filter.mainFilter);
 
     return (
         <HeaderExportComponent

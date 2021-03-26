@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { getCurrentDate } from "../getCurrentDate.service";
 import { MainFilterLabelInterface } from "../../Shared/Model/Export.model";
 
-export interface ExportLabels {
+export interface ExportLabelsInterface {
     ZNFilename: string;
     mainFilterLabels: MainFilterLabelInterface;
     allFilterLabel: string;
@@ -15,7 +15,7 @@ export interface ExportLabels {
  */
 export function generateExportLabels(
     mainFilterAttributes: string[]
-): ExportLabels {
+): ExportLabelsInterface {
     const { t } = useTranslation(["QueryPage"]);
 
     const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;

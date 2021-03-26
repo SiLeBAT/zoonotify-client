@@ -6,13 +6,13 @@ import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
-import { ExportLabels } from "../../../Core/ExportServices/generateExportLabels.service";
+import { ExportLabelsInterface } from "../../../Core/ExportServices/generateExportLabels.service";
 import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
 
 export function HeaderExportComponent(props: {
     isOpen: boolean;
     settings: ExportInterface;
-    exportLabels: ExportLabels;
+    exportLabels: ExportLabelsInterface;
     onClickOpen: () => void;
     onClickClose: () => void;
     onCheckboxChange: (name: string, checked: boolean) => void;
