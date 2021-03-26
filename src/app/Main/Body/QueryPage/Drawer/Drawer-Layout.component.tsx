@@ -45,13 +45,13 @@ export interface DrawerLayoutProps {
      */
     newWidth: number;
     onDisplFeaturesChange: (
-        selectedOption: { value: string; label: string },
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ) => void;
     onDisplFeaturesSwap: () => void;
     onDisplFeaturesRemoveAll: () => void;
     onFilterChange: (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
@@ -66,7 +66,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     const classes = useStyles((props.newWidth as unknown) as string);
 
     const handleChangeDisplFeatures = (
-        selectedOption: { value: string; label: string },
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
@@ -74,7 +74,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         props.onDisplFeaturesRemoveAll();
 
     const handleChangeFilter = (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();

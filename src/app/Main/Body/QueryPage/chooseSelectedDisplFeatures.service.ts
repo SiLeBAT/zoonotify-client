@@ -1,9 +1,9 @@
 import { FilterType } from "../../../Shared/Model/Filter.model";
 
 export function chooseSelectedDisplayedFeaturesService(
-    selectedOption: {value: string, label: string}
+    selectedOption: { value: string; label: string } | null
 ): FilterType {
-    if (selectedOption !== undefined && selectedOption.value !== undefined) {
+    if (selectedOption && selectedOption.value) {
         const selectedFeature = selectedOption.value;
         return selectedFeature;
     }

@@ -40,7 +40,7 @@ import { QueryPageComponent } from "./QueryPage.component";
 import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
 import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
 import { chooseSelectedDisplayedFeaturesService } from "./chooseSelectedDisplFeatures.service";
-import { chooseSelectedFiltersService } from  "./chooseSelectedFilters.service"
+import { chooseSelectedFiltersService } from "./chooseSelectedFilters.service";
 import { calculateRelativeTableData } from "./Results/calculateRelativeTableData.service";
 import { adaptCountedIsolatesGroupsService } from "../../../Core/adaptCountedIsolatesGroups.service";
 import { generateUniqueValuesService } from "./generateUniqueValues.service";
@@ -74,7 +74,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
     const handleChangeDisplFeatures = (
-        selectedOption: { value: string; label: string },
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ): void => {
         const newTable: TableInterface = {
@@ -109,7 +109,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleChangeFilter = (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ): void => {
         const newFilter: FilterContextInterface = {

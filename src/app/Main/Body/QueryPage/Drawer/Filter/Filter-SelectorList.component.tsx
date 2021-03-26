@@ -11,12 +11,12 @@ import { FilterType } from "../../../../../Shared/Model/Filter.model";
 export function FilterSelectorListComponent(
     mainFilterAttributes: string[],
     onChange: (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ) => void
 ): JSX.Element[] {
     const handleChange = (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ): void => onChange(selectedOption, keyName);
 

@@ -47,7 +47,7 @@ const iconStyle = css`
 
 interface DrawerDisplayedFeaturesProps {
     onDisplFeaturesChange: (
-        selectedOption: { value: string; label: string },
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ) => void;
     onDisplFeaturesSwap: () => void;
@@ -62,7 +62,7 @@ export function DrawerDisplayedFeaturesComponent(
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplFeatures = (
-        selectedOption: { value: string; label: string },
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
@@ -73,7 +73,9 @@ export function DrawerDisplayedFeaturesComponent(
         <div css={drawerWidthStyle}>
             <div css={featureAreaStyle}>
                 <p css={featureSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</p>
-                <ClearSelectorComponent onClick={handleRemoveAllDisplFeatures} />
+                <ClearSelectorComponent
+                    onClick={handleRemoveAllDisplFeatures}
+                />
             </div>
             <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Row")}
@@ -84,7 +86,10 @@ export function DrawerDisplayedFeaturesComponent(
                 onChange={handleChangeDisplFeatures}
             />
             <div css={centerIconButtonStyle}>
-                <IconButton css={iconButtonStyle} onClick={handleSwapDisplFeatures}>
+                <IconButton
+                    css={iconButtonStyle}
+                    onClick={handleSwapDisplFeatures}
+                >
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>

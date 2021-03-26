@@ -22,14 +22,14 @@ export interface SelectorProps {
      */
     index: number;
     onChange: (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ) => void;
 }
 
 /**
  * @desc Generate a new selector-element for one main filter
- * @param {SelectorProps} props      
+ * @param {SelectorProps} props
  * @return {JSX.Element} new selector-element
  */
 export function SelectorListSelectorComponent(
@@ -46,7 +46,11 @@ export function SelectorListSelectorComponent(
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
-    ): void => props.onChange(selectedOption as { value: string; label: string }[], keyName);
+    ): void =>
+        props.onChange(
+            selectedOption as { value: string; label: string }[] | null,
+            keyName
+        );
 
     const noFilter: boolean = CheckIfSingleFilterIsSet(
         filter.selectedFilter,

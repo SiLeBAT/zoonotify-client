@@ -1,7 +1,7 @@
 export function chooseSelectedFiltersService(
-    selectedOption: { value: string; label: string }[]
+    selectedOption: { value: string; label: string }[] | null
 ): string[] {
-    if (selectedOption !== undefined) {
+    if (selectedOption) {
         const selectedFilter: string[] = [];
         selectedOption.forEach((element) => {
             selectedFilter.push(element.value);

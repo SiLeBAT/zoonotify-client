@@ -97,7 +97,8 @@ export interface SelectorProps {
     onChange: (
         selectedOption:
             | { value: string; label: string }
-            | ValueType<{ value: string; label: string }>,
+            | ValueType<{ value: string; label: string }>
+            | null,
         keyName: FilterType | TableType
     ) => void;
     /**
@@ -120,7 +121,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
         selectedOption: ValueType<{
             value: string;
             label: string;
-        }>,
+        }> | null,
         keyName: FilterType | TableType
     ): void => props.onChange(selectedOption, keyName);
 

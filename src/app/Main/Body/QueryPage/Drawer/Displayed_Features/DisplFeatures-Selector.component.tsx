@@ -39,14 +39,14 @@ export interface FeatureSelectorProps {
      */
     mainFilterAttributes: string[];
     onChange: (
-        selectedOption: { value: string; label: string },
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ) => void;
 }
 
 /**
  * @desc Selector to select the displayed features in row/column
- * @param {FeatureSelectorProps} props 
+ * @param {FeatureSelectorProps} props
  * @returns {JSX.Element} - selector component
  */
 export function DisplayedFeatureSelectorComponent(
@@ -74,7 +74,11 @@ export function DisplayedFeatureSelectorComponent(
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
-    ): void => props.onChange(selectedOption as { value: string; label: string }, keyName);
+    ): void =>
+        props.onChange(
+            selectedOption as { value: string; label: string } | null,
+            keyName
+        );
 
     return (
         <SelectorComponent

@@ -6,9 +6,7 @@ import { FilterSelectorListComponent } from "./Filter-SelectorList.component";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
-import {
-    FilterContext,
-} from "../../../../../Shared/Context/FilterContext";
+import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const drawerWidthStyle = css`
@@ -39,7 +37,7 @@ const filterSubheadingStyle = css`
 
 export function DrawerFilterComponent(props: {
     onFilterChange: (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
@@ -48,7 +46,7 @@ export function DrawerFilterComponent(props: {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeFilter = (
-        selectedOption: { value: string; label: string }[],
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
