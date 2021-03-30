@@ -1,10 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-import {
-    generateExportLabels,
-} from "../../../Core/ExportServices/generateExportLabels.service";
-import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
 import { ISOLATE_URL } from "../../../Shared/URLs";
 import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
@@ -18,7 +14,9 @@ import {
     defaultExport,
     ExportInterface,
 } from "../../../Shared/Model/Export.model";
+import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
 import { HeaderExportComponent } from "./Header-Export.component";
+import { generateExportLabels } from "./ExportServices/generateExportLabels.service";
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);

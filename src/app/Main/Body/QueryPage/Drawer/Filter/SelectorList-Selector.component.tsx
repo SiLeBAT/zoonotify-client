@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
-import { CheckIfSingleFilterIsSet } from "../../../../../Core/FilterServices/checkIfFilterIsSet.service";
+import { CheckIfSingleFilterIsSet } from "../../QueryPageServices/checkIfFilterIsSet.service";
 import { DataContext } from "../../../../../Shared/Context/DataContext";
 import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";

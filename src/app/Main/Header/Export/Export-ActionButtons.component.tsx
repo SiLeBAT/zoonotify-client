@@ -3,14 +3,14 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import { CSVLink } from "react-csv";
 import { useTranslation } from "react-i18next";
 import { Button, DialogActions } from "@material-ui/core";
-import { dataOrStatisticToCsvString } from "../../../Core/ExportServices/dataOrStatisticToCsvString.service";
-import { dataAndStatisticToZipFile } from "../../../Core/ExportServices/dataAndStatisticToZipFile.service";
+import { dataAndStatisticToZipFile } from "./ExportServices/dataAndStatisticToZipFile.service";
 import {
     ExportInterface,
     MainFilterLabelInterface,
 } from "../../../Shared/Model/Export.model";
 import { FilterInterface } from "../../../Shared/Model/Filter.model";
 import { errorColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { dataOrStatisticToCsvString } from "./ExportServices/dataOrStatisticToCsvString.service";
 
 const buttonLinkStyle = css`
     all: inherit !important;

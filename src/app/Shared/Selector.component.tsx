@@ -95,10 +95,7 @@ export interface SelectorProps {
      */
     selectAttribute: FilterType | TableType;
     onChange: (
-        selectedOption:
-            | { value: string; label: string }
-            | ValueType<{ value: string; label: string }>
-            | null,
+        selectedOption: ValueType<{ value: string; label: string }> | null,
         keyName: FilterType | TableType
     ) => void;
     /**

@@ -25,19 +25,19 @@ import {
     TableType,
 } from "../../../Shared/Context/TableContext";
 import { FilterType } from "../../../Shared/Model/Filter.model";
-import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
-import { generatePathStringService } from "../../../Core/PathServices/generatePathString.service";
-import { QueryPageComponent } from "./QueryPage.component";
-import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
-import { chooseSelectedDisplayedFeaturesService } from "./chooseSelectedDisplFeatures.service";
-import { chooseSelectedFiltersService } from "./chooseSelectedFilters.service";
-import { calculateRelativeTableData } from "./Results/calculateRelativeTableData.service";
-import { adaptCountedIsolatesGroupsService } from "../../../Core/adaptCountedIsolatesGroups.service";
-import { generateTableHeaderValuesService } from "./generateTableHeaderValues.service";
-import { generateStatisticTableDataAbsService } from "./generateStatisticTableDataAbs.service";
-import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
-import { dataApiService } from "./dataApi.service";
-import { tableApiService } from "./tableApi.service";
+import { getFilterFromPath } from "./QueryPageServices/PathServices/getFilterFromPath.service";
+import { generatePathStringService } from "./QueryPageServices/PathServices/generatePathString.service";
+import { QueryPageLayoutComponent } from "./QueryPage-Layout.component";
+import { CheckIfFilterIsSet } from "./QueryPageServices/checkIfFilterIsSet.service";
+import { chooseSelectedDisplayedFeaturesService } from "./QueryPageServices/SelectorServices/chooseSelectedDisplFeatures.service";
+import { chooseSelectedFiltersService } from "./QueryPageServices/SelectorServices/chooseSelectedFilters.service";
+import { calculateRelativeTableData } from "./QueryPageServices/TableServices/calculateRelativeTableData.service";
+import { adaptCountedIsolatesGroupsService } from "./QueryPageServices/adaptCountedIsolatesGroups.service";
+import { generateTableHeaderValuesService } from "./QueryPageServices/TableServices/generateTableHeaderValues.service";
+import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableServices/generateStatisticTableDataAbs.service";
+import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
+import { dataApiService } from "./QueryPageServices/ApiServices/dataApi.service";
+import { tableApiService } from "./QueryPageServices/ApiServices/tableApi.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -268,7 +268,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             status={{ isolateStatus, isolateCountStatus, filterStatus }}
             dataIsSet={!_.isEmpty(data.ZNData)}
             componentToDisplay={
-                <QueryPageComponent
+                <QueryPageLayoutComponent
                     isCol={isCol}
                     isRow={isRow}
                     isFilter={isFilter}

@@ -6,7 +6,7 @@ import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
-import { generateFeatureList } from "../../../../../Core/generateFeatureList.service";
+import { generateFeatureList } from "./generateFeatureList.service";
 
 function generateTranslatedSelectorObject(
     selectorArray: string[],

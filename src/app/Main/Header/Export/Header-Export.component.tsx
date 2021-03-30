@@ -6,8 +6,8 @@ import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
-import { ExportLabelsInterface } from "../../../Core/ExportServices/generateExportLabels.service";
 import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
+import { ExportLabelsInterface } from "./ExportServices/generateExportLabels.service";
 
 export function HeaderExportComponent(props: {
     isOpen: boolean;
