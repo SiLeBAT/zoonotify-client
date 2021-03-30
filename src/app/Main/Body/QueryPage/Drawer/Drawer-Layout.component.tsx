@@ -6,7 +6,7 @@ import Divider from "@material-ui/core/Divider";
 import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
 import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
-import { FilterType } from "../../../../Shared/Model/Filter.model";
+import { FilterInterface, FilterType } from "../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../Shared/Context/TableContext";
 
 const dividerStyle = css`
@@ -44,6 +44,11 @@ export interface DrawerLayoutProps {
      * width of the Drawer (also after resize)
      */
     newWidth: number;
+    dataUniqueValues: FilterInterface;
+    selectedFilter: FilterInterface;
+    tableColumn: string;
+    tableRow: string;
+    mainFilterAttributes: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -91,11 +96,17 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         >
             <div className={classes.drawerContainer}>
                 <DrawerFilterComponent
+                    dataUniqueValues={props.dataUniqueValues}
+                    selectedFilter={props.selectedFilter}
+                    mainFilterAttributes={props.mainFilterAttributes}
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                 />
                 <Divider variant="middle" css={dividerStyle} />
                 <DrawerDisplayedFeaturesComponent
+                    tableColumn={props.tableColumn}
+                    tableRow={props.tableRow}
+                    mainFilterAttributes={props.mainFilterAttributes}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}

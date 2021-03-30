@@ -107,6 +107,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
             isOpen={isOpen}
             settings={setting}
             exportLabels={exportLabels}
+            filter={filter}
             onClickOpen={handleClickOpen}
             onClickClose={handleClickClose}
             onCheckboxChange={handleChange}

@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { TableResultsTableContentComponent } from "./TableResults-TableContent.component";
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
-import { TableContext } from "../../../../../Shared/Context/TableContext";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
+import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -32,6 +31,13 @@ export interface TableResultsProps {
      * attributes of the columns
      */
     columnAttributes: string[];
+    tableColumn: string;
+    tableRow: string;
+    tableOption: DisplayOptionType;
+    tables: {
+        statisticDataAbsolute: Record<string, string>[];
+        statisticDataPercent: Record<string, string>[];
+    };
     onRadioChange: (eventTargetValue: string) => void;
 }
 
@@ -43,19 +49,18 @@ export interface TableResultsProps {
 export function QueryPageContentTableResultsLayoutComponent(
     props: TableResultsProps
 ): JSX.Element {
-    const { table } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeRadio = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
 
     const accordionHeader: string = t(`Results.Table`);
-    const rowMainHeader: string = _.isEmpty(table.row)
+    const rowMainHeader: string = _.isEmpty(props.tableRow)
         ? ""
-        : t(`Filters.${table.row}`);
-    const colMainHeader: string = _.isEmpty(table.column)
+        : t(`Filters.${props.tableRow}`);
+    const colMainHeader: string = _.isEmpty(props.tableColumn)
         ? ""
-        : t(`Filters.${table.column}`);
+        : t(`Filters.${props.tableColumn}`);
 
     let tableAccordionContent = (
         <div css={dataStyle}>
@@ -71,6 +76,7 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
+                    tableOption={props.tableOption}
                     onRadioChange={handleChangeRadio}
                 />
                 {props.displayRowCol.isCol && (
@@ -89,6 +95,11 @@ export function QueryPageContentTableResultsLayoutComponent(
                         />
                     )}
                     <TableResultsTableContentComponent
+                        tables={{
+                            statisticDataAbsolute: props.tables.statisticDataAbsolute,
+                            statisticDataPercent: props.tables.statisticDataPercent
+                        }}
+                        tableOption={props.tableOption}
                         columnAttributes={props.columnAttributes}
                     />
                 </div>

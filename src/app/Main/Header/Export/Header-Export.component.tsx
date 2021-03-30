@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Dialog } from "@material-ui/core";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
+import { FilterContextInterface } from "../../../Shared/Context/FilterContext";
 import { ExportInterface } from "../../../Shared/Model/Export.model";
 import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
@@ -13,12 +13,12 @@ export function HeaderExportComponent(props: {
     isOpen: boolean;
     settings: ExportInterface;
     exportLabels: ExportLabelsInterface;
+    filter: FilterContextInterface;
     onClickOpen: () => void;
     onClickClose: () => void;
     onCheckboxChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
-    const { filter } = useContext(FilterContext);
-
+    
     const handleClickOpen = (): void => props.onClickOpen();
     const handleClickClose = (): void => props.onClickClose();
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
@@ -46,8 +46,8 @@ export function HeaderExportComponent(props: {
                 <ExportActionButtonsComponent
                     onClickClose={handleClickClose}
                     setting={props.settings}
-                    filter={filter.selectedFilter}
-                    mainFilterAttributes={filter.mainFilter}
+                    filter={props.filter.selectedFilter}
+                    mainFilterAttributes={props.filter.mainFilter}
                     buttonLabel={buttonLabel}
                     ZNFilename={props.exportLabels.ZNFilename}
                     mainFilterLabels={props.exportLabels.mainFilterLabels}

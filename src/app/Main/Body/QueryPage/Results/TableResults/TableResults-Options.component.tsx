@@ -8,12 +8,11 @@ import {
     withStyles,
     createStyles,
 } from "@material-ui/core";
-import { useContext } from "react";
 import {
     bfrDarkgrey,
     primaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { TableContext } from "../../../../../Shared/Context/TableContext";
+import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 
 const size = 0.75;
 
@@ -58,10 +57,9 @@ const BlueRadio = withStyles(() =>
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
+    tableOption: DisplayOptionType;
     onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
-    const { table } = useContext(TableContext);
-
     const handleChange = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
 
@@ -73,7 +71,7 @@ export function ResultsTableOptionsComponent(props: {
                     row
                     aria-label="options"
                     name="options"
-                    value={table.option}
+                    value={props.tableOption}
                     onChange={(event) => handleChange(event.target.value)}
                 >
                     <FormControlLabel

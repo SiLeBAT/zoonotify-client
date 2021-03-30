@@ -1,18 +1,15 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useContext } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
-    TableContext,
     TableType,
 } from "../../../../../Shared/Context/TableContext";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import { DisplayedFeatureSelectorComponent } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 
 const drawerWidthStyle = css`
     width: inherit;
@@ -46,6 +43,9 @@ const iconStyle = css`
 `;
 
 interface DrawerDisplayedFeaturesProps {
+    tableColumn: string, 
+    tableRow: string, 
+    mainFilterAttributes: string[],
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -57,8 +57,6 @@ interface DrawerDisplayedFeaturesProps {
 export function DrawerDisplayedFeaturesComponent(
     props: DrawerDisplayedFeaturesProps
 ): JSX.Element {
-    const { table } = useContext(TableContext);
-    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplFeatures = (
@@ -79,10 +77,10 @@ export function DrawerDisplayedFeaturesComponent(
             </div>
             <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Row")}
-                activeFeature={table.row}
-                otherFeature={table.column}
+                activeFeature={props.tableRow}
+                otherFeature={props.tableColumn}
                 selectAttribute="row"
-                mainFilterAttributes={filter.mainFilter}
+                mainFilterAttributes={props.mainFilterAttributes}
                 onChange={handleChangeDisplFeatures}
             />
             <div css={centerIconButtonStyle}>
@@ -95,10 +93,10 @@ export function DrawerDisplayedFeaturesComponent(
             </div>
             <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Column")}
-                activeFeature={table.column}
-                otherFeature={table.row}
+                activeFeature={props.tableColumn}
+                otherFeature={props.tableRow}
                 selectAttribute="column"
-                mainFilterAttributes={filter.mainFilter}
+                mainFilterAttributes={props.mainFilterAttributes}
                 onChange={handleChangeDisplFeatures}
             />
         </div>

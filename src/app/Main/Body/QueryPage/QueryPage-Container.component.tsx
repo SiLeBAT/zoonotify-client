@@ -62,6 +62,8 @@ export function QueryPageContainerComponent(): JSX.Element {
     const rowAttribute: FilterType = table.row;
     const colAttribute: FilterType = table.column;
 
+    const totalNrOfIsol: number = data.ZNData.length
+
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
     const handleChangeDisplFeatures = (
@@ -273,7 +275,18 @@ export function QueryPageContainerComponent(): JSX.Element {
                     isRow={isRow}
                     isFilter={isFilter}
                     colAttributes={columnAttributes}
+                    tableColumn={table.column}
+                    tableRow={table.row}
+                    tableOption={table.option}
+                    tables={{
+                        statisticDataAbsolute: table.statisticDataAbsolute,
+                        statisticDataPercent: table.statisticDataPercent,
+                    }}
+                    mainFilterAttributes={filter.mainFilter}
+                    totalNrOfIsol={totalNrOfIsol}
                     nrOfSelectedIsol={nrOfSelectedIsol}
+                    dataUniqueValues={data.uniqueValues}
+                    selectedFilter={filter.selectedFilter}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}

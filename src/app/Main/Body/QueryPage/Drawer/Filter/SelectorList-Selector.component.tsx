@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
 import { CheckIfSingleFilterIsSet } from "../../QueryPageServices/checkIfFilterIsSet.service";
-import { DataContext } from "../../../../../Shared/Context/DataContext";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 
@@ -17,10 +15,9 @@ function generateSelectorObject(
 }
 
 export interface SelectorProps {
-    /**
-     * number of the element
-     */
-    index: number;
+    dataUniqueValues: FilterInterface;
+    selectedFilter: FilterInterface;
+    filterAttribute: FilterType;
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
@@ -35,13 +32,11 @@ export interface SelectorProps {
 export function SelectorListSelectorComponent(
     props: SelectorProps
 ): JSX.Element {
-    const { data } = useContext(DataContext);
-    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const filterAttribute: FilterType = filter.mainFilter[props.index];
-    const filterValues: string[] = filter.selectedFilter[filterAttribute];
-    const allFilterValues: string[] = data.uniqueValues[filterAttribute];
+    const {filterAttribute} = props
+    const filterValues: string[] = props.selectedFilter[filterAttribute];
+    const allFilterValues: string[] = props.dataUniqueValues[filterAttribute];
 
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
@@ -53,7 +48,7 @@ export function SelectorListSelectorComponent(
         );
 
     const noFilter: boolean = CheckIfSingleFilterIsSet(
-        filter.selectedFilter,
+        props.selectedFilter,
         filterAttribute
     );
 

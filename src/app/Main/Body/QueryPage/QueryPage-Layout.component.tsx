@@ -4,8 +4,8 @@ import { useState } from "react";
 import { DrawerLayoutComponent } from "./Drawer/Drawer-Layout.component";
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentLayoutComponent } from "./QueryPageContent-Layout.component";
-import { FilterType } from "../../../Shared/Model/Filter.model";
-import { TableType } from "../../../Shared/Context/TableContext";
+import { FilterInterface, FilterType } from "../../../Shared/Model/Filter.model";
+import { DisplayOptionType, TableType } from "../../../Shared/Context/TableContext";
 
 const mainStyle = css`
     height: 100%;
@@ -19,7 +19,18 @@ export function QueryPageLayoutComponent(props: {
     isRow: boolean;
     isFilter: boolean;
     colAttributes: string[];
+    totalNrOfIsol: number;
     nrOfSelectedIsol: number;
+    dataUniqueValues: FilterInterface;
+    selectedFilter: FilterInterface;
+    tableColumn: string;
+    tableRow: string;
+    tableOption: DisplayOptionType,
+    tables: {
+        statisticDataAbsolute: Record<string, string>[];
+        statisticDataPercent: Record<string, string>[];
+    };
+    mainFilterAttributes: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -70,6 +81,11 @@ export function QueryPageLayoutComponent(props: {
             <DrawerLayoutComponent
                 isOpen={open}
                 newWidth={drawerWidth}
+                dataUniqueValues={props.dataUniqueValues}
+                selectedFilter={props.selectedFilter}
+                tableColumn={props.tableColumn}
+                tableRow={props.tableRow}
+                mainFilterAttributes={props.mainFilterAttributes}
                 onDisplFeaturesChange={handleChangeDisplFeatures}
                 onDisplFeaturesSwap={handleSwapDisplFeatures}
                 onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
@@ -87,7 +103,17 @@ export function QueryPageLayoutComponent(props: {
                 isRow={props.isRow}
                 isFilter={props.isFilter}
                 colAttributes={props.colAttributes}
+                tableColumn={props.tableColumn}
+                tableRow={props.tableRow}
+                tableOption={props.tableOption}
+                tables={{
+                    statisticDataAbsolute: props.tables.statisticDataAbsolute,
+                    statisticDataPercent: props.tables.statisticDataPercent
+                }}
+                totalNrOfIsol={props.totalNrOfIsol}
                 nrOfSelectedIsol={props.nrOfSelectedIsol}
+                selectedFilter={props.selectedFilter}
+                mainFilterAttributes={props.mainFilterAttributes}
                 onRadioChange={handleRadioChange}
             />
         </main>

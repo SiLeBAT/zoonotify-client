@@ -1,12 +1,10 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { FilterSelectorListComponent } from "./Filter-SelectorList.component";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const drawerWidthStyle = css`
@@ -36,13 +34,15 @@ const filterSubheadingStyle = css`
 `;
 
 export function DrawerFilterComponent(props: {
+    dataUniqueValues: FilterInterface;
+    selectedFilter: FilterInterface;
+    mainFilterAttributes: string[];
     onFilterChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
 }): JSX.Element {
-    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeFilter = (
@@ -60,7 +60,12 @@ export function DrawerFilterComponent(props: {
                 </p>
                 <ClearSelectorComponent onClick={handleRemoveAllFilter} />
             </div>
-            {FilterSelectorListComponent(filter.mainFilter, handleChangeFilter)}
+            {FilterSelectorListComponent(
+                props.dataUniqueValues,
+                props.selectedFilter,
+                props.mainFilterAttributes,
+                handleChangeFilter
+            )}
         </div>
     );
 }

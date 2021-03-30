@@ -1,6 +1,9 @@
 import { SelectorListSelectorComponent } from "./SelectorList-Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../../Shared/Model/Filter.model";
 
 /**
  * @desc Generate a selector-element for each main filter
@@ -9,6 +12,8 @@ import { FilterType } from "../../../../../Shared/Model/Filter.model";
  * @return {JSX.Element[]} selector-elements in a list
  */
 export function FilterSelectorListComponent(
+    dataUniqueValues: FilterInterface,
+    selectedFilter: FilterInterface,
     mainFilterAttributes: string[],
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
@@ -20,15 +25,20 @@ export function FilterSelectorListComponent(
         keyName: FilterType | TableType
     ): void => onChange(selectedOption, keyName);
 
-    const totalNumberOfFilters: number = mainFilterAttributes.length;
     const elements: JSX.Element[] = [];
-    for (let i = 0; i < totalNumberOfFilters; i += 1) {
+    mainFilterAttributes.forEach((mainFilter) => {
         elements.push(
             SelectorListSelectorComponent({
-                index: i,
+                dataUniqueValues,
+                selectedFilter,
+                filterAttribute: mainFilter,
                 onChange: handleChange,
             })
         );
-    }
+    });
+    /*     for (let i = 0; i < totalNumberOfFilters; i += 1) {
+        
+        );
+    } */
     return elements;
 }
