@@ -62,7 +62,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const rowAttribute: FilterType = table.row;
     const colAttribute: FilterType = table.column;
 
-    const totalNrOfIsol: number = data.ZNData.length
+    const totalNrOfIsol: number = data.ZNData.length;
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
@@ -230,10 +230,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
         setIsolateCountStatus(tableResponse.isolateCountStatus);
 
-        if (
-            tableResponse.isolateCountGroups !== undefined &&
-            tableResponse.nrOfSelectedIsolates !== undefined
-        ) {
+        if (tableResponse.nrOfSelectedIsolates !== undefined) {
             setTableContext(
                 tableResponse.isolateCountGroups,
                 tableResponse.nrOfSelectedIsolates
