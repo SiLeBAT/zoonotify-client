@@ -11,11 +11,11 @@ export function generateStatisticTableDataAbsService(
     selectedFilters: FilterInterface,
     allValuesText: string,
     isolateCountGroups: ClientIsolateCountedGroups,
-    colValues: string[],
+    columnNameValues: string[],
     colAttribute: string,
     rowAttribute: string
 ): Record<string, string>[] {
-    const rowValues = generateTableHeaderValuesService(
+    const rowNameValues = generateTableHeaderValuesService(
         isRow,
         allValuesText,
         uniqueValues,
@@ -34,10 +34,10 @@ export function generateStatisticTableDataAbsService(
     );
     const statisticTableDataAbs: Record<string, string>[] = [];
 
-    rowValues.forEach((rowElement) => {
+    rowNameValues.forEach((rowName) => {
         const tempStatTable: Record<string, string> = generateOneTableRowObjService(
-            rowElement,
-            colValues,
+            rowName,
+            columnNameValues,
             uniqIsolateColValues,
             uniqIsolateRowValues,
             isolateCountGroups,

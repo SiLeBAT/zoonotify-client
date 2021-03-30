@@ -15,8 +15,10 @@ const tableNumberStyle = css`
 `;
 
 export function QueryPageNrOfIsolatesComponent(props: {
-    totalNrOfIsol: number;
-    nrOfSelectedIsol: number;
+    numberOfIsolates:{
+        total: number,
+        filtered: number
+    }
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
@@ -31,12 +33,12 @@ export function QueryPageNrOfIsolatesComponent(props: {
                                 {t("NrOfIsolates.Total")}
                             </td>
                             <td css={tableNumberStyle}>
-                                {props.totalNrOfIsol}
+                                {props.numberOfIsolates.total}
                             </td>
                             <td css={tableTextStyle}>
                                 {t("NrOfIsolates.Selected")}
                             </td>
-                            <td>{props.nrOfSelectedIsol}</td>
+                            <td>{props.numberOfIsolates.filtered}</td>
                         </tr>
                     </tbody>
                 </table>

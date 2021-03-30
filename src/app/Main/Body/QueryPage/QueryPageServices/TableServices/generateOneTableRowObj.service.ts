@@ -2,8 +2,8 @@ import _ from "lodash";
 import { ClientIsolateCountedGroups } from "../../../../../Shared/Model/Client_Isolate.model";
 
 export function generateOneTableRowObjService(
-    rowElement: string,
-    colValues: string[],
+    rowName: string,
+    columnNameValues: string[],
     uniqIsolateColValues: string[],
     uniqIsolateRowValues: string[],
     isolateCountGroups: ClientIsolateCountedGroups,
@@ -12,17 +12,17 @@ export function generateOneTableRowObjService(
     allValuesText: string
 ): Record<string, string> {
     const tempStatTable: Record<string, string> = {};
-    tempStatTable.name = rowElement;
-    colValues.forEach((colElement: string | number) => {
+    tempStatTable.name = rowName;
+    columnNameValues.forEach((colName: string | number) => {
         if (
-            _.includes(uniqIsolateColValues, colElement) &&
-            _.includes(uniqIsolateRowValues, rowElement)
+            _.includes(uniqIsolateColValues, colName) &&
+            _.includes(uniqIsolateRowValues, rowName)
         ) {
             isolateCountGroups.forEach((isolateGroup) => {
                 if (
-                    (isolateGroup[rowAttribute] === rowElement ||
+                    (isolateGroup[rowAttribute] === rowName ||
                         isolateGroup[rowAttribute] === undefined) &&
-                    (isolateGroup[colAttribute] === colElement ||
+                    (isolateGroup[colAttribute] === colName ||
                         isolateGroup[colAttribute] === undefined)
                 ) {
                     const statTableKey =
@@ -33,7 +33,7 @@ export function generateOneTableRowObjService(
                 }
             });
         } else {
-            tempStatTable[colElement] = "0";
+            tempStatTable[colName] = "0";
         }
     });
     

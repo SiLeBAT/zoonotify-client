@@ -51,8 +51,8 @@ export function HeaderExportContainerComponent(): JSX.Element {
                 if (table.option === "absolute") {
                     statData = table.statisticDataAbsolute;
                 }
-                if (table.option === "percent") {
-                    statData = table.statisticDataPercent;
+                if (table.option === "relative") {
+                    statData = table.statisticDataRelative;
                 }
             }
             if (!_.isEmpty(statData)) {

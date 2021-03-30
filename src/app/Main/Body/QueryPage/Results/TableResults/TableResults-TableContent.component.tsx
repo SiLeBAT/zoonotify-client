@@ -15,21 +15,21 @@ const dataTableStyle = css`
 export function TableResultsTableContentComponent(props: {
     tables: {
         statisticDataAbsolute: Record<string, string>[];
-        statisticDataPercent: Record<string, string>[];
+        statisticDataRelative: Record<string, string>[];
     };
     tableOption: DisplayOptionType;
-    columnAttributes: string[];
+    columnNameValues: string[];
 }): JSX.Element {
 
     let tableData = props.tables.statisticDataAbsolute;
-    if (props.tableOption === "percent") {
-        tableData = props.tables.statisticDataPercent;
+    if (props.tableOption === "relative") {
+        tableData = props.tables.statisticDataRelative;
     }
     return (
         <div css={dataTableStyle}>
             <TableContentTableComponent
                 tableData={tableData}
-                columnAttributes={props.columnAttributes}
+                columnNameValues={props.columnNameValues}
             />
         </div>
     );

@@ -41,7 +41,7 @@ const useStyles = makeStyles({
  */
 export function TableContentTableComponent(props: {
     tableData: Record<string, string>[];
-    columnAttributes: string[];
+    columnNameValues: string[];
 }): JSX.Element {
     const classes = useStyles();
 
@@ -50,7 +50,7 @@ export function TableContentTableComponent(props: {
             <Table stickyHeader aria-label="statistic table">
                 <TableHead css={headerStyle}>
                     <TableRow css={headerStyle}>
-                        {TableContentHeaderComponent(props.columnAttributes)}
+                        {TableContentHeaderComponent(props.columnNameValues)}
                     </TableRow>
                 </TableHead>
                 <TableBody>

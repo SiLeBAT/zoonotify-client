@@ -52,7 +52,7 @@ const BlueRadio = withStyles(() =>
 )(Radio);
 
 /**
- * @desc Returns the option bar to display the table numbers as absolute numbers or in percent
+ * @desc Returns the option bar to display the table numbers as absolute numbers or in relative
  * @param props - function to handle change of radio button
  * @returns {JSX.Element} - option bar component
  */
@@ -82,9 +82,9 @@ export function ResultsTableOptionsComponent(props: {
                     />
                     <FormControlLabel
                         css={radioButtonSizeStyle}
-                        value="percent"
+                        value="relative"
                         control={<BlueRadio color="default" size="small" />}
-                        label="Percent"
+                        label="Percentage"
                     />
                 </RadioGroup>
             </FormControl>

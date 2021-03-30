@@ -43,7 +43,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
     const [isolateCountStatus, setIsolateCountStatus] = useState<number>();
     const [filterStatus, setFilterStatus] = useState<number>();
-    const [columnAttributes, setColumnAttributes] = useState<string[]>([]);
+    const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
 
     const { data, setData } = useContext(DataContext);
@@ -191,7 +191,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
             const allValuesText = t("Results.TableHead");
 
-            const colValues = generateTableHeaderValuesService(
+            const columnNames = generateTableHeaderValuesService(
                 isCol,
                 allValuesText,
                 data.uniqueValues,
@@ -207,7 +207,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 filter.selectedFilter,
                 allValuesText,
                 adaptedIsolateCountGroups,
-                colValues,
+                columnNames,
                 colAttribute,
                 rowAttribute
             );
@@ -216,11 +216,11 @@ export function QueryPageContainerComponent(): JSX.Element {
                 statisticTableDataAbs,
                 nrOfSelectedIsolates
             );
-            setColumnAttributes(colValues);
+            setColumnNameValues(columnNames);
             setTable({
                 ...table,
                 statisticDataAbsolute: statisticTableDataAbs,
-                statisticDataPercent: statisticTableDataRel,
+                statisticDataRelative: statisticTableDataRel,
             });
         }
     };
@@ -271,17 +271,13 @@ export function QueryPageContainerComponent(): JSX.Element {
                     isCol={isCol}
                     isRow={isRow}
                     isFilter={isFilter}
-                    colAttributes={columnAttributes}
-                    tableColumn={table.column}
-                    tableRow={table.row}
-                    tableOption={table.option}
-                    tables={{
-                        statisticDataAbsolute: table.statisticDataAbsolute,
-                        statisticDataPercent: table.statisticDataPercent,
+                    columnNameValues={columnNameValues}
+                    tableContext={table}
+                    numberOfIsolates={{
+                        total: totalNrOfIsol,
+                        filtered: nrOfSelectedIsol
                     }}
                     mainFilterAttributes={filter.mainFilter}
-                    totalNrOfIsol={totalNrOfIsol}
-                    nrOfSelectedIsol={nrOfSelectedIsol}
                     dataUniqueValues={data.uniqueValues}
                     selectedFilter={filter.selectedFilter}
                     onDisplFeaturesChange={handleChangeDisplFeatures}

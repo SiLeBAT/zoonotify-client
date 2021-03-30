@@ -5,7 +5,7 @@ import { DrawerLayoutComponent } from "./Drawer/Drawer-Layout.component";
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentLayoutComponent } from "./QueryPageContent-Layout.component";
 import { FilterInterface, FilterType } from "../../../Shared/Model/Filter.model";
-import { DisplayOptionType, TableType } from "../../../Shared/Context/TableContext";
+import { TableInterface, TableType } from "../../../Shared/Context/TableContext";
 
 const mainStyle = css`
     height: 100%;
@@ -18,18 +18,14 @@ export function QueryPageLayoutComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
-    colAttributes: string[];
-    totalNrOfIsol: number;
-    nrOfSelectedIsol: number;
+    columnNameValues: string[];
+    numberOfIsolates: {
+        total: number,
+        filtered: number
+    }
     dataUniqueValues: FilterInterface;
     selectedFilter: FilterInterface;
-    tableColumn: string;
-    tableRow: string;
-    tableOption: DisplayOptionType,
-    tables: {
-        statisticDataAbsolute: Record<string, string>[];
-        statisticDataPercent: Record<string, string>[];
-    };
+    tableContext: TableInterface;
     mainFilterAttributes: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
@@ -83,8 +79,8 @@ export function QueryPageLayoutComponent(props: {
                 newWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 selectedFilter={props.selectedFilter}
-                tableColumn={props.tableColumn}
-                tableRow={props.tableRow}
+                tableColumn={props.tableContext.column}
+                tableRow={props.tableContext.row}
                 mainFilterAttributes={props.mainFilterAttributes}
                 onDisplFeaturesChange={handleChangeDisplFeatures}
                 onDisplFeaturesSwap={handleSwapDisplFeatures}
@@ -102,16 +98,12 @@ export function QueryPageLayoutComponent(props: {
                 isCol={props.isCol}
                 isRow={props.isRow}
                 isFilter={props.isFilter}
-                colAttributes={props.colAttributes}
-                tableColumn={props.tableColumn}
-                tableRow={props.tableRow}
-                tableOption={props.tableOption}
-                tables={{
-                    statisticDataAbsolute: props.tables.statisticDataAbsolute,
-                    statisticDataPercent: props.tables.statisticDataPercent
+                columnNameValues={props.columnNameValues}
+                tableContext={props.tableContext}
+                numberOfIsolates={{
+                    total: props.numberOfIsolates.total,
+                    filtered: props.numberOfIsolates.filtered
                 }}
-                totalNrOfIsol={props.totalNrOfIsol}
-                nrOfSelectedIsol={props.nrOfSelectedIsol}
                 selectedFilter={props.selectedFilter}
                 mainFilterAttributes={props.mainFilterAttributes}
                 onRadioChange={handleRadioChange}

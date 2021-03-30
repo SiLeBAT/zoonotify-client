@@ -7,7 +7,7 @@ import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHe
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
-import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
+import { TableInterface } from "../../../../../Shared/Context/TableContext";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -30,14 +30,8 @@ export interface TableResultsProps {
     /**
      * attributes of the columns
      */
-    columnAttributes: string[];
-    tableColumn: string;
-    tableRow: string;
-    tableOption: DisplayOptionType;
-    tables: {
-        statisticDataAbsolute: Record<string, string>[];
-        statisticDataPercent: Record<string, string>[];
-    };
+    columnNameValues: string[];
+    tableContext: TableInterface
     onRadioChange: (eventTargetValue: string) => void;
 }
 
@@ -54,13 +48,17 @@ export function QueryPageContentTableResultsLayoutComponent(
     const handleChangeRadio = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
 
+
+    const tableColAttribute = props.tableContext.column
+    const tableRowAttribute = props.tableContext.row
+
     const accordionHeader: string = t(`Results.Table`);
-    const rowMainHeader: string = _.isEmpty(props.tableRow)
+    const rowMainHeader: string = _.isEmpty(tableRowAttribute)
         ? ""
-        : t(`Filters.${props.tableRow}`);
-    const colMainHeader: string = _.isEmpty(props.tableColumn)
+        : t(`Filters.${tableRowAttribute}`);
+    const colMainHeader: string = _.isEmpty(tableColAttribute)
         ? ""
-        : t(`Filters.${props.tableColumn}`);
+        : t(`Filters.${tableColAttribute}`);
 
     let tableAccordionContent = (
         <div css={dataStyle}>
@@ -76,7 +74,7 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
-                    tableOption={props.tableOption}
+                    tableOption={props.tableContext.option}
                     onRadioChange={handleChangeRadio}
                 />
                 {props.displayRowCol.isCol && (
@@ -96,11 +94,11 @@ export function QueryPageContentTableResultsLayoutComponent(
                     )}
                     <TableResultsTableContentComponent
                         tables={{
-                            statisticDataAbsolute: props.tables.statisticDataAbsolute,
-                            statisticDataPercent: props.tables.statisticDataPercent
+                            statisticDataAbsolute: props.tableContext.statisticDataAbsolute,
+                            statisticDataRelative: props.tableContext.statisticDataRelative
                         }}
-                        tableOption={props.tableOption}
-                        columnAttributes={props.columnAttributes}
+                        tableOption={props.tableContext.option}
+                        columnNameValues={props.columnNameValues}
                     />
                 </div>
             </div>

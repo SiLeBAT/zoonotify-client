@@ -7,7 +7,7 @@ import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrO
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { QueryPageContentTableResultsLayoutComponent } from "./Results/TableResults/QueryPageContent-TableResultsLayout.component";
 import { FilterInterface } from "../../../Shared/Model/Filter.model";
-import { DisplayOptionType } from "../../../Shared/Context/TableContext";
+import { TableInterface } from "../../../Shared/Context/TableContext";
 
 const contentStyle = css`
     width: 0;
@@ -49,18 +49,14 @@ export function QueryPageContentLayoutComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
-    colAttributes: string[];
-    tableRow: string,
-    tableColumn: string,
-    tableOption: DisplayOptionType,
-    totalNrOfIsol: number;
-    nrOfSelectedIsol: number;
+    columnNameValues: string[];
+    tableContext: TableInterface;
+    numberOfIsolates: {
+        total: number,
+        filtered: number
+    }
     mainFilterAttributes: string[];
     selectedFilter: FilterInterface;
-    tables: {
-        statisticDataAbsolute: Record<string, string>[];
-        statisticDataPercent: Record<string, string>[];
-    };
     onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
@@ -82,21 +78,14 @@ export function QueryPageContentLayoutComponent(props: {
                     <QueryPageIntroTextComponent />
                 )}
                 <QueryPageNrOfIsolatesComponent
-                    totalNrOfIsol={props.totalNrOfIsol}
-                    nrOfSelectedIsol={props.nrOfSelectedIsol}
+                    numberOfIsolates={props.numberOfIsolates}
                 />
             </div>
             <div css={resultsBoxStyle}>
                 <QueryPageContentTableResultsLayoutComponent
                     displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
-                    columnAttributes={props.colAttributes}
-                    tableRow={props.tableRow}
-                    tableColumn={props.tableColumn}
-                    tableOption={props.tableOption}
-                    tables={{
-                        statisticDataAbsolute: props.tables.statisticDataAbsolute,
-                        statisticDataPercent: props.tables.statisticDataPercent
-                    }}
+                    columnNameValues={props.columnNameValues}
+                    tableContext={props.tableContext}
                     onRadioChange={handleChangeRadio}
                 />
             </div>
