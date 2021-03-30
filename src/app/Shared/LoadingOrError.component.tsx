@@ -10,34 +10,36 @@ import { LoadingProcessComponent } from "./LoadingProcess.component";
  * @returns {JSX.Element} - ErrorPage / Loading sign / QueryPage
  */
 export function LoadingOrErrorComponent(props: {
-    status:
-        | {
-              isolateStatus: number | undefined;
-              isolateCountStatus: number | undefined;
-              filterStatus: number | undefined;
-          }
+    status: {
+        isolateStatus: number | undefined;
+        isolateCountStatus: number | undefined;
+        filterStatus: number | undefined;
+    };
     dataIsSet: boolean;
     componentToDisplay: JSX.Element;
 }): JSX.Element {
-    if (props.status !== undefined) {
-        if (props.status.isolateStatus !== 200 && props.status.isolateStatus) {
-            return (
-                <ErrorPageComponent errorStatus={props.status.isolateStatus} />
-            );
-        }
-        if (props.status.isolateCountStatus !== 200 && props.status.isolateCountStatus !== undefined) {
-            return (
-                <ErrorPageComponent errorStatus={props.status.isolateCountStatus} />
-            );
-        }
-        if (props.status.filterStatus !== 200 && props.status.filterStatus) {
-            return (
-                <ErrorPageComponent errorStatus={props.status.filterStatus} />
-            );
-        }
-        if (props.dataIsSet) {
-            return props.componentToDisplay;
-        }
+    if (
+        props.status.isolateStatus !== 200 &&
+        props.status.isolateStatus !== undefined
+    ) {
+        return <ErrorPageComponent errorStatus={props.status.isolateStatus} />;
+    }
+    if (
+        props.status.isolateCountStatus !== 200 &&
+        props.status.isolateCountStatus !== undefined
+    ) {
+        return (
+            <ErrorPageComponent errorStatus={props.status.isolateCountStatus} />
+        );
+    }
+    if (
+        props.status.filterStatus !== 200 &&
+        props.status.filterStatus !== undefined
+    ) {
+        return <ErrorPageComponent errorStatus={props.status.filterStatus} />;
+    }
+    if (props.dataIsSet) {
+        return props.componentToDisplay;
     }
 
     return <LoadingProcessComponent />;
