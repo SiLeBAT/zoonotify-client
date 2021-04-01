@@ -13,29 +13,45 @@ export function generateOneTableRowObjService(
 ): Record<string, string> {
     const tempStatTable: Record<string, string> = {};
     tempStatTable.name = rowName;
-    columnNameValues.forEach((colName: string | number) => {
-        if (
+    columnNameValues.forEach((colName: string) => {
+        const isolateGroupIncudesRowAndCol: boolean =
             _.includes(uniqIsolateColValues, colName) &&
-            _.includes(uniqIsolateRowValues, rowName)
-        ) {
+            _.includes(uniqIsolateRowValues, rowName);
+
+        if (isolateGroupIncudesRowAndCol) {
+            let breakIsolateCountLoop = false;
             isolateCountGroups.forEach((isolateGroup) => {
-                if (
-                    (isolateGroup[rowAttribute] === rowName ||
-                        isolateGroup[rowAttribute] === undefined) &&
-                    (isolateGroup[colAttribute] === colName ||
-                        isolateGroup[colAttribute] === undefined)
-                ) {
-                    const statTableKey =
-                        isolateGroup[colAttribute] === undefined
-                            ? allValuesText
-                            : isolateGroup[colAttribute];
-                    tempStatTable[statTableKey] = String(isolateGroup.count);
+                if (breakIsolateCountLoop) {
+                    return;
+                }
+
+                const isolateGroupRowValue = isolateGroup[rowAttribute];
+                const isolateGroupColValue = isolateGroup[colAttribute];
+                const isolateCount = isolateGroup.count;
+
+                const onlyRowNameIsInIsolateGroup: boolean =
+                    isolateGroupRowValue === rowName &&
+                    isolateGroupColValue === undefined;
+                const colNameIsInIsolateGroup: boolean =
+                    isolateGroupColValue === colName &&
+                    (isolateGroupRowValue === rowName ||
+                        isolateGroupRowValue === undefined);
+
+                if (colNameIsInIsolateGroup) {
+                    const statTableKey = isolateGroupColValue;
+                    tempStatTable[statTableKey] = String(isolateCount);
+                    breakIsolateCountLoop = true;
+                } else if (onlyRowNameIsInIsolateGroup) {
+                    const statTableKey = allValuesText;
+                    tempStatTable[statTableKey] = String(isolateCount);
+                    breakIsolateCountLoop = true;
+                } else {
+                    tempStatTable[colName] = "0";
                 }
             });
         } else {
             tempStatTable[colName] = "0";
         }
     });
-    
     return tempStatTable;
 }
