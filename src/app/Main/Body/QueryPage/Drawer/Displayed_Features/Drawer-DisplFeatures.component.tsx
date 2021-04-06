@@ -42,7 +42,7 @@ const iconStyle = css`
     height: 36px;
 `;
 
-interface DrawerDisplayedFeaturesProps {
+export interface DrawerDisplayedFeaturesProps {
     tableColumn: string, 
     tableRow: string, 
     mainFilterAttributes: string[],

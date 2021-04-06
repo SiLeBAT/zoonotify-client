@@ -31,7 +31,7 @@ export interface TableResultsProps {
      * attributes of the columns
      */
     columnNameValues: string[];
-    tableContext: TableInterface
+    tableData: TableInterface
     onRadioChange: (eventTargetValue: string) => void;
 }
 
@@ -49,8 +49,8 @@ export function QueryPageContentTableResultsLayoutComponent(
         props.onRadioChange(eventTargetValue);
 
 
-    const tableColAttribute = props.tableContext.column
-    const tableRowAttribute = props.tableContext.row
+    const tableColAttribute = props.tableData.column
+    const tableRowAttribute = props.tableData.row
 
     const accordionHeader: string = t(`Results.Table`);
     const rowMainHeader: string = _.isEmpty(tableRowAttribute)
@@ -74,7 +74,7 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
-                    tableOption={props.tableContext.option}
+                    tableOption={props.tableData.option}
                     onRadioChange={handleChangeRadio}
                 />
                 {props.displayRowCol.isCol && (
@@ -94,10 +94,10 @@ export function QueryPageContentTableResultsLayoutComponent(
                     )}
                     <TableResultsTableContentComponent
                         tables={{
-                            statisticDataAbsolute: props.tableContext.statisticDataAbsolute,
-                            statisticDataRelative: props.tableContext.statisticDataRelative
+                            statisticDataAbsolute: props.tableData.statisticDataAbsolute,
+                            statisticDataRelative: props.tableData.statisticDataRelative
                         }}
-                        tableOption={props.tableContext.option}
+                        tableOption={props.tableData.option}
                         columnNameValues={props.columnNameValues}
                     />
                 </div>

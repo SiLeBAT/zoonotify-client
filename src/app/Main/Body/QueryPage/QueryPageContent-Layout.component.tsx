@@ -50,7 +50,7 @@ export function QueryPageContentLayoutComponent(props: {
     isRow: boolean;
     isFilter: boolean;
     columnNameValues: string[];
-    tableContext: TableInterface;
+    tableData: TableInterface;
     numberOfIsolates: {
         total: number,
         filtered: number
@@ -85,7 +85,7 @@ export function QueryPageContentLayoutComponent(props: {
                 <QueryPageContentTableResultsLayoutComponent
                     displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
                     columnNameValues={props.columnNameValues}
-                    tableContext={props.tableContext}
+                    tableData={props.tableData}
                     onRadioChange={handleChangeRadio}
                 />
             </div>

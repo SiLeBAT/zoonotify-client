@@ -52,7 +52,7 @@ const BlueRadio = withStyles(() =>
 )(Radio);
 
 /**
- * @desc Returns the option bar to display the table numbers as absolute numbers or in relative
+ * @desc Returns the option bar to display the table numbers as absolute or as relative numbers.
  * @param props - function to handle change of radio button
  * @returns {JSX.Element} - option bar component
  */

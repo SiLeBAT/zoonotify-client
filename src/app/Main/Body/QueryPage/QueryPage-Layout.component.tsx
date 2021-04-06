@@ -25,7 +25,7 @@ export function QueryPageLayoutComponent(props: {
     }
     dataUniqueValues: FilterInterface;
     selectedFilter: FilterInterface;
-    tableContext: TableInterface;
+    tableData: TableInterface;
     mainFilterAttributes: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
@@ -79,8 +79,8 @@ export function QueryPageLayoutComponent(props: {
                 newWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 selectedFilter={props.selectedFilter}
-                tableColumn={props.tableContext.column}
-                tableRow={props.tableContext.row}
+                tableColumn={props.tableData.column}
+                tableRow={props.tableData.row}
                 mainFilterAttributes={props.mainFilterAttributes}
                 onDisplFeaturesChange={handleChangeDisplFeatures}
                 onDisplFeaturesSwap={handleSwapDisplFeatures}
@@ -99,11 +99,8 @@ export function QueryPageLayoutComponent(props: {
                 isRow={props.isRow}
                 isFilter={props.isFilter}
                 columnNameValues={props.columnNameValues}
-                tableContext={props.tableContext}
-                numberOfIsolates={{
-                    total: props.numberOfIsolates.total,
-                    filtered: props.numberOfIsolates.filtered
-                }}
+                tableData={props.tableData}
+                numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.selectedFilter}
                 mainFilterAttributes={props.mainFilterAttributes}
                 onRadioChange={handleRadioChange}

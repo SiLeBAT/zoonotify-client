@@ -235,9 +235,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 tableResponse.isolateCountGroups,
                 tableResponse.nrOfSelectedIsolates
             );
-        }
-        if (tableResponse.nrOfSelectedIsolates !== undefined) {
-            setNrOfSelectedIsol(tableResponse.nrOfSelectedIsolates);
+            setNrOfSelectedIsol(tableResponse.nrOfSelectedIsolates)
         }
     };
 
@@ -272,7 +270,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     isRow={isRow}
                     isFilter={isFilter}
                     columnNameValues={columnNameValues}
-                    tableContext={table}
+                    tableData={table}
                     numberOfIsolates={{
                         total: totalNrOfIsol,
                         filtered: nrOfSelectedIsol
