@@ -7,12 +7,12 @@ import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
 import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
-import { ExportLabelsInterface } from "./ExportServices/generateExportLabels.service";
+import { ExportLabels } from "./ExportServices/generateExportLabels.service";
 
 export function HeaderExportComponent(props: {
     isOpen: boolean;
     settings: ExportInterface;
-    exportLabels: ExportLabelsInterface;
+    exportLabels: ExportLabels;
     filter: FilterContextInterface;
     onClickOpen: () => void;
     onClickClose: () => void;

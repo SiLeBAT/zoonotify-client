@@ -1,4 +1,4 @@
-import { MainFilterLabelInterface } from "../../../../../Shared/Model/Export.model";
+import { MainFilterLabels } from "../../../../../Shared/Model/Export.model";
 import {
     DbCollection,
     DbKey,
@@ -16,7 +16,7 @@ import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
 export function generateDataTableCsvString(
     data: DbCollection,
     keys: DbKey[],
-    mainFilterLabels: MainFilterLabelInterface,
+    mainFilterLabels: MainFilterLabels,
     mainFilterAttributes: string[]
 ): string {
     const FilteredDataString: string[] = [];

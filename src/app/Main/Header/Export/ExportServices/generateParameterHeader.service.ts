@@ -1,4 +1,4 @@
-import { MainFilterLabelInterface } from "../../../../Shared/Model/Export.model";
+import { MainFilterLabels } from "../../../../Shared/Model/Export.model";
 import { FilterInterface } from "../../../../Shared/Model/Filter.model";
 
 
@@ -13,7 +13,7 @@ import { FilterInterface } from "../../../../Shared/Model/Filter.model";
 export function generateParameterHeader(
     filter: FilterInterface,
     allFilterLabel: string,
-    mainFilterLabels: MainFilterLabelInterface,
+    mainFilterLabels: MainFilterLabels,
     mainFilterAttributes: string[]
 ): string {
     const HeaderRows: string[] = [];

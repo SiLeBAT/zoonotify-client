@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { getCurrentDate } from "../../../../Core/getCurrentDate.service";
-import { MainFilterLabelInterface } from "../../../../Shared/Model/Export.model";
+import { MainFilterLabels } from "../../../../Shared/Model/Export.model";
 
 
-export interface ExportLabelsInterface {
+export interface ExportLabels {
     ZNFilename: string;
-    mainFilterLabels: MainFilterLabelInterface;
+    mainFilterLabels: MainFilterLabels;
     allFilterLabel: string;
 }
 
@@ -16,12 +16,12 @@ export interface ExportLabelsInterface {
  */
 export function generateExportLabels(
     mainFilterAttributes: string[]
-): ExportLabelsInterface {
+): ExportLabels {
     const { t } = useTranslation(["QueryPage"]);
 
     const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
 
-    const mainFilterLabels = {} as MainFilterLabelInterface;
+    const mainFilterLabels = {} as MainFilterLabels;
     mainFilterAttributes.forEach((mainFilter) => {
         mainFilterLabels[mainFilter] = t(`Filters.${mainFilter}`);
     });

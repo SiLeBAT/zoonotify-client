@@ -1,5 +1,5 @@
 import { DbKeyCollection } from "../../../../Shared/Model/Client_Isolate.model";
-import { ExportInterface, MainFilterLabelInterface } from "../../../../Shared/Model/Export.model";
+import { ExportInterface, MainFilterLabels } from "../../../../Shared/Model/Export.model";
 import { FilterInterface } from "../../../../Shared/Model/Filter.model";
 import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 import { generateParameterHeader } from "./generateParameterHeader.service";
@@ -9,7 +9,7 @@ export interface ObjectToCsvParameter {
     setting: ExportInterface;
     filter: FilterInterface;
     allFilterLabel: string;
-    mainFilterLabels: MainFilterLabelInterface;
+    mainFilterLabels: MainFilterLabels;
     mainFilterAttributes: string[];
 }
 

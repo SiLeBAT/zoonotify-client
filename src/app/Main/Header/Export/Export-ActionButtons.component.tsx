@@ -6,7 +6,7 @@ import { Button, DialogActions } from "@material-ui/core";
 import { dataAndStatisticToZipFile } from "./ExportServices/dataAndStatisticToZipFile.service";
 import {
     ExportInterface,
-    MainFilterLabelInterface,
+    MainFilterLabels,
 } from "../../../Shared/Model/Export.model";
 import { FilterInterface } from "../../../Shared/Model/Filter.model";
 import { errorColor } from "../../../Shared/Style/Style-MainTheme.component";
@@ -48,7 +48,7 @@ export interface ExportActionButtonProps {
     /**
      * object with labels of the main filters
      */
-    mainFilterLabels: MainFilterLabelInterface;
+    mainFilterLabels: MainFilterLabels;
     /**
      * "all values" / "Alle Werte"
      */

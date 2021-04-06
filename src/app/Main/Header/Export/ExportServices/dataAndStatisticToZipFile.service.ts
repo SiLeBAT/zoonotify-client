@@ -3,7 +3,7 @@ import { saveAs } from "file-saver";
 import { FilterInterface } from "../../../../Shared/Model/Filter.model";
 import {
     ExportInterface,
-    MainFilterLabelInterface,
+    MainFilterLabels,
 } from "../../../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
@@ -34,7 +34,7 @@ export interface DataAndStatisticToZipParameter {
     /**
      * object with labels of the main filters
      */
-    mainFilterLabels: MainFilterLabelInterface;
+    mainFilterLabels: MainFilterLabels;
     /**
      *  names of the two different files (data, statistic)
      */
