@@ -43,7 +43,7 @@ export interface DataAndStatisticToZipParameter {
 
 /**
  * @desc Convert the data table and the statistic table to one ZIP folder
- * @param {DataAndStatisticToZipParameter} zipParameter
+ * @param zipParameter
  * @returns {void}
  */
 export function dataAndStatisticToZipFile(

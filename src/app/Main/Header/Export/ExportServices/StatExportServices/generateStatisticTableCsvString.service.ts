@@ -4,8 +4,8 @@ import { generateStatisticRowsCsvString } from "./generateStatisticRowsCsvString
 
 /**
  * @desc Returns the table header and the statistic table as a string to save it as CSV
- * @param {{row: FilterType; column: FilterType;}} tableAttributes - selected row and column
- * @param {{statData: Record<string, string>[]; statKeys: string[];}} statDataSet - statistic table
+ * @param tableAttributes - selected row and column
+ * @param statDataSet - statistic table
  * @returns {string} - header and statistic table as string
  */
 export function generateStatisticTableCsvString(

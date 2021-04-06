@@ -64,7 +64,7 @@ export interface DrawerLayoutProps {
 
 /**
  * @desc Returns the Drawer
- * @param {DrawerLayoutProps} props
+ * @param props
  * @returns {JSX.Element} - Drawer component
  */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {

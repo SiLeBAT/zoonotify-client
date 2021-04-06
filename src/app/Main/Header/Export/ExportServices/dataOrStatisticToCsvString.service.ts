@@ -15,7 +15,7 @@ export interface ObjectToCsvParameter {
 
 /**
  * @desc Convert the chosen parameter and the resulting Data to a CSV string
- * @param {ObjectToCsvParameter} csvParameter
+ * @param csvParameter
  * @returns {string} - converted data as csv string
  */
 export function dataOrStatisticToCsvString(

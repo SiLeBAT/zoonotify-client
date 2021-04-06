@@ -46,7 +46,7 @@ export interface FeatureSelectorProps {
 
 /**
  * @desc Selector to select the displayed features in row/column
- * @param {FeatureSelectorProps} props
+ * @param props
  * @returns {JSX.Element} - selector component
  */
 export function DisplayedFeatureSelectorComponent(

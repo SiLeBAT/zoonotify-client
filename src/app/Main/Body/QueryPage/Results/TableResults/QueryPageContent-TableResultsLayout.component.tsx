@@ -37,7 +37,7 @@ export interface TableResultsProps {
 
 /**
  * @desc Returns accordion to display the results in a table
- * @param {TableResultsProps} props - info about isCol/isRow and columnAttributes
+ * @param props - info about isCol/isRow and columnAttributes
  * @returns {JSX.Element} - accordion with the result table
  */
 export function QueryPageContentTableResultsLayoutComponent(

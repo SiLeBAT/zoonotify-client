@@ -26,7 +26,7 @@ export interface SelectorProps {
 
 /**
  * @desc Generate a new selector-element for one main filter
- * @param {SelectorProps} props
+ * @param props
  * @return {JSX.Element} new selector-element
  */
 export function SelectorListSelectorComponent(

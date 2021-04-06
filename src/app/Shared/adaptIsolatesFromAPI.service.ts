@@ -3,7 +3,7 @@ import { DbCollection, ResistantValue } from "./Model/Client_Isolate.model";
 
 /**
  * @desc Extracts the desired isolate properties from the api and converts them to a string if necessary.
- * @param {IsolateDTO} isolateProp - isolates form api
+ * @param isolateProp - isolates form api
  * @returns {DbCollection} - desired isolate properties as string
  */
 export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {

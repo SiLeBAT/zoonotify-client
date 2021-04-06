@@ -22,7 +22,7 @@ export interface AccordionProps {
 
 /**
  * @desc Returns an accordion wrapper
- * @param {AccordionProps} props
+ * @param props
  * @returns {JSX.Element} - accordion with title and content
  */
 export function AccordionComponent(props: AccordionProps): JSX.Element {

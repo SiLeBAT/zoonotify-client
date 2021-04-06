@@ -57,7 +57,7 @@ export interface ExportActionButtonProps {
 
 /**
  * @desc Returns action buttons for the export dialog
- * @param {ExportActionButtonProps} props
+ * @param props
  * @returns {JSX.Element} - action buttons component
  */
 export function ExportActionButtonsComponent(

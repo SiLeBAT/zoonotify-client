@@ -84,7 +84,7 @@ const subheaderStyle = (open: boolean): SerializedStyles => css`
 
 /**
  * @desc Header of the page with navigation
- * @param {boolean} isConnected - true if client is connected to the server
+ * @param isConnected - true if client is connected to the server
  * @returns {JSX.Element} - header component
  */
 export function HeaderComponent(props: { isConnected: boolean }): JSX.Element {

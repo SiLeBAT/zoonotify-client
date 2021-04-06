@@ -3,7 +3,7 @@ import { ClientIsolateCountedGroups } from "../../../../Shared/Model/Client_Isol
 
 /**
  * @desc Transform the sampling year inside the pairs of counted isolates into a string
- * @param {IsolateCountedDTO} countedIsolatesProp - obj with pairs of counted isolates
+ * @param countedIsolatesProp - obj with pairs of counted isolates
  * @returns {ClientIsolateCounted} - obj with pairs of counted isolates
  */
 export function adaptCountedIsolatesGroupsService(

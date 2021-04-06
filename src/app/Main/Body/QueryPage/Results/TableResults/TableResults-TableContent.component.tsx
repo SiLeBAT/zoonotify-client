@@ -9,7 +9,7 @@ const dataTableStyle = css`
 
 /**
  * @desc Decides if row/colum is selected and return result table or explanation text
- * @param {string[]} columnAttributes - column attributes for the table header
+ * @param columnAttributes - column attributes for the table header
  * @returns {JSX.Element} - result table
  */
 export function TableResultsTableContentComponent(props: {

@@ -21,7 +21,7 @@ export interface CheckboxesProps {
 
 /**
  * @desc Returns the checkboxes to decide which data should be exported.
- * @param {CheckboxesProps} props
+ * @param props
  * @returns {JSX.Element} - checkboxes component
  */
 export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {

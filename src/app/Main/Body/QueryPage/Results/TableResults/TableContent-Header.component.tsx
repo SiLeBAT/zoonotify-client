@@ -40,7 +40,7 @@ const StyledTableCell = withStyles(() =>
 
 /**
  * @desc Returns list of table cells for the table header
- * @param {string[]} headerValues - object with two booleans, true if row/column is selected
+ * @param headerValues - object with two booleans, true if row/column is selected
  * @returns {JSX.Element[]} - list of table cell components
  */
 export function TableContentHeaderComponent(

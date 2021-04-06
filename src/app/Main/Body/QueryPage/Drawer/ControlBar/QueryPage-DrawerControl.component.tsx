@@ -73,7 +73,7 @@ export interface DrawerControlProps {
 
 /**
  * @desc Display the control bar of the Drawer
- * @param {DrawerControlProps} props
+ * @param props
  * @returns {JSX.Element} - control bar component of the Drawer
  */
 export function QueryPageDrawerControlComponent(

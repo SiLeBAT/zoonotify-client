@@ -9,7 +9,7 @@ export interface ListItemProps {
 
 /**
  * @desc Returns one ListItem for a link
- * @param {ListItemProps} props
+ * @param props
  * @returns {JSX.Element} - ListItem for the link
  */
 export function ListContentListItemComponent(

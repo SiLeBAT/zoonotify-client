@@ -32,7 +32,7 @@ export interface ExportButtonProps {
 
 /**
  * @desc Returns the export button inside the header.
- * @param {ExportButtonProps} props
+ * @param props
  * @returns {JSX.Element} - export button component
  */
 export function HeaderExportButtonComponent(

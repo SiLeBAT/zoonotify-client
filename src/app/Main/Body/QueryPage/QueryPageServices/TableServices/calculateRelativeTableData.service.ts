@@ -5,7 +5,7 @@ function calculateRelative(part: number, total: number): string {
 }
 /**
  * @desc Calculate the relativeage of an objectList with absolute numbers
- * @param {Record<string, string>[]} objList - objectList with one object for every table row with absolute numbers
+ * @param objList - objectList with one object for every table row with absolute numbers
  * @returns {Record<string, string>[]} - one object for each row inside a list
  */
 export function calculateRelativeTableData(

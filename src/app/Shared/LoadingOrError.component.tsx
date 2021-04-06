@@ -4,9 +4,9 @@ import { LoadingProcessComponent } from "./LoadingProcess.component";
 
 /**
  * @desc Choose which content should be rendered on the query page
- * @param {status: {isolateStatus: number; filterStatus: number;} | undefined } status - object with api fetch status (e.g. 200, 404)
- * @param {boolean} dataIsSet - true if data is set
- * @param {componentToDisplay} JSX.Element - Component to display if no Loading or Error
+ * @param status - object with api fetch status (e.g. 200, 404)
+ * @param dataIsSet - true if data is set
+ * @param JSX.Element - Component to display if no Loading or Error
  * @returns {JSX.Element} - ErrorPage / Loading sign / QueryPage
  */
 export function LoadingOrErrorComponent(props: {

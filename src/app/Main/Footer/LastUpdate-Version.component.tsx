@@ -31,7 +31,7 @@ export interface VersionProps {
 
 /**
  * @desc Returns one ListItem for one version
- * @param {VersionProps} props
+ * @param props
  * @returns {JSX.Element} - listItem with icon and text
  */
 export function LastUpdateVersionComponent(props: VersionProps): JSX.Element {

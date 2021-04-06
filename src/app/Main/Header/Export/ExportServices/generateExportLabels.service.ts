@@ -11,7 +11,7 @@ export interface ExportLabelsInterface {
 
 /**
  * @desc Returns all labels for the file export in the right language
- * @param {string[]} mainFilterAttributes - list of the main filters
+ * @param mainFilterAttributes - list of the main filters
  * @returns { ExportLabels } - object of labels: for the file, of the main filters, for "all values"
  */
 export function generateExportLabels(

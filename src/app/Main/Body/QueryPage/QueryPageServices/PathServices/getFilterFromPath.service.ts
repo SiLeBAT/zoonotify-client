@@ -2,8 +2,8 @@ import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.
 
 /**
  * @desc Extract the selected filter from the given URL path
- * @param {string} path - URL path
- * @param {FilterType[]} filterKeys - list of possible filter attributes
+ * @param path - URL path
+ * @param filterKeys - list of possible filter attributes
  * @returns {FilterInterface} - object with the filter form the URL path
  */
 export function getFilterFromPath(

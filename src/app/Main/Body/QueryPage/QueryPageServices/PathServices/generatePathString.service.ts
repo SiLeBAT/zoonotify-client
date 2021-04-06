@@ -5,8 +5,8 @@ import { FilterContextInterface } from "../../../../../Shared/Context/FilterCont
 
 /**
  * @desc Generate partial path containing the selected filter
- * @param {string} key - filter attribute
- * @param {string} value - corresponding filter value
+ * @param key - filter attribute
+ * @param value - corresponding filter value
  * @returns {string} - partial path one main filter
  */
 function setParams(key: string, value: string): string {
@@ -17,8 +17,8 @@ function setParams(key: string, value: string): string {
 
 /**
  * @desc Generate partial path containing the selected row/column
- * @param {string} key - "row" or "column"
- * @param {string} value - corresponding value to the row or column
+ * @param key - "row" or "column"
+ * @param value - corresponding value to the row or column
  * @returns {string} - partial path for row or column
  */
 function getTableParam(key: string, value: string): string {
@@ -28,8 +28,8 @@ function getTableParam(key: string, value: string): string {
 
 /**
  * @desc Convert selected filter and row/column to URL-Path
- * @param {FilterInterface} filter - object of selected filters
- * @param {TableInterface} table - object of selected row/column
+ * @param filter - object of selected filters
+ * @param table - object of selected row/column
  * @returns {string} - path including selected filters and row/column
  */
 export const generatePathStringService = (

@@ -110,7 +110,7 @@ export interface SelectorProps {
 
 /**
  * @desc Returns one selector for filter or row/column.
- * @param {SelectorProps} props
+ * @param props
  * @returns {JSX.Element} - selector component
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {

@@ -45,7 +45,7 @@ export interface TableMainHeaderProps {
 
 /**
  * @desc Returns one main header to wrap the result table
- * @param {TableMainHeaderProps} props - info about isRow & isRowAndCol, text of main header
+ * @param props - info about isRow & isRowAndCol, text of main header
  * @returns {JSX.Element} - one main header component
  */
 export function TableResultsTableMainHeaderComponent(

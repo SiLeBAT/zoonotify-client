@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 /**
  * @desc Create a ListItem for each parameter
- * @param {string[]} parameterList - list of selected parameter (filter)
+ * @param parameterList - list of selected parameter (filter)
  * @returns {JSX.Element[]} - list of ListItem-components
  */
 function createListItemComponent(parameterList: string[]): JSX.Element[] {

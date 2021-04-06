@@ -7,10 +7,10 @@ import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
 
 /**
  * @desc Returns the table header and the filtered dataset as string to save it as csv
- * @param {DbCollection} data - dataset
- * @param {DbKey[]} keys - keys of the dataset
- * @param {MainFilterLabelInterface} mainFilterLabels - Obj with translated labels for the table header
- * @param {string[]} mainFilterAttributes - keys to get matching mainFilterLabel
+ * @param data - dataset
+ * @param keys - keys of the dataset
+ * @param mainFilterLabels - Obj with translated labels for the table header
+ * @param mainFilterAttributes - keys to get matching mainFilterLabel
  * @returns {string} - dataset as string
  */
 export function generateDataTableCsvString(
