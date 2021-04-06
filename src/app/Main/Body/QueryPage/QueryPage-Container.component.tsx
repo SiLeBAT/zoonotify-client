@@ -5,6 +5,7 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     ClientIsolateCountedGroups,
+    DbCollection,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import {
@@ -24,7 +25,10 @@ import {
     TableInterface,
     TableType,
 } from "../../../Shared/Context/TableContext";
-import { FilterType } from "../../../Shared/Model/Filter.model";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../Shared/Model/Filter.model";
 import { getFilterFromPath } from "./QueryPageServices/PathServices/getFilterFromPath.service";
 import { generatePathStringService } from "./QueryPageServices/PathServices/generatePathString.service";
 import { QueryPageLayoutComponent } from "./QueryPage-Layout.component";
@@ -36,8 +40,14 @@ import { adaptCountedIsolatesGroupsService } from "./QueryPageServices/adaptCoun
 import { generateTableHeaderValuesService } from "./QueryPageServices/TableServices/generateTableHeaderValues.service";
 import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableServices/generateStatisticTableDataAbs.service";
 import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
-import { dataApiService } from "./QueryPageServices/ApiServices/dataApi.service";
-import { tableApiService } from "./QueryPageServices/ApiServices/tableApi.service";
+import { ApiService } from "../../../Core/api.service";
+import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
+import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
+import {
+    IsolateCountedDTO,
+    IsolateDTO,
+} from "../../../Shared/Model/Api_Isolate.model";
+import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -136,15 +146,25 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchAndSetData = async (): Promise<void> => {
-        const dataResponse = await dataApiService(ISOLATE_URL, FILTER_URL);
+        const isolateResponse = await ApiService(ISOLATE_URL);
+        const filterResponse = await ApiService(FILTER_URL);
 
-        setIsolateStatus(dataResponse.isolateStatus);
-        setFilterStatus(dataResponse.filterStatus);
+        setIsolateStatus(isolateResponse.apiStatus);
+        setFilterStatus(filterResponse.apiStatus);
 
-        if (dataResponse.adaptedDbIsolates && dataResponse.uniqueValuesObject) {
+        if (isolateResponse.apiProp && isolateResponse.apiProp) {
+            const isolateProp = (isolateResponse.apiProp as unknown) as IsolateDTO;
+            const filterProp = (filterResponse.apiProp as unknown) as FilterConfigDTO;
+
+            const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(
+                isolateProp
+            );
+            const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
+                filterProp
+            );
             setData({
-                ZNData: dataResponse.adaptedDbIsolates,
-                uniqueValues: dataResponse.uniqueValuesObject,
+                ZNData: adaptedDbIsolates,
+                uniqueValues: uniqueValuesObject,
             });
         }
     };
@@ -226,16 +246,16 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        const tableResponse = await tableApiService(isolateCountUrl);
+        const tableResponse = await ApiService(isolateCountUrl);
 
-        setIsolateCountStatus(tableResponse.isolateCountStatus);
+        setIsolateCountStatus(tableResponse.apiStatus);
 
-        if (tableResponse.nrOfSelectedIsolates !== undefined) {
-            setTableContext(
-                tableResponse.isolateCountGroups,
-                tableResponse.nrOfSelectedIsolates
-            );
-            setNrOfSelectedIsol(tableResponse.nrOfSelectedIsolates)
+        if (tableResponse.apiProp !== undefined) {
+            const isolateCountProp = (tableResponse.apiProp as unknown) as IsolateCountedDTO;
+            const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
+            const isolateCountGroups = isolateCountProp.groups;
+            setTableContext(isolateCountGroups, nrOfSelectedIsolates);
+            setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
     };
 
@@ -273,7 +293,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     tableData={table}
                     numberOfIsolates={{
                         total: totalNrOfIsol,
-                        filtered: nrOfSelectedIsol
+                        filtered: nrOfSelectedIsol,
                     }}
                     mainFilterAttributes={filter.mainFilter}
                     dataUniqueValues={data.uniqueValues}
