@@ -66,5 +66,8 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": 2,
         // Not too fond of this one
         "unicorn/filename-case": "off",
+
+        "unicorn/no-null": "off",
+
     },
 };

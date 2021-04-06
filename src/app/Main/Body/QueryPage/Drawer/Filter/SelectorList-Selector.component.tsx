@@ -2,7 +2,10 @@ import React from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
 import { CheckIfSingleFilterIsSet } from "../../QueryPageServices/checkIfFilterIsSet.service";
-import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.model";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 
@@ -34,18 +37,23 @@ export function SelectorListSelectorComponent(
 ): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const {filterAttribute} = props
+    const { filterAttribute } = props;
     const filterValues: string[] = props.selectedFilter[filterAttribute];
     const allFilterValues: string[] = props.dataUniqueValues[filterAttribute];
 
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
-    ): void =>
-        props.onChange(
-            selectedOption as { value: string; label: string }[] | null,
-            keyName
-        );
+    ): void => {
+        if (selectedOption !== undefined && Array.isArray(selectedOption)) {
+            props.onChange(
+                selectedOption as { value: string; label: string }[] | null,
+                keyName
+            );
+        } else {
+            props.onChange(null, keyName);
+        }
+    };
 
     const noFilter: boolean = CheckIfSingleFilterIsSet(
         props.selectedFilter,

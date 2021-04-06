@@ -74,11 +74,16 @@ export function DisplayedFeatureSelectorComponent(
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | TableType
-    ): void =>
-        props.onChange(
-            selectedOption as { value: string; label: string } | null,
-            keyName
-        );
+    ): void => {
+        if (selectedOption !== undefined && !Array.isArray(selectedOption)) {
+            props.onChange(
+                selectedOption as { value: string; label: string } | null,
+                keyName
+            );
+        } else {
+            props.onChange(null, keyName);
+        }
+    };
 
     return (
         <SelectorComponent
