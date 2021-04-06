@@ -25,7 +25,7 @@ const iconButtonStyle = css`
 `;
 
 export interface ResizeBarProps {
-    onChange: (newWidth: number) => void;
+    onResizeBarMove: (newWidth: number) => void;
 }
 
 /**
@@ -38,12 +38,12 @@ export function DrawerControlResizeBarComponent(
 ): JSX.Element {
     const minDrawerWidth = 325;
 
-    const handleChange = (newWidth: number): void => props.onChange(newWidth);
+    const handleMoveResizeBar = (newWidth: number): void => props.onResizeBarMove(newWidth);
 
     const handleMouseMove = useCallback((e): void => {
         const newWidth = e.clientX - document.body.offsetLeft;
         if (newWidth > minDrawerWidth) {
-            handleChange(newWidth);
+            handleMoveResizeBar(newWidth);
         }
     }, []);
 

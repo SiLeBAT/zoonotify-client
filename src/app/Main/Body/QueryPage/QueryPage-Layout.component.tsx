@@ -40,8 +40,8 @@ export function QueryPageLayoutComponent(props: {
     onFilterRemoveAll: () => void;
     onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
-    const [drawerWidth, setDrawerWidth] = useState(433);
-    const [open, setOpen] = useState(true);
+    const [drawerWidth, setDrawerWidth] = useState<number>(433);
+    const [open, setOpen] = useState<boolean>(true);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -68,7 +68,7 @@ export function QueryPageLayoutComponent(props: {
         }
     };
 
-    const handleChangeDrawerSize = (newWidth: number): void => {
+    const handleMoveResizeBar = (newWidth: number): void => {
         setDrawerWidth(newWidth);
     };
 
@@ -76,7 +76,7 @@ export function QueryPageLayoutComponent(props: {
         <main css={mainStyle}>
             <DrawerLayoutComponent
                 isOpen={open}
-                newWidth={drawerWidth}
+                drawerWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 selectedFilter={props.selectedFilter}
                 tableColumn={props.tableData.column}
@@ -90,9 +90,9 @@ export function QueryPageLayoutComponent(props: {
             />
             <QueryPageDrawerControlComponent
                 isOpen={open}
-                newWidth={drawerWidth}
+                drawerWidth={drawerWidth}
                 onDrawerOpenCloseClick={handleClickOpenCloseDrawer}
-                onDrawerSizeChange={handleChangeDrawerSize}
+                onResizeBarMove={handleMoveResizeBar}
             />
             <QueryPageContentLayoutComponent
                 isCol={props.isCol}

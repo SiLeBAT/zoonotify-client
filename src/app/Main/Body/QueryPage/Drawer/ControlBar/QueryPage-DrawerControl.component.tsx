@@ -63,12 +63,9 @@ export interface DrawerControlProps {
      * true if Drawer is open
      */
     isOpen: boolean;
-     /**
-     * width of the Drawer after resizing
-     */
-    newWidth: number;
+    drawerWidth: number;
     onDrawerOpenCloseClick: () => void;
-    onDrawerSizeChange: (newWidth: number) => void;
+    onResizeBarMove: (drawerWidth: number) => void;
 }
 
 /**
@@ -90,7 +87,7 @@ export function QueryPageDrawerControlComponent(
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
                 }),
-                marginLeft: -props.newWidth,
+                marginLeft: -props.drawerWidth,
             },
             contentShift: {
                 transition: theme.transitions.create("margin", {
@@ -105,8 +102,8 @@ export function QueryPageDrawerControlComponent(
 
     const handleClickOpenCloseDrawer = (): void =>
         props.onDrawerOpenCloseClick();
-    const handleChangeDrawerSize = (newWidth: number): void =>
-        props.onDrawerSizeChange(newWidth);
+    const handleMoveResizeBar = (drawerWidth: number): void =>
+        props.onResizeBarMove(drawerWidth);
 
     return (
         <div
@@ -130,7 +127,7 @@ export function QueryPageDrawerControlComponent(
                 }
             >
                 <DrawerControlResizeBarComponent
-                    onChange={handleChangeDrawerSize}
+                    onResizeBarMove={handleMoveResizeBar}
                 />
             </div>
             <IconButton

@@ -6,7 +6,10 @@ import Divider from "@material-ui/core/Divider";
 import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
 import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
-import { FilterInterface, FilterType } from "../../../../Shared/Model/Filter.model";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../Shared/Context/TableContext";
 
 const dividerStyle = css`
@@ -15,8 +18,8 @@ const dividerStyle = css`
 `;
 const useStyles = makeStyles(() =>
     createStyles({
-        drawer: (newWidth: string) => ({
-            width: `${newWidth}px`,
+        drawer: (drawerWidth: string) => ({
+            width: `${drawerWidth}px`,
             minWidth: "325px",
             position: "relative",
             height: "100%",
@@ -40,10 +43,7 @@ export interface DrawerLayoutProps {
      * true if Drawer is open
      */
     isOpen: boolean;
-    /**
-     * width of the Drawer (also after resize)
-     */
-    newWidth: number;
+    drawerWidth: number;
     dataUniqueValues: FilterInterface;
     selectedFilter: FilterInterface;
     tableColumn: string;
@@ -68,7 +68,7 @@ export interface DrawerLayoutProps {
  * @returns {JSX.Element} - Drawer component
  */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
-    const classes = useStyles((props.newWidth as unknown) as string);
+    const classes = useStyles((props.drawerWidth as unknown) as string);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
