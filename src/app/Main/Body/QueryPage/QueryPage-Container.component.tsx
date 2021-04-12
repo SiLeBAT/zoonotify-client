@@ -40,7 +40,7 @@ import { adaptCountedIsolatesGroupsService } from "./QueryPageServices/adaptCoun
 import { generateTableHeaderValuesService } from "./QueryPageServices/TableServices/generateTableHeaderValues.service";
 import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableServices/generateStatisticTableDataAbs.service";
 import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
-import { ApiService } from "../../../Core/api.service";
+import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
 import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
 import {
@@ -146,15 +146,15 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchAndSetData = async (): Promise<void> => {
-        const isolateResponse = await ApiService(ISOLATE_URL);
-        const filterResponse = await ApiService(FILTER_URL);
+        const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(ISOLATE_URL);
+        const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(FILTER_URL);
 
-        setIsolateStatus(isolateResponse.apiStatus);
-        setFilterStatus(filterResponse.apiStatus);
+        setIsolateStatus(isolateResponse.status);
+        setFilterStatus(filterResponse.status);
 
-        if (isolateResponse.apiProp && isolateResponse.apiProp) {
-            const isolateProp = (isolateResponse.apiProp as unknown) as IsolateDTO;
-            const filterProp = (filterResponse.apiProp as unknown) as FilterConfigDTO;
+        if (isolateResponse.data && filterResponse.data) {
+            const isolateProp: IsolateDTO = isolateResponse.data;
+            const filterProp: FilterConfigDTO = filterResponse.data;
 
             const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(
                 isolateProp
@@ -246,12 +246,12 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        const tableResponse = await ApiService(isolateCountUrl);
+        const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(isolateCountUrl);
 
-        setIsolateCountStatus(tableResponse.apiStatus);
+        setIsolateCountStatus(tableResponse.status);
 
-        if (tableResponse.apiProp !== undefined) {
-            const isolateCountProp = (tableResponse.apiProp as unknown) as IsolateCountedDTO;
+        if (tableResponse.data !== undefined) {
+            const isolateCountProp: IsolateCountedDTO = tableResponse.data;
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
             const isolateCountGroups = isolateCountProp.groups;
             setTableContext(isolateCountGroups, nrOfSelectedIsolates);

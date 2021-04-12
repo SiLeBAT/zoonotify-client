@@ -17,7 +17,7 @@ import {
 import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
 import { HeaderExportComponent } from "./Header-Export.component";
 import { generateExportLabels } from "./ExportServices/generateExportLabels.service";
-import { ApiService } from "../../../Core/api.service";
+import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
@@ -32,20 +32,22 @@ export function HeaderExportContainerComponent(): JSX.Element {
         raw: boolean,
         stat: boolean
     ): Promise<void> => {
-
-        const isolateFilteredResponse = await ApiService(
+        const isolateFilteredResponse: ApiResponse<IsolateDTO> = await callApiService(
             isolateFilteredUrl
         );
 
-        const isolateFilteredStatus = isolateFilteredResponse.apiStatus;
+        const isolateFilteredStatus = isolateFilteredResponse.status;
 
         let rawData: DbCollection = [];
         let rawKeys: DbKey[] = [];
         let statData: Record<string, string>[] = [];
         let statKeys: string[] = [];
 
-        if (isolateFilteredStatus === 200 &&isolateFilteredResponse.apiProp !== undefined) {
-            const isolateFilteredProp = isolateFilteredResponse.apiProp as unknown as IsolateDTO;
+        if (
+            isolateFilteredStatus === 200 &&
+            isolateFilteredResponse.data !== undefined
+        ) {
+            const isolateFilteredProp: IsolateDTO = isolateFilteredResponse.data;
             const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
                 isolateFilteredProp
             );

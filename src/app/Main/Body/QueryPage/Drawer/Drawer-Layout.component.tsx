@@ -16,9 +16,9 @@ const dividerStyle = css`
     height: 0.15em;
     background: ${primaryColor};
 `;
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((drawerWidth: string) =>
     createStyles({
-        drawer: (drawerWidth: string) => ({
+        drawer: () => ({
             width: `${drawerWidth}px`,
             minWidth: "325px",
             position: "relative",
@@ -68,7 +68,8 @@ export interface DrawerLayoutProps {
  * @returns {JSX.Element} - Drawer component
  */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
-    const classes = useStyles((props.drawerWidth as unknown) as string);
+    const drawerWidthString = String(props.drawerWidth)
+    const classes = useStyles(drawerWidthString);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,

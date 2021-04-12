@@ -41,7 +41,7 @@ export function DrawerControlResizeBarComponent(
     const handleMoveResizeBar = (newWidth: number): void => props.onResizeBarMove(newWidth);
 
     const handleMouseMove = useCallback((e): void => {
-        const newWidth = e.clientX - document.body.offsetLeft;
+        const newWidth: number = e.clientX - document.body.offsetLeft;
         if (newWidth > minDrawerWidth) {
             handleMoveResizeBar(newWidth);
         }
