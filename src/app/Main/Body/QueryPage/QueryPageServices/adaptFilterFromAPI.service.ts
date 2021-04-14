@@ -1,9 +1,9 @@
-import { FilterConfigDTO } from "../Shared/Model/Api_Filter.model";
-import { ClientFiltersConfig } from "../Shared/Model/Filter.model";
+import { FilterConfigDTO } from "../../../../Shared/Model/Api_Filter.model";
+import { ClientFiltersConfig } from "../../../../Shared/Model/Filter.model";
 
 /**
  * @desc transform the sampling year inside filterProp.values from Date into string[]
- * @param {FilterConfigDTO} filterProp -
+ * @param filterProp -
  * @returns {ClientFiltersConfig}
  */
 export function adaptFilterFromApiService(

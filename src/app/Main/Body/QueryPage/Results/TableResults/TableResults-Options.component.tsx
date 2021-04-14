@@ -8,15 +8,11 @@ import {
     withStyles,
     createStyles,
 } from "@material-ui/core";
-import { useContext } from "react";
 import {
     bfrDarkgrey,
     primaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
-import {
-    DisplayOptionType,
-    TableContext,
-} from "../../../../../Shared/Context/TableContext";
+import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 
 const size = 0.75;
 
@@ -56,22 +52,16 @@ const BlueRadio = withStyles(() =>
 )(Radio);
 
 /**
- * @desc Returns the option bar to display the table numbers as absolute numbers or in percent
+ * @desc Returns the option bar to display the table numbers as absolute or as relative numbers.
+ * @param props - function to handle change of radio button
  * @returns {JSX.Element} - option bar component
  */
-export function ResultsTableOptionsComponent(): JSX.Element {
-    const { table, setTable } = useContext(TableContext);
-
-    const handleRadioChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        const optionValue = (event.target as HTMLInputElement)
-            .value as DisplayOptionType;
-        setTable({
-            ...table,
-            option: optionValue,
-        });
-    };
+export function ResultsTableOptionsComponent(props: {
+    tableOption: DisplayOptionType;
+    onRadioChange: (eventTargetValue: string) => void;
+}): JSX.Element {
+    const handleChange = (eventTargetValue: string): void =>
+        props.onRadioChange(eventTargetValue);
 
     return (
         <div css={optionsStyle}>
@@ -81,8 +71,8 @@ export function ResultsTableOptionsComponent(): JSX.Element {
                     row
                     aria-label="options"
                     name="options"
-                    value={table.option}
-                    onChange={handleRadioChange}
+                    value={props.tableOption}
+                    onChange={(event) => handleChange(event.target.value)}
                 >
                     <FormControlLabel
                         css={radioButtonSizeStyle}
@@ -92,9 +82,9 @@ export function ResultsTableOptionsComponent(): JSX.Element {
                     />
                     <FormControlLabel
                         css={radioButtonSizeStyle}
-                        value="percent"
+                        value="relative"
                         control={<BlueRadio color="default" size="small" />}
-                        label="Percent"
+                        label="Percentage"
                     />
                 </RadioGroup>
             </FormControl>

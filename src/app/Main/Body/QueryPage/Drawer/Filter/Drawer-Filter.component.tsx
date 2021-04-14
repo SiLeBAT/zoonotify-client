@@ -1,13 +1,10 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { ValueType } from "react-select";
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { FilterSelectorListComponent } from "./Filter-SelectorList.component";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const drawerWidthStyle = css`
@@ -36,45 +33,23 @@ const filterSubheadingStyle = css`
     font-size: 1rem;
 `;
 
-export function DrawerFilterComponent(): JSX.Element {
-    const { filter, setFilter } = useContext(FilterContext);
+export function DrawerFilterComponent(props: {
+    dataUniqueValues: FilterInterface;
+    selectedFilter: FilterInterface;
+    mainFilterAttributes: string[];
+    onFilterChange: (
+        selectedOption: { value: string; label: string }[] | null,
+        keyName: FilterType | TableType
+    ) => void;
+    onFilterRemoveAll: () => void;
+}): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    /**
-     * @desc takes the current values of the selector with the onChange event handler and sets it as filter values (in the Context).
-     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the selector
-     * @param {FilterType | TableType}             keyName              name of the current main filter attribute
-     */
-    const handleChange = (
-        selectedOption: ValueType<Record<string, string>>,
+    const handleChangeFilter = (
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
-    ): void => {
-        if (selectedOption) {
-            const selectedFilter: string[] = [];
-            const selectedOptionObj = selectedOption as Record<
-                string,
-                string
-            >[];
-            selectedOptionObj.forEach((element) => {
-                selectedFilter.push(Object.values(element)[0]);
-            });
-            setFilter({
-                ...filter,
-                selectedFilter: {
-                    ...filter.selectedFilter,
-                    [keyName]: selectedFilter,
-                },
-            });
-        } else {
-            setFilter({
-                ...filter,
-                selectedFilter: {
-                    ...filter.selectedFilter,
-                    [keyName]: [],
-                },
-            });
-        }
-    };
+    ): void => props.onFilterChange(selectedOption, keyName);
+    const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
     return (
         <div css={drawerWidthStyle}>
@@ -83,9 +58,14 @@ export function DrawerFilterComponent(): JSX.Element {
                 <p css={filterSubheadingStyle}>
                     {t("Drawer.Subtitles.Filter")}
                 </p>
-                <ClearSelectorComponent isFilter isTable={false} />
+                <ClearSelectorComponent onClick={handleRemoveAllFilter} />
             </div>
-            {FilterSelectorListComponent(filter.mainFilter, handleChange)}
+            {FilterSelectorListComponent(
+                props.dataUniqueValues,
+                props.selectedFilter,
+                props.mainFilterAttributes,
+                handleChangeFilter
+            )}
         </div>
     );
 }

@@ -28,20 +28,24 @@ const tableTitleStyle = (
     transform: ${isRow ? "rotate(180deg)" : "none"};
 `;
 
-/**
- * @param {boolean} isRow - true if row is selected
- * @param {boolean} isRowAndCol - true if row and col are selected
- * @param {string} text - text content of the main header
- */
 export interface TableMainHeaderProps {
+    /**
+     *  true if row is selected
+     */
     isRow: boolean;
+    /**
+     *  true if row and col are selected
+     */
     isRowAndCol: boolean;
+     /**
+     *  text content of the main header
+     */
     text: string;
 }
 
 /**
  * @desc Returns one main header to wrap the result table
- * @param {TableMainHeaderProps} props - info about isRow & isRowAndCol, text of main header
+ * @param props - info about isRow & isRowAndCol, text of main header
  * @returns {JSX.Element} - one main header component
  */
 export function TableResultsTableMainHeaderComponent(

@@ -1,11 +1,13 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { ContentResultsContainerComponent } from "./Results/Content-ResultsContainer.component";
 import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.component";
 import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { QueryPageContentTableResultsLayoutComponent } from "./Results/TableResults/QueryPageContent-TableResultsLayout.component";
+import { FilterInterface } from "../../../Shared/Model/Filter.model";
+import { TableInterface } from "../../../Shared/Context/TableContext";
 
 const contentStyle = css`
     width: 0;
@@ -43,12 +45,24 @@ const resultsBoxStyle = css`
     margin-top: 2em;
 `;
 
-export function QueryPageContentComponent(props: {
+export function QueryPageContentLayoutComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
+    columnNameValues: string[];
+    tableData: TableInterface;
+    numberOfIsolates: {
+        total: number,
+        filtered: number
+    }
+    mainFilterAttributes: string[];
+    selectedFilter: FilterInterface;
+    onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
+
+    const handleChangeRadio = (eventTargetValue: string): void =>
+        props.onRadioChange(eventTargetValue);
 
     return (
         <div css={contentStyle}>
@@ -56,16 +70,23 @@ export function QueryPageContentComponent(props: {
             <p css={statusStyle}>{t("Content.DataStatus")}</p>
             <div css={contentBoxStyle}>
                 {props.isFilter || props.isCol || props.isRow ? (
-                    <QueryPageParameterContentComponent />
+                    <QueryPageParameterContentComponent
+                        mainFilterAttributes={props.mainFilterAttributes}
+                        selectedFilter={props.selectedFilter}
+                    />
                 ) : (
                     <QueryPageIntroTextComponent />
                 )}
-                <QueryPageNrOfIsolatesComponent />
+                <QueryPageNrOfIsolatesComponent
+                    numberOfIsolates={props.numberOfIsolates}
+                />
             </div>
             <div css={resultsBoxStyle}>
-                <ContentResultsContainerComponent
-                    isCol={props.isCol}
-                    isRow={props.isRow}
+                <QueryPageContentTableResultsLayoutComponent
+                    displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
+                    columnNameValues={props.columnNameValues}
+                    tableData={props.tableData}
+                    onRadioChange={handleChangeRadio}
                 />
             </div>
         </div>

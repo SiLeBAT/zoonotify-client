@@ -66,9 +66,11 @@ export const DbKeyCollection: DbKey[] = [
     "resistance",
 ];
 
+export type ClientIsolateCountedGroups = (Record<string, string> & {
+    count: number;
+})[];
+
 export interface ClientIsolateCounted {
     totalNumberOfIsolates: number;
-    groups?: (Record<string, string> & {
-        count: number;
-    })[];
+    groups: ClientIsolateCountedGroups;
 }

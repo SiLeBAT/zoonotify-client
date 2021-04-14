@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { TableResultsTableContentComponent } from "./TableResults-TableContent.component";
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
-import { TableContext } from "../../../../../Shared/Context/TableContext";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
+import { TableInterface } from "../../../../../Shared/Context/TableContext";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -20,36 +19,46 @@ const tableDivStyle = css`
     flex-direction: row;
 `;
 
-/**
- * @param {{isCol: boolean; isRow: boolean;}} displayRowCol - object with two booleans, true if row/column is selected
- * @param {string[]} columnAttributes - attributes of the columns
- */
 export interface TableResultsProps {
+    /**
+     * object with two booleans, true if row/column is selected
+     */
     displayRowCol: {
         isCol: boolean;
         isRow: boolean;
     };
-    columnAttributes: string[];
+    /**
+     * attributes of the columns
+     */
+    columnNameValues: string[];
+    tableData: TableInterface
+    onRadioChange: (eventTargetValue: string) => void;
 }
 
 /**
  * @desc Returns accordion to display the results in a table
- * @param {TableResultsProps} props - info about isCol/isRow and columnAttributes
+ * @param props - info about isCol/isRow and columnAttributes
  * @returns {JSX.Element} - accordion with the result table
  */
-export function ResultsTableResultsComponent(
+export function QueryPageContentTableResultsLayoutComponent(
     props: TableResultsProps
 ): JSX.Element {
-    const { table } = useContext(TableContext);
     const { t } = useTranslation(["QueryPage"]);
 
+    const handleChangeRadio = (eventTargetValue: string): void =>
+        props.onRadioChange(eventTargetValue);
+
+
+    const tableColAttribute = props.tableData.column
+    const tableRowAttribute = props.tableData.row
+
     const accordionHeader: string = t(`Results.Table`);
-    const rowMainHeader: string = _.isEmpty(table.row)
+    const rowMainHeader: string = _.isEmpty(tableRowAttribute)
         ? ""
-        : t(`Filters.${table.row}`);
-    const colMainHeader: string = _.isEmpty(table.column)
+        : t(`Filters.${tableRowAttribute}`);
+    const colMainHeader: string = _.isEmpty(tableColAttribute)
         ? ""
-        : t(`Filters.${table.column}`);
+        : t(`Filters.${tableColAttribute}`);
 
     let tableAccordionContent = (
         <div css={dataStyle}>
@@ -64,7 +73,10 @@ export function ResultsTableResultsComponent(
     if (isTable) {
         tableAccordionContent = (
             <div css={dataStyle}>
-                <ResultsTableOptionsComponent />
+                <ResultsTableOptionsComponent
+                    tableOption={props.tableData.option}
+                    onRadioChange={handleChangeRadio}
+                />
                 {props.displayRowCol.isCol && (
                     <TableResultsTableMainHeaderComponent
                         isRow={false}
@@ -81,7 +93,12 @@ export function ResultsTableResultsComponent(
                         />
                     )}
                     <TableResultsTableContentComponent
-                        columnAttributes={props.columnAttributes}
+                        tables={{
+                            statisticDataAbsolute: props.tableData.statisticDataAbsolute,
+                            statisticDataRelative: props.tableData.statisticDataRelative
+                        }}
+                        tableOption={props.tableData.option}
+                        columnNameValues={props.columnNameValues}
                     />
                 </div>
             </div>

@@ -47,9 +47,7 @@ export interface CardProps {
 
 /**
  * @desc Returns a card wrapper with BfR-Logo
- * @param {string} title - title of the card
- * @param {string} subtitle - subtitle of the card
- * @param {string} text - text of the card
+ * @param props
  * @returns {JSX.Element} - card with title, subtitle, text and BfR-Logo
  */
 export function LogoCardComponent(props: CardProps): JSX.Element {

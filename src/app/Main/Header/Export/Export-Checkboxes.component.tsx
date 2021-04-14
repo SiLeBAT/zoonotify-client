@@ -8,20 +8,27 @@ const checkboxStyle = css`
 `;
 
 export interface CheckboxesProps {
-    handleCheckbox: (name: string, checked: boolean) => void;
+    onCheckboxChange: (name: string, checked: boolean) => void;
+    /**
+     * true if dataset is selected for export
+     */
     raw: boolean;
+    /**
+     *  true if statistic data is selected for export
+     */
     stat: boolean;
 }
 
 /**
  * @desc Returns the checkboxes to decide which data should be exported.
- * @param {(name: string, checked: boolean) => void} onChange - function to select/deselect the checkbox
- * @param {boolean} raw - true if dataset is selected for export
- * @param {boolean} stat - true if statistic data is selected for export
+ * @param props
  * @returns {JSX.Element} - checkboxes component
  */
 export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
     const { t } = useTranslation(["Export"]);
+
+    const handleChangeCheckbox = (name: string, checked: boolean): void =>
+        props.onCheckboxChange(name, checked);
 
     return (
         <FormGroup css={checkboxStyle}>
@@ -30,7 +37,7 @@ export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
                     <Checkbox
                         checked={props.raw}
                         onChange={(event) =>
-                            props.handleCheckbox(
+                            handleChangeCheckbox(
                                 event.target.name,
                                 event.target.checked
                             )
@@ -46,7 +53,7 @@ export function ExportCheckboxesComponent(props: CheckboxesProps): JSX.Element {
                     <Checkbox
                         checked={props.stat}
                         onChange={(event) =>
-                            props.handleCheckbox(
+                            handleChangeCheckbox(
                                 event.target.name,
                                 event.target.checked
                             )

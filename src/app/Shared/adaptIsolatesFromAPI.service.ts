@@ -1,12 +1,9 @@
-import { IsolateDTO } from "../Shared/Model/Api_Isolate.model";
-import {
-    DbCollection,
-    ResistantValue,
-} from "../Shared/Model/Client_Isolate.model";
+import { IsolateDTO } from "./Model/Api_Isolate.model";
+import { DbCollection, ResistantValue } from "./Model/Client_Isolate.model";
 
 /**
  * @desc Extracts the desired isolate properties from the api and converts them to a string if necessary.
- * @param {IsolateDTO} isolateProp - isolates form api
+ * @param isolateProp - isolates form api
  * @returns {DbCollection} - desired isolate properties as string
  */
 export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {

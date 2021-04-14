@@ -6,7 +6,7 @@ import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
-import { generateFeatureList } from "../../../../../Core/generateFeatureList.service";
+import { generateFeatureList } from "./generateFeatureList.service";
 
 function generateTranslatedSelectorObject(
     selectorArray: string[],
@@ -18,24 +18,35 @@ function generateTranslatedSelectorObject(
     });
 }
 export interface FeatureSelectorProps {
+    /**
+     * feature of the corresponding selector (row/colum)
+     */
     activeFeature: FilterType;
+    /**
+     * feature of the other selector (row/column)
+     */
     otherFeature: FilterType;
+    /**
+     * label for the selector in the right language
+     */
     label: string;
+    /**
+     * "row" or "column"
+     */
     selectAttribute: FilterType | TableType;
+    /**
+     * all possible main filter
+     */
     mainFilterAttributes: string[];
-    handleChange: (
-        selectedOption: ValueType<Record<string, string>>,
+    onChange: (
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ) => void;
 }
 
 /**
  * @desc Selector to select the displayed features in row/column
- * @param {FilterType} activeFeature - feature of the corresponding selector (row/colum)
- * @param {FilterType} otherFeature - feature of the other selector (row/column)
- * @param {string} label - label for the selector in the right language
- * @param {FilterType | TableType} selectedAttribute - "row" or "column"
- * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle the change of the row/colum
+ * @param props
  * @returns {JSX.Element} - selector component
  */
 export function DisplayedFeatureSelectorComponent(
@@ -60,6 +71,20 @@ export function DisplayedFeatureSelectorComponent(
         label: string;
     }[] = generateTranslatedSelectorObject(selectedValues, t);
 
+    const handleChange = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => {
+        if (selectedOption !== undefined && !Array.isArray(selectedOption)) {
+            props.onChange(
+                selectedOption as { value: string; label: string } | null,
+                keyName
+            );
+        } else {
+            props.onChange(null, keyName);
+        }
+    };
+
     return (
         <SelectorComponent
             label={props.label}
@@ -67,7 +92,7 @@ export function DisplayedFeatureSelectorComponent(
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={selectedValuesObj}
             selectAttribute={props.selectAttribute}
-            handleChange={props.handleChange}
+            onChange={handleChange}
             isMulti={false}
             isNotSelect={isNotSelect}
         />

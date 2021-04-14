@@ -6,6 +6,11 @@ import Divider from "@material-ui/core/Divider";
 import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
 import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../Shared/Model/Filter.model";
+import { TableType } from "../../../../Shared/Context/TableContext";
 
 const dividerStyle = css`
     height: 0.15em;
@@ -13,8 +18,8 @@ const dividerStyle = css`
 `;
 const useStyles = makeStyles(() =>
     createStyles({
-        drawer: (newWidth: string) => ({
-            width: `${newWidth}px`,
+        drawer: (drawerWidth: string) => ({
+            width: `${drawerWidth}px`,
             minWidth: "325px",
             position: "relative",
             height: "100%",
@@ -34,18 +39,51 @@ const useStyles = makeStyles(() =>
 );
 
 export interface DrawerLayoutProps {
+    /**
+     * true if Drawer is open
+     */
     isOpen: boolean;
-    newWidth: number;
+    drawerWidth: number;
+    dataUniqueValues: FilterInterface;
+    selectedFilter: FilterInterface;
+    tableColumn: string;
+    tableRow: string;
+    mainFilterAttributes: string[];
+    onDisplFeaturesChange: (
+        selectedOption: { value: string; label: string } | null,
+        keyName: FilterType | TableType
+    ) => void;
+    onDisplFeaturesSwap: () => void;
+    onDisplFeaturesRemoveAll: () => void;
+    onFilterChange: (
+        selectedOption: { value: string; label: string }[] | null,
+        keyName: FilterType | TableType
+    ) => void;
+    onFilterRemoveAll: () => void;
 }
 
 /**
  * @desc Returns the Drawer
- * @param {boolean} isOpen - true if Drawer is open
- * @param {number} newWidth - width of the Drawer (also after resize)
+ * @param props
  * @returns {JSX.Element} - Drawer component
  */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
-    const classes = useStyles((props.newWidth as unknown) as string);
+    const drawerWidthSting = props.drawerWidth as unknown as string
+    const classes = useStyles(drawerWidthSting);
+
+    const handleChangeDisplFeatures = (
+        selectedOption: { value: string; label: string } | null,
+        keyName: FilterType | TableType
+    ): void => props.onDisplFeaturesChange(selectedOption, keyName);
+    const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
+    const handleRemoveAllDisplFeatures = (): void =>
+        props.onDisplFeaturesRemoveAll();
+
+    const handleChangeFilter = (
+        selectedOption: { value: string; label: string }[] | null,
+        keyName: FilterType | TableType
+    ): void => props.onFilterChange(selectedOption, keyName);
+    const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
     return (
         <Drawer
@@ -58,9 +96,22 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
             }}
         >
             <div className={classes.drawerContainer}>
-                <DrawerFilterComponent />
+                <DrawerFilterComponent
+                    dataUniqueValues={props.dataUniqueValues}
+                    selectedFilter={props.selectedFilter}
+                    mainFilterAttributes={props.mainFilterAttributes}
+                    onFilterChange={handleChangeFilter}
+                    onFilterRemoveAll={handleRemoveAllFilter}
+                />
                 <Divider variant="middle" css={dividerStyle} />
-                <DrawerDisplayedFeaturesComponent />
+                <DrawerDisplayedFeaturesComponent
+                    tableColumn={props.tableColumn}
+                    tableRow={props.tableRow}
+                    mainFilterAttributes={props.mainFilterAttributes}
+                    onDisplFeaturesChange={handleChangeDisplFeatures}
+                    onDisplFeaturesSwap={handleSwapDisplFeatures}
+                    onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
+                />
             </div>
         </Drawer>
     );

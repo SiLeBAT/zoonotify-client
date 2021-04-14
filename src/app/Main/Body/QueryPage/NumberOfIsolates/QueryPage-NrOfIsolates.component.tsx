@@ -1,8 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { useContext } from "react";
-import { DataContext } from "../../../../Shared/Context/DataContext";
 import { AccordionComponent } from "../../../../Shared/Accordion.component";
 
 const tableStyle = css`
@@ -16,11 +14,13 @@ const tableNumberStyle = css`
     padding-right: 5em;
 `;
 
-export function QueryPageNrOfIsolatesComponent(): JSX.Element {
+export function QueryPageNrOfIsolatesComponent(props: {
+    numberOfIsolates:{
+        total: number,
+        filtered: number
+    }
+}): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
-    const { data } = useContext(DataContext);
-
-    const totalNrOfIsolates = data.ZNData.length;
 
     return (
         <AccordionComponent
@@ -32,11 +32,13 @@ export function QueryPageNrOfIsolatesComponent(): JSX.Element {
                             <td css={tableTextStyle}>
                                 {t("NrOfIsolates.Total")}
                             </td>
-                            <td css={tableNumberStyle}>{totalNrOfIsolates}</td>
+                            <td css={tableNumberStyle}>
+                                {props.numberOfIsolates.total}
+                            </td>
                             <td css={tableTextStyle}>
                                 {t("NrOfIsolates.Selected")}
                             </td>
-                            <td>{data.nrOfSelectedIsolates}</td>
+                            <td>{props.numberOfIsolates.filtered}</td>
                         </tr>
                     </tbody>
                 </table>

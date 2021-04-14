@@ -15,8 +15,8 @@ const tableCellStyle = (isName: boolean): SerializedStyles => css`
 
 /**
  * @desc Returns list of table cells for one table row
- * @param {Record<string, string>} row - object with the values for the row
- * @param {Record<"tableCell", string>,} classes - material-ui styling of one table cell
+ * @param row - object with the values for the row
+ * @param classes - material-ui styling of one table cell
  * @returns {JSX.Element} - list of table cell components
  */
 export function TableContentRowsComponent(props: {

@@ -4,8 +4,8 @@ import { ListContentListItemComponent } from "./ListContent-ListItem.component";
 
 /**
  * @desc Returns ListItems for each link
- * @param {string} category - category of the links to find it in the translation file
- * @param {Record<string, string>[]} linkList - list of links belonging to one category
+ * @param category - category of the links to find it in the translation file
+ * @param linkList - list of links belonging to one category
  * @returns {JSX.Element[]} - list of ListItems for each link
  */
 export function LinkListContentComponent(

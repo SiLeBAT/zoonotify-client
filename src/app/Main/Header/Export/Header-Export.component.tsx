@@ -1,26 +1,28 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Dialog } from "@material-ui/core";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
+import { FilterContextInterface } from "../../../Shared/Context/FilterContext";
 import { ExportInterface } from "../../../Shared/Model/Export.model";
 import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportCheckboxesComponent } from "./Export-Checkboxes.component";
 import { ExportTextContentComponent } from "./Export-TextContent.component";
 import { ExportActionButtonsComponent } from "./Export-ActionButtons.component";
-import { ExportLabels } from "../../../Core/ExportServices/generateExportLabels.service";
 import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
+import { ExportLabels } from "./ExportServices/generateExportLabels.service";
 
 export function HeaderExportComponent(props: {
     isOpen: boolean;
     settings: ExportInterface;
     exportLabels: ExportLabels;
+    filter: FilterContextInterface;
     onClickOpen: () => void;
     onClickClose: () => void;
-    handleCheckbox: (name: string, checked: boolean) => void;
+    onCheckboxChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
-    const { filter } = useContext(FilterContext);
-
+    
     const handleClickOpen = (): void => props.onClickOpen();
     const handleClickClose = (): void => props.onClickClose();
+    const handleChangeCheckbox = (name: string, checked: boolean): void =>
+        props.onCheckboxChange(name, checked);
 
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(props.isOpen);
 
@@ -37,15 +39,15 @@ export function HeaderExportComponent(props: {
             >
                 <ExportTextContentComponent />
                 <ExportCheckboxesComponent
-                    handleCheckbox={props.handleCheckbox}
+                    onCheckboxChange={handleChangeCheckbox}
                     raw={props.settings.raw}
                     stat={props.settings.stat}
                 />
                 <ExportActionButtonsComponent
                     onClickClose={handleClickClose}
                     setting={props.settings}
-                    filter={filter.selectedFilter}
-                    mainFilterAttributes={filter.mainFilter}
+                    filter={props.filter.selectedFilter}
+                    mainFilterAttributes={props.filter.mainFilter}
                     buttonLabel={buttonLabel}
                     ZNFilename={props.exportLabels.ZNFilename}
                     mainFilterLabels={props.exportLabels.mainFilterLabels}

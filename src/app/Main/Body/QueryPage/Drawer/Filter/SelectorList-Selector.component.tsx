@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
-import { CheckIfSingleFilterIsSet } from "../../../../../Core/FilterServices/checkIfFilterIsSet.service";
-import { DataContext } from "../../../../../Shared/Context/DataContext";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { CheckIfSingleFilterIsSet } from "../../QueryPageServices/checkIfFilterIsSet.service";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 
@@ -17,34 +18,45 @@ function generateSelectorObject(
 }
 
 export interface SelectorProps {
-    index: number;
-    handleChange: (
-        selectedOption: ValueType<Record<string, string>>,
+    dataUniqueValues: FilterInterface;
+    selectedFilter: FilterInterface;
+    filterAttribute: FilterType;
+    onChange: (
+        selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ) => void;
 }
 
 /**
  * @desc Generate a new selector-element for one main filter
- * @param   {number}            index         number of the element
- * @param   {FilterInterface}   filter        object with selected filters
- * @param   {FilterInterface}   uniqueValues  all possible filter values;
- * @param   {( selectedOption: ValueType<Record<string, string>>b, keyName: FilterType | TableType) => void} handleChange function to handle selector change
- * @return  {JSX.Element}                     new selector-element
+ * @param props
+ * @return {JSX.Element} new selector-element
  */
 export function SelectorListSelectorComponent(
     props: SelectorProps
 ): JSX.Element {
-    const { data } = useContext(DataContext);
-    const { filter } = useContext(FilterContext);
     const { t } = useTranslation(["QueryPage"]);
 
-    const filterAttribute: FilterType = filter.mainFilter[props.index];
-    const filterValues: string[] = filter.selectedFilter[filterAttribute];
-    const allFilterValues: string[] = data.uniqueValues[filterAttribute];
+    const { filterAttribute } = props;
+    const filterValues: string[] = props.selectedFilter[filterAttribute];
+    const allFilterValues: string[] = props.dataUniqueValues[filterAttribute];
+
+    const handleChange = (
+        selectedOption: ValueType<{ value: string; label: string }>,
+        keyName: FilterType | TableType
+    ): void => {
+        if (selectedOption !== undefined && Array.isArray(selectedOption)) {
+            props.onChange(
+                selectedOption as { value: string; label: string }[] | null,
+                keyName
+            );
+        } else {
+            props.onChange(null, keyName);
+        }
+    };
 
     const noFilter: boolean = CheckIfSingleFilterIsSet(
-        filter.selectedFilter,
+        props.selectedFilter,
         filterAttribute
     );
 
@@ -65,7 +77,7 @@ export function SelectorListSelectorComponent(
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={selectedValuesObj}
             selectAttribute={filterAttribute}
-            handleChange={props.handleChange}
+            onChange={handleChange}
             isMulti
             isNotSelect={noFilter}
         />

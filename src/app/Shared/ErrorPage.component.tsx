@@ -4,7 +4,7 @@ import { LogoCardComponent } from "./LogoCard.component";
 
 /**
  * @desc Return an ErrorPage card with the current error status
- * @param {number} errorStatus - status of the api fetch
+ * @param errorStatus - status of the api fetch
  * @returns {JSX.Element} - card with ErrorPage content
  */
 export function ErrorPageComponent(props: {

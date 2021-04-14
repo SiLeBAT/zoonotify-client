@@ -59,18 +59,18 @@ const drawerIconStyle = css`
 `;
 
 export interface DrawerControlProps {
+    /**
+     * true if Drawer is open
+     */
     isOpen: boolean;
-    newWidth: number;
-    handleDrawer: () => void;
-    handleResize: (newWidth: number) => void;
+    drawerWidth: number;
+    onDrawerOpenCloseClick: () => void;
+    onResizeBarMove: (drawerWidth: number) => void;
 }
 
 /**
  * @desc Display the control bar of the Drawer
- * @param {boolean} isOpen - true if Drawer is open
- * @param {number} newWidth - width of the Drawer after resizing
- * @param {() => void} handleDrawer - handle open/close of the Drawer
- * @param {(newWidth: number) => void} handleResize - onChange-function for changing the size of the Drawer
+ * @param props
  * @returns {JSX.Element} - control bar component of the Drawer
  */
 export function QueryPageDrawerControlComponent(
@@ -87,7 +87,7 @@ export function QueryPageDrawerControlComponent(
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
                 }),
-                marginLeft: -props.newWidth,
+                marginLeft: -props.drawerWidth,
             },
             contentShift: {
                 transition: theme.transitions.create("margin", {
@@ -99,6 +99,11 @@ export function QueryPageDrawerControlComponent(
         })
     );
     const classes = useStyles();
+
+    const handleClickOpenCloseDrawer = (): void =>
+        props.onDrawerOpenCloseClick();
+    const handleMoveResizeBar = (drawerWidth: number): void =>
+        props.onResizeBarMove(drawerWidth);
 
     return (
         <div
@@ -122,10 +127,13 @@ export function QueryPageDrawerControlComponent(
                 }
             >
                 <DrawerControlResizeBarComponent
-                    onChange={props.handleResize}
+                    onResizeBarMove={handleMoveResizeBar}
                 />
             </div>
-            <IconButton css={iconButtonStyle} onClick={props.handleDrawer}>
+            <IconButton
+                css={iconButtonStyle}
+                onClick={handleClickOpenCloseDrawer}
+            >
                 {props.isOpen ? (
                     <ChevronLeftIcon css={drawerIconStyle} />
                 ) : (

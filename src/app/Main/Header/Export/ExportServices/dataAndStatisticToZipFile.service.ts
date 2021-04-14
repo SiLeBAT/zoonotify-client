@@ -1,37 +1,53 @@
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { FilterInterface } from "../../Shared/Model/Filter.model";
+import { FilterInterface } from "../../../../Shared/Model/Filter.model";
 import {
     ExportInterface,
-    MainFilterLabelInterface,
-} from "../../Shared/Model/Export.model";
+    MainFilterLabels,
+} from "../../../../Shared/Model/Export.model";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
-import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
+import { DbKeyCollection } from "../../../../Shared/Model/Client_Isolate.model";
 import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
-export interface ObjectToZipParameter {
+export interface DataAndStatisticToZipParameter {
+    /**
+     * all info for export (filtered/stat, row&column, dataset)
+     */
     setting: ExportInterface;
+    /**
+     * object with the selected filters
+     */
     filter: FilterInterface;
+    /**
+     * list with all main filters
+     */
     mainFilterAttributes: string[];
+    /**
+     * main filename
+     */
     ZNFilename: string;
+    /**
+     * "all values" / "Alle Werte"
+     */
     allFilterLabel: string;
-    mainFilterLabels: MainFilterLabelInterface;
+    /**
+     * object with labels of the main filters
+     */
+    mainFilterLabels: MainFilterLabels;
+    /**
+     *  names of the two different files (data, statistic)
+     */
     subFileNames: string[];
 }
 
 /**
  * @desc Convert the data table and the statistic table to one ZIP folder
- * @param {ExportInterface} setting -  all info for export (filtered/stat, row&column, dataset)
- * @param {FilterInterface} filter - object with the selected filters
- * @param {string} ZNFilename - main filename
- * @param {string} allFilterLabel - "all values" / "Alle Werte"
- * @param {MainFilterLabelInterface} mainFilterLabels -  object with labels of the main filters
- * @param {string[]} subFileNames - names of the two different files (data, statistic)
+ * @param zipParameter
  * @returns {void}
  */
 export function dataAndStatisticToZipFile(
-    zipParameter: ObjectToZipParameter
+    zipParameter: DataAndStatisticToZipParameter
 ): void {
     const csvRows: string[] = [];
     const csvRowsFilteredData: string[] = [];

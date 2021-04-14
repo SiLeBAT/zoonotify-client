@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
-    IsolateCountedDTO,
-    IsolateDTO,
-} from "../../../Shared/Model/Api_Isolate.model";
-import {
+    ClientIsolateCountedGroups,
     DbCollection,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
@@ -16,29 +14,54 @@ import {
     ISOLATE_URL,
 } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { TableContext } from "../../../Shared/Context/TableContext";
+import {
+    defaultFilter,
+    FilterContext,
+    FilterContextInterface,
+} from "../../../Shared/Context/FilterContext";
+import {
+    DisplayOptionType,
+    TableContext,
+    TableInterface,
+    TableType,
+} from "../../../Shared/Context/TableContext";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../Shared/Model/Filter.model";
+import { getFilterFromPath } from "./QueryPageServices/PathServices/getFilterFromPath.service";
+import { generatePathStringService } from "./QueryPageServices/PathServices/generatePathString.service";
+import { QueryPageLayoutComponent } from "./QueryPage-Layout.component";
+import { CheckIfFilterIsSet } from "./QueryPageServices/checkIfFilterIsSet.service";
+import { chooseSelectedDisplayedFeaturesService } from "./QueryPageServices/SelectorServices/chooseSelectedDisplFeatures.service";
+import { chooseSelectedFiltersService } from "./QueryPageServices/SelectorServices/chooseSelectedFilters.service";
+import { calculateRelativeTableData } from "./QueryPageServices/TableServices/calculateRelativeTableData.service";
+import { adaptCountedIsolatesGroupsService } from "./QueryPageServices/adaptCountedIsolatesGroups.service";
+import { generateTableHeaderValuesService } from "./QueryPageServices/TableServices/generateTableHeaderValues.service";
+import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableServices/generateStatisticTableDataAbs.service";
+import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
+import { ApiResponse, callApiService } from "../../../Core/callApi.service";
+import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
+import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
+import {
+    IsolateCountedDTO,
+    IsolateDTO,
+} from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
-import { ClientFiltersConfig, ClientSingleFilterConfig, FilterInterface } from "../../../Shared/Model/Filter.model";
-import { getFilterFromPath } from "../../../Core/PathServices/getFilterFromPath.service";
-import { generatePathString } from "../../../Core/PathServices/generatePathString.service";
-import { getFeaturesFromPath } from "../../../Core/PathServices/getTableFromPath.service";
-import { QueryPageComponent } from "./QueryPage.component";
-import { CheckIfFilterIsSet } from "../../../Core/FilterServices/checkIfFilterIsSet.service";
-import { adaptIsolatesFromAPI } from "../../../Core/adaptIsolatesFromAPI.service";
-
-import { adaptFilterFromApiService } from "../../../Core/adaptFilterFromAPI.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
-    const [status, setStatus] = useState<{
-        isolateStatus: number;
-        isolateCountStatus: number;
-        filterStatus: number;
-    }>();
+    const [isolateStatus, setIsolateStatus] = useState<number>();
+    const [isolateCountStatus, setIsolateCountStatus] = useState<number>();
+    const [filterStatus, setFilterStatus] = useState<number>();
+    const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
+    const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
+
     const { data, setData } = useContext(DataContext);
     const { filter, setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
+
     const history = useHistory();
+    const { t } = useTranslation(["QueryPage"]);
 
     const isCol: boolean = table.column !== "";
     const isRow: boolean = table.row !== "";
@@ -46,100 +69,241 @@ export function QueryPageContainerComponent(): JSX.Element {
         filter.selectedFilter,
         filter.mainFilter
     );
-    const state = { isCol, isRow, isFilter };
+    const rowAttribute: FilterType = table.row;
+    const colAttribute: FilterType = table.column;
+
+    const totalNrOfIsol: number = data.ZNData.length;
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
-    const fetchAndSetDataAndFilter = async (): Promise<void> => {
-        const isolateResponse: Response = await fetch(ISOLATE_URL);
-        const filterResponse: Response = await fetch(FILTER_URL);
-        const isolateCountResponse: Response = await fetch(isolateCountUrl);
+    const handleChangeDisplFeatures = (
+        selectedOption: { value: string; label: string } | null,
+        keyName: FilterType | TableType
+    ): void => {
+        const newTable: TableInterface = {
+            ...table,
+            [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
+        };
+        const newPath: string = generatePathStringService(filter, newTable);
+        history.push(newPath);
+        setTable(newTable);
+    };
 
-        const isolateStatus = isolateResponse.status;
-        const isolateCountStatus = isolateCountResponse.status;
-        const filterStatus = filterResponse.status;
+    const handleSwapDisplFeatures = (): void => {
+        const newTable: TableInterface = {
+            ...table,
+            row: table.column,
+            column: table.row,
+        };
+        const newPath: string = generatePathStringService(filter, newTable);
+        history.push(newPath);
+        setTable(newTable);
+    };
 
-        setStatus({
-            isolateStatus,
-            isolateCountStatus,
-            filterStatus,
+    const handleRemoveAllDisplFeatures = (): void => {
+        const newTable: TableInterface = {
+            ...table,
+            row: "" as FilterType,
+            column: "" as FilterType,
+        };
+        const newPath: string = generatePathStringService(filter, newTable);
+        history.push(newPath);
+        setTable(newTable);
+    };
+
+    const handleChangeFilter = (
+        selectedOption: { value: string; label: string }[] | null,
+        keyName: FilterType | TableType
+    ): void => {
+        const newFilter: FilterContextInterface = {
+            ...filter,
+            selectedFilter: {
+                ...filter.selectedFilter,
+                [keyName]: chooseSelectedFiltersService(selectedOption),
+            },
+        };
+        const newPath: string = generatePathStringService(newFilter, table);
+        history.push(newPath);
+        setFilter(newFilter);
+    };
+
+    const handleRemoveAllFilter = (): void => {
+        const newFilter: FilterContextInterface = {
+            ...filter,
+            selectedFilter: defaultFilter.selectedFilter,
+        };
+        const newPath: string = generatePathStringService(newFilter, table);
+        history.push(newPath);
+        setFilter(newFilter);
+    };
+
+    const handleRadioChange = (eventTargetValue: string): void => {
+        const optionValue = eventTargetValue as DisplayOptionType;
+        setTable({
+            ...table,
+            option: optionValue,
         });
+    };
 
-        if (
-            isolateStatus === 200 &&
-            isolateCountStatus === 200 &&
-            filterStatus === 200
-        ) {
-            const isolateProp: IsolateDTO = await isolateResponse.json();
-            const filterProp: FilterConfigDTO = await filterResponse.json();
-            const isolateCountProp: IsolateCountedDTO = await isolateCountResponse.json();
+    const fetchAndSetData = async (): Promise<void> => {
+        const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(ISOLATE_URL);
+        const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(FILTER_URL);
+
+        setIsolateStatus(isolateResponse.status);
+        setFilterStatus(filterResponse.status);
+
+        if (isolateResponse.data && filterResponse.data) {
+            const isolateProp: IsolateDTO = isolateResponse.data;
+            const filterProp: FilterConfigDTO = filterResponse.data;
 
             const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(
                 isolateProp
             );
-            const adaptedDbFilters: ClientFiltersConfig = adaptFilterFromApiService(
+            const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
                 filterProp
             );
-
-            const uniqueValuesObject: FilterInterface = {};
-
-            adaptedDbFilters.filters.forEach(
-                (filterElement: ClientSingleFilterConfig) => {
-                    const { id } = filterElement;
-                    uniqueValuesObject[id] = filterElement.values;
-                }
-            );
-
-            const nrOfSelectedIsolates =
-                isolateCountProp.totalNumberOfIsolates;
-
             setData({
                 ZNData: adaptedDbIsolates,
-                keyValues: DbKeyCollection,
                 uniqueValues: uniqueValuesObject,
-                nrOfSelectedIsolates,
             });
         }
     };
 
-    useEffect(() => {
-        fetchAndSetDataAndFilter();
+    const setTableFromPath = (): void => {
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
         );
-        setFilter({
-            mainFilter: DbKeyCollection,
-            selectedFilter: getFilterFromPath(
-                history.location.search,
-                DbKeyCollection
-            ),
-        });
         setTable({
             ...table,
             row: rowFromPath,
             column: colFromPath,
         });
+    };
+
+    const setFilterFromPath = (): void => {
+        const filterFromPath = getFilterFromPath(
+            history.location.search,
+            DbKeyCollection
+        );
+        setFilter({
+            mainFilter: DbKeyCollection,
+            selectedFilter: filterFromPath,
+        });
+    };
+
+    const setTableContext = (
+        isolateCountGroups:
+            | (Record<string, string | Date> & {
+                  count: number;
+              })[]
+            | undefined,
+        nrOfSelectedIsolates: number
+    ): void => {
+        if ((!isCol && !isRow) || isolateCountGroups === undefined) {
+            setTable({
+                ...table,
+                statisticDataAbsolute: [],
+            });
+        } else {
+            const adaptedIsolateCountGroups: ClientIsolateCountedGroups = adaptCountedIsolatesGroupsService(
+                isolateCountGroups
+            );
+
+            const allValuesText = t("Results.TableHead");
+
+            const columnNames = generateTableHeaderValuesService(
+                isCol,
+                allValuesText,
+                data.uniqueValues,
+                filter.selectedFilter,
+                colAttribute
+            );
+            const statisticTableDataAbs: Record<
+                string,
+                string
+            >[] = generateStatisticTableDataAbsService(
+                isRow,
+                data.uniqueValues,
+                filter.selectedFilter,
+                allValuesText,
+                adaptedIsolateCountGroups,
+                columnNames,
+                colAttribute,
+                rowAttribute
+            );
+
+            const statisticTableDataRel = calculateRelativeTableData(
+                statisticTableDataAbs,
+                nrOfSelectedIsolates
+            );
+            setColumnNameValues(columnNames);
+            setTable({
+                ...table,
+                statisticDataAbsolute: statisticTableDataAbs,
+                statisticDataRelative: statisticTableDataRel,
+            });
+        }
+    };
+
+    const fetchIsolateCounted = async (): Promise<void> => {
+        const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(isolateCountUrl);
+
+        setIsolateCountStatus(tableResponse.status);
+
+        if (tableResponse.data !== undefined) {
+            const isolateCountProp: IsolateCountedDTO = tableResponse.data;
+            const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
+            const isolateCountGroups = isolateCountProp.groups;
+            setTableContext(isolateCountGroups, nrOfSelectedIsolates);
+            setNrOfSelectedIsol(nrOfSelectedIsolates);
+        }
+    };
+
+    useEffect(() => {
+        fetchAndSetData();
     }, []);
 
+    useEffect(() => {
+        setTableFromPath();
+        setFilterFromPath();
+    }, [data.uniqueValues]);
+
     useEffect((): void => {
-        history.push(
-            `?${generatePathString(
-                filter.selectedFilter,
-                table,
-                filter.mainFilter
-            )}`
-        );
-    }, [filter, table, isolateCountUrl]);
+        if (!_.isEmpty(data.uniqueValues)) {
+            fetchIsolateCounted();
+        }
+    }, [
+        filter,
+        table.row,
+        table.column,
+        isolateCountUrl,
+        localStorage.getItem("i18nextLng"),
+    ]);
 
     return (
         <LoadingOrErrorComponent
-            status={status}
+            status={{ isolateStatus, isolateCountStatus, filterStatus }}
             dataIsSet={!_.isEmpty(data.ZNData)}
             componentToDisplay={
-                <QueryPageComponent
-                    isCol={state.isCol}
-                    isRow={state.isRow}
-                    isFilter={state.isFilter}
+                <QueryPageLayoutComponent
+                    isCol={isCol}
+                    isRow={isRow}
+                    isFilter={isFilter}
+                    columnNameValues={columnNameValues}
+                    tableData={table}
+                    numberOfIsolates={{
+                        total: totalNrOfIsol,
+                        filtered: nrOfSelectedIsol,
+                    }}
+                    mainFilterAttributes={filter.mainFilter}
+                    dataUniqueValues={data.uniqueValues}
+                    selectedFilter={filter.selectedFilter}
+                    onDisplFeaturesChange={handleChangeDisplFeatures}
+                    onDisplFeaturesSwap={handleSwapDisplFeatures}
+                    onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
+                    onFilterChange={handleChangeFilter}
+                    onFilterRemoveAll={handleRemoveAllFilter}
+                    onRadioChange={handleRadioChange}
                 />
             }
         />

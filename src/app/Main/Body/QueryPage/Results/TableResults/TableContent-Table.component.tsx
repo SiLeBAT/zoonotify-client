@@ -35,13 +35,13 @@ const useStyles = makeStyles({
 
 /**
  * @desc Returns TableContainer for the results
- * @param {Record<string, string>[]} tableData - list of objects with the counted isolates
- * @param {string[]} columnAttributes - column attributes for the table header
+ * @param tableData - list of objects with the counted isolates
+ * @param columnAttributes - column attributes for the table header
  * @returns {JSX.Element} - table container component
  */
 export function TableContentTableComponent(props: {
     tableData: Record<string, string>[];
-    columnAttributes: string[];
+    columnNameValues: string[];
 }): JSX.Element {
     const classes = useStyles();
 
@@ -50,7 +50,7 @@ export function TableContentTableComponent(props: {
             <Table stickyHeader aria-label="statistic table">
                 <TableHead css={headerStyle}>
                     <TableRow css={headerStyle}>
-                        {TableContentHeaderComponent(props.columnAttributes)}
+                        {TableContentHeaderComponent(props.columnNameValues)}
                     </TableRow>
                 </TableHead>
                 <TableBody>

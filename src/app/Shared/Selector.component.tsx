@@ -74,31 +74,54 @@ const selectStyle: StylesConfig = {
 };
 
 export interface SelectorProps {
+    /**
+     * label for the selector
+     */
     label: string;
+    /**
+     * all possible values for the selector with labels
+     */
     dropDownValuesObj: { value: string; label: string }[];
+    /**
+     * values that are already selected in other selectors with labels
+     */
     selectedValuesObj: { value: string; label: string }[];
+    /**
+     * label if no option is available
+     */
     noOptionLabel: string;
+    /**
+     * attribute for the selector
+     */
     selectAttribute: FilterType | TableType;
-    handleChange: (
-        selectedOption: ValueType<Record<string, string>>,
+    onChange: (
+        selectedOption: ValueType<{ value: string; label: string }> | null,
         keyName: FilterType | TableType
     ) => void;
+    /**
+     * true if the user can select multiple values
+     */
     isMulti: boolean;
+    /**
+     * true if no selector is selected so far
+     */
     isNotSelect: boolean;
 }
 
 /**
  * @desc Returns one selector for filter or row/column.
- * @param {string} label - label for the selector
- * @param {{value: string, label: string}[]} dropDownValuesObj - all possible values for the selector with labels
- * @param {{value: string, label: string}[]} selectedValuesObj - values that are already selected in other selectors with labels
- * @param {FilterType | TableType} selectAttribute - attribute for the selector
- * @param {(selectedOption: ValueType<Record<string, string>>,keyName: FilterType | TableType) => void} handleChange - function to handle change of the selector
- * @param {boolean} isMulti - true if the user can select multiple values
- * @param {boolean} isNotSelect - true if no selector is selected so far
+ * @param props
  * @returns {JSX.Element} - selector component
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {
+    const handleChange = (
+        selectedOption: ValueType<{
+            value: string;
+            label: string;
+        }> | null,
+        keyName: FilterType | TableType
+    ): void => props.onChange(selectedOption, keyName);
+
     return (
         <div>
             <InputLabel
@@ -115,7 +138,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
                 options={props.dropDownValuesObj}
                 placeholder={props.label}
                 onChange={(selectedOption) =>
-                    props.handleChange(selectedOption, props.selectAttribute)
+                    handleChange(selectedOption, props.selectAttribute)
                 }
                 styles={selectStyle}
                 value={props.selectedValuesObj}

@@ -35,4 +35,4 @@ export const defaultExport = {
     },
 };
 
-export type MainFilterLabelInterface = Record<FilterType, string>;
+export type MainFilterLabels = Record<FilterType, string>;

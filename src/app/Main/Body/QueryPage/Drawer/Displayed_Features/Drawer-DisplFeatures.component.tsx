@@ -1,19 +1,15 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useContext } from "react";
-import { ValueType } from "react-select";
 import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
-    TableContext,
     TableType,
 } from "../../../../../Shared/Context/TableContext";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import { DisplayedFeatureSelectorComponent } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
-import { FilterContext } from "../../../../../Shared/Context/FilterContext";
 
 const drawerWidthStyle = css`
     width: inherit;
@@ -46,70 +42,62 @@ const iconStyle = css`
     height: 36px;
 `;
 
-export function DrawerDisplayedFeaturesComponent(): JSX.Element {
-    const { table, setTable } = useContext(TableContext);
-    const { filter } = useContext(FilterContext);
+export interface DrawerDisplayedFeaturesProps {
+    tableColumn: string, 
+    tableRow: string, 
+    mainFilterAttributes: string[],
+    onDisplFeaturesChange: (
+        selectedOption: { value: string; label: string } | null,
+        keyName: FilterType | TableType
+    ) => void;
+    onDisplFeaturesSwap: () => void;
+    onDisplFeaturesRemoveAll: () => void;
+}
+
+export function DrawerDisplayedFeaturesComponent(
+    props: DrawerDisplayedFeaturesProps
+): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    /**
-     * @desc Takes the current values of the selector with the onChange event handler and sets it as row/column.
-     * @param {ValueType<Record<string, string>>}  selectedOption       current values of the selector
-     * @param {FilterType | TableType}             keyName              "row" or "column"
-     */
-    const handleChange = (
-        selectedOption: ValueType<Record<string, string>>,
+    const handleChangeDisplFeatures = (
+        selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
-    ): void => {
-        if (selectedOption) {
-            const selectedFeature: string[] = [];
-            const selectedOptionObj = selectedOption as Record<string, string>;
-            selectedFeature.push(Object.values(selectedOptionObj)[0]);
-            setTable({
-                ...table,
-                [keyName]: selectedFeature[0] as FilterType,
-            });
-        } else {
-            setTable({
-                ...table,
-                [keyName]: "",
-            });
-        }
-    };
-
-    const handleSwap = (): void => {
-        setTable({
-            ...table,
-            row: table.column,
-            column: table.row,
-        });
-    };
+    ): void => props.onDisplFeaturesChange(selectedOption, keyName);
+    const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
+    const handleRemoveAllDisplFeatures = (): void =>
+        props.onDisplFeaturesRemoveAll();
 
     return (
         <div css={drawerWidthStyle}>
             <div css={featureAreaStyle}>
                 <p css={featureSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</p>
-                <ClearSelectorComponent isFilter={false} isTable />
+                <ClearSelectorComponent
+                    onClick={handleRemoveAllDisplFeatures}
+                />
             </div>
             <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Row")}
-                activeFeature={table.row}
-                otherFeature={table.column}
+                activeFeature={props.tableRow}
+                otherFeature={props.tableColumn}
                 selectAttribute="row"
-                mainFilterAttributes={filter.mainFilter}
-                handleChange={handleChange}
+                mainFilterAttributes={props.mainFilterAttributes}
+                onChange={handleChangeDisplFeatures}
             />
             <div css={centerIconButtonStyle}>
-                <IconButton css={iconButtonStyle} onClick={handleSwap}>
+                <IconButton
+                    css={iconButtonStyle}
+                    onClick={handleSwapDisplFeatures}
+                >
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>
             <DisplayedFeatureSelectorComponent
                 label={t("Drawer.Graphs.Column")}
-                activeFeature={table.column}
-                otherFeature={table.row}
+                activeFeature={props.tableColumn}
+                otherFeature={props.tableRow}
                 selectAttribute="column"
-                mainFilterAttributes={filter.mainFilter}
-                handleChange={handleChange}
+                mainFilterAttributes={props.mainFilterAttributes}
+                onChange={handleChangeDisplFeatures}
             />
         </div>
     );

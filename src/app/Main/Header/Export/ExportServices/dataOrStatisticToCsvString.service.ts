@@ -1,24 +1,21 @@
-import { FilterInterface } from "../../Shared/Model/Filter.model";
-import {
-    ExportInterface,
-    MainFilterLabelInterface,
-} from "../../Shared/Model/Export.model";
+import { DbKeyCollection } from "../../../../Shared/Model/Client_Isolate.model";
+import { ExportInterface, MainFilterLabels } from "../../../../Shared/Model/Export.model";
+import { FilterInterface } from "../../../../Shared/Model/Filter.model";
+import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
-import { DbKeyCollection } from "../../Shared/Model/Client_Isolate.model";
-import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
 export interface ObjectToCsvParameter {
     setting: ExportInterface;
     filter: FilterInterface;
     allFilterLabel: string;
-    mainFilterLabels: MainFilterLabelInterface;
+    mainFilterLabels: MainFilterLabels;
     mainFilterAttributes: string[];
 }
 
 /**
  * @desc Convert the chosen parameter and the resulting Data to a CSV string
- * @param {ObjectToCsvParameter} csvParameter
+ * @param csvParameter
  * @returns {string} - converted data as csv string
  */
 export function dataOrStatisticToCsvString(
