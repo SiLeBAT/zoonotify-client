@@ -12,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TableContentRowsComponent } from "./TableContent-Rows.component";
 import { TableContentHeaderComponent } from "./TableContent-Header.component";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { TableContentRowWithColSumComponent } from "./TableContent-RowWithColSums.component";
 
 const headerStyle = css`
     height: 50px;
@@ -62,6 +63,13 @@ export function TableContentTableComponent(props: {
                             })}
                         </TableRow>
                     ))}
+                    <TableRow key="row-with-column-sum">
+                        {TableContentRowWithColSumComponent({
+                            tableData: props.tableData,
+                            headerValues: props.columnNameValues,
+                            classes,
+                        })}
+                    </TableRow>
                 </TableBody>
             </Table>
         </TableContainer>

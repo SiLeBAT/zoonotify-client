@@ -5,6 +5,7 @@ import TableCell from "@material-ui/core/TableCell";
 import {
     primaryColor,
     onBackgroundColor,
+    bfrPrimaryPalette,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const blankCellStyle = css`
@@ -22,7 +23,14 @@ const headerCellStyle = css`
     text-align: right;
     white-space: nowrap;
 `;
-
+const sumCellStyle = css`
+    box-sizing: border-box;
+    border-right: 1px solid lightgrey;
+    border-left: 1px solid ${primaryColor};
+    background-color: ${bfrPrimaryPalette[50]};
+    text-align: left;
+    white-space: nowrap;
+`
 const StyledTableCell = withStyles(() =>
     createStyles({
         head: {
@@ -63,5 +71,12 @@ export function TableContentHeaderComponent(
             </StyledTableCell>
         );
     });
+    elements.push(
+        <StyledTableCell
+            key="header-row-sum"
+            css={sumCellStyle}        >
+            Zeilensumme
+        </StyledTableCell>
+    );
     return elements;
 }
