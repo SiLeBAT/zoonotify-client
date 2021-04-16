@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { useTranslation } from "react-i18next";
 import {
     Table,
     TableBody,
@@ -45,6 +46,7 @@ export function TableContentTableComponent(props: {
     tableData: Record<string, string>[];
     columnNameValues: string[];
 }): JSX.Element {
+    const { t } = useTranslation(["QueryPage"]);
     const classes = useStyles();
 
     const tableRows: JSX.Element[] = props.tableData.map((row) => (
@@ -64,6 +66,7 @@ export function TableContentTableComponent(props: {
                     tableData: props.tableData,
                     headerValues: props.columnNameValues,
                     classes,
+                    colSumLabel: t("Sums.ColSum")
                 })}
             </TableRow>
         );
@@ -74,12 +77,13 @@ export function TableContentTableComponent(props: {
             <Table stickyHeader aria-label="statistic table">
                 <TableHead css={headerStyle}>
                     <TableRow css={headerStyle}>
-                        {TableContentHeaderComponent(props.isSumRowCol, props.columnNameValues)}
+                        {TableContentHeaderComponent(
+                            props.isSumRowCol,
+                            props.columnNameValues
+                        )}
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {tableRows}
-                </TableBody>
+                <TableBody>{tableRows}</TableBody>
             </Table>
         </TableContainer>
     );
