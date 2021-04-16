@@ -71,6 +71,11 @@ const selectStyle: StylesConfig = {
             color: primaryColor,
         },
     }),
+
+    menuList: (styles) => ({
+        ...styles,
+        maxHeight: "7rem",
+    }),
 };
 
 export interface SelectorProps {
