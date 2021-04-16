@@ -2,6 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
+import { useTranslation } from "react-i18next";
 import {
     primaryColor,
     onBackgroundColor,
@@ -52,6 +53,7 @@ export function TableContentHeaderComponent(
     isSumRowCol: boolean,
     headerValues: string[]
 ): JSX.Element[] {
+    const { t } = useTranslation(["QueryPage"]);
     const elements: JSX.Element[] = [];
     elements.push(
         <StyledTableCell
@@ -74,7 +76,7 @@ export function TableContentHeaderComponent(
             <StyledTableCell
                 key="header-row-sum"
                 css={sumCellStyle}        >
-                Zeilensumme
+                {t("Sums.RowSum")}
             </StyledTableCell>
         );
     }

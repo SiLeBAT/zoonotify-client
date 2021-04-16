@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { useTranslation } from "react-i18next";
 import {
     Radio,
     FormControl,
@@ -77,6 +78,7 @@ export function ResultsTableOptionsComponent(props: {
     onRadioChange: (eventTargetValue: string) => void;
     onCheckboxChange: (checked: boolean) => void;
 }): JSX.Element {
+    const { t } = useTranslation(["QueryPage"]);
     const handleChangeRadio = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
 
@@ -84,9 +86,14 @@ export function ResultsTableOptionsComponent(props: {
         props.onCheckboxChange(checked);
     };
 
+    const optionsHeading = t("OptionBar.Title")
+    const absoluteText = t("OptionBar.Absolute");
+    const percentageText = t("OptionBar.Percent");
+    const sumRowColText = t("OptionBar.Sum")
+
     return (
         <div>
-            <p css={optionsHeadingStyle}>Display options:</p>
+            <p css={optionsHeadingStyle}>{optionsHeading}</p>
             <FormControl css={optionsStyle} component="fieldset">
                 <RadioGroup
                     css={css`
@@ -101,13 +108,13 @@ export function ResultsTableOptionsComponent(props: {
                         css={radioButtonSizeStyle}
                         value="absolute"
                         control={<BlueRadio color="default" size="small" />}
-                        label="Absolute numbers"
+                        label={absoluteText}
                     />
                     <FormControlLabel
                         css={radioButtonSizeStyle}
                         value="relative"
                         control={<BlueRadio color="default" size="small" />}
-                        label="Percentage"
+                        label={percentageText}
                     />
                 </RadioGroup>
                 <FormControlLabel
@@ -122,7 +129,7 @@ export function ResultsTableOptionsComponent(props: {
                             color="primary"
                         />
                     }
-                    label="show column and row sum"
+                    label={sumRowColText}
                 />
             </FormControl>
         </div>

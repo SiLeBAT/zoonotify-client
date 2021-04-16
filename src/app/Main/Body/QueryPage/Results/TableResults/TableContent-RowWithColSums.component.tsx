@@ -2,6 +2,7 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 import {
     backgroundColor,
     bfrPrimaryPalette,
@@ -45,6 +46,7 @@ export function TableContentRowWithColSumComponent(props: {
     headerValues: string[];
     classes: Record<"tableCell", string>;
 }): JSX.Element[] {
+    const { t } = useTranslation(["QueryPage"]);
     const arrayWithColSumCells: JSX.Element[] = [
         <TableCell
             key="header-colum-sum"
@@ -54,7 +56,7 @@ export function TableContentRowWithColSumComponent(props: {
             align="left"
             css={tableCellStyle(true)}
         >
-            Spaltensumme
+            {t("Sums.ColSum")}
         </TableCell>,
     ];
 

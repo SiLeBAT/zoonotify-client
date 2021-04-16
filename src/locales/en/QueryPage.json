@@ -42,5 +42,15 @@
         "Total": "Total number of isolates:",
         "Selected": "Number of selected isolates:"
     }, 
-    "Explanation": "- Please select a row/column to display a statistic table -"
+    "Explanation": "- Please select a row/column to display a statistic table -",
+    "OptionBar": {
+        "Title": "Display options",
+        "Absolute": "Absolute numbers",
+        "Percent": "Percentage",
+        "Sum": "Sum of row and columns"
+    }, 
+    "Sums": {
+        "RowSum": "Row sum",
+        "ColSum": "Column sum"
+    }
 }
