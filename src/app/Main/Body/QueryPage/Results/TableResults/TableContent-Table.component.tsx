@@ -41,35 +41,44 @@ const useStyles = makeStyles({
  * @returns {JSX.Element} - table container component
  */
 export function TableContentTableComponent(props: {
+    isSumRowCol: boolean;
     tableData: Record<string, string>[];
     columnNameValues: string[];
 }): JSX.Element {
     const classes = useStyles();
+
+    const tableRows: JSX.Element[] = props.tableData.map((row) => (
+        <TableRow key={`row-${row.name}`}>
+            {TableContentRowsComponent({
+                isSumRowCol: props.isSumRowCol,
+                row,
+                classes,
+            })}
+        </TableRow>
+    ));
+
+    if (props.isSumRowCol) {
+        tableRows.push(
+            <TableRow key="row-with-column-sum">
+                {TableContentRowWithColSumComponent({
+                    tableData: props.tableData,
+                    headerValues: props.columnNameValues,
+                    classes,
+                })}
+            </TableRow>
+        );
+    }
 
     return (
         <TableContainer component={Paper} css={tableContainerStyle}>
             <Table stickyHeader aria-label="statistic table">
                 <TableHead css={headerStyle}>
                     <TableRow css={headerStyle}>
-                        {TableContentHeaderComponent(props.columnNameValues)}
+                        {TableContentHeaderComponent(props.isSumRowCol, props.columnNameValues)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {props.tableData.map((row) => (
-                        <TableRow key={`row-${row.name}`}>
-                            {TableContentRowsComponent({
-                                row,
-                                classes,
-                            })}
-                        </TableRow>
-                    ))}
-                    <TableRow key="row-with-column-sum">
-                        {TableContentRowWithColSumComponent({
-                            tableData: props.tableData,
-                            headerValues: props.columnNameValues,
-                            classes,
-                        })}
-                    </TableRow>
+                    {tableRows}
                 </TableBody>
             </Table>
         </TableContainer>

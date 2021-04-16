@@ -42,6 +42,7 @@ export function QueryPageLayoutComponent(props: {
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
     const [open, setOpen] = useState<boolean>(true);
+    const [sumRowCol, setSumRowCol] = useState<boolean>(true);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -66,6 +67,10 @@ export function QueryPageLayoutComponent(props: {
         } else {
             setOpen(true);
         }
+    };
+
+    const handleChangeCheckbox = (checked: boolean): void => {
+        setSumRowCol(checked)
     };
 
     const handleMoveResizeBar = (newWidth: number): void => {
@@ -98,12 +103,14 @@ export function QueryPageLayoutComponent(props: {
                 isCol={props.isCol}
                 isRow={props.isRow}
                 isFilter={props.isFilter}
+                isSumRowCol={sumRowCol}
                 columnNameValues={props.columnNameValues}
                 tableData={props.tableData}
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.selectedFilter}
                 mainFilterAttributes={props.mainFilterAttributes}
                 onRadioChange={handleRadioChange}
+                onCheckboxChange={handleChangeCheckbox}
             />
         </main>
     );

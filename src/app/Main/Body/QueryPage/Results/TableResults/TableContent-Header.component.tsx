@@ -17,9 +17,6 @@ const blankCellStyle = css`
 const headerCellStyle = css`
     box-sizing: border-box;
     border-right: 1px solid lightgrey;
-    :last-child {
-        border-right: none;
-    }
     text-align: right;
     white-space: nowrap;
 `;
@@ -52,6 +49,7 @@ const StyledTableCell = withStyles(() =>
  * @returns {JSX.Element[]} - list of table cell components
  */
 export function TableContentHeaderComponent(
+    isSumRowCol: boolean,
     headerValues: string[]
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
@@ -71,12 +69,14 @@ export function TableContentHeaderComponent(
             </StyledTableCell>
         );
     });
-    elements.push(
-        <StyledTableCell
-            key="header-row-sum"
-            css={sumCellStyle}        >
-            Zeilensumme
-        </StyledTableCell>
-    );
+    if (isSumRowCol) {
+        elements.push(
+            <StyledTableCell
+                key="header-row-sum"
+                css={sumCellStyle}        >
+                Zeilensumme
+            </StyledTableCell>
+        );
+    }
     return elements;
 }

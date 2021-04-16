@@ -31,8 +31,10 @@ export interface TableResultsProps {
      * attributes of the columns
      */
     columnNameValues: string[];
-    tableData: TableInterface
+    isSumRowCol: boolean;
+    tableData: TableInterface;
     onRadioChange: (eventTargetValue: string) => void;
+    onCheckboxChange: (checked: boolean) => void;
 }
 
 /**
@@ -48,9 +50,12 @@ export function QueryPageContentTableResultsLayoutComponent(
     const handleChangeRadio = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
 
+    const handleChangeCheckbox = (checked: boolean): void => {
+        props.onCheckboxChange(checked);
+    };
 
-    const tableColAttribute = props.tableData.column
-    const tableRowAttribute = props.tableData.row
+    const tableColAttribute = props.tableData.column;
+    const tableRowAttribute = props.tableData.row;
 
     const accordionHeader: string = t(`Results.Table`);
     const rowMainHeader: string = _.isEmpty(tableRowAttribute)
@@ -74,8 +79,10 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
+                    isSumRowCol={props.isSumRowCol}
                     tableOption={props.tableData.option}
                     onRadioChange={handleChangeRadio}
+                    onCheckboxChange={handleChangeCheckbox}
                 />
                 {props.displayRowCol.isCol && (
                     <TableResultsTableMainHeaderComponent
@@ -93,9 +100,12 @@ export function QueryPageContentTableResultsLayoutComponent(
                         />
                     )}
                     <TableResultsTableContentComponent
+                        isSumRowCol={props.isSumRowCol}
                         tables={{
-                            statisticDataAbsolute: props.tableData.statisticDataAbsolute,
-                            statisticDataRelative: props.tableData.statisticDataRelative
+                            statisticDataAbsolute:
+                                props.tableData.statisticDataAbsolute,
+                            statisticDataRelative:
+                                props.tableData.statisticDataRelative,
                         }}
                         tableOption={props.tableData.option}
                         columnNameValues={props.columnNameValues}

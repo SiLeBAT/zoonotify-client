@@ -7,6 +7,7 @@ import {
     RadioGroup,
     withStyles,
     createStyles,
+    Checkbox,
 } from "@material-ui/core";
 import {
     bfrDarkgrey,
@@ -17,9 +18,11 @@ import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 const size = 0.75;
 
 const optionsStyle = css`
+    width: 100%;
     display: "flex";
-    margin-top: 0;
+    margin-top: 9px;
     flex-direction: row;
+    justify-content: space-between;
 `;
 const optionsHeadingStyle = css`
     margin: auto 2em auto 0;
@@ -27,6 +30,18 @@ const optionsHeadingStyle = css`
     font-size: ${size}rem;
 `;
 const radioButtonSizeStyle = css`
+    span {
+        padding: 0px;
+        margin-left: 5px;
+        font-size: ${size}rem;
+    }
+    svg {
+        width: ${size}em;
+        height: ${size}em;
+    }
+`;
+const checkboxStyle = css`
+    margin-right: 0;
     span {
         font-size: ${size}rem;
     }
@@ -57,22 +72,30 @@ const BlueRadio = withStyles(() =>
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
+    isSumRowCol: boolean;
     tableOption: DisplayOptionType;
     onRadioChange: (eventTargetValue: string) => void;
+    onCheckboxChange: (checked: boolean) => void;
 }): JSX.Element {
-    const handleChange = (eventTargetValue: string): void =>
+    const handleChangeRadio = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
 
+    const handleChangeCheckbox = (checked: boolean): void => {
+        props.onCheckboxChange(checked);
+    };
+
     return (
-        <div css={optionsStyle}>
+        <div>
             <p css={optionsHeadingStyle}>Display options:</p>
-            <FormControl component="fieldset">
+            <FormControl css={optionsStyle} component="fieldset">
                 <RadioGroup
-                    row
+                    css={css`
+                        margin-bottom: 9px;
+                    `}
                     aria-label="options"
                     name="options"
                     value={props.tableOption}
-                    onChange={(event) => handleChange(event.target.value)}
+                    onChange={(event) => handleChangeRadio(event.target.value)}
                 >
                     <FormControlLabel
                         css={radioButtonSizeStyle}
@@ -87,6 +110,20 @@ export function ResultsTableOptionsComponent(props: {
                         label="Percentage"
                     />
                 </RadioGroup>
+                <FormControlLabel
+                    css={checkboxStyle}
+                    control={
+                        <Checkbox
+                            checked={props.isSumRowCol}
+                            onChange={(event) =>
+                                handleChangeCheckbox(event.target.checked)
+                            }
+                            name="raw"
+                            color="primary"
+                        />
+                    }
+                    label="show column and row sum"
+                />
             </FormControl>
         </div>
     );

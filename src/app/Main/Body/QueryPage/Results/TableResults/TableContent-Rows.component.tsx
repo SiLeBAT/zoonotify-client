@@ -27,11 +27,12 @@ const sumTableCellStyle = css`
  * @returns {JSX.Element} - list of table cell components
  */
 export function TableContentRowsComponent(props: {
+    isSumRowCol: boolean,
     row: Record<string, string>;
     classes: Record<"tableCell", string>;
 }): JSX.Element[] {
-    const elements: JSX.Element[] = [];
-    elements.push(
+    const rowCells: JSX.Element[] = [];
+    rowCells.push(
         <TableCell
             key={`isolates-${props.row.name}-name`}
             className={props.classes.tableCell}
@@ -49,7 +50,7 @@ export function TableContentRowsComponent(props: {
     colKeys.forEach((colKey): void => {
         const cellNumber = props.row[colKey]
         rowSum += Number.parseFloat(cellNumber);
-        elements.push(
+        rowCells.push(
             <TableCell
                 key={`isolates-${props.row.name}-${colKey}`}
                 className={props.classes.tableCell}
@@ -62,17 +63,19 @@ export function TableContentRowsComponent(props: {
             </TableCell>
         );
     });
-    elements.push(
-        <TableCell
-            key="isolates-row-sum"
-            className={props.classes.tableCell}
-            component="th"
-            scope="row"
-            align="right"
-            css={sumTableCellStyle}
-        >
-            {rowSum}
-        </TableCell>
-    );
-    return elements;
+    if (props.isSumRowCol) {
+        rowCells.push(
+            <TableCell
+                key="isolates-row-sum"
+                className={props.classes.tableCell}
+                component="th"
+                scope="row"
+                align="right"
+                css={sumTableCellStyle}
+            >
+                {rowSum}
+            </TableCell>
+        );
+    }
+    return rowCells;
 }
