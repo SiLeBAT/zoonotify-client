@@ -41,7 +41,9 @@ const linkStyle = css`
     }
 `;
 
-export function FooterLinkListComponent(): JSX.Element {
+export function FooterLinkListComponent(props: {
+    supportMail: string | undefined;
+}): JSX.Element {
     const { t } = useTranslation(["Footer"]);
     return (
         <ul css={footerContentStyle}>
@@ -72,9 +74,9 @@ export function FooterLinkListComponent(): JSX.Element {
             </li>
             <li css={footerElementStyle}>
                 <a
-                    href={`mailto: dominic.toelle@bfr.bund.de?subject=ZooNotify-Problem:&body=${t(
-                        "Content.MailText"
-                    )}`}
+                    href={`mailto: ${
+                        props.supportMail
+                    }?subject=ZooNotify-Problem:&body=${t("Content.MailText")}`}
                     css={linkStyle}
                 >
                     {t("Content.Mail")}

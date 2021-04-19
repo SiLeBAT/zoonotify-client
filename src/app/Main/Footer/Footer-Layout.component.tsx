@@ -17,11 +17,13 @@ const footerStyle = css`
     border-top: 2px solid ${primaryColor};
 `;
 
-export function FooterLayoutComponent(): JSX.Element {
+export function FooterLayoutComponent(props: {
+    supportMail: string | undefined;
+}): JSX.Element {
     return (
         <footer css={footerStyle}>
             <LastUpdateComponent />
-            <FooterLinkListComponent />
+            <FooterLinkListComponent supportMail={props.supportMail} />
         </footer>
     );
 }
