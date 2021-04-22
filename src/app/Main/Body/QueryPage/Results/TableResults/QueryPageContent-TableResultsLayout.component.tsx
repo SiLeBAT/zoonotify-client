@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { TableResultsTableContentComponent } from "./TableResults-TableContent.component";
@@ -31,10 +32,8 @@ export interface TableResultsProps {
      * attributes of the columns
      */
     columnNameValues: string[];
-    isSumRowCol: boolean;
     tableData: TableInterface;
     onRadioChange: (eventTargetValue: string) => void;
-    onCheckboxChange: (checked: boolean) => void;
 }
 
 /**
@@ -45,13 +44,14 @@ export interface TableResultsProps {
 export function QueryPageContentTableResultsLayoutComponent(
     props: TableResultsProps
 ): JSX.Element {
+    const [isSumRowCol, setIsSumRowCol] = useState<boolean>(true);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeRadio = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
 
     const handleChangeCheckbox = (checked: boolean): void => {
-        props.onCheckboxChange(checked);
+        setIsSumRowCol(checked)
     };
 
     const tableColAttribute = props.tableData.column;
@@ -79,7 +79,7 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
-                    isSumRowCol={props.isSumRowCol}
+                    isSumRowCol={isSumRowCol}
                     tableOption={props.tableData.option}
                     onRadioChange={handleChangeRadio}
                     onCheckboxChange={handleChangeCheckbox}
@@ -100,7 +100,7 @@ export function QueryPageContentTableResultsLayoutComponent(
                         />
                     )}
                     <TableResultsTableContentComponent
-                        isSumRowCol={props.isSumRowCol}
+                        isSumRowCol={isSumRowCol}
                         tables={{
                             statisticDataAbsolute:
                                 props.tableData.statisticDataAbsolute,

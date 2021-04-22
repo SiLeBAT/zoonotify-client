@@ -41,8 +41,7 @@ export function QueryPageLayoutComponent(props: {
     onRadioChange: (eventTargetValue: string) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
-    const [open, setOpen] = useState<boolean>(true);
-    const [sumRowCol, setSumRowCol] = useState<boolean>(true);
+    const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -62,15 +61,11 @@ export function QueryPageLayoutComponent(props: {
         props.onRadioChange(eventTargetValue);
 
     const handleClickOpenCloseDrawer = (): void => {
-        if (open) {
-            setOpen(false);
+        if (isOpen) {
+            setIsOpen(false);
         } else {
-            setOpen(true);
+            setIsOpen(true);
         }
-    };
-
-    const handleChangeCheckbox = (checked: boolean): void => {
-        setSumRowCol(checked)
     };
 
     const handleMoveResizeBar = (newWidth: number): void => {
@@ -80,7 +75,7 @@ export function QueryPageLayoutComponent(props: {
     return (
         <main css={mainStyle}>
             <DrawerLayoutComponent
-                isOpen={open}
+                isOpen={isOpen}
                 drawerWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 selectedFilter={props.selectedFilter}
@@ -94,7 +89,7 @@ export function QueryPageLayoutComponent(props: {
                 onFilterRemoveAll={handleRemoveAllFilter}
             />
             <QueryPageDrawerControlComponent
-                isOpen={open}
+                isOpen={isOpen}
                 drawerWidth={drawerWidth}
                 onDrawerOpenCloseClick={handleClickOpenCloseDrawer}
                 onResizeBarMove={handleMoveResizeBar}
@@ -103,14 +98,12 @@ export function QueryPageLayoutComponent(props: {
                 isCol={props.isCol}
                 isRow={props.isRow}
                 isFilter={props.isFilter}
-                isSumRowCol={sumRowCol}
                 columnNameValues={props.columnNameValues}
                 tableData={props.tableData}
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.selectedFilter}
                 mainFilterAttributes={props.mainFilterAttributes}
                 onRadioChange={handleRadioChange}
-                onCheckboxChange={handleChangeCheckbox}
             />
         </main>
     );

@@ -49,7 +49,6 @@ export function QueryPageContentLayoutComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
-    isSumRowCol: boolean;
     columnNameValues: string[];
     tableData: TableInterface;
     numberOfIsolates: {
@@ -59,16 +58,11 @@ export function QueryPageContentLayoutComponent(props: {
     mainFilterAttributes: string[];
     selectedFilter: FilterInterface;
     onRadioChange: (eventTargetValue: string) => void;
-    onCheckboxChange: (checked: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeRadio = (eventTargetValue: string): void =>
         props.onRadioChange(eventTargetValue);
-
-    const handleChangeCheckbox = (checked: boolean): void => {
-        props.onCheckboxChange(checked);
-    };
 
     return (
         <div css={contentStyle}>
@@ -90,11 +84,9 @@ export function QueryPageContentLayoutComponent(props: {
             <div css={resultsBoxStyle}>
                 <QueryPageContentTableResultsLayoutComponent
                     displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
-                    isSumRowCol={props.isSumRowCol}
                     columnNameValues={props.columnNameValues}
                     tableData={props.tableData}
                     onRadioChange={handleChangeRadio}
-                    onCheckboxChange={handleChangeCheckbox}
                 />
             </div>
         </div>

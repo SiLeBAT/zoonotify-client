@@ -41,7 +41,7 @@ const radioButtonSizeStyle = css`
         height: ${size}em;
     }
 `;
-const checkboxStyle = css`
+const checkBoxLabelStyle = css`
     margin-right: 0;
     span {
         font-size: ${size}rem;
@@ -118,7 +118,7 @@ export function ResultsTableOptionsComponent(props: {
                     />
                 </RadioGroup>
                 <FormControlLabel
-                    css={checkboxStyle}
+                    css={checkBoxLabelStyle}
                     control={
                         <Checkbox
                             checked={props.isSumRowCol}

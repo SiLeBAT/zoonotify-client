@@ -50,7 +50,7 @@ export function TableContentRowWithColSumComponent(props: {
 }): JSX.Element[] {
     const arrayWithColSumCells: JSX.Element[] = [
         <TableCell
-            key="header-colum-sum"
+            key="header-column-sum"
             className={props.classes.tableCell}
             component="th"
             scope="row"
