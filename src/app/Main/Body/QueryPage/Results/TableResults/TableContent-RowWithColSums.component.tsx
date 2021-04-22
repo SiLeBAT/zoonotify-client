@@ -34,7 +34,7 @@ function calculateColSum(
     const colNumbers: number[] = tableData.map((tableRow) => {
         const colNumber = tableRow[headerValue];
         if (colNumber !== undefined) {
-            return Number.parseFloat(colNumber);
+            return Number.parseInt(colNumber, 10);
         }
         return Number.NaN;
     });

@@ -51,7 +51,7 @@ export function TableContentRowsComponent(props: {
     let rowSum = 0;
     colKeys.forEach((colKey): void => {
         const cellNumber = props.row[colKey];
-        rowSum += Number.parseFloat(cellNumber);
+        rowSum += Number.parseInt(cellNumber, 10);
         rowCells.push(
             <TableCell
                 key={`isolates-${props.row.name}-${colKey}`}
