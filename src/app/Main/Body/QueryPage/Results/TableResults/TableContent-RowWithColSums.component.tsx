@@ -36,7 +36,7 @@ function calculateColSum(
         if (colNumber !== undefined) {
             return Number.parseInt(colNumber, 10);
         }
-        return Number.NaN;
+        return 0;
     });
 
     return _.sum(colNumbers);
@@ -64,20 +64,18 @@ export function TableContentRowWithColSumComponent(props: {
     props.headerValues.forEach((headerValue) => {
         const colSum: number = calculateColSum(props.tableData, headerValue);
 
-        if (!Number.isNaN(colSum)) {
-            arrayWithColSumCells.push(
-                <TableCell
-                    key={`isolates-col-sum-${headerValue}`}
-                    className={props.classes.tableCell}
-                    component="th"
-                    scope="row"
-                    align="right"
-                    css={tableCellStyle(false)}
-                >
-                    {colSum}
-                </TableCell>
-            );
-        }
+        arrayWithColSumCells.push(
+            <TableCell
+                key={`isolates-col-sum-${headerValue}`}
+                className={props.classes.tableCell}
+                component="th"
+                scope="row"
+                align="right"
+                css={tableCellStyle(false)}
+            >
+                {colSum}
+            </TableCell>
+        );
     });
     arrayWithColSumCells.push(
         <TableCell css={emptyCellStyle} key="sum-blank">
