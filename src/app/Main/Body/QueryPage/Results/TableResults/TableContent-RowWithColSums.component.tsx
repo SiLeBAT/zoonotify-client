@@ -2,26 +2,28 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
 import _ from "lodash";
+import { backgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
-    backgroundColor,
-    bfrPrimaryPalette,
-    primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+    highlightedTableBorder,
+    fixedCellSize,
+    defaultTableBorder,
+    sumRowColBackgroundColor,
+} from "./ResultsTable.style";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
-    border-right: 1px solid lightgrey;
-    border-top: 1px solid ${primaryColor};
-    background-color: ${bfrPrimaryPalette[50]};
-    width: ${isName ? "160px" : "auto"};
-    min-width: ${isName ? "160px" : "auto"};
+    border-right: ${defaultTableBorder};
+    border-top: ${highlightedTableBorder};
+    background-color: ${sumRowColBackgroundColor};
+    width: ${isName ? `${fixedCellSize}px` : "auto"};
+    min-width: ${isName ? `${fixedCellSize}px` : "auto"};
 `;
 
 const emptyCellStyle = css`
     border-right: none;
     border-bottom: none;
-    border-top: 1px solid ${primaryColor};
-    border-left: 1px solid ${primaryColor};
+    border-top: ${highlightedTableBorder};
+    border-left: ${highlightedTableBorder};
     background-color: ${backgroundColor};
 `;
 

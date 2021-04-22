@@ -3,38 +3,40 @@ import { css, jsx } from "@emotion/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import { useTranslation } from "react-i18next";
+import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
-    primaryColor,
-    onBackgroundColor,
-    bfrPrimaryPalette,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+    highlightedTableBorder,
+    fixedCellSize,
+    defaultTableBorder,
+    sumRowColBackgroundColor,
+} from "./ResultsTable.style";
 
 const blankCellStyle = css`
     box-sizing: border-box;
-    border-right: 1px solid lightgrey;
-    width: 160px;
-    min-width: 160px;
-`
+    border-right: ${defaultTableBorder};
+    width: ${fixedCellSize}px;
+    min-width: ${fixedCellSize}px;
+`;
 const headerCellStyle = css`
     box-sizing: border-box;
-    border-right: 1px solid lightgrey;
+    border-right: ${defaultTableBorder};
     text-align: right;
     white-space: nowrap;
 `;
 const sumCellStyle = css`
     box-sizing: border-box;
-    border-right: 1px solid lightgrey;
-    border-left: 1px solid ${primaryColor};
-    background-color: ${bfrPrimaryPalette[50]};
+    border-right: ${defaultTableBorder};
+    border-left: ${highlightedTableBorder};
+    background-color: ${sumRowColBackgroundColor};
     text-align: left;
     white-space: nowrap;
-`
+`;
 const StyledTableCell = withStyles(() =>
     createStyles({
         head: {
             padding: "0.75em",
             color: onBackgroundColor,
-            borderBottom: `1px solid ${primaryColor}`,
+            borderBottom: highlightedTableBorder,
             letterSpacing: 0,
         },
         body: {
@@ -56,26 +58,20 @@ export function TableContentHeaderComponent(
     const { t } = useTranslation(["QueryPage"]);
     const elements: JSX.Element[] = [];
     elements.push(
-        <StyledTableCell
-            key="header-blank"
-            css={blankCellStyle}        >
+        <StyledTableCell key="header-blank" css={blankCellStyle}>
             &nbsp;
         </StyledTableCell>
     );
     headerValues.forEach((element): void => {
         elements.push(
-            <StyledTableCell
-                key={`header-${element}`}
-                css={headerCellStyle}            >
+            <StyledTableCell key={`header-${element}`} css={headerCellStyle}>
                 {element}
             </StyledTableCell>
         );
     });
     if (isSumRowCol) {
         elements.push(
-            <StyledTableCell
-                key="header-row-sum"
-                css={sumCellStyle}        >
+            <StyledTableCell key="header-row-sum" css={sumCellStyle}>
                 {t("Sums.RowSum")}
             </StyledTableCell>
         );

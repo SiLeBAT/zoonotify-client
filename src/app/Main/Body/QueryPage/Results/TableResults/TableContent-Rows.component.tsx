@@ -3,21 +3,23 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
 import _ from "lodash";
 import {
-    bfrPrimaryPalette,
-    primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+    highlightedTableBorder,
+    fixedCellSize,
+    defaultTableBorder,
+    sumRowColBackgroundColor,
+} from "./ResultsTable.style";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
-    border-right: 1px solid lightgrey;
-    width: ${isName ? "160px" : "auto"};
-    min-width: ${isName ? "160px" : "auto"};
+    border-right: ${defaultTableBorder};
+    width: ${isName ? `${fixedCellSize}px` : "auto"};
+    min-width: ${isName ? `${fixedCellSize}px` : "auto"};
 `;
 const sumTableCellStyle = css`
     box-sizing: border-box;
-    border-right: 1px solid lightgrey;
-    border-left: 1px solid ${primaryColor};
-    background-color: ${bfrPrimaryPalette[50]};
+    border-right: ${defaultTableBorder};
+    border-left: ${highlightedTableBorder};
+    background-color: ${sumRowColBackgroundColor};
 `;
 
 /**
@@ -27,7 +29,7 @@ const sumTableCellStyle = css`
  * @returns {JSX.Element} - list of table cell components
  */
 export function TableContentRowsComponent(props: {
-    isSumRowCol: boolean,
+    isSumRowCol: boolean;
     row: Record<string, string>;
     classes: Record<"tableCell", string>;
 }): JSX.Element[] {
@@ -48,7 +50,7 @@ export function TableContentRowsComponent(props: {
     const colKeys = _.pull(k, "name");
     let rowSum = 0;
     colKeys.forEach((colKey): void => {
-        const cellNumber = props.row[colKey]
+        const cellNumber = props.row[colKey];
         rowSum += Number.parseFloat(cellNumber);
         rowCells.push(
             <TableCell
