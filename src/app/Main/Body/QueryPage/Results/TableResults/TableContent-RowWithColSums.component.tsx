@@ -34,7 +34,7 @@ function calculateColSum(
     const colNumbers: number[] = tableData.map((tableRow) => {
         const colNumber = tableRow[headerValue];
         if (colNumber !== undefined) {
-            return Number.parseInt(colNumber, 10);
+            return Number.parseFloat(colNumber);
         }
         return 0;
     });
@@ -47,6 +47,7 @@ export function TableContentRowWithColSumComponent(props: {
     headerValues: string[];
     classes: Record<"tableCell", string>;
     colSumLabel: string;
+    displayOption: string;
 }): JSX.Element[] {
     const arrayWithColSumCells: JSX.Element[] = [
         <TableCell
@@ -62,7 +63,11 @@ export function TableContentRowWithColSumComponent(props: {
     ];
 
     props.headerValues.forEach((headerValue) => {
-        const colSum: number = calculateColSum(props.tableData, headerValue);
+        let colSum: number | string = calculateColSum(props.tableData, headerValue);
+
+        if (props.displayOption === "relative") {
+            colSum = colSum.toFixed(2)
+        }
 
         arrayWithColSumCells.push(
             <TableCell

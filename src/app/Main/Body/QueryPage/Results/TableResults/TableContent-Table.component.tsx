@@ -45,6 +45,7 @@ export function TableContentTableComponent(props: {
     isSumRowCol: boolean;
     tableData: Record<string, string>[];
     columnNameValues: string[];
+    displayOption: string;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const classes = useStyles();
@@ -55,6 +56,7 @@ export function TableContentTableComponent(props: {
                 isSumRowCol: props.isSumRowCol,
                 row,
                 classes,
+                displayOption: props.displayOption
             })}
         </TableRow>
     ));
@@ -66,7 +68,8 @@ export function TableContentTableComponent(props: {
                     tableData: props.tableData,
                     headerValues: props.columnNameValues,
                     classes,
-                    colSumLabel: t("Sums.ColSum")
+                    colSumLabel: t("Sums.ColSum"),
+                    displayOption: props.displayOption
                 })}
             </TableRow>
         );
