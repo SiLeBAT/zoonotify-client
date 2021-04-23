@@ -3,6 +3,8 @@ import { ApiResponse, callApiService } from "../../Core/callApi.service";
 import { INFO_URL } from "../../Shared/URLs";
 import { InfoDTO } from "../../Shared/Model/Api_Info.model";
 import { FooterLayoutComponent } from "./Footer-Layout.component";
+import { LastUpdateComponent } from "./LastUpdate.component";
+import { FooterLinkListComponent } from "./Footer-LinkList.component";
 
 export function FooterContainer(): JSX.Element {
     const [supportMail, setSupportMail] = useState<string>();
@@ -21,5 +23,12 @@ export function FooterContainer(): JSX.Element {
         fetchAndSetContact();
     }, []);
 
-    return <FooterLayoutComponent supportMail={supportMail}/>;
+    return (
+        <FooterLayoutComponent
+            lastUpdateComponent={<LastUpdateComponent />}
+            linkListComponent={
+                <FooterLinkListComponent supportMail={supportMail} />
+            }
+        />
+    );
 }
