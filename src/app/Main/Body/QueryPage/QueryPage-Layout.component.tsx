@@ -38,7 +38,7 @@ export function QueryPageLayoutComponent(props: {
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onRadioChange: (eventTargetValue: string) => void;
+    onDisplayOptionsChange: (displayOption: string) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -57,8 +57,8 @@ export function QueryPageLayoutComponent(props: {
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
-    const handleRadioChange = (eventTargetValue: string): void =>
-        props.onRadioChange(eventTargetValue);
+    const handleChangeDisplayOptions = (displayOption: string): void =>
+        props.onDisplayOptionsChange(displayOption);
 
     const handleClickOpenCloseDrawer = (): void => {
         if (isOpen) {
@@ -103,7 +103,7 @@ export function QueryPageLayoutComponent(props: {
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.selectedFilter}
                 mainFilterAttributes={props.mainFilterAttributes}
-                onRadioChange={handleRadioChange}
+                onDisplayOptionsChange={handleChangeDisplayOptions}
             />
         </main>
     );

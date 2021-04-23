@@ -33,7 +33,7 @@ export interface TableResultsProps {
      */
     columnNameValues: string[];
     tableData: TableInterface;
-    onRadioChange: (eventTargetValue: string) => void;
+    onDisplayOptionsChange: (displayOption: string) => void;
 }
 
 /**
@@ -47,11 +47,11 @@ export function QueryPageContentTableResultsLayoutComponent(
     const [isSumRowCol, setIsSumRowCol] = useState<boolean>(true);
     const { t } = useTranslation(["QueryPage"]);
 
-    const handleChangeRadio = (eventTargetValue: string): void =>
-        props.onRadioChange(eventTargetValue);
+    const handleChangeDisplayOptions = (displayOption: string): void =>
+        props.onDisplayOptionsChange(displayOption);
 
-    const handleChangeCheckbox = (checked: boolean): void => {
-        setIsSumRowCol(checked)
+    const handleChangeShowSumsToggle = (showSums: boolean): void => {
+        setIsSumRowCol(showSums)
     };
 
     const tableColAttribute = props.tableData.column;
@@ -81,8 +81,8 @@ export function QueryPageContentTableResultsLayoutComponent(
                 <ResultsTableOptionsComponent
                     isSumRowCol={isSumRowCol}
                     tableOption={props.tableData.option}
-                    onRadioChange={handleChangeRadio}
-                    onCheckboxChange={handleChangeCheckbox}
+                    onDisplayOptionsChange={handleChangeDisplayOptions}
+                    onShowSumsToggle={handleChangeShowSumsToggle}
                 />
                 {props.displayRowCol.isCol && (
                     <TableResultsTableMainHeaderComponent

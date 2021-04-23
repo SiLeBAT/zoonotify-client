@@ -75,15 +75,15 @@ const BlueRadio = withStyles(() =>
 export function ResultsTableOptionsComponent(props: {
     isSumRowCol: boolean;
     tableOption: DisplayOptionType;
-    onRadioChange: (eventTargetValue: string) => void;
-    onCheckboxChange: (checked: boolean) => void;
+    onDisplayOptionsChange: (displayOption: string) => void;
+    onShowSumsToggle: (showSums: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
-    const handleChangeRadio = (eventTargetValue: string): void =>
-        props.onRadioChange(eventTargetValue);
+    const handleChangeDisplayOptions = (displayOption: string): void =>
+        props.onDisplayOptionsChange(displayOption);
 
-    const handleChangeCheckbox = (checked: boolean): void => {
-        props.onCheckboxChange(checked);
+    const handleChangeShowSumsToggle = (showSums: boolean): void => {
+        props.onShowSumsToggle(showSums);
     };
 
     const optionsHeading = t("OptionBar.Title")
@@ -102,7 +102,7 @@ export function ResultsTableOptionsComponent(props: {
                     aria-label="options"
                     name="options"
                     value={props.tableOption}
-                    onChange={(event) => handleChangeRadio(event.target.value)}
+                    onChange={(event) => handleChangeDisplayOptions(event.target.value)}
                 >
                     <FormControlLabel
                         css={radioButtonSizeStyle}
@@ -123,9 +123,9 @@ export function ResultsTableOptionsComponent(props: {
                         <Checkbox
                             checked={props.isSumRowCol}
                             onChange={(event) =>
-                                handleChangeCheckbox(event.target.checked)
+                                handleChangeShowSumsToggle(event.target.checked)
                             }
-                            name="raw"
+                            name="displaySumRowCol"
                             color="primary"
                         />
                     }
