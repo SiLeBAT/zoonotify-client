@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { TableResultsTableContentComponent } from "./TableResults-TableContent.component";
@@ -31,8 +32,8 @@ export interface TableResultsProps {
      * attributes of the columns
      */
     columnNameValues: string[];
-    tableData: TableInterface
-    onRadioChange: (eventTargetValue: string) => void;
+    tableData: TableInterface;
+    onDisplayOptionsChange: (displayOption: string) => void;
 }
 
 /**
@@ -43,14 +44,18 @@ export interface TableResultsProps {
 export function QueryPageContentTableResultsLayoutComponent(
     props: TableResultsProps
 ): JSX.Element {
+    const [isSumRowCol, setIsSumRowCol] = useState<boolean>(true);
     const { t } = useTranslation(["QueryPage"]);
 
-    const handleChangeRadio = (eventTargetValue: string): void =>
-        props.onRadioChange(eventTargetValue);
+    const handleChangeDisplayOptions = (displayOption: string): void =>
+        props.onDisplayOptionsChange(displayOption);
 
+    const handleChangeShowSumsToggle = (showSums: boolean): void => {
+        setIsSumRowCol(showSums)
+    };
 
-    const tableColAttribute = props.tableData.column
-    const tableRowAttribute = props.tableData.row
+    const tableColAttribute = props.tableData.column;
+    const tableRowAttribute = props.tableData.row;
 
     const accordionHeader: string = t(`Results.Table`);
     const rowMainHeader: string = _.isEmpty(tableRowAttribute)
@@ -74,8 +79,10 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
+                    isSumRowCol={isSumRowCol}
                     tableOption={props.tableData.option}
-                    onRadioChange={handleChangeRadio}
+                    onDisplayOptionsChange={handleChangeDisplayOptions}
+                    onShowSumsToggle={handleChangeShowSumsToggle}
                 />
                 {props.displayRowCol.isCol && (
                     <TableResultsTableMainHeaderComponent
@@ -93,9 +100,12 @@ export function QueryPageContentTableResultsLayoutComponent(
                         />
                     )}
                     <TableResultsTableContentComponent
+                        isSumRowCol={isSumRowCol}
                         tables={{
-                            statisticDataAbsolute: props.tableData.statisticDataAbsolute,
-                            statisticDataRelative: props.tableData.statisticDataRelative
+                            statisticDataAbsolute:
+                                props.tableData.statisticDataAbsolute,
+                            statisticDataRelative:
+                                props.tableData.statisticDataRelative,
                         }}
                         tableOption={props.tableData.option}
                         columnNameValues={props.columnNameValues}

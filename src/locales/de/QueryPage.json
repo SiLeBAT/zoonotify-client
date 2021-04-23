@@ -41,6 +41,16 @@
         "Title": "Anzahl Isolate",
         "Total": "Gesamtanzahl Isolate:",
         "Selected": "Anzahl ausgewählter Isolate:"
+    }, 
+    "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine Statistiktabelle anzuzeigen -",
+    "OptionBar": {
+        "Title": "Anzeigeoptionen",
+        "Absolute": "Absolute Zahlen",
+        "Percent": "Prozentual",
+        "Sum": "Zeilen- und Spaltensumme"
     },
-    "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine Statistiktabelle anzuzeigen -"
+    "Sums": {
+        "RowSum": "Zeilensumme",
+        "ColSum": "Spaltensumme"
+    }
 }

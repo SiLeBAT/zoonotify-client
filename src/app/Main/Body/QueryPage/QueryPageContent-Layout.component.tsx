@@ -51,17 +51,17 @@ export function QueryPageContentLayoutComponent(props: {
     columnNameValues: string[];
     tableData: TableInterface;
     numberOfIsolates: {
-        total: number,
-        filtered: number
-    }
+        total: number;
+        filtered: number;
+    };
     mainFilterAttributes: string[];
     selectedFilter: FilterInterface;
-    onRadioChange: (eventTargetValue: string) => void;
+    onDisplayOptionsChange: (displayOption: string) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const handleChangeRadio = (eventTargetValue: string): void =>
-        props.onRadioChange(eventTargetValue);
+    const handleChangeDisplayOptions = (displayOption: string): void =>
+        props.onDisplayOptionsChange(displayOption);
 
     return (
         <div css={contentStyle}>
@@ -85,7 +85,7 @@ export function QueryPageContentLayoutComponent(props: {
                     displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
                     columnNameValues={props.columnNameValues}
                     tableData={props.tableData}
-                    onRadioChange={handleChangeRadio}
+                    onDisplayOptionsChange={handleChangeDisplayOptions}
                 />
             </div>
         </div>

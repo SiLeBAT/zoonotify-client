@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { useTranslation } from "react-i18next";
 import {
     Radio,
     FormControl,
@@ -7,6 +8,7 @@ import {
     RadioGroup,
     withStyles,
     createStyles,
+    Checkbox,
 } from "@material-ui/core";
 import {
     bfrDarkgrey,
@@ -17,9 +19,11 @@ import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 const size = 0.75;
 
 const optionsStyle = css`
+    width: 100%;
     display: "flex";
-    margin-top: 0;
+    margin-top: 9px;
     flex-direction: row;
+    justify-content: space-between;
 `;
 const optionsHeadingStyle = css`
     margin: auto 2em auto 0;
@@ -27,6 +31,18 @@ const optionsHeadingStyle = css`
     font-size: ${size}rem;
 `;
 const radioButtonSizeStyle = css`
+    span {
+        padding: 0px;
+        margin-left: 5px;
+        font-size: ${size}rem;
+    }
+    svg {
+        width: ${size}em;
+        height: ${size}em;
+    }
+`;
+const checkBoxLabelStyle = css`
+    margin-right: 0;
     span {
         font-size: ${size}rem;
     }
@@ -57,36 +73,64 @@ const BlueRadio = withStyles(() =>
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
+    isSumRowCol: boolean;
     tableOption: DisplayOptionType;
-    onRadioChange: (eventTargetValue: string) => void;
+    onDisplayOptionsChange: (displayOption: string) => void;
+    onShowSumsToggle: (showSums: boolean) => void;
 }): JSX.Element {
-    const handleChange = (eventTargetValue: string): void =>
-        props.onRadioChange(eventTargetValue);
+    const { t } = useTranslation(["QueryPage"]);
+    const handleChangeDisplayOptions = (displayOption: string): void =>
+        props.onDisplayOptionsChange(displayOption);
+
+    const handleChangeShowSumsToggle = (showSums: boolean): void => {
+        props.onShowSumsToggle(showSums);
+    };
+
+    const optionsHeading = t("OptionBar.Title")
+    const absoluteText = t("OptionBar.Absolute");
+    const percentageText = t("OptionBar.Percent");
+    const sumRowColText = t("OptionBar.Sum")
 
     return (
-        <div css={optionsStyle}>
-            <p css={optionsHeadingStyle}>Display options:</p>
-            <FormControl component="fieldset">
+        <div>
+            <p css={optionsHeadingStyle}>{optionsHeading}</p>
+            <FormControl css={optionsStyle} component="fieldset">
                 <RadioGroup
-                    row
+                    css={css`
+                        margin-bottom: 9px;
+                    `}
                     aria-label="options"
                     name="options"
                     value={props.tableOption}
-                    onChange={(event) => handleChange(event.target.value)}
+                    onChange={(event) => handleChangeDisplayOptions(event.target.value)}
                 >
                     <FormControlLabel
                         css={radioButtonSizeStyle}
                         value="absolute"
                         control={<BlueRadio color="default" size="small" />}
-                        label="Absolute numbers"
+                        label={absoluteText}
                     />
                     <FormControlLabel
                         css={radioButtonSizeStyle}
                         value="relative"
                         control={<BlueRadio color="default" size="small" />}
-                        label="Percentage"
+                        label={percentageText}
                     />
                 </RadioGroup>
+                <FormControlLabel
+                    css={checkBoxLabelStyle}
+                    control={
+                        <Checkbox
+                            checked={props.isSumRowCol}
+                            onChange={(event) =>
+                                handleChangeShowSumsToggle(event.target.checked)
+                            }
+                            name="displaySumRowCol"
+                            color="primary"
+                        />
+                    }
+                    label={sumRowColText}
+                />
             </FormControl>
         </div>
     );

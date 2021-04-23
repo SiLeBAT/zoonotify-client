@@ -2,15 +2,24 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
 import _ from "lodash";
+import {
+    highlightedTableBorder,
+    fixedCellSize,
+    defaultTableBorder,
+    sumRowColBackgroundColor,
+} from "./ResultsTable.style";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
-    border-right: 1px solid lightgrey;
-    :last-child {
-        border-right: none;
-    }
-    width: ${isName ? "160px" : "auto"};
-    min-width: ${isName ? "160px" : "auto"};
+    border-right: ${defaultTableBorder};
+    width: ${isName ? `${fixedCellSize}px` : "auto"};
+    min-width: ${isName ? `${fixedCellSize}px` : "auto"};
+`;
+const sumTableCellStyle = css`
+    box-sizing: border-box;
+    border-right: ${defaultTableBorder};
+    border-left: ${highlightedTableBorder};
+    background-color: ${sumRowColBackgroundColor};
 `;
 
 /**
@@ -20,11 +29,13 @@ const tableCellStyle = (isName: boolean): SerializedStyles => css`
  * @returns {JSX.Element} - list of table cell components
  */
 export function TableContentRowsComponent(props: {
+    isSumRowCol: boolean;
     row: Record<string, string>;
     classes: Record<"tableCell", string>;
+    displayOption: string;
 }): JSX.Element[] {
-    const elements: JSX.Element[] = [];
-    elements.push(
+    const rowCells: JSX.Element[] = [];
+    rowCells.push(
         <TableCell
             key={`isolates-${props.row.name}-name`}
             className={props.classes.tableCell}
@@ -37,20 +48,42 @@ export function TableContentRowsComponent(props: {
         </TableCell>
     );
     const k = Object.keys(props.row);
-    const colKeys = _.pull(k, "name")
-    colKeys.forEach((element): void => {
-        elements.push(
+    const colKeys = _.pull(k, "name");
+    let rowSum = 0;
+    colKeys.forEach((colKey): void => {
+        const cellNumber = props.row[colKey];
+        rowSum += Number.parseFloat(cellNumber);
+        rowCells.push(
             <TableCell
-                key={`isolates-${props.row.name}-${element}`}
+                key={`isolates-${props.row.name}-${colKey}`}
                 className={props.classes.tableCell}
                 component="th"
                 scope="row"
                 align="right"
                 css={tableCellStyle(false)}
             >
-                {props.row[element]}
+                {cellNumber}
             </TableCell>
         );
     });
-    return elements;
+    
+    if (props.isSumRowCol) {
+        let rowSumString = rowSum.toString()
+        if (props.displayOption === "relative") {
+            rowSumString = rowSum.toFixed(2)
+        }
+        rowCells.push(
+            <TableCell
+                key="isolates-row-sum"
+                className={props.classes.tableCell}
+                component="th"
+                scope="row"
+                align="right"
+                css={sumTableCellStyle}
+            >
+                {rowSumString}
+            </TableCell>
+        );
+    }
+    return rowCells;
 }

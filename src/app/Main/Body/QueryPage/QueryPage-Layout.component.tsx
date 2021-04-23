@@ -38,10 +38,10 @@ export function QueryPageLayoutComponent(props: {
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onRadioChange: (eventTargetValue: string) => void;
+    onDisplayOptionsChange: (displayOption: string) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
-    const [open, setOpen] = useState<boolean>(true);
+    const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -57,14 +57,14 @@ export function QueryPageLayoutComponent(props: {
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
-    const handleRadioChange = (eventTargetValue: string): void =>
-        props.onRadioChange(eventTargetValue);
+    const handleChangeDisplayOptions = (displayOption: string): void =>
+        props.onDisplayOptionsChange(displayOption);
 
     const handleClickOpenCloseDrawer = (): void => {
-        if (open) {
-            setOpen(false);
+        if (isOpen) {
+            setIsOpen(false);
         } else {
-            setOpen(true);
+            setIsOpen(true);
         }
     };
 
@@ -75,7 +75,7 @@ export function QueryPageLayoutComponent(props: {
     return (
         <main css={mainStyle}>
             <DrawerLayoutComponent
-                isOpen={open}
+                isOpen={isOpen}
                 drawerWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 selectedFilter={props.selectedFilter}
@@ -89,7 +89,7 @@ export function QueryPageLayoutComponent(props: {
                 onFilterRemoveAll={handleRemoveAllFilter}
             />
             <QueryPageDrawerControlComponent
-                isOpen={open}
+                isOpen={isOpen}
                 drawerWidth={drawerWidth}
                 onDrawerOpenCloseClick={handleClickOpenCloseDrawer}
                 onResizeBarMove={handleMoveResizeBar}
@@ -103,7 +103,7 @@ export function QueryPageLayoutComponent(props: {
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.selectedFilter}
                 mainFilterAttributes={props.mainFilterAttributes}
-                onRadioChange={handleRadioChange}
+                onDisplayOptionsChange={handleChangeDisplayOptions}
             />
         </main>
     );

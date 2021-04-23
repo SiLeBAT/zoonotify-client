@@ -137,8 +137,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilter(newFilter);
     };
 
-    const handleRadioChange = (eventTargetValue: string): void => {
-        const optionValue = eventTargetValue as DisplayOptionType;
+    const handleChangeDisplayOptions = (displayOption: string): void => {
+        const optionValue = displayOption as DisplayOptionType;
         setTable({
             ...table,
             option: optionValue,
@@ -303,7 +303,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
-                    onRadioChange={handleRadioChange}
+                    onDisplayOptionsChange={handleChangeDisplayOptions}
                 />
             }
         />

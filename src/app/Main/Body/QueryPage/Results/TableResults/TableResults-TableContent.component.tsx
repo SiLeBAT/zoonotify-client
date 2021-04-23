@@ -13,6 +13,7 @@ const dataTableStyle = css`
  * @returns {JSX.Element} - result table
  */
 export function TableResultsTableContentComponent(props: {
+    isSumRowCol: boolean;
     tables: {
         statisticDataAbsolute: Record<string, string>[];
         statisticDataRelative: Record<string, string>[];
@@ -28,8 +29,10 @@ export function TableResultsTableContentComponent(props: {
     return (
         <div css={dataTableStyle}>
             <TableContentTableComponent
+                isSumRowCol={props.isSumRowCol}
                 tableData={tableData}
                 columnNameValues={props.columnNameValues}
+                displayOption={props.tableOption}
             />
         </div>
     );
