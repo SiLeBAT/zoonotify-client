@@ -42,7 +42,6 @@ const appNameStyle = css`
     }
 `;
 const disabledQueryStyle = css`
-    margin-right: 8em;
     padding: 0.5em 1em 0.5em 1em;
     font-size: 1rem;
     text-decoration: none;

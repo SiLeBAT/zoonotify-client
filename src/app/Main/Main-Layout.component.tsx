@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { BrowserRouter } from "react-router-dom";
 import { HeaderComponent } from "./Header/Header.component";
 import { BodyRouterComponent } from "./Body/Body-Router.component";
-import { FooterLayoutComponent } from "./Footer/Footer-Layout.component";
+import { FooterContainer } from "./Footer/Footer-Container.component";
 
 const wrapperStyle = css`
     height: 100%;
@@ -55,7 +55,7 @@ export function MainLayoutComponent(props: {
                         <BodyRouterComponent />
                     </div>
                     <div css={footerStyle}>
-                        <FooterLayoutComponent />
+                        <FooterContainer />
                     </div>
                 </div>
             </BrowserRouter>

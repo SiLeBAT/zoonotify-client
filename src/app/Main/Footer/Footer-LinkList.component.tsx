@@ -1,10 +1,12 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { Tooltip, withStyles } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import {
     primaryColor,
     hoverColor,
+    errorColor
 } from "../../Shared/Style/Style-MainTheme.component";
 import { ZNPaths } from "../../Shared/URLs";
 
@@ -40,9 +42,49 @@ const linkStyle = css`
         outline: none;
     }
 `;
+const disableLinkStyle = css`
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    color: gray;
+`;
 
-export function FooterLinkListComponent(): JSX.Element {
+const LightTooltip = withStyles(() => ({
+    tooltip: {
+        backgroundColor: "transparent",
+        color: errorColor,
+        fontSize: "9px",
+        paddingRight: 0,
+    },
+}))(Tooltip);
+
+export function FooterLinkListComponent(props: {
+    supportMail: string | undefined;
+}): JSX.Element {
     const { t } = useTranslation(["Footer"]);
+
+    let submitProblemLink: JSX.Element = (
+        <a
+            href={`mailto: ${
+                props.supportMail
+            }?subject=ZooNotify-Problem:&body=${t("Content.MailText")}`}
+            css={linkStyle}
+        >
+            {t("Content.Mail")}
+        </a>
+    );
+
+    if (props.supportMail === undefined) {
+        const supportMailErrorText = t("Content.SupportError")
+        submitProblemLink = (
+            <LightTooltip title={supportMailErrorText} placement="top">
+                <p css={disableLinkStyle}>{t("Content.Mail")}</p>
+            </LightTooltip>
+        );
+    }
+
     return (
         <ul css={footerContentStyle}>
             <li css={footerElementStyle}>
@@ -70,16 +112,7 @@ export function FooterLinkListComponent(): JSX.Element {
                     {t("Content.DataProtection")}
                 </NavLink>
             </li>
-            <li css={footerElementStyle}>
-                <a
-                    href={`mailto: dominic.toelle@bfr.bund.de?subject=ZooNotify-Problem:&body=${t(
-                        "Content.MailText"
-                    )}`}
-                    css={linkStyle}
-                >
-                    {t("Content.Mail")}
-                </a>
-            </li>
+            <li css={footerElementStyle}>{submitProblemLink}</li>
         </ul>
     );
 }
