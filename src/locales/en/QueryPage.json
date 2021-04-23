@@ -1,7 +1,7 @@
 {
     "Content": {
         "Title": "Query results",
-        "DataStatus": "Validated laboratory results according to RL 99/2003/EU - Data status 31.12.20",
+        "DataStatus": "Validated laboratory results according to {{directive}} - Data status {{date}}",
         "MainText": "ZooNotify allows to query a selection of classification results of isolates sent to the National Reference Laboratories at BfR. These are zoonotic agents and commensals obtained within the framework of the national zoonoses monitoring according to the AVV Zoonoses Food Chain Regulation and the Salmonella control programmes in poultry according to Regulation (EC) No 2160/2003. You can create your own queries with the filter function on the left or view and edit sample requests [LINK]. ZooNotify generates downloadable tables and graphics for you. The queries can be reproduced and shared via the URL."
     },
     "Results": {
@@ -33,7 +33,7 @@
         "samplingStage": "Sampling stage",
         "origin": "Origin of sample",
         "category": "Animal species / food category",
-        "productionType": "Animal species production type / food", 
+        "productionType": "Animal species production type / food",
         "resistance": "Antimicrobial resistance",
         "samplingYear": "Sampling year"
     },

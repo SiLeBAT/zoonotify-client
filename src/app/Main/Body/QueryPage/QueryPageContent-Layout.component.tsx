@@ -8,6 +8,7 @@ import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { QueryPageContentTableResultsLayoutComponent } from "./Results/TableResults/QueryPageContent-TableResultsLayout.component";
 import { FilterInterface } from "../../../Shared/Model/Filter.model";
 import { TableInterface } from "../../../Shared/Context/TableContext";
+import { QueryPageDatabaseStatusIndicatorComponent } from './DatabaseStatusIndicator/QueryPage-DatabaseStatusIndicator.component';
 
 const contentStyle = css`
     width: 0;
@@ -38,9 +39,7 @@ const headingStyle = css`
     font-weight: normal;
     color: ${primaryColor};
 `;
-const statusStyle = css`
-    text-align: center;
-`;
+
 const resultsBoxStyle = css`
     margin-top: 2em;
 `;
@@ -67,7 +66,7 @@ export function QueryPageContentLayoutComponent(props: {
     return (
         <div css={contentStyle}>
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
-            <p css={statusStyle}>{t("Content.DataStatus")}</p>
+            <QueryPageDatabaseStatusIndicatorComponent />
             <div css={contentBoxStyle}>
                 {props.isFilter || props.isCol || props.isRow ? (
                     <QueryPageParameterContentComponent

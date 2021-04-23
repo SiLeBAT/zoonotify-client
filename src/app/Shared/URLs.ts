@@ -5,10 +5,10 @@ export const ZNPaths = {
     queryPagePath: "/query",
     dpdPagePath: "/dataProtectionDeclaration",
 };
+const VERSION_ROOT = "/v1";
+export const FILTER_URL = `${VERSION_ROOT}/filterconfig`;
+export const ISOLATE_URL = `${VERSION_ROOT}/isolate`;
+export const ISOLATE_COUNT_URL = `${VERSION_ROOT}/isolate/counted/`;
+export const DATABASE_STATUS_URL = `${VERSION_ROOT}/database/status/`;
 
-export const MOCK_DATA_URL = "/v1/mockdata";
-export const FILTER_URL = "/v1/filterconfig";
-export const ISOLATE_URL = "/v1/isolate";
-export const ISOLATE_COUNT_URL = "/v1/isolate/counted/";
-
-export const API_URL = "/api-docs/v1/";
+export const API_URL = `/api-docs${VERSION_ROOT}/`;
