@@ -132,9 +132,6 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
         keyName: FilterType | TableType
     ): void => props.onChange(selectedOption, keyName);
 
-    // eslint-disable-next-line no-console
-    console.log(props.label, props.hide)
-
     return (
         <div css={hideSelector(props.hide)}>
             <InputLabel

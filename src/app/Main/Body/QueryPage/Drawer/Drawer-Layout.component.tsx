@@ -8,7 +8,7 @@ import {
     FilterType,
 } from "../../../../Shared/Model/Filter.model";
 import { TableType } from "../../../../Shared/Context/TableContext";
-import { FilterSettingDialogComponent } from "./Filter/FilterSetting-Dialog.component";
+import { FilterSettingDialogComponent } from "./Filter/Dialog/FilterSetting-Dialog.component";
 import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
 
 const useStyles = makeStyles(() =>
