@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { SelectorListSelectorComponent } from "./SelectorList-Selector.component";
 import { TableType } from "../../../../../Shared/Context/TableContext";
 import {
@@ -14,7 +15,8 @@ import {
 export function FilterSelectorListComponent(
     dataUniqueValues: FilterInterface,
     selectedFilter: FilterInterface,
-    mainFilterAttributes: string[],
+    filtersToDisplay: string[],
+    mainFilter: string[],
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
@@ -26,19 +28,29 @@ export function FilterSelectorListComponent(
     ): void => onChange(selectedOption, keyName);
 
     const elements: JSX.Element[] = [];
-    mainFilterAttributes.forEach((mainFilter) => {
-        elements.push(
-            SelectorListSelectorComponent({
-                dataUniqueValues,
-                selectedFilter,
-                filterAttribute: mainFilter,
-                onChange: handleChange,
-            })
-        );
+    mainFilter.forEach((filter) => {
+        if ( _.includes(filtersToDisplay, filter)) {
+            elements.push(
+                SelectorListSelectorComponent({
+                    hide: false,
+                    dataUniqueValues,
+                    selectedFilter,
+                    filterAttribute: filter,
+                    onChange: handleChange,
+                })
+            );
+        } else {
+            elements.push(
+                SelectorListSelectorComponent({
+                    hide: true,
+                    dataUniqueValues,
+                    selectedFilter,
+                    filterAttribute: filter,
+                    onChange: handleChange,
+                })
+            );
+        }
+
     });
-    /*     for (let i = 0; i < totalNumberOfFilters; i += 1) {
-        
-        );
-    } */
     return elements;
 }

@@ -145,6 +145,10 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
+    const handleClickSubmit = (filterToDisplay: string[]): void => {
+        setFilter({ ...filter, displayedFilter: filterToDisplay });
+    };
+
     const fetchAndSetData = async (): Promise<void> => {
         const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(ISOLATE_URL);
         const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(FILTER_URL);
@@ -186,6 +190,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             DbKeyCollection
         );
         setFilter({
+            ...filter,
             mainFilter: DbKeyCollection,
             selectedFilter: filterFromPath,
         });
@@ -295,15 +300,15 @@ export function QueryPageContainerComponent(): JSX.Element {
                         total: totalNrOfIsol,
                         filtered: nrOfSelectedIsol,
                     }}
-                    mainFilterAttributes={filter.mainFilter}
+                    filterInfo={filter}
                     dataUniqueValues={data.uniqueValues}
-                    selectedFilter={filter.selectedFilter}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
+                    onSubmitClick={handleClickSubmit}
                 />
             }
         />
