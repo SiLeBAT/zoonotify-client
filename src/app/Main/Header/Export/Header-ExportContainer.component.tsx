@@ -15,7 +15,7 @@ import {
     ExportInterface,
 } from "../../../Shared/Model/Export.model";
 import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
-import { HeaderExportComponent } from "./Header-Export.component";
+import { HeaderExportDialogComponent } from "./Header-ExportDialog.component";
 import { generateExportLabels } from "./ExportServices/generateExportLabels.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 
@@ -107,7 +107,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const exportLabels = generateExportLabels(filter.mainFilter);
 
     return (
-        <HeaderExportComponent
+        <HeaderExportDialogComponent
             isOpen={isOpen}
             settings={setting}
             exportLabels={exportLabels}
