@@ -2,6 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { useState } from "react";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 import { Button } from "@material-ui/core";
 import {
     onPrimaryColor,
@@ -36,6 +37,7 @@ export function FilterSettingDialogComponent(props: {
     const [filterToDisplay, setFilterToDisplay] = useState<string[]>(
         props.displayedFilter
     );
+    const { t } = useTranslation(["QueryPage"]);
     const handleClickOpen = (): void => props.onClickOpen();
     const handleClickClose = (): void => props.onClickClose();
 
@@ -62,6 +64,10 @@ export function FilterSettingDialogComponent(props: {
         setFilterToDisplay(newDisplayedFilter);
     };
 
+    const filterDialogTitle = t("FilterDialog.DialogTitle")
+    const filterDialogButton = t("FilterDialog.ButtonText")
+
+
     const filterContentText = <FilterDialogContentTextComponent />;
     const filterDialogCheckboxes = (
         <FilterDialogCheckboxesComponent
@@ -80,11 +86,11 @@ export function FilterSettingDialogComponent(props: {
     return (
         <div>
             <Button css={buttonStyle} onClick={handleClickOpen} color="primary">
-                Select Filter
+                {filterDialogButton}
             </Button>
             {DialogComponent({
                 isOpen: props.isOpen,
-                dialogTitle: "Select Filter",
+                dialogTitle: filterDialogTitle,
                 dialogContentText: filterContentText,
                 dialogContent: filterDialogCheckboxes,
                 dialogButtons: filterDialogButtons,

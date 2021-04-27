@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { FormGroup } from "@material-ui/core";
+import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { CheckboxComponent } from "../../../../../../Shared/Checkbox.component";
 
@@ -13,7 +15,8 @@ const checkboxGroupStyle = css`
 function filterCheckboxes(
     mainFilters: string[],
     displayedFilter: string[],
-    handleChangeCheckbox: (name: string, checked: boolean) => void
+    handleChangeCheckbox: (name: string, checked: boolean) => void,
+    t: TFunction
 ): JSX.Element[] {
     const checkboxes: JSX.Element[] = [];
     mainFilters.forEach((mainFilter) => {
@@ -24,7 +27,7 @@ function filterCheckboxes(
                 checked={isChecked}
                 key={`checkbox-${mainFilter}`}
                 name={mainFilter}
-                label={mainFilter}
+                label={t(`Filters.${mainFilter}`)}
             />
         );
     });
@@ -36,6 +39,8 @@ export function FilterDialogCheckboxesComponent(props: {
     filterToDisplay: string[];
     onHandleChangeCheckbox: (name: string, checked: boolean) => void;
 }): JSX.Element {
+    const { t } = useTranslation(["QueryPage"]);
+
     const handleChangeCheckbox = (name: string, checked: boolean): void => {
         props.onHandleChangeCheckbox(name, checked);
     };
@@ -45,7 +50,8 @@ export function FilterDialogCheckboxesComponent(props: {
             {filterCheckboxes(
                 props.mainFilters,
                 props.filterToDisplay,
-                handleChangeCheckbox
+                handleChangeCheckbox, 
+                t
             )}
         </FormGroup>
     );

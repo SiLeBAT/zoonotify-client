@@ -24,6 +24,15 @@
             "Column": "in Spalten"
         }
     },
+    "FilterDialog": {
+        "ButtonText": "Filter auswählen", 
+        "Cancel": "Abbrechen",
+        "Submit": "Anwenden",
+        "TextContentBeforeLink": "Bitte wählen Sie die gewünschten Filter aus. Die ausgewählten Filter werden nach dem Bestätigen angezeigt. Weitere Informationen zu den Filtern finden Sie auf der Seite ",
+        "TextContentAfterLink": ".",
+        "LinkText": "Erläuterungen",
+        "DialogTitle": "Filter auswählen"
+    },
     "Filters": {
         "All": "Alle Werte",
         "microorganism": "Erreger",

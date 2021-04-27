@@ -2,8 +2,12 @@
 import { css, jsx } from "@emotion/core";
 
 import { DialogContentText } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { primaryColor, secondaryColor } from "../../../../../../Shared/Style/Style-MainTheme.component";
+import {
+    primaryColor,
+    secondaryColor,
+} from "../../../../../../Shared/Style/Style-MainTheme.component";
 
 const linkStyle = css`
     color: ${primaryColor};
@@ -13,15 +17,15 @@ const linkStyle = css`
 `;
 
 export function FilterDialogContentTextComponent(): JSX.Element {
+    const { t } = useTranslation(["QueryPage"]);
+
     return (
         <DialogContentText>
-            Please select your desired filters. The selected filters will be
-            displayed after clicking the submit button. More information about
-            the filters can be found on the{" "}
+            {t("FilterDialog.TextContentBeforeLink")}
             <Link css={linkStyle} to="/explanations">
-                Explanations
-            </Link>{" "}
-            page.
+                {t("FilterDialog.LinkText")}
+            </Link>
+            {t("FilterDialog.TextContentAfterLink")}
         </DialogContentText>
     );
 }
