@@ -13,6 +13,7 @@ import { DialogComponent } from "../../../../../../Shared/Dialog.component";
 import { FilterDialogContentTextComponent } from "./FilterDialog-ContentText.component";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
 import { FilterDialogButtonsComponent } from "./FilterDialog-Buttons.component";
+import { FilterDialogSelectAllButtonComponent } from "./FilterDialog-SelectAllButton.component";
 
 const buttonStyle = css`
     width: 100%;
@@ -24,6 +25,11 @@ const buttonStyle = css`
         background-color: ${primaryColor};
         color: ${secondaryColor};
     }
+`;
+const filterDialogContentStyle = css`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 `;
 
 export function FilterSettingDialogComponent(props: {
@@ -64,17 +70,29 @@ export function FilterSettingDialogComponent(props: {
         setFilterToDisplay(newDisplayedFilter);
     };
 
-    const filterDialogTitle = t("FilterDialog.DialogTitle")
-    const filterDialogButton = t("FilterDialog.ButtonText")
+    const handleChangeSelectAll = (): void => {
+        setFilterToDisplay(props.mainFilters);
+    };
+    const handleChangeDeselectAll = (): void => {
+        setFilterToDisplay([]);
+    };
 
+    const filterDialogTitle = t("FilterDialog.DialogTitle");
+    const filterDialogButton = t("FilterDialog.ButtonText");
 
     const filterContentText = <FilterDialogContentTextComponent />;
-    const filterDialogCheckboxes = (
-        <FilterDialogCheckboxesComponent
-            mainFilters={props.mainFilters}
-            filterToDisplay={filterToDisplay}
-            onHandleChangeCheckbox={handleChangeCheckbox}
-        />
+    const filterDialogContent = (
+        <div css={filterDialogContentStyle}>
+            <FilterDialogCheckboxesComponent
+                mainFilters={props.mainFilters}
+                filterToDisplay={filterToDisplay}
+                onHandleChangeCheckbox={handleChangeCheckbox}
+            />
+            <FilterDialogSelectAllButtonComponent
+                onHandleSelectAll={handleChangeSelectAll}
+                onHandleDeselectAll={handleChangeDeselectAll}
+            />
+        </div>
     );
     const filterDialogButtons = (
         <FilterDialogButtonsComponent
@@ -92,7 +110,7 @@ export function FilterSettingDialogComponent(props: {
                 isOpen: props.isOpen,
                 dialogTitle: filterDialogTitle,
                 dialogContentText: filterContentText,
-                dialogContent: filterDialogCheckboxes,
+                dialogContent: filterDialogContent,
                 dialogButtons: filterDialogButtons,
                 onClickClose: handleClickCancel,
             })}

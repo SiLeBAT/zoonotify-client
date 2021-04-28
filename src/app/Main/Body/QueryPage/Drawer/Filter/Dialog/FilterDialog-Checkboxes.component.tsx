@@ -1,16 +1,9 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { FormGroup } from "@material-ui/core";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { CheckboxComponent } from "../../../../../../Shared/Checkbox.component";
-
-const checkboxGroupStyle = css`
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-`;
 
 function filterCheckboxes(
     mainFilters: string[],
@@ -46,7 +39,7 @@ export function FilterDialogCheckboxesComponent(props: {
     };
 
     return (
-        <FormGroup css={checkboxGroupStyle}>
+        <FormGroup>
             {filterCheckboxes(
                 props.mainFilters,
                 props.filterToDisplay,

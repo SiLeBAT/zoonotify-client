@@ -26,6 +26,8 @@
     },
     "FilterDialog": {
         "ButtonText": "Filter auswählen", 
+        "SelectAll": "Alle auswählen",
+        "DeselectAll": "Alle abwählen",
         "Cancel": "Abbrechen",
         "Submit": "Anwenden",
         "TextContentBeforeLink": "Bitte wählen Sie die gewünschten Filter aus. Die ausgewählten Filter werden nach dem Bestätigen angezeigt. Weitere Informationen zu den Filtern finden Sie auf der Seite ",
