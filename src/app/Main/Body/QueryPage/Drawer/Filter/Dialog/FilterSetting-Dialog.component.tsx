@@ -14,6 +14,8 @@ import { FilterDialogContentTextComponent } from "./FilterDialog-ContentText.com
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
 import { FilterDialogButtonsComponent } from "./FilterDialog-Buttons.component";
 import { FilterDialogSelectAllButtonComponent } from "./FilterDialog-SelectAllButton.component";
+import { FilterInterface } from "../../../../../../Shared/Model/Filter.model";
+import { defaultFilter, FilterContextInterface } from "../../../../../../Shared/Context/FilterContext";
 
 const buttonStyle = css`
     width: 100%;
@@ -34,26 +36,31 @@ const filterDialogContentStyle = css`
 
 export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
+    filterInfo: FilterContextInterface;
     onClickOpen: () => void;
     onClickClose: () => void;
-    mainFilters: string[];
-    displayedFilter: string[];
-    onSubmitClick: (filterToDisplay: string[]) => void;
+    onSubmitClick: (
+        selectedFilters: FilterInterface,
+        filterToDisplay: string[]
+    ) => void;
 }): JSX.Element {
     const [filterToDisplay, setFilterToDisplay] = useState<string[]>(
-        props.displayedFilter
+        props.filterInfo.displayedFilter
+    );
+    const [newSelectedFilters, setNewSelectedFilters] = useState<FilterInterface>(
+        props.filterInfo.selectedFilter
     );
     const { t } = useTranslation(["QueryPage"]);
     const handleClickOpen = (): void => props.onClickOpen();
     const handleClickClose = (): void => props.onClickClose();
 
     const handleClickCancel = (): void => {
-        setFilterToDisplay(props.displayedFilter);
+        setFilterToDisplay(props.filterInfo.displayedFilter);
         handleClickClose();
     };
 
     const handleClickSubmit = (): void => {
-        props.onSubmitClick(filterToDisplay);
+        props.onSubmitClick(newSelectedFilters, filterToDisplay);
         handleClickClose();
     };
 
@@ -67,13 +74,21 @@ export function FilterSettingDialogComponent(props: {
                 newDisplayedFilter.splice(index, 1);
             }
         }
+        const selectedFilters: FilterInterface = _.cloneDeep(props.filterInfo.selectedFilter);;
+        props.filterInfo.mainFilter.forEach((mainFilter) => {
+            if (!_.includes(newDisplayedFilter, mainFilter)) {
+                selectedFilters[mainFilter] = [];
+            }
+        });
+        setNewSelectedFilters(selectedFilters);
         setFilterToDisplay(newDisplayedFilter);
     };
 
     const handleChangeSelectAll = (): void => {
-        setFilterToDisplay(props.mainFilters);
+        setFilterToDisplay(props.filterInfo.mainFilter);
     };
     const handleChangeDeselectAll = (): void => {
+        setNewSelectedFilters(defaultFilter.selectedFilter)
         setFilterToDisplay([]);
     };
 
@@ -84,7 +99,7 @@ export function FilterSettingDialogComponent(props: {
     const filterDialogContent = (
         <div css={filterDialogContentStyle}>
             <FilterDialogCheckboxesComponent
-                mainFilters={props.mainFilters}
+                mainFilters={props.filterInfo.mainFilter}
                 filterToDisplay={filterToDisplay}
                 onHandleChangeCheckbox={handleChangeCheckbox}
             />

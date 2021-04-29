@@ -84,7 +84,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...table,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
         };
-        const newPath: string = generatePathStringService(filter, newTable);
+        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -95,7 +95,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: table.column,
             column: table.row,
         };
-        const newPath: string = generatePathStringService(filter, newTable);
+        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -106,7 +106,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: "" as FilterType,
             column: "" as FilterType,
         };
-        const newPath: string = generatePathStringService(filter, newTable);
+        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -122,7 +122,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
-        const newPath: string = generatePathStringService(newFilter, table);
+        const newPath: string = generatePathStringService(newFilter.selectedFilter, filter.mainFilter, table);
         history.push(newPath);
         setFilter(newFilter);
     };
@@ -132,7 +132,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...filter,
             selectedFilter: defaultFilter.selectedFilter,
         };
-        const newPath: string = generatePathStringService(newFilter, table);
+        const newPath: string = generatePathStringService(defaultFilter.selectedFilter, filter.mainFilter, table);
         history.push(newPath);
         setFilter(newFilter);
     };
@@ -145,13 +145,23 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const handleClickSubmit = (filterToDisplay: string[]): void => {
-        setFilter({ ...filter, displayedFilter: filterToDisplay });
+    const handleClickSubmit = (selectedFilters: FilterInterface, filterToDisplay: string[]): void => {
+        const newPath: string = generatePathStringService(selectedFilters, filter.mainFilter, table);
+        history.push(newPath);
+        setFilter({
+            ...filter,
+            selectedFilter: selectedFilters,
+            displayedFilter: filterToDisplay,
+        });
     };
 
     const fetchAndSetData = async (): Promise<void> => {
-        const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(ISOLATE_URL);
-        const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(FILTER_URL);
+        const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(
+            ISOLATE_URL
+        );
+        const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
+            FILTER_URL
+        );
 
         setIsolateStatus(isolateResponse.status);
         setFilterStatus(filterResponse.status);
@@ -251,7 +261,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(isolateCountUrl);
+        const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
+            isolateCountUrl
+        );
 
         setIsolateCountStatus(tableResponse.status);
 

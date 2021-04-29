@@ -39,7 +39,10 @@ export function QueryPageLayoutComponent(props: {
     ) => void;
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onSubmitClick: (filterToDisplay: string[]) => void;
+    onSubmitClick: (
+        selectedFilters: FilterInterface,
+        filterToDisplay: string[]
+    ) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -73,8 +76,12 @@ export function QueryPageLayoutComponent(props: {
         setDrawerWidth(newWidth);
     };
 
-    const handleClickSubmit = (filterToDisplay: string[]): void =>
-    props.onSubmitClick(filterToDisplay);
+    const handleClickSubmit = (
+        selectedFilters: FilterInterface,
+        filterToDisplay: string[]
+    ): void => {
+        props.onSubmitClick(selectedFilters, filterToDisplay);
+    };
 
     return (
         <main css={mainStyle}>

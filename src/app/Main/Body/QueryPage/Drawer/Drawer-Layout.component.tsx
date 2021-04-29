@@ -54,7 +54,10 @@ export interface DrawerLayoutProps {
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onSubmitClick: (filterToDisplay: string[]) => void;
+    onSubmitClick: (
+        selectedFilters: FilterInterface,
+        filterToDisplay: string[]
+    ) => void;
 }
 
 /**
@@ -63,7 +66,9 @@ export interface DrawerLayoutProps {
  * @returns {JSX.Element} - Drawer component
  */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
-    const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(false);
+    const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
+        false
+    );
 
     const drawerWidthSting = (props.drawerWidth as unknown) as string;
     const classes = useStyles(drawerWidthSting);
@@ -89,9 +94,12 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         setFilterDialogIsOpen(false);
     };
 
-
-    const handleClickSubmit = (filterToDisplay: string[]): void =>
-        props.onSubmitClick(filterToDisplay);
+    const handleClickSubmit = (
+        selectedFilters: FilterInterface,
+        filterToDisplay: string[]
+    ): void => {
+        props.onSubmitClick(selectedFilters, filterToDisplay);
+    };
 
     return (
         <Drawer
@@ -117,8 +125,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                     onClickOpen={handleClickOpenFilterSettingDialog}
                     onClickClose={handleClickCloseFilterSettingDialog}
                     onSubmitClick={handleClickSubmit}
-                    mainFilters={props.filterInfo.mainFilter}
-                    displayedFilter={props.filterInfo.displayedFilter}
+                    filterInfo={props.filterInfo}
                 />
                 <DrawerDisplayedFeaturesComponent
                     tableColumn={props.tableColumn}

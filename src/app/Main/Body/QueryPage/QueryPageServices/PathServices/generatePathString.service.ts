@@ -1,7 +1,6 @@
 import _ from "lodash";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.model";
 import { TableInterface } from "../../../../../Shared/Context/TableContext";
-import { FilterContextInterface } from "../../../../../Shared/Context/FilterContext";
 
 /**
  * @desc Generate partial path containing the selected filter
@@ -33,14 +32,13 @@ function getTableParam(key: string, value: string): string {
  * @returns {string} - path including selected filters and row/column
  */
 export const generatePathStringService = (
-    filter: FilterContextInterface,
+    selectedFilter: FilterInterface,
+    mainFilters: string[],
     table: TableInterface,
 ): string => {
     let newPath = "?";
-    const {selectedFilter} = filter
-    const mainFilterAttributes: string[] = filter.mainFilter
     let isFirstAttributeWithValue = true
-    mainFilterAttributes.forEach(
+    mainFilters.forEach(
         (attribute: FilterType): void => {
             if (!_.isEmpty(selectedFilter[attribute])) {
                 newPath += isFirstAttributeWithValue ? "" : "&";
