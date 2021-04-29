@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import { useTranslation } from "react-i18next";
+import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
     highlightedTableBorder,
@@ -53,28 +54,33 @@ const StyledTableCell = withStyles(() =>
  */
 export function TableContentHeaderComponent(
     isSumRowCol: boolean,
-    headerValues: string[]
+    headerValues: string[], 
+    tableOption: DisplayOptionType,
 ): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
-    const elements: JSX.Element[] = [];
-    elements.push(
+    const headerTableCells: JSX.Element[] = [];
+    headerTableCells.push(
         <StyledTableCell key="header-blank" css={blankCellStyle}>
             &nbsp;
         </StyledTableCell>
     );
-    headerValues.forEach((element): void => {
-        elements.push(
-            <StyledTableCell key={`header-${element}`} css={headerCellStyle}>
-                {element}
+    headerValues.forEach((headerValue): void => {
+        let headerTitle = headerValue
+        if (tableOption === "relative") {
+            headerTitle = `${headerValue} in %` 
+        }
+        headerTableCells.push(
+            <StyledTableCell key={`header-${headerValue}`} css={headerCellStyle}>
+                {headerTitle}
             </StyledTableCell>
         );
     });
     if (isSumRowCol) {
-        elements.push(
+        headerTableCells.push(
             <StyledTableCell key="header-row-sum" css={sumCellStyle}>
                 {t("Sums.RowSum")}
             </StyledTableCell>
         );
     }
-    return elements;
+    return headerTableCells;
 }
