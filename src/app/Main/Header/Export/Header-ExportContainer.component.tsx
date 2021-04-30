@@ -15,9 +15,11 @@ import {
     ExportInterface,
 } from "../../../Shared/Model/Export.model";
 import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
-import { HeaderExportDialogComponent } from "./Header-ExportDialog.component";
+import { HeaderExportDialogComponent } from "./Dialog/Header-ExportDialog.component";
 import { generateExportLabels } from "./ExportServices/generateExportLabels.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
+import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
+import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
@@ -47,7 +49,8 @@ export function HeaderExportContainerComponent(): JSX.Element {
             isolateFilteredStatus === 200 &&
             isolateFilteredResponse.data !== undefined
         ) {
-            const isolateFilteredProp: IsolateDTO = isolateFilteredResponse.data;
+            const isolateFilteredProp: IsolateDTO =
+                isolateFilteredResponse.data;
             const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
                 isolateFilteredProp
             );
@@ -105,16 +108,25 @@ export function HeaderExportContainerComponent(): JSX.Element {
     };
 
     const exportLabels = generateExportLabels(filter.mainFilter);
+    const buttonLabel: JSX.Element = ExportButtonLabelComponent(isOpen);
+
 
     return (
-        <HeaderExportDialogComponent
-            isOpen={isOpen}
-            settings={setting}
-            exportLabels={exportLabels}
-            filter={filter}
-            onClickOpen={handleClickOpen}
-            onClickClose={handleClickClose}
-            onCheckboxChange={handleChange}
-        />
+        <div>
+            <HeaderExportButtonComponent
+                onClickOpen={handleClickOpen}
+                buttonLabel={buttonLabel}
+            />
+            <HeaderExportDialogComponent
+                isOpen={isOpen}
+                settings={setting}
+                exportLabels={exportLabels}
+                buttonLabel={buttonLabel}
+                filter={filter}
+                onClickOpen={handleClickOpen}
+                onClickClose={handleClickClose}
+                onCheckboxChange={handleChange}
+            />
+        </div>
     );
 }

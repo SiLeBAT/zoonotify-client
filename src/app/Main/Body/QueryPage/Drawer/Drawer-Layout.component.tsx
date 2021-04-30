@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import { useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
+import { useTranslation } from "react-i18next";
+import { Button } from "@material-ui/core";
 import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
 import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import {
@@ -10,6 +14,23 @@ import {
 import { TableType } from "../../../../Shared/Context/TableContext";
 import { FilterSettingDialogComponent } from "./Filter/Dialog/FilterSetting-Dialog.component";
 import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
+import {
+    onPrimaryColor,
+    primaryColor,
+    secondaryColor,
+} from "../../../../Shared/Style/Style-MainTheme.component";
+
+const buttonStyle = css`
+    width: 100%;
+    height: 1.5rem;
+    margin-top: 0.5em;
+    background-color: ${primaryColor};
+    color: ${onPrimaryColor};
+    &:hover {
+        background-color: ${primaryColor};
+        color: ${secondaryColor};
+    }
+`;
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -66,6 +87,7 @@ export interface DrawerLayoutProps {
  * @returns {JSX.Element} - Drawer component
  */
 export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
+    const { t } = useTranslation(["QueryPage"]);
     const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
         false
     );
@@ -101,6 +123,8 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         props.onSubmitClick(selectedFilters, filterToDisplay);
     };
 
+    const filterDialogButton = t("FilterDialog.ButtonText");
+
     return (
         <Drawer
             className={classes.drawer}
@@ -120,6 +144,13 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                 />
+                <Button
+                    css={buttonStyle}
+                    onClick={handleClickOpenFilterSettingDialog}
+                    color="primary"
+                >
+                    {filterDialogButton}
+                </Button>
                 <FilterSettingDialogComponent
                     isOpen={filterDialogIsOpen}
                     onClickOpen={handleClickOpenFilterSettingDialog}

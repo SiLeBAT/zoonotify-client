@@ -3,12 +3,6 @@ import { css, jsx } from "@emotion/core";
 import { useState } from "react";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
-import { Button } from "@material-ui/core";
-import {
-    onPrimaryColor,
-    primaryColor,
-    secondaryColor,
-} from "../../../../../../Shared/Style/Style-MainTheme.component";
 import { DialogComponent } from "../../../../../../Shared/Dialog.component";
 import { FilterDialogContentTextComponent } from "./FilterDialog-ContentText.component";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
@@ -17,17 +11,7 @@ import { FilterDialogSelectAllButtonComponent } from "./FilterDialog-SelectAllBu
 import { FilterInterface } from "../../../../../../Shared/Model/Filter.model";
 import { defaultFilter, FilterContextInterface } from "../../../../../../Shared/Context/FilterContext";
 
-const buttonStyle = css`
-    width: 100%;
-    height: 1.5rem;
-    margin-top: 0.5em;
-    background-color: ${primaryColor};
-    color: ${onPrimaryColor};
-    &:hover {
-        background-color: ${primaryColor};
-        color: ${secondaryColor};
-    }
-`;
+
 const filterDialogContentStyle = css`
     display: flex;
     flex-direction: row;
@@ -51,7 +35,6 @@ export function FilterSettingDialogComponent(props: {
         props.filterInfo.selectedFilter
     );
     const { t } = useTranslation(["QueryPage"]);
-    const handleClickOpen = (): void => props.onClickOpen();
     const handleClickClose = (): void => props.onClickClose();
 
     const handleClickCancel = (): void => {
@@ -93,7 +76,6 @@ export function FilterSettingDialogComponent(props: {
     };
 
     const filterDialogTitle = t("FilterDialog.DialogTitle");
-    const filterDialogButton = t("FilterDialog.ButtonText");
 
     const filterContentText = <FilterDialogContentTextComponent />;
     const filterDialogContent = (
@@ -117,18 +99,14 @@ export function FilterSettingDialogComponent(props: {
     );
 
     return (
-        <div>
-            <Button css={buttonStyle} onClick={handleClickOpen} color="primary">
-                {filterDialogButton}
-            </Button>
-            {DialogComponent({
+            
+            DialogComponent({
                 isOpen: props.isOpen,
                 dialogTitle: filterDialogTitle,
                 dialogContentText: filterContentText,
                 dialogContent: filterDialogContent,
                 dialogButtons: filterDialogButtons,
                 onClickClose: handleClickCancel,
-            })}
-        </div>
+            })
     );
 }
