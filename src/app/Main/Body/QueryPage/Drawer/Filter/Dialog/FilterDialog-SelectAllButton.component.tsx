@@ -16,21 +16,21 @@ const selectIconStyle = css`
 `
 
 export function FilterDialogSelectAllButtonComponent(props: {
-    onHandleSelectAll: () => void;
-    onHandleDeselectAll: () => void;
+    onSelectAllFiltersToDisplay: () => void;
+    onDeselectAllFiltersToDisplay: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
-    const handleClickSelectAll = (): void => {
-        props.onHandleSelectAll();
+    const handleSelectAllFiltersToDisplay = (): void => {
+        props.onSelectAllFiltersToDisplay();
     };
-    const handleClickDeselectAll = (): void => {
-        props.onHandleDeselectAll();
+    const handleDeselectAllFiltersToDisplay = (): void => {
+        props.onDeselectAllFiltersToDisplay();
     };
 
     return (
         <div>
             <Button
-                onClick={handleClickSelectAll}
+                onClick={handleSelectAllFiltersToDisplay}
                 variant="outlined"
                 color="primary"
                 size="small"
@@ -40,7 +40,7 @@ export function FilterDialogSelectAllButtonComponent(props: {
                 {t("FilterDialog.SelectAll")}
             </Button>
             <Button
-                onClick={handleClickDeselectAll}
+                onClick={handleDeselectAllFiltersToDisplay}
                 variant="outlined"
                 color="primary"
                 size="small"

@@ -39,9 +39,9 @@ export function QueryPageLayoutComponent(props: {
     ) => void;
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onSubmitClick: (
+    onSubmitFiltersToDisplay: (
         selectedFilters: FilterInterface,
-        filterToDisplay: string[]
+        filtersToDisplay: string[]
     ) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
@@ -76,11 +76,11 @@ export function QueryPageLayoutComponent(props: {
         setDrawerWidth(newWidth);
     };
 
-    const handleClickSubmit = (
+    const handleSubmitFiltersToDisplay = (
         selectedFilters: FilterInterface,
-        filterToDisplay: string[]
+        filtersToDisplay: string[]
     ): void => {
-        props.onSubmitClick(selectedFilters, filterToDisplay);
+        props.onSubmitFiltersToDisplay(selectedFilters, filtersToDisplay);
     };
 
     return (
@@ -97,7 +97,7 @@ export function QueryPageLayoutComponent(props: {
                 onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
                 onFilterChange={handleChangeFilter}
                 onFilterRemoveAll={handleRemoveAllFilter}
-                onSubmitClick={handleClickSubmit}
+                onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
             />
             <QueryPageDrawerControlComponent
                 isOpen={isOpen}

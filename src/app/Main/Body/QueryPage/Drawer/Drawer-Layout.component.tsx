@@ -75,9 +75,9 @@ export interface DrawerLayoutProps {
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onSubmitClick: (
+    onSubmitFiltersToDisplay: (
         selectedFilters: FilterInterface,
-        filterToDisplay: string[]
+        filtersToDisplay: string[]
     ) => void;
 }
 
@@ -112,15 +112,15 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     const handleClickOpenFilterSettingDialog = (): void => {
         setFilterDialogIsOpen(true);
     };
-    const handleClickCloseFilterSettingDialog = (): void => {
+    const handleCloseFilterSettingDialog = (): void => {
         setFilterDialogIsOpen(false);
     };
 
-    const handleClickSubmit = (
+    const handleSubmitFiltersToDisplay = (
         selectedFilters: FilterInterface,
-        filterToDisplay: string[]
+        filtersToDisplay: string[]
     ): void => {
-        props.onSubmitClick(selectedFilters, filterToDisplay);
+        props.onSubmitFiltersToDisplay(selectedFilters, filtersToDisplay);
     };
 
     const filterDialogButton = t("FilterDialog.ButtonText");
@@ -139,7 +139,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                 <DrawerFilterComponent
                     dataUniqueValues={props.dataUniqueValues}
                     selectedFilter={props.filterInfo.selectedFilter}
-                    filterToDisplay={props.filterInfo.displayedFilter}
+                    filtersToDisplay={props.filterInfo.displayedFilters}
                     mainFilterAttributes={props.filterInfo.mainFilter}
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
@@ -154,8 +154,8 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                 <FilterSettingDialogComponent
                     isOpen={filterDialogIsOpen}
                     onClickOpen={handleClickOpenFilterSettingDialog}
-                    onClickClose={handleClickCloseFilterSettingDialog}
-                    onSubmitClick={handleClickSubmit}
+                    onClose={handleCloseFilterSettingDialog}
+                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                     filterInfo={props.filterInfo}
                 />
                 <DrawerDisplayedFeaturesComponent

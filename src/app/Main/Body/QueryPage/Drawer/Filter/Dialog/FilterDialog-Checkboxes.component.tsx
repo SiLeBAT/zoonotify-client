@@ -6,21 +6,21 @@ import _ from "lodash";
 import { CheckboxComponent } from "../../../../../../Shared/Checkbox.component";
 
 function filterCheckboxes(
-    mainFilters: string[],
-    displayedFilter: string[],
-    handleChangeCheckbox: (name: string, checked: boolean) => void,
+    availableFilters: string[],
+    displayedFilters: string[],
+    handleChangeFiltersToDisplay: (name: string, checked: boolean) => void,
     t: TFunction
 ): JSX.Element[] {
     const checkboxes: JSX.Element[] = [];
-    mainFilters.forEach((mainFilter) => {
-        const isChecked: boolean = _.includes(displayedFilter, mainFilter);
+    availableFilters.forEach((availableFilter) => {
+        const isChecked: boolean = _.includes(displayedFilters, availableFilter);
         checkboxes.push(
             <CheckboxComponent
-                onCheckboxChange={handleChangeCheckbox}
+                onCheckboxChange={handleChangeFiltersToDisplay}
                 checked={isChecked}
-                key={`checkbox-${mainFilter}`}
-                name={mainFilter}
-                label={t(`Filters.${mainFilter}`)}
+                key={`checkbox-${availableFilter}`}
+                name={availableFilter}
+                label={t(`Filters.${availableFilter}`)}
             />
         );
     });
@@ -28,22 +28,22 @@ function filterCheckboxes(
 }
 
 export function FilterDialogCheckboxesComponent(props: {
-    mainFilters: string[];
-    filterToDisplay: string[];
-    onHandleChangeCheckbox: (name: string, checked: boolean) => void;
+    availableFilters: string[];
+    filtersToDisplay: string[];
+    onFiltersToDisplayChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const handleChangeCheckbox = (name: string, checked: boolean): void => {
-        props.onHandleChangeCheckbox(name, checked);
+    const handleChangeFiltersToDisplay = (name: string, checked: boolean): void => {
+        props.onFiltersToDisplayChange(name, checked);
     };
 
     return (
         <FormGroup>
             {filterCheckboxes(
-                props.mainFilters,
-                props.filterToDisplay,
-                handleChangeCheckbox, 
+                props.availableFilters,
+                props.filtersToDisplay,
+                handleChangeFiltersToDisplay, 
                 t
             )}
         </FormGroup>

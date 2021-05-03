@@ -11,14 +11,14 @@ export function DialogComponent(props: {
     dialogContentText: JSX.Element;
     dialogContent: JSX.Element;
     dialogButtons: JSX.Element;
-    onClickClose: () => void;
+    onClose: () => void;
 }): JSX.Element {
-    const handleClickClose = (): void => props.onClickClose();
+    const handleClose = (): void => props.onClose();
 
     return (
         <Dialog
             open={props.isOpen}
-            onClose={handleClickClose}
+            onClose={handleClose}
             aria-labelledby="form-dialog-title"
         >
             <DialogTitle>{props.dialogTitle}</DialogTitle>

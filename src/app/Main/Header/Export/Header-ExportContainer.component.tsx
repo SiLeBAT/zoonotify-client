@@ -103,7 +103,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const handleClickOpen = (): void => {
         setIsOpen(true);
     };
-    const handleClickClose = (): void => {
+    const handleClose = (): void => {
         setIsOpen(false);
     };
 
@@ -124,7 +124,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
                 buttonLabel={buttonLabel}
                 filter={filter}
                 onClickOpen={handleClickOpen}
-                onClickClose={handleClickClose}
+                onClickClose={handleClose}
                 onCheckboxChange={handleChange}
             />
         </div>

@@ -22,57 +22,60 @@ export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
     filterInfo: FilterContextInterface;
     onClickOpen: () => void;
-    onClickClose: () => void;
-    onSubmitClick: (
+    onClose: () => void;
+    onSubmitFiltersToDisplay: (
         selectedFilters: FilterInterface,
-        filterToDisplay: string[]
+        filtersToDisplay: string[]
     ) => void;
 }): JSX.Element {
-    const [filterToDisplay, setFilterToDisplay] = useState<string[]>(
-        props.filterInfo.displayedFilter
+    const [filtersToDisplay, setFiltersToDisplay] = useState<string[]>(
+        props.filterInfo.displayedFilters
     );
     const [newSelectedFilters, setNewSelectedFilters] = useState<FilterInterface>(
         props.filterInfo.selectedFilter
     );
     const { t } = useTranslation(["QueryPage"]);
-    const handleClickClose = (): void => props.onClickClose();
 
-    const handleClickCancel = (): void => {
-        setFilterToDisplay(props.filterInfo.displayedFilter);
-        handleClickClose();
+    const availableFilters  = props.filterInfo.mainFilter
+
+    const handleClose = (): void => props.onClose();
+
+    const handleCancelFiltersToDisplay = (): void => {
+        setFiltersToDisplay(props.filterInfo.displayedFilters);
+        handleClose();
     };
 
-    const handleClickSubmit = (): void => {
-        props.onSubmitClick(newSelectedFilters, filterToDisplay);
-        handleClickClose();
+    const handleSubmitFiltersToDisplay = (): void => {
+        props.onSubmitFiltersToDisplay(newSelectedFilters, filtersToDisplay);
+        handleClose();
     };
 
-    const handleChangeCheckbox = (name: string, checked: boolean): void => {
-        const newDisplayedFilter: string[] = _.cloneDeep(filterToDisplay);
+    const handleChangeFiltersToDisplay = (name: string, checked: boolean): void => {
+        const newDisplayedFilters: string[] = _.cloneDeep(filtersToDisplay);
         if (checked) {
-            newDisplayedFilter.push(name);
+            newDisplayedFilters.push(name);
         } else {
-            const index = newDisplayedFilter.indexOf(name);
+            const index = newDisplayedFilters.indexOf(name);
             if (index > -1) {
-                newDisplayedFilter.splice(index, 1);
+                newDisplayedFilters.splice(index, 1);
             }
         }
         const selectedFilters: FilterInterface = _.cloneDeep(props.filterInfo.selectedFilter);;
-        props.filterInfo.mainFilter.forEach((mainFilter) => {
-            if (!_.includes(newDisplayedFilter, mainFilter)) {
-                selectedFilters[mainFilter] = [];
+        availableFilters.forEach((availableFilter) => {
+            if (!_.includes(newDisplayedFilters, availableFilter)) {
+                selectedFilters[availableFilter] = [];
             }
         });
         setNewSelectedFilters(selectedFilters);
-        setFilterToDisplay(newDisplayedFilter);
+        setFiltersToDisplay(newDisplayedFilters);
     };
 
-    const handleChangeSelectAll = (): void => {
-        setFilterToDisplay(props.filterInfo.mainFilter);
+    const handleSelectAllFiltersToDisplay = (): void => {
+        setFiltersToDisplay(availableFilters);
     };
-    const handleChangeDeselectAll = (): void => {
+    const handleDeselectAllFiltersToDisplay = (): void => {
         setNewSelectedFilters(defaultFilter.selectedFilter)
-        setFilterToDisplay([]);
+        setFiltersToDisplay([]);
     };
 
     const filterDialogTitle = t("FilterDialog.DialogTitle");
@@ -81,20 +84,20 @@ export function FilterSettingDialogComponent(props: {
     const filterDialogContent = (
         <div css={filterDialogContentStyle}>
             <FilterDialogCheckboxesComponent
-                mainFilters={props.filterInfo.mainFilter}
-                filterToDisplay={filterToDisplay}
-                onHandleChangeCheckbox={handleChangeCheckbox}
+                availableFilters={availableFilters}
+                filtersToDisplay={filtersToDisplay}
+                onFiltersToDisplayChange={handleChangeFiltersToDisplay}
             />
             <FilterDialogSelectAllButtonComponent
-                onHandleSelectAll={handleChangeSelectAll}
-                onHandleDeselectAll={handleChangeDeselectAll}
+                onSelectAllFiltersToDisplay={handleSelectAllFiltersToDisplay}
+                onDeselectAllFiltersToDisplay={handleDeselectAllFiltersToDisplay}
             />
         </div>
     );
     const filterDialogButtons = (
         <FilterDialogButtonsComponent
-            onHandleCancelClick={handleClickCancel}
-            onHandleSubmitClick={handleClickSubmit}
+            onFiltersToDisplayCancel={handleCancelFiltersToDisplay}
+            onFiltersToDisplaySubmit={handleSubmitFiltersToDisplay}
         />
     );
 
@@ -106,7 +109,7 @@ export function FilterSettingDialogComponent(props: {
                 dialogContentText: filterContentText,
                 dialogContent: filterDialogContent,
                 dialogButtons: filterDialogButtons,
-                onClickClose: handleClickCancel,
+                onClose: handleCancelFiltersToDisplay,
             })
     );
 }

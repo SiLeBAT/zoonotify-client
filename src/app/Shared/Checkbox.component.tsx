@@ -10,9 +10,9 @@ export interface CheckboxesProps {
 }
 
 /**
- * @desc Returns the checkboxes to decide which data should be exported.
+ * @desc Returns checkbox
  * @param props
- * @returns {JSX.Element} - checkboxes component
+ * @returns {JSX.Element} - checkbox component
  */
 export function CheckboxComponent(props: CheckboxesProps): JSX.Element {
     const handleChangeCheckbox = (name: string, checked: boolean): void =>

@@ -145,13 +145,13 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const handleClickSubmit = (selectedFilters: FilterInterface, filterToDisplay: string[]): void => {
+    const handleSubmitFiltersToDisplay = (selectedFilters: FilterInterface, filtersToDisplay: string[]): void => {
         const newPath: string = generatePathStringService(selectedFilters, filter.mainFilter, table);
         history.push(newPath);
         setFilter({
             ...filter,
             selectedFilter: selectedFilters,
-            displayedFilter: filterToDisplay,
+            displayedFilters: filtersToDisplay,
         });
     };
 
@@ -320,7 +320,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
-                    onSubmitClick={handleClickSubmit}
+                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                 />
             }
         />

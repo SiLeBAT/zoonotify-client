@@ -36,7 +36,7 @@ const filterSubheadingStyle = css`
 export function DrawerFilterComponent(props: {
     dataUniqueValues: FilterInterface;
     selectedFilter: FilterInterface;
-    filterToDisplay: string[];
+    filtersToDisplay: string[];
     mainFilterAttributes: string[];
     onFilterChange: (
         selectedOption: { value: string; label: string }[] | null,
@@ -64,7 +64,7 @@ export function DrawerFilterComponent(props: {
             {FilterSelectorListComponent(
                 props.dataUniqueValues,
                 props.selectedFilter,
-                props.filterToDisplay,
+                props.filtersToDisplay,
                 props.mainFilterAttributes,
                 handleChangeFilter
             )}

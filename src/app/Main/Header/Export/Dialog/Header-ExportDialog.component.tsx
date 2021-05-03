@@ -20,7 +20,7 @@ export function HeaderExportDialogComponent(props: {
     onCheckboxChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["Export"]);
-    const handleClickClose = (): void => props.onClickClose();
+    const handleClose = (): void => props.onClickClose();
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
@@ -44,7 +44,7 @@ export function HeaderExportDialogComponent(props: {
 
     const exportButtons = (
         <ExportDialogButtonsComponent
-            onClickClose={handleClickClose}
+            onClickClose={handleClose}
             setting={props.settings}
             filter={props.filter.selectedFilter}
             mainFilterAttributes={props.filter.mainFilter}
@@ -61,6 +61,6 @@ export function HeaderExportDialogComponent(props: {
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,
         dialogButtons: exportButtons,
-        onClickClose: handleClickClose,
+        onClose: handleClose,
     });
 }

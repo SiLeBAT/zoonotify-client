@@ -4,25 +4,25 @@ import DoneIcon from "@material-ui/icons/Done";
 import { useTranslation } from "react-i18next";
 
 export function FilterDialogButtonsComponent(props: {
-    onHandleCancelClick: () => void;
-    onHandleSubmitClick: () => void;
+    onFiltersToDisplayCancel: () => void;
+    onFiltersToDisplaySubmit: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const handleClickCancel = (): void => {
-        props.onHandleCancelClick();
+    const handleCancelFiltersToDisplay = (): void => {
+        props.onFiltersToDisplayCancel();
     };
 
-    const handleClickSubmit = (): void => {
-        props.onHandleSubmitClick();
+    const handleSubmitFiltersToDisplay = (): void => {
+        props.onFiltersToDisplaySubmit();
     };
 
     return (
         <DialogActions>
-            <Button onClick={handleClickCancel} color="primary">
+            <Button onClick={handleCancelFiltersToDisplay} color="primary">
                 {t("FilterDialog.Cancel")}
             </Button>
-            <Button type="submit" onClick={handleClickSubmit} color="primary">
+            <Button type="submit" onClick={handleSubmitFiltersToDisplay} color="primary">
                 <DoneIcon fontSize="small" />
                 {t("FilterDialog.Submit")}
             </Button>
