@@ -122,7 +122,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
-        const newPath: string = generatePathStringService(newFilter.selectedFilter, filter.mainFilter, table);
+        const newPath: string = generatePathStringService(newFilter.selectedFilter, newFilter.mainFilter, table);
         history.push(newPath);
         setFilter(newFilter);
     };
@@ -132,7 +132,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...filter,
             selectedFilter: defaultFilter.selectedFilter,
         };
-        const newPath: string = generatePathStringService(defaultFilter.selectedFilter, filter.mainFilter, table);
+        const newPath: string = generatePathStringService(newFilter.selectedFilter, newFilter.mainFilter, table);
         history.push(newPath);
         setFilter(newFilter);
     };

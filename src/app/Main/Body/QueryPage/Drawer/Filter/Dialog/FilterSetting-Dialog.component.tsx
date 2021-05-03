@@ -21,7 +21,6 @@ const filterDialogContentStyle = css`
 export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
     filterInfo: FilterContextInterface;
-    onClickOpen: () => void;
     onClose: () => void;
     onSubmitFiltersToDisplay: (
         selectedFilters: FilterInterface,

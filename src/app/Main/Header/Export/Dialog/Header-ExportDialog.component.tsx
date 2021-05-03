@@ -15,7 +15,6 @@ export function HeaderExportDialogComponent(props: {
     exportLabels: ExportLabels;
     buttonLabel: JSX.Element;
     filter: FilterContextInterface;
-    onClickOpen: () => void;
     onClickClose: () => void;
     onCheckboxChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
