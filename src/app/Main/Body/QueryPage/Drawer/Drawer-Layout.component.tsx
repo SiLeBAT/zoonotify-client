@@ -153,7 +153,6 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                 </Button>
                 <FilterSettingDialogComponent
                     isOpen={filterDialogIsOpen}
-                    onClickOpen={handleClickOpenFilterSettingDialog}
                     onClose={handleCloseFilterSettingDialog}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                     filterInfo={props.filterInfo}

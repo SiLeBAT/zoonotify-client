@@ -18,7 +18,6 @@ function filterCheckboxes(
             <CheckboxComponent
                 onCheckboxChange={handleChangeFiltersToDisplay}
                 checked={isChecked}
-                key={`checkbox-${availableFilter}`}
                 name={availableFilter}
                 label={t(`Filters.${availableFilter}`)}
             />

@@ -18,6 +18,8 @@ export function CheckboxComponent(props: CheckboxesProps): JSX.Element {
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
+    const checkboxKey = `checkbox-${props.name}`
+
     return (
         <FormControlLabel
             control={
@@ -31,6 +33,7 @@ export function CheckboxComponent(props: CheckboxesProps): JSX.Element {
                     }
                     name={props.name}
                     color="primary"
+                    key={checkboxKey}
                 />
             }
             label={props.label}

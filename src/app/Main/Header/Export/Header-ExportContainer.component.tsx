@@ -123,7 +123,6 @@ export function HeaderExportContainerComponent(): JSX.Element {
                 exportLabels={exportLabels}
                 buttonLabel={buttonLabel}
                 filter={filter}
-                onClickOpen={handleClickOpen}
                 onClickClose={handleClose}
                 onCheckboxChange={handleChange}
             />
