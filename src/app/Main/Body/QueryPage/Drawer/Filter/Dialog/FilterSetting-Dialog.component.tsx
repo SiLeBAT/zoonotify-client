@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
+import DoneIcon from "@material-ui/icons/Done";
 import { DialogComponent } from "../../../../../../Shared/Dialog.component";
 import { FilterDialogContentTextComponent } from "./FilterDialog-ContentText.component";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
-import { FilterDialogButtonsComponent } from "./FilterDialog-Buttons.component";
 import { FilterDialogSelectAllButtonComponent } from "./FilterDialog-SelectAllButton.component";
 
 const filterDialogContentStyle = css`
@@ -12,6 +12,11 @@ const filterDialogContentStyle = css`
     flex-direction: row;
     justify-content: space-between;
 `;
+
+const submitButtonStyle = css`
+    display: flex; 
+    align-items: center;
+`
 
 export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
@@ -21,15 +26,12 @@ export function FilterSettingDialogComponent(props: {
     onSelectAllFiltersToDisplay: () => void;
     onDeselectAllFiltersToDisplay: () => void;
     onFilterToDisplayCancel: () => void;
-    onFilterToDisplayChange: (
-        name: string,
-        checked: boolean
-    ) => void;
+    onFilterToDisplayChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleCancelFiltersToDisplay = (): void => {
-        props.onFilterToDisplayCancel()
+        props.onFilterToDisplayCancel();
     };
 
     const handleSubmitFiltersToDisplay = (): void => {
@@ -44,7 +46,7 @@ export function FilterSettingDialogComponent(props: {
     };
 
     const handleSelectAllFiltersToDisplay = (): void => {
-        props.onSelectAllFiltersToDisplay()
+        props.onSelectAllFiltersToDisplay();
     };
     const handleDeselectAllFiltersToDisplay = (): void => {
         props.onDeselectAllFiltersToDisplay();
@@ -68,19 +70,25 @@ export function FilterSettingDialogComponent(props: {
             />
         </div>
     );
-    const filterDialogButtons = (
-        <FilterDialogButtonsComponent
-            onFiltersToDisplayCancel={handleCancelFiltersToDisplay}
-            onFiltersToDisplaySubmit={handleSubmitFiltersToDisplay}
-        />
+
+    const submitFilterToDisplayButton = (
+        <div css={submitButtonStyle}>
+            <DoneIcon fontSize="small" />
+            {t("FilterDialog.Submit")}
+        </div>
     );
+    const cancelFilterToDisplayButton = t("FilterDialog.Cancel");
 
     return DialogComponent({
         isOpen: props.isOpen,
         dialogTitle: filterDialogTitle,
         dialogContentText: filterContentText,
         dialogContent: filterDialogContent,
-        dialogButtons: filterDialogButtons,
+        cancelButton: cancelFilterToDisplayButton,
+        submitButton: submitFilterToDisplayButton,
+        disableSubmitButton: false,
         onClose: handleCancelFiltersToDisplay,
+        onCancelClick: handleCancelFiltersToDisplay,
+        onSubmitClick: handleSubmitFiltersToDisplay,
     });
 }

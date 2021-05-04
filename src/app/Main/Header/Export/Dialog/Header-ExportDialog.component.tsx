@@ -5,9 +5,9 @@ import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
 import { ExportInterface } from "../../../../Shared/Model/Export.model";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
-import { ExportDialogButtonsComponent } from "./ExportDialog-Buttons.component";
 import { ExportLabels } from "../ExportServices/generateExportLabels.service";
 import { ExportDialogWarningComponent } from "./ExportDialog-Warning.component";
+import { ButtonsCsvLinkComponent } from "./Buttons-CSVLink.component";
 
 export function HeaderExportDialogComponent(props: {
     isOpen: boolean;
@@ -41,9 +41,10 @@ export function HeaderExportDialogComponent(props: {
         </div>
     );
 
-    const exportButtons = (
-        <ExportDialogButtonsComponent
-            onClickClose={handleClose}
+    const exportCancelButton = t("Button.Cancel");
+
+    const exportSubmitButton = (
+        <ButtonsCsvLinkComponent
             setting={props.settings}
             filter={props.filter.selectedFilter}
             mainFilterAttributes={props.filter.mainFilter}
@@ -59,7 +60,11 @@ export function HeaderExportDialogComponent(props: {
         dialogTitle: exportDialogTitle,
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,
-        dialogButtons: exportButtons,
+        cancelButton: exportCancelButton,
+        submitButton: exportSubmitButton,
+        disableSubmitButton: !fileIsSelect,
         onClose: handleClose,
+        onCancelClick: handleClose,
+        onSubmitClick: handleClose,
     });
 }
