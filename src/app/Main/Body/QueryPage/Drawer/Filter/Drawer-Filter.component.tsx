@@ -88,9 +88,6 @@ export function DrawerFilterComponent(props: {
     const handleClickOpenFilterSettingDialog = (): void => {
         setFilterDialogIsOpen(true);
     };
-    const handleCloseFilterSettingDialog = (): void => {
-        setFilterDialogIsOpen(false);
-    };
 
     const handleChangeFiltersToDisplay = (
         name: string,
@@ -101,9 +98,11 @@ export function DrawerFilterComponent(props: {
 
     const handleSubmitFiltersToDisplay = (): void => {
         props.onSubmitFiltersToDisplay();
+        setFilterDialogIsOpen(false);
     };
     const handleCancelFiltersToDisplay = (): void => {
         props.onFilterToDisplayCancel()
+        setFilterDialogIsOpen(false);
     };
         const handleSelectAllFiltersToDisplay = (): void => {
         props.onSelectAllFiltersToDisplay()
@@ -140,7 +139,6 @@ export function DrawerFilterComponent(props: {
             <FilterSettingDialogComponent
                 isOpen={filterDialogIsOpen}
                 tempFiltersToDisplay={props.tempFiltersToDisplay}
-                onClose={handleCloseFilterSettingDialog}
                 onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                 onSelectAllFiltersToDisplay={
                     handleSelectAllFiltersToDisplay

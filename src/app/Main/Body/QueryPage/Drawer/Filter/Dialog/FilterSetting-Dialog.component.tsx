@@ -17,7 +17,6 @@ export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
     availableFilters: string[];
     tempFiltersToDisplay: string[];
-    onClose: () => void;
     onSubmitFiltersToDisplay: () => void;
     onSelectAllFiltersToDisplay: () => void;
     onDeselectAllFiltersToDisplay: () => void;
@@ -29,16 +28,12 @@ export function FilterSettingDialogComponent(props: {
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const handleClose = (): void => props.onClose();
-
     const handleCancelFiltersToDisplay = (): void => {
         props.onFilterToDisplayCancel()
-        handleClose();
     };
 
     const handleSubmitFiltersToDisplay = (): void => {
         props.onSubmitFiltersToDisplay();
-        handleClose();
     };
 
     const handleChangeFiltersToDisplay = (
