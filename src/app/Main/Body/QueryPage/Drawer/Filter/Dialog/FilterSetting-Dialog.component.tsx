@@ -1,9 +1,13 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import DoneIcon from "@material-ui/icons/Done";
 import { DialogComponent } from "../../../../../../Shared/Dialog.component";
-import { FilterDialogContentTextComponent } from "./FilterDialog-ContentText.component";
+import {
+    primaryColor,
+    secondaryColor,
+} from "../../../../../../Shared/Style/Style-MainTheme.component";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
 import { FilterDialogSelectAllButtonComponent } from "./FilterDialog-SelectAllButton.component";
 
@@ -14,9 +18,15 @@ const filterDialogContentStyle = css`
 `;
 
 const submitButtonStyle = css`
-    display: flex; 
+    display: flex;
     align-items: center;
-`
+`;
+const linkStyle = css`
+    color: ${primaryColor};
+    &:hover {
+        color: ${secondaryColor};
+    }
+`;
 
 export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
@@ -54,7 +64,16 @@ export function FilterSettingDialogComponent(props: {
 
     const filterDialogTitle = t("FilterDialog.DialogTitle");
 
-    const filterContentText = <FilterDialogContentTextComponent />;
+    const filterContentText = (
+        <span>
+            {t("FilterDialog.TextContentBeforeLink")}
+            <Link css={linkStyle} to="/explanations">
+                {t("FilterDialog.LinkText")}
+            </Link>
+            {t("FilterDialog.TextContentAfterLink")}
+        </span>
+    );
+
     const filterDialogContent = (
         <div css={filterDialogContentStyle}>
             <FilterDialogCheckboxesComponent

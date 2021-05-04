@@ -1,5 +1,4 @@
 import React from "react";
-import { DialogContentText } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
@@ -27,9 +26,7 @@ export function HeaderExportDialogComponent(props: {
 
 
     const exportDialogTitle = t("Content.Title");
-    const exportContentText = (
-        <DialogContentText>{t("Content.Text")}</DialogContentText>
-    );
+    const exportContentText = t("Content.Text");
     const exportCheckboxes = (
         <div>
             <ExportDialogCheckboxesComponent

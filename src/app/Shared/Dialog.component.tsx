@@ -4,13 +4,14 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogContentText,
     DialogTitle,
 } from "@material-ui/core";
 
 export function DialogComponent(props: {
     isOpen: boolean;
     dialogTitle: string;
-    dialogContentText: JSX.Element;
+    dialogContentText: JSX.Element | string;
     dialogContent: JSX.Element;
     cancelButton: JSX.Element | string;
     submitButton: JSX.Element | string;
@@ -33,7 +34,7 @@ export function DialogComponent(props: {
         >
             <DialogTitle>{props.dialogTitle}</DialogTitle>
             <DialogContent>
-                {props.dialogContentText}
+                <DialogContentText>{props.dialogContentText}</DialogContentText>
                 {props.dialogContent}
             </DialogContent>
             <DialogActions>
