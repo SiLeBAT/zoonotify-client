@@ -1,16 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useState } from "react";
-import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { DialogComponent } from "../../../../../../Shared/Dialog.component";
 import { FilterDialogContentTextComponent } from "./FilterDialog-ContentText.component";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
 import { FilterDialogButtonsComponent } from "./FilterDialog-Buttons.component";
 import { FilterDialogSelectAllButtonComponent } from "./FilterDialog-SelectAllButton.component";
-import { FilterInterface } from "../../../../../../Shared/Model/Filter.model";
-import { defaultFilter, FilterContextInterface } from "../../../../../../Shared/Context/FilterContext";
-
 
 const filterDialogContentStyle = css`
     display: flex;
@@ -20,61 +15,44 @@ const filterDialogContentStyle = css`
 
 export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
-    filterInfo: FilterContextInterface;
+    availableFilters: string[];
+    tempFiltersToDisplay: string[];
     onClose: () => void;
-    onSubmitFiltersToDisplay: (
-        selectedFilters: FilterInterface,
-        filtersToDisplay: string[]
+    onSubmitFiltersToDisplay: () => void;
+    onSelectAllFiltersToDisplay: () => void;
+    onDeselectAllFiltersToDisplay: () => void;
+    onFilterToDisplayCancel: () => void;
+    onFilterToDisplayChange: (
+        name: string,
+        checked: boolean
     ) => void;
 }): JSX.Element {
-    const [filtersToDisplay, setFiltersToDisplay] = useState<string[]>(
-        props.filterInfo.displayedFilters
-    );
-    const [newSelectedFilters, setNewSelectedFilters] = useState<FilterInterface>(
-        props.filterInfo.selectedFilter
-    );
     const { t } = useTranslation(["QueryPage"]);
-
-    const availableFilters  = props.filterInfo.mainFilter
 
     const handleClose = (): void => props.onClose();
 
     const handleCancelFiltersToDisplay = (): void => {
-        setFiltersToDisplay(props.filterInfo.displayedFilters);
+        props.onFilterToDisplayCancel()
         handleClose();
     };
 
     const handleSubmitFiltersToDisplay = (): void => {
-        props.onSubmitFiltersToDisplay(newSelectedFilters, filtersToDisplay);
+        props.onSubmitFiltersToDisplay();
         handleClose();
     };
 
-    const handleChangeFiltersToDisplay = (name: string, checked: boolean): void => {
-        const newDisplayedFilters: string[] = _.cloneDeep(filtersToDisplay);
-        if (checked) {
-            newDisplayedFilters.push(name);
-        } else {
-            const index = newDisplayedFilters.indexOf(name);
-            if (index > -1) {
-                newDisplayedFilters.splice(index, 1);
-            }
-        }
-        const selectedFilters: FilterInterface = _.cloneDeep(props.filterInfo.selectedFilter);;
-        availableFilters.forEach((availableFilter) => {
-            if (!_.includes(newDisplayedFilters, availableFilter)) {
-                selectedFilters[availableFilter] = [];
-            }
-        });
-        setNewSelectedFilters(selectedFilters);
-        setFiltersToDisplay(newDisplayedFilters);
+    const handleChangeFiltersToDisplay = (
+        name: string,
+        checked: boolean
+    ): void => {
+        props.onFilterToDisplayChange(name, checked);
     };
 
     const handleSelectAllFiltersToDisplay = (): void => {
-        setFiltersToDisplay(availableFilters);
+        props.onSelectAllFiltersToDisplay()
     };
     const handleDeselectAllFiltersToDisplay = (): void => {
-        setNewSelectedFilters(defaultFilter.selectedFilter)
-        setFiltersToDisplay([]);
+        props.onDeselectAllFiltersToDisplay();
     };
 
     const filterDialogTitle = t("FilterDialog.DialogTitle");
@@ -83,13 +61,15 @@ export function FilterSettingDialogComponent(props: {
     const filterDialogContent = (
         <div css={filterDialogContentStyle}>
             <FilterDialogCheckboxesComponent
-                availableFilters={availableFilters}
-                filtersToDisplay={filtersToDisplay}
+                availableFilters={props.availableFilters}
+                filtersToDisplay={props.tempFiltersToDisplay}
                 onFiltersToDisplayChange={handleChangeFiltersToDisplay}
             />
             <FilterDialogSelectAllButtonComponent
                 onSelectAllFiltersToDisplay={handleSelectAllFiltersToDisplay}
-                onDeselectAllFiltersToDisplay={handleDeselectAllFiltersToDisplay}
+                onDeselectAllFiltersToDisplay={
+                    handleDeselectAllFiltersToDisplay
+                }
             />
         </div>
     );
@@ -100,15 +80,12 @@ export function FilterSettingDialogComponent(props: {
         />
     );
 
-    return (
-            
-            DialogComponent({
-                isOpen: props.isOpen,
-                dialogTitle: filterDialogTitle,
-                dialogContentText: filterContentText,
-                dialogContent: filterDialogContent,
-                dialogButtons: filterDialogButtons,
-                onClose: handleCancelFiltersToDisplay,
-            })
-    );
+    return DialogComponent({
+        isOpen: props.isOpen,
+        dialogTitle: filterDialogTitle,
+        dialogContentText: filterContentText,
+        dialogContent: filterDialogContent,
+        dialogButtons: filterDialogButtons,
+        onClose: handleCancelFiltersToDisplay,
+    });
 }

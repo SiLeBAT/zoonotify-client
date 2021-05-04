@@ -4,8 +4,14 @@ import { useState } from "react";
 import { DrawerLayoutComponent } from "./Drawer/Drawer-Layout.component";
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentLayoutComponent } from "./QueryPageContent-Layout.component";
-import { FilterInterface, FilterType } from "../../../Shared/Model/Filter.model";
-import { TableInterface, TableType } from "../../../Shared/Context/TableContext";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../Shared/Model/Filter.model";
+import {
+    TableInterface,
+    TableType,
+} from "../../../Shared/Context/TableContext";
 import { FilterContextInterface } from "../../../Shared/Context/FilterContext";
 
 const mainStyle = css`
@@ -21,12 +27,13 @@ export function QueryPageLayoutComponent(props: {
     isFilter: boolean;
     columnNameValues: string[];
     numberOfIsolates: {
-        total: number,
-        filtered: number
-    }
+        total: number;
+        filtered: number;
+    };
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
     tableData: TableInterface;
+    tempFiltersToDisplay: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -39,9 +46,13 @@ export function QueryPageLayoutComponent(props: {
     ) => void;
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onSubmitFiltersToDisplay: (
-        selectedFilters: FilterInterface,
-        filtersToDisplay: string[]
+    onSubmitFiltersToDisplay: () => void;
+    onSelectAllFiltersToDisplay: () => void;
+    onDeselectAllFiltersToDisplay: () => void;
+    onFilterToDisplayCancel: () => void;
+    onFilterToDisplayChange: (
+        name: string,
+        checked: boolean
     ) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
@@ -76,11 +87,23 @@ export function QueryPageLayoutComponent(props: {
         setDrawerWidth(newWidth);
     };
 
-    const handleSubmitFiltersToDisplay = (
-        selectedFilters: FilterInterface,
-        filtersToDisplay: string[]
+    const handleChangeFiltersToDisplay = (
+        name: string,
+        checked: boolean
     ): void => {
-        props.onSubmitFiltersToDisplay(selectedFilters, filtersToDisplay);
+        props.onFilterToDisplayChange(name, checked);
+    };
+    const handleSubmitFiltersToDisplay = (): void => {
+        props.onSubmitFiltersToDisplay();
+    };
+    const handleCancelFiltersToDisplay = (): void => {
+        props.onFilterToDisplayCancel()
+    };
+    const handleSelectAllFiltersToDisplay = (): void => {
+        props.onSelectAllFiltersToDisplay()
+    };
+    const handleDeselectAllFiltersToDisplay = (): void => {
+        props.onDeselectAllFiltersToDisplay();
     };
 
     return (
@@ -92,12 +115,21 @@ export function QueryPageLayoutComponent(props: {
                 filterInfo={props.filterInfo}
                 tableColumn={props.tableData.column}
                 tableRow={props.tableData.row}
+                tempFiltersToDisplay={props.tempFiltersToDisplay}
                 onDisplFeaturesChange={handleChangeDisplFeatures}
                 onDisplFeaturesSwap={handleSwapDisplFeatures}
                 onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
                 onFilterChange={handleChangeFilter}
                 onFilterRemoveAll={handleRemoveAllFilter}
                 onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                onSelectAllFiltersToDisplay={
+                    handleSelectAllFiltersToDisplay
+                }
+                onDeselectAllFiltersToDisplay={
+                    handleDeselectAllFiltersToDisplay
+                }
+                onFilterToDisplayCancel={handleCancelFiltersToDisplay}
+                onFilterToDisplayChange={handleChangeFiltersToDisplay}
             />
             <QueryPageDrawerControlComponent
                 isOpen={isOpen}

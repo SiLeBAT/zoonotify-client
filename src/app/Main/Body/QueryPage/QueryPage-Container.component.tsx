@@ -60,6 +60,13 @@ export function QueryPageContainerComponent(): JSX.Element {
     const { filter, setFilter } = useContext(FilterContext);
     const { table, setTable } = useContext(TableContext);
 
+    const [tempSelectedFilters, setTempSelectedFilters] = useState<
+        FilterInterface
+    >(filter.selectedFilter);
+    const [tempFiltersToDisplay, setTempFiltersToDisplay] = useState<string[]>(
+        filter.displayedFilters
+    );
+
     const history = useHistory();
     const { t } = useTranslation(["QueryPage"]);
 
@@ -145,14 +152,54 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const handleSubmitFiltersToDisplay = (selectedFilters: FilterInterface, filtersToDisplay: string[]): void => {
-        const newPath: string = generatePathStringService(selectedFilters, filter.mainFilter, table);
+    const handleSubmitFiltersToDisplay = (): void => {
+        const newPath: string = generatePathStringService(
+            tempSelectedFilters,
+            filter.mainFilter,
+            table
+        );
         history.push(newPath);
         setFilter({
             ...filter,
-            selectedFilter: selectedFilters,
-            displayedFilters: filtersToDisplay,
+            selectedFilter: tempSelectedFilters,
+            displayedFilters: tempFiltersToDisplay,
         });
+    };
+    const handleSelectAllFiltersToDisplay = (): void => {
+        setTempFiltersToDisplay(filter.mainFilter);
+    };
+    const handleDeselectAllFiltersToDisplay = (): void => {
+        setTempFiltersToDisplay([])
+        setTempSelectedFilters(defaultFilter.selectedFilter);
+    };
+
+    const handleCancelFiltersToDisplay = (): void => {
+        setTempFiltersToDisplay(filter.displayedFilters);
+    };
+
+    const handleChangeFiltersToDisplay = (
+        name: string,
+        checked: boolean
+    ): void => {
+        const newDisplayedFilters: string[] = _.cloneDeep(tempFiltersToDisplay);
+        if (checked) {
+            newDisplayedFilters.push(name);
+        } else {
+            const index = newDisplayedFilters.indexOf(name);
+            if (index > -1) {
+                newDisplayedFilters.splice(index, 1);
+            }
+        }
+        const newSelectedFilters: FilterInterface = _.cloneDeep(
+            filter.selectedFilter
+        );
+        filter.mainFilter.forEach((availableFilter) => {
+            if (!_.includes(newDisplayedFilters, availableFilter)) {
+                newSelectedFilters[availableFilter] = [];
+            }
+        });
+        setTempSelectedFilters(newSelectedFilters);
+        setTempFiltersToDisplay(newDisplayedFilters);
     };
 
     const fetchAndSetData = async (): Promise<void> => {
@@ -314,6 +361,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     }}
                     filterInfo={filter}
                     dataUniqueValues={data.uniqueValues}
+                    tempFiltersToDisplay={tempFiltersToDisplay}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
@@ -321,6 +369,14 @@ export function QueryPageContainerComponent(): JSX.Element {
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                    onSelectAllFiltersToDisplay={
+                        handleSelectAllFiltersToDisplay
+                    }
+                    onDeselectAllFiltersToDisplay={
+                        handleDeselectAllFiltersToDisplay
+                    }
+                    onFilterToDisplayCancel={handleCancelFiltersToDisplay}
+                    onFilterToDisplayChange={handleChangeFiltersToDisplay}
                 />
             }
         />
