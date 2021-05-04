@@ -1,8 +1,8 @@
-import React from "react";
-import { FormGroup } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { CheckboxComponent } from "../../../../Shared/Checkbox.component";
-
+import {
+    CheckboxesComponent,
+    CheckboxesObject,
+} from "../../../../Shared/Checkboxes.component";
 
 export interface CheckboxesProps {
     onCheckboxChange: (name: string, checked: boolean) => void;
@@ -21,28 +21,21 @@ export interface CheckboxesProps {
  * @param props
  * @returns {JSX.Element} - checkboxes component
  */
-export function ExportDialogCheckboxesComponent(props: CheckboxesProps): JSX.Element {
+export function ExportDialogCheckboxesComponent(
+    props: CheckboxesProps
+): JSX.Element {
     const { t } = useTranslation(["Export"]);
 
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
-    return (
-        <FormGroup>
-            <CheckboxComponent
-                onCheckboxChange={handleChangeCheckbox}
-                checked={props.isRaw}
-                key="checkbox-raw-data"
-                name="raw"
-                label={t("Checkbox.DataSet")}
-            />
-            <CheckboxComponent
-                onCheckboxChange={handleChangeCheckbox}
-                checked={props.isStat}
-                key="checkbox-stat-data"
-                name="stat"
-                label={t("Checkbox.Stat")}
-            />
-        </FormGroup>
-    );
+    const checkboxObjectList: CheckboxesObject[] = [
+        { name: "raw", label: t("Checkbox.DataSet"), checked: props.isRaw },
+        { name: "stat", label: t("Checkbox.Stat"), checked: props.isStat },
+    ];
+
+    return CheckboxesComponent({
+        onCheckboxChange: handleChangeCheckbox,
+        checkboxes: checkboxObjectList,
+    });
 }
