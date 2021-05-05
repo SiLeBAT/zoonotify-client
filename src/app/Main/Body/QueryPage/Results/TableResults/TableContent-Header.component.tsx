@@ -67,7 +67,7 @@ export function TableContentHeaderComponent(
     headerValues.forEach((headerValue): void => {
         let headerTitle = headerValue
         if (tableOption === "relative") {
-            headerTitle = `${headerValue} in %` 
+            headerTitle = `${headerValue} ${t("Results.Unit")}` 
         }
         headerTableCells.push(
             <StyledTableCell key={`header-${headerValue}`} css={headerCellStyle}>
