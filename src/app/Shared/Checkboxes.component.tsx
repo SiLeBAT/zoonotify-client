@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/core";
 import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
 
-export type CheckboxesObject = {
+export type CheckboxesConfig = {
     name: string;
     label: string;
     checked: boolean;
@@ -10,13 +10,13 @@ export type CheckboxesObject = {
 
 export interface CheckboxesProps {
     onCheckboxChange: (name: string, checked: boolean) => void;
-    checkboxes: CheckboxesObject[];
+    checkboxes: CheckboxesConfig[];
 }
 
 /**
- * @desc Returns checkbox
+ * @desc Returns multiple checkboxes in a FromGroup Element
  * @param props
- * @returns {JSX.Element} - checkbox component
+ * @returns {JSX.Element} - checkboxes component
  */
 export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
     const handleChangeCheckbox = (name: string, checked: boolean): void =>

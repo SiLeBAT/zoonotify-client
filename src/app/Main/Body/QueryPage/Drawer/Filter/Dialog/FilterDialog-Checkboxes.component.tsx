@@ -3,15 +3,15 @@ import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
     CheckboxesComponent,
-    CheckboxesObject,
+    CheckboxesConfig,
 } from "../../../../../../Shared/Checkboxes.component";
 
 function generateCheckboxObjectList(
     availableFilters: string[],
     displayedFilters: string[],
     t: TFunction
-): CheckboxesObject[] {
-    const checkboxes: CheckboxesObject[] = [];
+): CheckboxesConfig[] {
+    const checkboxes: CheckboxesConfig[] = [];
     availableFilters.forEach((availableFilter) => {
         const isChecked: boolean = _.includes(
             displayedFilters,

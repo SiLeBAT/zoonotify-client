@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import {
     CheckboxesComponent,
-    CheckboxesObject,
+    CheckboxesConfig,
 } from "../../../../Shared/Checkboxes.component";
 
 export interface CheckboxesProps {
@@ -29,7 +29,7 @@ export function ExportDialogCheckboxesComponent(
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
-    const checkboxObjectList: CheckboxesObject[] = [
+    const checkboxObjectList: CheckboxesConfig[] = [
         { name: "raw", label: t("Checkbox.DataSet"), checked: props.isRaw },
         { name: "stat", label: t("Checkbox.Stat"), checked: props.isStat },
     ];
