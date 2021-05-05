@@ -7,7 +7,7 @@ export interface FilterContextInterface {
     selectedFilter: FilterInterface;
 }
 
-export const defaultFiltersToDisplay = ["microorganism", "samplingContext", "samplingStage"]
+export const defaultFiltersToDisplay = ["microorganism", "samplingYear", "samplingContext"]
 
 export const defaultFilter: FilterContextInterface = {
     mainFilter: [],
