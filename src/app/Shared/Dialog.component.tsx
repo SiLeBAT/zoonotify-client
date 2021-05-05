@@ -17,12 +17,11 @@ export function DialogComponent(props: {
     submitButton: JSX.Element | string;
     disableSubmitButton: boolean;
     onClose: () => void;
-    onCancelClick: () => void;
     onSubmitClick: () => void;
 }): JSX.Element {
     const handleClose = (): void => props.onClose();
 
-    const handleClickCancel = (): void => props.onCancelClick();
+    const handleClickCancel = (): void => props.onClose();
 
     const handleClickSubmit = (): void => props.onSubmitClick();
 

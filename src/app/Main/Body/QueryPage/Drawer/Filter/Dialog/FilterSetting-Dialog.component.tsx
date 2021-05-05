@@ -119,7 +119,6 @@ export function FilterSettingDialogComponent(props: {
         submitButton: submitFilterToDisplayButton,
         disableSubmitButton: false,
         onClose: handleCancelFiltersToDisplay,
-        onCancelClick: handleCancelFiltersToDisplay,
         onSubmitClick: handleSubmitFiltersToDisplay,
     });
 }

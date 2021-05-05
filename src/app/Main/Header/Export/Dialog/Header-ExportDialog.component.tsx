@@ -61,7 +61,6 @@ export function HeaderExportDialogComponent(props: {
         submitButton: exportSubmitButton,
         disableSubmitButton: !fileIsSelect,
         onClose: handleClose,
-        onCancelClick: handleClose,
         onSubmitClick: handleClose,
     });
 }
