@@ -42,7 +42,6 @@ export interface DrawerLayoutProps {
     filterInfo: FilterContextInterface;
     tableColumn: string;
     tableRow: string;
-    tempFiltersToDisplay: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -54,14 +53,7 @@ export interface DrawerLayoutProps {
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onSubmitFiltersToDisplay: () => void;
-    onSelectAllFiltersToDisplay: () => void;
-    onDeselectAllFiltersToDisplay: () => void;
-    onFilterToDisplayCancel: () => void;
-    onFilterToDisplayChange: (
-        name: string,
-        checked: boolean
-    ) => void;
+    onSubmitFiltersToDisplay: (tempFiltersToDisplay: string[]) => void;
 }
 
 /**
@@ -87,23 +79,8 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
-    const handleChangeFiltersToDisplay = (
-        name: string,
-        checked: boolean
-    ): void => {
-        props.onFilterToDisplayChange(name, checked);
-    };
-    const handleCancelFiltersToDisplay = (): void => {
-        props.onFilterToDisplayCancel()
-    };
-    const handleSubmitFiltersToDisplay = (): void => {
-        props.onSubmitFiltersToDisplay();
-    };
-    const handleSelectAllFiltersToDisplay = (): void => {
-        props.onSelectAllFiltersToDisplay()
-    };
-    const handleDeselectAllFiltersToDisplay = (): void => {
-        props.onDeselectAllFiltersToDisplay();
+    const handleSubmitFiltersToDisplay = (tempFiltersToDisplay: string[]): void => {
+        props.onSubmitFiltersToDisplay(tempFiltersToDisplay);
     };
 
     return (
@@ -120,18 +97,9 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                 <DrawerFilterComponent
                     dataUniqueValues={props.dataUniqueValues}
                     filterInfo={props.filterInfo}
-                    tempFiltersToDisplay={props.tempFiltersToDisplay}
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-                    onSelectAllFiltersToDisplay={
-                        handleSelectAllFiltersToDisplay
-                    }
-                    onDeselectAllFiltersToDisplay={
-                        handleDeselectAllFiltersToDisplay
-                    }
-                    onFilterToDisplayCancel={handleCancelFiltersToDisplay}
-                    onFilterToDisplayChange={handleChangeFiltersToDisplay}
                 />
                 <DrawerDisplayedFeaturesComponent
                     tableColumn={props.tableColumn}

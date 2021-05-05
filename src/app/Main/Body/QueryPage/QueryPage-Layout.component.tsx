@@ -33,7 +33,6 @@ export function QueryPageLayoutComponent(props: {
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
     tableData: TableInterface;
-    tempFiltersToDisplay: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -46,14 +45,7 @@ export function QueryPageLayoutComponent(props: {
     ) => void;
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onSubmitFiltersToDisplay: () => void;
-    onSelectAllFiltersToDisplay: () => void;
-    onDeselectAllFiltersToDisplay: () => void;
-    onFilterToDisplayCancel: () => void;
-    onFilterToDisplayChange: (
-        name: string,
-        checked: boolean
-    ) => void;
+    onSubmitFiltersToDisplay: (tempFiltersToDisplay: string[]) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -87,23 +79,8 @@ export function QueryPageLayoutComponent(props: {
         setDrawerWidth(newWidth);
     };
 
-    const handleChangeFiltersToDisplay = (
-        name: string,
-        checked: boolean
-    ): void => {
-        props.onFilterToDisplayChange(name, checked);
-    };
-    const handleSubmitFiltersToDisplay = (): void => {
-        props.onSubmitFiltersToDisplay();
-    };
-    const handleCancelFiltersToDisplay = (): void => {
-        props.onFilterToDisplayCancel()
-    };
-    const handleSelectAllFiltersToDisplay = (): void => {
-        props.onSelectAllFiltersToDisplay()
-    };
-    const handleDeselectAllFiltersToDisplay = (): void => {
-        props.onDeselectAllFiltersToDisplay();
+    const handleSubmitFiltersToDisplay = (tempFiltersToDisplay: string[]): void => {
+        props.onSubmitFiltersToDisplay(tempFiltersToDisplay);
     };
 
     return (
@@ -115,21 +92,12 @@ export function QueryPageLayoutComponent(props: {
                 filterInfo={props.filterInfo}
                 tableColumn={props.tableData.column}
                 tableRow={props.tableData.row}
-                tempFiltersToDisplay={props.tempFiltersToDisplay}
                 onDisplFeaturesChange={handleChangeDisplFeatures}
                 onDisplFeaturesSwap={handleSwapDisplFeatures}
                 onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
                 onFilterChange={handleChangeFilter}
                 onFilterRemoveAll={handleRemoveAllFilter}
                 onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-                onSelectAllFiltersToDisplay={
-                    handleSelectAllFiltersToDisplay
-                }
-                onDeselectAllFiltersToDisplay={
-                    handleDeselectAllFiltersToDisplay
-                }
-                onFilterToDisplayCancel={handleCancelFiltersToDisplay}
-                onFilterToDisplayChange={handleChangeFiltersToDisplay}
             />
             <QueryPageDrawerControlComponent
                 isOpen={isOpen}

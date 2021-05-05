@@ -59,20 +59,12 @@ const buttonStyle = css`
 export function DrawerFilterComponent(props: {
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
-    tempFiltersToDisplay: string[];
     onFilterChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onSubmitFiltersToDisplay: () => void;
-    onSelectAllFiltersToDisplay: () => void;
-    onDeselectAllFiltersToDisplay: () => void;
-    onFilterToDisplayCancel: () => void;
-    onFilterToDisplayChange: (
-        name: string,
-        checked: boolean
-    ) => void;
+    onSubmitFiltersToDisplay: (tempFiltersToDisplay: string[]) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
@@ -89,27 +81,14 @@ export function DrawerFilterComponent(props: {
         setFilterDialogIsOpen(true);
     };
 
-    const handleChangeFiltersToDisplay = (
-        name: string,
-        checked: boolean
-    ): void => {
-        props.onFilterToDisplayChange(name, checked);
+    const handleSubmitFiltersToDisplay = (tempFiltersToDisplay: string[]): void => {
+        props.onSubmitFiltersToDisplay(tempFiltersToDisplay);
+        setFilterDialogIsOpen(false);
     };
 
-    const handleSubmitFiltersToDisplay = (): void => {
-        props.onSubmitFiltersToDisplay();
-        setFilterDialogIsOpen(false);
-    };
     const handleCancelFiltersToDisplay = (): void => {
-        props.onFilterToDisplayCancel()
-        setFilterDialogIsOpen(false);
-    };
-        const handleSelectAllFiltersToDisplay = (): void => {
-        props.onSelectAllFiltersToDisplay()
-    };
-    const handleDeselectAllFiltersToDisplay = (): void => {
-        props.onDeselectAllFiltersToDisplay();
-    };
+        setFilterDialogIsOpen(false)
+    }
 
     const filterDialogButton = t("FilterDialog.ButtonText");
 
@@ -138,17 +117,10 @@ export function DrawerFilterComponent(props: {
             </Button>
             <FilterSettingDialogComponent
                 isOpen={filterDialogIsOpen}
-                tempFiltersToDisplay={props.tempFiltersToDisplay}
-                onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-                onSelectAllFiltersToDisplay={
-                    handleSelectAllFiltersToDisplay
-                }
-                onDeselectAllFiltersToDisplay={
-                    handleDeselectAllFiltersToDisplay
-                }
-                onFilterToDisplayCancel={handleCancelFiltersToDisplay}
-                onFilterToDisplayChange={handleChangeFiltersToDisplay}
+                previousFiltersToDisplay={props.filterInfo.displayedFilters}
                 availableFilters={props.filterInfo.mainFilter}
+                onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                onCancelFiltersToDisplay={handleCancelFiltersToDisplay}
             />
         </div>
     );
