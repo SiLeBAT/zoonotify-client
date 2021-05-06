@@ -31,6 +31,7 @@ export function TableResultsTableContentComponent(props: {
             <TableContentTableComponent
                 isSumRowCol={props.isSumRowCol}
                 tableData={tableData}
+                tableOption={props.tableOption}
                 columnNameValues={props.columnNameValues}
                 displayOption={props.tableOption}
             />

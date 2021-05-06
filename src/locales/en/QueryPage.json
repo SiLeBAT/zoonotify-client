@@ -7,7 +7,8 @@
     "Results": {
         "Parameter": "Parameter",
         "TableHead": "Number of isolates",
-        "Table": "Table"
+        "Table": "Table",
+        "Unit": "in %"
     },
     "Buttons": {
         "Delete": "Delete all"

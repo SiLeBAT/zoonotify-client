@@ -14,6 +14,7 @@ import { TableContentRowsComponent } from "./TableContent-Rows.component";
 import { TableContentHeaderComponent } from "./TableContent-Header.component";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { TableContentRowWithColSumComponent } from "./TableContent-RowWithColSums.component";
+import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 
 const headerStyle = css`
     height: 50px;
@@ -44,6 +45,7 @@ const useStyles = makeStyles({
 export function TableContentTableComponent(props: {
     isSumRowCol: boolean;
     tableData: Record<string, string>[];
+    tableOption: DisplayOptionType;
     columnNameValues: string[];
     displayOption: string;
 }): JSX.Element {
@@ -82,7 +84,8 @@ export function TableContentTableComponent(props: {
                     <TableRow css={headerStyle}>
                         {TableContentHeaderComponent(
                             props.isSumRowCol,
-                            props.columnNameValues
+                            props.columnNameValues, 
+                            props.tableOption
                         )}
                     </TableRow>
                 </TableHead>
