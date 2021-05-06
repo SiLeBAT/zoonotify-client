@@ -3,11 +3,15 @@ import { FilterInterface } from "../Model/Filter.model";
 
 export interface FilterContextInterface {
     mainFilter: string[];
+    displayedFilters: string[]
     selectedFilter: FilterInterface;
 }
 
+export const defaultFiltersToDisplay = ["microorganism", "samplingYear", "samplingContext"]
+
 export const defaultFilter: FilterContextInterface = {
     mainFilter: [],
+    displayedFilters: defaultFiltersToDisplay,
     selectedFilter: {
         microorganism: [],
         samplingContext: [],

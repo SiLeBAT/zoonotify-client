@@ -18,6 +18,7 @@ function generateSelectorObject(
 }
 
 export interface SelectorProps {
+    hide: boolean;
     dataUniqueValues: FilterInterface;
     selectedFilter: FilterInterface;
     filterAttribute: FilterType;
@@ -80,6 +81,7 @@ export function SelectorListSelectorComponent(
             onChange={handleChange}
             isMulti
             isNotSelect={noFilter}
+            hide={props.hide}
         />
     );
 }

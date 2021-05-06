@@ -6,8 +6,12 @@ import { FilterType } from "./Model/Filter.model";
 import { TableType } from "./Context/TableContext";
 import { primaryColor, bfrDarkgrey } from "./Style/Style-MainTheme.component";
 
+const hideSelector = (hide: boolean): SerializedStyles => css`
+    display: ${hide ? "none" : "grid"};
+`;
+
 const selectAreaStyle = css`
-    margin: 0.25em 1em 1em 16px;
+    margin: 0.25em 1em 0.25em 16px;
 `;
 const openText = keyframes`
       0%   {color:white; left:0px; top:20px;}
@@ -111,6 +115,7 @@ export interface SelectorProps {
      * true if no selector is selected so far
      */
     isNotSelect: boolean;
+    hide: boolean;
 }
 
 /**
@@ -128,7 +133,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
     ): void => props.onChange(selectedOption, keyName);
 
     return (
-        <div>
+        <div css={hideSelector(props.hide)}>
             <InputLabel
                 css={labelStyle(props.isNotSelect)}
                 id={`label${props.label}`}

@@ -84,7 +84,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...table,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
         };
-        const newPath: string = generatePathStringService(filter, newTable);
+        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -95,7 +95,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: table.column,
             column: table.row,
         };
-        const newPath: string = generatePathStringService(filter, newTable);
+        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -106,7 +106,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: "" as FilterType,
             column: "" as FilterType,
         };
-        const newPath: string = generatePathStringService(filter, newTable);
+        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
         history.push(newPath);
         setTable(newTable);
     };
@@ -122,7 +122,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
-        const newPath: string = generatePathStringService(newFilter, table);
+        const newPath: string = generatePathStringService(newFilter.selectedFilter, newFilter.mainFilter, table);
         history.push(newPath);
         setFilter(newFilter);
     };
@@ -132,7 +132,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...filter,
             selectedFilter: defaultFilter.selectedFilter,
         };
-        const newPath: string = generatePathStringService(newFilter, table);
+        const newPath: string = generatePathStringService(newFilter.selectedFilter, newFilter.mainFilter, table);
         history.push(newPath);
         setFilter(newFilter);
     };
@@ -145,9 +145,36 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
+    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+        const newSelectedFilters: FilterInterface = _.cloneDeep(
+            filter.selectedFilter
+        );
+        filter.mainFilter.forEach((availableFilter) => {
+            if (!_.includes(newFiltersToDisplay, availableFilter)) {
+                newSelectedFilters[availableFilter] = [];
+            }
+        });
+        const newFilter: FilterContextInterface = {
+            ...filter,
+            selectedFilter: newSelectedFilters,
+            displayedFilters: newFiltersToDisplay,
+        }
+        const newPath: string = generatePathStringService(
+            newFilter.selectedFilter,
+            newFilter.mainFilter,
+            table
+        );
+        history.push(newPath);
+        setFilter(newFilter);
+    };
+
     const fetchAndSetData = async (): Promise<void> => {
-        const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(ISOLATE_URL);
-        const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(FILTER_URL);
+        const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(
+            ISOLATE_URL
+        );
+        const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
+            FILTER_URL
+        );
 
         setIsolateStatus(isolateResponse.status);
         setFilterStatus(filterResponse.status);
@@ -186,6 +213,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             DbKeyCollection
         );
         setFilter({
+            ...filter,
             mainFilter: DbKeyCollection,
             selectedFilter: filterFromPath,
         });
@@ -246,7 +274,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(isolateCountUrl);
+        const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
+            isolateCountUrl
+        );
 
         setIsolateCountStatus(tableResponse.status);
 
@@ -295,15 +325,15 @@ export function QueryPageContainerComponent(): JSX.Element {
                         total: totalNrOfIsol,
                         filtered: nrOfSelectedIsol,
                     }}
-                    mainFilterAttributes={filter.mainFilter}
+                    filterInfo={filter}
                     dataUniqueValues={data.uniqueValues}
-                    selectedFilter={filter.selectedFilter}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
+                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                 />
             }
         />

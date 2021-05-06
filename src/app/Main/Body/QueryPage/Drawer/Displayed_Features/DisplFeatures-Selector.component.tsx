@@ -95,6 +95,7 @@ export function DisplayedFeatureSelectorComponent(
             onChange={handleChange}
             isMulti={false}
             isNotSelect={isNotSelect}
+            hide={false}
         />
     );
 }

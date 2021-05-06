@@ -24,6 +24,17 @@
             "Column": "in columns"
         }
     },
+    "FilterDialog": {
+        "ButtonText": "select filter", 
+        "SelectAll": "Select all",
+        "DeselectAll": "Deselect all",
+        "Cancel": "Cancel",
+        "Submit": "Submit", 
+        "TextContentBeforeLink": "Please select your desired filters. The selected filters will be displayed after clicking the submit button. More information about the filters can be found on the ",
+        "TextContentAfterLink": " page.",
+        "LinkText": "Explanations",
+        "DialogTitle": "Select filter"
+    },
     "Filters": {
         "All": "All values",
         "microorganism": "Microorganism",
