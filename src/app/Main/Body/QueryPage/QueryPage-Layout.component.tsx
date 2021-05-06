@@ -45,7 +45,7 @@ export function QueryPageLayoutComponent(props: {
     ) => void;
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onSubmitFiltersToDisplay: (tempFiltersToDisplay: string[]) => void;
+    onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -79,8 +79,8 @@ export function QueryPageLayoutComponent(props: {
         setDrawerWidth(newWidth);
     };
 
-    const handleSubmitFiltersToDisplay = (tempFiltersToDisplay: string[]): void => {
-        props.onSubmitFiltersToDisplay(tempFiltersToDisplay);
+    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+        props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
 
     return (

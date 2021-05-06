@@ -35,16 +35,16 @@ export function FilterSettingDialogComponent(props: {
     isOpen: boolean;
     previousFiltersToDisplay: string[];
     availableFilters: string[];
-    onSubmitFiltersToDisplay: (tempFiltersToDisplay: string[]) => void;
+    onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
     onCancelFiltersToDisplay: () => void;
 }): JSX.Element {
-    const [tempFiltersToDisplay, setTempFiltersToDisplay] = useState<string[]>(
+    const [newFiltersToDisplay, setTempFiltersToDisplay] = useState<string[]>(
         props.previousFiltersToDisplay
     );
     const { t } = useTranslation(["QueryPage"]);
 
     const handleSubmitFiltersToDisplay = (): void => {
-        props.onSubmitFiltersToDisplay(tempFiltersToDisplay)
+        props.onSubmitFiltersToDisplay(newFiltersToDisplay)
     };
     const handleSelectAllFiltersToDisplay = (): void => {
         setTempFiltersToDisplay(props.availableFilters);
@@ -62,7 +62,7 @@ export function FilterSettingDialogComponent(props: {
         name: string,
         checked: boolean
     ): void => {
-        const newFilterToDisplay: string[] = _.cloneDeep(tempFiltersToDisplay);
+        const newFilterToDisplay: string[] = _.cloneDeep(newFiltersToDisplay);
         if (checked) {
             newFilterToDisplay.push(name);
         } else {
@@ -90,7 +90,7 @@ export function FilterSettingDialogComponent(props: {
         <div css={filterDialogContentStyle}>
             <FilterDialogCheckboxesComponent
                 availableFilters={props.availableFilters}
-                filtersToDisplay={tempFiltersToDisplay}
+                filtersToDisplay={newFiltersToDisplay}
                 onFiltersToDisplayChange={handleChangeFiltersToDisplay}
             />
             <FilterDialogSelectAllButtonComponent

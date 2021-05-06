@@ -64,7 +64,7 @@ export function DrawerFilterComponent(props: {
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onSubmitFiltersToDisplay: (tempFiltersToDisplay: string[]) => void;
+    onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
@@ -81,8 +81,8 @@ export function DrawerFilterComponent(props: {
         setFilterDialogIsOpen(true);
     };
 
-    const handleSubmitFiltersToDisplay = (tempFiltersToDisplay: string[]): void => {
-        props.onSubmitFiltersToDisplay(tempFiltersToDisplay);
+    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+        props.onSubmitFiltersToDisplay(newFiltersToDisplay);
         setFilterDialogIsOpen(false);
     };
 

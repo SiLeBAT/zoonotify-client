@@ -53,7 +53,7 @@ export interface DrawerLayoutProps {
         keyName: FilterType | TableType
     ) => void;
     onFilterRemoveAll: () => void;
-    onSubmitFiltersToDisplay: (tempFiltersToDisplay: string[]) => void;
+    onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
 }
 
 /**
@@ -79,8 +79,8 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
-    const handleSubmitFiltersToDisplay = (tempFiltersToDisplay: string[]): void => {
-        props.onSubmitFiltersToDisplay(tempFiltersToDisplay);
+    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+        props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
 
     return (

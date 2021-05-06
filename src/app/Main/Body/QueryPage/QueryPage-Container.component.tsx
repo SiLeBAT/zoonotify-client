@@ -145,19 +145,19 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const handleSubmitFiltersToDisplay = (tempFiltersToDisplay: string[]): void => {
+    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
         const newSelectedFilters: FilterInterface = _.cloneDeep(
             filter.selectedFilter
         );
         filter.mainFilter.forEach((availableFilter) => {
-            if (!_.includes(tempFiltersToDisplay, availableFilter)) {
+            if (!_.includes(newFiltersToDisplay, availableFilter)) {
                 newSelectedFilters[availableFilter] = [];
             }
         });
         const newFilter: FilterContextInterface = {
             ...filter,
             selectedFilter: newSelectedFilters,
-            displayedFilters: tempFiltersToDisplay,
+            displayedFilters: newFiltersToDisplay,
         }
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
