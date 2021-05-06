@@ -14,14 +14,12 @@ export function QueryPageDatabaseStatusIndicatorComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const [date, setDate] = useState('');
-    const [directive, setDirective] = useState('');
 
     useEffect(() => {
         callApiService<DatabaseStatusDTO>(DATABASE_STATUS_URL)
             .then((statusResponse: ApiResponse<DatabaseStatusDTO>) => {
                 if (statusResponse.status === 200) {
                     setDate(statusResponse.data?.date || "");
-                    setDirective(statusResponse.data?.directive || "");
                 }
                 return true;
             })
@@ -31,5 +29,5 @@ export function QueryPageDatabaseStatusIndicatorComponent(): JSX.Element {
 
     }, []);
 
-    return date && directive ? <p css={statusStyle}>{t("Content.DataStatus", {date, directive})}</p> : <p />;
+    return date ? <p css={statusStyle}>{t("Content.DataStatus", {date})}</p> : <p />;
 }
