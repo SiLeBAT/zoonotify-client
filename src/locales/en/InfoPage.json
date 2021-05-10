@@ -196,31 +196,47 @@
         "Amrs": {
             "Name": "Antibiotikaresistenztestung",
             "Description": "Alle für die Darstellung in ZooNotify ausgewählten Isolate von Salmonella spp., Campylobacter (C.) jejuni, Campylobacter (C.) coli, Escherichia (E.) coli, Shiga-Toxin bildende E. coli (STEC), Enterococcus (E.) faecalis und E. faecium sowie Methicillin-resistenten Staphylococcus aureus (MRSA) wurden mittels der vorgesehenen, international anerkannten, quantitativen Verfahren für die Resistenzbestimmung (Bouillon-Mikrodilutionsmethode nach ISO 20776-1:2006 bzw. CLSI M07) im Nationalen Referenzlabor (NRL) für Antibiotikaresistenz bzw. nach CLSI VET06 und M45A im NRL für Campylobacter untersucht. Die Isolate wurden dem am BfR etablierten Untersuchungsspektrum antimikrobieller Substanzen unterzogen. Hierfür wurden die fertig konfektionierten Plattenformate EUVSEC und ggf. EUVSEC2 (Salmonella spp. und E. coli), EUVENC (Enterokokken), EUCAMP2 (Campylobacter spp.) und EUST (MRSA) der Firma TREK Diagnostic Systems/Thermo Fisher Scientific verwendet.  Die Testung auf Resistenzen erfolgte unter Beachtung des Durchführungsbeschlusses 2013/652/EU, in dem das Untersuchungsverfahren, die zu testenden Wirkstoffe sowie die Bewertungskriterien für die Mehrzahl der Erreger festgelegt sind. Soweit dort keine epidemiologischen Cut-Off Werte beschrieben wurden, erfolgte die Bewertung anhand der Empfehlung der European Food Safety Authority (EFSA) in Abstimmung mit dem Europäischen Referenzlabor für Antibiotikaresistenz (EURL-AR).  Die Testung von MRSA und den Enterococcus spp. auf Resistenzen erfolgte auf Basis der Empfehlungen der EFSA (EFSA (2012a): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in methicillin-resistant Staphylococcus aureus in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in Salmonella, Campylobacter and indicator Escherichia coli and Enterococcus spp. bacteria transmitted through food. EFSA Journal 10(6):2742).",
-            "Paragraph-1": "Resistenztestung von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente). Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). ",
-            "Paragraph-2": "Die Eingruppierung der Isolate von ESBL/AmpC-E.coli und Carbapenemase-bildende Escherichia coli anhand ihrer phänotypischen Eigenschaften über den Unterfilter \"ESBL_AmpC_Carba_Phänotyp\" erfolgte nach den Kriterien von EFSA und ECDC aus dem Jahr 2017 (The European Union summary report on antimicrobial resistance in zoonotic and indicator bacteria from humans, animals and food in 2015. EFSA Journal 2017;15(2):4694, 212 pp. doi:10.2903/j.efsa.2017.4694).",
-            "Paragraph-3": "Wenn ein Isolat von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente) eine Resistenz gegenüber Cefotaxim und/oder Ceftazidim (Cephalsporine der 3. Generation) und/oder dem Carbapenem Meropenem aufweist, werden zur Charakterisierung der ß-laktam-Resistenz weitere Wirkstoffe herangezogen. Durch die Auswertung der Ergebnisse dieser in einer 2. Platte untersuchten Substanzen kann phänotypisch das Vorliegen von ESBL-, AmpC-, ESBL- und AmpC, oder Carphapenemase eingegrenzt werden. Ein endgültiger Nachweis des Resistenzmechanismus kann jedoch nur durch den Nachweis eines verantwortlichen Gens erbracht werden.",
-            "Paragraph-4": "Resistenztestung von C. jejuni und C. coli. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU.",
-            "Paragraph-5": "Resistenztestung von Methicillin-resistenten Staphylococcus aureus. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2014-2020.",
-            "Paragraph-6": "Resistenztestung von Enterococcus faecalis und E. faecium. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.",
-            "TitleSalmColiTable": "Tabelle AMR E. coli-Salm",
-            "TitleSalmColiTowTable": "Tabelle AMR E. coli-Salm-2. Platte",
-            "TitleCampyTable": "Tabelle AMR Campy",
-            "TitleMrsaTable": "Tabelle AMR MRSA",
-            "TitelEfTable": "Tabelle AMR EF",
+            "Paragraph": "Resistenztestung von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente). Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). ",
+            "coliSalm": {
+                "Paragraph": "Die Eingruppierung der Isolate von ESBL/AmpC-E.coli und Carbapenemase-bildende Escherichia coli anhand ihrer phänotypischen Eigenschaften über den Unterfilter \"ESBL_AmpC_Carba_Phänotyp\" erfolgte nach den Kriterien von EFSA und ECDC aus dem Jahr 2017 (The European Union summary report on antimicrobial resistance in zoonotic and indicator bacteria from humans, animals and food in 2015. EFSA Journal 2017;15(2):4694, 212 pp. doi:10.2903/j.efsa.2017.4694).",
+                "TableTitle": "Tabelle 1: Resistenztestung von Salmonella spp. und Escherichia coli.",
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020).", 
+                "TableComment": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020)."
+            },
+            "coliSalmTwo": {
+                "Paragraph": "Wenn ein Isolat von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente) eine Resistenz gegenüber Cefotaxim und/oder Ceftazidim (Cephalsporine der 3. Generation) und/oder dem Carbapenem Meropenem aufweist, werden zur Charakterisierung der ß-laktam-Resistenz weitere Wirkstoffe herangezogen. Durch die Auswertung der Ergebnisse dieser in einer 2. Platte untersuchten Substanzen kann phänotypisch das Vorliegen von ESBL-, AmpC-, ESBL- und AmpC, oder Carphapenemase eingegrenzt werden. Ein endgültiger Nachweis des Resistenzmechanismus kann jedoch nur durch den Nachweis eines verantwortlichen Gens erbracht werden.",
+                "TableTitle": "Tabelle 2: Resistenztestung von Salmonella spp. und Escherichia coli bei Verdacht auf Produktion von ESBL-, AmpC- beta-Laktamase oder Carbapenemase.",
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020).", 
+                "TableComment": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020)."
+            },
+            "campy": {
+                "Paragraph": "Resistenztestung von C. jejuni und C. coli. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU.",
+                "TableTitle": "Tabelle 3: Resistenztestung von Campylobacter jejuni und C. coli.",
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für 2014 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU.", 
+                "TableComment": "* Cut-Off Werte für C. jejuni; ** Cut-Off Werte für C. coli."
+            },
+            "mrsa": {
+                "Paragraph": "Resistenztestung von Methicillin-resistenten Staphylococcus aureus. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2014-2020.",
+                "TableTitle": "Tabelle 4: Resistenztestung von Methicillin-resistenten Staphylococcus aureus.",
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für 2014 - 2019.", 
+                "TableComment": ""
+            },
+            "ef": {
+                "Paragraph": "Resistenztestung von Enterococcus faecalis und E. faecium. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.",
+                "TableTitle": "Tabelle 5: Resistenztestung von Enterococcus faecalis und E. faecium.",
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für 2014 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.", 
+                "TableComment": ""
+            },
             "TableHeaderClass": "Substanzklasse",
             "TableHeaderAmrSubstance": "Antimikrobielle Substanz",
-            "TableHeaderCuttOff": "Cut-Off > E. coli \u00B5g/ml",
+            "TableHeaderCuttOff": "Cut-Off > \u00B5g/ml",
             "TableHeaderCuttOffSalm": "Cut-Off > Salmonella \u00B5g/ml",
             "TableHeaderCuttOffColi": "Cut-Off > E. coli \u00B5g/ml",
             "TableHeaderCuttOffFaecalis": "Cut-Off > E. coli \u00B5g/ml",
             "TableHeaderCuttOffFaecium": "Cut-Off > E. coli \u00B5g/ml",
             "TableHeaderMin": "Konzentationsbreich Minimum \u00B5g/ml",
             "TableHeaderMax": "Konzentationsbreich Maximum \u00B5g/ml",
-            "CommentTextSalmColiTable": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020).",
-            "CommentTextSalmColiTowTable": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020).",
-            "CommentTextCampyTable": "* Cut-Off Werte für C. jejuni; ** Cut-Off Werte für C. coli.",
-            "CommentTextMrsaTable": "",
-            "CommentTextEfTable": ""
+            "CancelButton": "Abbrechen"
         }
     }
 }
