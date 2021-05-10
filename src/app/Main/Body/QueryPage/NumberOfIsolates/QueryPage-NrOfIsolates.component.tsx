@@ -43,6 +43,7 @@ export function QueryPageNrOfIsolatesComponent(props: {
                     </tbody>
                 </table>
             }
+            defaultExpanded
         />
     );
 }

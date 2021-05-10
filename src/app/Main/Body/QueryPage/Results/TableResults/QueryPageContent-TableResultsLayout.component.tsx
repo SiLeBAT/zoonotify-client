@@ -119,6 +119,7 @@ export function QueryPageContentTableResultsLayoutComponent(
         <AccordionComponent
             title={accordionHeader}
             content={tableAccordionContent}
+            defaultExpanded
         />
     );
 }

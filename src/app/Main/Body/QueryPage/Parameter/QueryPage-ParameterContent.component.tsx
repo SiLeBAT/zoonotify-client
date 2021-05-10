@@ -60,6 +60,7 @@ export function QueryPageParameterContentComponent(props: {
                     {createParameterComponent()}
                 </div>
             }
+            defaultExpanded
         />
     );
 }

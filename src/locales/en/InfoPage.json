@@ -1,4 +1,226 @@
 {
-    "Title": "Explanations",
-    "MainText": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+    "Title": "Erläuterungen",
+    "Background": {
+        "Name": "Hintergrund",
+        "Description": "Für die Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern sowie der Quellen von Erkrankungen des Menschen wird bundesweit einheitlich das Zoonosen-Monitoring gemäß Zoonosen-Stichprobenplan durchgeführt. Dies trägt dazu bei, die Belange der Richtlinie 2003/99/EG zu erfüllen. Übergreifendes Ziel ist, eine umfassende Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern einschließlich Antibiotikaresistenzen sowie der Quellen von Erkrankungen des Menschen vornehmen zu können. Hierdurch soll auch die Durchführung wichtiger Komponenten der Richtlinie 2003/99/EG sowie des Durchführungsbeschlusses 2013/652/EU bzw. seiner Nachfolgeregelung 2020/1729/EU sichergestellt werden. Die Bedeutung von Salmonella spp., Campylobacter spp., Listeria monocytogenes und Shiga-Toxin bildenden Escherichia coli (STEC) ergibt sich aus dem gehäuften Vorkommen bzw. der Schwere von Erkrankungsfällen beim Menschen. Zudem handelt es sich um überwachungspflichtige Erreger gemäß Anhang I. A der Richtlinie 2003/99/EG. Bisher werden Erkrankungsfälle des Menschen mit Nutztier-assoziierten Methicillin-resistenten Staphylococcus aureus (MRSA) für Deutschland vor allem bei Personen mit Kontakt zu diesen Nutztieren beschrieben. Allerdings wurde bereits eine weite Verbreitung des Erregers in verschiedenen Nutztierpopulationen (Schwein, Kalb, Pute) sowie in frischem Fleisch hiervon in Deutschland beobachtet. Neben den bei Nutztieren typischen Erregern des klonalen Komplexes CC398 werden auch spa-Typen nachgewiesen, die anderen klonalen Komplexen zuzuordnen sind. Dies betont die Notwendigkeit, in regelmäßigen Abständen die Untersuchungen entlang der Lebensmittelkette zu wiederholen, um Veränderungen der Verbreitung auf den verschiedenen Stufen der Lebensmittelkette sowie das Neuauftreten oder das Ausbreiten von Klonen mit neu erworbenen Virulenzfaktoren und/oder Resistenzdeterminanten erkennen zu können. Kommensale E. coli werden regelmäßig untersucht, um Entwicklungstendenzen von bekannten Resistenzen und neu auftretende Resistenzen frühzeitig erkennen zu können. Mit dem Durchführungsbeschluss 2013/652/EU und seinem ab 2021 gültigen Nachfolgedokument 2020/1729/EU wurde die Untersuchung auf Salmonella spp., Campylobacter spp. und kommensale E. coli im Hinblick auf Antibiotikaresistenzen verbindlich für alle Mitgliedsstaaten festgelegt. Diese Daten sind wichtig, um die möglichen Quellen und Übertragungswege von resistenten Mikroorganismen entlang der Lebensmittelkette hin zum Menschen abschätzen zu können. Zudem wurde die Untersuchung von Proben auf Enterococcus faecium/faecalis vorgeschlagen, um auch bei grampositiven Erregern verstärkt Resistenzen, insbesondere auch gegen humanmedizinisch besonders wichtige Antibiotika erkennen zu können. Der selektive Nachweis von ESBL/AmpC-bildenden E. coli wird in die Programme des Zoonosen-Monitorings mit aufgenommen, um die Ausbreitung von Keimen mit der Fähigkeit, Extended-Spektrum Beta-Laktamasen und/oder AmpC Beta-Laktamasen bilden zu können, zu beobachten. Zudem soll das Auftreten von neuen Resistenzen, insbesondere gegen Carbapeneme frühzeitig erkannt werden. Um abschätzen zu können, ob sich Carbapenemase-bildende E. coli verbreitet haben, werden auch gezielte selektive Untersuchungen auf das Vorkommen von E. coli mit derartigen Resistenzeigenschaften im Zoonosen-Monitoring aufgenommen. Die Untersuchungen auf diesen Erreger wurden in Programmen entsprechend den Empfehlungen des Beschlusses 2013/652/EU und nach dem Nachfolgedokument 2020/1729/EU ab 2021 verpflichtend durchgeführt. Richtlinie 2003/99/EG sieht vor, dass auf den geeigneten Stufen der Lebensmittelkette repräsentative Daten erhoben werden. Gleichzeitig sollen die wichtigsten Lebensmittelgruppen betrachtet werden. Richtlinie 2003/99/EG sieht auch vor, dass jährlich im Bericht über Entwicklungstendenzen und Quellen von Zoonosen, Zoonoseerregern und Antibiotikaresistenzen auch die Daten zur Bewertung der nationalen Salmonellen Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 veröffentlicht werden. Isolate, die in der Umsetzung des Zoonosen-Monitorings und der Salmonellen Bekämpfunsprogramme beim Geflügel gewonnen werden, werden in den Nationalen Referenzlaboratorien am BfR bestätigt und weiter mikrobiologisch typisiert. Diese Ergebnisse können über ZooNotify abgerufen werden."
+    },
+    "Filters": {
+        "Name": "Filter und Unterfilter",
+        "microorganism": {
+            "Name": "Microorganismus",
+            "Description": "Sie können verschiedene, aus Proben gewonnene und an Nationalen Referenzlaboratorien typisierte Mikroorganismen auswählen. Unterfilter helfen Ihnen, Ihre Suche bzgl. mikrobiologischer Eigenschaften zu verfeinern. Auswählbar sind:",
+            "microorganism-types": {
+                "microorganism-1": {
+                    "Name": "Salmonella spp.",
+                    "Description": "Über weitere Unterfilter können Sie \"Serovar\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
+                },
+                "microorganism-2": {
+                    "Name": "Campylobacter spp.",
+                    "Description": "Über weitere Unterfilter können Sie \"Spezies\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
+                },
+                "microorganism-3": {
+                    "Name": "Listeria monocytogenes",
+                    "Description": "Über den Unterfilter können Sie \"Serotyp\" auswählen."
+                },
+                "microorganism-4": {
+                    "Name": "Shiga-Toxin bildende Escherichia coli (STEC)",
+                    "Description": "Über weitere Unterfilter können Sie \"O-Gruppe\", \"H-Gruppe\", das Vorhandensein von \"stx1-Gen\", \"stx2-Gen\", \"eae-Gen\", \"hly-Gen\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
+                },
+                "microorganism-5": {
+                    "Name": "Methicillin-resistente Stapylococcus aureus (MRSA)",
+                    "Description": "Über weitere Unterfilter können Sie \"spa-Typ\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
+                },
+                "microorganism-6": {
+                    "Name": "Kommensale Escherichia coli (E. coli)",
+                    "Description": "Über einen weiteren Unterfilter können Sie \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
+                },
+                "microorganism-7": {
+                    "Name": "ESBL und/oder AmpC-bildende Escherichia coli (ESBL/AmpC-E.coli)",
+                    "Description": "ESBL und/oder AmpC-bildende Escherichia coli (ESBL/AmpC-E.coli), über weitere Unterfilter können Sie den \"ESBL_AmpC_Carba_Phänotyp\" (siehe dazu Methoden) und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen"
+                },
+                "microorganism-8": {
+                    "Name": "Carbapenemase-bildende Escherichia coli",
+                    "Description": "Über weitere Unterfilter können Sie den \"ESBL_AmpC_Carba_Phänotyp\" (siehe dazu Methoden) und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
+                },
+                "microorganism-9": {
+                    "Name": "Enterococcus spp.",
+                    "Description": "Über weitere Unterfilter \"Entero_Spez\" können Sie zwischen den Spezies faecalis und faecium unterscheiden und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen"
+                }
+            }
+        },
+        "samplingYear": {
+            "Name": "Erhebungsjahr",
+            "Description": "Hiermit können Sie das Jahr, in dem die Probenahme stattfand auswählen."
+        },
+        "samplingContext": {
+            "Name": "Probenahmegrund",
+            "Description": "Isolate, die auf der Grundlage der AVV-Zoonosen-Lebensmittelkette gewonnen wurden sind über die Auswahl \"Zoonosen-Monitoring\" gekennzeichnet.  Weitere Salmonellenisolate, die auf der Grundlage der Bekämpfungsprogramme beim Geflügel nach der Verordnung (EG) Nr. 2160/2003 gewonnen wurden, können über \"Salm-Bekämpfung\" ausgewählt werden. Enthalten sind Isolate aus Legehennen-, Masthähnchen- und Mastputenbetrieben, sowie Zuchthühnerbetrieben ohne Unterscheidung zwischen Lege- und Mastlinie."
+        },
+        "origin": {
+            "Name": "Probenherkunft",
+            "Description": "Hier können Sie den Bereich auswählen, aus dem die Isolate stammen. Im Zoonosen-Monitoring stehen Untersuchungen entlang von Lebensmittelketten vom Erzeuger bis zum Verbraucher (Einzelhandel) im Vordergrund. Bei den Salmonellen Bekämpfungsprogrammen stammen die Isolate ausschließlich aus Geflügelerzeugerbetrieben.",
+            "origin-types": {
+                "origin-1": {
+                    "Name": "Futtermittel",
+                    "Description": "\"Futtermittel\" stehen am Anfang der Lebensmittelkette, da sie Eintragsquelle von Zoonoseerregern in Erzeugerbetriebe sein können. \"Futtermittel\" für verschiedene Nutztiere werden regelmäßig im Rahmen des Zoonosen-Monitorings auf Salmonellen untersucht."
+                },
+                "origin-2": {
+                    "Name": "Tier",
+                    "Description": "Isolate von \"Tier\"-en stammen von Proben, die in Erzeugerbetrieben und von Darminhalt am Schlachthof genommen wurden. Während die Probenahme im Erzeugerbetrieb auch eine detaillierte Erhebung von Angaben zu Betriebsgröße, Haltungsform und Alter der Tiere zulässt und gut die deutsche Situation widerspiegelt, sehen die Beschlüsse 2013/652/EU bzw. seine Nachfolgeregelung 2020/1729/EU die Beprobung am Schlachthof vor. Hierbei wird die Berücksichtigung von Tieren aus anderen Ländern, die in Deutschland geschlachtet werden, explizit ausgeschlossen. Da die Verfügbarkeit von Daten zum Erzeugerbetrieb in der Regel begrenzt ist, ersetzt sie somit nicht die Beprobung in der Primärproduktion. Weiterhin reflektiert die Beprobung am Schlachthof am besten den Eintrag in die Lebensmittelverarbeitung und berücksichtigt hierbei auch mögliche Besiedelungen bzw. Infektionen bis zum Zeitpunkt des Ausstallens der Tiere aus dem Erzeugerbetrieb und während des Transportes zum Schlachthof."
+                },
+                "origin-3": {
+                    "Name": "Lebensmittel",
+                    "Description": "Isolate von \"Lebensmittel\"-n stammen von Proben, die von Schlachtkörpern am Schlachhof und von Lebensmitteln im Einzelhandel sowie an Einfuhrstellen genommen wurden. \"Lebensmittel\" im Einzelhandel können tierischen oder pflanzlichen Ursprungs sein. Die Probenahme von Lebensmitteln im Einzelhandel, wie sie direkt in den Haushalt des Endverbrauchers gelangen, reflektiert am besten den Eintrag in den Haushalt und damit die Exposition des Verbrauchers. Als Probenahmeorte sind hierfür neben dem Einzelhandel im engeren Sinne auch Direktvermarkter (als Einzelhandelsart), ggf. der Großhandel (einschließlich Großmärkte) sowie Einfuhrstellen bzw. Grenzkontrollstellen zulässig, wenn diese Lebensmittel für die Abgabe an den Endverbraucher herstellen bzw. die Lebensmittel dort bereits in der Endverpackung für die Abgabe an den Haushalt des Verbrauchers vorliegen. Entsprechend des Durchführungsbeschlusses 2013/652/EU bzw. seiner Nachfolgeregelung 2020/1729/EU ist aber die Berücksichtigung von Proben aus dem Großhandel nicht zulässig."
+                }
+            }
+        },
+        "samplingStage": {
+            "Name": "Probenahmestelle",
+            "Description": "Hier können Sie die Betriebsart oder die Stelle, an der die Probenahme erfolgt ist auswählen und damit die Sutfe der Lebensmittelgewinnung näher eingrenzen. ",
+            "samplingStage-types": {
+                "samplingStage-1": {
+                    "Name": "Zentralen Ölmühlen",
+                    "Description": "Futtermittelproben werden auf Salmonellen untersucht und stammen aus \"Mischfutterwerk\"-en und \"Zentralen Ölmühlen\"."
+                },
+                "samplingStage-2": {
+                    "Name": "Mühlen",
+                    "Description": "Isolate aus Mehl vor der Verpackung zur Abgabe an den verbraucher wurden in \"Mühlen\" gewonnen."
+                },
+                "samplingStage-3": {
+                    "Name": "Erzeugerbetrieb",
+                    "Description": "Am \"Erzeugerbetrieb\" werden Isolate von Tieren gewonnen. Dabei kommen überwiegend Kotproben zum Tragen oder Sammelmilchproben. Aber auch Hautproben oder Muscheln und Fische am Erzeugerbetrieb sind im Zoonosen-Monitoring schon beprobt worden. Bei den Salmonellen Bekämpfungsprogrammen beim Geflügel sind es Kot-/Staubproben gemäß Regelwerken."
+                },
+                "samplingStage-4": {
+                    "Name": "Schlachthof",
+                    "Description": "Isolate aus Proben, die am \"Schlachthof\" gewonnen wurden können im Fall von Proben von Darminhalt vom \"Tier\", im Fall von Proben von Karkassen und Schlachtkörpern vom \"Lebensmittel\" stammen. Die Beprobung am Schlachthof reflektiert am besten den Eintrag in die Lebensmittelverarbeitung und berücksichtigt hierbei auch mögliche Besiedelungen bzw. Infektionen bis zum Zeitpunkt des Ausstallens der Tiere aus dem Erzeugerbetrieb und während des Transportes zum Schlachthof. Proben, die gemäß Durchführungsbeschluss 2013/652/EU bzw. seiner Nachfolgeregelung 2020/1729/EU genommen wurden von Tieren, die die in Deutschland gemästet und geschlachtet wurden. "
+                },
+                "samplingStage-5": {
+                    "Name": "Wildbahn",
+                    "Description": "Tierische Proben von Jagdwild werden auf der \"Wildbahn\" gewonnen. Es handelt sich um Kot- oder Nasentupferproben. Diese Programme dienen überwiegend dazu, den Eintragsweg von resistenten Keimen aus der Umwelt zu reflektieren."
+                },
+                "samplingStage-6": {
+                    "Name": "Einfuhrstelle",
+                    "Description": "An \"Einfuhrstelle\"-n werden Proben genommen, um den Eintrag von Kontaminanten auf Lebensmitteln aus Drittländern zu untersuchen. "
+                },
+                "samplingStage-7": {
+                    "Name": "Einzelhandel",
+                    "Description": "Die Probenahme von unterschiedlichsten Lebensmitteln im \"Einzelhandel\", wie sie direkt in den Haushalt des Endverbrauchers gelangen, reflektiert am besten den Eintrag in den Haushalt und damit die Exposition des Verbrauchers. Als Probenahmeorte sind hierfür neben dem Einzelhandel im engeren Sinne auch Direktvermarkter (als Einzelhandelsart), ggf. der Großhandel (einschließlich Großmärkte) sowie Einfuhrstellen bzw. Grenzkontrollstellen zulässig, wenn diese Lebensmittel für die Abgabe an den Endverbraucher herstellen bzw. die Lebensmittel dort bereits in der Endverpackung für die Abgabe an den Haushalt des Verbrauchers vorliegen. Entsprechend der Kriterien für die Durchführung des Beschlusses 2020/1729/EU ist aber nach wie vor in 2021 die Berücksichtigung von Proben von Schweine- und Rindfleisch aus dem Großhandel nicht zulässig."
+                }
+            }
+        },
+        "category": {
+            "Name": "Tierart/Lebensmittel Oberkategorie",
+            "Description": "Mit diesem Filter können Sie zwischen Isolaten aus Proben tierischen und pflanzlichen Ursprungs unterscheiden.",
+            "category-types": {
+                "category-1": {
+                    "Name": "Nutztiere",
+                    "Description": "\"Nutztiere\" beschreibt Isolate aus Futtermitteln für Nutztiere allgemein."
+                },
+                "category-2": {
+                    "Name": "Geflügel",
+                    "Description": "\"Geflügel\" beschreibt Isolate aus Matrizes, bei denen nicht nur eine Tierart unterschieden werden kann."
+                },
+                "category-3": {
+                    "Name": "Huhn",
+                    "Description": "\"Huhn\" beschreibt Isolate aus der Spezies Gallus gallus. Sie können darunter unterschiedliche Produktionslinien und -formen an verschiedenen Stufen der Lebensmittelgewinnung wählen."
+                },
+                "category-4": {
+                    "Name": "Pute",
+                    "Description": "Der Filter \"Pute\" selektiert Isolate von Mastputen aus unterschiedlichen Produktionsformen."
+                },
+                "category-5": {
+                    "Name": "Schwein",
+                    "Description": "Mit dem Filter \"Schwein\" können Sie Isolate aus unterschiedlichen Produktionslinien wie Mast und Zucht, Produktionsformen sowie von Tieren unterschiedlichen Alters auswählen."
+                },
+                "category-6": {
+                    "Name": "Rind",
+                    "Description": "\"Rind\" beschreibt Isolate mit Ursprung Mastkalb/Jungrind, Milchrind une/oder Rind ohne weitere Spezifikation."
+                },
+                "category-7": {
+                    "Name": "Kleine Wiederkäuer",
+                    "Description": "Der Filter \"kleine Wiederkäuer\" beschreibt Isolate mit dem Ursprung Ziege und/oder Schaf."
+                },
+                "category-8": {
+                    "Name": "Wildgeflügel",
+                    "Description": "\"Wildgeflügel\" beschreibt Isolate von Wildenten und -gänsen ohne weitere Unterscheidung."
+                },
+                "category-9": {
+                    "Name": "Wildschwein",
+                    "Description": "Mit dem Filter \"Wildschwein\" können Sie Isolate von erlegten Wildschweinen auswählen."
+                },
+                "category-10": {
+                    "Name": "Wildwiederkäuer",
+                    "Description": "\"Wildwiederkäuer\" selektiert Isolate mit Ursprung Wildwiederkäuer ohne weitere Unterscheidung."
+                },
+                "category-11": {
+                    "Name": "Rehwild",
+                    "Description": ""
+                },
+                "category-12": {
+                    "Name": "Pflanzliche Lebensmittel",
+                    "Description": "Mit dem Filter \"Pflanzliche Lebensmittel\" lassen sich Isolate aus Lebensmitteln pflanzlicher Herkunft auswählen, wie bspw. Kräuter oder Blattsalate. "
+                },
+                "category-13": {
+                    "Name": "Süßwasserfische",
+                    "Description": "\"Süßwasserfische\" erlaubt die Eingrenzung von Isolaten auf die Arten Tilapia und Pangasius."
+                },
+                "category-14": {
+                    "Name": "Meeresfrüchte",
+                    "Description": ""
+                }
+            }
+        },
+        "productionType": {
+            "Name": "Tierart Produktionsform/Lebensmittel",
+            "Description": " Dieser Filter erlaubt eine weitere Eingrenzung der Auswahl der Isolate tierischer Herkunft nach ihrer Produktionsform nach RL 2002/4 EG als konventionell oder ökologisch. Bei Isolaten tierischer Herkunft ohne weitere Angabe handelt es sich überwiegend um solche aus konventioneller Produktion, aber nicht ausschließlich. Bei Isolaten pflanzlicher Herkunft können Sie mit diesem Filter grobe Kategorien, wie \"Kräuter\" oder \"Gemüse\" auswählen. Eine weitere Differenzierung der Isolate kann mit dem Filter \"Matrix\" und dem Unterfilter \"Matrixfdetail\" vorgenommen werden."
+        },
+        "matrix": {
+            "Name": "Matix",
+            "Description": "Mit der \"Matrix\" können Sie unter derzeit 26 unterschiedlichen Probenarten auswählen, die im Rahmen des Zoonosen-Monitorings oder der Salmonellen Bekäpfungsprogramme beim Geflügel seit dem Jahr 2014 gewonnen wurden. Darunter stammen 2 Matrices aus Futtermitteln, 6 aus Lebensmitteln pflanzlichen urprungs und 18 Matrices aus tierischer Herkunft. Mit dem Unterfilter \"Matrixdetail\" verfeinern Sie Ihre Suche bezüglich unterschiedlicher Eigenschaften der ausgewählten Matrix wie Be- und Verarbeitungsszustand (bspw. \"tiefgekühlt\" bei der Matrix \"Petersilie\") oder weitere Spezifikationen zu der Probenart (bspw. \"Sammelkot\" bei der Matrix \"Kot\"."
+        },
+        "federalState": {
+            "Name": "Bundesland",
+            "Description": "Mit dem \"Bundesland\" ist das an das BfR einsendende Bundesland der Isolate gemeint. In diesen fand die Probenahme statt, aus der die von Ihnen ausgewählten Isolate gewonnen wurden."
+        },
+        "resistance": {
+            "Name": "Antimikrobielle Resistenz",
+            "Description": "Isolate von Salmonella spp., Campylobacter spp., STEC, MRSA, kommensalen E. coli, ESBL und/oder AmpC-bildende E. coli, Carbapenemase-bildende E. coli und Enterococcus spp. wurden auf ihre Resistenz gegenüber antimikrobielle Substanzen am Nationalen Referenzlabor (NRL) für Antibiotikaresistenz am BfR und am NRL Campylobacter getestet. Dafür werden spezielle Wirkstoffpanels verwendet, die sich bei den einzelnen Mikroorganismen unterscheiden. Sie können mit diesem Filter die Wirkstoffe auswählen, die Teil des Panels für die Untersuchung des Ihnen ausgewählten Mikroorganismus sind. Details zur Methodik entnehmen Sie bitte dem unten folgenden Abschnitt \"Antibiotikaresistenztestung\"."
+        }
+    },
+    "Methods": {
+        "Name": "Methoden",
+        "Isolates": {
+            "Name": "Isolatgewinnung",
+            "Description": "Isolate werden im Rahmen des Zoonosen-Monitorings aus Programmen gewonnen, denen eine repräsentative Zufallsstichprobe der jeweils definierten Population, ggf. unter Berücksichtigung definierter Schichtungskriterien auf der jeweils festgelegten Stufe der Lebensmittelkette zugrunde liegt. Bei der Probenahme werden jeweils unabhängige Einheiten beprobt. Um die repräsentative Auswahl der zu beprobenden Betriebe zu gewährleisten, wird in der jeweiligen Region auf der Grundlage einer Gesamtliste der Betriebe eine Zufallsauswahl getroffen. Soweit verfügbar, werden für die Primärisolierung international standardisierte mikrobiologische Nachweisverfahren in den akkreditierten.Landesuntersuntersuchungseinrichtungen verwendet. Es können aber auch andere Untersuchungsverfahren eingesetzt werden, soweit sichergestellt werden kann, dass diese gleichwertig zu den vorgeschlagenen Methoden sind. Hierbei ist es insbesondere auch möglich, mittels einer PCR-Methode die Proben zu untersuchen und positive Ergebnisse mittels des kulturellen ISO-Verfahrens zu bestätigen. Soweit die vorgeschlagenen Methoden von den Methoden der amtlichen Sammlung nach § 64 LFGB oder ISO-Methoden abweichen, werden Methodenempfehlungen durch das jeweilige NRL am BfR bereitgestellt. Isolate, die im Rahmen der Salmonellen Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
+        },
+        "Amrs": {
+            "Name": "Antibiotikaresistenztestung",
+            "Description": "Alle für die Darstellung in ZooNotify ausgewählten Isolate von Salmonella spp., Campylobacter (C.) jejuni, Campylobacter (C.) coli, Escherichia (E.) coli, Shiga-Toxin bildende E. coli (STEC), Enterococcus (E.) faecalis und E. faecium sowie Methicillin-resistenten Staphylococcus aureus (MRSA) wurden mittels der vorgesehenen, international anerkannten, quantitativen Verfahren für die Resistenzbestimmung (Bouillon-Mikrodilutionsmethode nach ISO 20776-1:2006 bzw. CLSI M07) im Nationalen Referenzlabor (NRL) für Antibiotikaresistenz bzw. nach CLSI VET06 und M45A im NRL für Campylobacter untersucht. Die Isolate wurden dem am BfR etablierten Untersuchungsspektrum antimikrobieller Substanzen unterzogen. Hierfür wurden die fertig konfektionierten Plattenformate EUVSEC und ggf. EUVSEC2 (Salmonella spp. und E. coli), EUVENC (Enterokokken), EUCAMP2 (Campylobacter spp.) und EUST (MRSA) der Firma TREK Diagnostic Systems/Thermo Fisher Scientific verwendet.  Die Testung auf Resistenzen erfolgte unter Beachtung des Durchführungsbeschlusses 2013/652/EU, in dem das Untersuchungsverfahren, die zu testenden Wirkstoffe sowie die Bewertungskriterien für die Mehrzahl der Erreger festgelegt sind. Soweit dort keine epidemiologischen Cut-Off Werte beschrieben wurden, erfolgte die Bewertung anhand der Empfehlung der European Food Safety Authority (EFSA) in Abstimmung mit dem Europäischen Referenzlabor für Antibiotikaresistenz (EURL-AR).  Die Testung von MRSA und den Enterococcus spp. auf Resistenzen erfolgte auf Basis der Empfehlungen der EFSA (EFSA (2012a): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in methicillin-resistant Staphylococcus aureus in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in Salmonella, Campylobacter and indicator Escherichia coli and Enterococcus spp. bacteria transmitted through food. EFSA Journal 10(6):2742).",
+            "Paragraph-1": "Resistenztestung von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente). Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). ",
+            "Paragraph-2": "Die Eingruppierung der Isolate von ESBL/AmpC-E.coli und Carbapenemase-bildende Escherichia coli anhand ihrer phänotypischen Eigenschaften über den Unterfilter \"ESBL_AmpC_Carba_Phänotyp\" erfolgte nach den Kriterien von EFSA und ECDC aus dem Jahr 2017 (The European Union summary report on antimicrobial resistance in zoonotic and indicator bacteria from humans, animals and food in 2015. EFSA Journal 2017;15(2):4694, 212 pp. doi:10.2903/j.efsa.2017.4694).",
+            "Paragraph-3": "Wenn ein Isolat von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente) eine Resistenz gegenüber Cefotaxim und/oder Ceftazidim (Cephalsporine der 3. Generation) und/oder dem Carbapenem Meropenem aufweist, werden zur Charakterisierung der ß-laktam-Resistenz weitere Wirkstoffe herangezogen. Durch die Auswertung der Ergebnisse dieser in einer 2. Platte untersuchten Substanzen kann phänotypisch das Vorliegen von ESBL-, AmpC-, ESBL- und AmpC, oder Carphapenemase eingegrenzt werden. Ein endgültiger Nachweis des Resistenzmechanismus kann jedoch nur durch den Nachweis eines verantwortlichen Gens erbracht werden.",
+            "Paragraph-4": "Resistenztestung von C. jejuni und C. coli. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU.",
+            "Paragraph-5": "Resistenztestung von Methicillin-resistenten Staphylococcus aureus. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2014-2020.",
+            "Paragraph-6": "Resistenztestung von Enterococcus faecalis und E. faecium. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.",
+            "TitleSalmColiTable": "Tabelle AMR E. coli-Salm",
+            "TitleSalmColiTowTable": "Tabelle AMR E. coli-Salm-2. Platte",
+            "TitleCampyTable": "Tabelle AMR Campy",
+            "TitleMrsaTable": "Tabelle AMR MRSA",
+            "TitelEfTable": "Tabelle AMR EF",
+            "TableHeaderClass": "Substanzklasse",
+            "TableHeaderAmrSubstance": "Antimikrobielle Substanz",
+            "TableHeaderCuttOff": "Cut-Off > E. coli \u00B5g/ml",
+            "TableHeaderCuttOffSalm": "Cut-Off > Salmonella \u00B5g/ml",
+            "TableHeaderCuttOffColi": "Cut-Off > E. coli \u00B5g/ml",
+            "TableHeaderCuttOffFaecalis": "Cut-Off > E. coli \u00B5g/ml",
+            "TableHeaderCuttOffFaecium": "Cut-Off > E. coli \u00B5g/ml",
+            "TableHeaderMin": "Konzentationsbreich Minimum \u00B5g/ml",
+            "TableHeaderMax": "Konzentationsbreich Maximum \u00B5g/ml",
+            "CommentTextSalmColiTable": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020).",
+            "CommentTextSalmColiTowTable": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020).",
+            "CommentTextCampyTable": "* Cut-Off Werte für C. jejuni; ** Cut-Off Werte für C. coli.",
+            "CommentTextMrsaTable": "",
+            "CommentTextEfTable": ""
+        }
+    }
 }
