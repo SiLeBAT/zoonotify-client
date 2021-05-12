@@ -8,7 +8,8 @@ import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { QueryPageContentTableResultsLayoutComponent } from "./Results/TableResults/QueryPageContent-TableResultsLayout.component";
 import { FilterInterface } from "../../../Shared/Model/Filter.model";
 import { TableInterface } from "../../../Shared/Context/TableContext";
-import { QueryPageDatabaseStatusIndicatorComponent } from './DatabaseStatusIndicator/QueryPage-DatabaseStatusIndicator.component';
+import { QueryPageDatabaseStatusIndicatorComponent } from "./DatabaseStatusIndicator/QueryPage-DatabaseStatusIndicator.component";
+import { QueryPageContentBarChartResultsComponent } from "./Results/Charts/QueryPageContent-BarChart.component";
 
 const contentStyle = css`
     width: 0;
@@ -88,6 +89,10 @@ export function QueryPageContentLayoutComponent(props: {
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                 />
             </div>
+            <QueryPageContentBarChartResultsComponent
+                    columnAttributes={props.columnNameValues}
+                    graphicData={props.tableData.statisticDataAbsolute}
+                />
         </div>
     );
 }
