@@ -64,6 +64,9 @@ export function QueryPageContentLayoutComponent(props: {
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
+    const isFeature: boolean =
+        props.isCol || props.isRow;
+
     return (
         <div css={contentStyle}>
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
@@ -92,6 +95,7 @@ export function QueryPageContentLayoutComponent(props: {
             <QueryPageContentBarChartResultsComponent
                     columnAttributes={props.columnNameValues}
                     graphicData={props.tableData.statisticDataAbsolute}
+                    isChart={isFeature}
                 />
         </div>
     );

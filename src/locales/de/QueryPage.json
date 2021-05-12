@@ -64,5 +64,8 @@
     "Sums": {
         "RowSum": "Zeilensumme",
         "ColSum": "Spaltensumme"
+    },
+    "Chart": {
+        "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine graphische Darstellung der Ergebnisse anzuzeigen -"
     }
 }
