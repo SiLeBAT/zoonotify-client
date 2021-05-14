@@ -1,4 +1,5 @@
-import { AmrsTableData } from "./Amrs/createAmrsTableData.service";
+
+export type AmrsTableData = Record<string, string>
 
 export interface AmrsTable {
     title: string;

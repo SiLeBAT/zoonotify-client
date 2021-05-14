@@ -13,8 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
-import { AmrsTable } from "../InfoPage.model";
-import { AmrsTableData } from "./createAmrsTableData.service";
+import { AmrsTable, AmrsTableData } from "../InfoPage.model";
 
 const dialogContentStyle = css`
     margin: 1em;

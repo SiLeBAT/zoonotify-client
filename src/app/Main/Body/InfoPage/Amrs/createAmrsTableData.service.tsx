@@ -1,4 +1,4 @@
-export type AmrsTableData = Record<string, string>
+import { AmrsTableData } from "../InfoPage.model";
 
 export function createAmrTable(
     substanceClass: string,

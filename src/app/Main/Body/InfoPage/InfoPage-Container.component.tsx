@@ -3,9 +3,8 @@ import { useTranslation } from "react-i18next";
 import {
     createAmrTableOneCutOff,
     createAmrTable,
-    AmrsTableData,
 } from "./Amrs/createAmrsTableData.service";
-import { AmrKey, AmrsTable } from "./InfoPage.model";
+import { AmrKey, AmrsTable, AmrsTableData } from "./InfoPage.model";
 import { InfoPageComponent } from "./InfoPage.component";
 import { modifyTableDataStringService } from "../../../Core/modifyTableDataString.service";
 
