@@ -1,15 +1,16 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
+import { Button } from "@material-ui/core";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
-import {
-    onPrimaryColor,
-    primaryColor,
-} from "../../../Shared/Style/Style-MainTheme.component";
 import { InfoPageAmrsContentComponent } from "./Amrs/InfoPage-AmrsContent.component";
 import { InfoPageFiltersContentComponent } from "./InfoPage-FiltersContent.component";
 import { AmrKey, AmrsTable } from "./InfoPage.model";
-import { InfoPageNavButtonsComponent } from "./InfoPage-NavButtons.component";
+import {
+    onPrimaryColor,
+    primaryColor,
+    secondaryColor,
+} from "../../../Shared/Style/Style-MainTheme.component";
 
 const infoPageStyle = css`
     margin-left: 5em;
@@ -25,6 +26,23 @@ const headingStyle = css`
     font-weight: normal;
     color: ${primaryColor};
     border-bottom: 1px solid ${primaryColor};
+`;
+const navButtonDisplayStyle = css`
+    display: grid;
+`;
+const navButtonListStyle = css`
+    margin: 0 auto;
+    display: grid;
+`;
+const navButtonStyle = css`
+    margin: 0.25em;
+    text-align: center;
+    background-color: ${primaryColor};
+    color: ${onPrimaryColor};
+    &:hover {
+        background-color: ${primaryColor};
+        color: ${secondaryColor};
+    }
 `;
 
 const subHeadingStyle = css`
@@ -52,11 +70,20 @@ export function InfoPageComponent(props: {
     return (
         <div css={infoPageStyle}>
             <p css={headingStyle}>{t("Title")}</p>
-            <InfoPageNavButtonsComponent
-                backgroundButtonLabel={backgroundChapterHeading}
-                filtersButtonLabel={filtersChapterHeading}
-                methodsButtonLabel={methodsChapterHeading}
-            />
+            <section css={navButtonDisplayStyle}>
+                <div css={navButtonListStyle}>
+                    <Button css={navButtonStyle} href="#background">
+                        {backgroundChapterHeading}
+                    </Button>
+                    <Button css={navButtonStyle} href="#filter">
+                        {filtersChapterHeading}
+                    </Button>
+                    <Button css={navButtonStyle} href="#methods">
+                        {methodsChapterHeading}
+                    </Button>
+                </div>
+            </section>
+
             <div>
                 <AccordionComponent
                     title={backgroundChapterHeading}
