@@ -5,7 +5,7 @@ import {
     createAmrTable,
     AmrsTableData,
 } from "./Amrs/createAmrsTableData.service";
-import { AmrKeyType, TableData } from "./InfoPage.model";
+import { AmrKey, AmrsTable } from "./InfoPage.model";
 import { InfoPageComponent } from "./InfoPage.component";
 import { modifyTableDataStringService } from "../../../Core/modifyTableDataString.service";
 
@@ -246,7 +246,7 @@ export function InfoPageContainerComponent(): JSX.Element {
         t("Methods.Amrs.TableHeaderMax"),
     ];
 
-    const amrKeys: AmrKeyType[] = [
+    const amrKeys: AmrKey[] = [
         "coliSalm",
         "coliSalmTwo",
         "campy",
@@ -254,35 +254,35 @@ export function InfoPageContainerComponent(): JSX.Element {
         "ef",
     ];
 
-    const tableDataAmrColiSalm: TableData = {
+    const tableDataAmrColiSalm: AmrsTable = {
         title: t("Methods.Amrs.coliSalm.TableTitle"),
         description: t("Methods.Amrs.coliSalm.TableDescription"),
         tableHeader: coliSalmTableHeader,
         tableRows: tableAmrEcoliSalmRows,
         commentText: t("Methods.Amrs.coliSalm.TableComment"),
     };
-    const tableDataAmrColiSalmTwo: TableData = {
+    const tableDataAmrColiSalmTwo: AmrsTable = {
         title: t("Methods.Amrs.coliSalmTwo.TableTitle"),
         description: t("Methods.Amrs.coliSalmTwo.TableDescription"),
         tableHeader: coliSalmTableHeader,
         tableRows: tableAmrEcoliSalmTwoRows,
         commentText: t("Methods.Amrs.coliSalmTwo.TableComment"),
     };
-    const tableDataAmrCampy: TableData = {
+    const tableDataAmrCampy: AmrsTable = {
         title: t("Methods.Amrs.campy.TableTitle"),
         description: t("Methods.Amrs.campy.TableDescription"),
         tableHeader: oneCutOffTableHeader,
         tableRows: tableAmrCampyRows,
         commentText: t("Methods.Amrs.campy.TableComment"),
     };
-    const tableDataAmrMrsa: TableData = {
+    const tableDataAmrMrsa: AmrsTable = {
         title: t("Methods.Amrs.mrsa.TableTitle"),
         description: t("Methods.Amrs.mrsa.TableDescription"),
         tableHeader: oneCutOffTableHeader,
         tableRows: tableAmrMrsaRows,
         commentText: t("Methods.Amrs.mrsa.TableComment"),
     };
-    const tableDataAmrEf: TableData = {
+    const tableDataAmrEf: AmrsTable = {
         title: t("Methods.Amrs.ef.TableTitle"),
         description: t("Methods.Amrs.ef.TableDescription"),
         tableHeader: efTableHeader,
@@ -291,7 +291,7 @@ export function InfoPageContainerComponent(): JSX.Element {
     };
 
 
-    const amrTableData: Record<AmrKeyType, TableData> = {
+    const amrTableData: Record<AmrKey, AmrsTable> = {
         coliSalm: tableDataAmrColiSalm,
         coliSalmTwo: tableDataAmrColiSalmTwo,
         campy: tableDataAmrCampy,
@@ -301,7 +301,7 @@ export function InfoPageContainerComponent(): JSX.Element {
 
 
 
-    const handleExportAmrData = (amrKey: AmrKeyType): void => {
+    const handleExportAmrData = (amrKey: AmrKey): void => {
         const csvHeader = amrTableData[amrKey].tableHeader.join(",");
 
         let csvContent = "";

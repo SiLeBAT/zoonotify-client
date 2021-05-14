@@ -7,7 +7,7 @@ import {
     secondaryColor,
 } from "../../../Shared/Style/Style-MainTheme.component";
 
-const navButtonDivStyle = css`
+const navButtonListStyle= css`
     width: fit-content;
     margin: auto;
     display: flex;
@@ -31,7 +31,7 @@ export function InfoPageNavButtonsComponent(props: {
 }): JSX.Element {
 
     return (
-        <div css={navButtonDivStyle}>
+        <div css={navButtonListStyle}>
             <Button css={navButtonStyle} href="#background">
                 {props.backgroundButtonLabel}
             </Button>

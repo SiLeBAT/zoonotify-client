@@ -6,9 +6,9 @@ import {
     onPrimaryColor,
     primaryColor,
 } from "../../../Shared/Style/Style-MainTheme.component";
-import { InfoPageAmrsAccordionContentComponent } from "./Amrs/InfoPage-AmrsAccordionContent.component";
-import { InfoPageFilterAccordionsComponent } from "./InfoPage-FilterAccordions.component";
-import { AmrKeyType, TableData } from "./InfoPage.model";
+import { InfoPageAmrsContentComponent } from "./Amrs/InfoPage-AmrsContent.component";
+import { InfoPageFiltersContentComponent } from "./InfoPage-FiltersContent.component";
+import { AmrKey, AmrsTable } from "./InfoPage.model";
 import { InfoPageNavButtonsComponent } from "./InfoPage-NavButtons.component";
 
 const infoPageStyle = css`
@@ -35,13 +35,13 @@ const subHeadingStyle = css`
 
 export function InfoPageComponent(props: {
     describedFilters: string[];
-    amrKeys: AmrKeyType[];
-    tableData: Record<string, TableData>;
-    onAmrDataExport: (amrKey: AmrKeyType) => void;
+    amrKeys: AmrKey[];
+    tableData: Record<AmrKey, AmrsTable>;
+    onAmrDataExport: (amrKey: AmrKey) => void;
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
 
-    const handleExportAmrData = (amrKey: AmrKeyType): void => {
+    const handleExportAmrData = (amrKey: AmrKey): void => {
         props.onAmrDataExport(amrKey);
     };
 
@@ -66,7 +66,7 @@ export function InfoPageComponent(props: {
                 <p css={subHeadingStyle} id="filter">
                     {filtersChapterHeading}
                 </p>
-                <InfoPageFilterAccordionsComponent
+                <InfoPageFiltersContentComponent
                     describedFilters={props.describedFilters}
                 />
                 <p css={subHeadingStyle} id="methods">
@@ -81,7 +81,7 @@ export function InfoPageComponent(props: {
                     <AccordionComponent
                         title={t("Methods.Amrs.Name")}
                         content={
-                            <InfoPageAmrsAccordionContentComponent
+                            <InfoPageAmrsContentComponent
                                 amrKeys={props.amrKeys}
                                 tableData={props.tableData}
                                 onAmrDataExport={handleExportAmrData}

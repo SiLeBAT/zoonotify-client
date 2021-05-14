@@ -9,11 +9,11 @@ const descriptionStyle = css`
     text-align: justify;
 `;
 
-const subContentSubNameStyle = css`
+const subContentNameStyle = css`
     margin-bottom: 0.25em;
     color: ${primaryColor};
 `;
-const subContentSubDescriptionStyle = css`
+const subContentDescriptionStyle = css`
     margin-top: 0;
     padding-left: 1.5em;
     hyphens: auto;
@@ -22,22 +22,22 @@ const subContentSubDescriptionStyle = css`
 
 function generateContentWithSubContent(
     filterDescription: string,
-    describedFiltersObject: Record<string, Record<string, string>>
+    describedFiltersContent: Record<string, Record<string, string>>
 ): JSX.Element {
     const subContent: JSX.Element[] = [];
 
-    Object.keys(describedFiltersObject).forEach((describedFilterSubKey) => {
+    Object.keys(describedFiltersContent).forEach((describedFilterSubKey) => {
         const subFilter: Record<string, string> =
-            describedFiltersObject[describedFilterSubKey];
+            describedFiltersContent[describedFilterSubKey];
         const subFilterName = subFilter.Name;
         subContent.push(
-            <p css={subContentSubNameStyle} key={`${subFilterName}-name`}>
+            <p css={subContentNameStyle} key={`${subFilterName}-name`}>
                 {subFilterName}
             </p>
         );
         subContent.push(
             <p
-                css={subContentSubDescriptionStyle}
+                css={subContentDescriptionStyle}
                 key={`${subFilterName}-description`}
             >
                 {subFilter.Description}
@@ -55,7 +55,7 @@ function generateContentWithSubContent(
     return content;
 }
 
-export function InfoPageFilterAccordionsComponent(props: {
+export function InfoPageFiltersContentComponent(props: {
     describedFilters: string[];
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
@@ -69,7 +69,7 @@ export function InfoPageFilterAccordionsComponent(props: {
             describedFilter === "samplingStage" ||
             describedFilter === "category"
         ) {
-            const describedFiltersObject: Record<
+            const describedFiltersContent: Record<
                 string,
                 Record<string, string>
             > = t(`Filters.${describedFilter}.${describedFilter}-types`, {
@@ -83,7 +83,7 @@ export function InfoPageFilterAccordionsComponent(props: {
                     title={t(`Filters.${describedFilter}.Name`)}
                     content={generateContentWithSubContent(
                         filterDescription,
-                        describedFiltersObject
+                        describedFiltersContent
                     )}
                     defaultExpanded={false}
                     key={`accordion_${describedFilter}`}

@@ -13,10 +13,10 @@ import {
 import { useTranslation } from "react-i18next";
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
-import { TableData } from "../InfoPage.model";
+import { AmrsTable } from "../InfoPage.model";
 import { AmrsTableData } from "./createAmrsTableData.service";
 
-const tableDivStyle = css`
+const dialogContentStyle = css`
     margin: 1em;
     height: inherit;
     overflow-y: auto;
@@ -43,13 +43,13 @@ const useStyles = makeStyles({
     },
 });
 
-function tableRowCellList(row: AmrsTableData): JSX.Element[] {
+function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
     Object.keys(row).forEach((rowKey) => {
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
-                component="th"
+                component="td"
                 scope="row"
                 key={`amr-table-cell-${row.name}-${rowKey}`}
             >
@@ -61,8 +61,8 @@ function tableRowCellList(row: AmrsTableData): JSX.Element[] {
 }
 
 export function InfoPageAmrDialogComponent(props: {
-    resistancesTableData: TableData;
-    infoPageTableDialogIsOpen: boolean;
+    resistancesTableData: AmrsTable;
+    isOpen: boolean;
     onClose: () => void;
     onAmrDataExport: () => void;
 }): JSX.Element {
@@ -78,7 +78,7 @@ export function InfoPageAmrDialogComponent(props: {
     };
 
     const dialogTableContent = (
-        <div css={tableDivStyle}>
+        <div css={dialogContentStyle}>
             <TableContainer css={tableContainerStyle} component={Paper}>
                 <Table
                     className={classes.table}
@@ -93,6 +93,7 @@ export function InfoPageAmrDialogComponent(props: {
                                     <TableCell
                                         key={`header-amr-${headerValue}`}
                                         css={tableTextStyle}
+                                        component="th"
                                     >
                                         {headerValue}
                                     </TableCell>
@@ -101,11 +102,13 @@ export function InfoPageAmrDialogComponent(props: {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.resistancesTableData.tableRows.map((row) => (
-                            <TableRow key={`amr-table-row-${row.name}`}>
-                                {tableRowCellList(row)}
-                            </TableRow>
-                        ))}
+                        {props.resistancesTableData.tableRows.map((row) =>
+                            (
+                                <TableRow key={`amr-table-row-${row.name}`}>
+                                    {createTableRowCells(row)}
+                                </TableRow>
+                            )
+                        )}
                     </TableBody>
                 </Table>
                 <p css={starTextStyle}>
@@ -113,13 +116,13 @@ export function InfoPageAmrDialogComponent(props: {
                 </p>
             </TableContainer>
         </div>
-    ); 
+    );
 
     const amrTableCancelButton = t("Methods.Amrs.CancelButton");
     const amrTableSubmitButton = ExportButtonLabelComponent(false);
 
     return DialogComponent({
-        isOpen: props.infoPageTableDialogIsOpen,
+        isOpen: props.isOpen,
         dialogTitle: props.resistancesTableData.title,
         dialogContentText: props.resistancesTableData.description,
         dialogContent: dialogTableContent,

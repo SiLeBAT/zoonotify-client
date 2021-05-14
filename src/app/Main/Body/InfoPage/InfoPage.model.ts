@@ -1,6 +1,6 @@
 import { AmrsTableData } from "./Amrs/createAmrsTableData.service";
 
-export interface TableData {
+export interface AmrsTable {
     title: string;
     description: string;
     tableHeader: string[];
@@ -9,4 +9,4 @@ export interface TableData {
 }
 
 
-export type AmrKeyType = "coliSalm" | "coliSalmTwo" | "campy" | "mrsa" | "ef"
+export type AmrKey = "coliSalm" | "coliSalmTwo" | "campy" | "mrsa" | "ef"

@@ -4,24 +4,24 @@ import { useState } from "react";
 import { Button } from "@material-ui/core";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
-import { AmrKeyType, TableData } from "../InfoPage.model";
+import { AmrKey, AmrsTable } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
 
 const tableDialogButtonStyle = css`
     text-align: left
 `
 
-export function InfoPageAmrsAccordionContentComponent(props: {
-    amrKeys: AmrKeyType[];
-    tableData: Record<string, TableData>;
-    onAmrDataExport: (amrKey: AmrKeyType) => void;
+export function InfoPageAmrsContentComponent(props: {
+    amrKeys: AmrKey[];
+    tableData: Record<AmrKey, AmrsTable>;
+    onAmrDataExport: (amrKey: AmrKey) => void;
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
 
     const [
         infoPageTableDialogsAreOpen,
         setInfoPageTableDialogsAreOpen,
-    ] = useState<Record<AmrKeyType, boolean>>({
+    ] = useState<Record<AmrKey, boolean>>({
         coliSalm: false,
         coliSalmTwo: false,
         campy: false,
@@ -36,7 +36,7 @@ export function InfoPageAmrsAccordionContentComponent(props: {
         );
         setInfoPageTableDialogsAreOpen(allClosed);
     };
-    const handleExportAmrData = (amrKey: AmrKeyType): void => {
+    const handleExportAmrData = (amrKey: AmrKey): void => {
         props.onAmrDataExport(amrKey);
         const allClosed: Record<string, boolean> = _.mapValues(
             infoPageTableDialogsAreOpen,
@@ -45,7 +45,7 @@ export function InfoPageAmrsAccordionContentComponent(props: {
         setInfoPageTableDialogsAreOpen(allClosed);
     };
 
-    const handleOpen = (amrKey: AmrKeyType): void => {
+    const handleOpen = (amrKey: AmrKey): void => {
         const newIsOpen: Record<string, boolean> = _.mapValues(
             infoPageTableDialogsAreOpen,
             () => false
@@ -66,7 +66,7 @@ export function InfoPageAmrsAccordionContentComponent(props: {
                     </Button>
                     <InfoPageAmrDialogComponent
                         resistancesTableData={props.tableData[amrKey]}
-                        infoPageTableDialogIsOpen={
+                        isOpen={
                             infoPageTableDialogsAreOpen[amrKey]
                         }
                         onClose={handleClose}

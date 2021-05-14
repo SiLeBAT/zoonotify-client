@@ -2,17 +2,17 @@ export type AmrsTableData = Record<string, string>
 
 export function createAmrTable(
     substanceClass: string,
-    amSubstance: string,
+    amrSubstance: string,
     cutOffOne: string,
-    cutOffTow: string,
+    CutOffTwo: string,
     concentrationMin: string,
     concentrationMax: string
 ): AmrsTableData {
     return {
         substanceClass,
-        amSubstance,
+        amrSubstance,
         cutOffOne,
-        cutOffTow,
+        CutOffTwo,
         concentrationMin,
         concentrationMax,
     };
@@ -21,14 +21,14 @@ export function createAmrTable(
 
 export function createAmrTableOneCutOff(
     substanceClass: string,
-    amSubstance: string,
+    amrSubstance: string,
     cutOff: string,
     concentrationMin: string,
     concentrationMax: string
 ): AmrsTableData {
     return {
         substanceClass,
-        amSubstance,
+        amrSubstance,
         cutOff,
         concentrationMin,
         concentrationMax,
