@@ -115,10 +115,11 @@ export function InfoPageContainerComponent(): JSX.Element {
             csvContent += "\n";
         });
         const csvTable = `${csvHeader}\n${csvContent}`;
+        const amrFileName = `${amrTableData[amrKey].title}.csv`.replace(/ /g, "_").replace("..", ".")
         const amrTableExportElement = document.createElement("a");
         amrTableExportElement.href = `data:text/csv;charset=utf-8,${encodeURI(csvTable)}`;
         amrTableExportElement.target = "_blank";
-        amrTableExportElement.download = `${amrKey}.csv`;
+        amrTableExportElement.download = amrFileName;
         amrTableExportElement.click();
     };
 
