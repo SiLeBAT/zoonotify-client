@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import {
-    makeStyles,
     Paper,
     Table,
     TableBody,
@@ -36,12 +35,6 @@ const starTextStyle = css`
     letter-spacing: 0;
 `;
 
-const useStyles = makeStyles({
-    table: {
-        minWidth: 550,
-    },
-});
-
 function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
     Object.keys(row).forEach((rowKey) => {
@@ -67,7 +60,6 @@ export function InfoPageAmrDialogComponent(props: {
     onAmrDataExport: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
-    const classes = useStyles();
 
     const handleClose = (): void => {
         props.onClose();
@@ -83,7 +75,6 @@ export function InfoPageAmrDialogComponent(props: {
         <div css={dialogContentStyle}>
             <TableContainer css={tableContainerStyle} component={Paper}>
                 <Table
-                    className={classes.table}
                     size="small"
                     stickyHeader
                     aria-label="amr-table"
@@ -119,7 +110,7 @@ export function InfoPageAmrDialogComponent(props: {
     );
 
     const amrTableCancelButton = t("Methods.Amrs.CancelButton");
-    const amrTableSubmitButton = ExportButtonLabelComponent(false);
+    const amrTableSubmitButton = ExportButtonLabelComponent(true);
 
     return DialogComponent({
         isOpen: amrDialogIsOpen,
