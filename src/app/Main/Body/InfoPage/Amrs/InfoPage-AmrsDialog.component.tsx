@@ -13,7 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
-import { AmrsTable, AmrsTableData } from "../InfoPage.model";
+import { AmrKey, AmrsTable, AmrsTableData } from "../InfoPage.model";
 
 const dialogContentStyle = css`
     margin: 1em;
@@ -61,7 +61,8 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
 
 export function InfoPageAmrDialogComponent(props: {
     resistancesTableData: AmrsTable;
-    isOpen: boolean;
+    amrKey: AmrKey;
+    openAmrDialogKey: AmrKey | null;
     onClose: () => void;
     onAmrDataExport: () => void;
 }): JSX.Element {
@@ -75,6 +76,8 @@ export function InfoPageAmrDialogComponent(props: {
     const handleSubmit = (): void => {
         props.onAmrDataExport();
     };
+
+    const amrDialogIsOpen = props.amrKey === props.openAmrDialogKey;
 
     const dialogTableContent = (
         <div css={dialogContentStyle}>
@@ -101,13 +104,11 @@ export function InfoPageAmrDialogComponent(props: {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.resistancesTableData.tableRows.map((row) =>
-                            (
-                                <TableRow key={`amr-table-row-${row.name}`}>
-                                    {createTableRowCells(row)}
-                                </TableRow>
-                            )
-                        )}
+                        {props.resistancesTableData.tableRows.map((row) => (
+                            <TableRow key={`amr-table-row-${row.name}`}>
+                                {createTableRowCells(row)}
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
                 <p css={starTextStyle}>
@@ -121,7 +122,7 @@ export function InfoPageAmrDialogComponent(props: {
     const amrTableSubmitButton = ExportButtonLabelComponent(false);
 
     return DialogComponent({
-        isOpen: props.isOpen,
+        isOpen: amrDialogIsOpen,
         dialogTitle: props.resistancesTableData.title,
         dialogContentText: props.resistancesTableData.description,
         dialogContent: dialogTableContent,
