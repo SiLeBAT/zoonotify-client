@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
-import { AmrKey, AmrsTable, AmrsTableData } from "../InfoPage.model";
+import { AmrKey, AmrsTable, AmrsTableData, AmrsTableDataKey } from "../InfoPage.model";
 
 const dialogContentStyle = css`
     margin: 1em;
@@ -38,14 +38,15 @@ const starTextStyle = css`
 function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
     Object.keys(row).forEach((rowKey) => {
+        const amrRowKey = rowKey as AmrsTableDataKey
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
                 component="td"
                 scope="row"
-                key={`amr-table-cell-${row.name}-${rowKey}`}
+                key={`amr-table-cell-${row.amrSubstance}-${amrRowKey}`}
             >
-                {row[rowKey]}
+                {row[amrRowKey]}
             </TableCell>
         );
     });
@@ -96,7 +97,7 @@ export function InfoPageAmrDialogComponent(props: {
                     </TableHead>
                     <TableBody>
                         {props.resistancesTableData.tableRows.map((row) => (
-                            <TableRow key={`amr-table-row-${row.name}`}>
+                            <TableRow key={`amr-table-row-${row.amrSubstance}`}>
                                 {createTableRowCells(row)}
                             </TableRow>
                         ))}

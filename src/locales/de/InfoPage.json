@@ -232,8 +232,8 @@
             "TableHeaderCuttOff": "Cut-Off > \u00B5g/ml",
             "TableHeaderCuttOffSalm": "Cut-Off > Salmonella \u00B5g/ml",
             "TableHeaderCuttOffColi": "Cut-Off > E. coli \u00B5g/ml",
-            "TableHeaderCuttOffFaecalis": "Cut-Off > E. coli \u00B5g/ml",
-            "TableHeaderCuttOffFaecium": "Cut-Off > E. coli \u00B5g/ml",
+            "TableHeaderCuttOffFaecalis": "Cut-Off > E. faecalis \u00B5g/ml",
+            "TableHeaderCuttOffFaecium": "Cut-Off > E. faecium \u00B5g/ml",
             "TableHeaderMin": "Konzentationsbreich Minimum \u00B5g/ml",
             "TableHeaderMax": "Konzentationsbreich Maximum \u00B5g/ml",
             "CancelButton": "Abbrechen"

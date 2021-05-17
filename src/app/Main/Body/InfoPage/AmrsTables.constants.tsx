@@ -4,7 +4,7 @@ function createAmrTable(
     substanceClass: string,
     amrSubstance: string,
     cutOffOne: string,
-    CutOffTwo: string,
+    cutOffTwo: string,
     concentrationMin: string,
     concentrationMax: string
 ): AmrsTableData {
@@ -12,7 +12,7 @@ function createAmrTable(
         substanceClass,
         amrSubstance,
         cutOffOne,
-        CutOffTwo,
+        cutOffTwo,
         concentrationMin,
         concentrationMax,
     };
@@ -22,14 +22,14 @@ function createAmrTable(
 function createAmrTableOneCutOff(
     substanceClass: string,
     amrSubstance: string,
-    cutOff: string,
+    cutOffOne: string,
     concentrationMin: string,
     concentrationMax: string
 ): AmrsTableData {
     return {
         substanceClass,
         amrSubstance,
-        cutOff,
+        cutOffOne,
         concentrationMin,
         concentrationMax,
     };
