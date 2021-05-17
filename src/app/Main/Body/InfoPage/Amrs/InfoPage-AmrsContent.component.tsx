@@ -46,15 +46,15 @@ export function InfoPageAmrsContentComponent(props: {
                     >
                         {props.tableData[amrKey].title}
                     </Button>
-                    <InfoPageAmrDialogComponent
-                        resistancesTableData={props.tableData[amrKey]}
-                        amrKey={amrKey}
-                        openAmrDialogKey={openAmrDialog}
-                        onClose={handleClose}
-                        onAmrDataExport={() => handleExportAmrData(amrKey)}
-                    />
                 </div>
             ))}
+            {openAmrDialog !== null && (
+                <InfoPageAmrDialogComponent
+                    resistancesTableData={props.tableData[openAmrDialog]}
+                    onClose={handleClose}
+                    onAmrDataExport={() => handleExportAmrData(openAmrDialog)}
+                />
+            )}
         </div>
     );
 }

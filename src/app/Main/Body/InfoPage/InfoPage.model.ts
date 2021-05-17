@@ -7,14 +7,6 @@ export interface AmrsTableData {
     concentrationMax: string;
 }
 
-export type AmrsTableDataKey =
-    | "substanceClass"
-    | "amrSubstance"
-    | "cutOffOne"
-    | "cutOffTwo"
-    | "concentrationMin"
-    | "concentrationMax";
-
 export interface AmrsTable {
     title: string;
     description: string;
