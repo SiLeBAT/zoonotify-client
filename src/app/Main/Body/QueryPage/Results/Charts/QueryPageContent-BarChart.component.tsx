@@ -16,12 +16,12 @@ const explanationTextStyle = css`
 
 /**
  * @desc Returns accordion to display the results in a chart
- * @param props - data to display a graph
+ * @param props - data to display a chart
  * @returns {JSX.Element} - accordion with the result chart
  */
 export function QueryPageContentBarChartResultsComponent(props: {
     columnAttributes: string[];
-    graphicData: Record<string, string>[];
+    chartData: Record<string, string>[];
     isChart: boolean;
 }): JSX.Element {
     const { t } = useTranslation("QueryPage");
@@ -36,7 +36,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
             <div css={dataStyle}>
                 <BarChartResultsComponent
                     columnAttributes={props.columnAttributes}
-                    graphicData={props.graphicData}
+                    chartData={props.chartData}
                 />
             </div>
         );

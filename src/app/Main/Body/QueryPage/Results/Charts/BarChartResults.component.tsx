@@ -1,41 +1,45 @@
 import React from "react";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
+import _ from "lodash";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
 
-type XYType = { name: string; data: number[] };
+type ApexChartData = { name: string; data: number[] };
 
-function processingJsonApex(
-    JSONTable: Record<string, string>[],
+function processingTableDataToApexData(
+    data: Record<string, string>[],
     xValues: string[]
-): XYType[] {
-    const graphData = [] as XYType[];
+): ApexChartData[] {
+    const apexChartData = [] as ApexChartData[];
 
-    JSONTable.forEach((tableRow) => {
+    data.forEach((chartSeries) => {
         const seriesValues: number[] = [];
         xValues.forEach((element) => {
-            seriesValues.push(Number.parseFloat(tableRow[element]));
+            seriesValues.push(Number.parseFloat(chartSeries[element]));
         });
-        const groupData: XYType = { name: tableRow.name, data: seriesValues };
-        graphData.push(groupData);
+        const groupData: ApexChartData = {
+            name: chartSeries.name,
+            data: seriesValues,
+        };
+        apexChartData.push(groupData);
     });
 
-    return graphData;
+    return apexChartData;
 }
 
 export function BarChartResultsComponent(props: {
     columnAttributes: string[];
-    graphicData: Record<string, string>[];
+    chartData: Record<string, string>[];
 }): JSX.Element {
-    const dataList = processingJsonApex(
-        props.graphicData,
+    const apexDataList = processingTableDataToApexData(
+        props.chartData,
         props.columnAttributes
     );
 
     const chartOptions: ApexOptions = {
         chart: {
             type: "bar",
-            height: 430,
             toolbar: {
                 show: false,
                 tools: {
@@ -63,22 +67,7 @@ export function BarChartResultsComponent(props: {
             "#012575",
         ],
         dataLabels: {
-            enabled: true,
-            style: {
-                fontSize: "10px",
-                colors: [primaryColor],
-            },
-            background: {
-                enabled: true,
-                foreColor: "#fff",
-                padding: 3,
-                borderRadius: 2,
-                borderWidth: 1,
-                opacity: 0.4,
-                dropShadow: {
-                    enabled: false,
-                },
-            },
+            enabled: false,
         },
         stroke: {
             show: false,
@@ -111,16 +100,19 @@ export function BarChartResultsComponent(props: {
     };
 
     const chartProps = {
-        series: dataList,
+        series: apexDataList,
         options: chartOptions,
     };
+
+    if (_.isEmpty(chartProps.series)) {
+        return <LoadingProcessComponent />;
+    }
 
     return (
         <ReactApexChart
             options={chartProps.options}
             series={chartProps.series}
             type="bar"
-            height={430}
         />
     );
 }

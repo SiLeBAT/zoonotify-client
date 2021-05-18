@@ -94,7 +94,7 @@ export function QueryPageContentLayoutComponent(props: {
             </div>
             <QueryPageContentBarChartResultsComponent
                     columnAttributes={props.columnNameValues}
-                    graphicData={props.tableData.statisticDataAbsolute}
+                    chartData={props.tableData.statisticDataAbsolute}
                     isChart={isFeature}
                 />
         </div>
