@@ -70,11 +70,8 @@ export function InfoPageComponent(props: {
     return (
         <div css={infoPageStyle}>
             <p css={headingStyle}>{t("Title")}</p>
-            <section css={navButtonDisplayStyle}>
+            <div css={navButtonDisplayStyle}>
                 <div css={navButtonListStyle}>
-                    <Button css={navButtonStyle} href="#background">
-                        {backgroundChapterHeading}
-                    </Button>
                     <Button css={navButtonStyle} href="#filter">
                         {filtersChapterHeading}
                     </Button>
@@ -82,8 +79,7 @@ export function InfoPageComponent(props: {
                         {methodsChapterHeading}
                     </Button>
                 </div>
-            </section>
-
+            </div>
             <div>
                 <AccordionComponent
                     title={backgroundChapterHeading}
