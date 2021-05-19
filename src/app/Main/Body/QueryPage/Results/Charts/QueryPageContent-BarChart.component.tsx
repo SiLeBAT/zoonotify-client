@@ -5,9 +5,8 @@ import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
 const dataStyle = css`
-    max-width: fit-content;
     margin: auto;
-    box-sizing: inherit;
+    box-sizing: border-box;
 `;
 
 const explanationTextStyle = css`

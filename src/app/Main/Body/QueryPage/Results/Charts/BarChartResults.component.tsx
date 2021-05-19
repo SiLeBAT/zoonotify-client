@@ -13,13 +13,13 @@ function processingTableDataToApexData(
 ): ApexChartData[] {
     const apexChartData = [] as ApexChartData[];
 
-    data.forEach((chartSeries) => {
+    data.forEach((tableRow) => {
         const seriesValues: number[] = [];
-        xValues.forEach((element) => {
-            seriesValues.push(Number.parseFloat(chartSeries[element]));
+        xValues.forEach((xValue) => {
+            seriesValues.push(Number.parseFloat(tableRow[xValue]));
         });
         const groupData: ApexChartData = {
-            name: chartSeries.name,
+            name: tableRow.name,
             data: seriesValues,
         };
         apexChartData.push(groupData);
