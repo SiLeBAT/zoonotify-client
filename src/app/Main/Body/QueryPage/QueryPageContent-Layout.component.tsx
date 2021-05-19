@@ -64,8 +64,7 @@ export function QueryPageContentLayoutComponent(props: {
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const isFeature: boolean =
-        props.isCol || props.isRow;
+    const isFeature: boolean = props.isCol || props.isRow;
 
     return (
         <div css={contentStyle}>
@@ -93,10 +92,10 @@ export function QueryPageContentLayoutComponent(props: {
                 />
             </div>
             <QueryPageContentBarChartResultsComponent
-                    columnAttributes={props.columnNameValues}
-                    chartData={props.tableData.statisticDataAbsolute}
-                    isChart={isFeature}
-                />
+                columnAttributes={props.columnNameValues}
+                chartData={props.tableData.statisticDataAbsolute}
+                isChart={isFeature}
+            />
         </div>
     );
 }

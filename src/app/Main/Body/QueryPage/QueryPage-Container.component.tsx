@@ -84,7 +84,11 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...table,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
         };
-        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
+        const newPath: string = generatePathStringService(
+            filter.selectedFilter,
+            filter.mainFilter,
+            newTable
+        );
         history.push(newPath);
         setTable(newTable);
     };
@@ -95,7 +99,11 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: table.column,
             column: table.row,
         };
-        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
+        const newPath: string = generatePathStringService(
+            filter.selectedFilter,
+            filter.mainFilter,
+            newTable
+        );
         history.push(newPath);
         setTable(newTable);
     };
@@ -106,7 +114,11 @@ export function QueryPageContainerComponent(): JSX.Element {
             row: "" as FilterType,
             column: "" as FilterType,
         };
-        const newPath: string = generatePathStringService(filter.selectedFilter, filter.mainFilter, newTable);
+        const newPath: string = generatePathStringService(
+            filter.selectedFilter,
+            filter.mainFilter,
+            newTable
+        );
         history.push(newPath);
         setTable(newTable);
     };
@@ -122,7 +134,11 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
-        const newPath: string = generatePathStringService(newFilter.selectedFilter, newFilter.mainFilter, table);
+        const newPath: string = generatePathStringService(
+            newFilter.selectedFilter,
+            newFilter.mainFilter,
+            table
+        );
         history.push(newPath);
         setFilter(newFilter);
     };
@@ -132,7 +148,11 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...filter,
             selectedFilter: defaultFilter.selectedFilter,
         };
-        const newPath: string = generatePathStringService(newFilter.selectedFilter, newFilter.mainFilter, table);
+        const newPath: string = generatePathStringService(
+            newFilter.selectedFilter,
+            newFilter.mainFilter,
+            table
+        );
         history.push(newPath);
         setFilter(newFilter);
     };
@@ -145,7 +165,9 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+    const handleSubmitFiltersToDisplay = (
+        newFiltersToDisplay: string[]
+    ): void => {
         const newSelectedFilters: FilterInterface = _.cloneDeep(
             filter.selectedFilter
         );
@@ -158,7 +180,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             ...filter,
             selectedFilter: newSelectedFilters,
             displayedFilters: newFiltersToDisplay,
-        }
+        };
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
             newFilter.mainFilter,

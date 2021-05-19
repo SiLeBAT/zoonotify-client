@@ -79,7 +79,9 @@ export function QueryPageLayoutComponent(props: {
         setDrawerWidth(newWidth);
     };
 
-    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+    const handleSubmitFiltersToDisplay = (
+        newFiltersToDisplay: string[]
+    ): void => {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
 
