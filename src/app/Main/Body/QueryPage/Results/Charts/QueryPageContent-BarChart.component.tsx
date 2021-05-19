@@ -18,14 +18,14 @@ const explanationTextStyle = css`
 
 function processingTableDataToApexData(
     data: Record<string, string>[],
-    xLabels: string[]
+    dataLabels: string[]
 ): ApexChartData {
     const apexChartData = {} as ApexChartData;
     const apexChartSeries = [] as typeof apexChartData.series;
 
     data.forEach((tableRow) => {
         const seriesValues: number[] = [];
-        xLabels.forEach((xLabel) => {
+        dataLabels.forEach((xLabel) => {
             seriesValues.push(Number.parseFloat(tableRow[xLabel]));
         });
         const groupData = {
@@ -35,10 +35,10 @@ function processingTableDataToApexData(
         apexChartSeries.push(groupData);
     });
 
-    apexChartData.series = apexChartSeries;
-    apexChartData.xLabels = xLabels;
-
-    return apexChartData;
+    return {
+        series: apexChartSeries,
+        dataLabels
+      };
 }
 
 /**

@@ -1,5 +1,5 @@
 export type ApexChartData = {
-    xLabels: string[];
+    dataLabels: string[];
     series: {
         name: string;
         data: number[];

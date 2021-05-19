@@ -53,7 +53,7 @@ export function BarChartResultsComponent(props: {
             },
         },
         xaxis: {
-            categories: props.chartData.xLabels,
+            categories: props.chartData.dataLabels,
         },
         yaxis: {
             showForNullSeries: false,
