@@ -4,38 +4,12 @@ import ReactApexChart from "react-apexcharts";
 import _ from "lodash";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
+import { ApexChartData } from "./ApexChart.model";
 
-type ApexChartData = { name: string; data: number[] };
-
-function processingTableDataToApexData(
-    data: Record<string, string>[],
-    xValues: string[]
-): ApexChartData[] {
-    const apexChartData = [] as ApexChartData[];
-
-    data.forEach((tableRow) => {
-        const seriesValues: number[] = [];
-        xValues.forEach((xValue) => {
-            seriesValues.push(Number.parseFloat(tableRow[xValue]));
-        });
-        const groupData: ApexChartData = {
-            name: tableRow.name,
-            data: seriesValues,
-        };
-        apexChartData.push(groupData);
-    });
-
-    return apexChartData;
-}
 
 export function BarChartResultsComponent(props: {
-    columnAttributes: string[];
-    chartData: Record<string, string>[];
+    chartData: ApexChartData;
 }): JSX.Element {
-    const apexDataList = processingTableDataToApexData(
-        props.chartData,
-        props.columnAttributes
-    );
 
     const chartOptions: ApexOptions = {
         chart: {
@@ -81,7 +55,7 @@ export function BarChartResultsComponent(props: {
             },
         },
         xaxis: {
-            categories: props.columnAttributes,
+            categories: props.chartData.xLabels,
         },
         yaxis: {
             showForNullSeries: false,
@@ -100,7 +74,7 @@ export function BarChartResultsComponent(props: {
     };
 
     const chartProps = {
-        series: apexDataList,
+        series: props.chartData.series,
         options: chartOptions,
     };
 

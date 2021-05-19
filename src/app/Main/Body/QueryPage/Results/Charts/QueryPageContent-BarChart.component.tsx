@@ -2,6 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
+import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
 const dataStyle = css`
@@ -12,6 +13,34 @@ const dataStyle = css`
 const explanationTextStyle = css`
     font-size: 0.75rem;
 `;
+
+function processingTableDataToApexData(
+    data: Record<string, string>[],
+    xLabels: string[]
+): ApexChartData {
+    const apexChartData = {} as ApexChartData;
+    const apexChartSeries = [] as {
+        label: string;
+        xValues: number[];
+    }[];
+
+    data.forEach((tableRow) => {
+        const seriesValues: number[] = [];
+        xLabels.forEach((xLabel) => {
+            seriesValues.push(Number.parseFloat(tableRow[xLabel]));
+        });
+        const groupData = {
+            label: tableRow.name,
+            xValues: seriesValues,
+        };
+        apexChartSeries.push(groupData);
+    });
+
+    apexChartData.series = apexChartSeries;
+    apexChartData.xLabels = xLabels;
+
+    return apexChartData;
+}
 
 /**
  * @desc Returns accordion to display the results in a chart
@@ -25,6 +54,11 @@ export function QueryPageContentBarChartResultsComponent(props: {
 }): JSX.Element {
     const { t } = useTranslation("QueryPage");
 
+    const processedChartData = processingTableDataToApexData(
+        props.chartData,
+        props.columnAttributes
+    );
+
     let chartAccordionContent = (
         <div css={dataStyle}>
             <p css={explanationTextStyle}>{t("Chart.Explanation")}</p>
@@ -33,10 +67,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
     if (props.isChart) {
         chartAccordionContent = (
             <div css={dataStyle}>
-                <BarChartResultsComponent
-                    columnAttributes={props.columnAttributes}
-                    chartData={props.chartData}
-                />
+                <BarChartResultsComponent chartData={processedChartData} />
             </div>
         );
     }
