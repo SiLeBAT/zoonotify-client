@@ -1,7 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
+import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
@@ -19,10 +21,7 @@ function processingTableDataToApexData(
     xLabels: string[]
 ): ApexChartData {
     const apexChartData = {} as ApexChartData;
-    const apexChartSeries = [] as {
-        label: string;
-        xValues: number[];
-    }[];
+    const apexChartSeries = [] as typeof apexChartData.series;
 
     data.forEach((tableRow) => {
         const seriesValues: number[] = [];
@@ -30,8 +29,8 @@ function processingTableDataToApexData(
             seriesValues.push(Number.parseFloat(tableRow[xLabel]));
         });
         const groupData = {
-            label: tableRow.name,
-            xValues: seriesValues,
+            name: tableRow.name,
+            data: seriesValues,
         };
         apexChartSeries.push(groupData);
     });
@@ -54,22 +53,27 @@ export function QueryPageContentBarChartResultsComponent(props: {
 }): JSX.Element {
     const { t } = useTranslation("QueryPage");
 
-    const processedChartData = processingTableDataToApexData(
-        props.chartData,
-        props.columnAttributes
-    );
-
     let chartAccordionContent = (
         <div css={dataStyle}>
             <p css={explanationTextStyle}>{t("Chart.Explanation")}</p>
         </div>
     );
+
     if (props.isChart) {
-        chartAccordionContent = (
-            <div css={dataStyle}>
-                <BarChartResultsComponent chartData={processedChartData} />
-            </div>
+        const processedChartData = processingTableDataToApexData(
+            props.chartData,
+            props.columnAttributes
         );
+
+        if (_.isEmpty(processedChartData.series)) {
+            chartAccordionContent = <LoadingProcessComponent />;
+        } else {
+            chartAccordionContent = (
+                <div css={dataStyle}>
+                    <BarChartResultsComponent chartData={processedChartData} />
+                </div>
+            );
+        }
     }
 
     return <AccordionComponent title="Chart" content={chartAccordionContent} />;

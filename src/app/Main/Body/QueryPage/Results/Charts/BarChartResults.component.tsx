@@ -1,9 +1,7 @@
 import React from "react";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
-import _ from "lodash";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
 import { ApexChartData } from "./ApexChart.model";
 
 
@@ -77,10 +75,6 @@ export function BarChartResultsComponent(props: {
         series: props.chartData.series,
         options: chartOptions,
     };
-
-    if (_.isEmpty(chartProps.series)) {
-        return <LoadingProcessComponent />;
-    }
 
     return (
         <ReactApexChart
