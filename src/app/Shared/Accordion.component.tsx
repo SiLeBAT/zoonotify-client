@@ -12,12 +12,16 @@ const titleStyle = css`
 `;
 const contentStyle = css`
     margin-left: 2em;
+    margin-right: 2em;
     display: block;
+    hyphens: auto;
+    text-align: justify;
 `;
 
 export interface AccordionProps {
     title: string;
     content: JSX.Element;
+    defaultExpanded: boolean
 }
 
 /**
@@ -27,7 +31,7 @@ export interface AccordionProps {
  */
 export function AccordionComponent(props: AccordionProps): JSX.Element {
     return (
-        <Accordion defaultExpanded>
+        <Accordion defaultExpanded={props.defaultExpanded}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"

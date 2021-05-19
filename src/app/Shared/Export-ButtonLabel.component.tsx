@@ -2,7 +2,7 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { useTranslation } from "react-i18next";
-import { secondaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { secondaryColor } from "./Style/Style-MainTheme.component";
 
 const buttonLabelStyle = (isOpen: boolean): SerializedStyles => css`
     display: flex;

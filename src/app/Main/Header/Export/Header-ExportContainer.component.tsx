@@ -19,7 +19,7 @@ import { HeaderExportDialogComponent } from "./Dialog/Header-ExportDialog.compon
 import { generateExportLabels } from "./ExportServices/generateExportLabels.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
-import { ExportButtonLabelComponent } from "./Export-ButtonLabel.component";
+import { ExportButtonLabelComponent } from "../../../Shared/Export-ButtonLabel.component";
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
