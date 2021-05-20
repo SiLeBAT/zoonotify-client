@@ -20,8 +20,7 @@ function processingTableDataToApexData(
     data: Record<string, string>[],
     dataLabels: string[]
 ): ApexChartData {
-    const apexChartData = {} as ApexChartData;
-    const apexChartSeries = [] as typeof apexChartData.series;
+    const apexChartSeries = [] as ApexChartData['series'];
 
     data.forEach((tableRow) => {
         const seriesValues: number[] = [];
