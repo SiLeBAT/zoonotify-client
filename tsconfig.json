@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
+    "allowUmdGlobalAccess": true,
 
     //"noImplicitAny": true,
     //"noImplicitThis": true,
