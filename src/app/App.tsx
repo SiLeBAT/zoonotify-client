@@ -1,12 +1,12 @@
 import React, { Suspense } from "react";
 import * as ReactDOM from "react-dom";
 import { StylesProvider } from "@material-ui/core/styles";
-import { CheckServerConnectionComponent } from "./Main/CheckServerConnection.component";
 import "../i18n";
 import { FilterProvider } from "./Shared/Context/FilterContext";
 import { DataProvider } from "./Shared/Context/DataContext";
 import { TableProvider } from "./Shared/Context/TableContext";
 import { LoadingProcessComponent } from "./Shared/LoadingProcess.component";
+import { MainLayoutComponent } from "./Main/Main-Layout.component";
 
 ReactDOM.render(
     <Suspense fallback={<LoadingProcessComponent />}>
@@ -14,7 +14,7 @@ ReactDOM.render(
             <DataProvider>
                 <TableProvider>
                     <StylesProvider injectFirst>
-                        <CheckServerConnectionComponent />
+                        <MainLayoutComponent />
                     </StylesProvider>
                 </TableProvider>
             </DataProvider>
