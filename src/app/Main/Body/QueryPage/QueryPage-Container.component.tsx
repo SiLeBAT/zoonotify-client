@@ -5,13 +5,11 @@ import _ from "lodash";
 import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     ClientIsolateCountedGroups,
-    DbCollection,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
 import {
     FILTER_URL,
     ISOLATE_COUNT_URL,
-    ISOLATE_URL,
 } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
@@ -41,11 +39,9 @@ import { generateTableHeaderValuesService } from "./QueryPageServices/TableServi
 import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableServices/generateStatisticTableDataAbs.service";
 import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
-import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
 import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
 import {
     IsolateCountedDTO,
-    IsolateDTO,
 } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 
@@ -54,6 +50,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [isolateCountStatus, setIsolateCountStatus] = useState<number>();
     const [filterStatus, setFilterStatus] = useState<number>();
     const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
+    const [totalNrOfIsol, setTotalNrOfIsol] = useState<number>(0);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
 
     const { data, setData } = useContext(DataContext);
@@ -71,8 +68,6 @@ export function QueryPageContainerComponent(): JSX.Element {
     );
     const rowAttribute: FilterType = table.row;
     const colAttribute: FilterType = table.column;
-
-    const totalNrOfIsol: number = data.ZNData.length;
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
@@ -191,8 +186,8 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchAndSetData = async (): Promise<void> => {
-        const isolateResponse: ApiResponse<IsolateDTO> = await callApiService(
-            ISOLATE_URL
+        const isolateResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
+            ISOLATE_COUNT_URL
         );
         const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
             FILTER_URL
@@ -202,19 +197,19 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilterStatus(filterResponse.status);
 
         if (isolateResponse.data && filterResponse.data) {
-            const isolateProp: IsolateDTO = isolateResponse.data;
+            const isolateCountProp: IsolateCountedDTO = isolateResponse.data;
+
+            const totalNrOfIsolates = isolateCountProp.totalNumberOfIsolates;
+
             const filterProp: FilterConfigDTO = filterResponse.data;
 
-            const adaptedDbIsolates: DbCollection = adaptIsolatesFromAPI(
-                isolateProp
-            );
             const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
                 filterProp
             );
             setData({
-                ZNData: adaptedDbIsolates,
                 uniqueValues: uniqueValuesObject,
             });
+            setTotalNrOfIsol(totalNrOfIsolates)
         }
     };
 
@@ -335,7 +330,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     return (
         <LoadingOrErrorComponent
             status={{ isolateStatus, isolateCountStatus, filterStatus }}
-            dataIsSet={!_.isEmpty(data.ZNData)}
+            dataIsSet={!_.isEmpty(data.uniqueValues)}
             componentToDisplay={
                 <QueryPageLayoutComponent
                     isCol={isCol}

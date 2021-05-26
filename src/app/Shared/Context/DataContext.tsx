@@ -1,14 +1,11 @@
 import React, { useState, createContext } from "react";
-import { DbCollection } from "../Model/Client_Isolate.model";
 import { FilterInterface } from "../Model/Filter.model";
 
 interface DataInterface {
-    ZNData: DbCollection;
     uniqueValues: FilterInterface;
 }
 
 const defaultProfile: DataInterface = {
-    ZNData: [],
     uniqueValues: {},
 };
 
