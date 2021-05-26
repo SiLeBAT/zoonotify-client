@@ -63,15 +63,6 @@ const rightHeaderStyle = css`
     display: flex;
     align-items: flex-end;
 `;
-const subheaderStyle = (open: boolean): SerializedStyles => css`
-    width: 100%;
-    display: ${open ? "flex" : "none"};
-    justify-content: flex-end;
-    align-items: center;
-    background-color: ${bfrPrimaryPalette[300]};
-    box-sizing: border-box;
-    box-shadow: 0 8px 6px -6px grey;
-`;
 
 /**
  * @desc Header of the page with navigation
@@ -134,9 +125,7 @@ export function HeaderComponent(): JSX.Element {
                 </div>
             </div>
 
-            <div css={subheaderStyle(queryOpen)}>
-                <HeaderExportContainerComponent />
-            </div>
+            {queryOpen && <HeaderExportContainerComponent />}
         </header>
     );
 }

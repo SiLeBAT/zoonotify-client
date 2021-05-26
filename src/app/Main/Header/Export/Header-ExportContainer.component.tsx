@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { ISOLATE_URL } from "../../../Shared/URLs";
@@ -20,10 +22,22 @@ import { generateExportLabels } from "./ExportServices/generateExportLabels.serv
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportButtonLabelComponent } from "../../../Shared/Export-ButtonLabel.component";
+import { bfrPrimaryPalette } from "../../../Shared/Style/Style-MainTheme.component";
+
+const subheaderStyle = css`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: ${bfrPrimaryPalette[300]};
+    box-sizing: border-box;
+    box-shadow: 0 8px 6px -6px grey;
+`;
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
     const [isOpen, setIsOpen] = useState(false);
+    const [isExport, setIsExport] = useState(false);
     const { table } = useContext(TableContext);
     const { filter } = useContext(FilterContext);
     const history = useHistory();
@@ -88,13 +102,10 @@ export function HeaderExportContainerComponent(): JSX.Element {
     };
 
     useEffect(() => {
-        fetchAndChooseData(setting.raw, setting.stat);
-    }, [
-        table.statisticDataAbsolute,
-        setting.raw,
-        setting.stat,
-        isolateFilteredUrl,
-    ]);
+        if (isExport) {
+            fetchAndChooseData(setting.raw, setting.stat);
+        }
+    }, [isExport]);
 
     const handleChange = (name: string, checked: boolean): void => {
         setSetting({ ...setting, [name]: checked });
@@ -106,26 +117,32 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const handleClose = (): void => {
         setIsOpen(false);
     };
+    const handleExport = (): void => {
+        setIsOpen(false);
+        setIsExport(true);
+    };
 
     const exportLabels = generateExportLabels(filter.mainFilter);
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(isOpen);
 
 
     return (
-        <div>
+        <div css={subheaderStyle}>
             <HeaderExportButtonComponent
                 onClickOpen={handleClickOpen}
                 buttonLabel={buttonLabel}
             />
-            <HeaderExportDialogComponent
-                isOpen={isOpen}
-                settings={setting}
-                exportLabels={exportLabels}
-                buttonLabel={buttonLabel}
-                filter={filter}
-                onClickClose={handleClose}
-                onCheckboxChange={handleChange}
-            />
+            {isOpen && (
+                <HeaderExportDialogComponent
+                    settings={setting}
+                    exportLabels={exportLabels}
+                    buttonLabel={buttonLabel}
+                    filter={filter}
+                    onClickClose={handleClose}
+                    onClickExport={handleExport}
+                    onCheckboxChange={handleChange}
+                />
+            )}
         </div>
     );
 }

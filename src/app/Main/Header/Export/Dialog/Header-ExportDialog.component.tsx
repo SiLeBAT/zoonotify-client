@@ -9,12 +9,12 @@ import { ExportDialogWarningComponent } from "./ExportDialog-Warning.component";
 import { ButtonsCsvLinkComponent } from "./Buttons-CSVLink.component";
 
 export function HeaderExportDialogComponent(props: {
-    isOpen: boolean;
     settings: ExportInterface;
     exportLabels: ExportLabels;
     buttonLabel: JSX.Element;
     filter: FilterContextInterface;
     onClickClose: () => void;
+    onClickExport: () => void;
     onCheckboxChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["Export"]);
@@ -22,8 +22,9 @@ export function HeaderExportDialogComponent(props: {
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
-    const fileIsSelect = props.settings.raw || props.settings.stat;
+    const handleExport = (): void => props.onClickExport();
 
+    const fileIsSelect = props.settings.raw || props.settings.stat;
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
@@ -53,7 +54,7 @@ export function HeaderExportDialogComponent(props: {
     );
 
     return DialogComponent({
-        isOpen: props.isOpen,
+        isOpen: true,
         dialogTitle: exportDialogTitle,
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,
@@ -61,6 +62,6 @@ export function HeaderExportDialogComponent(props: {
         submitButton: exportSubmitButton,
         disableSubmitButton: !fileIsSelect,
         onClose: handleClose,
-        onSubmitClick: handleClose,
+        onSubmitClick: handleExport,
     });
 }
