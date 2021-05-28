@@ -1,12 +1,20 @@
-import React from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
 import { ExportInterface } from "../../../../Shared/Model/Export.model";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
 import { ExportLabels } from "../ExportServices/generateExportLabels.service";
-import { ExportDialogWarningComponent } from "./ExportDialog-Warning.component";
 import { ButtonsCsvLinkComponent } from "./Buttons-CSVLink.component";
+import { errorColor } from "../../../../Shared/Style/Style-MainTheme.component";
+
+const warningStyle = css`
+    display: flex;
+    color: ${errorColor};
+    margin-left: 2em;
+    font-size: 0.75rem;
+`;
 
 export function HeaderExportDialogComponent(props: {
     settings: ExportInterface;
@@ -35,7 +43,7 @@ export function HeaderExportDialogComponent(props: {
                 isRaw={props.settings.raw}
                 isStat={props.settings.stat}
             />
-            <ExportDialogWarningComponent fileIsSelect={fileIsSelect} />
+            {!fileIsSelect && <p css={warningStyle}>{t("Warning")}</p>}
         </div>
     );
 

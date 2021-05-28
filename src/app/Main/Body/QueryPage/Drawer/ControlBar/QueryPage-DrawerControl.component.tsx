@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx, SerializedStyles } from "@emotion/core";
+import { css, jsx } from "@emotion/core";
 import clsx from "clsx";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { IconButton } from "@material-ui/core";
@@ -19,8 +19,11 @@ const drawerStyle = css`
     flex-direction: row;
     box-sizing: border-box;
 `;
-const drawerBarStyle = (open: boolean): SerializedStyles => css`
-    display: ${open ? "none" : "flex"};
+const resizeBarStyle = css`
+    display: flex;
+`;
+const drawerBarStyle = css`
+    display: flex;
     width: 41px;
     box-sizing: border-box;
     background: ${primaryColor};
@@ -112,24 +115,18 @@ export function QueryPageDrawerControlComponent(
             })}
             css={drawerStyle}
         >
-            <div css={drawerBarStyle(props.isOpen)}>
-                <p css={drawerTextStyle}>{t("Drawer.Title")}</p>
-            </div>
-            <div
-                css={
-                    props.isOpen
-                        ? css`
-                              display: flex;
-                          `
-                        : css`
-                              display: none;
-                          `
-                }
-            >
-                <DrawerControlResizeBarComponent
-                    onResizeBarMove={handleMoveResizeBar}
-                />
-            </div>
+            {!props.isOpen && (
+                <div css={drawerBarStyle}>
+                    <p css={drawerTextStyle}>{t("Drawer.Title")}</p>
+                </div>
+            )}
+            {props.isOpen && (
+                <div css={resizeBarStyle}>
+                    <DrawerControlResizeBarComponent
+                        onResizeBarMove={handleMoveResizeBar}
+                    />
+                </div>
+            )}
             <IconButton
                 css={iconButtonStyle}
                 onClick={handleClickOpenCloseDrawer}
