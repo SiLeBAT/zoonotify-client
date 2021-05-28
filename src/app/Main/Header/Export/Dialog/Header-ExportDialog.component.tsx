@@ -62,7 +62,6 @@ export function HeaderExportDialogComponent(props: {
     );
 
     return DialogComponent({
-        isOpen: true,
         dialogTitle: exportDialogTitle,
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,

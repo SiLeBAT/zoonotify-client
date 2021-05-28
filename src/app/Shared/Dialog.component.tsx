@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 
 export function DialogComponent(props: {
-    isOpen: boolean;
     dialogTitle: string;
     dialogContentText: JSX.Element | string;
     dialogContent: JSX.Element;
@@ -27,7 +26,7 @@ export function DialogComponent(props: {
 
     return (
         <Dialog
-            open={props.isOpen}
+            open
             onClose={handleClose}
             aria-labelledby="form-dialog-title"
         >
