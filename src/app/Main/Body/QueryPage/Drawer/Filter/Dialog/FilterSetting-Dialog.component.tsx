@@ -111,6 +111,7 @@ export function FilterSettingDialogComponent(props: {
     const cancelFilterToDisplayButton = t("FilterDialog.Cancel");
 
     return DialogComponent({
+        loading: false,
         dialogTitle: filterDialogTitle,
         dialogContentText: filterContentText,
         dialogContent: filterDialogContent,

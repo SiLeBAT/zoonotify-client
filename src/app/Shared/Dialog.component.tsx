@@ -1,12 +1,34 @@
 import React from "react";
 import {
     Button,
+    CircularProgress,
+    createStyles,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
+    makeStyles,
+    Theme,
 } from "@material-ui/core";
+import { primaryColor } from "./Style/Style-MainTheme.component";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        wrapper: {
+            margin: theme.spacing(1),
+            position: "relative",
+        },
+        buttonProgress: {
+            color: `${primaryColor}`,
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            marginTop: -12,
+            marginLeft: -12,
+        },
+    })
+);
 
 export function DialogComponent(props: {
     dialogTitle: string;
@@ -15,9 +37,12 @@ export function DialogComponent(props: {
     cancelButton: JSX.Element | string;
     submitButton: JSX.Element | string;
     disableSubmitButton: boolean;
+    loading: boolean;
     onClose: () => void;
     onSubmitClick: () => void;
 }): JSX.Element {
+    const classes = useStyles();
+
     const handleClose = (): void => props.onClose();
 
     const handleClickCancel = (): void => props.onClose();
@@ -25,27 +50,35 @@ export function DialogComponent(props: {
     const handleClickSubmit = (): void => props.onSubmitClick();
 
     return (
-        <Dialog
-            open
-            onClose={handleClose}
-            aria-labelledby="form-dialog-title"
-        >
+        <Dialog open onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle>{props.dialogTitle}</DialogTitle>
             <DialogContent>
                 <DialogContentText>{props.dialogContentText}</DialogContentText>
                 {props.dialogContent}
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClickCancel} color="primary">
+                <Button
+                    onClick={handleClickCancel}
+                    color="primary"
+                    disabled={props.loading}
+                >
                     {props.cancelButton}
                 </Button>
-                <Button
-                    onClick={handleClickSubmit}
-                    color="primary"
-                    disabled={props.disableSubmitButton}
-                >
-                    {props.submitButton}
-                </Button>
+                <div className={classes.wrapper}>
+                    <Button
+                        onClick={handleClickSubmit}
+                        color="primary"
+                        disabled={props.disableSubmitButton || props.loading}
+                    >
+                        {props.submitButton}
+                    </Button>
+                    {props.loading && (
+                        <CircularProgress
+                            size={24}
+                            className={classes.buttonProgress}
+                        />
+                    )}
+                </div>
             </DialogActions>
         </Dialog>
     );
