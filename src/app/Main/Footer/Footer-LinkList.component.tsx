@@ -8,7 +8,7 @@ import {
     hoverColor,
     errorColor
 } from "../../Shared/Style/Style-MainTheme.component";
-import { ZNPaths } from "../../Shared/URLs";
+import { API_URL, ZNPaths } from "../../Shared/URLs";
 
 const footerContentStyle = css`
     margin: 0;
@@ -105,6 +105,16 @@ export function FooterLinkListComponent(props: {
                     css={linkStyle}
                 >
                     FoodRisk-Labs
+                </a>
+            </li>
+            <li css={footerElementStyle}>
+                <a
+                    href={API_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    css={linkStyle}
+                >
+                    {t("Content.Api")}
                 </a>
             </li>
             <li css={footerElementStyle}>
