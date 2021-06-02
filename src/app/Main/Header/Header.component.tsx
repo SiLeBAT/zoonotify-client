@@ -20,6 +20,15 @@ const headerStyle = css`
     flex-direction: column;
     box-sizing: border-box;
 `;
+const subheaderStyle = css`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: ${bfrPrimaryPalette[300]};
+    box-sizing: border-box;
+    box-shadow: 0 8px 6px -6px grey;
+`;
 const mainHeaderStyle = (open: boolean): SerializedStyles => css`
     width: 100%;
     height: 100%;
@@ -125,7 +134,11 @@ export function HeaderComponent(): JSX.Element {
                 </div>
             </div>
 
-            {queryOpen && <HeaderExportContainerComponent />}
+            {queryOpen && (
+                <div css={subheaderStyle}>
+                    <HeaderExportContainerComponent />
+                </div>
+            )}
         </header>
     );
 }

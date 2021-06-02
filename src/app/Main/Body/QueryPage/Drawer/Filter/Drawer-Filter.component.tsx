@@ -119,7 +119,6 @@ export function DrawerFilterComponent(props: {
             </Button>
             {filterDialogIsOpen && (
                 <FilterSettingDialogComponent
-                    isOpen={filterDialogIsOpen}
                     previousFiltersToDisplay={props.filterInfo.displayedFilters}
                     availableFilters={props.filterInfo.mainFilter}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}

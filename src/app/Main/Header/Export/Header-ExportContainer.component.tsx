@@ -1,10 +1,7 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-/* import { CSVDownload } from "react-csv"; */
 import { ISOLATE_URL } from "../../../Shared/URLs";
 import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
@@ -24,25 +21,13 @@ import { generateExportLabels } from "./ExportServices/generateExportLabels.serv
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
 import { ExportButtonLabelComponent } from "../../../Shared/Export-ButtonLabel.component";
-import { bfrPrimaryPalette } from "../../../Shared/Style/Style-MainTheme.component";
 import { dataOrStatisticToCsvString } from "./ExportServices/dataOrStatisticToCsvString.service";
 import { dataAndStatisticToZipFile } from "./ExportServices/dataAndStatisticToZipFile.service";
-
-const subheaderStyle = css`
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    background-color: ${bfrPrimaryPalette[300]};
-    box-sizing: border-box;
-    box-shadow: 0 8px 6px -6px grey;
-`;
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const [setting, setSetting] = useState<ExportInterface>(defaultExport);
     const [isOpen, setIsOpen] = useState(false);
     const [isExport, setIsExport] = useState(false);
-   /*  const [clearData, setClearData] = useState(false); */
     const [csvDataString, setCsvDataString] = useState<string>();
     const [loading, setLoading] = useState(false);
     const { table } = useContext(TableContext);
@@ -63,11 +48,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const isolateFilteredUrl: string = ISOLATE_URL + history.location.search;
 
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(isOpen);
-    /* const exportButtonLabel = buttonLabel; */
-    /* let exportSubmitButton: JSX.Element = exportButtonLabel; */
-
-
-    
+  
     const fetchAndChooseData = async (
         raw: boolean,
         stat: boolean
@@ -134,17 +115,6 @@ export function HeaderExportContainerComponent(): JSX.Element {
                 mainFilterAttributes: filter.mainFilter,
             });
             setCsvDataString(dataString)
-            /* exportSubmitButton = (
-                <div>
-                    {exportButtonLabel}
-                    <CSVDownload
-                        data={dataString}
-                        filename={ZNFilename}
-                        target="_blank"
-                    />
-                </div>
-            );
-            clearData() */
         }
 
         if (raw && stat) {
@@ -162,20 +132,11 @@ export function HeaderExportContainerComponent(): JSX.Element {
         setLoading(false);
     };    
 
-    // https://stackoverflow.com/questions/64817556/loading-data-asynchronously-and-downloading-csv-data-with-a-click-is-one-step-be
-
     useEffect(() => {
         if (isExport) {
             fetchAndChooseData(setting.raw, setting.stat);
         }
     }, [isExport]);
-
-    /* useEffect(() => {
-        // eslint-disable-next-line unicorn/no-useless-undefined
-        setCsvDataString(undefined);
-        setIsExport(false);
-        setIsOpen(false);
-    }, [clearData]) */
 
     const handleChange = (name: string, checked: boolean): void => {
         setSetting({ ...setting, [name]: checked });
@@ -195,8 +156,6 @@ export function HeaderExportContainerComponent(): JSX.Element {
     };
 
     const reset = useCallback(() => {
-        // eslint-disable-next-line no-console
-        console.log("reset")
         // eslint-disable-next-line unicorn/no-useless-undefined
         setCsvDataString(undefined);
         setIsExport(false);
@@ -205,7 +164,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
 
 
     return (
-        <div css={subheaderStyle}>
+        <div>
             <HeaderExportButtonComponent
                 onClickOpen={handleClickOpen}
                 buttonLabel={buttonLabel}
@@ -218,7 +177,6 @@ export function HeaderExportContainerComponent(): JSX.Element {
                     dataString={csvDataString}
                     buttonLabel={buttonLabel}
                     loading={loading}
-                 
                     onClickClose={handleClose}
                     onClickExport={handleExport}
                     onCheckboxChange={handleChange}

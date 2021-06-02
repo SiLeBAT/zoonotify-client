@@ -32,7 +32,6 @@ const linkStyle = css`
 `;
 
 export function FilterSettingDialogComponent(props: {
-    isOpen: boolean;
     previousFiltersToDisplay: string[];
     availableFilters: string[];
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
