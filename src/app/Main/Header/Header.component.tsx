@@ -9,7 +9,6 @@ import {
     onPrimaryColor,
     secondaryColor,
     bfrPrimaryPalette,
-    surfaceColor,
 } from "../../Shared/Style/Style-MainTheme.component";
 import { ZNPaths } from "../../Shared/URLs";
 import { HeaderExportContainerComponent } from "./Export/Header-ExportContainer.component";
@@ -20,6 +19,15 @@ const headerStyle = css`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+`;
+const subheaderStyle = css`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: ${bfrPrimaryPalette[300]};
+    box-sizing: border-box;
+    box-shadow: 0 8px 6px -6px grey;
 `;
 const mainHeaderStyle = (open: boolean): SerializedStyles => css`
     width: 100%;
@@ -40,13 +48,6 @@ const appNameStyle = css`
     &:focus {
         outline: none;
     }
-`;
-const disabledQueryStyle = css`
-    padding: 0.5em 1em 0.5em 1em;
-    font-size: 1rem;
-    text-decoration: none;
-    cursor: auto;
-    color: ${surfaceColor};
 `;
 const navLinkStyle = (open: boolean): SerializedStyles => css`
     padding: 0.5em 1em 0.5em 1em;
@@ -71,22 +72,13 @@ const rightHeaderStyle = css`
     display: flex;
     align-items: flex-end;
 `;
-const subheaderStyle = (open: boolean): SerializedStyles => css`
-    width: 100%;
-    display: ${open ? "flex" : "none"};
-    justify-content: flex-end;
-    align-items: center;
-    background-color: ${bfrPrimaryPalette[300]};
-    box-sizing: border-box;
-    box-shadow: 0 8px 6px -6px grey;
-`;
 
 /**
  * @desc Header of the page with navigation
  * @param isConnected - true if client is connected to the server
  * @returns {JSX.Element} - header component
  */
-export function HeaderComponent(props: { isConnected: boolean }): JSX.Element {
+export function HeaderComponent(): JSX.Element {
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
     const [queryOpen, setQueryOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
@@ -111,10 +103,6 @@ export function HeaderComponent(props: { isConnected: boolean }): JSX.Element {
         }
     });
 
-    const handleClick = (e: { preventDefault: () => void }): void => {
-        if (!props.isConnected) e.preventDefault();
-    };
-
     return (
         <header css={headerStyle}>
             <div css={mainHeaderStyle(infoOpen || linkOpen)}>
@@ -132,13 +120,8 @@ export function HeaderComponent(props: { isConnected: boolean }): JSX.Element {
                         {t("Info")}
                     </NavLink>
                     <NavLink
-                        onClick={handleClick}
                         to={ZNPaths.queryPagePath}
-                        css={
-                            props.isConnected
-                                ? navLinkStyle(queryOpen)
-                                : disabledQueryStyle
-                        }
+                        css={navLinkStyle(queryOpen)}
                     >
                         {t("Query")}
                     </NavLink>
@@ -151,9 +134,11 @@ export function HeaderComponent(props: { isConnected: boolean }): JSX.Element {
                 </div>
             </div>
 
-            <div css={subheaderStyle(queryOpen)}>
-                <HeaderExportContainerComponent />
-            </div>
+            {queryOpen && (
+                <div css={subheaderStyle}>
+                    <HeaderExportContainerComponent />
+                </div>
+            )}
         </header>
     );
 }

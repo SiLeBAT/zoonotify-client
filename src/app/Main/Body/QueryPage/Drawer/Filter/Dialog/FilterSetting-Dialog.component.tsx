@@ -32,7 +32,6 @@ const linkStyle = css`
 `;
 
 export function FilterSettingDialogComponent(props: {
-    isOpen: boolean;
     previousFiltersToDisplay: string[];
     availableFilters: string[];
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
@@ -111,7 +110,7 @@ export function FilterSettingDialogComponent(props: {
     const cancelFilterToDisplayButton = t("FilterDialog.Cancel");
 
     return DialogComponent({
-        isOpen: props.isOpen,
+        loading: false,
         dialogTitle: filterDialogTitle,
         dialogContentText: filterContentText,
         dialogContent: filterDialogContent,

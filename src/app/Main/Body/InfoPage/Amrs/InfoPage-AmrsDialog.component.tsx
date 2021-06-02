@@ -109,7 +109,7 @@ export function InfoPageAmrDialogComponent(props: {
     const amrTableSubmitButton = ExportButtonLabelComponent(true);
 
     return DialogComponent({
-        isOpen: true,
+        loading: false,
         dialogTitle: props.resistancesTableData.title,
         dialogContentText: props.resistancesTableData.description,
         dialogContent: dialogTableContent,

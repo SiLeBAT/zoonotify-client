@@ -81,14 +81,16 @@ export function DrawerFilterComponent(props: {
         setFilterDialogIsOpen(true);
     };
 
-    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+    const handleSubmitFiltersToDisplay = (
+        newFiltersToDisplay: string[]
+    ): void => {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
         setFilterDialogIsOpen(false);
     };
 
     const handleCancelFiltersToDisplay = (): void => {
-        setFilterDialogIsOpen(false)
-    }
+        setFilterDialogIsOpen(false);
+    };
 
     const filterDialogButton = t("FilterDialog.ButtonText");
 
@@ -115,13 +117,14 @@ export function DrawerFilterComponent(props: {
             >
                 {filterDialogButton}
             </Button>
-            <FilterSettingDialogComponent
-                isOpen={filterDialogIsOpen}
-                previousFiltersToDisplay={props.filterInfo.displayedFilters}
-                availableFilters={props.filterInfo.mainFilter}
-                onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-                onCancelFiltersToDisplay={handleCancelFiltersToDisplay}
-            />
+            {filterDialogIsOpen && (
+                <FilterSettingDialogComponent
+                    previousFiltersToDisplay={props.filterInfo.displayedFilters}
+                    availableFilters={props.filterInfo.mainFilter}
+                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                    onCancelFiltersToDisplay={handleCancelFiltersToDisplay}
+                />
+            )}
         </div>
     );
 }

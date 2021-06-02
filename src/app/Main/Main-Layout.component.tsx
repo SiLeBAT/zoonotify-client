@@ -38,17 +38,14 @@ const contentWrapperStyle = css`
 
 /**
  * @desc Layout of the Page (Header, Body Footer,) - content of the body depends on the BrowserRouter
- * @param isConnected - true if client is connected to the server
  * @returns {JSX.Element} - main page component
  */
-export function MainLayoutComponent(props: {
-    isConnected: boolean;
-}): JSX.Element {
+export function MainLayoutComponent(): JSX.Element {
     return (
         <div css={wrapperStyle}>
             <BrowserRouter>
                 <div css={headerStyle}>
-                    <HeaderComponent isConnected={props.isConnected} />
+                    <HeaderComponent />
                 </div>
                 <div css={contentWrapperStyle}>
                     <div css={bodyStyle}>

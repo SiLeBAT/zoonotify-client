@@ -1,29 +1,40 @@
-import React from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
+import { CSVDownload } from "react-csv";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
-import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
-import { ExportInterface } from "../../../../Shared/Model/Export.model";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
-import { ExportLabels } from "../ExportServices/generateExportLabels.service";
-import { ExportDialogWarningComponent } from "./ExportDialog-Warning.component";
-import { ButtonsCsvLinkComponent } from "./Buttons-CSVLink.component";
+import { errorColor } from "../../../../Shared/Style/Style-MainTheme.component";
+
+const warningStyle = css`
+    display: flex;
+    color: ${errorColor};
+    margin-left: 2em;
+    font-size: 0.75rem;
+`;
 
 export function HeaderExportDialogComponent(props: {
-    isOpen: boolean;
-    settings: ExportInterface;
-    exportLabels: ExportLabels;
+    raw: boolean;
+    stat: boolean;
+    ZNFilename: string;
+    dataString: string | undefined;
     buttonLabel: JSX.Element;
-    filter: FilterContextInterface;
+    loading: boolean;
     onClickClose: () => void;
+    onClickExport: () => void;
     onCheckboxChange: (name: string, checked: boolean) => void;
+    clearData: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["Export"]);
     const handleClose = (): void => props.onClickClose();
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
-    const fileIsSelect = props.settings.raw || props.settings.stat;
+    const handleExport = (): void => props.onClickExport();
 
+    const handleClearData = (): void => props.clearData();
+
+    const fileIsSelect = props.raw || props.stat;
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
@@ -31,29 +42,34 @@ export function HeaderExportDialogComponent(props: {
         <div>
             <ExportDialogCheckboxesComponent
                 onCheckboxChange={handleChangeCheckbox}
-                isRaw={props.settings.raw}
-                isStat={props.settings.stat}
+                isRaw={props.raw}
+                isStat={props.stat}
             />
-            <ExportDialogWarningComponent fileIsSelect={fileIsSelect} />
+            {!fileIsSelect && <p css={warningStyle}>{t("Warning")}</p>}
         </div>
     );
 
     const exportCancelButton = t("Button.Cancel");
 
-    const exportSubmitButton = (
-        <ButtonsCsvLinkComponent
-            setting={props.settings}
-            filter={props.filter.selectedFilter}
-            mainFilterAttributes={props.filter.mainFilter}
-            buttonLabel={props.buttonLabel}
-            ZNFilename={props.exportLabels.ZNFilename}
-            mainFilterLabels={props.exportLabels.mainFilterLabels}
-            allFilterLabel={props.exportLabels.allFilterLabel}
-        />
-    );
+    const exportButtonLabel = props.buttonLabel;
+    let exportSubmitButton: JSX.Element = exportButtonLabel;
+
+    if (props.dataString !== undefined) {
+        exportSubmitButton = (
+            <div>
+                {exportButtonLabel}
+                <CSVDownload
+                    data={props.dataString}
+                    filename={props.ZNFilename}
+                    target="_blank"
+                />
+            </div>
+        );
+        handleClearData()
+    }
 
     return DialogComponent({
-        isOpen: props.isOpen,
+        loading: props.loading,
         dialogTitle: exportDialogTitle,
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,
@@ -61,6 +77,6 @@ export function HeaderExportDialogComponent(props: {
         submitButton: exportSubmitButton,
         disableSubmitButton: !fileIsSelect,
         onClose: handleClose,
-        onSubmitClick: handleClose,
+        onSubmitClick: handleExport,
     });
 }
