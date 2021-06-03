@@ -7,7 +7,7 @@
     "Filters": {
         "Name": "Filter und Unterfilter",
         "microorganism": {
-            "Name": "Microorganismus",
+            "Name": "Mikroorganismus",
             "Description": "Sie können verschiedene, aus Proben gewonnene und an Nationalen Referenzlaboratorien typisierte Mikroorganismen auswählen. Unterfilter helfen Ihnen, Ihre Suche bzgl. mikrobiologischer Eigenschaften zu verfeinern. Auswählbar sind:",
             "microorganism-types": {
                 "microorganism-1": {
@@ -175,7 +175,7 @@
             "Description": " Dieser Filter erlaubt eine weitere Eingrenzung der Auswahl der Isolate tierischer Herkunft nach ihrer Produktionsform nach RL 2002/4 EG als konventionell oder ökologisch. Bei Isolaten tierischer Herkunft ohne weitere Angabe handelt es sich überwiegend um solche aus konventioneller Produktion, aber nicht ausschließlich. Bei Isolaten pflanzlicher Herkunft können Sie mit diesem Filter grobe Kategorien, wie \"Kräuter\" oder \"Gemüse\" auswählen. Eine weitere Differenzierung der Isolate kann mit dem Filter \"Matrix\" und dem Unterfilter \"Matrixfdetail\" vorgenommen werden."
         },
         "matrix": {
-            "Name": "Matix",
+            "Name": "Matrix",
             "Description": "Mit der \"Matrix\" können Sie unter derzeit 26 unterschiedlichen Probenarten auswählen, die im Rahmen des Zoonosen-Monitorings oder der Salmonellen Bekäpfungsprogramme beim Geflügel seit dem Jahr 2014 gewonnen wurden. Darunter stammen 2 Matrices aus Futtermitteln, 6 aus Lebensmitteln pflanzlichen urprungs und 18 Matrices aus tierischer Herkunft. Mit dem Unterfilter \"Matrixdetail\" verfeinern Sie Ihre Suche bezüglich unterschiedlicher Eigenschaften der ausgewählten Matrix wie Be- und Verarbeitungsszustand (bspw. \"tiefgekühlt\" bei der Matrix \"Petersilie\") oder weitere Spezifikationen zu der Probenart (bspw. \"Sammelkot\" bei der Matrix \"Kot\"."
         },
         "federalState": {
