@@ -1,6 +1,7 @@
 import React from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import { CheckIfSingleFilterIsSet } from "../../QueryPageServices/checkIfFilterIsSet.service";
 import {
     FilterInterface,
@@ -10,10 +11,13 @@ import { TableType } from "../../../../../Shared/Context/TableContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 
 function generateSelectorObject(
-    selectorArray: string[]
+    filterAttribute: string,
+    selectorArray: string[],
+    t: TFunction
 ): { value: string; label: string }[] {
     return selectorArray.map((filterValue) => {
-        return { value: filterValue, label: filterValue };
+        const filterValueLabel = t(`FilterValues.${filterAttribute}.${filterValue.replace(".", "")}`)
+        return { value: filterValue, label: filterValueLabel };
     });
 }
 
@@ -64,11 +68,11 @@ export function SelectorListSelectorComponent(
     const dropDownValuesObj: {
         value: string;
         label: string;
-    }[] = generateSelectorObject(allFilterValues);
+    }[] = generateSelectorObject(filterAttribute, allFilterValues, t);
     const selectedValuesObj: {
         value: string;
         label: string;
-    }[] = generateSelectorObject(filterValues);
+    }[] = generateSelectorObject(filterAttribute, filterValues, t);
 
     return (
         <SelectorComponent
