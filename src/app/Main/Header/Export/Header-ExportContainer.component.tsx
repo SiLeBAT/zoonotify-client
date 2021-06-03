@@ -127,6 +127,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
                 mainFilterAttributes: filter.mainFilter,
                 subFileNames,
             });
+            setIsOpen(false);
         }
         setSetting(newSettings);
         setLoading(false);
