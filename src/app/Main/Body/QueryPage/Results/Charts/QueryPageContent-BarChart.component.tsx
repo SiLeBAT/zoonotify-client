@@ -8,11 +8,15 @@ import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
 const dataStyle = css`
-    margin: auto;
+    margin: 0 auto;
+    display: grid;
     box-sizing: border-box;
 `;
-
+const centerChartStyle = css`
+    margin: auto;
+`;
 const explanationTextStyle = css`
+    text-align: center;
     font-size: 0.75rem;
 `;
 
@@ -20,7 +24,7 @@ function processingTableDataToApexData(
     data: Record<string, string>[],
     dataLabels: string[]
 ): ApexChartData {
-    const apexChartSeries = [] as ApexChartData['series'];
+    const apexChartSeries = [] as ApexChartData["series"];
 
     data.forEach((tableRow) => {
         const seriesValues: number[] = [];
@@ -36,8 +40,8 @@ function processingTableDataToApexData(
 
     return {
         series: apexChartSeries,
-        dataLabels
-      };
+        dataLabels,
+    };
 }
 
 /**
@@ -69,7 +73,11 @@ export function QueryPageContentBarChartResultsComponent(props: {
         } else {
             chartAccordionContent = (
                 <div css={dataStyle}>
-                    <BarChartResultsComponent chartData={processedChartData} />
+                    <div css={centerChartStyle}>
+                        <BarChartResultsComponent
+                            chartData={processedChartData}
+                        />
+                    </div>
                 </div>
             );
         }
