@@ -224,8 +224,8 @@
     },
     "NrOfIsolates": {
         "Title": "Anzahl Isolate",
-        "Total": "Gesamtanzahl Isolate:",
-        "Selected": "Anzahl ausgewählter Isolate:"
+        "Total": "Gesamt:",
+        "Selected": "Ausgewählt:"
     },
     "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine Statistiktabelle anzuzeigen -",
     "OptionBar": {
