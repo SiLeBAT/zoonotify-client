@@ -83,11 +83,5 @@ export function QueryPageContentBarChartResultsComponent(props: {
         }
     }
 
-    return (
-        <AccordionComponent
-            title="Chart"
-            content={chartAccordionContent}
-            defaultExpanded
-        />
-    );
+    return <AccordionComponent title={t("Chart.Title")} content={chartAccordionContent} defaultExpanded />;
 }
