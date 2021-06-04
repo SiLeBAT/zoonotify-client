@@ -21,8 +21,8 @@
         },
         "Selector": "--no options--",
         "Graphs": {
-            "Row": "in rows",
-            "Column": "in columns"
+            "Row": "rows / x-axis",
+            "Column": "columns / y-axis"
         }
     },
     "FilterDialog": {
@@ -237,5 +237,9 @@
     "Sums": {
         "RowSum": "Row sum",
         "ColSum": "Column sum"
+    },
+    "Chart": {
+        "Title": "Chart",
+        "Explanation": "- Please select a x-axis/y-axis to display a chart -"
     }
 }
