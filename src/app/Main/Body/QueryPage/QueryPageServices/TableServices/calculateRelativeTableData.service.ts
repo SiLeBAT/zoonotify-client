@@ -11,10 +11,17 @@ function calculateRelative(part: number, total: number): string {
 export function calculateRelativeTableData(
     objList: Record<string, string>[], 
     nrOfSelectedIsolates: number,
+    tableHeadRelative: string,
+    isRow: boolean,
 ): Record<string, string>[] {
     const statisticTableDataRel: Record<string, string>[] = [];
     objList.forEach((obj) => {
         const relativeRow: Record<string, string> = { name: obj.name };
+        if (isRow) {
+            relativeRow.name = obj.name
+        } else {
+            relativeRow.name = tableHeadRelative
+        }
         const k = Object.keys(obj);
         k.forEach((element) => {
             if (element !== "name") {

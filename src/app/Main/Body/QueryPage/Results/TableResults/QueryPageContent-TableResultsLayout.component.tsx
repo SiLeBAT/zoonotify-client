@@ -101,6 +101,7 @@ export function QueryPageContentTableResultsLayoutComponent(
                     )}
                     <TableResultsTableContentComponent
                         isSumRowCol={isSumRowCol}
+                        isCol={props.displayRowCol.isCol}
                         tables={{
                             statisticDataAbsolute:
                                 props.tableData.statisticDataAbsolute,

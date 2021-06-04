@@ -44,10 +44,10 @@ const useStyles = makeStyles({
  */
 export function TableContentTableComponent(props: {
     isSumRowCol: boolean;
+    isCol: boolean;
     tableData: Record<string, string>[];
-    tableOption: DisplayOptionType;
+    displayOption: DisplayOptionType;
     columnNameValues: string[];
-    displayOption: string;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const classes = useStyles();
@@ -85,7 +85,8 @@ export function TableContentTableComponent(props: {
                         {TableContentHeaderComponent(
                             props.isSumRowCol,
                             props.columnNameValues, 
-                            props.tableOption
+                            props.displayOption,
+                            props.isCol
                         )}
                     </TableRow>
                 </TableHead>
