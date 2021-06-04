@@ -21,8 +21,8 @@
         },
         "Selector": "--keine weiteren Optionen--",
         "Graphs": {
-            "Row": "in Zeilen",
-            "Column": "in Spalten"
+            "Row": "Zeilen / x-Achse",
+            "Column": "Spalten / y-Achse"
         }
     },
     "FilterDialog": {
@@ -239,6 +239,7 @@
         "ColSum": "Spaltensumme"
     },
     "Chart": {
-        "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine graphische Darstellung der Ergebnisse anzuzeigen -"
+        "Title": "Grafik",
+        "Explanation": "- Bitte wählen Sie eine x-Achse/y-Achse aus, um eine graphische Darstellung der Ergebnisse anzuzeigen -"
     }
 }
