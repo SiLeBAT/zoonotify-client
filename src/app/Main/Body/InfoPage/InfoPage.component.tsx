@@ -13,9 +13,8 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 
 const infoPageStyle = css`
-    margin-left: 5em;
-    margin-right: 5em;
-    margin-bottom: 2em;
+    width: 60%;
+    margin: 2em auto ;
 `;
 
 const headingStyle = css`
