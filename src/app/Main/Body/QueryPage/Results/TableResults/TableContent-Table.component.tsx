@@ -58,7 +58,8 @@ export function TableContentTableComponent(props: {
                 isSumRowCol: props.isSumRowCol,
                 row,
                 classes,
-                displayOption: props.displayOption
+                displayOption: props.displayOption,
+                colKeys: props.columnNameValues
             })}
         </TableRow>
     ));
