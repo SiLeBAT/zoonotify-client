@@ -7,6 +7,7 @@
     "Results": {
         "Parameter": "Parameter",
         "TableHead": "Number of isolates",
+        "TableHeadRelative": "Isolates in %",
         "Table": "Table",
         "Unit": "in %"
     },

@@ -7,10 +7,7 @@ import {
     ClientIsolateCountedGroups,
     DbKeyCollection,
 } from "../../../Shared/Model/Client_Isolate.model";
-import {
-    FILTER_URL,
-    ISOLATE_COUNT_URL,
-} from "../../../Shared/URLs";
+import { FILTER_URL, ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
     defaultFilter,
@@ -40,9 +37,7 @@ import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableS
 import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
-import {
-    IsolateCountedDTO,
-} from "../../../Shared/Model/Api_Isolate.model";
+import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 
 export function QueryPageContainerComponent(): JSX.Element {
@@ -209,7 +204,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             setData({
                 uniqueValues: uniqueValuesObject,
             });
-            setTotalNrOfIsol(totalNrOfIsolates)
+            setTotalNrOfIsol(totalNrOfIsolates);
         }
     };
 
@@ -255,6 +250,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             );
 
             const allValuesText = t("Results.TableHead");
+            const allValuesTextRelative = t("Results.TableHeadRelative");
 
             const columnNames = generateTableHeaderValuesService(
                 isCol,
@@ -279,7 +275,9 @@ export function QueryPageContainerComponent(): JSX.Element {
 
             const statisticTableDataRel = calculateRelativeTableData(
                 statisticTableDataAbs,
-                nrOfSelectedIsolates
+                nrOfSelectedIsolates, 
+                allValuesTextRelative,
+                isRow
             );
             setColumnNameValues(columnNames);
             setTable({

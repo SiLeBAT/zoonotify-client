@@ -56,6 +56,7 @@ export function TableContentHeaderComponent(
     isSumRowCol: boolean,
     headerValues: string[], 
     tableOption: DisplayOptionType,
+    isCol: boolean,
 ): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
     const headerTableCells: JSX.Element[] = [];
@@ -67,7 +68,11 @@ export function TableContentHeaderComponent(
     headerValues.forEach((headerValue): void => {
         let headerTitle = headerValue
         if (tableOption === "relative") {
-            headerTitle = `${headerValue} ${t("Results.Unit")}` 
+            if (isCol) {
+                headerTitle = `${headerValue} ${t("Results.Unit")}` 
+            } else {
+                headerTitle = `${t("Results.TableHeadRelative")}` 
+            }
         }
         headerTableCells.push(
             <StyledTableCell key={`header-${headerValue}`} css={headerCellStyle}>
