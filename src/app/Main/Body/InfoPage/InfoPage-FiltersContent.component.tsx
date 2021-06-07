@@ -5,6 +5,7 @@ import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 
 const descriptionStyle = css`
+    margin: 0;
     hyphens: auto;
     text-align: justify;
 `;
