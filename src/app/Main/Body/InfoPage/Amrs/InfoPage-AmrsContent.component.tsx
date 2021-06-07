@@ -1,15 +1,23 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { useState } from "react";
-import { Button } from "@material-ui/core";
-/* import _ from "lodash"; */
+import React, { useState } from "react";
+import { Button, createStyles, makeStyles } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { AmrKey, AmrsTable } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
 
-const tableDialogButtonStyle = css`
-    text-align: left;
-`;
+
+const useStyles = makeStyles(() =>
+  createStyles({
+      button: {
+        textAlign: "left",
+        backgroundColor: "#f3f7fa",
+        '&:hover': {
+          backgroundColor: "#dae9f5",
+          textDecoration: "underline",
+        },
+      }
+
+  }),
+);
 
 export function InfoPageAmrsContentComponent(props: {
     amrKeys: AmrKey[];
@@ -17,6 +25,7 @@ export function InfoPageAmrsContentComponent(props: {
     onAmrDataExport: (amrKey: AmrKey) => void;
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
+    const classes = useStyles();
 
     const [openAmrDialog, setOpenAmrDialog] = useState<AmrKey | null>(null);
 
@@ -40,9 +49,9 @@ export function InfoPageAmrsContentComponent(props: {
                 <div key={`${amrKey}-amr-table-dialog`}>
                     <p>{t(`Methods.Amrs.${amrKey}.Paragraph`)}</p>
                     <Button
-                        css={tableDialogButtonStyle}
                         onClick={() => handleOpen(amrKey)}
                         color="primary"
+                        className={classes.button}
                     >
                         {props.tableData[amrKey].title}
                     </Button>
