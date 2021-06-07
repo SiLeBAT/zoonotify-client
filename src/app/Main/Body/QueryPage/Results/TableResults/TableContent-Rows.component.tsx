@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
-import _ from "lodash";
 import {
     highlightedTableBorder,
     fixedCellSize,
@@ -33,6 +32,7 @@ export function TableContentRowsComponent(props: {
     row: Record<string, string>;
     classes: Record<"tableCell", string>;
     displayOption: string;
+    colKeys: string[];
 }): JSX.Element[] {
     const rowCells: JSX.Element[] = [];
     rowCells.push(
@@ -47,10 +47,8 @@ export function TableContentRowsComponent(props: {
             {props.row.name}
         </TableCell>
     );
-    const k = Object.keys(props.row);
-    const colKeys = _.pull(k, "name");
     let rowSum = 0;
-    colKeys.forEach((colKey): void => {
+    props.colKeys.forEach((colKey): void => {
         const cellNumber = props.row[colKey];
         rowSum += Number.parseFloat(cellNumber);
         rowCells.push(
