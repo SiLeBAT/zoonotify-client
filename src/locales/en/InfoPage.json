@@ -310,7 +310,9 @@
             "mrsa": {
                 "Paragraph": {
                     "Description1": "Resistenztestung von Methicillin-resistenten ",
-                    "Description2": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2014-2020."
+                    "Description2": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von ",
+                    "EucastLink": "EUCAST",
+                    "Description3": ") für die Jahre 2014-2020."
                 },
                 "TableTitle": "Tabelle 4: Resistenztestung von Methicillin-resistenten ",
                 "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für 2014 - 2019.",

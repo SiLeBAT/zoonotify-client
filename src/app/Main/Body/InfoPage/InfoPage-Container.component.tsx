@@ -132,8 +132,17 @@ export function InfoPageContainerComponent(): JSX.Element {
     const tableDataAmrMrsa: AmrsTable = {
         introduction: (
             <p>
-                {t(`Methods.Amrs.mrsa.Paragraph.Description1`)} {microorganismNames.Staphy}
+                {t(`Methods.Amrs.mrsa.Paragraph.Description1`)}
+                {microorganismNames.Staphy}
                 {t(`Methods.Amrs.mrsa.Paragraph.Description2`)}
+                <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href="https://mic.eucast.org/"
+                >
+                    {t(`Methods.Amrs.mrsa.Paragraph.EucastLink`)}
+                </a>
+                {t(`Methods.Amrs.mrsa.Paragraph.Description3`)}
             </p>
         ),
         title: (
@@ -171,7 +180,6 @@ export function InfoPageContainerComponent(): JSX.Element {
         commentText: t("Methods.Amrs.ef.TableComment"),
     };
 
-
     const amrTableData: Record<AmrKey, AmrsTable> = {
         coliSalm: tableDataAmrColiSalm,
         coliSalmTwo: tableDataAmrColiSalmTwo,
@@ -180,12 +188,17 @@ export function InfoPageContainerComponent(): JSX.Element {
         ef: tableDataAmrEf,
     };
 
-
-    
     const handleExportAmrData = (amrKey: AmrKey): void => {
-        const csvHeader = amrTableData[amrKey].tableHeader.join(",");
-
         let csvContent = "";
+
+        csvContent += `"${amrTableData[amrKey].title}"`;
+        csvContent += "\n";
+        csvContent += `"${amrTableData[amrKey].description}"`;
+        csvContent += "\n";
+        csvContent += "\n";
+        csvContent += `"${amrTableData[amrKey].tableHeader.join(",")}"`;
+        csvContent += "\n";
+
         amrTableData[amrKey].tableRows.forEach((tableRow) => {
             const rowValues = Object.values(tableRow);
             const modifiedRowValues = rowValues.map((rowValue) =>
@@ -195,7 +208,10 @@ export function InfoPageContainerComponent(): JSX.Element {
             csvContent += modifiedRowValuesString;
             csvContent += "\n";
         });
-        const csvTable = `${csvHeader}\n${csvContent}`;
+
+        csvContent += `"${amrTableData[amrKey].commentText}"`;
+
+        const csvTable = csvContent;
         const amrFileName = `${amrTableData[amrKey].title}.csv`
             .replace(/ /g, "_")
             .replace("..", ".");
