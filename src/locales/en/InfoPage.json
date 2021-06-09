@@ -2,7 +2,22 @@
     "Title": "Erläuterungen",
     "Background": {
         "Name": "Hintergrund",
-        "Description": "Für die Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern sowie der Quellen von Erkrankungen des Menschen wird bundesweit einheitlich das Zoonosen-Monitoring gemäß Zoonosen-Stichprobenplan durchgeführt. Dies trägt dazu bei, die Belange der Richtlinie 2003/99/EG zu erfüllen. Übergreifendes Ziel ist, eine umfassende Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern einschließlich Antibiotikaresistenzen sowie der Quellen von Erkrankungen des Menschen vornehmen zu können. Hierdurch soll auch die Durchführung wichtiger Komponenten der Richtlinie 2003/99/EG sowie des Durchführungsbeschlusses 2013/652/EU bzw. seiner Nachfolgeregelung 2020/1729/EU sichergestellt werden. Die Bedeutung von Salmonella spp., Campylobacter spp., Listeria monocytogenes und Shiga-Toxin bildenden Escherichia coli (STEC) ergibt sich aus dem gehäuften Vorkommen bzw. der Schwere von Erkrankungsfällen beim Menschen. Zudem handelt es sich um überwachungspflichtige Erreger gemäß Anhang I. A der Richtlinie 2003/99/EG. Bisher werden Erkrankungsfälle des Menschen mit Nutztier-assoziierten Methicillin-resistenten Staphylococcus aureus (MRSA) für Deutschland vor allem bei Personen mit Kontakt zu diesen Nutztieren beschrieben. Allerdings wurde bereits eine weite Verbreitung des Erregers in verschiedenen Nutztierpopulationen (Schwein, Kalb, Pute) sowie in frischem Fleisch hiervon in Deutschland beobachtet. Neben den bei Nutztieren typischen Erregern des klonalen Komplexes CC398 werden auch spa-Typen nachgewiesen, die anderen klonalen Komplexen zuzuordnen sind. Dies betont die Notwendigkeit, in regelmäßigen Abständen die Untersuchungen entlang der Lebensmittelkette zu wiederholen, um Veränderungen der Verbreitung auf den verschiedenen Stufen der Lebensmittelkette sowie das Neuauftreten oder das Ausbreiten von Klonen mit neu erworbenen Virulenzfaktoren und/oder Resistenzdeterminanten erkennen zu können. Kommensale E. coli werden regelmäßig untersucht, um Entwicklungstendenzen von bekannten Resistenzen und neu auftretende Resistenzen frühzeitig erkennen zu können. Mit dem Durchführungsbeschluss 2013/652/EU und seinem ab 2021 gültigen Nachfolgedokument 2020/1729/EU wurde die Untersuchung auf Salmonella spp., Campylobacter spp. und kommensale E. coli im Hinblick auf Antibiotikaresistenzen verbindlich für alle Mitgliedsstaaten festgelegt. Diese Daten sind wichtig, um die möglichen Quellen und Übertragungswege von resistenten Mikroorganismen entlang der Lebensmittelkette hin zum Menschen abschätzen zu können. Zudem wurde die Untersuchung von Proben auf Enterococcus faecium/faecalis vorgeschlagen, um auch bei grampositiven Erregern verstärkt Resistenzen, insbesondere auch gegen humanmedizinisch besonders wichtige Antibiotika erkennen zu können. Der selektive Nachweis von ESBL/AmpC-bildenden E. coli wird in die Programme des Zoonosen-Monitorings mit aufgenommen, um die Ausbreitung von Keimen mit der Fähigkeit, Extended-Spektrum Beta-Laktamasen und/oder AmpC Beta-Laktamasen bilden zu können, zu beobachten. Zudem soll das Auftreten von neuen Resistenzen, insbesondere gegen Carbapeneme frühzeitig erkannt werden. Um abschätzen zu können, ob sich Carbapenemase-bildende E. coli verbreitet haben, werden auch gezielte selektive Untersuchungen auf das Vorkommen von E. coli mit derartigen Resistenzeigenschaften im Zoonosen-Monitoring aufgenommen. Die Untersuchungen auf diesen Erreger wurden in Programmen entsprechend den Empfehlungen des Beschlusses 2013/652/EU und nach dem Nachfolgedokument 2020/1729/EU ab 2021 verpflichtend durchgeführt. Richtlinie 2003/99/EG sieht vor, dass auf den geeigneten Stufen der Lebensmittelkette repräsentative Daten erhoben werden. Gleichzeitig sollen die wichtigsten Lebensmittelgruppen betrachtet werden. Richtlinie 2003/99/EG sieht auch vor, dass jährlich im Bericht über Entwicklungstendenzen und Quellen von Zoonosen, Zoonoseerregern und Antibiotikaresistenzen auch die Daten zur Bewertung der nationalen Salmonellen Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 veröffentlicht werden. Isolate, die in der Umsetzung des Zoonosen-Monitorings und der Salmonellen Bekämpfunsprogramme beim Geflügel gewonnen werden, werden in den Nationalen Referenzlaboratorien am BfR bestätigt und weiter mikrobiologisch typisiert. Diese Ergebnisse können über ZooNotify abgerufen werden."
+        "Paragraph1": "Für die Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern sowie der Quellen von Erkrankungen des Menschen wird bundesweit einheitlich das Zoonosen-Monitoring gemäß Zoonosen-Stichprobenplan durchgeführt. Dies trägt dazu bei, die Belange der Richtlinie 2003/99/EG zu erfüllen. Übergreifendes Ziel ist, eine umfassende Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern einschließlich Antibiotikaresistenzen sowie der Quellen von Erkrankungen des Menschen vornehmen zu können. Hierdurch soll auch die Durchführung wichtiger Komponenten der Richtlinie 2003/99/EG sowie des Durchführungsbeschlusses 2013/652/EU bzw. seiner Nachfolgeregelung 2020/1729/EU sichergestellt werden. ",
+        "Paragraph2": {
+            "Description1": "Die Bedeutung von ",
+            "Description2": " und Shiga-Toxin bildenden ",
+            "Description3": " (STEC) ergibt sich aus dem gehäuften Vorkommen bzw. der Schwere von Erkrankungsfällen beim Menschen. Zudem handelt es sich um überwachungspflichtige Erreger gemäß Anhang I. A der Richtlinie 2003/99/EG. Bisher werden Erkrankungsfälle des Menschen mit Nutztier-assoziierten Methicillin-resistenten ",
+            "Description4": " (MRSA) für Deutschland vor allem bei Personen mit Kontakt zu diesen Nutztieren beschrieben. Allerdings wurde bereits eine weite Verbreitung des Erregers in verschiedenen Nutztierpopulationen (Schwein, Kalb, Pute) sowie in frischem Fleisch hiervon in Deutschland beobachtet. Neben den bei Nutztieren typischen Erregern des klonalen Komplexes CC398 werden auch spa-Typen nachgewiesen, die anderen klonalen Komplexen zuzuordnen sind. Dies betont die Notwendigkeit, in regelmäßigen Abständen die Untersuchungen entlang der Lebensmittelkette zu wiederholen, um Veränderungen der Verbreitung auf den verschiedenen Stufen der Lebensmittelkette sowie das Neuauftreten oder das Ausbreiten von Klonen mit neu erworbenen Virulenzfaktoren und/oder Resistenzdeterminanten erkennen zu können. Kommensale ",
+            "Description5": " werden regelmäßig untersucht, um Entwicklungstendenzen von bekannten Resistenzen und neu auftretende Resistenzen frühzeitig erkennen zu können. Mit dem Durchführungsbeschluss 2013/652/EU und seinem ab 2021 gültigen Nachfolgedokument 2020/1729/EU wurde die Untersuchung auf ",
+            "Description6": " und kommensale ",
+            "Description7": " im Hinblick auf Antibiotikaresistenzen verbindlich für alle Mitgliedsstaaten festgelegt. Diese Daten sind wichtig, um die möglichen Quellen und Übertragungswege von resistenten Mikroorganismen entlang der Lebensmittelkette hin zum Menschen abschätzen zu können. Zudem wurde die Untersuchung von Proben auf ",
+            "Description8": " vorgeschlagen, um auch bei grampositiven Erregern verstärkt Resistenzen, insbesondere auch gegen humanmedizinisch besonders wichtige Antibiotika erkennen zu können. Der selektive Nachweis von ESBL/AmpC-bildenden ",
+            "Description9": " wird in die Programme des Zoonosen-Monitorings mit aufgenommen, um die Ausbreitung von Keimen mit der Fähigkeit, Extended-Spektrum Beta-Laktamasen und/oder AmpC Beta-Laktamasen bilden zu können, zu beobachten. Zudem soll das Auftreten von neuen Resistenzen, insbesondere gegen Carbapeneme frühzeitig erkannt werden. Um abschätzen zu können, ob sich Carbapenemase-bildende ",
+            "Description10": " verbreitet haben, werden auch gezielte selektive Untersuchungen auf das Vorkommen von ",
+            "Description11": " mit derartigen Resistenzeigenschaften im Zoonosen-Monitoring aufgenommen. Die Untersuchungen auf diesen Erreger wurden in Programmen entsprechend den Empfehlungen des Beschlusses 2013/652/EU und nach dem Nachfolgedokument 2020/1729/EU ab 2021 verpflichtend durchgeführt."
+        },
+        "Paragraph3": "Richtlinie 2003/99/EG sieht vor, dass auf den geeigneten Stufen der Lebensmittelkette repräsentative Daten erhoben werden. Gleichzeitig sollen die wichtigsten Lebensmittelgruppen betrachtet werden. Richtlinie 2003/99/EG sieht auch vor, dass jährlich im Bericht über Entwicklungstendenzen und Quellen von Zoonosen, Zoonoseerregern und Antibiotikaresistenzen auch die Daten zur Bewertung der nationalen Salmonellen Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 veröffentlicht werden.",
+        "Paragraph4": "Isolate, die in der Umsetzung des Zoonosen-Monitorings und der Salmonellen Bekämpfunsprogramme beim Geflügel gewonnen werden, werden in den Nationalen Referenzlaboratorien am BfR bestätigt und weiter mikrobiologisch typisiert. Diese Ergebnisse können über ZooNotify abgerufen werden."
     },
     "Filters": {
         "Name": "Filter und Unterfilter",
@@ -11,40 +26,59 @@
             "Description": "Sie können verschiedene, aus Proben gewonnene und an Nationalen Referenzlaboratorien typisierte Mikroorganismen auswählen. Unterfilter helfen Ihnen, Ihre Suche bzgl. mikrobiologischer Eigenschaften zu verfeinern. Auswählbar sind:",
             "microorganism-types": {
                 "microorganism-1": {
+                    "Subname": "",
                     "Name": "Salmonella spp.",
+                    "Abbreviation": "",
                     "Description": "Über weitere Unterfilter können Sie \"Serovar\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 },
                 "microorganism-2": {
+                    "Subname": "",
                     "Name": "Campylobacter spp.",
+                    "Abbreviation": "",
                     "Description": "Über weitere Unterfilter können Sie \"Spezies\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 },
                 "microorganism-3": {
+                    "Subname": "",
                     "Name": "Listeria monocytogenes",
+                    "Abbreviation": "",
                     "Description": "Über den Unterfilter können Sie \"Serotyp\" auswählen."
                 },
                 "microorganism-4": {
-                    "Name": "Shiga-Toxin bildende Escherichia coli (STEC)",
+                    "Subname": "Shiga-Toxin bildende ",
+                    "Name": "Escherichia coli",
+                    "Abbreviation": " (STEC)",
                     "Description": "Über weitere Unterfilter können Sie \"O-Gruppe\", \"H-Gruppe\", das Vorhandensein von \"stx1-Gen\", \"stx2-Gen\", \"eae-Gen\", \"hly-Gen\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 },
                 "microorganism-5": {
-                    "Name": "Methicillin-resistente Stapylococcus aureus (MRSA)",
+                    "Subname": "Methicillin-resistente ",
+                    "Name": "Stapylococcus aureus",
+                    "Abbreviation": " (MRSA)",
                     "Description": "Über weitere Unterfilter können Sie \"spa-Typ\" und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 },
                 "microorganism-6": {
-                    "Name": "Kommensale Escherichia coli (E. coli)",
+                    "Subname": "Kommensale ",
+                    "Name": "Escherichia coli",
+                    "Abbreviation": " (E.coli)",
                     "Description": "Über einen weiteren Unterfilter können Sie \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 },
                 "microorganism-7": {
-                    "Name": "ESBL und/oder AmpC-bildende Escherichia coli (ESBL/AmpC-E.coli)",
-                    "Description": "ESBL und/oder AmpC-bildende Escherichia coli (ESBL/AmpC-E.coli), über weitere Unterfilter können Sie den \"ESBL_AmpC_Carba_Phänotyp\" (siehe dazu Methoden) und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen"
+                    "Subname": "ESBL und/oder AmpC-bildende ",
+                    "Name": "Escherichia coli",
+                    "Abbreviation": " (ESBL/AmpC-E.coli)",
+                    "Description": "Über weitere Unterfilter können Sie den \"ESBL_AmpC_Carba_Phänotyp\" (siehe dazu Methoden) und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 },
                 "microorganism-8": {
-                    "Name": "Carbapenemase-bildende Escherichia coli",
+                    "Subname": "Carbapenemase-bildende ",
+                    "Name": "Escherichia coli",
                     "Description": "Über weitere Unterfilter können Sie den \"ESBL_AmpC_Carba_Phänotyp\" (siehe dazu Methoden) und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 },
                 "microorganism-9": {
+                    "Subname": "",
                     "Name": "Enterococcus spp.",
-                    "Description": "Über weitere Unterfilter \"Entero_Spez\" können Sie zwischen den Spezies faecalis und faecium unterscheiden und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen"
+                    "Abbreviation": "",
+                    "Description1": "Über weitere Unterfilter \"Entero_Spez\" können Sie zwischen den Spezies ",
+                    "Description2": " und ",
+                    "Description3": " unterscheiden und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
                 }
             }
         },
@@ -54,7 +88,8 @@
         },
         "samplingContext": {
             "Name": "Probenahmegrund",
-            "Description": "Isolate, die auf der Grundlage der AVV-Zoonosen-Lebensmittelkette gewonnen wurden sind über die Auswahl \"Zoonosen-Monitoring\" gekennzeichnet.  Weitere Salmonellenisolate, die auf der Grundlage der Bekämpfungsprogramme beim Geflügel nach der Verordnung (EG) Nr. 2160/2003 gewonnen wurden, können über \"Salm-Bekämpfung\" ausgewählt werden. Enthalten sind Isolate aus Legehennen-, Masthähnchen- und Mastputenbetrieben, sowie Zuchthühnerbetrieben ohne Unterscheidung zwischen Lege- und Mastlinie."
+            "Description1": "Isolate, die auf der Grundlage der AVV-Zoonosen-Lebensmittelkette gewonnen wurden sind über die Auswahl \"Zoonosen-Monitoring\" gekennzeichnet.", 
+            "Description2": "Weitere Salmonellenisolate, die auf der Grundlage der Bekämpfungsprogramme beim Geflügel nach der Verordnung (EG) Nr. 2160/2003 gewonnen wurden, können über \"Salm-Bekämpfung\" ausgewählt werden. Enthalten sind Isolate aus Legehennen-, Masthähnchen- und Mastputenbetrieben, sowie Zuchthühnerbetrieben ohne Unterscheidung zwischen Lege- und Mastlinie."
         },
         "origin": {
             "Name": "Probenherkunft",
@@ -134,7 +169,7 @@
                 },
                 "category-6": {
                     "Name": "Rind",
-                    "Description": "\"Rind\" beschreibt Isolate mit Ursprung Mastkalb/Jungrind, Milchrind une/oder Rind ohne weitere Spezifikation."
+                    "Description": "\"Rind\" beschreibt Isolate mit Ursprung Mastkalb/Jungrind, Milchrind und/oder Rind ohne weitere Spezifikation."
                 },
                 "category-7": {
                     "Name": "Kleine Wiederkäuer",
@@ -176,7 +211,7 @@
         },
         "matrix": {
             "Name": "Matrix",
-            "Description": "Mit der \"Matrix\" können Sie unter derzeit 26 unterschiedlichen Probenarten auswählen, die im Rahmen des Zoonosen-Monitorings oder der Salmonellen Bekäpfungsprogramme beim Geflügel seit dem Jahr 2014 gewonnen wurden. Darunter stammen 2 Matrices aus Futtermitteln, 6 aus Lebensmitteln pflanzlichen urprungs und 18 Matrices aus tierischer Herkunft. Mit dem Unterfilter \"Matrixdetail\" verfeinern Sie Ihre Suche bezüglich unterschiedlicher Eigenschaften der ausgewählten Matrix wie Be- und Verarbeitungsszustand (bspw. \"tiefgekühlt\" bei der Matrix \"Petersilie\") oder weitere Spezifikationen zu der Probenart (bspw. \"Sammelkot\" bei der Matrix \"Kot\"."
+            "Description": "Mit der \"Matrix\" können Sie unter derzeit 26 unterschiedlichen Probenarten auswählen, die im Rahmen des Zoonosen-Monitorings oder der Salmonellen Bekäpfungsprogramme beim Geflügel seit dem Jahr 2014 gewonnen wurden. Darunter stammen 2 Matrices aus Futtermitteln, 6 aus Lebensmitteln pflanzlichen urprungs und 18 Matrices aus tierischer Herkunft. Mit dem Unterfilter \"Matrixdetail\" verfeinern Sie Ihre Suche bezüglich unterschiedlicher Eigenschaften der ausgewählten Matrix wie Be- und Verarbeitungsszustand (bspw. \"tiefgekühlt\" bei der Matrix \"Petersilie\") oder weitere Spezifikationen zu der Probenart (bspw. \"Sammelkot\" bei der Matrix \"Kot\")."
         },
         "federalState": {
             "Name": "Bundesland",
@@ -184,47 +219,114 @@
         },
         "resistance": {
             "Name": "Antimikrobielle Resistenz",
-            "Description": "Isolate von Salmonella spp., Campylobacter spp., STEC, MRSA, kommensalen E. coli, ESBL und/oder AmpC-bildende E. coli, Carbapenemase-bildende E. coli und Enterococcus spp. wurden auf ihre Resistenz gegenüber antimikrobielle Substanzen am Nationalen Referenzlabor (NRL) für Antibiotikaresistenz am BfR und am NRL Campylobacter getestet. Dafür werden spezielle Wirkstoffpanels verwendet, die sich bei den einzelnen Mikroorganismen unterscheiden. Sie können mit diesem Filter die Wirkstoffe auswählen, die Teil des Panels für die Untersuchung des Ihnen ausgewählten Mikroorganismus sind. Details zur Methodik entnehmen Sie bitte dem unten folgenden Abschnitt \"Antibiotikaresistenztestung\"."
+            "Description1": "Isolate von ",
+            "Description2": " STEC, MRSA, kommensalen ",
+            "Description3": ", ESBL und/oder AmpC-bildende ",
+            "Description4": ", Carbapenemase-bildende ",
+            "Description5": " und ",
+            "Description6": " wurden auf ihre Resistenz gegenüber antimikrobielle Substanzen am Nationalen Referenzlabor (NRL) für Antibiotikaresistenz am BfR und am NRL Campylobacter getestet. Dafür werden spezielle Wirkstoffpanels verwendet, die sich bei den einzelnen Mikroorganismen unterscheiden. Sie können mit diesem Filter die Wirkstoffe auswählen, die Teil des Panels für die Untersuchung des Ihnen ausgewählten Mikroorganismus sind. Details zur Methodik entnehmen Sie bitte dem unten folgenden Abschnitt \"Antibiotikaresistenztestung\"."
         }
     },
     "Methods": {
         "Name": "Methoden",
         "Isolates": {
             "Name": "Isolatgewinnung",
-            "Description": "Isolate werden im Rahmen des Zoonosen-Monitorings aus Programmen gewonnen, denen eine repräsentative Zufallsstichprobe der jeweils definierten Population, ggf. unter Berücksichtigung definierter Schichtungskriterien auf der jeweils festgelegten Stufe der Lebensmittelkette zugrunde liegt. Bei der Probenahme werden jeweils unabhängige Einheiten beprobt. Um die repräsentative Auswahl der zu beprobenden Betriebe zu gewährleisten, wird in der jeweiligen Region auf der Grundlage einer Gesamtliste der Betriebe eine Zufallsauswahl getroffen. Soweit verfügbar, werden für die Primärisolierung international standardisierte mikrobiologische Nachweisverfahren in den akkreditierten.Landesuntersuntersuchungseinrichtungen verwendet. Es können aber auch andere Untersuchungsverfahren eingesetzt werden, soweit sichergestellt werden kann, dass diese gleichwertig zu den vorgeschlagenen Methoden sind. Hierbei ist es insbesondere auch möglich, mittels einer PCR-Methode die Proben zu untersuchen und positive Ergebnisse mittels des kulturellen ISO-Verfahrens zu bestätigen. Soweit die vorgeschlagenen Methoden von den Methoden der amtlichen Sammlung nach § 64 LFGB oder ISO-Methoden abweichen, werden Methodenempfehlungen durch das jeweilige NRL am BfR bereitgestellt. Isolate, die im Rahmen der Salmonellen Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
+            "Paragraph1": "Isolate werden im Rahmen des Zoonosen-Monitorings aus Programmen gewonnen, denen eine repräsentative Zufallsstichprobe der jeweils definierten Population, ggf. unter Berücksichtigung definierter Schichtungskriterien auf der jeweils festgelegten Stufe der Lebensmittelkette zugrunde liegt. Bei der Probenahme werden jeweils unabhängige Einheiten beprobt. Um die repräsentative Auswahl der zu beprobenden Betriebe zu gewährleisten, wird in der jeweiligen Region auf der Grundlage einer Gesamtliste der Betriebe eine Zufallsauswahl getroffen. Soweit verfügbar, werden für die Primärisolierung international standardisierte mikrobiologische Nachweisverfahren in den akkreditierten Landesuntersuntersuchungseinrichtungen verwendet. Es können aber auch andere Untersuchungsverfahren eingesetzt werden, soweit sichergestellt werden kann, dass diese gleichwertig zu den vorgeschlagenen Methoden sind. Hierbei ist es insbesondere auch möglich, mittels einer PCR-Methode die Proben zu untersuchen und positive Ergebnisse mittels des kulturellen ISO-Verfahrens zu bestätigen. Soweit die vorgeschlagenen Methoden von den Methoden der amtlichen Sammlung nach § 64 LFGB oder ISO-Methoden abweichen, werden Methodenempfehlungen durch das jeweilige NRL am BfR bereitgestellt.",
+            "Paragraph2": "Isolate, die im Rahmen der Salmonellen Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
         },
         "Amrs": {
             "Name": "Antibiotikaresistenztestung",
-            "Description": "Alle für die Darstellung in ZooNotify ausgewählten Isolate von Salmonella spp., Campylobacter (C.) jejuni, Campylobacter (C.) coli, Escherichia (E.) coli, Shiga-Toxin bildende E. coli (STEC), Enterococcus (E.) faecalis und E. faecium sowie Methicillin-resistenten Staphylococcus aureus (MRSA) wurden mittels der vorgesehenen, international anerkannten, quantitativen Verfahren für die Resistenzbestimmung (Bouillon-Mikrodilutionsmethode nach ISO 20776-1:2006 bzw. CLSI M07) im Nationalen Referenzlabor (NRL) für Antibiotikaresistenz bzw. nach CLSI VET06 und M45A im NRL für Campylobacter untersucht. Die Isolate wurden dem am BfR etablierten Untersuchungsspektrum antimikrobieller Substanzen unterzogen. Hierfür wurden die fertig konfektionierten Plattenformate EUVSEC und ggf. EUVSEC2 (Salmonella spp. und E. coli), EUVENC (Enterokokken), EUCAMP2 (Campylobacter spp.) und EUST (MRSA) der Firma TREK Diagnostic Systems/Thermo Fisher Scientific verwendet.  Die Testung auf Resistenzen erfolgte unter Beachtung des Durchführungsbeschlusses 2013/652/EU, in dem das Untersuchungsverfahren, die zu testenden Wirkstoffe sowie die Bewertungskriterien für die Mehrzahl der Erreger festgelegt sind. Soweit dort keine epidemiologischen Cut-Off Werte beschrieben wurden, erfolgte die Bewertung anhand der Empfehlung der European Food Safety Authority (EFSA) in Abstimmung mit dem Europäischen Referenzlabor für Antibiotikaresistenz (EURL-AR).  Die Testung von MRSA und den Enterococcus spp. auf Resistenzen erfolgte auf Basis der Empfehlungen der EFSA (EFSA (2012a): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in methicillin-resistant Staphylococcus aureus in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in Salmonella, Campylobacter and indicator Escherichia coli and Enterococcus spp. bacteria transmitted through food. EFSA Journal 10(6):2742).",
-            "Paragraph": "Resistenztestung von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente). Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). ",
+            "Paragraph1": {
+                "Description1": "Alle für die Darstellung in ZooNotify ausgewählten Isolate von ",
+                "Description2": " Shiga-Toxin bildende ",
+                "Description3": " (STEC), ",
+                "Description4": " und ",
+                "Description5": " sowie Methicillin-resistenten ",
+                "Description6": " (MRSA) wurden mittels der vorgesehenen, international anerkannten, quantitativen Verfahren für die Resistenzbestimmung (Bouillon-Mikrodilutionsmethode nach ISO 20776-1:2006 bzw. CLSI M07) im Nationalen Referenzlabor (NRL) für Antibiotikaresistenz bzw. nach CLSI VET06 und M45A im NRL für Campylobacter untersucht."
+            },
+            "Paragraph2": {
+                "Description1": "Die Isolate wurden dem am BfR etablierten Untersuchungsspektrum antimikrobieller Substanzen unterzogen. Hierfür wurden die fertig konfektionierten Plattenformate EUVSEC und ggf. EUVSEC2 (",
+                "Description2": " und ",
+                "Description3": "), EUVENC (Enterokokken), EUCAMP2 (",
+                "Description4": ") und EUST (MRSA) der Firma TREK Diagnostic Systems/Thermo Fisher Scientific verwendet."
+            },
+            "Paragraph3": "Die Testung auf Resistenzen erfolgte unter Beachtung des Durchführungsbeschlusses 2013/652/EU, in dem das Untersuchungsverfahren, die zu testenden Wirkstoffe sowie die Bewertungskriterien für die Mehrzahl der Erreger festgelegt sind. Soweit dort keine epidemiologischen Cut-Off Werte beschrieben wurden, erfolgte die Bewertung anhand der Empfehlung der European Food Safety Authority (EFSA) in Abstimmung mit dem Europäischen Referenzlabor für Antibiotikaresistenz (EURL-AR).",
+            "Paragraph4": {
+                "Description1": "Die Testung von MRSA und den ",
+                "Description2": " auf Resistenzen erfolgte auf Basis der Empfehlungen der EFSA (EFSA (2012a): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in methicillin-resistant ",
+                "Description3": " in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in  ",
+                "Description4": " and indicator ",
+                "Description5": " and ",
+                "Description6": " bacteria transmitted through food. EFSA Journal 10(6):2742)."
+            },
+            "Paragraph5": {
+                "Description1": "Resistenztestung von ",
+                "Description2": " und ",
+                "Description3": " (kommensale, STEC und resistente). Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). "
+            },
             "coliSalm": {
-                "Paragraph": "Die Eingruppierung der Isolate von ESBL/AmpC-E.coli und Carbapenemase-bildende Escherichia coli anhand ihrer phänotypischen Eigenschaften über den Unterfilter \"ESBL_AmpC_Carba_Phänotyp\" erfolgte nach den Kriterien von EFSA und ECDC aus dem Jahr 2017 (The European Union summary report on antimicrobial resistance in zoonotic and indicator bacteria from humans, animals and food in 2015. EFSA Journal 2017;15(2):4694, 212 pp. doi:10.2903/j.efsa.2017.4694).",
-                "TableTitle": "Tabelle 1: Resistenztestung von Salmonella spp. und Escherichia coli.",
-                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020).", 
+                "Paragraph": {
+                    "Description1": "Die Eingruppierung der Isolate von ESBL/AmpC-",
+                    "Description2": " und Carbapenemase-bildende ",
+                    "Description3": " anhand ihrer phänotypischen Eigenschaften über den Unterfilter \"ESBL_AmpC_Carba_Phänotyp\" erfolgte nach den Kriterien von EFSA und ECDC aus dem Jahr 2017 (The European Union summary report on antimicrobial resistance in zoonotic and indicator bacteria from humans, animals and food in 2015. EFSA Journal 2017;15(2):4694, 212 pp. doi:10.2903/j.efsa.2017.4694)."
+                },
+                "TableTitle": {
+                    "Part1": "Tabelle 1: Resistenztestung von ",
+                    "Part2": " und "
+                },
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020).",
                 "TableComment": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020)."
             },
             "coliSalmTwo": {
-                "Paragraph": "Wenn ein Isolat von Salmonella spp. und Escherichia coli (kommensale, STEC und resistente) eine Resistenz gegenüber Cefotaxim und/oder Ceftazidim (Cephalsporine der 3. Generation) und/oder dem Carbapenem Meropenem aufweist, werden zur Charakterisierung der ß-laktam-Resistenz weitere Wirkstoffe herangezogen. Durch die Auswertung der Ergebnisse dieser in einer 2. Platte untersuchten Substanzen kann phänotypisch das Vorliegen von ESBL-, AmpC-, ESBL- und AmpC, oder Carphapenemase eingegrenzt werden. Ein endgültiger Nachweis des Resistenzmechanismus kann jedoch nur durch den Nachweis eines verantwortlichen Gens erbracht werden.",
-                "TableTitle": "Tabelle 2: Resistenztestung von Salmonella spp. und Escherichia coli bei Verdacht auf Produktion von ESBL-, AmpC- beta-Laktamase oder Carbapenemase.",
-                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020).", 
+                "Paragraph": {
+                    "Description1": "Wenn ein Isolat von ",
+                    "Description2": " und ",
+                    "Description3": " (kommensale, STEC und resistente) eine Resistenz gegenüber Cefotaxim und/oder Ceftazidim (Cephalsporine der 3. Generation) und/oder dem Carbapenem Meropenem aufweist, werden zur Charakterisierung der ß-laktam-Resistenz weitere Wirkstoffe herangezogen. Durch die Auswertung der Ergebnisse dieser in einer 2. Platte untersuchten Substanzen kann phänotypisch das Vorliegen von ESBL-, AmpC-, ESBL- und AmpC, oder Carphapenemase eingegrenzt werden. Ein endgültiger Nachweis des Resistenzmechanismus kann jedoch nur durch den Nachweis eines verantwortlichen Gens erbracht werden."
+                },
+                "TableTitle": {
+                    "Part1": "Tabelle 2: Resistenztestung von ",
+                    "Part2": " und ",
+                    "Part3": " bei Verdacht auf Produktion von ESBL-, AmpC- beta-Laktamase oder Carbapenemase"
+                },
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020).",
                 "TableComment": "* Werte nicht im Durchführungsbeschluss 2013/652/EU festgelegt. Empfehlung der EFSA für die einheitliche Bewertung innerhalb der EU (EFSA 2020)."
             },
             "campy": {
-                "Paragraph": "Resistenztestung von C. jejuni und C. coli. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU.",
-                "TableTitle": "Tabelle 3: Resistenztestung von Campylobacter jejuni und C. coli.",
-                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für 2014 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU.", 
-                "TableComment": "* Cut-Off Werte für C. jejuni; ** Cut-Off Werte für C. coli."
+                "Paragraph": {
+                    "Description1": "Resistenztestung von ",
+                    "Description2": " und ",
+                    "Description3": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU."
+                },
+                "TableTitle": {
+                    "Part1": "Tabelle 3: Resistenztestung von ",
+                    "Part2": " und "
+                },
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für 2014 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Festlegung im Durchführungsbeschluss 2013/652/EU.",
+                "TableComment": {
+                    "Part1": "* Cut-Off Werte für ",
+                    "Part2": "; ** Cut-Off Werte für "
+                }
             },
             "mrsa": {
-                "Paragraph": "Resistenztestung von Methicillin-resistenten Staphylococcus aureus. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2014-2020.",
-                "TableTitle": "Tabelle 4: Resistenztestung von Methicillin-resistenten Staphylococcus aureus.",
-                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für 2014 - 2019.", 
+                "Paragraph": {
+                    "Description1": "Resistenztestung von Methicillin-resistenten ",
+                    "Description2": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2014-2020."
+                },
+                "TableTitle": "Tabelle 4: Resistenztestung von Methicillin-resistenten ",
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für 2014 - 2019.",
                 "TableComment": ""
             },
             "ef": {
-                "Paragraph": "Resistenztestung von Enterococcus faecalis und E. faecium. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.",
-                "TableTitle": "Tabelle 5: Resistenztestung von Enterococcus faecalis und E. faecium.",
-                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für 2014 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.", 
+                "Paragraph": {
+                    "Description1": "Resistenztestung von ",
+                    "Description2": " und ",
+                    "Description3": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU."
+                },
+                "TableTitle": {
+                    "Part1": "Tabelle 5: Resistenztestung von ",
+                    "Part2": " und "
+                },
+                "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für 2014 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.",
                 "TableComment": ""
             },
             "TableHeaderClass": "Substanzklasse",

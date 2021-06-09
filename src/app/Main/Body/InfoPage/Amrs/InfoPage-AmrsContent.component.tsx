@@ -1,22 +1,26 @@
 import React, { useState } from "react";
-import { Button, createStyles, makeStyles } from "@material-ui/core";
+import { Button, createStyles, Divider, makeStyles } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { AmrKey, AmrsTable } from "../InfoPage.model";
+import { AmrKey, AmrsTable, microorganismNames } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
-
+import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const useStyles = makeStyles(() =>
-  createStyles({
-      button: {
-        textAlign: "left",
-        backgroundColor: "#f3f7fa",
-        '&:hover': {
-          backgroundColor: "#dae9f5",
-          textDecoration: "underline",
+    createStyles({
+        button: {
+            textAlign: "left",
+            backgroundColor: "#f3f7fa",
+            "&:hover": {
+                backgroundColor: "#dae9f5",
+                textDecoration: "underline",
+            },
         },
-      }
-
-  }),
+        divider: {
+            background: primaryColor,
+            width: "50%",
+            margin: "auto",
+        },
+    })
 );
 
 export function InfoPageAmrsContentComponent(props: {
@@ -43,11 +47,57 @@ export function InfoPageAmrsContentComponent(props: {
 
     return (
         <div>
-            <p>{t("Methods.Amrs.Description")}</p>
-            <p>{t("Methods.Amrs.Paragraph")}</p>
+            <p>
+                {t("Methods.Amrs.Paragraph1.Description1")}
+                {microorganismNames.Salm} spp., {microorganismNames.CampyJeC},{" "}
+                {microorganismNames.CampyColiC}, {microorganismNames.ColiFull}
+                {t("Methods.Amrs.Paragraph1.Description2")}
+                {microorganismNames.ColiShort}
+                {t("Methods.Amrs.Paragraph1.Description3")}
+                {microorganismNames.EnteroFaecalisE}
+                {t("Methods.Amrs.Paragraph1.Description4")}
+                {microorganismNames.EnteroFaecium}
+                {t("Methods.Amrs.Paragraph1.Description5")}
+                {microorganismNames.Staphy}
+                {t("Methods.Amrs.Paragraph1.Description6")}
+            </p>
+            <p>
+                {t("Methods.Amrs.Paragraph2.Description1")}
+                {microorganismNames.Salm} spp.
+                {t("Methods.Amrs.Paragraph2.Description2")}
+                {microorganismNames.ColiShort}
+                {t("Methods.Amrs.Paragraph2.Description3")}
+                {microorganismNames.Campy} spp.
+                {t("Methods.Amrs.Paragraph2.Description4")}
+            </p>
+            <p>{t("Methods.Amrs.Paragraph3")}</p>
+            <p>
+                {t("Methods.Amrs.Paragraph4.Description1")}
+                {microorganismNames.Entero} spp.
+                {t("Methods.Amrs.Paragraph4.Description2")}
+                {microorganismNames.Staphy}
+                {t("Methods.Amrs.Paragraph4.Description3")}
+                {microorganismNames.Salm}, {microorganismNames.Campy}
+                {t("Methods.Amrs.Paragraph4.Description4")}
+                {microorganismNames.ColiFull}
+                {t("Methods.Amrs.Paragraph4.Description5")}
+                {microorganismNames.Entero} spp.
+                {t("Methods.Amrs.Paragraph4.Description6")}
+            </p>
+            <Divider
+                variant="middle"
+                className={classes.divider}
+            />
+            <p>
+                {t("Methods.Amrs.Paragraph5.Description1")}
+                {microorganismNames.Salm} spp.
+                {t("Methods.Amrs.Paragraph5.Description2")}
+                {microorganismNames.ColiFull}
+                {t("Methods.Amrs.Paragraph5.Description3")}
+            </p>
             {props.amrKeys.map((amrKey) => (
                 <div key={`${amrKey}-amr-table-dialog`}>
-                    <p>{t(`Methods.Amrs.${amrKey}.Paragraph`)}</p>
+                    {props.tableData[amrKey].introduction}
                     <Button
                         onClick={() => handleOpen(amrKey)}
                         color="primary"

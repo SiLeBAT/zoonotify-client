@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function DialogComponent(props: {
-    dialogTitle: string;
+    dialogTitle: JSX.Element | string;
     dialogContentText: JSX.Element | string;
     dialogContent: JSX.Element;
     cancelButton: JSX.Element | string;
