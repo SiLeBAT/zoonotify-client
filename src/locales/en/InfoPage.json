@@ -216,7 +216,9 @@
                 "TableComment": "* Cut-Off Werte für C. jejuni; ** Cut-Off Werte für C. coli."
             },
             "mrsa": {
-                "Paragraph": "Resistenztestung von Methicillin-resistenten Staphylococcus aureus. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2014-2020.",
+                "Paragraph1": "Resistenztestung von Methicillin-resistenten Staphylococcus aureus. Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von ",
+                "EucastLink": "EUCAST",
+                "Paragraph2": ") für die Jahre 2014-2020.",
                 "TableTitle": "Tabelle 4: Resistenztestung von Methicillin-resistenten Staphylococcus aureus.",
                 "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für 2014 - 2019.", 
                 "TableComment": ""

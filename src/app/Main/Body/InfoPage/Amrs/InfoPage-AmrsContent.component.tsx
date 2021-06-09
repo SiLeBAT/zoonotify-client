@@ -38,7 +38,19 @@ export function InfoPageAmrsContentComponent(props: {
             <p>{t("Methods.Amrs.Paragraph")}</p>
             {props.amrKeys.map((amrKey) => (
                 <div key={`${amrKey}-amr-table-dialog`}>
-                    <p>{t(`Methods.Amrs.${amrKey}.Paragraph`)}</p>
+                    {(amrKey === "mrsa" && (
+                        <p>
+                            {t(`Methods.Amrs.mrsa.Paragraph1`)}
+                            <a
+                                rel="noreferrer"
+                                target="_blank"
+                                href="https://mic.eucast.org/"
+                            >
+                                {t(`Methods.Amrs.mrsa.EucastLink`)}
+                            </a>
+                            {t(`Methods.Amrs.mrsa.Paragraph2`)}
+                        </p>
+                    )) || <p>{t(`Methods.Amrs.${amrKey}.Paragraph`)}</p>}
                     <Button
                         css={tableDialogButtonStyle}
                         onClick={() => handleOpen(amrKey)}
