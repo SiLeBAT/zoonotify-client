@@ -5,7 +5,7 @@ import { Button } from "@material-ui/core";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { InfoPageAmrsContentComponent } from "./Amrs/InfoPage-AmrsContent.component";
 import { InfoPageFiltersContentComponent } from "./InfoPage-FiltersContent.component";
-import { AmrKey, AmrsTable } from "./InfoPage.model";
+import { AmrKey, AmrsTable, microorganismNames } from "./InfoPage.model";
 import {
     onPrimaryColor,
     primaryColor,
@@ -13,9 +13,8 @@ import {
 } from "../../../Shared/Style/Style-MainTheme.component";
 
 const infoPageStyle = css`
-    margin-left: 5em;
-    margin-right: 5em;
-    margin-bottom: 2em;
+    width: 60%;
+    margin: 2em auto;
 `;
 
 const headingStyle = css`
@@ -83,7 +82,40 @@ export function InfoPageComponent(props: {
             <div>
                 <AccordionComponent
                     title={backgroundChapterHeading}
-                    content={t("Background.Description")}
+                    content={
+                        <div>
+                            <p>{t("Background.Paragraph1")}</p>
+                            <p>
+                                {t("Background.Paragraph2.Description1")}
+                                {microorganismNames.Salm} spp.,{" "}
+                                {microorganismNames.Campy} spp.,{" "}
+                                {microorganismNames.Listeria}
+                                {t("Background.Paragraph2.Description2")}
+                                {microorganismNames.ColiFull}
+                                {t("Background.Paragraph2.Description3")}
+                                {microorganismNames.Staphy}
+                                {t("Background.Paragraph2.Description4")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description5")}
+                                {microorganismNames.Salm} spp.,{" "}
+                                {microorganismNames.Campy} spp.
+                                {t("Background.Paragraph2.Description6")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description7")}
+                                {microorganismNames.EnteroFF}
+                                {t("Background.Paragraph2.Description8")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description9")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description10")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description11")}
+                                
+                            </p>
+                            <p>{t("Background.Paragraph3")}</p>
+                            <p>{t("Background.Paragraph4")}</p>
+                        </div>
+                    }
                     defaultExpanded={false}
                 />
                 <p css={subHeadingStyle} id="filter">
@@ -98,7 +130,12 @@ export function InfoPageComponent(props: {
                 <div>
                     <AccordionComponent
                         title={t("Methods.Isolates.Name")}
-                        content={t("Methods.Isolates.Description")}
+                        content={
+                            <div>
+                                <p>{t("Methods.Isolates.Paragraph1")}</p>
+                                <p>{t("Methods.Isolates.Paragraph2")}</p>
+                            </div>
+                        }
                         defaultExpanded={false}
                     />
                     <AccordionComponent

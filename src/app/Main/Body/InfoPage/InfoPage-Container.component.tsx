@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { AmrKey, AmrsTable } from "./InfoPage.model";
+import { AmrKey, AmrsTable, microorganismNames } from "./InfoPage.model";
 import { InfoPageComponent } from "./InfoPage.component";
 import { modifyTableDataStringService } from "../../../Core/modifyTableDataString.service";
 import {
@@ -60,35 +60,120 @@ export function InfoPageContainerComponent(): JSX.Element {
     ];
 
     const tableDataAmrColiSalm: AmrsTable = {
-        title: t("Methods.Amrs.coliSalm.TableTitle"),
+        introduction: (
+            <p>
+                {t(`Methods.Amrs.coliSalm.Paragraph.Description1`)}
+                {microorganismNames.ColiShort}
+                {t(`Methods.Amrs.coliSalm.Paragraph.Description2`)}
+                {microorganismNames.ColiFull}
+                {t(`Methods.Amrs.coliSalm.Paragraph.Description3`)}
+            </p>
+        ),
+        title: (
+            <div>
+                {t("Methods.Amrs.coliSalm.TableTitle.Part1")}
+                {microorganismNames.Salm} spp.
+                {t("Methods.Amrs.coliSalm.TableTitle.Part2")}
+                {microorganismNames.ColiFull}
+            </div>
+        ),
         description: t("Methods.Amrs.coliSalm.TableDescription"),
         tableHeader: coliSalmTableHeader,
         tableRows: tableAmrEcoliSalmRows,
         commentText: t("Methods.Amrs.coliSalm.TableComment"),
     };
     const tableDataAmrColiSalmTwo: AmrsTable = {
-        title: t("Methods.Amrs.coliSalmTwo.TableTitle"),
+        introduction: (
+            <p>
+                {t("Methods.Amrs.coliSalmTwo.Paragraph.Description1")}
+                {microorganismNames.Salm} spp.
+                {t("Methods.Amrs.coliSalmTwo.Paragraph.Description2")}
+                {microorganismNames.ColiFull}
+                {t("Methods.Amrs.coliSalmTwo.Paragraph.Description3")}
+            </p>
+        ),
+        title: (
+            <div>
+                {t("Methods.Amrs.coliSalmTwo.TableTitle.Part1")}
+                {microorganismNames.Salm} spp.
+                {t("Methods.Amrs.coliSalmTwo.TableTitle.Part2")}
+                {microorganismNames.ColiFull}
+                {t("Methods.Amrs.coliSalmTwo.TableTitle.Part3")}
+            </div>
+        ),
         description: t("Methods.Amrs.coliSalmTwo.TableDescription"),
         tableHeader: coliSalmTableHeader,
         tableRows: tableAmrEcoliSalmTwoRows,
         commentText: t("Methods.Amrs.coliSalmTwo.TableComment"),
     };
     const tableDataAmrCampy: AmrsTable = {
-        title: t("Methods.Amrs.campy.TableTitle"),
+        introduction: (
+            <p>
+                {t(`Methods.Amrs.campy.Paragraph.Description1`)}
+                {microorganismNames.CampyJeShort}
+                {t(`Methods.Amrs.campy.Paragraph.Description2`)}
+                {microorganismNames.CampyColiShort}
+                {t(`Methods.Amrs.campy.Paragraph.Description3`)}
+            </p>
+        ),
+        title: (
+            <div>
+                {t("Methods.Amrs.campy.TableTitle.Part1")}
+                {microorganismNames.CampyJe}
+                {t("Methods.Amrs.campy.TableTitle.Part2")}
+                {microorganismNames.CampyColiShort}
+            </div>
+        ),
         description: t("Methods.Amrs.campy.TableDescription"),
         tableHeader: oneCutOffTableHeader,
         tableRows: tableAmrCampyRows,
         commentText: t("Methods.Amrs.campy.TableComment"),
     };
     const tableDataAmrMrsa: AmrsTable = {
-        title: t("Methods.Amrs.mrsa.TableTitle"),
+        introduction: (
+            <p>
+                {t(`Methods.Amrs.mrsa.Paragraph.Description1`)}
+                {microorganismNames.Staphy}
+                {t(`Methods.Amrs.mrsa.Paragraph.Description2`)}
+                <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href="https://mic.eucast.org/"
+                >
+                    {t(`Methods.Amrs.mrsa.Paragraph.EucastLink`)}
+                </a>
+                {t(`Methods.Amrs.mrsa.Paragraph.Description3`)}
+            </p>
+        ),
+        title: (
+            <div>
+                {t("Methods.Amrs.mrsa.TableTitle")}
+                {microorganismNames.Staphy}
+            </div>
+        ),
         description: t("Methods.Amrs.mrsa.TableDescription"),
         tableHeader: oneCutOffTableHeader,
         tableRows: tableAmrMrsaRows,
         commentText: t("Methods.Amrs.mrsa.TableComment"),
     };
     const tableDataAmrEf: AmrsTable = {
-        title: t("Methods.Amrs.ef.TableTitle"),
+        introduction: (
+            <p>
+                {t(`Methods.Amrs.ef.Paragraph.Description1`)}
+                {microorganismNames.EnteroFaecalis}
+                {t(`Methods.Amrs.ef.Paragraph.Description2`)}
+                {microorganismNames.EnteroFaecium}
+                {t(`Methods.Amrs.ef.Paragraph.Description3`)}
+            </p>
+        ),
+        title: (
+            <div>
+                {t("Methods.Amrs.ef.TableTitle.Part1")}
+                {microorganismNames.EnteroFaecalis}
+                {t("Methods.Amrs.ef.TableTitle.Part2")}
+                {microorganismNames.EnteroFaecium}
+            </div>
+        ),
         description: t("Methods.Amrs.ef.TableDescription"),
         tableHeader: efTableHeader,
         tableRows: tableAmrEfRows,
