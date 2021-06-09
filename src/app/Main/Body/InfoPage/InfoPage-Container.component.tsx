@@ -3,7 +3,13 @@ import { useTranslation } from "react-i18next";
 import { AmrKey, AmrsTable } from "./InfoPage.model";
 import { InfoPageComponent } from "./InfoPage.component";
 import { modifyTableDataStringService } from "../../../Core/modifyTableDataString.service";
-import { tableAmrCampyRows, tableAmrEcoliSalmRows, tableAmrEcoliSalmTwoRows, tableAmrEfRows, tableAmrMrsaRows } from "./AmrsTables.constants";
+import {
+    tableAmrCampyRows,
+    tableAmrEcoliSalmRows,
+    tableAmrEcoliSalmTwoRows,
+    tableAmrEfRows,
+    tableAmrMrsaRows,
+} from "./AmrsTables.constants";
 
 export function InfoPageContainerComponent(): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
@@ -20,7 +26,6 @@ export function InfoPageContainerComponent(): JSX.Element {
         "federalState",
         "resistance",
     ];
-
 
     const coliSalmTableHeader = [
         t("Methods.Amrs.TableHeaderClass"),
@@ -90,21 +95,25 @@ export function InfoPageContainerComponent(): JSX.Element {
         commentText: t("Methods.Amrs.ef.TableComment"),
     };
 
-
     const amrTableData: Record<AmrKey, AmrsTable> = {
         coliSalm: tableDataAmrColiSalm,
         coliSalmTwo: tableDataAmrColiSalmTwo,
         campy: tableDataAmrCampy,
         mrsa: tableDataAmrMrsa,
-        ef: tableDataAmrEf
+        ef: tableDataAmrEf,
     };
 
-
-
     const handleExportAmrData = (amrKey: AmrKey): void => {
-        const csvHeader = amrTableData[amrKey].tableHeader.join(",");
-
         let csvContent = "";
+
+        csvContent += `"${amrTableData[amrKey].title}"`;
+        csvContent += "\n";
+        csvContent += `"${amrTableData[amrKey].description}"`;
+        csvContent += "\n";
+        csvContent += "\n";
+        csvContent += `"${amrTableData[amrKey].tableHeader.join(",")}"`;
+        csvContent += "\n";
+
         amrTableData[amrKey].tableRows.forEach((tableRow) => {
             const rowValues = Object.values(tableRow);
             const modifiedRowValues = rowValues.map((rowValue) =>
@@ -114,10 +123,17 @@ export function InfoPageContainerComponent(): JSX.Element {
             csvContent += modifiedRowValuesString;
             csvContent += "\n";
         });
-        const csvTable = `${csvHeader}\n${csvContent}`;
-        const amrFileName = `${amrTableData[amrKey].title}.csv`.replace(/ /g, "_").replace("..", ".")
+
+        csvContent += `"${amrTableData[amrKey].commentText}"`;
+
+        const csvTable = csvContent;
+        const amrFileName = `${amrTableData[amrKey].title}.csv`
+            .replace(/ /g, "_")
+            .replace("..", ".");
         const amrTableExportElement = document.createElement("a");
-        amrTableExportElement.href = `data:text/csv;charset=utf-8,${encodeURI(csvTable)}`;
+        amrTableExportElement.href = `data:text/csv;charset=utf-8,${encodeURI(
+            csvTable
+        )}`;
         amrTableExportElement.target = "_blank";
         amrTableExportElement.download = amrFileName;
         amrTableExportElement.click();
