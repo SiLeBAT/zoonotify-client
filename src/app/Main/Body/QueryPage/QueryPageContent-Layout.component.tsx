@@ -49,6 +49,7 @@ export function QueryPageContentLayoutComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
+    tableIsLoading: boolean;
     columnNameValues: string[];
     tableData: TableInterface;
     numberOfIsolates: {
@@ -85,6 +86,7 @@ export function QueryPageContentLayoutComponent(props: {
             </div>
             <div css={resultsBoxStyle}>
                 <QueryPageContentTableResultsLayoutComponent
+                    tableIsLoading={props.tableIsLoading}
                     displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
                     columnNameValues={props.columnNameValues}
                     tableData={props.tableData}

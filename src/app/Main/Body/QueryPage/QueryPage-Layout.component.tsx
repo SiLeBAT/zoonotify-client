@@ -25,6 +25,7 @@ export function QueryPageLayoutComponent(props: {
     isCol: boolean;
     isRow: boolean;
     isFilter: boolean;
+    tableIsLoading: boolean;
     columnNameValues: string[];
     numberOfIsolates: {
         total: number;
@@ -89,6 +90,7 @@ export function QueryPageLayoutComponent(props: {
         <main css={mainStyle}>
             <DrawerLayoutComponent
                 isOpen={isOpen}
+                tableIsLoading={props.tableIsLoading}
                 drawerWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 filterInfo={props.filterInfo}
@@ -111,6 +113,7 @@ export function QueryPageLayoutComponent(props: {
                 isCol={props.isCol}
                 isRow={props.isRow}
                 isFilter={props.isFilter}
+                tableIsLoading={props.tableIsLoading}
                 columnNameValues={props.columnNameValues}
                 tableData={props.tableData}
                 numberOfIsolates={props.numberOfIsolates}

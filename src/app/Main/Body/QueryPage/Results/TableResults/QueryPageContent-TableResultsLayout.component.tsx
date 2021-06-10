@@ -3,24 +3,20 @@ import { css, jsx } from "@emotion/core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import { TableResultsTableContentComponent } from "./TableResults-TableContent.component";
-import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
 import { TableInterface } from "../../../../../Shared/Context/TableContext";
+import { TableResultsTableComponent } from "./TableResults-Table.component";
 
 const dataStyle = css`
     max-width: fit-content;
     margin: auto;
     box-sizing: inherit;
 `;
-const tableDivStyle = css`
-    display: flex;
-    flex-direction: row;
-`;
 
 export interface TableResultsProps {
+    tableIsLoading: boolean;
     /**
      * object with two booleans, true if row/column is selected
      */
@@ -51,7 +47,7 @@ export function QueryPageContentTableResultsLayoutComponent(
         props.onDisplayOptionsChange(displayOption);
 
     const handleChangeShowSumsToggle = (showSums: boolean): void => {
-        setIsSumRowCol(showSums)
+        setIsSumRowCol(showSums);
     };
 
     const tableColAttribute = props.tableData.column;
@@ -72,8 +68,11 @@ export function QueryPageContentTableResultsLayoutComponent(
     );
     const isTable: boolean =
         props.displayRowCol.isCol || props.displayRowCol.isRow;
-    const isRowAndCol: boolean =
-        props.displayRowCol.isCol && props.displayRowCol.isRow;
+
+    let tableData = props.tableData.statisticDataAbsolute;
+    if (props.tableData.option === "relative") {
+        tableData = props.tableData.statisticDataRelative;
+    }
 
     if (isTable) {
         tableAccordionContent = (
@@ -84,34 +83,16 @@ export function QueryPageContentTableResultsLayoutComponent(
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onShowSumsToggle={handleChangeShowSumsToggle}
                 />
-                {props.displayRowCol.isCol && (
-                    <TableResultsTableMainHeaderComponent
-                        isRow={false}
-                        text={colMainHeader}
-                        isRowAndCol={isRowAndCol}
-                    />
-                )}
-                <div css={tableDivStyle}>
-                    {props.displayRowCol.isRow && (
-                        <TableResultsTableMainHeaderComponent
-                            isRow
-                            text={rowMainHeader}
-                            isRowAndCol={isRowAndCol}
-                        />
-                    )}
-                    <TableResultsTableContentComponent
-                        isSumRowCol={isSumRowCol}
-                        isCol={props.displayRowCol.isCol}
-                        tables={{
-                            statisticDataAbsolute:
-                                props.tableData.statisticDataAbsolute,
-                            statisticDataRelative:
-                                props.tableData.statisticDataRelative,
-                        }}
-                        tableOption={props.tableData.option}
-                        columnNameValues={props.columnNameValues}
-                    />
-                </div>
+                <TableResultsTableComponent
+                    isSumRowCol={isSumRowCol}
+                    isLoading={props.tableIsLoading}
+                    displayRowCol={props.displayRowCol}
+                    colMainHeader={colMainHeader}
+                    rowMainHeader={rowMainHeader}
+                    tableData={tableData}
+                    tableOption={props.tableData.option}
+                    columnNameValues={props.columnNameValues}
+                />
             </div>
         );
     }

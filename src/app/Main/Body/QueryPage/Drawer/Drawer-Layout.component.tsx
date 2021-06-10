@@ -37,6 +37,7 @@ export interface DrawerLayoutProps {
      * true if Drawer is open
      */
     isOpen: boolean;
+    tableIsLoading: boolean;
     drawerWidth: number;
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
@@ -102,6 +103,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                 />
                 <DrawerDisplayedFeaturesComponent
+                    tableIsLoading={props.tableIsLoading}
                     tableColumn={props.tableColumn}
                     tableRow={props.tableRow}
                     mainFilterAttributes={props.filterInfo.mainFilter}

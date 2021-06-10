@@ -4,9 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import {
-    TableType,
-} from "../../../../../Shared/Context/TableContext";
+import { TableType } from "../../../../../Shared/Context/TableContext";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import { DisplayedFeatureSelectorComponent } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
@@ -43,9 +41,10 @@ const iconStyle = css`
 `;
 
 export interface DrawerDisplayedFeaturesProps {
-    tableColumn: string, 
-    tableRow: string, 
-    mainFilterAttributes: string[],
+    tableIsLoading: boolean;
+    tableColumn: string;
+    tableRow: string;
+    mainFilterAttributes: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -76,6 +75,7 @@ export function DrawerDisplayedFeaturesComponent(
                 />
             </div>
             <DisplayedFeatureSelectorComponent
+                tableIsLoading={props.tableIsLoading}
                 label={t("Drawer.Graphs.Row")}
                 activeFeature={props.tableRow}
                 otherFeature={props.tableColumn}
@@ -92,6 +92,7 @@ export function DrawerDisplayedFeaturesComponent(
                 </IconButton>
             </div>
             <DisplayedFeatureSelectorComponent
+                tableIsLoading={props.tableIsLoading}
                 label={t("Drawer.Graphs.Column")}
                 activeFeature={props.tableColumn}
                 otherFeature={props.tableRow}
