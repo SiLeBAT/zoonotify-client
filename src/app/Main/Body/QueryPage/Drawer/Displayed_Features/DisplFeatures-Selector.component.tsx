@@ -18,6 +18,7 @@ function generateTranslatedSelectorObject(
     });
 }
 export interface FeatureSelectorProps {
+    tableIsLoading: boolean;
     /**
      * feature of the corresponding selector (row/colum)
      */
@@ -95,6 +96,7 @@ export function DisplayedFeatureSelectorComponent(
             onChange={handleChange}
             isMulti={false}
             isNotSelect={isNotSelect}
+            isDisabled={props.tableIsLoading}
             hide={false}
         />
     );

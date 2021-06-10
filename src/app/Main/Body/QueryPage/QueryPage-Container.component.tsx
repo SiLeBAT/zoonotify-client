@@ -47,6 +47,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
     const [totalNrOfIsol, setTotalNrOfIsol] = useState<number>(0);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
+    const [tableIsLoading, setTableIsLoading] = useState<boolean>(false);
 
     const { data, setData } = useContext(DataContext);
     const { filter, setFilter } = useContext(FilterContext);
@@ -275,7 +276,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
             const statisticTableDataRel = calculateRelativeTableData(
                 statisticTableDataAbs,
-                nrOfSelectedIsolates, 
+                nrOfSelectedIsolates,
                 allValuesTextRelative,
                 isRow
             );
@@ -289,6 +290,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
+        setTableIsLoading(true)
         const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
         );
@@ -302,10 +304,14 @@ export function QueryPageContainerComponent(): JSX.Element {
             setTableContext(isolateCountGroups, nrOfSelectedIsolates);
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
+        setTableIsLoading(false)
     };
 
     useEffect(() => {
         fetchAndSetData();
+        return () => {
+            setTable({ ...table, row: "", column: "" });
+        };
     }, []);
 
     useEffect(() => {
@@ -334,6 +340,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     isCol={isCol}
                     isRow={isRow}
                     isFilter={isFilter}
+                    tableIsLoading={tableIsLoading}
                     columnNameValues={columnNameValues}
                     tableData={table}
                     numberOfIsolates={{

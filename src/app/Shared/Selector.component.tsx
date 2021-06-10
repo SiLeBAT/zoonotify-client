@@ -115,6 +115,7 @@ export interface SelectorProps {
      * true if no selector is selected so far
      */
     isNotSelect: boolean;
+    isDisabled: boolean;
     hide: boolean;
 }
 
@@ -160,6 +161,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
                     },
                 })}
                 isClearable
+                isDisabled={props.isDisabled}
             />
         </div>
     );
