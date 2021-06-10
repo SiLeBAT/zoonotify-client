@@ -42,7 +42,7 @@ const useStyles = makeStyles({
  * @param columnAttributes - column attributes for the table header
  * @returns {JSX.Element} - table container component
  */
-export function TableContentTableComponent(props: {
+export function TableContentTableContainerComponent(props: {
     isSumRowCol: boolean;
     isCol: boolean;
     tableData: Record<string, string>[];

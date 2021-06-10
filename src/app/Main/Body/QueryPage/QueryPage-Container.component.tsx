@@ -71,6 +71,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ): void => {
+        setTableIsLoading(true)
         const newTable: TableInterface = {
             ...table,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
@@ -85,6 +86,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleSwapDisplFeatures = (): void => {
+        setTableIsLoading(true)
         const newTable: TableInterface = {
             ...table,
             row: table.column,

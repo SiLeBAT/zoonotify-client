@@ -113,6 +113,7 @@ export function QueryPageLayoutComponent(props: {
                 isCol={props.isCol}
                 isRow={props.isRow}
                 isFilter={props.isFilter}
+                tableIsLoading={props.tableIsLoading}
                 columnNameValues={props.columnNameValues}
                 tableData={props.tableData}
                 numberOfIsolates={props.numberOfIsolates}
