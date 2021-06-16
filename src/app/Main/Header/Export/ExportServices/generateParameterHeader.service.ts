@@ -1,6 +1,7 @@
-import { MainFilterLabels } from "../../../../Shared/Model/Export.model";
-import { FilterInterface } from "../../../../Shared/Model/Filter.model";
-
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../Shared/Model/Filter.model";
 
 /**
  * @desc Convert the selected filter/parameter to save them as a header in the CSV file
@@ -13,7 +14,7 @@ import { FilterInterface } from "../../../../Shared/Model/Filter.model";
 export function generateParameterHeader(
     filter: FilterInterface,
     allFilterLabel: string,
-    mainFilterLabels: MainFilterLabels,
+    mainFilterLabels: Record<FilterType, string>,
     mainFilterAttributes: string[]
 ): string {
     const HeaderRows: string[] = [];
