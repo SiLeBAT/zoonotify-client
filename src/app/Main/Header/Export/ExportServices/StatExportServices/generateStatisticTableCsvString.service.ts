@@ -24,7 +24,7 @@ export function generateStatisticTableCsvString(
         headerToPrint[0] = tableAttributeNames.row;
         StatDataString.push(headerToPrint.join(","));
     } else {
-        StatDataString.push(headers.join(","));
+        StatDataString.push(`,${headers.slice(1).join(",")}`);
     }
 
     StatDataString.push(

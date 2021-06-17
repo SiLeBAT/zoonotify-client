@@ -50,11 +50,15 @@ export function HeaderExportContainerComponent(): JSX.Element {
 
     if (!_.isEmpty(table.row)) {
         setting.tableAttributeNames.row = t(`QueryPage:Filters.${table.row}`);
+    } else {
+        setting.tableAttributeNames.row = undefined;
     }
     if (!_.isEmpty(table.column)) {
         setting.tableAttributeNames.column = t(
             `QueryPage:Filters.${table.column}`
         );
+    } else {
+        setting.tableAttributeNames.column = undefined
     }
 
     const isolateFilteredUrl: string = ISOLATE_URL + history.location.search;
