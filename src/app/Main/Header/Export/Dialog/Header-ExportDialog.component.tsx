@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { CSVDownload } from "react-csv";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
 import { errorColor } from "../../../../Shared/Style/Style-MainTheme.component";
@@ -16,23 +15,18 @@ const warningStyle = css`
 export function HeaderExportDialogComponent(props: {
     raw: boolean;
     stat: boolean;
-    ZNFilename: string;
-    dataString: string | undefined;
     buttonLabel: JSX.Element;
     loading: boolean;
     onClickClose: () => void;
-    onClickExport: () => void;
+    onClickExport: () => Promise<void>;
     onCheckboxChange: (name: string, checked: boolean) => void;
-    clearData: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["Export"]);
     const handleClose = (): void => props.onClickClose();
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
-    const handleExport = (): void => props.onClickExport();
-
-    const handleClearData = (): void => props.clearData();
+    const handleExport = (): Promise<void> => props.onClickExport();
 
     const fileIsSelect = props.raw || props.stat;
 
@@ -51,30 +45,13 @@ export function HeaderExportDialogComponent(props: {
 
     const exportCancelButton = t("Button.Cancel");
 
-    const exportButtonLabel = props.buttonLabel;
-    let exportSubmitButton: JSX.Element = exportButtonLabel;
-
-    if (props.dataString !== undefined) {
-        exportSubmitButton = (
-            <div>
-                {exportButtonLabel}
-                <CSVDownload
-                    data={props.dataString}
-                    filename={props.ZNFilename}
-                    target="_blank"
-                />
-            </div>
-        );
-        handleClearData()
-    }
-
     return DialogComponent({
         loading: props.loading,
         dialogTitle: exportDialogTitle,
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,
         cancelButton: exportCancelButton,
-        submitButton: exportSubmitButton,
+        submitButton: props.buttonLabel,
         disableSubmitButton: !fileIsSelect,
         onClose: handleClose,
         onSubmitClick: handleExport,

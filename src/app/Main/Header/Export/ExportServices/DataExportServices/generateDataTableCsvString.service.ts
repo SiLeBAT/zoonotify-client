@@ -1,8 +1,8 @@
-import { MainFilterLabels } from "../../../../../Shared/Model/Export.model";
 import {
     DbCollection,
     DbKey,
 } from "../../../../../Shared/Model/Client_Isolate.model";
+import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
 
 /**
@@ -16,7 +16,7 @@ import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
 export function generateDataTableCsvString(
     data: DbCollection,
     keys: DbKey[],
-    mainFilterLabels: MainFilterLabels,
+    mainFilterLabels: Record<FilterType, string>,
     mainFilterAttributes: string[]
 ): string {
     const FilteredDataString: string[] = [];
