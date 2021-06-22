@@ -43,7 +43,7 @@
     "@types/lodash": "^4.14.159",
     "apexcharts": "^3.26.2",
     "clsx": "^1.1.1",
-    "file-saver": "^2.0.2",
+    "file-saver": "^2.0.5",
     "i18next": "^19.5.1",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-xhr-backend": "^3.2.2",
