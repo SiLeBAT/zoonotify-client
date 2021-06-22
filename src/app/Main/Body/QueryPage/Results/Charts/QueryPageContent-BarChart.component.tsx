@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { Button } from "@material-ui/core";
 import _ from "lodash";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
@@ -54,6 +56,8 @@ export function QueryPageContentBarChartResultsComponent(props: {
     chartData: Record<string, string>[];
     isChart: boolean;
 }): JSX.Element {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const barChartRef = useRef<any>(null);
     const { t } = useTranslation("QueryPage");
 
     let chartAccordionContent = (
@@ -61,6 +65,20 @@ export function QueryPageContentBarChartResultsComponent(props: {
             <p css={explanationTextStyle}>{t("Chart.Explanation")}</p>
         </div>
     );
+
+    const handlePngDownload = (): void => {
+        barChartRef?.current?.chart
+            .dataURI()
+            .then((uri: {imgURI: string}) => {
+                const a = document.createElement("a");
+                a.href = uri.imgURI;
+                a.target = "_blank";
+                a.download = "ZN_chart.png";
+                a.click();
+                return uri;
+            })
+            .catch("error");
+    };
 
     if (props.isChart) {
         const processedChartData = processingTableDataToApexData(
@@ -73,9 +91,11 @@ export function QueryPageContentBarChartResultsComponent(props: {
         } else {
             chartAccordionContent = (
                 <div css={dataStyle}>
+                    <Button onClick={handlePngDownload}>Download</Button>
                     <div css={centerChartStyle}>
                         <BarChartResultsComponent
                             chartData={processedChartData}
+                            barChartRef={barChartRef}
                         />
                     </div>
                 </div>
@@ -83,5 +103,11 @@ export function QueryPageContentBarChartResultsComponent(props: {
         }
     }
 
-    return <AccordionComponent title={t("Chart.Title")} content={chartAccordionContent} defaultExpanded />;
+    return (
+        <AccordionComponent
+            title={t("Chart.Title")}
+            content={chartAccordionContent}
+            defaultExpanded
+        />
+    );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
@@ -7,6 +7,8 @@ import { ApexChartData } from "./ApexChart.model";
 
 export function BarChartResultsComponent(props: {
     chartData: ApexChartData;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    barChartRef: MutableRefObject<any>;
 }): JSX.Element {
 
     const chartOptions: ApexOptions = {
@@ -78,6 +80,7 @@ export function BarChartResultsComponent(props: {
 
     return (
         <ReactApexChart
+            ref={props.barChartRef}
             options={chartProps.options}
             series={chartProps.series}
             type="bar"
