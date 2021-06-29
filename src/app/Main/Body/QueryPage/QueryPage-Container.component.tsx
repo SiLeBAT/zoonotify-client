@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -66,6 +66,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     const colAttribute: FilterType = table.column;
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const barChartRef = useRef<any>(null);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -181,6 +184,20 @@ export function QueryPageContainerComponent(): JSX.Element {
         );
         history.push(newPath);
         setFilter(newFilter);
+    };
+
+    const handleChartDownload = (): void => {
+        barChartRef?.current?.chart
+            .dataURI()
+            .then((uri: {imgURI: string}) => {
+                const a = document.createElement("a");
+                a.href = uri.imgURI;
+                a.target = "_blank";
+                a.download = "ZN_chart.png";
+                a.click();
+                return uri;
+            })
+            .catch("error");
     };
 
     const fetchAndSetData = async (): Promise<void> => {
@@ -351,6 +368,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     }}
                     filterInfo={filter}
                     dataUniqueValues={data.uniqueValues}
+                    barChartRef={barChartRef}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
@@ -358,6 +376,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                    onDownloadChart={handleChartDownload}
                 />
             }
         />

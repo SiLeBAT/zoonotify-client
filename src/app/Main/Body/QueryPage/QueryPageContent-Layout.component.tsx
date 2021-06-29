@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
 import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.component";
 import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
@@ -58,12 +59,17 @@ export function QueryPageContentLayoutComponent(props: {
     };
     mainFilterAttributes: string[];
     selectedFilter: FilterInterface;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    barChartRef: MutableRefObject<any>;
     onDisplayOptionsChange: (displayOption: string) => void;
+    onDownloadChart: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
+
+    const handleChartDownload = (): void => props.onDownloadChart()
 
     const isFeature: boolean = props.isCol || props.isRow;
 
@@ -97,6 +103,8 @@ export function QueryPageContentLayoutComponent(props: {
                 columnAttributes={props.columnNameValues}
                 chartData={props.tableData.statisticDataAbsolute}
                 isChart={isFeature}
+                barChartRef={props.barChartRef}
+                onDownloadChart={handleChartDownload}
             />
         </div>
     );

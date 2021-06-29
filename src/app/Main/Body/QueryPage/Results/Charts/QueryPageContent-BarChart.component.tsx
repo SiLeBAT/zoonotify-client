@@ -2,10 +2,11 @@
 import { css, jsx } from "@emotion/core";
 import { Button } from "@material-ui/core";
 import _ from "lodash";
-import { useRef } from "react";
+import { MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
+import { primaryColor, secondaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
@@ -21,6 +22,17 @@ const explanationTextStyle = css`
     text-align: center;
     font-size: 0.75rem;
 `;
+const optionBarStyle = css`
+    display: flex;
+    justify-content: flex-end;
+`
+const exportButtonStyle = css`
+    background: ${primaryColor};
+    &:hover {
+        color: ${secondaryColor};
+        background: ${primaryColor};
+    }
+`
 
 function processingTableDataToApexData(
     data: Record<string, string>[],
@@ -55,9 +67,12 @@ export function QueryPageContentBarChartResultsComponent(props: {
     columnAttributes: string[];
     chartData: Record<string, string>[];
     isChart: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    barChartRef: MutableRefObject<any>;
+    onDownloadChart: () => void;
 }): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const barChartRef = useRef<any>(null);
+    /* const barChartRef = useRef<any>(null); */
     const { t } = useTranslation("QueryPage");
 
     let chartAccordionContent = (
@@ -66,7 +81,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
         </div>
     );
 
-    const handlePngDownload = (): void => {
+    /* const handlePngDownload = (): void => {
         barChartRef?.current?.chart
             .dataURI()
             .then((uri: {imgURI: string}) => {
@@ -78,7 +93,9 @@ export function QueryPageContentBarChartResultsComponent(props: {
                 return uri;
             })
             .catch("error");
-    };
+    }; */
+
+    const handleClick = (): void => props.onDownloadChart()
 
     if (props.isChart) {
         const processedChartData = processingTableDataToApexData(
@@ -91,11 +108,13 @@ export function QueryPageContentBarChartResultsComponent(props: {
         } else {
             chartAccordionContent = (
                 <div css={dataStyle}>
-                    <Button onClick={handlePngDownload}>Download</Button>
+                    <div css={optionBarStyle}>
+                        <Button css={exportButtonStyle} size="small" variant="contained" color="primary" onClick={handleClick} >Download</Button>
+                    </div>
                     <div css={centerChartStyle}>
                         <BarChartResultsComponent
                             chartData={processedChartData}
-                            barChartRef={barChartRef}
+                            barChartRef={props.barChartRef}
                         />
                     </div>
                 </div>
