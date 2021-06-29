@@ -39,6 +39,7 @@ import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
 import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
+import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -74,7 +75,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ): void => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const newTable: TableInterface = {
             ...table,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
@@ -89,7 +90,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleSwapDisplFeatures = (): void => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const newTable: TableInterface = {
             ...table,
             row: table.column,
@@ -187,13 +188,14 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleChartDownload = (): void => {
+        const ZnPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
         barChartRef?.current?.chart
             .dataURI()
-            .then((uri: {imgURI: string}) => {
+            .then((uri: { imgURI: string }) => {
                 const a = document.createElement("a");
                 a.href = uri.imgURI;
                 a.target = "_blank";
-                a.download = "ZN_chart.png";
+                a.download = ZnPngFilename;
                 a.click();
                 return uri;
             })
@@ -309,7 +311,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
         );
@@ -323,7 +325,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             setTableContext(isolateCountGroups, nrOfSelectedIsolates);
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
-        setTableIsLoading(false)
+        setTableIsLoading(false);
     };
 
     useEffect(() => {

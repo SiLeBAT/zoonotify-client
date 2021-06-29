@@ -89,7 +89,7 @@ export function QueryPageLayoutComponent(props: {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
 
-    const handleChartDownload = (): void => props.onDownloadChart()
+    const handleChartDownload = (): void => props.onDownloadChart();
 
     return (
         <main css={mainStyle}>

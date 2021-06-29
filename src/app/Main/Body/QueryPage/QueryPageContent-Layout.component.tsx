@@ -69,7 +69,7 @@ export function QueryPageContentLayoutComponent(props: {
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleChartDownload = (): void => props.onDownloadChart()
+    const handleChartDownload = (): void => props.onDownloadChart();
 
     const isFeature: boolean = props.isCol || props.isRow;
 

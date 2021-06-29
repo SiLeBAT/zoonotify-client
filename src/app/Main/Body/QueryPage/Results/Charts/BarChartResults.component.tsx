@@ -4,13 +4,11 @@ import ReactApexChart from "react-apexcharts";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { ApexChartData } from "./ApexChart.model";
 
-
 export function BarChartResultsComponent(props: {
     chartData: ApexChartData;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     barChartRef: MutableRefObject<any>;
 }): JSX.Element {
-
     const chartOptions: ApexOptions = {
         chart: {
             type: "bar",

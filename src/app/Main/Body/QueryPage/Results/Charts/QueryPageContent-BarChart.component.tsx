@@ -1,12 +1,16 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Button } from "@material-ui/core";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import _ from "lodash";
 import { MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
-import { primaryColor, secondaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import {
+    primaryColor,
+    secondaryColor,
+} from "../../../../../Shared/Style/Style-MainTheme.component";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
@@ -25,14 +29,16 @@ const explanationTextStyle = css`
 const optionBarStyle = css`
     display: flex;
     justify-content: flex-end;
-`
+`;
 const exportButtonStyle = css`
     background: ${primaryColor};
     &:hover {
         color: ${secondaryColor};
         background: ${primaryColor};
     }
-`
+    display: flex;
+    align-items: center;
+`;
 
 function processingTableDataToApexData(
     data: Record<string, string>[],
@@ -71,8 +77,6 @@ export function QueryPageContentBarChartResultsComponent(props: {
     barChartRef: MutableRefObject<any>;
     onDownloadChart: () => void;
 }): JSX.Element {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    /* const barChartRef = useRef<any>(null); */
     const { t } = useTranslation("QueryPage");
 
     let chartAccordionContent = (
@@ -81,21 +85,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
         </div>
     );
 
-    /* const handlePngDownload = (): void => {
-        barChartRef?.current?.chart
-            .dataURI()
-            .then((uri: {imgURI: string}) => {
-                const a = document.createElement("a");
-                a.href = uri.imgURI;
-                a.target = "_blank";
-                a.download = "ZN_chart.png";
-                a.click();
-                return uri;
-            })
-            .catch("error");
-    }; */
-
-    const handleClick = (): void => props.onDownloadChart()
+    const handleClick = (): void => props.onDownloadChart();
 
     if (props.isChart) {
         const processedChartData = processingTableDataToApexData(
@@ -109,7 +99,16 @@ export function QueryPageContentBarChartResultsComponent(props: {
             chartAccordionContent = (
                 <div css={dataStyle}>
                     <div css={optionBarStyle}>
-                        <Button css={exportButtonStyle} size="small" variant="contained" color="primary" onClick={handleClick} >Download</Button>
+                        <Button
+                            css={exportButtonStyle}
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            startIcon={<GetAppIcon fontSize="small" />}
+                            onClick={handleClick}
+                        >
+                            {t("Header:Export")}
+                        </Button>
                     </div>
                     <div css={centerChartStyle}>
                         <BarChartResultsComponent
