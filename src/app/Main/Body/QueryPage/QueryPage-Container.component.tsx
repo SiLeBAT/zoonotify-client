@@ -223,14 +223,14 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const setFilterFromPath = (): void => {
-        const filterFromPath = getFilterFromPath(
+        const [filterFromPath, displFilterFromPath] = getFilterFromPath(
             history.location.search,
             DbKeyCollection
         );
         setFilter({
-            ...filter,
             mainFilter: DbKeyCollection,
             selectedFilter: filterFromPath,
+            displayedFilters: displFilterFromPath
         });
     };
 

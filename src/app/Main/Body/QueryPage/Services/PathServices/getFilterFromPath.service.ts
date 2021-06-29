@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.model";
 
 /**
@@ -9,14 +10,18 @@ import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.
 export function getFilterFromPath(
     path: string,
     filterKeys: FilterType[]
-): FilterInterface {
+): [FilterInterface, string[]] {
     const searchParams = new URLSearchParams(path);
     const filterFromPath: FilterInterface = {};
+    const displFilterFromPath: string[] = []
 
     filterKeys.forEach((filterKey) => {
         const filterValues: string[] = searchParams.getAll(filterKey);
         filterFromPath[filterKey] = filterValues;
+        if (!_.isEmpty(filterValues)) {
+            displFilterFromPath.push(filterKey)
+        }
     });
 
-    return filterFromPath;
+    return [filterFromPath, displFilterFromPath];
 }
