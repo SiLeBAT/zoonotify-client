@@ -227,10 +227,14 @@ export function QueryPageContainerComponent(): JSX.Element {
             history.location.search,
             DbKeyCollection
         );
+        let displFilter: string[] = displFilterFromPath
+        if (_.isEmpty(displFilterFromPath)) {
+            displFilter = defaultFilter.displayedFilters; 
+        }
         setFilter({
             mainFilter: DbKeyCollection,
             selectedFilter: filterFromPath,
-            displayedFilters: displFilterFromPath
+            displayedFilters: displFilter
         });
     };
 
