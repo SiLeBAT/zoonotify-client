@@ -18,13 +18,13 @@ export function QueryPageParameterContentComponent(props: {
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const mainFilters = props.mainFilterAttributes
-    const {selectedFilter} = props
+    const mainFilters = props.mainFilterAttributes;
+    const selectedFilters = props.selectedFilter;
 
-    const displayFilter: Record<string, string[]> = {}
+    const displayFilters: Record<string, string[]> = {};
     mainFilters.forEach((filterElement: string) => {
-        if (selectedFilter[filterElement].length !== 0) {
-            displayFilter[filterElement] = selectedFilter[filterElement];
+        if (selectedFilters[filterElement].length !== 0) {
+            displayFilters[filterElement] = selectedFilters[filterElement];
         }
     });
 
@@ -34,12 +34,12 @@ export function QueryPageParameterContentComponent(props: {
      */
     const createParameterComponent = (): JSX.Element[] => {
         const elements: JSX.Element[] = [];
-        Object.keys(displayFilter).forEach((element): void => {
+        Object.keys(displayFilters).forEach((element): void => {
             elements.push(
                 <ParameterContentListComponent
                     key={`parameter_list_${element}`}
                     element={element}
-                    listElements={displayFilter[element]}
+                    listElements={displayFilters[element]}
                 />
             );
         });
