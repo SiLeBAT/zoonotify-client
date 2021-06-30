@@ -198,10 +198,6 @@ export function QueryPageContainerComponent(): JSX.Element {
                 a.download = znPngFilename;
                 a.click();
             })
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .catch((error: any) => {
-                throw error;
-            });
     };
 
     const fetchAndSetData = async (): Promise<void> => {
