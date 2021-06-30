@@ -188,18 +188,20 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleChartDownload = (): void => {
-        const ZnPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
+        const znPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
         barChartRef?.current?.chart
             .dataURI()
             .then((uri: { imgURI: string }) => {
                 const a = document.createElement("a");
                 a.href = uri.imgURI;
                 a.target = "_blank";
-                a.download = ZnPngFilename;
+                a.download = znPngFilename;
                 a.click();
-                return uri;
             })
-            .catch("error");
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .catch((error: any) => {
+                throw error;
+            });
     };
 
     const fetchAndSetData = async (): Promise<void> => {
