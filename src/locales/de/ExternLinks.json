@@ -6,12 +6,17 @@
     "Guidelines": {
         "Title": "Richtlinien",
         "AVV": "AVV Zoonosen Lebensmittelkette",
-        "RL": "RL 2003/99/EG"
+        "RL": "RL 2003/99/EG",
+        "EG": "Verordnung (EG) Nr. 2160/2003",
+        "EU13": "Durchführungsbeschluss (EU) 2013/652/EU",
+        "EU20": "Durchführungsbeschluss (EU) 2020/1729"
     },
     "Reports": {
         "Title": "Berichte",
         "ZoonosenBfR": "Zoonosenberichterstattung durch das BfR",
-        "ZoonosenMonitoring": "Berichte zum Zoonosen-Monitoring"
+        "ZoonosenMonitoring": "Berichte zum Zoonosen-Monitoring",
+        "AR": "Lagebild zu Antibiotikaresistenzen und -einsatz im Bereich Tierhaltung und Lebensmittelkette",
+        "AMK": "Bericht des BMEL über die Evaluierung des Antibiotikaminimierungskonzepts der 16. AMG-Novelle"
     },
     "Institutes": {
         "Title": "Organisationen und Institute",

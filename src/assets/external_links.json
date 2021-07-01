@@ -9,7 +9,19 @@
                 },
                 {
                     "Text": "RL",
-                    "Link": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:32003L0099&from=SK"
+                    "Link": "http://data.europa.eu/eli/dir/2003/99/2013-07-01"
+                },
+                {
+                    "Text": "EG",
+                    "Link": "http://data.europa.eu/eli/reg/2003/2160/oj"
+                },
+                {
+                    "Text": "EU13",
+                    "Link": "https://eur-lex.europa.eu/eli/dec_impl/2013/652/oj"
+                },
+                {
+                    "Text": "EU20",
+                    "Link": "http://data.europa.eu/eli/dec_impl/2020/1729/oj"
                 }
             ]
         },
@@ -23,9 +35,17 @@
                 {
                     "Text": "ZoonosenMonitoring",
                     "Link": "https://www.bvl.bund.de/DE/Arbeitsbereiche/01_Lebensmittel/01_Aufgaben/02_AmtlicheLebensmittelueberwachung/06_ZoonosenMonitoring/lm_zoonosen_monitoring_node.html"
+                },
+                {
+                    "Text": "AR",
+                    "Link": "https://www.bmel.de/DE/themen/tiere/tierarzneimittel/lagebild-antibiotikaeinsatz-bei-tieren.html"
+                },
+                {
+                    "Text": "AMK",
+                    "Link": "https://www.bmel.de/DE/themen/tiere/tierarzneimittel/kurzfassung16-amg-novelle.html"
                 }
-            ] 
-        }, 
+            ]
+        },
         {
             "Title": "Institutes",
             "Links": [
@@ -36,21 +56,21 @@
                 {
                     "Text": "BVL",
                     "Link": "https://www.bvl.bund.de/DE/Home/home_node.html"
-                }, 
+                },
                 {
                     "Text": "EFSA",
                     "Link": "https://www.efsa.europa.eu/de"
-                }, 
+                },
                 {
                     "Text": "ECDC",
                     "Link": "https://www.ecdc.europa.eu/en"
-                }, 
+                },
                 {
                     "Text": "BMEL",
                     "Link": "https://www.bmel.de/DE/Home/home_node.html"
                 }
-            ] 
-        }, 
+            ]
+        },
         {
             "Title": "Platforms",
             "Links": [
@@ -61,12 +81,12 @@
                 {
                     "Text": "ArEFSA",
                     "Link": "https://www.efsa.europa.eu/en/interactive-pages/AMR-Report-2018"
-                }, 
+                },
                 {
                     "Text": "SurveillanceAtlas",
                     "Link": "https://atlas.ecdc.europa.eu/public/index.aspx"
-                }               
-            ] 
+                }
+            ]
         }
     ]
 }
