@@ -223,17 +223,17 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const setFilterFromPath = (): void => {
-        const [filterFromPath, displFilterFromPath] = getFilterFromPath(
+        const filterFromPath = getFilterFromPath(
             history.location.search,
             DbKeyCollection
         );
-        let displFilter: string[] = displFilterFromPath
-        if (_.isEmpty(displFilterFromPath)) {
+        let displFilter: string[] = filterFromPath.displayedFilters
+        if (_.isEmpty(filterFromPath.displayedFilters)) {
             displFilter = defaultFilter.displayedFilters; 
         }
         setFilter({
             mainFilter: DbKeyCollection,
-            selectedFilter: filterFromPath,
+            selectedFilter: filterFromPath.selectedFilters,
             displayedFilters: displFilter
         });
     };
