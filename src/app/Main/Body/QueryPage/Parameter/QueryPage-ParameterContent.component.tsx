@@ -21,10 +21,10 @@ export function QueryPageParameterContentComponent(props: {
     const mainFilters = props.mainFilterAttributes;
     const selectedFilters = props.selectedFilter;
 
-    const displayFilters: Record<string, string[]> = {};
+    const displayedFilters = new Map<string, string[]>();
     mainFilters.forEach((filterElement: string) => {
         if (selectedFilters[filterElement].length !== 0) {
-            displayFilters[filterElement] = selectedFilters[filterElement];
+            displayedFilters.set(filterElement, selectedFilters[filterElement]);
         }
     });
 
@@ -34,14 +34,17 @@ export function QueryPageParameterContentComponent(props: {
      */
     const createParameterComponent = (): JSX.Element[] => {
         const elements: JSX.Element[] = [];
-        Object.keys(displayFilters).forEach((element): void => {
-            elements.push(
-                <ParameterContentListComponent
-                    key={`parameter_list_${element}`}
-                    element={element}
-                    listElements={displayFilters[element]}
-                />
-            );
+        Object.keys(displayedFilters).forEach((element): void => {
+            const listElements = displayedFilters.get(element);
+            if (listElements !== undefined) {
+                elements.push(
+                    <ParameterContentListComponent
+                        key={`parameter_list_${element}`}
+                        element={element}
+                        listElements={listElements}
+                    />
+                );
+            }
         });
         return elements;
     };
