@@ -100,6 +100,7 @@ export function QueryPageContentLayoutComponent(props: {
                 />
             </div>
             <QueryPageContentBarChartResultsComponent
+                chartIsLoading={props.tableIsLoading}
                 columnAttributes={props.columnNameValues}
                 chartData={props.tableData.statisticDataAbsolute}
                 isChart={isFeature}

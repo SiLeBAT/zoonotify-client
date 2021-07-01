@@ -70,6 +70,7 @@ function processingTableDataToApexData(
  * @returns {JSX.Element} - accordion with the result chart
  */
 export function QueryPageContentBarChartResultsComponent(props: {
+    chartIsLoading: boolean;
     columnAttributes: string[];
     chartData: Record<string, string>[];
     isChart: boolean;
@@ -93,7 +94,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
             props.columnAttributes
         );
 
-        if (_.isEmpty(processedChartData.series)) {
+        if (_.isEmpty(processedChartData.series) || props.chartIsLoading) {
             chartAccordionContent = <LoadingProcessComponent />;
         } else {
             chartAccordionContent = (
