@@ -2,7 +2,7 @@ import React from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
-import { CheckIfSingleFilterIsSet } from "../../QueryPageServices/checkIfFilterIsSet.service";
+import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import {
     FilterInterface,
     FilterType,

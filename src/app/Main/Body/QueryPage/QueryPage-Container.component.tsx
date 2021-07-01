@@ -24,19 +24,19 @@ import {
     FilterInterface,
     FilterType,
 } from "../../../Shared/Model/Filter.model";
-import { getFilterFromPath } from "./QueryPageServices/PathServices/getFilterFromPath.service";
-import { generatePathStringService } from "./QueryPageServices/PathServices/generatePathString.service";
+import { getFilterFromPath } from "./Services/PathServices/getFilterFromPath.service";
+import { generatePathStringService } from "./Services/PathServices/generatePathString.service";
 import { QueryPageLayoutComponent } from "./QueryPage-Layout.component";
-import { CheckIfFilterIsSet } from "./QueryPageServices/checkIfFilterIsSet.service";
-import { chooseSelectedDisplayedFeaturesService } from "./QueryPageServices/SelectorServices/chooseSelectedDisplFeatures.service";
-import { chooseSelectedFiltersService } from "./QueryPageServices/SelectorServices/chooseSelectedFilters.service";
-import { calculateRelativeTableData } from "./QueryPageServices/TableServices/calculateRelativeTableData.service";
-import { adaptCountedIsolatesGroupsService } from "./QueryPageServices/adaptCountedIsolatesGroups.service";
-import { generateTableHeaderValuesService } from "./QueryPageServices/TableServices/generateTableHeaderValues.service";
-import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableServices/generateStatisticTableDataAbs.service";
-import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
+import { CheckIfFilterIsSet } from "./Services/checkIfFilterIsSet.service";
+import { chooseSelectedDisplayedFeaturesService } from "./Services/SelectorServices/chooseSelectedDisplFeatures.service";
+import { chooseSelectedFiltersService } from "./Services/SelectorServices/chooseSelectedFilters.service";
+import { calculateRelativeTableData } from "./Services/TableServices/calculateRelativeTableData.service";
+import { adaptCountedIsolatesGroupsService } from "./Services/adaptCountedIsolatesGroups.service";
+import { generateTableHeaderValuesService } from "./Services/TableServices/generateTableHeaderValues.service";
+import { generateStatisticTableDataAbsService } from "./Services/TableServices/generateStatisticTableDataAbs.service";
+import { getFeaturesFromPath } from "./Services/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
-import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
+import { generateUniqueValuesService } from "./Services/generateUniqueValues.service";
 import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 
@@ -227,10 +227,14 @@ export function QueryPageContainerComponent(): JSX.Element {
             history.location.search,
             DbKeyCollection
         );
+        let displFilter: string[] = filterFromPath.displayedFilters
+        if (_.isEmpty(filterFromPath.displayedFilters)) {
+            displFilter = defaultFilter.displayedFilters; 
+        }
         setFilter({
-            ...filter,
             mainFilter: DbKeyCollection,
-            selectedFilter: filterFromPath,
+            selectedFilter: filterFromPath.selectedFilters,
+            displayedFilters: displFilter
         });
     };
 
