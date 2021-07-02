@@ -74,8 +74,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
     columnAttributes: string[];
     chartData: Record<string, string>[];
     isChart: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    barChartRef: MutableRefObject<any>;
+    getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDownloadChart: () => void;
 }): JSX.Element {
     const { t } = useTranslation("QueryPage");
@@ -114,7 +113,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
                     <div css={centerChartStyle}>
                         <BarChartResultsComponent
                             chartData={processedChartData}
-                            barChartRef={props.barChartRef}
+                            getPngDownloadUriRef={props.getPngDownloadUriRef}
                         />
                     </div>
                 </div>

@@ -34,8 +34,7 @@ export function QueryPageLayoutComponent(props: {
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
     tableData: TableInterface;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    barChartRef: MutableRefObject<any>;
+    getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -124,7 +123,7 @@ export function QueryPageLayoutComponent(props: {
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.filterInfo.selectedFilter}
                 mainFilterAttributes={props.filterInfo.mainFilter}
-                barChartRef={props.barChartRef}
+                getPngDownloadUriRef={props.getPngDownloadUriRef}
                 onDisplayOptionsChange={handleChangeDisplayOptions}
                 onDownloadChart={handleChartDownload}
             />

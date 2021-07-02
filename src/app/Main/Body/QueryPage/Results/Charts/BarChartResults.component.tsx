@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from "react";
+import React, { MutableRefObject, useRef, useEffect } from "react";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
@@ -6,9 +6,20 @@ import { ApexChartData } from "./ApexChart.model";
 
 export function BarChartResultsComponent(props: {
     chartData: ApexChartData;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    barChartRef: MutableRefObject<any>;
+    getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
 }): JSX.Element {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const barChartRef = useRef<any>(null);
+
+    useEffect(() => {
+        // eslint-disable-next-line no-param-reassign
+        props.getPngDownloadUriRef.current = async () => {
+            return barChartRef.current?.chart
+                .dataURI()
+                .then((uri: { imgURI: string }) => uri.imgURI);
+        };
+    }, []);
+
     const chartOptions: ApexOptions = {
         chart: {
             type: "bar",
@@ -78,7 +89,7 @@ export function BarChartResultsComponent(props: {
 
     return (
         <ReactApexChart
-            ref={props.barChartRef}
+            ref={barChartRef}
             options={chartProps.options}
             series={chartProps.series}
             type="bar"

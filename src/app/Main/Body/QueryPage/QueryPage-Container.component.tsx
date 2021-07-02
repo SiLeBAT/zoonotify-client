@@ -68,8 +68,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const barChartRef = useRef<any>(null);
+    const getPngDownloadUriRef = useRef<(() => Promise<string>) | null>(null);
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -189,15 +188,19 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const handleChartDownload = (): void => {
         const znPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
-        barChartRef?.current?.chart
-            .dataURI()
-            .then((uri: { imgURI: string }) => {
+
+        const download = async (): Promise<void> => {
+            if (getPngDownloadUriRef.current !== null) {
+                const imgURI = await getPngDownloadUriRef.current();
                 const a = document.createElement("a");
-                a.href = uri.imgURI;
+                a.href = imgURI;
                 a.target = "_blank";
                 a.download = znPngFilename;
                 a.click();
-            })
+            }
+        };
+
+        download();
     };
 
     const fetchAndSetData = async (): Promise<void> => {
@@ -368,7 +371,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     }}
                     filterInfo={filter}
                     dataUniqueValues={data.uniqueValues}
-                    barChartRef={barChartRef}
+                    getPngDownloadUriRef={getPngDownloadUriRef}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}

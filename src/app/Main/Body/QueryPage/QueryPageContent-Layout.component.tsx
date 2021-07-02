@@ -59,8 +59,7 @@ export function QueryPageContentLayoutComponent(props: {
     };
     mainFilterAttributes: string[];
     selectedFilter: FilterInterface;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    barChartRef: MutableRefObject<any>;
+    getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplayOptionsChange: (displayOption: string) => void;
     onDownloadChart: () => void;
 }): JSX.Element {
@@ -104,7 +103,7 @@ export function QueryPageContentLayoutComponent(props: {
                 columnAttributes={props.columnNameValues}
                 chartData={props.tableData.statisticDataAbsolute}
                 isChart={isFeature}
-                barChartRef={props.barChartRef}
+                getPngDownloadUriRef={props.getPngDownloadUriRef}
                 onDownloadChart={handleChartDownload}
             />
         </div>
