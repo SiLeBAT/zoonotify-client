@@ -67,14 +67,14 @@ function createListItemComponent(parameterList: string[]): JSX.Element[] {
 }
 
 export interface ListProps {
-    element: FilterType;
-    listElements: string[];
+    paramterLabel: FilterType;
+    parameterList: string[];
 }
 
 export function ParameterContentListComponent(props: ListProps): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
-    const label = t(`Filters.${props.element}`);
+    const label = t(`Filters.${props.paramterLabel}`);
 
     return (
         <List
@@ -91,7 +91,7 @@ export function ParameterContentListComponent(props: ListProps): JSX.Element {
                 </ListSubheader>
             }
         >
-            {createListItemComponent(props.listElements)}
+            {createListItemComponent(props.parameterList)}
         </List>
     );
 }

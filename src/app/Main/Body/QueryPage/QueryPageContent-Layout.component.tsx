@@ -56,7 +56,6 @@ export function QueryPageContentLayoutComponent(props: {
         total: number;
         filtered: number;
     };
-    mainFilterAttributes: string[];
     selectedFilter: FilterInterface;
     onDisplayOptionsChange: (displayOption: string) => void;
 }): JSX.Element {
@@ -72,9 +71,8 @@ export function QueryPageContentLayoutComponent(props: {
             <h1 css={headingStyle}>{t("Content.Title")}</h1>
             <QueryPageDatabaseStatusIndicatorComponent />
             <div css={contentBoxStyle}>
-                {props.isFilter || props.isCol || props.isRow ? (
+                {props.isFilter ? (
                     <QueryPageParameterContentComponent
-                        mainFilterAttributes={props.mainFilterAttributes}
                         selectedFilter={props.selectedFilter}
                     />
                 ) : (

@@ -118,7 +118,6 @@ export function QueryPageLayoutComponent(props: {
                 tableData={props.tableData}
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.filterInfo.selectedFilter}
-                mainFilterAttributes={props.filterInfo.mainFilter}
                 onDisplayOptionsChange={handleChangeDisplayOptions}
             />
         </main>

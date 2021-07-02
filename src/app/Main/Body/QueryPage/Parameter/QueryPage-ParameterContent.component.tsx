@@ -13,20 +13,11 @@ const parameterBlockStyle = css`
 `;
 
 export function QueryPageParameterContentComponent(props: {
-    mainFilterAttributes: string[];
     selectedFilter: FilterInterface;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const mainFilters = props.mainFilterAttributes;
     const selectedFilters = props.selectedFilter;
-
-    const displayedFilters = new Map<string, string[]>();
-    mainFilters.forEach((filterElement: string) => {
-        if (selectedFilters[filterElement].length !== 0) {
-            displayedFilters.set(filterElement, selectedFilters[filterElement]);
-        }
-    });
 
     /**
      * @desc Creates a ParameterList for each main filter
@@ -34,14 +25,13 @@ export function QueryPageParameterContentComponent(props: {
      */
     const createParameterComponent = (): JSX.Element[] => {
         const elements: JSX.Element[] = [];
-        Object.keys(displayedFilters).forEach((element): void => {
-            const listElements = displayedFilters.get(element);
-            if (listElements !== undefined) {
+        Object.keys(selectedFilters).forEach((filterElement) => {
+            if (selectedFilters[filterElement].length !== 0) {
                 elements.push(
                     <ParameterContentListComponent
-                        key={`parameter_list_${element}`}
-                        element={element}
-                        listElements={listElements}
+                        key={`parameter_list_${filterElement}`}
+                        paramterLabel={filterElement}
+                        parameterList={selectedFilters[filterElement]}
                     />
                 );
             }
