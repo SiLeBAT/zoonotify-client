@@ -23,14 +23,14 @@ const tableContainerStyle = css`
 `;
 
 const tableTextStyle = css`
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     letter-spacing: 0;
     white-space: nowrap;
 `;
 
 const starTextStyle = css`
     margin-left: 1em;
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     letter-spacing: 0;
 `;
 

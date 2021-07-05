@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
 import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.component";
 import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
@@ -57,12 +58,16 @@ export function QueryPageContentLayoutComponent(props: {
         filtered: number;
     };
     selectedFilter: FilterInterface;
+    getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplayOptionsChange: (displayOption: string) => void;
+    onDownloadChart: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
+
+    const handleChartDownload = (): void => props.onDownloadChart();
 
     const isFeature: boolean = props.isCol || props.isRow;
 
@@ -92,9 +97,12 @@ export function QueryPageContentLayoutComponent(props: {
                 />
             </div>
             <QueryPageContentBarChartResultsComponent
+                chartIsLoading={props.tableIsLoading}
                 columnAttributes={props.columnNameValues}
                 chartData={props.tableData.statisticDataAbsolute}
                 isChart={isFeature}
+                getPngDownloadUriRef={props.getPngDownloadUriRef}
+                onDownloadChart={handleChartDownload}
             />
         </div>
     );

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -24,21 +24,22 @@ import {
     FilterInterface,
     FilterType,
 } from "../../../Shared/Model/Filter.model";
-import { getFilterFromPath } from "./QueryPageServices/PathServices/getFilterFromPath.service";
-import { generatePathStringService } from "./QueryPageServices/PathServices/generatePathString.service";
+import { getFilterFromPath } from "./Services/PathServices/getFilterFromPath.service";
+import { generatePathStringService } from "./Services/PathServices/generatePathString.service";
 import { QueryPageLayoutComponent } from "./QueryPage-Layout.component";
-import { CheckIfFilterIsSet } from "./QueryPageServices/checkIfFilterIsSet.service";
-import { chooseSelectedDisplayedFeaturesService } from "./QueryPageServices/SelectorServices/chooseSelectedDisplFeatures.service";
-import { chooseSelectedFiltersService } from "./QueryPageServices/SelectorServices/chooseSelectedFilters.service";
-import { calculateRelativeTableData } from "./QueryPageServices/TableServices/calculateRelativeTableData.service";
-import { adaptCountedIsolatesGroupsService } from "./QueryPageServices/adaptCountedIsolatesGroups.service";
-import { generateTableHeaderValuesService } from "./QueryPageServices/TableServices/generateTableHeaderValues.service";
-import { generateStatisticTableDataAbsService } from "./QueryPageServices/TableServices/generateStatisticTableDataAbs.service";
-import { getFeaturesFromPath } from "./QueryPageServices/PathServices/getTableFromPath.service";
+import { CheckIfFilterIsSet } from "./Services/checkIfFilterIsSet.service";
+import { chooseSelectedDisplayedFeaturesService } from "./Services/SelectorServices/chooseSelectedDisplFeatures.service";
+import { chooseSelectedFiltersService } from "./Services/SelectorServices/chooseSelectedFilters.service";
+import { calculateRelativeTableData } from "./Services/TableServices/calculateRelativeTableData.service";
+import { adaptCountedIsolatesGroupsService } from "./Services/adaptCountedIsolatesGroups.service";
+import { generateTableHeaderValuesService } from "./Services/TableServices/generateTableHeaderValues.service";
+import { generateStatisticTableDataAbsService } from "./Services/TableServices/generateStatisticTableDataAbs.service";
+import { getFeaturesFromPath } from "./Services/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
-import { generateUniqueValuesService } from "./QueryPageServices/generateUniqueValues.service";
+import { generateUniqueValuesService } from "./Services/generateUniqueValues.service";
 import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
+import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -67,11 +68,13 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
+    const getPngDownloadUriRef = useRef<(() => Promise<string>) | null>(null);
+
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ): void => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const newTable: TableInterface = {
             ...table,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
@@ -86,7 +89,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleSwapDisplFeatures = (): void => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const newTable: TableInterface = {
             ...table,
             row: table.column,
@@ -183,6 +186,23 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilter(newFilter);
     };
 
+    const handleChartDownload = (): void => {
+        const znPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
+
+        const download = async (): Promise<void> => {
+            if (getPngDownloadUriRef.current !== null) {
+                const imgURI = await getPngDownloadUriRef.current();
+                const a = document.createElement("a");
+                a.href = imgURI;
+                a.target = "_blank";
+                a.download = znPngFilename;
+                a.click();
+            }
+        };
+
+        download();
+    };
+
     const fetchAndSetData = async (): Promise<void> => {
         const isolateResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             ISOLATE_COUNT_URL
@@ -227,10 +247,14 @@ export function QueryPageContainerComponent(): JSX.Element {
             history.location.search,
             DbKeyCollection
         );
+        let displFilter: string[] = filterFromPath.displayedFilters
+        if (_.isEmpty(filterFromPath.displayedFilters)) {
+            displFilter = defaultFilter.displayedFilters; 
+        }
         setFilter({
-            ...filter,
             mainFilter: DbKeyCollection,
-            selectedFilter: filterFromPath,
+            selectedFilter: filterFromPath.selectedFilters,
+            displayedFilters: displFilter
         });
     };
 
@@ -292,7 +316,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
         );
@@ -306,7 +330,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             setTableContext(isolateCountGroups, nrOfSelectedIsolates);
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
-        setTableIsLoading(false)
+        setTableIsLoading(false);
     };
 
     useEffect(() => {
@@ -351,6 +375,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     }}
                     filterInfo={filter}
                     dataUniqueValues={data.uniqueValues}
+                    getPngDownloadUriRef={getPngDownloadUriRef}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
@@ -358,6 +383,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                    onDownloadChart={handleChartDownload}
                 />
             }
         />

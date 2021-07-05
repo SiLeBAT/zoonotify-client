@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useState } from "react";
+import { MutableRefObject, useState } from "react";
 import { DrawerLayoutComponent } from "./Drawer/Drawer-Layout.component";
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentLayoutComponent } from "./QueryPageContent-Layout.component";
@@ -34,6 +34,7 @@ export function QueryPageLayoutComponent(props: {
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
     tableData: TableInterface;
+    getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
@@ -47,6 +48,7 @@ export function QueryPageLayoutComponent(props: {
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
+    onDownloadChart: () => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -86,6 +88,8 @@ export function QueryPageLayoutComponent(props: {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
 
+    const handleChartDownload = (): void => props.onDownloadChart();
+
     return (
         <main css={mainStyle}>
             <DrawerLayoutComponent
@@ -118,7 +122,9 @@ export function QueryPageLayoutComponent(props: {
                 tableData={props.tableData}
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.filterInfo.selectedFilter}
+                getPngDownloadUriRef={props.getPngDownloadUriRef}
                 onDisplayOptionsChange={handleChangeDisplayOptions}
+                onDownloadChart={handleChartDownload}
             />
         </main>
     );
