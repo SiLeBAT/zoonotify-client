@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -39,6 +39,7 @@ import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { generateUniqueValuesService } from "./Services/generateUniqueValues.service";
 import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
+import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -67,11 +68,13 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
+    const getPngDownloadUriRef = useRef<(() => Promise<string>) | null>(null);
+
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | TableType
     ): void => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const newTable: TableInterface = {
             ...table,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
@@ -86,7 +89,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleSwapDisplFeatures = (): void => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const newTable: TableInterface = {
             ...table,
             row: table.column,
@@ -181,6 +184,23 @@ export function QueryPageContainerComponent(): JSX.Element {
         );
         history.push(newPath);
         setFilter(newFilter);
+    };
+
+    const handleChartDownload = (): void => {
+        const znPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
+
+        const download = async (): Promise<void> => {
+            if (getPngDownloadUriRef.current !== null) {
+                const imgURI = await getPngDownloadUriRef.current();
+                const a = document.createElement("a");
+                a.href = imgURI;
+                a.target = "_blank";
+                a.download = znPngFilename;
+                a.click();
+            }
+        };
+
+        download();
     };
 
     const fetchAndSetData = async (): Promise<void> => {
@@ -296,7 +316,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        setTableIsLoading(true)
+        setTableIsLoading(true);
         const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
         );
@@ -310,7 +330,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             setTableContext(isolateCountGroups, nrOfSelectedIsolates);
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
-        setTableIsLoading(false)
+        setTableIsLoading(false);
     };
 
     useEffect(() => {
@@ -355,6 +375,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     }}
                     filterInfo={filter}
                     dataUniqueValues={data.uniqueValues}
+                    getPngDownloadUriRef={getPngDownloadUriRef}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
@@ -362,6 +383,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                    onDownloadChart={handleChartDownload}
                 />
             }
         />
