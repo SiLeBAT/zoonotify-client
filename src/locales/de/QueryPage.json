@@ -9,7 +9,8 @@
         "TableHead": "Anzahl Isolate",
         "TableHeadRelative": "Anteil Isolate in %",
         "Table": "Tabelle",
-        "Unit": "in %"
+        "Unit": "in %",
+        "per": "je"
     },
     "Buttons": {
         "Delete": "Auswahl zurücksetzen"

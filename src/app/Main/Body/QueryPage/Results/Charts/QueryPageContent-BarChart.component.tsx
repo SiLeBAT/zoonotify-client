@@ -2,6 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { Button } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import { TFunction } from "i18next";
 import _ from "lodash";
 import { MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
@@ -64,6 +65,26 @@ function processingTableDataToApexData(
     };
 }
 
+function generateAxisLabels(
+    t: TFunction,
+    rowName: string,
+    colName: string
+): [string, string] {
+    let lableXaxis = t("Results.TableHead");
+    let lableYaxis = "";
+    if (!_.isEmpty(rowName)) {
+        lableXaxis = `${t("Results.TableHead")} ${t("Results.per")} ${t(
+            `Filters.${rowName}`
+        )}`;
+    }
+
+    if (!_.isEmpty(colName)) {
+        lableYaxis = t(`Filters.${colName}`);
+    }
+
+    return [lableXaxis, lableYaxis];
+}
+
 /**
  * @desc Returns accordion to display the results in a chart
  * @param props - data to display a chart
@@ -76,6 +97,8 @@ export function QueryPageContentBarChartResultsComponent(props: {
     isChart: boolean;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDownloadChart: () => void;
+    colName: string;
+    rowName: string;
 }): JSX.Element {
     const { t } = useTranslation("QueryPage");
 
@@ -96,6 +119,12 @@ export function QueryPageContentBarChartResultsComponent(props: {
         if (_.isEmpty(processedChartData.series) || props.chartIsLoading) {
             chartAccordionContent = <LoadingProcessComponent />;
         } else {
+            const [lableXaxis, lableYaxis] = generateAxisLabels(
+                t,
+                props.rowName,
+                props.colName
+            );
+
             chartAccordionContent = (
                 <div css={dataStyle}>
                     <div css={optionBarStyle}>
@@ -114,6 +143,8 @@ export function QueryPageContentBarChartResultsComponent(props: {
                         <BarChartResultsComponent
                             chartData={processedChartData}
                             getPngDownloadUriRef={props.getPngDownloadUriRef}
+                            lableXaxis={lableXaxis}
+                            lableYaxis={lableYaxis}
                         />
                     </div>
                 </div>
