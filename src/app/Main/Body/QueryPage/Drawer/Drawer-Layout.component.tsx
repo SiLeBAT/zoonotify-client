@@ -23,9 +23,11 @@ const useStyles = makeStyles(() =>
             width: "inherit",
             zIndex: 0,
             position: "relative",
+            direction: "rtl",
+            overflow: "auto",
         },
         drawerContainer: {
-            overflow: "auto",
+            direction: "ltr",
             padding: "1em",
             height: "100%",
         },
@@ -80,7 +82,9 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
-    const handleSubmitFiltersToDisplay = (newFiltersToDisplay: string[]): void => {
+    const handleSubmitFiltersToDisplay = (
+        newFiltersToDisplay: string[]
+    ): void => {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
 

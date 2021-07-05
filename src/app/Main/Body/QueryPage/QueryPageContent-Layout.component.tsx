@@ -15,8 +15,6 @@ import { QueryPageContentBarChartResultsComponent } from "./Results/Charts/Query
 const contentStyle = css`
     width: 0;
     height: inherit;
-    margin-right: 1em;
-    margin-left: 1em;
     padding: 2em;
     flex: 1 1 0;
     hyphens: auto;
@@ -24,13 +22,8 @@ const contentStyle = css`
     overflow: auto;
 `;
 const contentBoxStyle = css`
-    max-width: 60em;
-    min-width: 20em;
+    max-width: 45em;
     margin: auto;
-    display: flex;
-    flex: 0 1 auto;
-    flex-direction: column;
-    hyphens: auto;
     box-sizing: border-box;
 `;
 const headingStyle = css`
@@ -73,7 +66,7 @@ export function QueryPageContentLayoutComponent(props: {
 
     return (
         <div css={contentStyle}>
-            <h1 css={headingStyle}>{t("Content.Title")}</h1>
+            <p css={headingStyle}>{t("Content.Title")}</p>
             <QueryPageDatabaseStatusIndicatorComponent />
             <div css={contentBoxStyle}>
                 {props.isFilter ? (
@@ -95,15 +88,15 @@ export function QueryPageContentLayoutComponent(props: {
                     tableData={props.tableData}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                 />
+                <QueryPageContentBarChartResultsComponent
+                    chartIsLoading={props.tableIsLoading}
+                    columnAttributes={props.columnNameValues}
+                    chartData={props.tableData.statisticDataAbsolute}
+                    isChart={isFeature}
+                    getPngDownloadUriRef={props.getPngDownloadUriRef}
+                    onDownloadChart={handleChartDownload}
+                />
             </div>
-            <QueryPageContentBarChartResultsComponent
-                chartIsLoading={props.tableIsLoading}
-                columnAttributes={props.columnNameValues}
-                chartData={props.tableData.statisticDataAbsolute}
-                isChart={isFeature}
-                getPngDownloadUriRef={props.getPngDownloadUriRef}
-                onDownloadChart={handleChartDownload}
-            />
         </div>
     );
 }
