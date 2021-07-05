@@ -122,7 +122,6 @@ export function QueryPageLayoutComponent(props: {
                 tableData={props.tableData}
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.filterInfo.selectedFilter}
-                mainFilterAttributes={props.filterInfo.mainFilter}
                 getPngDownloadUriRef={props.getPngDownloadUriRef}
                 onDisplayOptionsChange={handleChangeDisplayOptions}
                 onDownloadChart={handleChartDownload}

@@ -23,7 +23,6 @@ const listStyle = css`
 const parameterValue = css`
     margin-top: 0;
     margin-left: 2em;
-    white-space: nowrap;
     span {
         letter-spacing: 0;
     }
@@ -31,9 +30,7 @@ const parameterValue = css`
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            flexGrow: 1,
-            maxWidth: 752,
-            flex: "1 1 auto",
+            width: "11em",
         },
         demo: {
             backgroundColor: theme.palette.background.paper,
@@ -70,14 +67,14 @@ function createListItemComponent(parameterList: string[]): JSX.Element[] {
 }
 
 export interface ListProps {
-    element: FilterType;
-    listElements: string[];
+    paramterLabel: FilterType;
+    parameterList: string[];
 }
 
 export function ParameterContentListComponent(props: ListProps): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
-    const label = t(`Filters.${props.element}`);
+    const label = t(`Filters.${props.paramterLabel}`);
 
     return (
         <List
@@ -94,7 +91,7 @@ export function ParameterContentListComponent(props: ListProps): JSX.Element {
                 </ListSubheader>
             }
         >
-            {createListItemComponent(props.listElements)}
+            {createListItemComponent(props.parameterList)}
         </List>
     );
 }

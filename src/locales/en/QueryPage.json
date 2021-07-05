@@ -5,7 +5,7 @@
         "MainText": "ZooNotify allows to query a selection of classification results of isolates sent to the National Reference Laboratories at BfR. These are zoonotic agents and commensals obtained within the framework of the national zoonoses monitoring according to the AVV Zoonoses Food Chain Regulation and the Salmonella control programmes in poultry according to Regulation (EC) No 2160/2003. You can create your own queries with the filter function on the left or view and edit sample requests [LINK]. ZooNotify generates downloadable tables and graphics for you. The queries can be reproduced and shared via the URL."
     },
     "Results": {
-        "Parameter": "Parameter",
+        "Parameter": "Selected Filters",
         "TableHead": "Number of isolates",
         "TableHeadRelative": "Isolates in %",
         "Table": "Table",
