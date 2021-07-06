@@ -9,7 +9,8 @@
         "TableHead": "Number of isolates",
         "TableHeadRelative": "Isolates in %",
         "Table": "Table",
-        "Unit": "in %"
+        "Unit": "in %", 
+        "per": "per"
     },
     "Buttons": {
         "Delete": "Delete all"

@@ -7,6 +7,8 @@ import { ApexChartData } from "./ApexChart.model";
 export function BarChartResultsComponent(props: {
     chartData: ApexChartData;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
+    xAxisLabel: string;
+    yAxisLabel: string;
 }): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const barChartRef = useRef<any>(null);
@@ -19,7 +21,7 @@ export function BarChartResultsComponent(props: {
                 .then((uri: { imgURI: string }) => uri.imgURI);
         };
     }, []);
-
+    
     const chartOptions: ApexOptions = {
         chart: {
             type: "bar",
@@ -65,6 +67,15 @@ export function BarChartResultsComponent(props: {
         },
         xaxis: {
             categories: props.chartData.dataLabels,
+            title: {
+                text: props.xAxisLabel,
+                style: {
+                    fontSize: "12px",
+                    fontFamily: "Helvetica, Arial, sans-serif",
+                    fontWeight: 600,
+                    cssClass: "apexcharts-xaxis-title",
+                },
+            },
         },
         yaxis: {
             showForNullSeries: false,
@@ -73,6 +84,15 @@ export function BarChartResultsComponent(props: {
                 align: "right",
                 minWidth: 0,
                 maxWidth: 500,
+            },
+            title: {
+                text: props.yAxisLabel,
+                style: {
+                    fontSize: "12px",
+                    fontFamily: "Helvetica, Arial, sans-serif",
+                    fontWeight: 600,
+                    cssClass: "apexcharts-xaxis-title",
+                },
             },
         },
         legend: {
