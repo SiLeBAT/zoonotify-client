@@ -7,8 +7,8 @@ import { ApexChartData } from "./ApexChart.model";
 export function BarChartResultsComponent(props: {
     chartData: ApexChartData;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
-    lableXaxis: string;
-    lableYaxis: string;
+    xAxisLabel: string;
+    yAxisLabel: string;
 }): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const barChartRef = useRef<any>(null);
@@ -68,7 +68,7 @@ export function BarChartResultsComponent(props: {
         xaxis: {
             categories: props.chartData.dataLabels,
             title: {
-                text: props.lableXaxis,
+                text: props.xAxisLabel,
                 style: {
                     fontSize: "12px",
                     fontFamily: "Helvetica, Arial, sans-serif",
@@ -86,7 +86,7 @@ export function BarChartResultsComponent(props: {
                 maxWidth: 500,
             },
             title: {
-                text: props.lableYaxis,
+                text: props.yAxisLabel,
                 style: {
                     fontSize: "12px",
                     fontFamily: "Helvetica, Arial, sans-serif",

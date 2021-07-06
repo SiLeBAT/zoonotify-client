@@ -70,19 +70,19 @@ function generateAxisLabels(
     rowName: string,
     colName: string
 ): [string, string] {
-    let lableXaxis = t("Results.TableHead");
-    let lableYaxis = "";
-    if (!_.isEmpty(rowName)) {
-        lableXaxis = `${t("Results.TableHead")} ${t("Results.per")} ${t(
+    let xAxisLabel = t("Results.TableHead");
+    let yAxisLabel = "";
+    if (rowName !== "") {
+        xAxisLabel = `${t("Results.TableHead")} ${t("Results.per")} ${t(
             `Filters.${rowName}`
         )}`;
     }
 
-    if (!_.isEmpty(colName)) {
-        lableYaxis = t(`Filters.${colName}`);
+    if (colName !== "") {
+        yAxisLabel = t(`Filters.${colName}`);
     }
 
-    return [lableXaxis, lableYaxis];
+    return [xAxisLabel, yAxisLabel];
 }
 
 /**
@@ -119,7 +119,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
         if (_.isEmpty(processedChartData.series) || props.chartIsLoading) {
             chartAccordionContent = <LoadingProcessComponent />;
         } else {
-            const [lableXaxis, lableYaxis] = generateAxisLabels(
+            const [xAxisLabel, yAxisLabel] = generateAxisLabels(
                 t,
                 props.rowName,
                 props.colName
@@ -143,8 +143,8 @@ export function QueryPageContentBarChartResultsComponent(props: {
                         <BarChartResultsComponent
                             chartData={processedChartData}
                             getPngDownloadUriRef={props.getPngDownloadUriRef}
-                            lableXaxis={lableXaxis}
-                            lableYaxis={lableYaxis}
+                            xAxisLabel={xAxisLabel}
+                            yAxisLabel={yAxisLabel}
                         />
                     </div>
                 </div>
