@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
     Radio,
     FormControl,
+    FormGroup,
     FormControlLabel,
     RadioGroup,
     withStyles,
@@ -19,10 +20,7 @@ import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 const size = 0.75;
 
 const optionsStyle = css`
-    width: 100%;
-    display: "flex";
-    margin-top: 9px;
-    flex-direction: row;
+    display: flex;
     justify-content: space-between;
 `;
 const optionsHeadingStyle = css`
@@ -44,6 +42,8 @@ const radioButtonSizeStyle = css`
 const checkBoxLabelStyle = css`
     margin-right: 0;
     span {
+        padding: 0px;
+        margin-left: 5px;
         font-size: ${size}rem;
     }
     svg {
@@ -73,65 +73,94 @@ const BlueRadio = withStyles(() =>
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
-    isSumRowCol: boolean;
+    isSumRowCol: { rowSum: boolean; colSum: boolean };
     tableOption: DisplayOptionType;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onShowSumsToggle: (showSums: boolean) => void;
+    onShowRowSumToggle: (showSums: boolean) => void;
+    onShowColSumToggle: (showSums: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleChangeShowSumsToggle = (showSums: boolean): void => {
-        props.onShowSumsToggle(showSums);
+    const handleChangeShowRowSumToggle = (showSums: boolean): void => {
+        props.onShowRowSumToggle(showSums);
+    };
+    const handleChangeShowColSumToggle = (showSums: boolean): void => {
+        props.onShowColSumToggle(showSums);
     };
 
-    const optionsHeading = t("OptionBar.Title")
+    const optionsHeading = t("OptionBar.Title");
     const absoluteText = t("OptionBar.Absolute");
     const percentageText = t("OptionBar.Percent");
-    const sumRowColText = t("OptionBar.Sum")
+    const sumColText = t("Sums.ColSum");
+    const sumRowText = t("Sums.RowSum");
 
     return (
         <div>
             <p css={optionsHeadingStyle}>{optionsHeading}</p>
-            <FormControl css={optionsStyle} component="fieldset">
-                <RadioGroup
-                    css={css`
-                        margin-bottom: 9px;
-                    `}
-                    aria-label="options"
-                    name="options"
-                    value={props.tableOption}
-                    onChange={(event) => handleChangeDisplayOptions(event.target.value)}
-                >
-                    <FormControlLabel
-                        css={radioButtonSizeStyle}
-                        value="absolute"
-                        control={<BlueRadio color="default" size="small" />}
-                        label={absoluteText}
-                    />
-                    <FormControlLabel
-                        css={radioButtonSizeStyle}
-                        value="relative"
-                        control={<BlueRadio color="default" size="small" />}
-                        label={percentageText}
-                    />
-                </RadioGroup>
-                <FormControlLabel
-                    css={checkBoxLabelStyle}
-                    control={
-                        <Checkbox
-                            checked={props.isSumRowCol}
-                            onChange={(event) =>
-                                handleChangeShowSumsToggle(event.target.checked)
-                            }
-                            name="displaySumRowCol"
-                            color="primary"
+            <div css={optionsStyle}>
+                <FormControl component="fieldset">
+                    <RadioGroup
+                        css={css`
+                            margin-bottom: 9px;
+                        `}
+                        aria-label="options"
+                        name="options"
+                        value={props.tableOption}
+                        onChange={(event) =>
+                            handleChangeDisplayOptions(event.target.value)
+                        }
+                    >
+                        <FormControlLabel
+                            css={radioButtonSizeStyle}
+                            value="absolute"
+                            control={<BlueRadio color="default" size="small" />}
+                            label={absoluteText}
                         />
-                    }
-                    label={sumRowColText}
-                />
-            </FormControl>
+                        <FormControlLabel
+                            css={radioButtonSizeStyle}
+                            value="relative"
+                            control={<BlueRadio color="default" size="small" />}
+                            label={percentageText}
+                        />
+                    </RadioGroup>
+                </FormControl>
+                <FormGroup>
+                    <FormControlLabel
+                        css={checkBoxLabelStyle}
+                        control={
+                            <Checkbox
+                                checked={props.isSumRowCol.colSum}
+                                onChange={(event) =>
+                                    handleChangeShowColSumToggle(
+                                        event.target.checked
+                                    )
+                                }
+                                name="displaySumCol"
+                                color="primary"
+                            />
+                        }
+                        label={sumColText}
+                    />
+                    <FormControlLabel
+                        css={checkBoxLabelStyle}
+                        control={
+                            <Checkbox
+                                checked={props.isSumRowCol.rowSum}
+                                onChange={(event) =>
+                                    handleChangeShowRowSumToggle(
+                                        event.target.checked
+                                    )
+                                }
+                                name="displaySumRow"
+                                color="primary"
+                            />
+                        }
+                        label={sumRowText}
+                    />
+                </FormGroup>
+            </div>
         </div>
     );
 }
