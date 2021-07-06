@@ -28,7 +28,7 @@ const sumTableCellStyle = css`
  * @returns {JSX.Element} - list of table cell components
  */
 export function TableContentRowsComponent(props: {
-    isSumRowCol: { rowSum: boolean; colSum: boolean };
+    isSumRowCol: { showRowSum: boolean; showColSum: boolean };
     row: Record<string, string>;
     classes: Record<"tableCell", string>;
     displayOption: string;
@@ -65,7 +65,7 @@ export function TableContentRowsComponent(props: {
         );
     });
 
-    if (props.isSumRowCol.rowSum) {
+    if (props.isSumRowCol.showRowSum) {
         let rowSumString = rowSum.toString();
         if (props.displayOption === "relative") {
             rowSumString = rowSum.toFixed(2);

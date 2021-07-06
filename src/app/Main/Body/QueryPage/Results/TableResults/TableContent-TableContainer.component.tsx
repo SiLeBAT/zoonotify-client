@@ -43,7 +43,7 @@ const useStyles = makeStyles({
  * @returns {JSX.Element} - table container component
  */
 export function TableContentTableContainerComponent(props: {
-    isSumRowCol: { rowSum: boolean; colSum: boolean };
+    isSumRowCol: { showRowSum: boolean; showColSum: boolean };
     isCol: boolean;
     tableData: Record<string, string>[];
     displayOption: DisplayOptionType;
@@ -64,7 +64,7 @@ export function TableContentTableContainerComponent(props: {
         </TableRow>
     ));
 
-    if (props.isSumRowCol.colSum) {
+    if (props.isSumRowCol.showColSum) {
         tableRows.push(
             <TableRow key="row-with-column-sum">
                 {TableContentRowWithColSumComponent({

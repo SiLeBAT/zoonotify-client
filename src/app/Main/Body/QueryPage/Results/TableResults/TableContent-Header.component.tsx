@@ -53,7 +53,7 @@ const StyledTableCell = withStyles(() =>
  * @returns {JSX.Element[]} - list of table cell components
  */
 export function TableContentHeaderComponent(
-    isSumRowCol: { rowSum: boolean; colSum: boolean },
+    isSumRowCol: { showRowSum: boolean; showColSum: boolean },
     headerValues: string[],
     tableOption: DisplayOptionType,
     isCol: boolean
@@ -83,7 +83,7 @@ export function TableContentHeaderComponent(
             </StyledTableCell>
         );
     });
-    if (isSumRowCol.rowSum) {
+    if (isSumRowCol.showRowSum) {
         headerTableCells.push(
             <StyledTableCell key="header-row-sum" css={sumCellStyle}>
                 {t("Sums.RowSum")}

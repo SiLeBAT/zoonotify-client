@@ -41,22 +41,19 @@ export function QueryPageContentTableResultsLayoutComponent(
     props: TableResultsProps
 ): JSX.Element {
     const [isSumRowCol, setIsSumRowCol] = useState<{
-        rowSum: boolean;
-        colSum: boolean;
+        showRowSum: boolean;
+        showColSum: boolean;
     }>({
-        rowSum: true,
-        colSum: true,
+        showRowSum: true,
+        showColSum: true,
     });
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleChangeShowRowSumToggle = (showSums: boolean): void => {
-        setIsSumRowCol({ ...isSumRowCol, rowSum: showSums });
-    };
-    const handleChangeShowColSumToggle = (showSums: boolean): void => {
-        setIsSumRowCol({ ...isSumRowCol, colSum: showSums });
+    const handleShowRowColSum = (name: string, checked: boolean): void => {
+        setIsSumRowCol({ ...isSumRowCol, [name]: checked });
     };
 
     const tableColAttribute = props.tableData.column;
@@ -90,8 +87,7 @@ export function QueryPageContentTableResultsLayoutComponent(
                     isSumRowCol={isSumRowCol}
                     tableOption={props.tableData.option}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
-                    onShowRowSumToggle={handleChangeShowRowSumToggle}
-                    onShowColSumToggle={handleChangeShowColSumToggle}
+                    onShowRowColSum={handleShowRowColSum}
                 />
                 <TableResultsTableComponent
                     isSumRowCol={isSumRowCol}

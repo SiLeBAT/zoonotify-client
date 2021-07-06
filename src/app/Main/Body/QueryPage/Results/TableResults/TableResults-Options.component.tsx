@@ -4,18 +4,17 @@ import { useTranslation } from "react-i18next";
 import {
     Radio,
     FormControl,
-    FormGroup,
     FormControlLabel,
     RadioGroup,
     withStyles,
     createStyles,
-    Checkbox,
 } from "@material-ui/core";
 import {
     bfrDarkgrey,
     primaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
+import { CheckboxesComponent } from "../../../../../Shared/Checkboxes.component";
 
 const size = 0.75;
 
@@ -28,18 +27,7 @@ const optionsHeadingStyle = css`
     font-weight: bold;
     font-size: ${size}rem;
 `;
-const radioButtonSizeStyle = css`
-    span {
-        padding: 0px;
-        margin-left: 5px;
-        font-size: ${size}rem;
-    }
-    svg {
-        width: ${size}em;
-        height: ${size}em;
-    }
-`;
-const checkBoxLabelStyle = css`
+const toggleStyle = css`
     margin-right: 0;
     span {
         padding: 0px;
@@ -73,22 +61,17 @@ const BlueRadio = withStyles(() =>
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
-    isSumRowCol: { rowSum: boolean; colSum: boolean };
+    isSumRowCol: { showRowSum: boolean; showColSum: boolean };
     tableOption: DisplayOptionType;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onShowRowSumToggle: (showSums: boolean) => void;
-    onShowColSumToggle: (showSums: boolean) => void;
+    onShowRowColSum: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleChangeShowRowSumToggle = (showSums: boolean): void => {
-        props.onShowRowSumToggle(showSums);
-    };
-    const handleChangeShowColSumToggle = (showSums: boolean): void => {
-        props.onShowColSumToggle(showSums);
-    };
+    const handleChangeShowRowColSum = (name: string, checked: boolean): void =>
+        props.onShowRowColSum(name, checked);
 
     const optionsHeading = t("OptionBar.Title");
     const absoluteText = t("OptionBar.Absolute");
@@ -113,53 +96,35 @@ export function ResultsTableOptionsComponent(props: {
                         }
                     >
                         <FormControlLabel
-                            css={radioButtonSizeStyle}
+                            css={toggleStyle}
                             value="absolute"
                             control={<BlueRadio color="default" size="small" />}
                             label={absoluteText}
                         />
                         <FormControlLabel
-                            css={radioButtonSizeStyle}
+                            css={toggleStyle}
                             value="relative"
                             control={<BlueRadio color="default" size="small" />}
                             label={percentageText}
                         />
                     </RadioGroup>
                 </FormControl>
-                <FormGroup>
-                    <FormControlLabel
-                        css={checkBoxLabelStyle}
-                        control={
-                            <Checkbox
-                                checked={props.isSumRowCol.colSum}
-                                onChange={(event) =>
-                                    handleChangeShowColSumToggle(
-                                        event.target.checked
-                                    )
-                                }
-                                name="displaySumCol"
-                                color="primary"
-                            />
-                        }
-                        label={sumColText}
-                    />
-                    <FormControlLabel
-                        css={checkBoxLabelStyle}
-                        control={
-                            <Checkbox
-                                checked={props.isSumRowCol.rowSum}
-                                onChange={(event) =>
-                                    handleChangeShowRowSumToggle(
-                                        event.target.checked
-                                    )
-                                }
-                                name="displaySumRow"
-                                color="primary"
-                            />
-                        }
-                        label={sumRowText}
-                    />
-                </FormGroup>
+                {CheckboxesComponent({
+                    onCheckboxChange: handleChangeShowRowColSum,
+                    checkboxes: [
+                        {
+                            name: "showColSum",
+                            label: sumColText,
+                            checked: props.isSumRowCol.showColSum,
+                        },
+                        {
+                            name: "showRowSum",
+                            label: sumRowText,
+                            checked: props.isSumRowCol.showRowSum,
+                        },
+                    ],
+                    style: toggleStyle,
+                })}
             </div>
         </div>
     );
