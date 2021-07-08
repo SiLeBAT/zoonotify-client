@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import {
     Radio,
     FormControl,
@@ -15,6 +16,7 @@ import {
 } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 import { CheckboxesComponent } from "../../../../../Shared/Checkboxes.component";
+import { SumOptions } from "./TableResults.mode";
 
 const size = 0.75;
 
@@ -64,14 +66,25 @@ export function ResultsTableOptionsComponent(props: {
     isSumRowCol: { showRowSum: boolean; showColSum: boolean };
     tableOption: DisplayOptionType;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onShowRowColSum: (name: string, checked: boolean) => void;
+    onShowRowColSum: (isSumRowCol: {
+        showRowSum: boolean;
+        showColSum: boolean;
+    }) => void;
 }): JSX.Element {
+    const [isSumRowCol, setIsSumRowCol] = useState<SumOptions>({
+        showRowSum: true,
+        showColSum: true,
+    });
     const { t } = useTranslation(["QueryPage"]);
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleChangeShowRowColSum = (name: string, checked: boolean): void =>
-        props.onShowRowColSum(name, checked);
+    const handleRowSumCheckboxChange = (name: string, checked: boolean): void => {
+            const newIsSumRowCol = { ...isSumRowCol, [name]: checked }
+            setIsSumRowCol(newIsSumRowCol);
+            props.onShowRowColSum(newIsSumRowCol);
+    }
+        
 
     const optionsHeading = t("OptionBar.Title");
     const absoluteText = t("OptionBar.Absolute");
@@ -110,7 +123,7 @@ export function ResultsTableOptionsComponent(props: {
                     </RadioGroup>
                 </FormControl>
                 {CheckboxesComponent({
-                    onCheckboxChange: handleChangeShowRowColSum,
+                    onCheckboxChange: handleRowSumCheckboxChange,
                     checkboxes: [
                         {
                             name: "showColSum",
