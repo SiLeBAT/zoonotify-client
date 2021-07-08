@@ -20,6 +20,9 @@ const listStyle = css`
     padding: 0;
     margin: 0 4em 0 0;
 `;
+const listHeaderStyle = css`
+    position: relative;
+`;
 const parameterValue = css`
     margin-top: 0;
     margin-left: 2em;
@@ -86,6 +89,7 @@ export function ParameterContentListComponent(props: ListProps): JSX.Element {
                     component="div"
                     id="nested-list-subheader"
                     className={classes.nested}
+                    css={listHeaderStyle}
                 >
                     {label}
                 </ListSubheader>
