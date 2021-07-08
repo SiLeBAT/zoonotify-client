@@ -12,7 +12,7 @@ const wrapperStyle = css`
     box-sizing: border-box;
 `;
 const bodyStyle = css`
-    flex: 1;
+    flex: 1 1 0;
     box-sizing: border-box;
     overflow: auto;
 `;

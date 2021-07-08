@@ -14,7 +14,6 @@ import { QueryPageContentBarChartResultsComponent } from "./Results/Charts/Query
 
 const contentStyle = css`
     width: 0;
-    height: inherit;
     padding: 2em;
     flex: 1 1 0;
     hyphens: auto;
