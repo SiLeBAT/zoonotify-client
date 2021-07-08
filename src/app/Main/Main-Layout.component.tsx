@@ -12,27 +12,8 @@ const wrapperStyle = css`
     box-sizing: border-box;
 `;
 const bodyStyle = css`
-    width: 100%;
-    flex: 1 0 auto;
+    flex: 1 1 0;
     box-sizing: border-box;
-    overflow: auto;
-`;
-const footerStyle = css`
-    flex: 0 0 auto;
-    box-sizing: border-box;
-`;
-const headerStyle = css`
-    width: 100%;
-    flex: 0 0 auto;
-    z-index: 100;
-    box-sizing: border-box;
-`;
-const contentWrapperStyle = css`
-    width: 100%;
-    height: 0;
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
     overflow: auto;
 `;
 
@@ -44,17 +25,13 @@ export function MainLayoutComponent(): JSX.Element {
     return (
         <div css={wrapperStyle}>
             <BrowserRouter>
-                <div css={headerStyle}>
+                <div>
                     <HeaderComponent />
                 </div>
-                <div css={contentWrapperStyle}>
-                    <div css={bodyStyle}>
-                        <BodyRouterComponent />
-                    </div>
-                    <div css={footerStyle}>
-                        <FooterContainer />
-                    </div>
+                <div css={bodyStyle}>
+                    <BodyRouterComponent />
                 </div>
+                <FooterContainer />
             </BrowserRouter>
         </div>
     );
