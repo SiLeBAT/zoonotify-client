@@ -94,8 +94,9 @@ export function QueryPageContentLayoutComponent(props: {
                     isChart={isFeature}
                     getPngDownloadUriRef={props.getPngDownloadUriRef}
                     onDownloadChart={handleChartDownload}
+                    colName={props.tableData.column}
+                    rowName={props.tableData.row}
                 />
-            </div>
         </div>
     );
 }
