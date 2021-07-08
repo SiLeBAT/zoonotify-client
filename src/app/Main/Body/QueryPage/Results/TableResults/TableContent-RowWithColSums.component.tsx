@@ -43,7 +43,7 @@ function calculateColSum(
 }
 
 export function TableContentRowWithColSumComponent(props: {
-    isSumRowCol: { showRowSum: boolean; showColSum: boolean };
+    showRowSum: boolean;
     tableData: Record<string, string>[];
     headerValues: string[];
     classes: Record<"tableCell", string>;
@@ -86,7 +86,7 @@ export function TableContentRowWithColSumComponent(props: {
             </TableCell>
         );
     });
-    if (props.isSumRowCol.showRowSum) {
+    if (props.showRowSum) {
         arrayWithColSumCells.push(
             <TableCell css={emptyCellStyle} key="sum-blank">
                 &nbsp;

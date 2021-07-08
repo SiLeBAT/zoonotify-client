@@ -55,7 +55,7 @@ export function TableContentTableContainerComponent(props: {
     const tableRows: JSX.Element[] = props.tableData.map((row) => (
         <TableRow key={`row-${row.name}`}>
             {TableContentRowsComponent({
-                isSumRowCol: props.isSumRowCol,
+                showRowSum: props.isSumRowCol.showRowSum,
                 row,
                 classes,
                 displayOption: props.displayOption,
@@ -68,7 +68,7 @@ export function TableContentTableContainerComponent(props: {
         tableRows.push(
             <TableRow key="row-with-column-sum">
                 {TableContentRowWithColSumComponent({
-                    isSumRowCol: props.isSumRowCol,
+                    showRowSum: props.isSumRowCol.showRowSum,
                     tableData: props.tableData,
                     headerValues: props.columnNameValues,
                     classes,
@@ -85,7 +85,7 @@ export function TableContentTableContainerComponent(props: {
                 <TableHead css={headerStyle}>
                     <TableRow css={headerStyle}>
                         {TableContentHeaderComponent(
-                            props.isSumRowCol,
+                            props.isSumRowCol.showRowSum,
                             props.columnNameValues,
                             props.displayOption,
                             props.isCol
