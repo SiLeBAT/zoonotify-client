@@ -16,7 +16,7 @@ import {
 } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 import { CheckboxesComponent } from "../../../../../Shared/Checkboxes.component";
-import { SumOptions } from "./TableResults.mode";
+import { SumOptions } from "./TableResults.model";
 
 const size = 0.75;
 
@@ -63,26 +63,20 @@ const BlueRadio = withStyles(() =>
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
-    isSumRowCol: { showRowSum: boolean; showColSum: boolean };
+    sumOptions: { showRowSum: boolean; showColSum: boolean };
     tableOption: DisplayOptionType;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onShowRowColSum: (isSumRowCol: {
-        showRowSum: boolean;
-        showColSum: boolean;
-    }) => void;
+    onChangeSumOptions: (sumOptions: SumOptions) => void;
 }): JSX.Element {
-    const [isSumRowCol, setIsSumRowCol] = useState<SumOptions>({
-        showRowSum: true,
-        showColSum: true,
-    });
+    const [sumOptions, setIsSumOptions] = useState<SumOptions>(props.sumOptions);
     const { t } = useTranslation(["QueryPage"]);
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleRowSumCheckboxChange = (name: string, checked: boolean): void => {
-            const newIsSumRowCol = { ...isSumRowCol, [name]: checked }
-            setIsSumRowCol(newIsSumRowCol);
-            props.onShowRowColSum(newIsSumRowCol);
+    const handleSumOptionsCheckboxChange = (name: string, checked: boolean): void => {
+            const newIsSumOptions = { ...sumOptions, [name]: checked }
+            setIsSumOptions(newIsSumOptions);
+            props.onChangeSumOptions(newIsSumOptions);
     }
         
 
@@ -123,17 +117,17 @@ export function ResultsTableOptionsComponent(props: {
                     </RadioGroup>
                 </FormControl>
                 {CheckboxesComponent({
-                    onCheckboxChange: handleRowSumCheckboxChange,
+                    onCheckboxChange: handleSumOptionsCheckboxChange,
                     checkboxes: [
                         {
                             name: "showColSum",
                             label: sumColText,
-                            checked: props.isSumRowCol.showColSum,
+                            checked: props.sumOptions.showColSum,
                         },
                         {
                             name: "showRowSum",
                             label: sumRowText,
-                            checked: props.isSumRowCol.showRowSum,
+                            checked: props.sumOptions.showRowSum,
                         },
                     ],
                     style: toggleStyle,

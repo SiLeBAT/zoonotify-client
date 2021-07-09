@@ -8,7 +8,7 @@ import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
 import { TableInterface } from "../../../../../Shared/Context/TableContext";
 import { TableResultsTableComponent } from "./TableResults-Table.component";
-import { SumOptions } from "./TableResults.mode";
+import { SumOptions } from "./TableResults.model";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -41,7 +41,7 @@ export interface TableResultsProps {
 export function QueryPageContentTableResultsLayoutComponent(
     props: TableResultsProps
 ): JSX.Element {
-    const [isSumRowColState, setIsSumRowCol] = useState<SumOptions>({
+    const [sumOptionsState, setSumOptionsState] = useState<SumOptions>({
         showRowSum: true,
         showColSum: true,
     });
@@ -50,8 +50,8 @@ export function QueryPageContentTableResultsLayoutComponent(
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleShowRowColSum = (isSumRowCol: SumOptions): void => {
-        setIsSumRowCol(isSumRowCol);
+    const handleSumOptionsChange = (sumOptions: SumOptions): void => {
+        setSumOptionsState(sumOptions);
     };
 
     const tableColAttribute = props.tableData.column;
@@ -82,13 +82,13 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
-                    isSumRowCol={isSumRowColState}
+                    sumOptions={sumOptionsState}
                     tableOption={props.tableData.option}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
-                    onShowRowColSum={handleShowRowColSum}
+                    onChangeSumOptions={handleSumOptionsChange}
                 />
                 <TableResultsTableComponent
-                    isSumRowCol={isSumRowColState}
+                    sumOptions={sumOptionsState}
                     isLoading={props.tableIsLoading}
                     displayRowCol={props.displayRowCol}
                     colMainHeader={colMainHeader}

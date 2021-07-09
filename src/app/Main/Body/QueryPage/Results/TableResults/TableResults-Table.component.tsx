@@ -19,7 +19,7 @@ const tableDivStyle = css`
  * @returns {JSX.Element} - result table
  */
 export function TableResultsTableComponent(props: {
-    isSumRowCol: { showRowSum: boolean; showColSum: boolean };
+    sumOptions: { showRowSum: boolean; showColSum: boolean };
     isLoading: boolean;
     displayRowCol: {
         isCol: boolean;
@@ -58,7 +58,7 @@ export function TableResultsTableComponent(props: {
                 )}
                 <div css={dataTableStyle}>
                     <TableContentTableContainerComponent
-                        isSumRowCol={props.isSumRowCol}
+                        sumOptions={props.sumOptions}
                         isCol={props.displayRowCol.isCol}
                         tableData={props.tableData}
                         columnNameValues={props.columnNameValues}
