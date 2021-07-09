@@ -1,6 +1,7 @@
 /** @jsx jsx */
-import { jsx, SerializedStyles } from "@emotion/core";
+import { jsx } from "@emotion/core";
 import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
+import { smallToggleStyle } from "./Style/SmallToggleStyle";
 
 export type CheckboxesConfig = {
     name: string;
@@ -11,7 +12,7 @@ export type CheckboxesConfig = {
 export interface CheckboxesProps {
     onCheckboxChange: (name: string, checked: boolean) => void;
     checkboxes: CheckboxesConfig[];
-    style: SerializedStyles | null;
+    size: "small" | "default";
 }
 
 /**
@@ -29,7 +30,7 @@ export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
 
         checkboxesList.push(
             <FormControlLabel
-                css={props.style}
+                css={props.size === "small" ? smallToggleStyle : null}
                 control={
                     <Checkbox
                         checked={checkbox.checked}

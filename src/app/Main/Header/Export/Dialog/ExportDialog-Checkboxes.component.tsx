@@ -37,6 +37,6 @@ export function ExportDialogCheckboxesComponent(
     return CheckboxesComponent({
         onCheckboxChange: handleChangeCheckbox,
         checkboxes: checkboxObjectList,
-        style: null
+        size: "default"
     });
 }

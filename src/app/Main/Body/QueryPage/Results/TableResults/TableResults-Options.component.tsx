@@ -16,9 +16,9 @@ import {
 } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 import { CheckboxesComponent } from "../../../../../Shared/Checkboxes.component";
+import { smallSize, smallToggleStyle } from "../../../../../Shared/Style/SmallToggleStyle";
 import { SumOptions } from "./TableResults.model";
 
-const size = 0.75;
 
 const optionsStyle = css`
     display: flex;
@@ -27,19 +27,7 @@ const optionsStyle = css`
 const optionsHeadingStyle = css`
     margin: auto 2em auto 0;
     font-weight: bold;
-    font-size: ${size}rem;
-`;
-const toggleStyle = css`
-    margin-right: 0;
-    span {
-        padding: 0px;
-        margin-left: 5px;
-        font-size: ${size}rem;
-    }
-    svg {
-        width: ${size}em;
-        height: ${size}em;
-    }
+    font-size: ${smallSize}rem;
 `;
 
 const BlueRadio = withStyles(() =>
@@ -103,13 +91,13 @@ export function ResultsTableOptionsComponent(props: {
                         }
                     >
                         <FormControlLabel
-                            css={toggleStyle}
+                            css={smallToggleStyle}
                             value="absolute"
                             control={<BlueRadio color="default" size="small" />}
                             label={absoluteText}
                         />
                         <FormControlLabel
-                            css={toggleStyle}
+                            css={smallToggleStyle}
                             value="relative"
                             control={<BlueRadio color="default" size="small" />}
                             label={percentageText}
@@ -130,7 +118,7 @@ export function ResultsTableOptionsComponent(props: {
                             checked: props.sumOptions.showRowSum,
                         },
                     ],
-                    style: toggleStyle,
+                    size: "small",
                 })}
             </div>
         </div>
