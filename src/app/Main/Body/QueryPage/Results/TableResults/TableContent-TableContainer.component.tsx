@@ -84,12 +84,12 @@ export function TableContentTableContainerComponent(props: {
             <Table stickyHeader aria-label="statistic table">
                 <TableHead css={headerStyle}>
                     <TableRow css={headerStyle}>
-                        {TableContentHeaderComponent(
-                            props.sumOptions.showRowSum,
-                            props.columnNameValues,
-                            props.displayOption,
-                            props.isCol
-                        )}
+                        {TableContentHeaderComponent({
+                            showRowSum: props.sumOptions.showRowSum,
+                            headerValues: props.columnNameValues,
+                            tableOption: props.displayOption,
+                            isCol: props.isCol,
+                        })}
                     </TableRow>
                 </TableHead>
                 <TableBody>{tableRows}</TableBody>
