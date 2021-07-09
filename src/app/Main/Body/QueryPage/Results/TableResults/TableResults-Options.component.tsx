@@ -51,19 +51,19 @@ const BlueRadio = withStyles(() =>
  * @returns {JSX.Element} - option bar component
  */
 export function ResultsTableOptionsComponent(props: {
-    sumOptions: { showRowSum: boolean; showColSum: boolean };
+    sumOptions: SumOptions;
     tableOption: DisplayOptionType;
     onDisplayOptionsChange: (displayOption: string) => void;
     onChangeSumOptions: (sumOptions: SumOptions) => void;
 }): JSX.Element {
-    const [sumOptions, setIsSumOptions] = useState<SumOptions>(props.sumOptions);
+    const [sumOptions, setSumOptions] = useState<SumOptions>(props.sumOptions);
     const { t } = useTranslation(["QueryPage"]);
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
     const handleSumOptionsCheckboxChange = (name: string, checked: boolean): void => {
             const newIsSumOptions = { ...sumOptions, [name]: checked }
-            setIsSumOptions(newIsSumOptions);
+            setSumOptions(newIsSumOptions);
             props.onChangeSumOptions(newIsSumOptions);
     }
         

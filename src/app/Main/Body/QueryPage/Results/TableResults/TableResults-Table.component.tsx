@@ -4,6 +4,7 @@ import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.co
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 import { TableContentTableContainerComponent } from "./TableContent-TableContainer.component";
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
+import { SumOptions } from "./TableResults.model";
 
 const dataTableStyle = css`
     overflow: auto;
@@ -19,7 +20,7 @@ const tableDivStyle = css`
  * @returns {JSX.Element} - result table
  */
 export function TableResultsTableComponent(props: {
-    sumOptions: { showRowSum: boolean; showColSum: boolean };
+    sumOptions: SumOptions;
     isLoading: boolean;
     displayRowCol: {
         isCol: boolean;
