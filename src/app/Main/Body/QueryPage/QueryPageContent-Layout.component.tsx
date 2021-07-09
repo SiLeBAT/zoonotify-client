@@ -97,6 +97,7 @@ export function QueryPageContentLayoutComponent(props: {
                     colName={props.tableData.column}
                     rowName={props.tableData.row}
                 />
+            </div>
         </div>
     );
 }
