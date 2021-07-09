@@ -1,6 +1,7 @@
 import {
     DbCollection,
     DbKey,
+    resistancesCollection,
 } from "../../../../../Shared/Model/Client_Isolate.model";
 import { modifyTableDataStringService } from "../../../../../Core/modifyTableDataString.service";
 
@@ -12,17 +13,24 @@ import { modifyTableDataStringService } from "../../../../../Core/modifyTableDat
  */
 export function generateDataRowsCsvString(
     dataArray: DbCollection,
-    headers: DbKey[]
+    headers: DbKey[],
 ): string {
     const csvTable: string[] = [];
     dataArray.forEach((row) => {
         const csvRow: string[] = [];
+
+        const resistanceRowArray = new Array(resistancesCollection.length).fill(0)
+
         headers.forEach((element) => {
-            if (element !== "resistance") {
-                const rowValue: string = row[element];
-                csvRow.push(modifyTableDataStringService(rowValue));
+            if (element === "resistance") {
+                row.resistance.forEach((resistance) => {
+                    const resistanceIndex = resistancesCollection.indexOf(resistance) 
+                    resistanceRowArray[resistanceIndex] = 1
+                })
+                const rowValue = resistanceRowArray.join(",");
+                csvRow.push(rowValue);
             } else {
-                const rowValue = row.resistance.join(";");
+                const rowValue: string = row[element];
                 csvRow.push(modifyTableDataStringService(rowValue));
             }
         });
