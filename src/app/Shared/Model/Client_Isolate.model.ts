@@ -66,6 +66,44 @@ export const DbKeyCollection: DbKey[] = [
     "resistance",
 ];
 
+export const resistancesCollection = [
+    "GEN",
+    "KAN",
+    "STR",
+    "CHL",
+    "CIP",
+    "PEN",
+    "FOX",
+    "TMP",
+    "SMX",
+    "TET",
+    "CLI",
+    "ERY",
+    "MUP",
+    "RIF",
+    "LZD",
+    "FUS",
+    "SYN",
+    "TIA",
+    "VAN",
+    "FOT",
+    "TAZ",
+    "NAL",
+    "AMP",
+    "COL",
+    "AZI",
+    "TGC",
+    "FEP",
+    "F/C",
+    "T/C",
+    "ETP",
+    "IMI",
+    "MERO",
+    "TRM",
+    "DAP",
+    "TEC",
+];
+
 export type ClientIsolateCountedGroups = (Record<string, string> & {
     count: number;
 })[];

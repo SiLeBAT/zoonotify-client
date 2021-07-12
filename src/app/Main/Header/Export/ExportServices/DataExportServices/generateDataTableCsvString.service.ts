@@ -1,6 +1,7 @@
 import {
     DbCollection,
     DbKey,
+    resistancesCollection,
 } from "../../../../../Shared/Model/Client_Isolate.model";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
@@ -20,9 +21,10 @@ export function generateDataTableCsvString(
     mainFilterAttributes: string[]
 ): string {
     const FilteredDataString: string[] = [];
-    const headerArray: string[] = mainFilterAttributes.map(
-        (element) => mainFilterLabels[element]
-    );
+    let headerArray: string[] = mainFilterAttributes
+        .filter((mainFilter) => mainFilter !== "resistance")
+        .map((element) => mainFilterLabels[element]);
+    headerArray = headerArray.concat(resistancesCollection);
     FilteredDataString.push(headerArray.join(","));
     FilteredDataString.push(generateDataRowsCsvString(data, keys));
 
