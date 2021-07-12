@@ -17,7 +17,7 @@ export function generateDataRowsCsvString(
 ): string {
     const csvTable: string[] = [];
     dataArray.forEach((row) => {
-        const csvRow: string[] = [];
+        let csvRow: string[] = [];
 
         const resistanceRowArray = new Array(resistancesCollection.length).fill(0)
 
@@ -27,8 +27,7 @@ export function generateDataRowsCsvString(
                     const resistanceIndex = resistancesCollection.indexOf(resistance) 
                     resistanceRowArray[resistanceIndex] = 1
                 })
-                const rowValue = resistanceRowArray.join(",");
-                csvRow.push(rowValue);
+                csvRow = csvRow.concat(resistanceRowArray);
             } else {
                 const rowValue: string = row[element];
                 csvRow.push(modifyTableDataStringService(rowValue));

@@ -21,11 +21,11 @@ export function generateDataTableCsvString(
     mainFilterAttributes: string[]
 ): string {
     const FilteredDataString: string[] = [];
-    const headerArray: string[] = mainFilterAttributes
+    let headerArray: string[] = mainFilterAttributes
         .filter((mainFilter) => mainFilter !== "resistance")
         .map((element) => mainFilterLabels[element]);
-    const headerArrayWithResistances = headerArray.concat(resistancesCollection);
-    FilteredDataString.push(headerArrayWithResistances.join(","));
+    headerArray = headerArray.concat(resistancesCollection);
+    FilteredDataString.push(headerArray.join(","));
     FilteredDataString.push(generateDataRowsCsvString(data, keys));
 
     return FilteredDataString.join("\n");
