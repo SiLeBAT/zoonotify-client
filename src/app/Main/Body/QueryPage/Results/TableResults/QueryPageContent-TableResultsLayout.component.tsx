@@ -41,7 +41,7 @@ export interface TableResultsProps {
 export function QueryPageContentTableResultsLayoutComponent(
     props: TableResultsProps
 ): JSX.Element {
-    const [sumOptionsState, setSumOptionsState] = useState<SumOptions>({
+    const [sumOptions, setSumOptions] = useState<SumOptions>({
         showRowSum: true,
         showColSum: true,
     });
@@ -50,8 +50,8 @@ export function QueryPageContentTableResultsLayoutComponent(
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleSumOptionsChange = (sumOptions: SumOptions): void => {
-        setSumOptionsState(sumOptions);
+    const handleSumOptionsChange = (changedSumOptions: SumOptions): void => {
+        setSumOptions(changedSumOptions);
     };
 
     const tableColAttribute = props.tableData.column;
@@ -82,13 +82,13 @@ export function QueryPageContentTableResultsLayoutComponent(
         tableAccordionContent = (
             <div css={dataStyle}>
                 <ResultsTableOptionsComponent
-                    sumOptions={sumOptionsState}
+                    sumOptions={sumOptions}
                     tableOption={props.tableData.option}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onChangeSumOptions={handleSumOptionsChange}
                 />
                 <TableResultsTableComponent
-                    sumOptions={sumOptionsState}
+                    sumOptions={sumOptions}
                     isLoading={props.tableIsLoading}
                     displayRowCol={props.displayRowCol}
                     colMainHeader={colMainHeader}
