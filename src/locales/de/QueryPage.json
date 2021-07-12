@@ -233,8 +233,7 @@
     "OptionBar": {
         "Title": "Anzeigeoptionen",
         "Absolute": "Absolute Zahlen",
-        "Percent": "Prozentual",
-        "Sum": "Zeilen- und Spaltensumme"
+        "Percent": "Prozentual"
     },
     "Sums": {
         "RowSum": "Zeilensumme",

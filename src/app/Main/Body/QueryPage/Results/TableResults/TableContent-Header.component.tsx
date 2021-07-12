@@ -52,12 +52,12 @@ const StyledTableCell = withStyles(() =>
  * @param headerValues - object with two booleans, true if row/column is selected
  * @returns {JSX.Element[]} - list of table cell components
  */
-export function TableContentHeaderComponent(
-    isSumRowCol: boolean,
-    headerValues: string[], 
+export function TableContentHeaderComponent(props: {
+    showRowSum: boolean,
+    headerValues: string[],
     tableOption: DisplayOptionType,
-    isCol: boolean,
-): JSX.Element[] {
+    isCol: boolean
+}): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
     const headerTableCells: JSX.Element[] = [];
     headerTableCells.push(
@@ -65,22 +65,25 @@ export function TableContentHeaderComponent(
             &nbsp;
         </StyledTableCell>
     );
-    headerValues.forEach((headerValue): void => {
-        let headerTitle = headerValue
-        if (tableOption === "relative") {
-            if (isCol) {
-                headerTitle = `${headerValue} ${t("Results.Unit")}` 
+    props.headerValues.forEach((headerValue): void => {
+        let headerTitle = headerValue;
+        if (props.tableOption === "relative") {
+            if (props.isCol) {
+                headerTitle = `${headerValue} ${t("Results.Unit")}`;
             } else {
-                headerTitle = `${t("Results.TableHeadRelative")}` 
+                headerTitle = `${t("Results.TableHeadRelative")}`;
             }
         }
         headerTableCells.push(
-            <StyledTableCell key={`header-${headerValue}`} css={headerCellStyle}>
+            <StyledTableCell
+                key={`header-${headerValue}`}
+                css={headerCellStyle}
+            >
                 {headerTitle}
             </StyledTableCell>
         );
     });
-    if (isSumRowCol) {
+    if (props.showRowSum) {
         headerTableCells.push(
             <StyledTableCell key="header-row-sum" css={sumCellStyle}>
                 {t("Sums.RowSum")}
