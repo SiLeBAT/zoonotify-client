@@ -247,14 +247,14 @@ export function QueryPageContainerComponent(): JSX.Element {
             history.location.search,
             DbKeyCollection
         );
-        let displFilter: string[] = filterFromPath.displayedFilters
+        let displFilter: string[] = filterFromPath.displayedFilters;
         if (_.isEmpty(filterFromPath.displayedFilters)) {
-            displFilter = defaultFilter.displayedFilters; 
+            displFilter = defaultFilter.displayedFilters;
         }
         setFilter({
             mainFilter: DbKeyCollection,
             selectedFilter: filterFromPath.selectedFilters,
-            displayedFilters: displFilter
+            displayedFilters: displFilter,
         });
     };
 
@@ -349,13 +349,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         if (!_.isEmpty(data.uniqueValues)) {
             fetchIsolateCounted();
         }
-    }, [
-        filter,
-        table.row,
-        table.column,
-        isolateCountUrl,
-        localStorage.getItem("i18nextLng"),
-    ]);
+    }, [filter, table.row, table.column, isolateCountUrl]);
 
     return (
         <LoadingOrErrorComponent
@@ -363,8 +357,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             dataIsSet={!_.isEmpty(data.uniqueValues)}
             componentToDisplay={
                 <QueryPageLayoutComponent
-                    isCol={isCol}
-                    isRow={isRow}
+                    displayRowCol={{ isCol, isRow }}
                     isFilter={isFilter}
                     tableIsLoading={tableIsLoading}
                     columnNameValues={columnNameValues}

@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
+import { useTranslation } from "react-i18next";
 import {
     highlightedTableBorder,
     fixedCellSize,
@@ -30,10 +31,18 @@ const sumTableCellStyle = css`
 export function TableContentRowsComponent(props: {
     showRowSum: boolean;
     row: Record<string, string>;
+    rowAttribute: string;
+    displayRow: boolean;
     classes: Record<"tableCell", string>;
     displayOption: string;
     colKeys: string[];
 }): JSX.Element[] {
+    const { t } = useTranslation(["QueryPage"]);
+
+    const rowName = props.displayRow
+        ? t(`FilterValues.${props.rowAttribute}.${props.row.name.replace(".", "")}`)
+        : props.row.name;
+
     const rowCells: JSX.Element[] = [];
     rowCells.push(
         <TableCell
@@ -44,7 +53,7 @@ export function TableContentRowsComponent(props: {
             align="left"
             css={tableCellStyle(true)}
         >
-            {props.row.name}
+            {rowName}
         </TableCell>
     );
     let rowSum = 0;

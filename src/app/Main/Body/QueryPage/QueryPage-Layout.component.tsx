@@ -13,6 +13,7 @@ import {
     TableType,
 } from "../../../Shared/Context/TableContext";
 import { FilterContextInterface } from "../../../Shared/Context/FilterContext";
+import { DisplayRowCol } from "./Results/TableResults/TableResults.model";
 
 const mainStyle = css`
     height: 100%;
@@ -22,8 +23,7 @@ const mainStyle = css`
 `;
 
 export function QueryPageLayoutComponent(props: {
-    isCol: boolean;
-    isRow: boolean;
+    displayRowCol: DisplayRowCol;
     isFilter: boolean;
     tableIsLoading: boolean;
     columnNameValues: string[];
@@ -114,8 +114,7 @@ export function QueryPageLayoutComponent(props: {
                 onResizeBarMove={handleMoveResizeBar}
             />
             <QueryPageContentLayoutComponent
-                isCol={props.isCol}
-                isRow={props.isRow}
+                displayRowCol={props.displayRowCol}
                 isFilter={props.isFilter}
                 tableIsLoading={props.tableIsLoading}
                 columnNameValues={props.columnNameValues}

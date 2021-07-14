@@ -4,7 +4,7 @@ import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.co
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 import { TableContentTableContainerComponent } from "./TableContent-TableContainer.component";
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
-import { SumOptions } from "./TableResults.model";
+import { DisplayRowCol, SumOptions } from "./TableResults.model";
 
 const dataTableStyle = css`
     overflow: auto;
@@ -22,28 +22,27 @@ const tableDivStyle = css`
 export function TableResultsTableComponent(props: {
     sumOptions: SumOptions;
     isLoading: boolean;
-    displayRowCol: {
-        isCol: boolean;
-        isRow: boolean;
-    };
+    displayRowCol: DisplayRowCol;
     colMainHeader: string;
     rowMainHeader: string;
     tableData: Record<string, string>[];
     tableOption: DisplayOptionType;
     columnNameValues: string[];
+    colAttribute: string;
+    rowAttribute: string;
 }): JSX.Element {
     if (props.isLoading) {
         return <LoadingProcessComponent />;
     }
+
+    const isRowAndCol = props.displayRowCol.isCol && props.displayRowCol.isRow
     return (
         <div>
             {props.displayRowCol.isCol && (
                 <TableResultsTableMainHeaderComponent
                     isRow={false}
                     text={props.colMainHeader}
-                    isRowAndCol={
-                        props.displayRowCol.isCol && props.displayRowCol.isRow
-                    }
+                    isRowAndCol={isRowAndCol}
                 />
             )}
             <div css={tableDivStyle}>
@@ -51,17 +50,16 @@ export function TableResultsTableComponent(props: {
                     <TableResultsTableMainHeaderComponent
                         isRow
                         text={props.rowMainHeader}
-                        isRowAndCol={
-                            props.displayRowCol.isCol &&
-                            props.displayRowCol.isRow
-                        }
+                        isRowAndCol={isRowAndCol}
                     />
                 )}
                 <div css={dataTableStyle}>
                     <TableContentTableContainerComponent
                         sumOptions={props.sumOptions}
-                        isCol={props.displayRowCol.isCol}
                         tableData={props.tableData}
+                        colAttribute={props.colAttribute}
+                        rowAttribute={props.rowAttribute}
+                        displayRowCol={props.displayRowCol}
                         columnNameValues={props.columnNameValues}
                         displayOption={props.tableOption}
                     />

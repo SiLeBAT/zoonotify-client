@@ -8,7 +8,7 @@ import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
 import { TableInterface } from "../../../../../Shared/Context/TableContext";
 import { TableResultsTableComponent } from "./TableResults-Table.component";
-import { SumOptions } from "./TableResults.model";
+import { DisplayRowCol, SumOptions } from "./TableResults.model";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -21,10 +21,7 @@ export interface TableResultsProps {
     /**
      * object with two booleans, true if row/column is selected
      */
-    displayRowCol: {
-        isCol: boolean;
-        isRow: boolean;
-    };
+    displayRowCol: DisplayRowCol;
     /**
      * attributes of the columns
      */
@@ -96,6 +93,8 @@ export function QueryPageContentTableResultsLayoutComponent(
                     tableData={tableData}
                     tableOption={props.tableData.option}
                     columnNameValues={props.columnNameValues}
+                    colAttribute={tableColAttribute}
+                    rowAttribute={tableRowAttribute}
                 />
             </div>
         );
