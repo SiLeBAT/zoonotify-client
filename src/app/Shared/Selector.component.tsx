@@ -143,7 +143,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
             </InputLabel>
             <Select
                 css={selectAreaStyle}
-                closeMenuOnSelect={false}
+                closeMenuOnSelect={!props.isMulti}
                 isMulti={props.isMulti}
                 noOptionsMessage={() => props.noOptionLabel}
                 options={props.dropDownValuesObj}
