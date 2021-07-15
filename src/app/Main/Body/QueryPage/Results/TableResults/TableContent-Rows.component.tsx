@@ -8,6 +8,8 @@ import {
     defaultTableBorder,
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
+import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
+
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
@@ -34,14 +36,19 @@ export function TableContentRowsComponent(props: {
     rowAttribute: string;
     displayRow: boolean;
     classes: Record<"tableCell", string>;
-    displayOption: string;
+    displayOption: DisplayOptionType;
     colKeys: string[];
 }): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
 
-    const rowName = props.displayRow
-        ? t(`FilterValues.${props.rowAttribute}.${props.row.name.replace(".", "")}`)
-        : props.row.name;
+    let rowName = "";
+        if (props.displayRow) {
+            rowName = t(`FilterValues.${props.rowAttribute}.${props.row.name.replace(".", "")}`);
+        } else if (props.displayOption === "relative") {
+            rowName = t("Results.TableHeadRelative");
+        } else if (props.displayOption === "absolute") {
+            rowName = t("Results.TableHead");
+        }
 
     const rowCells: JSX.Element[] = [];
     rowCells.push(

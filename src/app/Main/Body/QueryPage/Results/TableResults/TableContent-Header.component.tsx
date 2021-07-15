@@ -67,12 +67,17 @@ export function TableContentHeaderComponent(props: {
         </StyledTableCell>
     );
     props.headerValues.forEach((headerValue): void => {
-        let headerTitle = t(`FilterValues.${props.colAttribute}.${headerValue}`) ;
-        if (props.tableOption === "relative" && props.isCol) {
-            headerTitle = `${headerTitle} ${t("Results.Unit")}`;
-        } else if (props.tableOption === "relative" && !props.isCol) {
+        let headerTitle = "";
+        if (props.isCol) {
+            headerTitle = t(
+                `FilterValues.${props.colAttribute}.${headerValue.replace(".", "")}`
+            );
+            if (props.tableOption === "relative") {
+                headerTitle = `${headerTitle} ${t("Results.Unit")}`;
+            }
+        } else if (props.tableOption === "relative") {
             headerTitle = t("Results.TableHeadRelative");
-        } else if (props.tableOption === "absolute" && !props.isCol) {
+        } else if (props.tableOption === "absolute") {
             headerTitle = t("Results.TableHead");
         }
 

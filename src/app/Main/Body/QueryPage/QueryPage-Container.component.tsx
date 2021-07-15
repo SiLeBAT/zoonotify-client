@@ -277,7 +277,6 @@ export function QueryPageContainerComponent(): JSX.Element {
             );
 
             const allValuesText = t("Results.TableHead");
-            const allValuesTextRelative = t("Results.TableHeadRelative");
 
             const columnNames = generateTableHeaderValuesService(
                 isCol,
@@ -303,8 +302,6 @@ export function QueryPageContainerComponent(): JSX.Element {
             const statisticTableDataRel = calculateRelativeTableData(
                 statisticTableDataAbs,
                 nrOfSelectedIsolates,
-                allValuesTextRelative,
-                isRow
             );
             setColumnNameValues(columnNames);
             setTable({
