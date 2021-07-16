@@ -11,7 +11,6 @@ import { FilterInterface } from "../../../Shared/Model/Filter.model";
 import { TableInterface } from "../../../Shared/Context/TableContext";
 import { QueryPageDatabaseStatusIndicatorComponent } from "./DatabaseStatusIndicator/QueryPage-DatabaseStatusIndicator.component";
 import { QueryPageContentBarChartResultsComponent } from "./Results/Charts/QueryPageContent-BarChart.component";
-import { DisplayRowCol } from "./Results/TableResults/TableResults.model";
 
 const contentStyle = css`
     width: 0;
@@ -40,7 +39,6 @@ const resultsBoxStyle = css`
 `;
 
 export function QueryPageContentLayoutComponent(props: {
-    displayRowCol: DisplayRowCol;
     isFilter: boolean;
     tableIsLoading: boolean;
     columnNameValues: string[];
@@ -61,8 +59,6 @@ export function QueryPageContentLayoutComponent(props: {
 
     const handleChartDownload = (): void => props.onDownloadChart();
 
-    const isFeature: boolean = props.displayRowCol.isCol || props.displayRowCol.isRow;
-
     return (
         <div css={contentStyle}>
             <p css={headingStyle}>{t("Content.Title")}</p>
@@ -82,7 +78,6 @@ export function QueryPageContentLayoutComponent(props: {
             <div css={resultsBoxStyle}>
                 <QueryPageContentTableResultsLayoutComponent
                     tableIsLoading={props.tableIsLoading}
-                    displayRowCol={props.displayRowCol}
                     columnNameValues={props.columnNameValues}
                     tableData={props.tableData}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
@@ -90,12 +85,9 @@ export function QueryPageContentLayoutComponent(props: {
                 <QueryPageContentBarChartResultsComponent
                     chartIsLoading={props.tableIsLoading}
                     columnAttributes={props.columnNameValues}
-                    chartData={props.tableData.statisticDataAbsolute}
-                    isChart={isFeature}
+                    chartData={props.tableData}
                     getPngDownloadUriRef={props.getPngDownloadUriRef}
                     onDownloadChart={handleChartDownload}
-                    colName={props.tableData.column}
-                    rowName={props.tableData.row}
                 />
             </div>
         </div>

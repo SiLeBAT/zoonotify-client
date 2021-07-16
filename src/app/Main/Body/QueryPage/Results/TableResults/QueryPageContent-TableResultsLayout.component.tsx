@@ -8,7 +8,7 @@ import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
 import { TableInterface } from "../../../../../Shared/Context/TableContext";
 import { TableResultsTableComponent } from "./TableResults-Table.component";
-import { DisplayRowCol, SumOptions } from "./TableResults.model";
+import { SumOptions } from "./TableResults.model";
 
 const dataStyle = css`
     max-width: fit-content;
@@ -18,13 +18,6 @@ const dataStyle = css`
 
 export interface TableResultsProps {
     tableIsLoading: boolean;
-    /**
-     * object with two booleans, true if row/column is selected
-     */
-    displayRowCol: DisplayRowCol;
-    /**
-     * attributes of the columns
-     */
     columnNameValues: string[];
     tableData: TableInterface;
     onDisplayOptionsChange: (displayOption: string) => void;
@@ -67,8 +60,7 @@ export function QueryPageContentTableResultsLayoutComponent(
             <ExplanationTextComponent />
         </div>
     );
-    const isTable: boolean =
-        props.displayRowCol.isCol || props.displayRowCol.isRow;
+    const isTable: boolean = props.tableData.row !== "" || props.tableData.column !== ""
 
     let tableData = props.tableData.statisticDataAbsolute;
     if (props.tableData.option === "relative") {
@@ -87,7 +79,6 @@ export function QueryPageContentTableResultsLayoutComponent(
                 <TableResultsTableComponent
                     sumOptions={sumOptions}
                     isLoading={props.tableIsLoading}
-                    displayRowCol={props.displayRowCol}
                     colMainHeader={colMainHeader}
                     rowMainHeader={rowMainHeader}
                     tableData={tableData}

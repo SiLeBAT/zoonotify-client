@@ -354,7 +354,6 @@ export function QueryPageContainerComponent(): JSX.Element {
             dataIsSet={!_.isEmpty(data.uniqueValues)}
             componentToDisplay={
                 <QueryPageLayoutComponent
-                    displayRowCol={{ isCol, isRow }}
                     isFilter={isFilter}
                     tableIsLoading={tableIsLoading}
                     columnNameValues={columnNameValues}

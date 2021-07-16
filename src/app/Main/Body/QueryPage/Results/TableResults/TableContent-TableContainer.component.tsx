@@ -15,7 +15,7 @@ import { TableContentHeaderComponent } from "./TableContent-Header.component";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { TableContentRowWithColSumComponent } from "./TableContent-RowWithColSums.component";
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
-import { DisplayRowCol, SumOptions } from "./TableResults.model";
+import { SumOptions } from "./TableResults.model";
 
 const headerStyle = css`
     height: 50px;
@@ -47,7 +47,6 @@ export function TableContentTableContainerComponent(props: {
     sumOptions: SumOptions;
     tableData: Record<string, string>[];
     displayOption: DisplayOptionType;
-    displayRowCol: DisplayRowCol;
     columnNameValues: string[];
     colAttribute: string;
     rowAttribute: string;
@@ -55,13 +54,16 @@ export function TableContentTableContainerComponent(props: {
     const { t } = useTranslation(["QueryPage"]);
     const classes = useStyles();
 
+    const isCol = props.colAttribute !== ""
+    const isRow = props.rowAttribute !== ""
+
     const tableRows: JSX.Element[] = props.tableData.map((row) => (
         <TableRow key={`row-${row.name}`}>
             {TableContentRowsComponent({
                 showRowSum: props.sumOptions.showRowSum,
                 row,
                 rowAttribute: props.rowAttribute,
-                displayRow: props.displayRowCol.isRow,
+                displayRow: isRow,
                 classes,
                 displayOption: props.displayOption,
                 colKeys: props.columnNameValues,
@@ -94,7 +96,7 @@ export function TableContentTableContainerComponent(props: {
                             headerValues: props.columnNameValues,
                             colAttribute: props.colAttribute,
                             tableOption: props.displayOption,
-                            isCol: props.displayRowCol.isCol,
+                            isCol,
                         })}
                     </TableRow>
                 </TableHead>

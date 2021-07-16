@@ -4,7 +4,7 @@ import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.co
 import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
 import { TableContentTableContainerComponent } from "./TableContent-TableContainer.component";
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
-import { DisplayRowCol, SumOptions } from "./TableResults.model";
+import { SumOptions } from "./TableResults.model";
 
 const dataTableStyle = css`
     overflow: auto;
@@ -22,7 +22,6 @@ const tableDivStyle = css`
 export function TableResultsTableComponent(props: {
     sumOptions: SumOptions;
     isLoading: boolean;
-    displayRowCol: DisplayRowCol;
     colMainHeader: string;
     rowMainHeader: string;
     tableData: Record<string, string>[];
@@ -35,22 +34,24 @@ export function TableResultsTableComponent(props: {
         return <LoadingProcessComponent />;
     }
 
-    const isRowAndCol = props.displayRowCol.isCol && props.displayRowCol.isRow
+    const isCol = props.colAttribute !== ""
+    const isRow = props.rowAttribute !== ""
+    
     return (
         <div>
-            {props.displayRowCol.isCol && (
+            {isCol && (
                 <TableResultsTableMainHeaderComponent
                     isRow={false}
                     text={props.colMainHeader}
-                    isRowAndCol={isRowAndCol}
+                    isRowAndCol={isCol && isRow}
                 />
             )}
             <div css={tableDivStyle}>
-                {props.displayRowCol.isRow && (
+                {isRow && (
                     <TableResultsTableMainHeaderComponent
                         isRow
                         text={props.rowMainHeader}
-                        isRowAndCol={isRowAndCol}
+                        isRowAndCol={isCol && isRow}
                     />
                 )}
                 <div css={dataTableStyle}>
@@ -59,7 +60,6 @@ export function TableResultsTableComponent(props: {
                         tableData={props.tableData}
                         colAttribute={props.colAttribute}
                         rowAttribute={props.rowAttribute}
-                        displayRowCol={props.displayRowCol}
                         columnNameValues={props.columnNameValues}
                         displayOption={props.tableOption}
                     />
