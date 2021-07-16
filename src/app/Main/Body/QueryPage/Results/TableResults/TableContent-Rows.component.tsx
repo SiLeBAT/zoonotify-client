@@ -8,7 +8,7 @@ import {
     defaultTableBorder,
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
-import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
+import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
 
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`

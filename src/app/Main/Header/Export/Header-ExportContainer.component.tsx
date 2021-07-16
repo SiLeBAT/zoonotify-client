@@ -5,7 +5,7 @@ import _ from "lodash";
 import { ISOLATE_URL } from "../../../Shared/URLs";
 import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { TableContext } from "../../../Shared/Context/TableContext";
+import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     DbCollection,
     DbKey,
@@ -20,7 +20,7 @@ import { ExportButtonLabelComponent } from "../../../Shared/Export-ButtonLabel.c
 import { dataAndStatisticToZipFile } from "./ExportServices/dataAndStatisticToZipFile.service";
 
 export function HeaderExportContainerComponent(): JSX.Element {
-    const { table } = useContext(TableContext);
+    const { data } = useContext(DataContext);
     const { t } = useTranslation(["Export", "QueryPage"]);
     const { filter } = useContext(FilterContext);
     const [setting, setSetting] = useState<{
@@ -48,14 +48,14 @@ export function HeaderExportContainerComponent(): JSX.Element {
         stat: t("Export:FileName.Stat"),
     };
 
-    if (!_.isEmpty(table.row)) {
-        setting.tableAttributeNames.row = t(`QueryPage:Filters.${table.row}`);
+    if (!_.isEmpty(data.row)) {
+        setting.tableAttributeNames.row = t(`QueryPage:Filters.${data.row}`);
     } else {
         setting.tableAttributeNames.row = undefined;
     }
-    if (!_.isEmpty(table.column)) {
+    if (!_.isEmpty(data.column)) {
         setting.tableAttributeNames.column = t(
-            `QueryPage:Filters.${table.column}`
+            `QueryPage:Filters.${data.column}`
         );
     } else {
         setting.tableAttributeNames.column = undefined
@@ -73,11 +73,11 @@ export function HeaderExportContainerComponent(): JSX.Element {
         let statKeys: string[] = [];
 
         if (setting.stat) {
-            if (table.option === "absolute") {
-                statData = table.statisticDataAbsolute;
+            if (data.option === "absolute") {
+                statData = data.statisticDataAbsolute;
             }
-            if (table.option === "relative") {
-                statData = table.statisticDataRelative;
+            if (data.option === "relative") {
+                statData = data.statisticDataRelative;
             }
             if (!_.isEmpty(statData)) {
                 statKeys = Object.keys(statData[0]);

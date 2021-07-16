@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { SelectorListSelectorComponent } from "./SelectorList-Selector.component";
-import { TableType } from "../../../../../Shared/Context/TableContext";
+import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import {
     FilterInterface,
     FilterType,
@@ -19,12 +19,12 @@ export function FilterSelectorListComponent(
     mainFilter: string[],
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void
 ): JSX.Element[] {
     const handleChange = (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => onChange(selectedOption, keyName);
 
     const elements: JSX.Element[] = [];

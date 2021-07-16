@@ -6,7 +6,7 @@ import _ from "lodash";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
-import { TableInterface } from "../../../../../Shared/Context/TableContext";
+import { DataInterface } from "../../../../../Shared/Context/DataContext";
 import { TableResultsTableComponent } from "./TableResults-Table.component";
 import { SumOptions } from "./TableResults.model";
 
@@ -19,7 +19,7 @@ const dataStyle = css`
 export interface TableResultsProps {
     tableIsLoading: boolean;
     columnNameValues: string[];
-    tableData: TableInterface;
+    tableData: DataInterface;
     onDisplayOptionsChange: (displayOption: string) => void;
 }
 

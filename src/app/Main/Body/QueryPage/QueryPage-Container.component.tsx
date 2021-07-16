@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     ClientIsolateCountedGroups,
     DbKeyCollection,
@@ -16,10 +15,10 @@ import {
 } from "../../../Shared/Context/FilterContext";
 import {
     DisplayOptionType,
-    TableContext,
-    TableInterface,
-    TableType,
-} from "../../../Shared/Context/TableContext";
+    DataContext,
+    DataInterface,
+    FeatureType,
+} from "../../../Shared/Context/DataContext";
 import {
     FilterInterface,
     FilterType,
@@ -48,23 +47,24 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
     const [totalNrOfIsol, setTotalNrOfIsol] = useState<number>(0);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
-    const [tableIsLoading, setTableIsLoading] = useState<boolean>(false);
+    const [dataIsLoading, setTableIsLoading] = useState<boolean>(false);
+    const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>({});
 
-    const { data, setData } = useContext(DataContext);
+
     const { filter, setFilter } = useContext(FilterContext);
-    const { table, setTable } = useContext(TableContext);
+    const { data, setData } = useContext(DataContext);
 
     const history = useHistory();
     const { t } = useTranslation(["QueryPage"]);
 
-    const isCol: boolean = table.column !== "";
-    const isRow: boolean = table.row !== "";
+    const isCol: boolean = data.column !== "";
+    const isRow: boolean = data.row !== "";
     const isFilter: boolean = CheckIfFilterIsSet(
         filter.selectedFilter,
         filter.mainFilter
     );
-    const rowAttribute: FilterType = table.row;
-    const colAttribute: FilterType = table.column;
+    const rowAttribute: FilterType = data.row;
+    const colAttribute: FilterType = data.column;
 
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
@@ -72,11 +72,11 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => {
         setTableIsLoading(true);
-        const newTable: TableInterface = {
-            ...table,
+        const newTable: DataInterface = {
+            ...data,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
         };
         const newPath: string = generatePathStringService(
@@ -85,15 +85,15 @@ export function QueryPageContainerComponent(): JSX.Element {
             newTable
         );
         history.push(newPath);
-        setTable(newTable);
+        setData(newTable);
     };
 
     const handleSwapDisplFeatures = (): void => {
         setTableIsLoading(true);
-        const newTable: TableInterface = {
-            ...table,
-            row: table.column,
-            column: table.row,
+        const newTable: DataInterface = {
+            ...data,
+            row: data.column,
+            column: data.row,
         };
         const newPath: string = generatePathStringService(
             filter.selectedFilter,
@@ -101,12 +101,12 @@ export function QueryPageContainerComponent(): JSX.Element {
             newTable
         );
         history.push(newPath);
-        setTable(newTable);
+        setData(newTable);
     };
 
     const handleRemoveAllDisplFeatures = (): void => {
-        const newTable: TableInterface = {
-            ...table,
+        const newTable: DataInterface = {
+            ...data,
             row: "" as FilterType,
             column: "" as FilterType,
         };
@@ -116,12 +116,12 @@ export function QueryPageContainerComponent(): JSX.Element {
             newTable
         );
         history.push(newPath);
-        setTable(newTable);
+        setData(newTable);
     };
 
     const handleChangeFilter = (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => {
         const newFilter: FilterContextInterface = {
             ...filter,
@@ -133,7 +133,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
             newFilter.mainFilter,
-            table
+            data
         );
         history.push(newPath);
         setFilter(newFilter);
@@ -147,7 +147,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
             newFilter.mainFilter,
-            table
+            data
         );
         history.push(newPath);
         setFilter(newFilter);
@@ -155,8 +155,8 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const handleChangeDisplayOptions = (displayOption: string): void => {
         const optionValue = displayOption as DisplayOptionType;
-        setTable({
-            ...table,
+        setData({
+            ...data,
             option: optionValue,
         });
     };
@@ -180,7 +180,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
             newFilter.mainFilter,
-            table
+            data
         );
         history.push(newPath);
         setFilter(newFilter);
@@ -224,9 +224,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
                 filterProp
             );
-            setData({
-                uniqueValues: uniqueValuesObject,
-            });
+            setUniqueDataValues(uniqueValuesObject);
             setTotalNrOfIsol(totalNrOfIsolates);
         }
     };
@@ -235,8 +233,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
         );
-        setTable({
-            ...table,
+        setData({
+            ...data,
             row: rowFromPath,
             column: colFromPath,
         });
@@ -258,7 +256,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const setTableContext = (
+    const setDataContext = (
         isolateCountGroups:
             | (Record<string, string | Date> & {
                   count: number;
@@ -267,8 +265,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         nrOfSelectedIsolates: number
     ): void => {
         if ((!isCol && !isRow) || isolateCountGroups === undefined) {
-            setTable({
-                ...table,
+            setData({
+                ...data,
                 statisticDataAbsolute: [],
             });
         } else {
@@ -281,7 +279,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const columnNames = generateTableHeaderValuesService(
                 isCol,
                 allValuesText,
-                data.uniqueValues,
+                uniqueDataValues,
                 filter.selectedFilter,
                 colAttribute
             );
@@ -290,7 +288,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 string
             >[] = generateStatisticTableDataAbsService(
                 isRow,
-                data.uniqueValues,
+                uniqueDataValues,
                 filter.selectedFilter,
                 allValuesText,
                 adaptedIsolateCountGroups,
@@ -304,8 +302,8 @@ export function QueryPageContainerComponent(): JSX.Element {
                 nrOfSelectedIsolates,
             );
             setColumnNameValues(columnNames);
-            setTable({
-                ...table,
+            setData({
+                ...data,
                 statisticDataAbsolute: statisticTableDataAbs,
                 statisticDataRelative: statisticTableDataRel,
             });
@@ -314,17 +312,17 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const fetchIsolateCounted = async (): Promise<void> => {
         setTableIsLoading(true);
-        const tableResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
+        const countedIsolatesResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
         );
 
-        setIsolateCountStatus(tableResponse.status);
+        setIsolateCountStatus(countedIsolatesResponse.status);
 
-        if (tableResponse.data !== undefined) {
-            const isolateCountProp: IsolateCountedDTO = tableResponse.data;
+        if (countedIsolatesResponse.data !== undefined) {
+            const isolateCountProp: IsolateCountedDTO = countedIsolatesResponse.data;
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
             const isolateCountGroups = isolateCountProp.groups;
-            setTableContext(isolateCountGroups, nrOfSelectedIsolates);
+            setDataContext(isolateCountGroups, nrOfSelectedIsolates);
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
         setTableIsLoading(false);
@@ -333,37 +331,37 @@ export function QueryPageContainerComponent(): JSX.Element {
     useEffect(() => {
         fetchAndSetData();
         return () => {
-            setTable({ ...table, row: "", column: "" });
+            setData({ ...data, row: "", column: "" });
         };
     }, []);
 
     useEffect(() => {
         setTableFromPath();
         setFilterFromPath();
-    }, [data.uniqueValues]);
+    }, [uniqueDataValues]);
 
     useEffect((): void => {
-        if (!_.isEmpty(data.uniqueValues)) {
+        if (!_.isEmpty(uniqueDataValues)) {
             fetchIsolateCounted();
         }
-    }, [filter, table.row, table.column, isolateCountUrl]);
+    }, [filter, data.row, data.column, isolateCountUrl]);
 
     return (
         <LoadingOrErrorComponent
             status={{ isolateStatus, isolateCountStatus, filterStatus }}
-            dataIsSet={!_.isEmpty(data.uniqueValues)}
+            dataIsSet={!_.isEmpty(uniqueDataValues)}
             componentToDisplay={
                 <QueryPageLayoutComponent
                     isFilter={isFilter}
-                    tableIsLoading={tableIsLoading}
+                    dataIsLoading={dataIsLoading}
                     columnNameValues={columnNameValues}
-                    tableData={table}
+                    data={data}
                     numberOfIsolates={{
                         total: totalNrOfIsol,
                         filtered: nrOfSelectedIsol,
                     }}
                     filterInfo={filter}
-                    dataUniqueValues={data.uniqueValues}
+                    dataUniqueValues={uniqueDataValues}
                     getPngDownloadUriRef={getPngDownloadUriRef}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}

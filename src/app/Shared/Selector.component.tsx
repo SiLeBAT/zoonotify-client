@@ -3,7 +3,7 @@ import { css, jsx, keyframes, SerializedStyles } from "@emotion/core";
 import Select, { ValueType, StylesConfig } from "react-select";
 import { InputLabel } from "@material-ui/core";
 import { FilterType } from "./Model/Filter.model";
-import { TableType } from "./Context/TableContext";
+import { FeatureType } from "./Context/DataContext";
 import { primaryColor, bfrDarkgrey } from "./Style/Style-MainTheme.component";
 
 const hideSelector = (hide: boolean): SerializedStyles => css`
@@ -102,10 +102,10 @@ export interface SelectorProps {
     /**
      * attribute for the selector
      */
-    selectAttribute: FilterType | TableType;
+    selectAttribute: FilterType | FeatureType;
     onChange: (
         selectedOption: ValueType<{ value: string; label: string }> | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
     /**
      * true if the user can select multiple values
@@ -130,7 +130,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
             value: string;
             label: string;
         }> | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => props.onChange(selectedOption, keyName);
 
     return (

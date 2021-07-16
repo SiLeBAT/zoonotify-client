@@ -12,7 +12,7 @@ import {
     primaryColor,
     secondaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { TableInterface } from "../../../../../Shared/Context/TableContext";
+import { DataInterface } from "../../../../../Shared/Context/DataContext";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
@@ -94,7 +94,7 @@ function generateAxisLabels(
 export function QueryPageContentBarChartResultsComponent(props: {
     chartIsLoading: boolean;
     columnAttributes: string[];
-    chartData: TableInterface;
+    chartData: DataInterface;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDownloadChart: () => void;
 }): JSX.Element {

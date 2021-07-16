@@ -7,7 +7,7 @@ import {
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
-import { TableType } from "../../../../../Shared/Context/TableContext";
+import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 
 function generateSelectorObject(
@@ -28,7 +28,7 @@ export interface SelectorProps {
     filterAttribute: FilterType;
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
 }
 
@@ -48,7 +48,7 @@ export function SelectorListSelectorComponent(
 
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => {
         if (selectedOption !== undefined && Array.isArray(selectedOption)) {
             props.onChange(

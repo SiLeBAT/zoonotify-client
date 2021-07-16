@@ -4,7 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { TableType } from "../../../../../Shared/Context/TableContext";
+import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import { DisplayedFeatureSelectorComponent } from "./DisplFeatures-Selector.component";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
@@ -41,13 +41,13 @@ const iconStyle = css`
 `;
 
 export interface DrawerDisplayedFeaturesProps {
-    tableIsLoading: boolean;
-    tableColumn: string;
-    tableRow: string;
+    dataIsLoading: boolean;
+    columnFeature: string;
+    rowFeature: string;
     mainFilterAttributes: string[];
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
     onDisplFeaturesSwap: () => void;
     onDisplFeaturesRemoveAll: () => void;
@@ -60,7 +60,7 @@ export function DrawerDisplayedFeaturesComponent(
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
     const handleRemoveAllDisplFeatures = (): void =>
@@ -75,10 +75,10 @@ export function DrawerDisplayedFeaturesComponent(
                 />
             </div>
             <DisplayedFeatureSelectorComponent
-                tableIsLoading={props.tableIsLoading}
+                dataIsLoading={props.dataIsLoading}
                 label={t("Drawer.Graphs.Row")}
-                activeFeature={props.tableRow}
-                otherFeature={props.tableColumn}
+                activeFeature={props.rowFeature}
+                otherFeature={props.columnFeature}
                 selectAttribute="row"
                 mainFilterAttributes={props.mainFilterAttributes}
                 onChange={handleChangeDisplFeatures}
@@ -92,10 +92,10 @@ export function DrawerDisplayedFeaturesComponent(
                 </IconButton>
             </div>
             <DisplayedFeatureSelectorComponent
-                tableIsLoading={props.tableIsLoading}
+                dataIsLoading={props.dataIsLoading}
                 label={t("Drawer.Graphs.Column")}
-                activeFeature={props.tableColumn}
-                otherFeature={props.tableRow}
+                activeFeature={props.columnFeature}
+                otherFeature={props.rowFeature}
                 selectAttribute="column"
                 mainFilterAttributes={props.mainFilterAttributes}
                 onChange={handleChangeDisplFeatures}

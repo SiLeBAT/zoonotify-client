@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
-import { TableType } from "../../../../../Shared/Context/TableContext";
+import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { generateFeatureList } from "./generateFeatureList.service";
 
@@ -18,7 +18,7 @@ function generateTranslatedSelectorObject(
     });
 }
 export interface FeatureSelectorProps {
-    tableIsLoading: boolean;
+    dataIsLoading: boolean;
     /**
      * feature of the corresponding selector (row/colum)
      */
@@ -34,14 +34,14 @@ export interface FeatureSelectorProps {
     /**
      * "row" or "column"
      */
-    selectAttribute: FilterType | TableType;
+    selectAttribute: FilterType | FeatureType;
     /**
      * all possible main filter
      */
     mainFilterAttributes: string[];
     onChange: (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
 }
 
@@ -74,7 +74,7 @@ export function DisplayedFeatureSelectorComponent(
 
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => {
         if (selectedOption !== undefined && !Array.isArray(selectedOption)) {
             props.onChange(
@@ -96,7 +96,7 @@ export function DisplayedFeatureSelectorComponent(
             onChange={handleChange}
             isMulti={false}
             isNotSelect={isNotSelect}
-            isDisabled={props.tableIsLoading}
+            isDisabled={props.dataIsLoading}
             hide={false}
         />
     );

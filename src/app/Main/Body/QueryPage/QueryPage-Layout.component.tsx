@@ -9,9 +9,9 @@ import {
     FilterType,
 } from "../../../Shared/Model/Filter.model";
 import {
-    TableInterface,
-    TableType,
-} from "../../../Shared/Context/TableContext";
+    DataInterface,
+    FeatureType,
+} from "../../../Shared/Context/DataContext";
 import { FilterContextInterface } from "../../../Shared/Context/FilterContext";
 
 const mainStyle = css`
@@ -23,7 +23,7 @@ const mainStyle = css`
 
 export function QueryPageLayoutComponent(props: {
     isFilter: boolean;
-    tableIsLoading: boolean;
+    dataIsLoading: boolean;
     columnNameValues: string[];
     numberOfIsolates: {
         total: number;
@@ -31,17 +31,17 @@ export function QueryPageLayoutComponent(props: {
     };
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
-    tableData: TableInterface;
+    data: DataInterface;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
     onDisplFeaturesSwap: () => void;
     onDisplFeaturesRemoveAll: () => void;
     onFilterChange: (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
@@ -53,7 +53,7 @@ export function QueryPageLayoutComponent(props: {
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
     const handleRemoveAllDisplFeatures = (): void =>
@@ -61,7 +61,7 @@ export function QueryPageLayoutComponent(props: {
 
     const handleChangeFilter = (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
@@ -92,12 +92,12 @@ export function QueryPageLayoutComponent(props: {
         <main css={mainStyle}>
             <DrawerLayoutComponent
                 isOpen={isOpen}
-                tableIsLoading={props.tableIsLoading}
+                dataIsLoading={props.dataIsLoading}
                 drawerWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 filterInfo={props.filterInfo}
-                tableColumn={props.tableData.column}
-                tableRow={props.tableData.row}
+                columnFeature={props.data.column}
+                rowFeature={props.data.row}
                 onDisplFeaturesChange={handleChangeDisplFeatures}
                 onDisplFeaturesSwap={handleSwapDisplFeatures}
                 onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
@@ -113,9 +113,9 @@ export function QueryPageLayoutComponent(props: {
             />
             <QueryPageContentLayoutComponent
                 isFilter={props.isFilter}
-                tableIsLoading={props.tableIsLoading}
+                dataIsLoading={props.dataIsLoading}
                 columnNameValues={props.columnNameValues}
-                tableData={props.tableData}
+                data={props.data}
                 numberOfIsolates={props.numberOfIsolates}
                 selectedFilter={props.filterInfo.selectedFilter}
                 getPngDownloadUriRef={props.getPngDownloadUriRef}

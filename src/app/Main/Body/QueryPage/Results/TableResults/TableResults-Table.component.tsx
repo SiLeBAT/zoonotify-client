@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
-import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
+import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
 import { TableContentTableContainerComponent } from "./TableContent-TableContainer.component";
 import { TableResultsTableMainHeaderComponent } from "./TableResults-TableMainHeader.component";
 import { SumOptions } from "./TableResults.model";

@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import { useTranslation } from "react-i18next";
-import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
+import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
     highlightedTableBorder,
