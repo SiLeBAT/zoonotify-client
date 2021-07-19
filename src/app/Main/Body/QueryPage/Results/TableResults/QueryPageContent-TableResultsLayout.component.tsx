@@ -6,7 +6,7 @@ import _ from "lodash";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../Shared/ExplanationText.component";
-import { TableInterface } from "../../../../../Shared/Context/TableContext";
+import { DataInterface } from "../../../../../Shared/Context/DataContext";
 import { TableResultsTableComponent } from "./TableResults-Table.component";
 import { SumOptions } from "./TableResults.model";
 
@@ -18,18 +18,8 @@ const dataStyle = css`
 
 export interface TableResultsProps {
     tableIsLoading: boolean;
-    /**
-     * object with two booleans, true if row/column is selected
-     */
-    displayRowCol: {
-        isCol: boolean;
-        isRow: boolean;
-    };
-    /**
-     * attributes of the columns
-     */
     columnNameValues: string[];
-    tableData: TableInterface;
+    tableData: DataInterface;
     onDisplayOptionsChange: (displayOption: string) => void;
 }
 
@@ -70,8 +60,7 @@ export function QueryPageContentTableResultsLayoutComponent(
             <ExplanationTextComponent />
         </div>
     );
-    const isTable: boolean =
-        props.displayRowCol.isCol || props.displayRowCol.isRow;
+    const isTable: boolean = props.tableData.row !== "" || props.tableData.column !== ""
 
     let tableData = props.tableData.statisticDataAbsolute;
     if (props.tableData.option === "relative") {
@@ -90,12 +79,13 @@ export function QueryPageContentTableResultsLayoutComponent(
                 <TableResultsTableComponent
                     sumOptions={sumOptions}
                     isLoading={props.tableIsLoading}
-                    displayRowCol={props.displayRowCol}
                     colMainHeader={colMainHeader}
                     rowMainHeader={rowMainHeader}
                     tableData={tableData}
                     tableOption={props.tableData.option}
                     columnNameValues={props.columnNameValues}
+                    colAttribute={tableColAttribute}
+                    rowAttribute={tableRowAttribute}
                 />
             </div>
         );

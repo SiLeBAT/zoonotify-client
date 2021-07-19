@@ -1,12 +1,15 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
+import { useTranslation } from "react-i18next";
 import {
     highlightedTableBorder,
     fixedCellSize,
     defaultTableBorder,
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
+import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
+
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
@@ -30,10 +33,23 @@ const sumTableCellStyle = css`
 export function TableContentRowsComponent(props: {
     showRowSum: boolean;
     row: Record<string, string>;
+    rowAttribute: string;
+    displayRow: boolean;
     classes: Record<"tableCell", string>;
-    displayOption: string;
+    displayOption: DisplayOptionType;
     colKeys: string[];
 }): JSX.Element[] {
+    const { t } = useTranslation(["QueryPage"]);
+
+    let rowName = "";
+        if (props.displayRow) {
+            rowName = t(`FilterValues.${props.rowAttribute}.${props.row.name.replace(".", "")}`);
+        } else if (props.displayOption === "relative") {
+            rowName = t("Results.TableHeadRelative");
+        } else if (props.displayOption === "absolute") {
+            rowName = t("Results.TableHead");
+        }
+
     const rowCells: JSX.Element[] = [];
     rowCells.push(
         <TableCell
@@ -44,7 +60,7 @@ export function TableContentRowsComponent(props: {
             align="left"
             css={tableCellStyle(true)}
         >
-            {props.row.name}
+            {rowName}
         </TableCell>
     );
     let rowSum = 0;

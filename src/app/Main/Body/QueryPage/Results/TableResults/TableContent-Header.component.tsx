@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import { useTranslation } from "react-i18next";
-import { DisplayOptionType } from "../../../../../Shared/Context/TableContext";
+import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
     highlightedTableBorder,
@@ -53,10 +53,11 @@ const StyledTableCell = withStyles(() =>
  * @returns {JSX.Element[]} - list of table cell components
  */
 export function TableContentHeaderComponent(props: {
-    showRowSum: boolean,
-    headerValues: string[],
-    tableOption: DisplayOptionType,
-    isCol: boolean
+    showRowSum: boolean;
+    headerValues: string[];
+    colAttribute: string;
+    tableOption: DisplayOptionType;
+    isCol: boolean;
 }): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
     const headerTableCells: JSX.Element[] = [];
@@ -66,14 +67,20 @@ export function TableContentHeaderComponent(props: {
         </StyledTableCell>
     );
     props.headerValues.forEach((headerValue): void => {
-        let headerTitle = headerValue;
-        if (props.tableOption === "relative") {
-            if (props.isCol) {
-                headerTitle = `${headerValue} ${t("Results.Unit")}`;
-            } else {
-                headerTitle = `${t("Results.TableHeadRelative")}`;
+        let headerTitle = "";
+        if (props.isCol) {
+            headerTitle = t(
+                `FilterValues.${props.colAttribute}.${headerValue.replace(".", "")}`
+            );
+            if (props.tableOption === "relative") {
+                headerTitle = `${headerTitle} ${t("Results.Unit")}`;
             }
+        } else if (props.tableOption === "relative") {
+            headerTitle = t("Results.TableHeadRelative");
+        } else if (props.tableOption === "absolute") {
+            headerTitle = t("Results.TableHead");
         }
+
         headerTableCells.push(
             <StyledTableCell
                 key={`header-${headerValue}`}

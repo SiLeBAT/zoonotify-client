@@ -9,7 +9,7 @@ import {
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
-import { TableType } from "../../../../../Shared/Context/TableContext";
+import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import {
     onPrimaryColor,
     primaryColor,
@@ -61,7 +61,7 @@ export function DrawerFilterComponent(props: {
     filterInfo: FilterContextInterface;
     onFilterChange: (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
     onFilterRemoveAll: () => void;
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
@@ -73,7 +73,7 @@ export function DrawerFilterComponent(props: {
 
     const handleChangeFilter = (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 

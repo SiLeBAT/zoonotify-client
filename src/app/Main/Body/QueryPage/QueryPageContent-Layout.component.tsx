@@ -8,7 +8,7 @@ import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrO
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { QueryPageContentTableResultsLayoutComponent } from "./Results/TableResults/QueryPageContent-TableResultsLayout.component";
 import { FilterInterface } from "../../../Shared/Model/Filter.model";
-import { TableInterface } from "../../../Shared/Context/TableContext";
+import { DataInterface } from "../../../Shared/Context/DataContext";
 import { QueryPageDatabaseStatusIndicatorComponent } from "./DatabaseStatusIndicator/QueryPage-DatabaseStatusIndicator.component";
 import { QueryPageContentBarChartResultsComponent } from "./Results/Charts/QueryPageContent-BarChart.component";
 
@@ -39,12 +39,10 @@ const resultsBoxStyle = css`
 `;
 
 export function QueryPageContentLayoutComponent(props: {
-    isCol: boolean;
-    isRow: boolean;
     isFilter: boolean;
-    tableIsLoading: boolean;
+    dataIsLoading: boolean;
     columnNameValues: string[];
-    tableData: TableInterface;
+    data: DataInterface;
     numberOfIsolates: {
         total: number;
         filtered: number;
@@ -60,8 +58,6 @@ export function QueryPageContentLayoutComponent(props: {
         props.onDisplayOptionsChange(displayOption);
 
     const handleChartDownload = (): void => props.onDownloadChart();
-
-    const isFeature: boolean = props.isCol || props.isRow;
 
     return (
         <div css={contentStyle}>
@@ -81,21 +77,17 @@ export function QueryPageContentLayoutComponent(props: {
             </div>
             <div css={resultsBoxStyle}>
                 <QueryPageContentTableResultsLayoutComponent
-                    tableIsLoading={props.tableIsLoading}
-                    displayRowCol={{ isCol: props.isCol, isRow: props.isRow }}
+                    tableIsLoading={props.dataIsLoading}
                     columnNameValues={props.columnNameValues}
-                    tableData={props.tableData}
+                    tableData={props.data}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                 />
                 <QueryPageContentBarChartResultsComponent
-                    chartIsLoading={props.tableIsLoading}
+                    chartIsLoading={props.dataIsLoading}
                     columnAttributes={props.columnNameValues}
-                    chartData={props.tableData.statisticDataAbsolute}
-                    isChart={isFeature}
+                    chartData={props.data}
                     getPngDownloadUriRef={props.getPngDownloadUriRef}
                     onDownloadChart={handleChartDownload}
-                    colName={props.tableData.column}
-                    rowName={props.tableData.row}
                 />
             </div>
         </div>

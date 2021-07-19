@@ -1,12 +1,23 @@
 import React, { useState, createContext } from "react";
-import { FilterInterface } from "../Model/Filter.model";
+import { FilterType } from "../Model/Filter.model";
 
-interface DataInterface {
-    uniqueValues: FilterInterface;
+export type FeatureType = "row" | "column";
+export type DisplayOptionType = "absolute" | "relative";
+
+export interface DataInterface {
+    row: FilterType;
+    column: FilterType;
+    option: DisplayOptionType;
+    statisticDataAbsolute: Record<string, string>[];
+    statisticDataRelative: Record<string, string>[];
 }
 
-const defaultProfile: DataInterface = {
-    uniqueValues: {},
+export const defaultData: DataInterface = {
+    row: "" as FilterType,
+    column: "" as FilterType,
+    option: "absolute",
+    statisticDataAbsolute: [],
+    statisticDataRelative: [],
 };
 
 interface ProfileState {
@@ -14,17 +25,17 @@ interface ProfileState {
     setData: React.Dispatch<React.SetStateAction<DataInterface>>;
 }
 
-const defaultProfileState: ProfileState = {
-    data: defaultProfile,
+const defaultDataState: ProfileState = {
+    data: defaultData,
     setData: (): void => {},
 };
 
-export const DataContext = createContext<ProfileState>(defaultProfileState);
+export const DataContext = createContext<ProfileState>(defaultDataState);
 
 export const DataProvider = (props: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [data, setData] = useState(defaultProfile);
+    const [data, setData] = useState(defaultData);
 
     return (
         <DataContext.Provider

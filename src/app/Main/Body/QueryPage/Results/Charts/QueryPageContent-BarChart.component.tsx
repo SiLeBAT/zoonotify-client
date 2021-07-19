@@ -12,6 +12,7 @@ import {
     primaryColor,
     secondaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { DataInterface } from "../../../../../Shared/Context/DataContext";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
@@ -93,12 +94,9 @@ function generateAxisLabels(
 export function QueryPageContentBarChartResultsComponent(props: {
     chartIsLoading: boolean;
     columnAttributes: string[];
-    chartData: Record<string, string>[];
-    isChart: boolean;
+    chartData: DataInterface;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDownloadChart: () => void;
-    colName: string;
-    rowName: string;
 }): JSX.Element {
     const { t } = useTranslation("QueryPage");
 
@@ -110,9 +108,14 @@ export function QueryPageContentBarChartResultsComponent(props: {
 
     const handleClick = (): void => props.onDownloadChart();
 
-    if (props.isChart) {
+    const colName = props.chartData.column
+    const rowName = props.chartData.row
+
+    const isChart = colName !== "" || rowName !== ""
+
+    if (isChart) {
         const processedChartData = processingTableDataToApexData(
-            props.chartData,
+            props.chartData.statisticDataAbsolute,
             props.columnAttributes
         );
 
@@ -121,8 +124,8 @@ export function QueryPageContentBarChartResultsComponent(props: {
         } else {
             const [xAxisLabel, yAxisLabel] = generateAxisLabels(
                 t,
-                props.rowName,
-                props.colName
+                rowName,
+                colName
             );
 
             chartAccordionContent = (

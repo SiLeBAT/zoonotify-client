@@ -7,7 +7,7 @@ import {
     FilterInterface,
     FilterType,
 } from "../../../../Shared/Model/Filter.model";
-import { TableType } from "../../../../Shared/Context/TableContext";
+import { FeatureType } from "../../../../Shared/Context/DataContext";
 import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
 
 const useStyles = makeStyles(() =>
@@ -39,21 +39,21 @@ export interface DrawerLayoutProps {
      * true if Drawer is open
      */
     isOpen: boolean;
-    tableIsLoading: boolean;
+    dataIsLoading: boolean;
     drawerWidth: number;
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
-    tableColumn: string;
-    tableRow: string;
+    columnFeature: string;
+    rowFeature: string;
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
     onDisplFeaturesSwap: () => void;
     onDisplFeaturesRemoveAll: () => void;
     onFilterChange: (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ) => void;
     onFilterRemoveAll: () => void;
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
@@ -70,7 +70,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => props.onDisplFeaturesChange(selectedOption, keyName);
     const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
     const handleRemoveAllDisplFeatures = (): void =>
@@ -78,7 +78,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
 
     const handleChangeFilter = (
         selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | TableType
+        keyName: FilterType | FeatureType
     ): void => props.onFilterChange(selectedOption, keyName);
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
@@ -107,9 +107,9 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                 />
                 <DrawerDisplayedFeaturesComponent
-                    tableIsLoading={props.tableIsLoading}
-                    tableColumn={props.tableColumn}
-                    tableRow={props.tableRow}
+                    dataIsLoading={props.dataIsLoading}
+                    columnFeature={props.columnFeature}
+                    rowFeature={props.rowFeature}
                     mainFilterAttributes={props.filterInfo.mainFilter}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
