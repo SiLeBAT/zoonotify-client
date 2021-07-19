@@ -6,8 +6,8 @@
     },
     "Results": {
         "Parameter": "Ausgewählte Filter",
-        "TableHead": "Anzahl Isolate",
-        "TableHeadRelative": "Anteil Isolate in %",
+        "NrIsolatesText": "Anzahl Isolate",
+        "NrIsolatesTextRelative": "Anteil Isolate",
         "Table": "Tabelle",
         "Unit": "in %",
         "per": "je"

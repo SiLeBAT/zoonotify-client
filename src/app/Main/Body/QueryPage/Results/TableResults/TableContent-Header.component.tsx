@@ -76,9 +76,9 @@ export function TableContentHeaderComponent(props: {
                 headerTitle = `${headerTitle} ${t("Results.Unit")}`;
             }
         } else if (props.tableOption === "relative") {
-            headerTitle = t("Results.TableHeadRelative");
+            headerTitle = `${t("Results.NrIsolatesTextRelative")} ${t("Results.Unit")}`;
         } else if (props.tableOption === "absolute") {
-            headerTitle = t("Results.TableHead");
+            headerTitle = t("Results.NrIsolatesText");
         }
 
         headerTableCells.push(
