@@ -274,7 +274,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 isolateCountGroups
             );
 
-            const allValuesText = t("Results.TableHead");
+            const allValuesText = t("Results.NrIsolatesText");
 
             const columnNames = generateTableHeaderValuesService(
                 isCol,

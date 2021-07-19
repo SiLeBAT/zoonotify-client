@@ -10,7 +10,6 @@ import {
 } from "./ResultsTable.style";
 import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
 
-
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
     border-right: ${defaultTableBorder};
@@ -42,13 +41,18 @@ export function TableContentRowsComponent(props: {
     const { t } = useTranslation(["QueryPage"]);
 
     let rowName = "";
-        if (props.displayRow) {
-            rowName = t(`FilterValues.${props.rowAttribute}.${props.row.name.replace(".", "")}`);
-        } else if (props.displayOption === "relative") {
-            rowName = t("Results.TableHeadRelative");
-        } else if (props.displayOption === "absolute") {
-            rowName = t("Results.TableHead");
-        }
+    if (props.displayRow) {
+        rowName = t(
+            `FilterValues.${props.rowAttribute}.${props.row.name.replace(
+                ".",
+                ""
+            )}`
+        );
+    } else if (props.displayOption === "relative") {
+        rowName = `${t("Results.NrIsolatesTextRelative")} ${t("Results.Unit")}`;
+    } else if (props.displayOption === "absolute") {
+        rowName = t("Results.NrIsolatesText");
+    }
 
     const rowCells: JSX.Element[] = [];
     rowCells.push(
