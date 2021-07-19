@@ -47,7 +47,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
     const [totalNrOfIsol, setTotalNrOfIsol] = useState<number>(0);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
-    const [dataIsLoading, setTableIsLoading] = useState<boolean>(false);
+    const [dataIsLoading, setDataIsLoading] = useState<boolean>(false);
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>({});
 
 
@@ -74,7 +74,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | FeatureType
     ): void => {
-        setTableIsLoading(true);
+        setDataIsLoading(true);
         const newTable: DataInterface = {
             ...data,
             [keyName]: chooseSelectedDisplayedFeaturesService(selectedOption),
@@ -89,7 +89,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleSwapDisplFeatures = (): void => {
-        setTableIsLoading(true);
+        setDataIsLoading(true);
         const newTable: DataInterface = {
             ...data,
             row: data.column,
@@ -311,7 +311,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchIsolateCounted = async (): Promise<void> => {
-        setTableIsLoading(true);
+        setDataIsLoading(true);
         const countedIsolatesResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
         );
@@ -325,7 +325,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             setDataContext(isolateCountGroups, nrOfSelectedIsolates);
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
-        setTableIsLoading(false);
+        setDataIsLoading(false);
     };
 
     useEffect(() => {
