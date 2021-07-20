@@ -75,19 +75,24 @@ function generateAxisLabels(
     colName: string,
     displayOption: DisplayOptionType
 ): [string, string] {
-    let xAxisLabel = t("Results.NrIsolatesText");
+    let xAxisLabel = "";
     let yAxisLabel = "";
     if (rowName !== "") {
-        xAxisLabel = `${t("Results.NrIsolatesText")} ${t("Results.per")} ${t(
-            `Filters.${rowName}`
-        )}`;
         if (displayOption === "relative") {
-            xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t("Results.per")} ${t(
-                `Filters.${rowName}`
-            )} ${t("Results.Unit")}`;
+            xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t(
+                "Results.per"
+            )} ${t(`Filters.${rowName}`)} ${t("Results.Unit")}`;
+        } else if (displayOption === "absolute") {
+            xAxisLabel = `${t("Results.NrIsolatesText")} ${t(
+                "Results.per"
+            )} ${t(`Filters.${rowName}`)}`;
         }
     } else if (displayOption === "relative") {
-        xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t("Results.Unit")}`;
+        xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t(
+            "Results.Unit"
+        )}`;
+    } else if (displayOption === "absolute") {
+        xAxisLabel = t("Results.NrIsolatesText");
     }
 
     if (colName !== "") {
