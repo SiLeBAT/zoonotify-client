@@ -9,6 +9,7 @@ export function BarChartResultsComponent(props: {
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     xAxisLabel: string;
     yAxisLabel: string;
+    xAxisMax?: number;
 }): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const barChartRef = useRef<any>(null);
@@ -76,6 +77,7 @@ export function BarChartResultsComponent(props: {
                     cssClass: "apexcharts-xaxis-title",
                 },
             },
+            max: props.xAxisMax
         },
         yaxis: {
             showForNullSeries: false,

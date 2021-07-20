@@ -6,8 +6,8 @@
     },
     "Results": {
         "Parameter": "Selected Filters",
-        "TableHead": "Number of isolates",
-        "TableHeadRelative": "Isolates in %",
+        "NrIsolatesText": "Number of isolates",
+        "NrIsolatesTextRelative": "Isolates",
         "Table": "Table",
         "Unit": "in %", 
         "per": "per"

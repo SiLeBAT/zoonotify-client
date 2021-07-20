@@ -12,7 +12,10 @@ import {
     primaryColor,
     secondaryColor,
 } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { DataInterface } from "../../../../../Shared/Context/DataContext";
+import {
+    DataInterface,
+    DisplayOptionType,
+} from "../../../../../Shared/Context/DataContext";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
@@ -69,14 +72,27 @@ function processingTableDataToApexData(
 function generateAxisLabels(
     t: TFunction,
     rowName: string,
-    colName: string
+    colName: string,
+    displayOption: DisplayOptionType
 ): [string, string] {
-    let xAxisLabel = t("Results.TableHead");
+    let xAxisLabel = "";
     let yAxisLabel = "";
     if (rowName !== "") {
-        xAxisLabel = `${t("Results.TableHead")} ${t("Results.per")} ${t(
-            `Filters.${rowName}`
+        if (displayOption === "relative") {
+            xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t(
+                "Results.per"
+            )} ${t(`Filters.${rowName}`)} ${t("Results.Unit")}`;
+        } else if (displayOption === "absolute") {
+            xAxisLabel = `${t("Results.NrIsolatesText")} ${t(
+                "Results.per"
+            )} ${t(`Filters.${rowName}`)}`;
+        }
+    } else if (displayOption === "relative") {
+        xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t(
+            "Results.Unit"
         )}`;
+    } else if (displayOption === "absolute") {
+        xAxisLabel = t("Results.NrIsolatesText");
     }
 
     if (colName !== "") {
@@ -108,14 +124,21 @@ export function QueryPageContentBarChartResultsComponent(props: {
 
     const handleClick = (): void => props.onDownloadChart();
 
-    const colName = props.chartData.column
-    const rowName = props.chartData.row
+    const colName = props.chartData.column;
+    const rowName = props.chartData.row;
 
-    const isChart = colName !== "" || rowName !== ""
+    const isChart = colName !== "" || rowName !== "";
+
+    let chartData = props.chartData.statisticDataAbsolute;
+    let xAxisMax;
+    if (props.chartData.option === "relative") {
+        chartData = props.chartData.statisticDataRelative;
+        xAxisMax = 100;
+    }
 
     if (isChart) {
         const processedChartData = processingTableDataToApexData(
-            props.chartData.statisticDataAbsolute,
+            chartData,
             props.columnAttributes
         );
 
@@ -125,7 +148,8 @@ export function QueryPageContentBarChartResultsComponent(props: {
             const [xAxisLabel, yAxisLabel] = generateAxisLabels(
                 t,
                 rowName,
-                colName
+                colName,
+                props.chartData.option
             );
 
             chartAccordionContent = (
@@ -148,6 +172,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
                             getPngDownloadUriRef={props.getPngDownloadUriRef}
                             xAxisLabel={xAxisLabel}
                             yAxisLabel={yAxisLabel}
+                            xAxisMax={xAxisMax}
                         />
                     </div>
                 </div>
