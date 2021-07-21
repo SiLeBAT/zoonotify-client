@@ -55,14 +55,14 @@ export type DbCollection = (Record<DbKeyWithStringValue, string> & {
 
 export const DbKeyCollection: DbKey[] = [
     "microorganism",
+    "samplingYear",
     "samplingContext",
-    "matrix",
-    "federalState",
-    "samplingStage",
     "origin",
+    "samplingStage",
     "category",
     "productionType",
-    "samplingYear",
+    "matrix",
+    "federalState",
     "resistance",
 ];
 
