@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
     ClientIsolateCountedGroups,
-    DbKeyCollection,
+    MainFilterList,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { FILTER_URL, ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
@@ -243,14 +243,14 @@ export function QueryPageContainerComponent(): JSX.Element {
     const setFilterFromPath = (): void => {
         const filterFromPath = getFilterFromPath(
             history.location.search,
-            DbKeyCollection
+            MainFilterList
         );
         let displFilter: string[] = filterFromPath.displayedFilters;
         if (_.isEmpty(filterFromPath.displayedFilters)) {
             displFilter = defaultFilter.displayedFilters;
         }
         setFilter({
-            mainFilter: DbKeyCollection,
+            mainFilter: MainFilterList,
             selectedFilter: filterFromPath.selectedFilters,
             displayedFilters: displFilter,
         });

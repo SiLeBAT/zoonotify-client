@@ -53,7 +53,7 @@ export type DbCollection = (Record<DbKeyWithStringValue, string> & {
     resistance: ResistantValue[];
 })[];
 
-export const DbKeyCollection: DbKey[] = [
+export const MainFilterList: DbKey[] = [
     "microorganism",
     "samplingYear",
     "samplingContext",

@@ -9,7 +9,7 @@ import { DataContext } from "../../../Shared/Context/DataContext";
 import {
     DbCollection,
     DbKey,
-    DbKeyCollection,
+    MainFilterList,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
 import { HeaderExportDialogComponent } from "./Dialog/Header-ExportDialog.component";
@@ -99,7 +99,7 @@ export function HeaderExportContainerComponent(): JSX.Element {
                     isolateFilteredProp
                 );
                 rawData = adaptedFilteredIsolates;
-                rawKeys = DbKeyCollection;
+                rawKeys = MainFilterList;
             }
         }
 
