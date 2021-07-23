@@ -65,15 +65,17 @@ export function TableContentRowWithColSumComponent(props: {
     let totalColSum = 0
 
     props.headerValues.forEach((headerValue) => {
-        let colSum: number | string = calculateColSum(
+        const colSum: number = calculateColSum(
             props.tableData,
             headerValue
         );
 
         totalColSum += colSum
 
+        let colSumString = colSum.toString()
+
         if (props.displayOption === "relative") {
-            colSum = colSum.toFixed(2);
+            colSumString = colSum.toFixed(2);
         }
 
         arrayWithColSumCells.push(
@@ -85,7 +87,7 @@ export function TableContentRowWithColSumComponent(props: {
                 align="right"
                 css={tableCellStyle(false)}
             >
-                {colSum}
+                {colSumString}
             </TableCell>
         );
     });
