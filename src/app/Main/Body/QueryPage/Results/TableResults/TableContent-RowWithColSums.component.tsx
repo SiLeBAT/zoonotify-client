@@ -2,7 +2,6 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
 import _ from "lodash";
-import { backgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
     highlightedTableBorder,
     fixedCellSize,
@@ -19,12 +18,12 @@ const tableCellStyle = (isName: boolean): SerializedStyles => css`
     min-width: ${isName ? `${fixedCellSize}px` : "auto"};
 `;
 
-const emptyCellStyle = css`
+const totalSumStyle = css`
     border-right: none;
     border-bottom: none;
     border-top: ${highlightedTableBorder};
     border-left: ${highlightedTableBorder};
-    background-color: ${backgroundColor};
+    background-color: ${sumRowColBackgroundColor};
 `;
 
 function calculateColSum(
@@ -63,14 +62,20 @@ export function TableContentRowWithColSumComponent(props: {
         </TableCell>,
     ];
 
+    let totalColSum = 0
+
     props.headerValues.forEach((headerValue) => {
-        let colSum: number | string = calculateColSum(
+        const colSum: number = calculateColSum(
             props.tableData,
             headerValue
         );
 
+        totalColSum += colSum
+
+        let colSumString = colSum.toString()
+
         if (props.displayOption === "relative") {
-            colSum = colSum.toFixed(2);
+            colSumString = colSum.toFixed(2);
         }
 
         arrayWithColSumCells.push(
@@ -82,14 +87,28 @@ export function TableContentRowWithColSumComponent(props: {
                 align="right"
                 css={tableCellStyle(false)}
             >
-                {colSum}
+                {colSumString}
             </TableCell>
         );
     });
+
+    let totalColSumString: string = totalColSum.toString()
+
+    if (props.displayOption === "relative") {
+        totalColSumString = totalColSum.toFixed(0);
+    }
+
+
+
     if (props.showRowSum) {
         arrayWithColSumCells.push(
-            <TableCell css={emptyCellStyle} key="sum-blank">
-                &nbsp;
+            <TableCell
+                css={totalSumStyle}
+                className={props.classes.tableCell}
+                key="sum-total"
+                align="right"
+            >
+                {totalColSumString}
             </TableCell>
         );
     }
