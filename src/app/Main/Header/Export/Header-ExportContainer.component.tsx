@@ -61,7 +61,10 @@ export function HeaderExportContainerComponent(): JSX.Element {
         setting.tableAttributeNames.column = undefined
     }
 
-    const isolateFilteredUrl: string = ISOLATE_URL + history.location.search;
+    const filterSettingsPath = history.location.search.replace(/&row.+/g, "").replace(/&column.+/g, "")
+
+    const isolateFilteredUrl: string = ISOLATE_URL + filterSettingsPath;
+
 
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(isOpen);
 
