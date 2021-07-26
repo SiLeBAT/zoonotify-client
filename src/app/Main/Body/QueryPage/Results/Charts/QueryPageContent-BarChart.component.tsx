@@ -21,11 +21,12 @@ import { BarChartResultsComponent } from "./BarChartResults.component";
 
 const dataStyle = css`
     margin: 0 auto;
-    display: grid;
     box-sizing: border-box;
 `;
 const centerChartStyle = css`
     margin: auto;
+    overflow: auto;
+    flex: 1 1 0;
 `;
 const explanationTextStyle = css`
     text-align: center;
