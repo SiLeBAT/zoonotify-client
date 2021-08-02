@@ -19,7 +19,7 @@ import {
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
-const overflowStyle = css`
+const chartOverflowStyle = css`
     overflow-x: auto;
 `;
 const explanationTextStyle = css`
@@ -161,7 +161,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
                             {t("Header:Export")}
                         </Button>
                     </div>
-                    <div css={overflowStyle}>
+                    <div css={chartOverflowStyle}>
                         <BarChartResultsComponent
                             chartData={processedChartData}
                             getPngDownloadUriRef={props.getPngDownloadUriRef}
