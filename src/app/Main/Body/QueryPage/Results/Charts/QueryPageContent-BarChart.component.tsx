@@ -19,13 +19,8 @@ import {
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 
-const dataStyle = css`
-    margin: 0 auto;
-    display: grid;
-    box-sizing: border-box;
-`;
-const centerChartStyle = css`
-    margin: auto;
+const chartOverflowStyle = css`
+    overflow-x: auto;
 `;
 const explanationTextStyle = css`
     text-align: center;
@@ -117,7 +112,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
     const { t } = useTranslation("QueryPage");
 
     let chartAccordionContent = (
-        <div css={dataStyle}>
+        <div>
             <p css={explanationTextStyle}>{t("Chart.Explanation")}</p>
         </div>
     );
@@ -153,7 +148,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
             );
 
             chartAccordionContent = (
-                <div css={dataStyle}>
+                <div>
                     <div css={optionBarStyle}>
                         <Button
                             css={exportButtonStyle}
@@ -166,7 +161,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
                             {t("Header:Export")}
                         </Button>
                     </div>
-                    <div css={centerChartStyle}>
+                    <div css={chartOverflowStyle}>
                         <BarChartResultsComponent
                             chartData={processedChartData}
                             getPngDownloadUriRef={props.getPngDownloadUriRef}
