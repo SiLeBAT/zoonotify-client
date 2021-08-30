@@ -58,40 +58,36 @@ export function DisplayedFeatureSelectorComponent(
         [props.otherFeature]
     );
 
-    const isNotSelect: boolean = _.isEmpty(props.activeFeature);
-    const selectedValue: FilterType | null = isNotSelect
-        ? null
-        : props.activeFeature;
+    const isNotSelected: boolean = _.isEmpty(props.activeFeature);
 
     const dropDownValuesObj: {
         value: string;
         label: string;
     }[] = generateTranslatedSelectorObject(offeredAttributes, t);
 
-    const selectedValueObj:
+    const selectedValueObjList:
         | {
               value: string;
               label: string;
           }[]
-        | [] =
-        selectedValue === null
-            ? []
-            : [
-                  {
-                      value: selectedValue,
-                      label: t(`Filters.${selectedValue}`),
-                  },
-              ];
+        | null = isNotSelected
+        ? null
+        : [
+              {
+                  value: props.activeFeature,
+                  label: t(`Filters.${props.activeFeature}`),
+              },
+          ];
 
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | FeatureType
     ): void => {
-        if (selectedOption !== undefined && !Array.isArray(selectedOption)) {
+        if (selectedOption !== undefined && selectedOption !== null && !Array.isArray(selectedOption)) {
             const option = selectedOption as { value: string; label: string };
-            if (option.value !== selectedValue) {
+            if (option.value !== props.activeFeature) {
                 props.onChange(
-                    selectedOption as { value: string; label: string } | null,
+                    selectedOption as { value: string; label: string },
                     keyName
                 );
             }
@@ -105,11 +101,11 @@ export function DisplayedFeatureSelectorComponent(
             label={props.label}
             noOptionLabel={t("Drawer.Selector")}
             dropDownValuesObj={dropDownValuesObj}
-            selectedValuesObj={selectedValueObj}
+            selectedValuesObj={selectedValueObjList}
             selectAttribute={props.selectAttribute}
             onChange={handleChange}
             isMulti={false}
-            isNotSelect={isNotSelect}
+            isNotSelected={isNotSelected}
             isDisabled={props.dataIsLoading}
             hide={false}
         />

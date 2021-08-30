@@ -84,7 +84,7 @@ export function SelectorListSelectorComponent(
             selectAttribute={filterAttribute}
             onChange={handleChange}
             isMulti
-            isNotSelect={noFilter}
+            isNotSelected={noFilter}
             isDisabled={false}
             hide={props.hide}
         />

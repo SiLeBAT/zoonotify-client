@@ -94,7 +94,7 @@ export interface SelectorProps {
     /**
      * values that are already selected in other selectors with labels
      */
-    selectedValuesObj: { value: string; label: string }[];
+    selectedValuesObj: { value: string; label: string }[] | null;
     /**
      * label if no option is available
      */
@@ -114,7 +114,7 @@ export interface SelectorProps {
     /**
      * true if no selector is selected so far
      */
-    isNotSelect: boolean;
+    isNotSelected: boolean;
     isDisabled: boolean;
     hide: boolean;
 }
@@ -136,7 +136,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
     return (
         <div css={hideSelector(props.hide)}>
             <InputLabel
-                css={labelStyle(props.isNotSelect)}
+                css={labelStyle(props.isNotSelected)}
                 id={`label${props.label}`}
             >
                 {props.label}
