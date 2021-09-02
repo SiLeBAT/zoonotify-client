@@ -58,11 +58,14 @@ export function HeaderExportContainerComponent(): JSX.Element {
             `QueryPage:Filters.${data.column}`
         );
     } else {
-        setting.tableAttributeNames.column = undefined
+        setting.tableAttributeNames.column = undefined;
     }
 
-    const isolateFilteredUrl: string = ISOLATE_URL + history.location.search;
-
+    const urlParams = new URLSearchParams(history.location.search);
+    urlParams.delete("row");
+    urlParams.delete("column");
+    const urlParamsString = urlParams.toString()
+    const isolateFilteredUrl = `${ISOLATE_URL}/${urlParamsString}`;
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(isOpen);
 
     const fetchAndChooseData = async (): Promise<void> => {
