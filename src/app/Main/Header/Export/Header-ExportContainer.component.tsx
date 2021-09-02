@@ -64,7 +64,8 @@ export function HeaderExportContainerComponent(): JSX.Element {
     const urlParams = new URLSearchParams(history.location.search);
     urlParams.delete("row");
     urlParams.delete("column");
-    const isolateFilteredUrl = `${ISOLATE_URL}/${urlParams}`;
+    const urlParamsString = urlParams.toString()
+    const isolateFilteredUrl = `${ISOLATE_URL}/${urlParamsString}`;
     const buttonLabel: JSX.Element = ExportButtonLabelComponent(isOpen);
 
     const fetchAndChooseData = async (): Promise<void> => {
