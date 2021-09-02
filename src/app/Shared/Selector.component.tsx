@@ -94,7 +94,7 @@ export interface SelectorProps {
     /**
      * values that are already selected in other selectors with labels
      */
-    selectedValuesObj: { value: string; label: string }[] | null;
+    selectedValuesObj: { value: string; label: string }[];
     /**
      * label if no option is available
      */

@@ -65,25 +65,24 @@ export function DisplayedFeatureSelectorComponent(
         label: string;
     }[] = generateTranslatedSelectorObject(offeredAttributes, t);
 
-    const selectedValueObjList:
-        | {
-              value: string;
-              label: string;
-          }[]
-        | null = isNotSelected
+    const selectedValueObj: {
+        value: string;
+        label: string;
+    } | null = isNotSelected
         ? null
-        : [
-              {
-                  value: props.activeFeature,
-                  label: t(`Filters.${props.activeFeature}`),
-              },
-          ];
-
+        : {
+              value: props.activeFeature,
+              label: t(`Filters.${props.activeFeature}`),
+          };
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | FeatureType
     ): void => {
-        if (selectedOption !== undefined && selectedOption !== null && !Array.isArray(selectedOption)) {
+        if (
+            selectedOption !== undefined &&
+            selectedOption !== null &&
+            !Array.isArray(selectedOption)
+        ) {
             const option = selectedOption as { value: string; label: string };
             if (option.value !== props.activeFeature) {
                 props.onChange(
@@ -101,7 +100,9 @@ export function DisplayedFeatureSelectorComponent(
             label={props.label}
             noOptionLabel={t("Drawer.Selector")}
             dropDownValuesObj={dropDownValuesObj}
-            selectedValuesObj={selectedValueObjList}
+            selectedValuesObj={
+                selectedValueObj === null ? [] : [selectedValueObj]
+            }
             selectAttribute={props.selectAttribute}
             onChange={handleChange}
             isMulti={false}
