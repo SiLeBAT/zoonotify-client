@@ -6,7 +6,6 @@ import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
-import { generateFeatureList } from "./generateFeatureList.service";
 
 function generateTranslatedSelectorObject(
     selectorArray: string[],
@@ -58,29 +57,39 @@ export function DisplayedFeatureSelectorComponent(
         props.mainFilterAttributes,
         [props.otherFeature]
     );
-    const [isNotSelect, selectedValues]: [
-        boolean,
-        FilterType[]
-    ] = generateFeatureList(props.activeFeature);
+
+    const isNotSelected: boolean = _.isEmpty(props.activeFeature);
 
     const dropDownValuesObj: {
         value: string;
         label: string;
     }[] = generateTranslatedSelectorObject(offeredAttributes, t);
-    const selectedValuesObj: {
+
+    const selectedValueObj: {
         value: string;
         label: string;
-    }[] = generateTranslatedSelectorObject(selectedValues, t);
-
+    } | null = isNotSelected
+        ? null
+        : {
+              value: props.activeFeature,
+              label: t(`Filters.${props.activeFeature}`),
+          };
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }>,
         keyName: FilterType | FeatureType
     ): void => {
-        if (selectedOption !== undefined && !Array.isArray(selectedOption)) {
-            props.onChange(
-                selectedOption as { value: string; label: string } | null,
-                keyName
-            );
+        if (
+            selectedOption !== undefined &&
+            selectedOption !== null &&
+            !Array.isArray(selectedOption)
+        ) {
+            const option = selectedOption as { value: string; label: string };
+            if (option.value !== props.activeFeature) {
+                props.onChange(
+                    selectedOption as { value: string; label: string },
+                    keyName
+                );
+            }
         } else {
             props.onChange(null, keyName);
         }
@@ -91,11 +100,13 @@ export function DisplayedFeatureSelectorComponent(
             label={props.label}
             noOptionLabel={t("Drawer.Selector")}
             dropDownValuesObj={dropDownValuesObj}
-            selectedValuesObj={selectedValuesObj}
+            selectedValuesObj={
+                selectedValueObj === null ? [] : [selectedValueObj]
+            }
             selectAttribute={props.selectAttribute}
             onChange={handleChange}
             isMulti={false}
-            isNotSelect={isNotSelect}
+            isNotSelected={isNotSelected}
             isDisabled={props.dataIsLoading}
             hide={false}
         />
