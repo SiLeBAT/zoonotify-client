@@ -10,10 +10,11 @@ export function adaptFilterFromApiService(
     filterProp: FilterConfigDTO
 ): ClientFiltersConfig {
     const adaptedFilters: ClientFiltersConfig = {
-        filters: filterProp.filters.map(({ id, name, parent, values }) => ({
+        filters: filterProp.filters.map(({ id, name, parent, target, values }) => ({
             id,
             name,
             parent,
+            target,
             values: (values as Array<string | Date>).map((element) =>
                 String(element)
             ),

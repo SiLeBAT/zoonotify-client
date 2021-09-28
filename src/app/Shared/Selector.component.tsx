@@ -4,7 +4,8 @@ import Select, { ValueType, StylesConfig } from "react-select";
 import { InputLabel } from "@material-ui/core";
 import { FilterType } from "./Model/Filter.model";
 import { FeatureType } from "./Context/DataContext";
-import { primaryColor, bfrDarkgrey } from "./Style/Style-MainTheme.component";
+
+const defaultColor = "rgb(204, 204, 204)"
 
 const hideSelector = (hide: boolean): SerializedStyles => css`
     display: ${hide ? "none" : "grid"};
@@ -21,28 +22,29 @@ const closeText = keyframes`
     0% {left:0px; top:0px;}
     100%   {color:white; left:0px; top:20px;}
 `;
-const labelStyle = (noSelect: boolean): SerializedStyles => css`
+const labelStyle = (noSelect: boolean, titleColor: string): SerializedStyles => css`
     position: relative;
     animation-name: ${noSelect ? closeText : openText};
     animation-duration: 0.25s;
     animation-delay: 0s;
-    color: ${noSelect ? "white" : bfrDarkgrey};
+    color: ${noSelect ? "white" : titleColor};
     font-size: 0.75rem;
     margin-left: 16px;
     margin-top: 1em;
 `;
 
 const selectStyle: StylesConfig = {
-    control: (styles) => ({
+    control: (styles, state) => ({
         ...styles,
         backgroundColor: "white",
         borderRadius: "0px",
+        borderColor: state.selectProps.mainColor? state.selectProps.mainColor : defaultColor,
         borderTop: "0 !important",
         borderLeft: "0 !important",
         borderRight: "0 !important",
         boxShadow: "0 !important",
         ":hover": {
-            borderBottom: `1.5px solid ${primaryColor}`,
+            borderBottom: `1.5px solid ${state.selectProps.hooverColor}`,
         },
     }),
 
@@ -54,25 +56,27 @@ const selectStyle: StylesConfig = {
         };
     },
 
-    multiValueRemove: (styles) => ({
+    multiValueRemove: (styles, state) => ({
         ...styles,
         ":hover": {
-            backgroundColor: bfrDarkgrey,
+            backgroundColor: state.selectProps.hooverColorDark,
             color: "white",
             borderRadius: "25px",
         },
     }),
-    dropdownIndicator: (styles) => ({
+    dropdownIndicator: (styles, state) => ({
         ...styles,
+        color: state.selectProps.mainColor? state.selectProps.mainColor : defaultColor,
         ":hover": {
-            color: primaryColor,
+            color: state.selectProps.hooverColor,
         },
     }),
 
-    clearIndicator: (styles) => ({
+    clearIndicator: (styles, state) => ({
         ...styles,
+        color: state.selectProps.mainColor? state.selectProps.mainColor : defaultColor,
         ":hover": {
-            color: primaryColor,
+            color: state.selectProps.hooverColor,
         },
     }),
 
@@ -83,6 +87,10 @@ const selectStyle: StylesConfig = {
 };
 
 export interface SelectorProps {
+    mainColor?: string;
+    titleColor: string;
+    hooverColorDark: string;
+    hooverColor: string;
     /**
      * label for the selector
      */
@@ -136,7 +144,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
     return (
         <div css={hideSelector(props.hide)}>
             <InputLabel
-                css={labelStyle(props.isNotSelected)}
+                css={labelStyle(props.isNotSelected, props.titleColor)}
                 id={`label${props.label}`}
             >
                 {props.label}
@@ -152,12 +160,16 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
                     handleChange(selectedOption, props.selectAttribute)
                 }
                 styles={selectStyle}
+                mainColor={props.mainColor}
+                titleColor={props.titleColor}
+                hooverColor={props.hooverColor}
+                hooverColorDark={props.hooverColorDark}
                 value={props.selectedValuesObj}
                 theme={(theme) => ({
                     ...theme,
                     colors: {
                         ...theme.colors,
-                        primary: primaryColor,
+                        primary: props.hooverColor,
                     },
                 })}
                 isClearable

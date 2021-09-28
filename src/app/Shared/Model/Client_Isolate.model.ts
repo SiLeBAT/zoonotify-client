@@ -66,6 +66,8 @@ export const MainFilterList: DbKey[] = [
     "resistance",
 ];
 
+export const subFiltersList: string[] = ["serovar", "species", "serotyp"];
+
 export const resistancesCollection = [
     "GEN",
     "KAN",

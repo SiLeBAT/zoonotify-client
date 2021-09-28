@@ -1,13 +1,16 @@
+import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { SelectorListSelectorComponent } from "./SelectorList-Selector.component";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import {
+    ClientSingleFilterConfig,
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
+import { SubFilterSelectorComponent } from "./SubFilter-Selector.component";
 
 /**
- * @desc Generate a selector-element for each main filter
+ * @desc Generate a selector-element for each main filter and subfilter
  * @param mainFilterAttributes - all possible main filter
  * @param onChange - function to handle the chance of a filter selectors
  * @return {JSX.Element[]} selector-elements in a list
@@ -17,20 +20,25 @@ export function FilterSelectorListComponent(
     selectedFilter: FilterInterface,
     filtersToDisplay: string[],
     mainFilter: string[],
+    subFilters: ClientSingleFilterConfig[],
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
     ) => void
 ): JSX.Element[] {
+    const { t } = useTranslation(["QueryPage"]);
+
     const handleChange = (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
     ): void => onChange(selectedOption, keyName);
 
-    const elements: JSX.Element[] = [];
+    const noOptionLabel = t("Drawer.Selector");
+
+    const filterSelectorsList: JSX.Element[] = [];
     mainFilter.forEach((filter) => {
-        if ( _.includes(filtersToDisplay, filter)) {
-            elements.push(
+        if (_.includes(filtersToDisplay, filter)) {
+            filterSelectorsList.push(
                 SelectorListSelectorComponent({
                     hide: false,
                     dataUniqueValues,
@@ -39,8 +47,33 @@ export function FilterSelectorListComponent(
                     onChange: handleChange,
                 })
             );
+            subFilters.forEach((subFilter) => {
+                if (filter === subFilter.parent) {
+                    const subFilterTarget = subFilter.target;
+                    if (
+                        subFilterTarget !== undefined &&
+                        _.includes(
+                            selectedFilter.microorganism,
+                            subFilterTarget
+                        )
+                    ) {
+                        const subFilterAttribute = subFilter.id;
+                        const subFilterValues = subFilter.values;
+                        filterSelectorsList.push(
+                            SubFilterSelectorComponent({
+                                subFilterTarget,
+                                subFilterAttribute,
+                                subFilterValues,
+                                selectedFilter,
+                                onChange: handleChange,
+                                noOptionLabel,
+                            })
+                        );
+                    }
+                }
+            });
         } else {
-            elements.push(
+            filterSelectorsList.push(
                 SelectorListSelectorComponent({
                     hide: true,
                     dataUniqueValues,
@@ -50,7 +83,6 @@ export function FilterSelectorListComponent(
                 })
             );
         }
-
     });
-    return elements;
+    return filterSelectorsList;
 }
