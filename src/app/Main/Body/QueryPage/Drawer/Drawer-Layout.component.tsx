@@ -4,6 +4,7 @@ import Drawer from "@material-ui/core/Drawer";
 import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
 import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
 import {
+    ClientSingleFilterConfig,
     FilterInterface,
     FilterType,
 } from "../../../../Shared/Model/Filter.model";
@@ -43,6 +44,7 @@ export interface DrawerLayoutProps {
     drawerWidth: number;
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
+    subFilters: ClientSingleFilterConfig[];
     columnFeature: string;
     rowFeature: string;
     onDisplFeaturesChange: (
@@ -102,6 +104,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
                 <DrawerFilterComponent
                     dataUniqueValues={props.dataUniqueValues}
                     filterInfo={props.filterInfo}
+                    subFilters={props.subFilters}
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}

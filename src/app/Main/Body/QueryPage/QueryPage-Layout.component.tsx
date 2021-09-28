@@ -5,6 +5,7 @@ import { DrawerLayoutComponent } from "./Drawer/Drawer-Layout.component";
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentLayoutComponent } from "./QueryPageContent-Layout.component";
 import {
+    ClientSingleFilterConfig,
     FilterInterface,
     FilterType,
 } from "../../../Shared/Model/Filter.model";
@@ -31,6 +32,7 @@ export function QueryPageLayoutComponent(props: {
     };
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
+    subFilters: ClientSingleFilterConfig[];
     data: DataInterface;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplFeaturesChange: (
@@ -96,6 +98,7 @@ export function QueryPageLayoutComponent(props: {
                 drawerWidth={drawerWidth}
                 dataUniqueValues={props.dataUniqueValues}
                 filterInfo={props.filterInfo}
+                subFilters={props.subFilters}
                 columnFeature={props.data.column}
                 rowFeature={props.data.row}
                 onDisplFeaturesChange={handleChangeDisplFeatures}

@@ -4,7 +4,8 @@ export type FilterInterface = Record<FilterType, string[]>;
 export interface ClientSingleFilterConfig {
     id: string;
     name: string;
-    parent: string;
+    parent?: string;
+    target?: string;
     values: string[];
 }
 
