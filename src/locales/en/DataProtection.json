@@ -18,17 +18,16 @@
                 "Mail": {
                     "Text": "E-Mail: ",
                     "LinkAdressBfR": "poststelle@bfr.bund.de",
-                    "LinkAdressDP": "dsb@bfr.bund.de"
+                    "LinkAdressDP": "Janina.Rochon@bfr.bund.de"
                 },
                 "Homepage": "www.bfr.bund.de"
             },
             "Text2": "If you have questions about the processing of your data or about data protection, please contact our Data Protection Officer: ",
             "AdressDP": {
-                "Name": "Rechtsanwalt Carsten Bethke",
-                "Street": "Calandrellistr. 24",
-                "City": "12247 Berlin",
-                "Phone": "Tel.: 0049 (0)30 7017 3010",
-                "Fax": "Fax: 0049 (0)30 7017 3011"
+                "Name": "Janina Rochon",
+                "Street": "Max-Dohrn-Straße 8-10",
+                "City": "10589 Berlin",
+                "Phone": "Tel.: 0049 (0)30 18412 31002"
             }
         },
         "2": {

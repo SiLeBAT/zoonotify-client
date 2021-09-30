@@ -88,7 +88,6 @@ export function DataProtectionPageComponent(): JSX.Element {
                         <tr>{t("Chapter.1.AdressDP.Street")}</tr>
                         <tr>{t("Chapter.1.AdressDP.City")}</tr>
                         <tr>{t("Chapter.1.AdressDP.Phone")}</tr>
-                        <tr>{t("Chapter.1.AdressDP.Fax")}</tr>
                         <tr>
                             {t("Chapter.1.AdressBfR.Mail.Text")}{" "}
                             <a href="mailto:dsb@bfr.bund.de">
