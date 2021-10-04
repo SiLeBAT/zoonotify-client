@@ -9,6 +9,8 @@ import {
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
 import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
+import { MicroorganismLabelKey } from "../../../../../Shared/Model/MicroorganismNames.model";
+import { getMicroorganismLabelService } from "../../Services/getMicroorganismLable.service";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
@@ -40,14 +42,15 @@ export function TableContentRowsComponent(props: {
 }): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
 
-    let rowName = "";
+    let rowName: string | JSX.Element = "";
+    const rowKey = props.row.name.replace(".", "");
     if (props.displayRow) {
-        rowName = t(
-            `FilterValues.${props.rowAttribute}.${props.row.name.replace(
-                ".",
-                ""
-            )}`
-        );
+        if (props.rowAttribute === "microorganism") {
+            const microorganismKey = rowKey as MicroorganismLabelKey;
+            rowName = getMicroorganismLabelService(microorganismKey);
+        } else {
+            rowName = t(`FilterValues.${props.rowAttribute}.${rowKey}`);
+        }
     } else if (props.displayOption === "relative") {
         rowName = `${t("Results.NrIsolatesTextRelative")} ${t("Results.Unit")}`;
     } else if (props.displayOption === "absolute") {

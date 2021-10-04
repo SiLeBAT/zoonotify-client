@@ -59,11 +59,11 @@
             "Campylobacter spp": "Campylobacter spp.",
             "E coli": "E. coli",
             "ESBL/AmpC-E coli": "ESBL/AmpC-E. coli",
-            "Listeria monocytogenes": "Listeria monocytogenes",
+            "Listeria monocytogenes": "L. monocytogenes",
             "MRSA": "MRSA",
             "Salmonella spp": "Salmonella spp.",
             "STEC": "STEC",
-            "CARBA-E coli": "Carbapenemase-forming Escherichia coli",
+            "CARBA-E coli": "Carba-E. coli",
             "Enterococcus spp": "Enterococcus spp."
         },
         "matrix": {

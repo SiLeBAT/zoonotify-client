@@ -30,7 +30,7 @@ export function QueryPageParameterContentComponent(props: {
                 elements.push(
                     <ParameterContentListComponent
                         key={`parameter_list_${filterElement}`}
-                        paramterLabel={filterElement}
+                        parameterLabel={filterElement}
                         parameterList={selectedFilters[filterElement]}
                     />
                 );

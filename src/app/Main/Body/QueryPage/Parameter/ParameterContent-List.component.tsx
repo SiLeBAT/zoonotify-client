@@ -9,8 +9,11 @@ import {
     createStyles,
     ListSubheader,
 } from "@material-ui/core";
+import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { FilterType } from "../../../../Shared/Model/Filter.model";
+import { MicroorganismLabelKey } from "../../../../Shared/Model/MicroorganismNames.model";
+import { getMicroorganismLabelService } from "../Services/getMicroorganismLable.service";
 
 const spaceStyle = css`
     padding: 0;
@@ -52,15 +55,28 @@ const useStyles = makeStyles((theme: Theme) =>
  * @param parameterList - list of selected parameter (filter)
  * @returns {JSX.Element[]} - list of ListItem-components
  */
-function createListItemComponent(parameterList: string[]): JSX.Element[] {
+function createListItemComponent(
+    parameterAttribute: FilterType,
+    parameterList: string[],
+    t: TFunction
+): JSX.Element[] {
     const elements: JSX.Element[] = [];
-    parameterList.forEach((element): void => {
-        const keyName = element.replace(" ", "_");
+    parameterList.forEach((parameter): void => {
+        const key = parameter.replace(".", "");
+        let parameterName: string | JSX.Element = "";
+        if (parameterAttribute === "microorganism") {
+            const microorganismKey: MicroorganismLabelKey = key as MicroorganismLabelKey;
+            parameterName = getMicroorganismLabelService(microorganismKey);
+        } else {
+            parameterName = t(`FilterValues.${parameterAttribute}.${key}`);
+        }
+
+        const keyName = parameter.replace(" ", "_");
         elements.push(
             <ListItem key={`listItem-${keyName}`} css={spaceStyle}>
                 <ListItemText
                     id={`labelId-${keyName}`}
-                    primary={element}
+                    primary={parameterName}
                     css={parameterValue}
                 />
             </ListItem>
@@ -70,14 +86,14 @@ function createListItemComponent(parameterList: string[]): JSX.Element[] {
 }
 
 export interface ListProps {
-    paramterLabel: FilterType;
+    parameterLabel: FilterType;
     parameterList: string[];
 }
 
 export function ParameterContentListComponent(props: ListProps): JSX.Element {
     const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
-    const label = t(`Filters.${props.paramterLabel}`);
+    const label = t(`Filters.${props.parameterLabel}`);
 
     return (
         <List
@@ -95,7 +111,11 @@ export function ParameterContentListComponent(props: ListProps): JSX.Element {
                 </ListSubheader>
             }
         >
-            {createListItemComponent(props.parameterList)}
+            {createListItemComponent(
+                props.parameterLabel,
+                props.parameterList,
+                t
+            )}
         </List>
     );
 }

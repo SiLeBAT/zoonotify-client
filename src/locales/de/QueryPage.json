@@ -56,15 +56,15 @@
     },
     "FilterValues": {
         "microorganism": {
-            "Campylobacter spp": "Campylobacter spp.",
+            "Campylobacter spp": "Campylobacter",
             "E coli": "E. coli",
             "ESBL/AmpC-E coli": "ESBL/AmpC-E. coli",
-            "Listeria monocytogenes": "Listeria monocytogenes",
+            "Listeria monocytogenes": "L. monocytogenes",
             "MRSA": "MRSA",
-            "Salmonella spp": "Salmonella spp.",
+            "Salmonella spp": "Salmonella",
             "STEC": "STEC",
-            "CARBA-E coli": "Carbapenemase-bildende Escherichia coli",
-            "Enterococcus spp": "Enterococcus spp."
+            "CARBA-E coli": "Carba-E. coli",
+            "Enterococcus spp": "Enterococcus"
         },
         "matrix": {
             "Frisches Fleisch": "Frisches Fleisch",
