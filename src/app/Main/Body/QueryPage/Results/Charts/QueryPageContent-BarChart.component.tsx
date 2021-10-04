@@ -42,7 +42,10 @@ const exportButtonStyle = css`
 
 function processingTableDataToApexData(
     data: Record<string, string>[],
-    dataLabels: string[]
+    dataLabels: string[], 
+    yAttribute: string, 
+    xAttribute: string,
+    t: TFunction
 ): ApexChartData {
     const apexChartSeries = [] as ApexChartData["series"];
 
@@ -51,16 +54,34 @@ function processingTableDataToApexData(
         dataLabels.forEach((xLabel) => {
             seriesValues.push(Number.parseFloat(tableRow[xLabel]));
         });
-        const groupData = {
-            name: tableRow.name,
+        let seriesLabel = t("Results.NrIsolatesText");
+        if (xAttribute !== "") {
+            const seriesLabelKey = tableRow.name.replace(".", "") 
+            seriesLabel = t(`FilterValues.${xAttribute}.${seriesLabelKey}`);
+        }
+        
+
+        const seriesData = {
+            name: seriesLabel,
             data: seriesValues,
         };
-        apexChartSeries.push(groupData);
+        apexChartSeries.push(seriesData);
     });
+
+    let newDataLabels = [t("Results.NrIsolatesText")];
+    if (yAttribute !== "") {
+        const translatedDataLabels: string[] = []
+        dataLabels.forEach(dataLabel => {
+            const dataLabelKey = dataLabel.replace(".", "")
+            translatedDataLabels.push(t(`FilterValues.${yAttribute}.${dataLabelKey}`))
+        });
+        newDataLabels = translatedDataLabels
+    }
+    
 
     return {
         series: apexChartSeries,
-        dataLabels,
+        dataLabels: newDataLabels,
     };
 }
 
@@ -134,7 +155,10 @@ export function QueryPageContentBarChartResultsComponent(props: {
     if (isChart) {
         const processedChartData = processingTableDataToApexData(
             chartData,
-            props.columnAttributes
+            props.columnAttributes,
+            colName, 
+            rowName,
+            t
         );
 
         if (_.isEmpty(processedChartData.series) || props.chartIsLoading) {
