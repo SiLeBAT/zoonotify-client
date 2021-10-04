@@ -10,7 +10,7 @@ export function BarChartResultsComponent(props: {
     xAxisLabel: string;
     yAxisLabel: string;
     xAxisMax?: number;
-    isStackedBarChart: boolean;
+    displayAsStacked: boolean;
 }): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const barChartRef = useRef<any>(null);
@@ -33,7 +33,7 @@ export function BarChartResultsComponent(props: {
                     download: false,
                 },
             },
-            stacked: props.isStackedBarChart,
+            stacked: props.displayAsStacked,
         },
         plotOptions: {
             bar: {
