@@ -23,8 +23,10 @@ export const defaultFilter: FilterContextInterface = {
         productionType: [],
         resistance: [],
         samplingYear: [],
-    },
-};
+        serovar: [],
+        species: [],
+        serotyp: []
+    }};
 interface ProfileState {
     filter: FilterContextInterface;
     setFilter: React.Dispatch<React.SetStateAction<FilterContextInterface>>;

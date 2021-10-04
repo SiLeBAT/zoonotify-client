@@ -6,6 +6,7 @@ import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { bfrDarkgrey, primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 function generateTranslatedSelectorObject(
     selectorArray: string[],
@@ -98,6 +99,9 @@ export function DisplayedFeatureSelectorComponent(
     return (
         <SelectorComponent
             label={props.label}
+            titleColor={bfrDarkgrey}
+            hooverColor={primaryColor}
+            hooverColorDark={bfrDarkgrey}
             noOptionLabel={t("Drawer.Selector")}
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={

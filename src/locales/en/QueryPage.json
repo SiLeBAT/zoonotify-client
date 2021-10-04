@@ -49,7 +49,10 @@
         "category": "Animal species / food category",
         "productionType": "Animal species production type / food",
         "resistance": "Antimicrobial resistance",
-        "samplingYear": "Sampling year"
+        "samplingYear": "Sampling year",
+        "serovar": "Serovar",
+        "species": "Spezies",
+        "serotyp": "Serotyp"
     },
     "FilterValues": {
         "microorganism": {

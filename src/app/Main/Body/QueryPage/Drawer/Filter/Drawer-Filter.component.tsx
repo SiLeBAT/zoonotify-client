@@ -6,6 +6,7 @@ import { Button } from "@material-ui/core";
 import { FilterSelectorListComponent } from "./Filter-SelectorList.component";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
 import {
+    ClientSingleFilterConfig,
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
@@ -59,6 +60,7 @@ const buttonStyle = css`
 export function DrawerFilterComponent(props: {
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
+    subFilters: ClientSingleFilterConfig[];
     onFilterChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
@@ -108,6 +110,7 @@ export function DrawerFilterComponent(props: {
                 props.filterInfo.selectedFilter,
                 props.filterInfo.displayedFilters,
                 props.filterInfo.mainFilter,
+                props.subFilters,
                 handleChangeFilter
             )}
             <Button

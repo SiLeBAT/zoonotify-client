@@ -1,7 +1,6 @@
 import React from "react";
 import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
-import { TFunction } from "i18next";
 import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import {
     FilterInterface,
@@ -9,17 +8,8 @@ import {
 } from "../../../../../Shared/Model/Filter.model";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
-
-function generateSelectorObject(
-    filterAttribute: string,
-    selectorArray: string[],
-    t: TFunction
-): { value: string; label: string }[] {
-    return selectorArray.map((filterValue) => {
-        const filterValueLabel = t(`FilterValues.${filterAttribute}.${filterValue.replace(".", "")}`)
-        return { value: filterValue, label: filterValueLabel };
-    });
-}
+import { bfrDarkgrey, primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { generateSelectorObject } from "./generateSelectorObject.service";
 
 export interface SelectorProps {
     hide: boolean;
@@ -77,6 +67,9 @@ export function SelectorListSelectorComponent(
     return (
         <SelectorComponent
             key={`filter-selector-${filterAttribute}`}
+            titleColor={bfrDarkgrey}
+            hooverColor={primaryColor}
+            hooverColorDark={bfrDarkgrey}
             label={t(`Filters.${filterAttribute}`)}
             noOptionLabel={t("Drawer.Selector")}
             dropDownValuesObj={dropDownValuesObj}

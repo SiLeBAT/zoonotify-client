@@ -5,6 +5,7 @@ import _ from "lodash";
 import {
     ClientIsolateCountedGroups,
     MainFilterList,
+    subFiltersList,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { FILTER_URL, ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
@@ -20,6 +21,8 @@ import {
     FeatureType,
 } from "../../../Shared/Context/DataContext";
 import {
+    ClientFiltersConfig,
+    ClientSingleFilterConfig,
     FilterInterface,
     FilterType,
 } from "../../../Shared/Model/Filter.model";
@@ -39,6 +42,7 @@ import { generateUniqueValuesService } from "./Services/generateUniqueValues.ser
 import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 import { getCurrentDate } from "../../../Core/getCurrentDate.service";
+import { adaptFilterFromApiService } from "./Services/adaptFilterFromAPI.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -49,7 +53,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
     const [dataIsLoading, setDataIsLoading] = useState<boolean>(false);
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>({});
-
+    const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>([]);
 
     const { filter, setFilter } = useContext(FilterContext);
     const { data, setData } = useContext(DataContext);
@@ -130,9 +134,10 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
+        const allFiltersList = subFiltersList.concat(MainFilterList)
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
-            newFilter.mainFilter,
+            allFiltersList,
             data
         );
         history.push(newPath);
@@ -213,7 +218,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
         setIsolateStatus(isolateResponse.status);
         setFilterStatus(filterResponse.status);
-
+ 
         if (isolateResponse.data && filterResponse.data) {
             const isolateCountProp: IsolateCountedDTO = isolateResponse.data;
 
@@ -224,6 +229,16 @@ export function QueryPageContainerComponent(): JSX.Element {
             const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
                 filterProp
             );
+
+            const adaptedFilterProp: ClientFiltersConfig = adaptFilterFromApiService(filterProp)
+            const adaptedSubFilters: ClientSingleFilterConfig[] = []
+            adaptedFilterProp.filters.forEach(adaptedFilter => {
+                if (adaptedFilter.parent !== undefined) {
+                    adaptedSubFilters.push(adaptedFilter)
+                }
+            });
+
+            setSubFilters(adaptedSubFilters)
             setUniqueDataValues(uniqueValuesObject);
             setTotalNrOfIsol(totalNrOfIsolates);
         }
@@ -241,9 +256,10 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const setFilterFromPath = (): void => {
+        const allFiltersList = subFiltersList.concat(MainFilterList)
         const filterFromPath = getFilterFromPath(
             history.location.search,
-            MainFilterList
+            allFiltersList
         );
         let displFilter: string[] = filterFromPath.displayedFilters;
         if (_.isEmpty(filterFromPath.displayedFilters)) {
@@ -361,6 +377,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                         filtered: nrOfSelectedIsol,
                     }}
                     filterInfo={filter}
+                    subFilters={subFilters}
                     dataUniqueValues={uniqueDataValues}
                     getPngDownloadUriRef={getPngDownloadUriRef}
                     onDisplFeaturesChange={handleChangeDisplFeatures}

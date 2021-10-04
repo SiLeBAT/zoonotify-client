@@ -49,7 +49,10 @@
         "category": "Tierart/Lebensmittel Oberkategorie",
         "productionType": "Tierart Produktionsrichtung/Lebensmittel",
         "resistance": "Antimikrobielle Resistenz",
-        "samplingYear": "Erhebungsjahr"
+        "samplingYear": "Erhebungsjahr",
+        "serovar": "Serovar",
+        "species": "Spezies",
+        "serotyp": "Serotyp"
     },
     "FilterValues": {
         "microorganism": {
