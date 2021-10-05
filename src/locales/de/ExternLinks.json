@@ -4,17 +4,17 @@
         "Text": "Hier finden Sie Links auf nationale und internationale Einrichtungen des gesundheitlichen Verbraucherschutzes und der Krankheitsüberwachung und –prävention sowie auf hilfreiche Tools in diesem Themenereich. Die Liste erhebt keinen Anspruch auf Vollständigkeit. Das BfR übernimmt keine Verantwortung für die Inhalte der hier aufgeführten Internet-Seiten."
     },
     "Guidelines": {
-        "Title": "Richtlinien",
-        "AVV": "AVV Zoonosen Lebensmittelkette",
-        "RL": "RL 2003/99/EG",
+        "Title": "Rechtsvorschriften",
+        "AVV": "allgemeine Verwaltungsvorschrift Zoonosen Lebensmittelkette",
+        "RL": "Richtlinie  2003/99/EG",
         "EG": "Verordnung (EG) Nr. 2160/2003",
         "EU13": "Durchführungsbeschluss (EU) 2013/652/EU",
         "EU20": "Durchführungsbeschluss (EU) 2020/1729"
     },
     "Reports": {
         "Title": "Berichte",
-        "ZoonosenBfR": "Zoonosenberichterstattung durch das BfR",
-        "ZoonosenMonitoring": "Berichte zum Zoonosen-Monitoring",
+        "ZoonosenBfR": "Zoonosen: Gesundheitliche Bewertung",
+        "ZoonosenMonitoring": "Berichte zum Zoonosen-Monitoring nach AVV Zoonosen Lebensmittelkette",
         "AR": "Lagebild zu Antibiotikaresistenzen und -einsatz im Bereich Tierhaltung und Lebensmittelkette",
         "AMK": "Bericht des BMEL über die Evaluierung des Antibiotikaminimierungskonzepts der 16. AMG-Novelle"
     },
