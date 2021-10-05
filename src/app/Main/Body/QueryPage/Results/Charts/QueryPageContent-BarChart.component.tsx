@@ -126,9 +126,11 @@ export function QueryPageContentBarChartResultsComponent(props: {
 
     let chartData = props.chartData.statisticDataAbsolute;
     let xAxisMax;
+    let displayAsStacked = false
     if (props.chartData.option === "relative") {
         chartData = props.chartData.statisticDataRelative;
         xAxisMax = 100;
+        displayAsStacked = true
     }
 
     if (isChart) {
@@ -168,6 +170,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
                             xAxisLabel={xAxisLabel}
                             yAxisLabel={yAxisLabel}
                             xAxisMax={xAxisMax}
+                            displayAsStacked={displayAsStacked}
                         />
                     </div>
                 </div>
