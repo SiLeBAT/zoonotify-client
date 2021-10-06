@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { ZNPaths } from "../../../Shared/URLs";
+import { contactBfr, contactDP, homePageBfr, linkBDSG, linkDSGVO, mailBfr, mailDP, mailZnSupport } from "./DataProtection.config";
 
 const dataProtectionStyle = css`
     max-width: 90ch;
@@ -58,24 +59,24 @@ export function DataProtectionPageComponent(): JSX.Element {
                 <p>{t("Chapter.1.Text1")}</p>
                 <table>
                     <tbody>
-                        <tr>{t("Chapter.1.AdressBfR.Institution")}</tr>
-                        <tr>{t("Chapter.1.AdressBfR.Street")}</tr>
-                        <tr>{t("Chapter.1.AdressBfR.City")}</tr>
-                        <tr>{t("Chapter.1.AdressBfR.Phone")}</tr>
-                        <tr>{t("Chapter.1.AdressBfR.Fax")}</tr>
+                        <tr>{t("Chapter.1.BfrName")}</tr>
+                        <tr>{contactBfr.Street}</tr>
+                        <tr>{contactBfr.City}</tr>
+                        <tr>{contactBfr.Phone}</tr>
+                        <tr>{contactBfr.Fax}</tr>
                         <tr>
-                            {t("Chapter.1.AdressBfR.Mail.Text")}{" "}
-                            <a href="mailto:poststelle@bfr.bund.de">
-                                {t("Chapter.1.AdressBfR.Mail.LinkAdressBfR")}
+                            {t("Chapter.1.MailText")}
+                            <a href={`mailto:${mailBfr}`}>
+                                {mailBfr}
                             </a>
                         </tr>
                         <tr>
                             <a
-                                href="https://www.bfr.bund.de"
+                                href={homePageBfr}
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                {t("Chapter.1.AdressBfR.Homepage")}
+                                {homePageBfr}
                             </a>
                         </tr>
                     </tbody>
@@ -84,15 +85,15 @@ export function DataProtectionPageComponent(): JSX.Element {
                 <p> {t("Chapter.1.Text2")} </p>
                 <table>
                     <tbody>
-                        <tr>{t("Chapter.1.AdressDP.Name")}</tr>
-                        <tr>{t("Chapter.1.AdressDP.Street")}</tr>
-                        <tr>{t("Chapter.1.AdressDP.City")}</tr>
-                        <tr>{t("Chapter.1.AdressDP.Phone")}</tr>
-                        <tr>{t("Chapter.1.AdressDP.Fax")}</tr>
+                        <tr>{contactDP.Name}</tr>
+                        <tr>{contactDP.Street}</tr>
+                        <tr>{contactDP.City}</tr>
+                        <tr>{contactDP.Phone}</tr>
+                        <tr>{contactDP.Fax}</tr>
                         <tr>
-                            {t("Chapter.1.AdressBfR.Mail.Text")}{" "}
-                            <a href="mailto:dsb@bfr.bund.de">
-                                {t("Chapter.1.AdressBfR.Mail.LinkAdressDP")}
+                            {t("Chapter.1.MailText")}
+                            <a href={`mailto:${mailDP}`}>
+                                {mailDP}
                             </a>
                         </tr>
                     </tbody>
@@ -104,7 +105,7 @@ export function DataProtectionPageComponent(): JSX.Element {
                 <p>
                     {t("Chapter.2.Text1")}
                     <a
-                        href="https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:32016R0679&qid=1527147390147&from=EN"
+                        href={linkDSGVO}
                         target="_blank"
                         rel="noreferrer"
                     >
@@ -112,7 +113,7 @@ export function DataProtectionPageComponent(): JSX.Element {
                     </a>
                     {t("Chapter.2.Text2")}
                     <a
-                        href="https://www.gesetze-im-internet.de/bdsg_2018/"
+                        href={linkBDSG}
                         target="_blank"
                         rel="noreferrer"
                     >
@@ -157,8 +158,8 @@ export function DataProtectionPageComponent(): JSX.Element {
             <div>
                 <p>
                     {t("Chapter.3.32.Text1")}{" "}
-                    <a href="mailto:dominic.toelle@bfr.bund.de">
-                        {t("Chapter.3.32.LinkMail")}
+                    <a href={`mailto:${mailZnSupport}`}>
+                        {mailZnSupport}
                     </a>
                     {t("Chapter.3.32.Text2")}
                 </p>
@@ -186,8 +187,8 @@ export function DataProtectionPageComponent(): JSX.Element {
                 <p>{t("Chapter.5.Text5")}</p>
                 <p>
                     {t("Chapter.5.Text6")}
-                    <a href="mailto:poststelle@bfr.bund.de">
-                        {t("Chapter.1.AdressBfR.Mail.LinkAdressDP")}
+                    <a href={`mailto:${mailDP}`}>
+                        {mailDP}
                     </a>
                     {t("Chapter.5.Text7")}
                 </p>

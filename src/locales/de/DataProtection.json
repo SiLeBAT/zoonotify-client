@@ -9,28 +9,9 @@
         "1": {
             "Heading": "1. Wer ist für die Datenverarbeitung verantwortlich, und an wen kann ich mich wenden?",
             "Text1": "Das Bundesinstitut für Risikobewertung ist für die Verarbeitung Ihrer Daten im Sinne des Art. 4 Nr. 7 DS-GVO verantwortlich. Nachfolgend finden Sie unsere Kontaktdaten: ",
-            "AdressBfR": {
-                "Name": "Christin Weigel",
-                "Institution": "Bundesinstitut für Risikobewertung (BfR)",
-                "Street": "Max-Dohrn-Str. 8-10",
-                "City": "10589 Berlin",
-                "Phone": "Tel.: 030-18412-0",
-                "Fax": "Fax: 030-18412-4741",
-                "Mail": {
-                    "Text": "E-Mail: ",
-                    "LinkAdressBfR": "poststelle@bfr.bund.de",
-                    "LinkAdressDP": "dsb@bfr.bund.de"
-                },
-                "Homepage": "www.bfr.bund.de"
-            },
-            "Text2": "Bei Fragen zur Verarbeitung Ihrer Daten und zum Datenschutz wenden Sie sich bitte an unsere behördliche Datenschutzbeauftragte: ",
-            "AdressDP": {
-                "Name": "Rechtsanwalt Carsten Bethke",
-                "Street": "Calandrellistr. 24",
-                "City": "12247 Berlin",
-                "Phone": "Tel.: 0049 (0)30 7017 3010",
-                "Fax": "Fax: 0049 (0)30 7017 3011"
-            }
+            "MailText": "E-Mail: ",
+            "BfrName": "Bundesinstitut für Risikobewertung (BfR)",
+            "Text2": "Bei Fragen zur Verarbeitung Ihrer Daten und zum Datenschutz wenden Sie sich bitte an unsere behördliche Datenschutzbeauftragte: "
         },
         "2": {
             "Heading": "2. Auf welcher Rechtsgrundlage verarbeiten wir Ihre personenbezogenen Daten?",

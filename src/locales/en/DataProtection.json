@@ -9,28 +9,9 @@
         "1": {
             "Heading": "1. Who is responsible for data processing and who can I contact?",
             "Text1": "The German Federal Institute for Risk Assessment is responsible for processing your data in line with Art. 4 No. 7 GDPR. You can find our contact details below: ",
-            "AdressBfR": {
-                "Institution": "German Federal Institute for Risk Assessment (BfR)",
-                "Street": "Max-Dohrn-Str. 8-10",
-                "City": "10589 Berlin",
-                "Phone": "Tel.: 0049 (0)30-18412-0",
-                "Fax": "Fax: 0049 (0)30-18412-99099",
-                "Mail": {
-                    "Text": "E-Mail: ",
-                    "LinkAdressBfR": "poststelle@bfr.bund.de",
-                    "LinkAdressDP": "dsb@bfr.bund.de"
-                },
-                "Homepage": "www.bfr.bund.de"
-            },
-            "Text2": "If you have questions about the processing of your data or about data protection, please contact our Data Protection Officer: ",
-            "AdressDP": {
-                "Name": "Rechtsanwalt Carsten Bethke",
-                "Street": "Calandrellistr. 24",
-                "City": "12247 Berlin",
-                "Phone": "Tel.: 0049 (0)30 7017 3010",
-                "Fax": "Fax: 0049 (0)30 7017 3011"
-            }
-        },
+            "MailText": "E-Mail: ",
+            "BfrName": "German Federal Institute for Risk Assessment (BfR)",
+            "Text2": "If you have questions about the processing of your data or about data protection, please contact our Data Protection Officer: "        },
         "2": {
             "Heading": "2. On which legal basis do we process your personal data?",
             "Text1": "At the BfR, personal data is processed in accordance with the ",
