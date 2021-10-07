@@ -22,6 +22,7 @@ const tableDivStyle = css`
 export function TableResultsTableComponent(props: {
     sumOptions: SumOptions;
     isLoading: boolean;
+    numberOfIsolates: number;
     colMainHeader: string;
     rowMainHeader: string;
     tableData: Record<string, string>[];
@@ -57,6 +58,7 @@ export function TableResultsTableComponent(props: {
                 <div css={dataTableStyle}>
                     <TableContentTableContainerComponent
                         sumOptions={props.sumOptions}
+                        numberOfIsolates={props.numberOfIsolates}
                         tableData={props.tableData}
                         colAttribute={props.colAttribute}
                         rowAttribute={props.rowAttribute}

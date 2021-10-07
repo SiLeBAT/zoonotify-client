@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@material-ui/core/TableCell";
-import _ from "lodash";
 import {
     highlightedTableBorder,
     fixedCellSize,
@@ -26,24 +25,10 @@ const totalSumStyle = css`
     background-color: ${sumRowColBackgroundColor};
 `;
 
-function calculateColSum(
-    tableData: Record<string, string>[],
-    headerValue: string
-): number {
-    const colNumbers: number[] = tableData.map((tableRow) => {
-        const colNumber = tableRow[headerValue];
-        if (colNumber !== undefined) {
-            return Number.parseFloat(colNumber);
-        }
-        return 0;
-    });
-
-    return _.sum(colNumbers);
-}
-
 export function TableContentRowWithColSumComponent(props: {
     showRowSum: boolean;
-    tableData: Record<string, string>[];
+    numberOfIsolates: number;
+    rowWithColSums: Record<string, string>[];
     headerValues: string[];
     classes: Record<"tableCell", string>;
     colSumLabel: string;
@@ -62,22 +47,9 @@ export function TableContentRowWithColSumComponent(props: {
         </TableCell>,
     ];
 
-    let totalColSum = 0
+    const totalColSum = props.numberOfIsolates;
 
     props.headerValues.forEach((headerValue) => {
-        const colSum: number = calculateColSum(
-            props.tableData,
-            headerValue
-        );
-
-        totalColSum += colSum
-
-        let colSumString = colSum.toString()
-
-        if (props.displayOption === "relative") {
-            colSumString = colSum.toFixed(2);
-        }
-
         arrayWithColSumCells.push(
             <TableCell
                 key={`isolates-col-sum-${headerValue}`}
@@ -87,18 +59,16 @@ export function TableContentRowWithColSumComponent(props: {
                 align="right"
                 css={tableCellStyle(false)}
             >
-                {colSumString}
+                {props.rowWithColSums[0][headerValue]}
             </TableCell>
         );
     });
 
-    let totalColSumString: string = totalColSum.toString()
+    let totalColSumString: string = totalColSum.toString();
 
     if (props.displayOption === "relative") {
-        totalColSumString = totalColSum.toFixed(0);
+        totalColSumString = "100.0";
     }
-
-
 
     if (props.showRowSum) {
         arrayWithColSumCells.push(

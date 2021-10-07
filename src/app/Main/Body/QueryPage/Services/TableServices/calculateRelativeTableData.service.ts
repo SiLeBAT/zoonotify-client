@@ -1,7 +1,7 @@
 function calculateRelative(part: number, total: number): string {
     const relative = total === 0 ? 0 : (part / total) * 100;
-    const relativeRounded = relative.toFixed(2);
-    return relativeRounded;
+    const relativeRounded = (Math.round(relative * 100) / 100).toFixed(1);
+    return relativeRounded.toString();
 }
 /**
  * @desc Calculate the relative numbers of an objectList with absolute numbers
@@ -9,8 +9,8 @@ function calculateRelative(part: number, total: number): string {
  * @returns {Record<string, string>[]} - one object for each row inside a list
  */
 export function calculateRelativeTableData(
-    objList: Record<string, string>[], 
-    nrOfSelectedIsolates: number,
+    objList: Record<string, string>[],
+    nrOfSelectedIsolates: number
 ): Record<string, string>[] {
     const statisticTableDataRel: Record<string, string>[] = [];
     objList.forEach((obj) => {

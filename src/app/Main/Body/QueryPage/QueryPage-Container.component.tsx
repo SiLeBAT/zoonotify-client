@@ -43,6 +43,7 @@ import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 import { adaptFilterFromApiService } from "./Services/adaptFilterFromAPI.service";
+import { calculateRowColSumsAbsolute } from "./Services/TableServices/calculateRowColSums.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -52,8 +53,12 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [totalNrOfIsol, setTotalNrOfIsol] = useState<number>(0);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
     const [dataIsLoading, setDataIsLoading] = useState<boolean>(false);
-    const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>({});
-    const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>([]);
+    const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
+        {}
+    );
+    const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>(
+        []
+    );
 
     const { filter, setFilter } = useContext(FilterContext);
     const { data, setData } = useContext(DataContext);
@@ -134,7 +139,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
-        const allFiltersList = subFiltersList.concat(MainFilterList)
+        const allFiltersList = subFiltersList.concat(MainFilterList);
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
             allFiltersList,
@@ -218,7 +223,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
         setIsolateStatus(isolateResponse.status);
         setFilterStatus(filterResponse.status);
- 
+
         if (isolateResponse.data && filterResponse.data) {
             const isolateCountProp: IsolateCountedDTO = isolateResponse.data;
 
@@ -230,15 +235,17 @@ export function QueryPageContainerComponent(): JSX.Element {
                 filterProp
             );
 
-            const adaptedFilterProp: ClientFiltersConfig = adaptFilterFromApiService(filterProp)
-            const adaptedSubFilters: ClientSingleFilterConfig[] = []
-            adaptedFilterProp.filters.forEach(adaptedFilter => {
+            const adaptedFilterProp: ClientFiltersConfig = adaptFilterFromApiService(
+                filterProp
+            );
+            const adaptedSubFilters: ClientSingleFilterConfig[] = [];
+            adaptedFilterProp.filters.forEach((adaptedFilter) => {
                 if (adaptedFilter.parent !== undefined) {
-                    adaptedSubFilters.push(adaptedFilter)
+                    adaptedSubFilters.push(adaptedFilter);
                 }
             });
 
-            setSubFilters(adaptedSubFilters)
+            setSubFilters(adaptedSubFilters);
             setUniqueDataValues(uniqueValuesObject);
             setTotalNrOfIsol(totalNrOfIsolates);
         }
@@ -256,7 +263,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const setFilterFromPath = (): void => {
-        const allFiltersList = subFiltersList.concat(MainFilterList)
+        const allFiltersList = subFiltersList.concat(MainFilterList);
         const filterFromPath = getFilterFromPath(
             history.location.search,
             allFiltersList
@@ -315,13 +322,28 @@ export function QueryPageContainerComponent(): JSX.Element {
 
             const statisticTableDataRel = calculateRelativeTableData(
                 statisticTableDataAbs,
-                nrOfSelectedIsolates,
+                nrOfSelectedIsolates
             );
+
+            const statTableDataWithSumsAbs = calculateRowColSumsAbsolute(
+                statisticTableDataAbs,
+                columnNames,
+                false,
+                nrOfSelectedIsolates.toString()
+            );
+            const statTableDataWithSumsRel = calculateRowColSumsAbsolute(
+                statisticTableDataRel,
+                columnNames,
+                true,
+                nrOfSelectedIsolates.toString(),
+                statTableDataWithSumsAbs
+            );
+
             setColumnNameValues(columnNames);
             setData({
                 ...data,
-                statisticDataAbsolute: statisticTableDataAbs,
-                statisticDataRelative: statisticTableDataRel,
+                statisticDataAbsolute: statTableDataWithSumsAbs,
+                statisticDataRelative: statTableDataWithSumsRel,
             });
         }
     };
@@ -335,7 +357,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         setIsolateCountStatus(countedIsolatesResponse.status);
 
         if (countedIsolatesResponse.data !== undefined) {
-            const isolateCountProp: IsolateCountedDTO = countedIsolatesResponse.data;
+            const isolateCountProp: IsolateCountedDTO =
+                countedIsolatesResponse.data;
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
             const isolateCountGroups = isolateCountProp.groups;
             setDataContext(isolateCountGroups, nrOfSelectedIsolates);
