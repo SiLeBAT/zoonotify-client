@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { List, ListSubheader } from "@material-ui/core";
-import links from "./external_links.json";
+import links from "../../../../assets/external_links.json";
 import { LinkListContentComponent } from "./LinkList-ListContent.component";
 
 export function LinkPageLinkListComponent(): JSX.Element[] {
