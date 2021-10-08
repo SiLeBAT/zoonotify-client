@@ -77,6 +77,7 @@ export function InfoPageContainerComponent(): JSX.Element {
                 {microorganismNames.ColiFull}
             </div>
         ),
+        titleString: t("Methods.Amrs.coliSalm.TableTitleString"),
         description: t("Methods.Amrs.coliSalm.TableDescription"),
         tableHeader: coliSalmTableHeader,
         tableRows: tableAmrEcoliSalmRows,
@@ -101,6 +102,7 @@ export function InfoPageContainerComponent(): JSX.Element {
                 {t("Methods.Amrs.coliSalmTwo.TableTitle.Part3")}
             </div>
         ),
+        titleString: t("Methods.Amrs.coliSalmTwo.TableTitleString"),
         description: t("Methods.Amrs.coliSalmTwo.TableDescription"),
         tableHeader: coliSalmTableHeader,
         tableRows: tableAmrEcoliSalmTwoRows,
@@ -124,6 +126,7 @@ export function InfoPageContainerComponent(): JSX.Element {
                 {microorganismNames.CampyColiShort}
             </div>
         ),
+        titleString: t("Methods.Amrs.campy.TableTitleString"),
         description: t("Methods.Amrs.campy.TableDescription"),
         tableHeader: oneCutOffTableHeader,
         tableRows: tableAmrCampyRows,
@@ -151,6 +154,7 @@ export function InfoPageContainerComponent(): JSX.Element {
                 {microorganismNames.Staphy}
             </div>
         ),
+        titleString: t("Methods.Amrs.mrsa.TableTitleString"),
         description: t("Methods.Amrs.mrsa.TableDescription"),
         tableHeader: oneCutOffTableHeader,
         tableRows: tableAmrMrsaRows,
@@ -174,6 +178,7 @@ export function InfoPageContainerComponent(): JSX.Element {
                 {microorganismNames.EnteroFaecium}
             </div>
         ),
+        titleString: t("Methods.Amrs.ef.TableTitleString"),
         description: t("Methods.Amrs.ef.TableDescription"),
         tableHeader: efTableHeader,
         tableRows: tableAmrEfRows,
@@ -191,7 +196,7 @@ export function InfoPageContainerComponent(): JSX.Element {
     const handleExportAmrData = (amrKey: AmrKey): void => {
         let csvContent = "";
 
-        csvContent += `"${amrTableData[amrKey].title}"`;
+        csvContent += `"${amrTableData[amrKey].titleString}"`;
         csvContent += "\n";
         csvContent += `"${amrTableData[amrKey].description}"`;
         csvContent += "\n";
@@ -212,7 +217,7 @@ export function InfoPageContainerComponent(): JSX.Element {
         csvContent += `"${amrTableData[amrKey].commentText}"`;
 
         const csvTable = csvContent;
-        const amrFileName = `${amrTableData[amrKey].title}.csv`
+        const amrFileName = `${amrTableData[amrKey].titleString}.csv`
             .replace(/ /g, "_")
             .replace("..", ".");
         const amrTableExportElement = document.createElement("a");

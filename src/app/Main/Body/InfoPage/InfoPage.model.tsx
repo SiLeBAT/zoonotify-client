@@ -12,6 +12,7 @@ export interface AmrsTableData {
 export interface AmrsTable {
     introduction: JSX.Element;
     title: JSX.Element;
+    titleString: string;
     description: string;
     tableHeader: string[];
     tableRows: AmrsTableData[];
