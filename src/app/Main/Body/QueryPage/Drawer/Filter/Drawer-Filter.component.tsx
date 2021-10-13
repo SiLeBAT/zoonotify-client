@@ -58,6 +58,7 @@ const buttonStyle = css`
 `;
 
 export function DrawerFilterComponent(props: {
+    dataIsLoading: boolean,
     dataUniqueValues: FilterInterface;
     filterInfo: FilterContextInterface;
     subFilters: ClientSingleFilterConfig[];
@@ -106,6 +107,7 @@ export function DrawerFilterComponent(props: {
                 <ClearSelectorComponent onClick={handleRemoveAllFilter} />
             </div>
             {FilterSelectorListComponent(
+                props.dataIsLoading,
                 props.dataUniqueValues,
                 props.filterInfo.selectedFilter,
                 props.filterInfo.displayedFilters,

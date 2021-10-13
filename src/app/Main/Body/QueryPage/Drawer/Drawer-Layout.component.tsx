@@ -102,6 +102,7 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
         >
             <div className={classes.drawerContainer}>
                 <DrawerFilterComponent
+                    dataIsLoading={props.dataIsLoading}
                     dataUniqueValues={props.dataUniqueValues}
                     filterInfo={props.filterInfo}
                     subFilters={props.subFilters}

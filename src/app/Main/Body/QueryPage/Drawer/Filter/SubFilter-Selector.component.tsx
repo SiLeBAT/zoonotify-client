@@ -30,6 +30,7 @@ const subFilterTargetLabelStyle = css`
 `;
 
 export interface SelectorProps {
+    dataIsLoading: boolean;
     subFilterTarget: string;
     subFilterValues: string[];
     selectedFilter: FilterInterface;
@@ -96,7 +97,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
                 onChange={handleChange}
                 isMulti
                 isNotSelected={noFilter}
-                isDisabled={false}
+                isDisabled={props.dataIsLoading}
                 hide={false}
             />
         </div>
