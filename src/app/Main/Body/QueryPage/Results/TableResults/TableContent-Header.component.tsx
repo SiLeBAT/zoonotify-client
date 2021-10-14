@@ -5,14 +5,13 @@ import TableCell from "@material-ui/core/TableCell";
 import { useTranslation } from "react-i18next";
 import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
 import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
-import { getMicroorganismLabelService } from "../../Services/getMicroorganismLable.service";
 import {
     highlightedTableBorder,
     fixedCellSize,
     defaultTableBorder,
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
-import { MicroorganismLabelKey } from "../../../../../Shared/Model/MicroorganismNames.model";
+import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
 
 const blankCellStyle = css`
     box-sizing: border-box;
@@ -73,8 +72,17 @@ export function TableContentHeaderComponent(props: {
         if (props.isCol) {
             const colKey = headerValue.replace(".", "");
             if (props.colAttribute === "microorganism") {
-                const microorganismKey = colKey as MicroorganismLabelKey;
-                headerTitle = getMicroorganismLabelService(microorganismKey);
+                const translateRootString = `FilterValues.formattedMicroorganisms.${colKey}`;
+                const prefix = t(`${translateRootString}.prefix`);
+                const name = t(`${translateRootString}.name`);
+                const italicName = t(`${translateRootString}.italicName`);
+                const suffix = t(`${translateRootString}.suffix`);
+                headerTitle = getMicroorganismLabelService({
+                    prefix,
+                    name,
+                    italicName,
+                    suffix,
+                });
             } else {
                 headerTitle = t(`FilterValues.${props.colAttribute}.${colKey}`);
             }

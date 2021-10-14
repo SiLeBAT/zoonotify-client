@@ -66,6 +66,62 @@
             "CARBA-E coli": "Carba-E. coli",
             "Enterococcus spp": "Enterococcus spp."
         },
+        "formattedMicroorganisms": {
+            "Campylobacter spp": {
+                "prefix": "",
+                "name": "",
+                "italicName": "Campylobacter",
+                "suffix": " spp."
+            },
+            "E coli": {
+                "prefix": "",
+                "name": "",
+                "italicName": "E.coli",
+                "suffix": ""
+            },
+            "ESBL/AmpC-E coli": {
+                "prefix": "ESBL/AmpC-",
+                "name": "",
+                "italicName": "E.coli",
+                "suffix": ""
+            },
+            "Listeria monocytogenes": {
+                "prefix": "",
+                "name": "",
+                "italicName": "L. monocytogenes",
+                "suffix": ""
+            },
+            "MRSA": {
+                "prefix": "",
+                "name": "MRSA",
+                "italicName": "",
+                "suffix": ""
+            },
+            "Salmonella spp": {
+                "prefix": "",
+                "name": "",
+                "italicName": "Salmonella",
+                "suffix": " spp."
+            },
+            "STEC": {
+                "prefix": "",
+                "name": "STEC",
+                "italicName": "",
+                "suffix": ""
+            },
+            "CARBA-E coli": {
+                "prefix": "Carba-",
+                "name": "",
+                "italicName": "E.coli",
+                "suffix": ""
+            },
+            "Enterococcus spp": {
+                "prefix": "",
+                "name": "",
+                "italicName": "Enterococcus",
+                "suffix": " spp."
+            }
+        },
         "matrix": {
             "Frisches Fleisch": "Frisches Fleisch",
             "Blinddarminhalt": "Blinddarminhalt",

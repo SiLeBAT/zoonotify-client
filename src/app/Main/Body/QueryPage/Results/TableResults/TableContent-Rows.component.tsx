@@ -9,8 +9,7 @@ import {
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
 import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
-import { MicroorganismLabelKey } from "../../../../../Shared/Model/MicroorganismNames.model";
-import { getMicroorganismLabelService } from "../../Services/getMicroorganismLable.service";
+import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
@@ -46,8 +45,17 @@ export function TableContentRowsComponent(props: {
     const rowKey = props.row.name.replace(".", "");
     if (props.displayRow) {
         if (props.rowAttribute === "microorganism") {
-            const microorganismKey = rowKey as MicroorganismLabelKey;
-            rowName = getMicroorganismLabelService(microorganismKey);
+            const translateRootString = `FilterValues.formattedMicroorganisms.${rowKey}`;
+            const prefix = t(`${translateRootString}.prefix`);
+            const name = t(`${translateRootString}.name`);
+            const italicName = t(`${translateRootString}.italicName`);
+            const suffix = t(`${translateRootString}.suffix`);
+            rowName = getMicroorganismLabelService({
+                prefix,
+                name,
+                italicName,
+                suffix,
+            });
         } else {
             rowName = t(`FilterValues.${props.rowAttribute}.${rowKey}`);
         }

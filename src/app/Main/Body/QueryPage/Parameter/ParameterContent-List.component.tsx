@@ -12,8 +12,7 @@ import {
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { FilterType } from "../../../../Shared/Model/Filter.model";
-import { MicroorganismLabelKey } from "../../../../Shared/Model/MicroorganismNames.model";
-import { getMicroorganismLabelService } from "../Services/getMicroorganismLable.service";
+import { getMicroorganismLabelService } from "../Services/getMicroorganismLabel";
 
 const spaceStyle = css`
     padding: 0;
@@ -65,8 +64,17 @@ function createListItemComponent(
         const key = parameter.replace(".", "");
         let parameterName: string | JSX.Element = "";
         if (parameterAttribute === "microorganism") {
-            const microorganismKey: MicroorganismLabelKey = key as MicroorganismLabelKey;
-            parameterName = getMicroorganismLabelService(microorganismKey);
+            const microorganismKey = key;
+            const translateRootString = `FilterValues.formattedMicroorganisms.${microorganismKey}`
+            const prefix = t(`${translateRootString}.prefix`)
+            const name = t(`${translateRootString}.name`)
+            const italicName = t(`${translateRootString}.italicName`)
+            const suffix = t(`${translateRootString}.suffix`)
+            parameterName = getMicroorganismLabelService({prefix,
+            name,
+            italicName,
+            suffix}
+            );
         } else {
             parameterName = t(`FilterValues.${parameterAttribute}.${key}`);
         }
