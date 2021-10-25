@@ -16,6 +16,7 @@ import { SubFilterSelectorComponent } from "./SubFilter-Selector.component";
  * @return {JSX.Element[]} selector-elements in a list
  */
 export function FilterSelectorListComponent(
+    dataIsLoading: boolean,
     dataUniqueValues: FilterInterface,
     selectedFilter: FilterInterface,
     filtersToDisplay: string[],
@@ -40,6 +41,7 @@ export function FilterSelectorListComponent(
         if (_.includes(filtersToDisplay, filter)) {
             filterSelectorsList.push(
                 SelectorListSelectorComponent({
+                    dataIsLoading,
                     hide: false,
                     dataUniqueValues,
                     selectedFilter,
@@ -61,6 +63,7 @@ export function FilterSelectorListComponent(
                         const subFilterValues = subFilter.values;
                         filterSelectorsList.push(
                             SubFilterSelectorComponent({
+                                dataIsLoading,
                                 subFilterTarget,
                                 subFilterAttribute,
                                 subFilterValues,
@@ -75,6 +78,7 @@ export function FilterSelectorListComponent(
         } else {
             filterSelectorsList.push(
                 SelectorListSelectorComponent({
+                    dataIsLoading,
                     hide: true,
                     dataUniqueValues,
                     selectedFilter,

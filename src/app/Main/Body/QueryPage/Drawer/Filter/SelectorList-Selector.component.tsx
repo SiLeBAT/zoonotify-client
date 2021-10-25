@@ -12,6 +12,7 @@ import { bfrDarkgrey, primaryColor } from "../../../../../Shared/Style/Style-Mai
 import { generateSelectorObject } from "./generateSelectorObject.service";
 
 export interface SelectorProps {
+    dataIsLoading: boolean;
     hide: boolean;
     dataUniqueValues: FilterInterface;
     selectedFilter: FilterInterface;
@@ -78,7 +79,7 @@ export function SelectorListSelectorComponent(
             onChange={handleChange}
             isMulti
             isNotSelected={noFilter}
-            isDisabled={false}
+            isDisabled={props.dataIsLoading}
             hide={props.hide}
         />
     );
