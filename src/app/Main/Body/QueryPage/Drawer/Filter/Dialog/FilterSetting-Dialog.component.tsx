@@ -5,20 +5,23 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import _ from "lodash";
 import DoneIcon from "@material-ui/icons/Done";
+import { Checkbox, createStyles, Divider, FormControlLabel, makeStyles } from "@material-ui/core";
 import { DialogComponent } from "../../../../../../Shared/Dialog.component";
 import {
     primaryColor,
     secondaryColor,
 } from "../../../../../../Shared/Style/Style-MainTheme.component";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
-import { FilterDialogSelectAllButtonComponent } from "./FilterDialog-SelectAllButton.component";
 
-
-const filterDialogContentStyle = css`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`;
+const useStyles = makeStyles(() =>
+    createStyles({
+        divider: {
+            background: primaryColor,
+            marginLeft: 0,
+            marginRight: 0,
+        },
+    })
+);
 
 const submitButtonStyle = css`
     display: flex;
@@ -37,24 +40,26 @@ export function FilterSettingDialogComponent(props: {
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
     onCancelFiltersToDisplay: () => void;
 }): JSX.Element {
-    const [newFiltersToDisplay, setTempFiltersToDisplay] = useState<string[]>(
+    const [newFiltersToDisplay, setNewFiltersToDisplay] = useState<string[]>(
         props.previousFiltersToDisplay
     );
     const { t } = useTranslation(["QueryPage"]);
+    const classes = useStyles();
 
     const handleSubmitFiltersToDisplay = (): void => {
-        props.onSubmitFiltersToDisplay(newFiltersToDisplay)
+        props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
-    const handleSelectAllFiltersToDisplay = (): void => {
-        setTempFiltersToDisplay(props.availableFilters);
-    };
-    const handleDeselectAllFiltersToDisplay = (): void => {
-        setTempFiltersToDisplay([]);
+    const handleSelectAllCheckBoxChange = (checked: boolean): void => {
+        if (checked) {
+            setNewFiltersToDisplay(props.availableFilters);
+        } else {
+            setNewFiltersToDisplay([]);
+        }
     };
 
     const handleCancelFiltersToDisplay = (): void => {
-        props.onCancelFiltersToDisplay()
-        setTempFiltersToDisplay(props.previousFiltersToDisplay);
+        props.onCancelFiltersToDisplay();
+        setNewFiltersToDisplay(props.previousFiltersToDisplay);
     };
 
     const handleChangeFiltersToDisplay = (
@@ -70,7 +75,7 @@ export function FilterSettingDialogComponent(props: {
                 newFilterToDisplay.splice(index, 1);
             }
         }
-        setTempFiltersToDisplay(newFilterToDisplay);
+        setNewFiltersToDisplay(newFilterToDisplay);
     };
 
     const filterDialogTitle = t("FilterDialog.DialogTitle");
@@ -85,18 +90,27 @@ export function FilterSettingDialogComponent(props: {
         </span>
     );
 
+    const allChecked = props.availableFilters === newFiltersToDisplay
+    const indeterminateChecked = props.availableFilters !== newFiltersToDisplay && !_.isEmpty(newFiltersToDisplay)
+
     const filterDialogContent = (
-        <div css={filterDialogContentStyle}>
+        <div>
+            <FormControlLabel
+                label={t("FilterDialog.SelectAll")}
+                control={
+                    <Checkbox
+                        checked={allChecked}
+                        indeterminate={indeterminateChecked}
+                        onChange={(event) => handleSelectAllCheckBoxChange(event.target.checked)}
+                        color="primary"
+                    />
+                }
+            />
+            <Divider variant="middle" className={classes.divider} />
             <FilterDialogCheckboxesComponent
                 availableFilters={props.availableFilters}
                 filtersToDisplay={newFiltersToDisplay}
                 onFiltersToDisplayChange={handleChangeFiltersToDisplay}
-            />
-            <FilterDialogSelectAllButtonComponent
-                onSelectAllFiltersToDisplay={handleSelectAllFiltersToDisplay}
-                onDeselectAllFiltersToDisplay={
-                    handleDeselectAllFiltersToDisplay
-                }
             />
         </div>
     );
