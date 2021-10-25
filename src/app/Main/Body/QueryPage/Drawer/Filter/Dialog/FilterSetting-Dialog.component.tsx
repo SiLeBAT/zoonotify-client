@@ -40,7 +40,7 @@ export function FilterSettingDialogComponent(props: {
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
     onCancelFiltersToDisplay: () => void;
 }): JSX.Element {
-    const [newFiltersToDisplay, setTempFiltersToDisplay] = useState<string[]>(
+    const [newFiltersToDisplay, setNewFiltersToDisplay] = useState<string[]>(
         props.previousFiltersToDisplay
     );
     const { t } = useTranslation(["QueryPage"]);
@@ -49,17 +49,17 @@ export function FilterSettingDialogComponent(props: {
     const handleSubmitFiltersToDisplay = (): void => {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
-    const handleSelectAllFiltersToDisplay = (selectAll: boolean): void => {
-        if (selectAll) {
-            setTempFiltersToDisplay(props.availableFilters);
+    const handleSelectAllCheckBoxChange = (checked: boolean): void => {
+        if (checked) {
+            setNewFiltersToDisplay(props.availableFilters);
         } else {
-            setTempFiltersToDisplay([]);
+            setNewFiltersToDisplay([]);
         }
     };
 
     const handleCancelFiltersToDisplay = (): void => {
         props.onCancelFiltersToDisplay();
-        setTempFiltersToDisplay(props.previousFiltersToDisplay);
+        setNewFiltersToDisplay(props.previousFiltersToDisplay);
     };
 
     const handleChangeFiltersToDisplay = (
@@ -75,7 +75,7 @@ export function FilterSettingDialogComponent(props: {
                 newFilterToDisplay.splice(index, 1);
             }
         }
-        setTempFiltersToDisplay(newFilterToDisplay);
+        setNewFiltersToDisplay(newFilterToDisplay);
     };
 
     const filterDialogTitle = t("FilterDialog.DialogTitle");
@@ -101,7 +101,7 @@ export function FilterSettingDialogComponent(props: {
                     <Checkbox
                         checked={allChecked}
                         indeterminate={indeterminateChecked}
-                        onChange={(event) => handleSelectAllFiltersToDisplay(event.target.checked)}
+                        onChange={(event) => handleSelectAllCheckBoxChange(event.target.checked)}
                         color="primary"
                     />
                 }
