@@ -87,6 +87,7 @@ export function DrawerDisplayedFeaturesComponent(
                 <IconButton
                     css={iconButtonStyle}
                     onClick={handleSwapDisplFeatures}
+                    disabled={props.dataIsLoading}
                 >
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
