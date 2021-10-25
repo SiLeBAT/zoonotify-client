@@ -64,8 +64,7 @@ function createListItemComponent(
         const key = parameter.replace(".", "");
         let parameterName: string | JSX.Element = "";
         if (parameterAttribute === "microorganism") {
-            const microorganismKey = key;
-            const translateRootString = `FilterValues.formattedMicroorganisms.${microorganismKey}`
+            const translateRootString = `FilterValues.formattedMicroorganisms.${key}`
             const prefix = t(`${translateRootString}.prefix`)
             const name = t(`${translateRootString}.name`)
             const italicName = t(`${translateRootString}.italicName`)
