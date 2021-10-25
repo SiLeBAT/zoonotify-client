@@ -11,6 +11,7 @@ import {
     defaultTableBorder,
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
+import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
 
 const blankCellStyle = css`
     box-sizing: border-box;
@@ -67,16 +68,35 @@ export function TableContentHeaderComponent(props: {
         </StyledTableCell>
     );
     props.headerValues.forEach((headerValue): void => {
-        let headerTitle = "";
+        let headerTitle: string | JSX.Element = "";
         if (props.isCol) {
-            headerTitle = t(
-                `FilterValues.${props.colAttribute}.${headerValue.replace(".", "")}`
-            );
+            const colKey = headerValue.replace(".", "");
+            if (props.colAttribute === "microorganism") {
+                const translateRootString = `FilterValues.formattedMicroorganisms.${colKey}`;
+                const prefix = t(`${translateRootString}.prefix`);
+                const name = t(`${translateRootString}.name`);
+                const italicName = t(`${translateRootString}.italicName`);
+                const suffix = t(`${translateRootString}.suffix`);
+                headerTitle = getMicroorganismLabelService({
+                    prefix,
+                    name,
+                    italicName,
+                    suffix,
+                });
+            } else {
+                headerTitle = t(`FilterValues.${props.colAttribute}.${colKey}`);
+            }
             if (props.tableOption === "relative") {
-                headerTitle = `${headerTitle} ${t("Results.Unit")}`;
+                headerTitle = (
+                    <span>
+                        {headerTitle} {t("Results.Unit")}
+                    </span>
+                );
             }
         } else if (props.tableOption === "relative") {
-            headerTitle = `${t("Results.NrIsolatesTextRelative")} ${t("Results.Unit")}`;
+            headerTitle = `${t("Results.NrIsolatesTextRelative")} ${t(
+                "Results.Unit"
+            )}`;
         } else if (props.tableOption === "absolute") {
             headerTitle = t("Results.NrIsolatesText");
         }
