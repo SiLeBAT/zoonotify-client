@@ -43,7 +43,7 @@ import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 import { adaptFilterFromApiService } from "./Services/adaptFilterFromAPI.service";
-import { calculateRowColSumsAbsolute } from "./Services/TableServices/calculateRowColSums.service";
+import { calculateRowColSumsAbsolute, calculateRowColSumsRelative } from "./Services/TableServices/calculateRowColSums.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -328,13 +328,10 @@ export function QueryPageContainerComponent(): JSX.Element {
             const statTableDataWithSumsAbs = calculateRowColSumsAbsolute(
                 statisticTableDataAbs,
                 columnNames,
-                false,
-                nrOfSelectedIsolates.toString()
             );
-            const statTableDataWithSumsRel = calculateRowColSumsAbsolute(
+            const statTableDataWithSumsRel = calculateRowColSumsRelative(
                 statisticTableDataRel,
                 columnNames,
-                true,
                 nrOfSelectedIsolates.toString(),
                 statTableDataWithSumsAbs
             );

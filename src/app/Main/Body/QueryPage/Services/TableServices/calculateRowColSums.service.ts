@@ -1,26 +1,10 @@
 import _ from "lodash";
 
-function chooseNumberFormat(
-    calculateRelativeNumber: boolean,
-    nrOfIsolates: string | undefined,
-    absNrOfIsolates: string | undefined,
-    calculatesNumber: number
-): string {
-    if (calculateRelativeNumber) {
-        if (nrOfIsolates === absNrOfIsolates) {
-            return "100.0";
-        }
-        return calculatesNumber.toFixed(1);
-    }
-    return calculatesNumber.toString();
-}
-
-export function calculateRowColSumsAbsolute(
+function calcSums(
     tableData: Record<string, string>[],
     columnNames: string[],
-    isRelativeData: boolean,
-    nrOfIsolates: string,
-    tableDataAbs?: Record<string, string>[]
+    mapRowSums: (value: number, index: number) => string,
+    mapColSums: (value: Record<string, number>, key: string) => string
 ): Record<string, string>[] {
     const tableDataWithSums: Record<string, string>[] = [];
 
@@ -41,44 +25,85 @@ export function calculateRowColSumsAbsolute(
                 colSums[colName] = newColSum;
             }
         });
-        const calculateRelativeNumber =
-            tableDataAbs !== undefined && isRelativeData;
-        let absNrOfIsolates;
-        if (tableDataAbs !== undefined) {
-            absNrOfIsolates = tableDataAbs[i].rowSum;
-        }
-        newTableRow.rowSum = chooseNumberFormat(
-            calculateRelativeNumber,
-            nrOfIsolates,
-            absNrOfIsolates,
-            rowSum
-        );
+
+        newTableRow.rowSum = mapRowSums(rowSum, i);
 
         tableDataWithSums.push(newTableRow);
     });
 
-    let absColSums: Record<string, string> = {};
+    const tableDataWithSumsStrings: Record<string, string> = {};
+    Object.keys(colSums).forEach((k) => {
+        tableDataWithSumsStrings.name = "colSum";
+        tableDataWithSumsStrings[k] = mapColSums(colSums, k);
+    });
 
-    if (tableDataAbs !== undefined) {
+    tableDataWithSums.push(tableDataWithSumsStrings);
+
+    return tableDataWithSums;
+}
+
+const mapAbsRowSums = (value: number): string => {
+    const stringValue = value.toString();
+    return stringValue;
+};
+
+const mapAbsColSums = (value: Record<string, number>, key: string): string => {
+    const stringValue = value[key].toString();
+    return stringValue;
+};
+
+export function calculateRowColSumsAbsolute(
+    tableData: Record<string, string>[],
+    columnNames: string[]
+): Record<string, string>[] {
+    const tableDataWithSums = calcSums(
+        tableData,
+        columnNames,
+        mapAbsRowSums,
+        mapAbsColSums
+    );
+
+    return tableDataWithSums;
+}
+
+export function calculateRowColSumsRelative(
+    tableData: Record<string, string>[],
+    columnNames: string[],
+    nrOfIsolates: string,
+    tableDataAbs: Record<string, string>[]
+): Record<string, string>[] {
+    const mapRowSums = (value: number, index: number): string => {
+        const absNrOfIsolates = tableDataAbs[index].rowSum;
+
+        let newRowSum = value.toFixed(1);
+
+        if (nrOfIsolates === absNrOfIsolates) {
+            newRowSum = "100.0";
+        }
+
+        return newRowSum;
+    };
+
+    const mapColSums = (value: Record<string, number>, key: string): string => {
+        let absColSums: Record<string, string> = {};
+
         tableDataAbs.forEach((tableDataRow) => {
             if (tableDataRow.name === "colSum") {
                 absColSums = tableDataRow;
             }
         });
-    }
+        if (nrOfIsolates === absColSums[key]) {
+            return "100.0";
+        }
+        return value[key].toFixed(1);
+    };
 
-    const tableDataWithSumsStrings: Record<string, string> = {};
-    Object.keys(colSums).forEach((k) => {
-        tableDataWithSumsStrings.name = "colSum";
-        tableDataWithSumsStrings[k] = chooseNumberFormat(
-            isRelativeData,
-            nrOfIsolates,
-            absColSums[k],
-            colSums[k]
-        );
-    });
-
-    tableDataWithSums.push(tableDataWithSumsStrings);
+    const tableDataWithSums = calcSums(
+        tableData,
+        columnNames,
+        mapRowSums,
+        mapColSums
+    );
 
     return tableDataWithSums;
 }
