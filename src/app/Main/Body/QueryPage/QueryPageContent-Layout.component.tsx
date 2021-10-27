@@ -80,7 +80,6 @@ export function QueryPageContentLayoutComponent(props: {
                     tableIsLoading={props.dataIsLoading}
                     columnNameValues={props.columnNameValues}
                     tableData={props.data}
-                    numberOfIsolates={props.numberOfIsolates.filtered}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                 />
                 <QueryPageContentBarChartResultsComponent

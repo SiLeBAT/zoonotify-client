@@ -27,12 +27,10 @@ const totalSumStyle = css`
 
 export function TableContentRowWithColSumComponent(props: {
     showRowSum: boolean;
-    numberOfIsolates: number;
     rowWithColSums: Record<string, string>;
     headerValues: string[];
     classes: Record<"tableCell", string>;
     colSumLabel: string;
-    displayOption: string;
 }): JSX.Element[] {
     const arrayWithColSumCells: JSX.Element[] = [
         <TableCell

@@ -45,7 +45,6 @@ const useStyles = makeStyles({
  */
 export function TableContentTableContainerComponent(props: {
     sumOptions: SumOptions;
-    numberOfIsolates: number;
     tableData: Record<string, string>[];
     displayOption: DisplayOptionType;
     columnNameValues: string[];
@@ -81,12 +80,10 @@ export function TableContentTableContainerComponent(props: {
             <TableRow key="row-with-column-sum">
                 {TableContentRowWithColSumComponent({
                     showRowSum: props.sumOptions.showRowSum,
-                    numberOfIsolates: props.numberOfIsolates,
                     rowWithColSums,
                     headerValues: props.columnNameValues,
                     classes,
                     colSumLabel: t("Sums.ColSum"),
-                    displayOption: props.displayOption,
                 })}
             </TableRow>
         );

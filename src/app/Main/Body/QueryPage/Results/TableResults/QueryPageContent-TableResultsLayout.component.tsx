@@ -20,7 +20,6 @@ export interface TableResultsProps {
     tableIsLoading: boolean;
     columnNameValues: string[];
     tableData: DataInterface;
-    numberOfIsolates: number;
     onDisplayOptionsChange: (displayOption: string) => void;
 }
 
@@ -80,7 +79,6 @@ export function QueryPageContentTableResultsLayoutComponent(
                 <TableResultsTableComponent
                     sumOptions={sumOptions}
                     isLoading={props.tableIsLoading}
-                    numberOfIsolates={props.numberOfIsolates}
                     colMainHeader={colMainHeader}
                     rowMainHeader={rowMainHeader}
                     tableData={tableData}
