@@ -328,6 +328,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const statTableDataWithSumsAbs = calculateRowColSumsAbsolute(
                 statisticTableDataAbs,
                 columnNames,
+                nrOfSelectedIsolates.toString(),
             );
             const statTableDataWithSumsRel = calculateRowColSumsRelative(
                 statisticTableDataRel,

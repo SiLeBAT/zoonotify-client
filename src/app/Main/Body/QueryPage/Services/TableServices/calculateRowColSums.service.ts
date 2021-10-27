@@ -4,7 +4,8 @@ function calcSums(
     tableData: Record<string, string>[],
     columnNames: string[],
     mapRowSums: (value: number, index: number) => string,
-    mapColSums: (value: Record<string, number>, key: string) => string
+    mapColSums: (value: Record<string, number>, key: string) => string,
+    mapTotalSum: () => string
 ): Record<string, string>[] {
     const tableDataWithSums: Record<string, string>[] = [];
 
@@ -31,40 +32,52 @@ function calcSums(
         tableDataWithSums.push(newTableRow);
     });
 
-    const tableDataWithSumsStrings: Record<string, string> = {};
+    const rowWithColSums: Record<string, string> = {};
     Object.keys(colSums).forEach((k) => {
-        tableDataWithSumsStrings.name = "colSum";
-        tableDataWithSumsStrings[k] = mapColSums(colSums, k);
+        rowWithColSums.name = "colSum";
+        rowWithColSums[k] = mapColSums(colSums, k);
     });
 
-    tableDataWithSums.push(tableDataWithSumsStrings);
+    rowWithColSums.rowSum = mapTotalSum();
+
+    tableDataWithSums.push(rowWithColSums);
 
     return tableDataWithSums;
 }
 
-const mapAbsRowSums = (value: number): string => {
+const mapRowSumsAbs = (value: number): string => {
     const stringValue = value.toString();
     return stringValue;
 };
 
-const mapAbsColSums = (value: Record<string, number>, key: string): string => {
+const mapColSumsAbs = (value: Record<string, number>, key: string): string => {
     const stringValue = value[key].toString();
     return stringValue;
 };
 
 export function calculateRowColSumsAbsolute(
     tableData: Record<string, string>[],
-    columnNames: string[]
+    columnNames: string[],
+    nrOfIsolates: string
 ): Record<string, string>[] {
+    const mapTotalSumAbs = (): string => {
+        return nrOfIsolates;
+    };
+    
     const tableDataWithSums = calcSums(
         tableData,
         columnNames,
-        mapAbsRowSums,
-        mapAbsColSums
+        mapRowSumsAbs,
+        mapColSumsAbs,
+        mapTotalSumAbs
     );
 
     return tableDataWithSums;
 }
+
+const mapTotalSumRelative = (): string => {
+    return "100.0";
+};
 
 export function calculateRowColSumsRelative(
     tableData: Record<string, string>[],
@@ -72,7 +85,7 @@ export function calculateRowColSumsRelative(
     nrOfIsolates: string,
     tableDataAbs: Record<string, string>[]
 ): Record<string, string>[] {
-    const mapRowSums = (value: number, index: number): string => {
+    const mapRowSumsRelative = (value: number, index: number): string => {
         const absNrOfIsolates = tableDataAbs[index].rowSum;
 
         let newRowSum = value.toFixed(1);
@@ -84,7 +97,7 @@ export function calculateRowColSumsRelative(
         return newRowSum;
     };
 
-    const mapColSums = (value: Record<string, number>, key: string): string => {
+    const mapColSumsRelative = (value: Record<string, number>, key: string): string => {
         let absColSums: Record<string, string> = {};
 
         tableDataAbs.forEach((tableDataRow) => {
@@ -101,8 +114,9 @@ export function calculateRowColSumsRelative(
     const tableDataWithSums = calcSums(
         tableData,
         columnNames,
-        mapRowSums,
-        mapColSums
+        mapRowSumsRelative,
+        mapColSumsRelative,
+        mapTotalSumRelative
     );
 
     return tableDataWithSums;

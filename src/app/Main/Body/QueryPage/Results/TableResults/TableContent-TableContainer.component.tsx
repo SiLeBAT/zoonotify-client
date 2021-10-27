@@ -75,7 +75,7 @@ export function TableContentTableContainerComponent(props: {
         ));
 
     if (props.sumOptions.showColSum) {
-        const rowWithColSums = props.tableData.filter((row) => row.name === "colSum")
+        const rowWithColSums = props.tableData.filter((row) => row.name === "colSum")[0]
 
         tableRows.push(
             <TableRow key="row-with-column-sum">
