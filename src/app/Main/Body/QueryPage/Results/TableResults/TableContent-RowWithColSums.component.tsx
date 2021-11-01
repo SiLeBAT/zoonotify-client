@@ -27,7 +27,7 @@ const totalSumStyle = css`
 
 export function TableContentRowWithColSumComponent(props: {
     showRowSum: boolean;
-    rowWithColSums: Record<string, string>;
+    rowWithColSums: Record<string, string> | undefined;
     headerValues: string[];
     classes: Record<"tableCell", string>;
     colSumLabel: string;
@@ -45,25 +45,26 @@ export function TableContentRowWithColSumComponent(props: {
         </TableCell>,
     ];
 
-    props.headerValues.forEach((headerValue) => {
-        arrayWithColSumCells.push(
-            <TableCell
-                key={`isolates-col-sum-${headerValue}`}
-                className={props.classes.tableCell}
-                component="th"
-                scope="row"
-                align="right"
-                css={tableCellStyle(false)}
-            >
-                {props.rowWithColSums[headerValue]}
-            </TableCell>
-        );
-    });
-
-
+    if (props.rowWithColSums !== undefined) {
+        const { rowWithColSums } = props;
+        props.headerValues.forEach((headerValue) => {
+            arrayWithColSumCells.push(
+                <TableCell
+                    key={`isolates-col-sum-${headerValue}`}
+                    className={props.classes.tableCell}
+                    component="th"
+                    scope="row"
+                    align="right"
+                    css={tableCellStyle(false)}
+                >
+                    {rowWithColSums[headerValue]}
+                </TableCell>
+            );
+        });
+    }
 
     if (props.showRowSum && props.rowWithColSums !== undefined) {
-        const totalSum = props.rowWithColSums.rowSum
+        const totalSum = props.rowWithColSums.rowSum;
         arrayWithColSumCells.push(
             <TableCell
                 css={totalSumStyle}
