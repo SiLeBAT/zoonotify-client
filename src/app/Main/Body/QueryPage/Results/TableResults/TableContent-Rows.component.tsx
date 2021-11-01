@@ -78,10 +78,8 @@ export function TableContentRowsComponent(props: {
             {rowName}
         </TableCell>
     );
-    let rowSum = 0;
     props.colKeys.forEach((colKey): void => {
         const cellNumber = props.row[colKey];
-        rowSum += Number.parseFloat(cellNumber);
         rowCells.push(
             <TableCell
                 key={`isolates-${props.row.name}-${colKey}`}
@@ -97,10 +95,6 @@ export function TableContentRowsComponent(props: {
     });
 
     if (props.showRowSum) {
-        let rowSumString = rowSum.toString();
-        if (props.displayOption === "relative") {
-            rowSumString = rowSum.toFixed(2);
-        }
         rowCells.push(
             <TableCell
                 key="isolates-row-sum"
@@ -110,7 +104,7 @@ export function TableContentRowsComponent(props: {
                 align="right"
                 css={sumTableCellStyle}
             >
-                {rowSumString}
+                {props.row.rowSum}
             </TableCell>
         );
     }

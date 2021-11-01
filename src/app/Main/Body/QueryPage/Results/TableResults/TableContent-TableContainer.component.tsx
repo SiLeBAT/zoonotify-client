@@ -54,33 +54,36 @@ export function TableContentTableContainerComponent(props: {
     const { t } = useTranslation(["QueryPage"]);
     const classes = useStyles();
 
-    const isCol = props.colAttribute !== ""
-    const isRow = props.rowAttribute !== ""
+    const isCol = props.colAttribute !== "";
+    const isRow = props.rowAttribute !== "";
 
-    const tableRows: JSX.Element[] = props.tableData.map((row) => (
-        <TableRow key={`row-${row.name}`}>
-            {TableContentRowsComponent({
-                showRowSum: props.sumOptions.showRowSum,
-                row,
-                rowAttribute: props.rowAttribute,
-                displayRow: isRow,
-                classes,
-                displayOption: props.displayOption,
-                colKeys: props.columnNameValues,
-            })}
-        </TableRow>
-    ));
+    const tableRows: JSX.Element[] = props.tableData
+        .filter((row) => row.name !== "colSum")
+        .map((row) => (
+            <TableRow key={`row-${row.name}`}>
+                {TableContentRowsComponent({
+                    showRowSum: props.sumOptions.showRowSum,
+                    row,
+                    rowAttribute: props.rowAttribute,
+                    displayRow: isRow,
+                    classes,
+                    displayOption: props.displayOption,
+                    colKeys: props.columnNameValues,
+                })}
+            </TableRow>
+        ));
 
     if (props.sumOptions.showColSum) {
+        const rowWithColSums = props.tableData.filter((row) => row.name === "colSum")[0]
+
         tableRows.push(
             <TableRow key="row-with-column-sum">
                 {TableContentRowWithColSumComponent({
                     showRowSum: props.sumOptions.showRowSum,
-                    tableData: props.tableData,
+                    rowWithColSums,
                     headerValues: props.columnNameValues,
                     classes,
                     colSumLabel: t("Sums.ColSum"),
-                    displayOption: props.displayOption,
                 })}
             </TableRow>
         );
