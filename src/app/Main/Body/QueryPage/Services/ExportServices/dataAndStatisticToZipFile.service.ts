@@ -6,11 +6,11 @@ import {
     MainFilterList,
     DbCollection,
     DbKey,
-} from "../../../../Shared/Model/Client_Isolate.model";
+} from "../../../../../Shared/Model/Client_Isolate.model";
 import {
     FilterType,
     FilterInterface,
-} from "../../../../Shared/Model/Filter.model";
+} from "../../../../../Shared/Model/Filter.model";
 import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
 export interface DataAndStatisticToZipParameter {

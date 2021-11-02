@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Button, withStyles } from "@material-ui/core";
-import { onPrimaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { onPrimaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const downloadButtonStyle = css`
     margin-right: 1em;

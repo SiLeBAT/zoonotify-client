@@ -14,12 +14,26 @@ import {
     FeatureType,
 } from "../../../Shared/Context/DataContext";
 import { FilterContextInterface } from "../../../Shared/Context/FilterContext";
+import { HeaderExportContainerComponent } from "./Subheader/Header-ExportContainer.component";
+import { bfrPrimaryPalette } from "../../../Shared/Style/Style-MainTheme.component";
 
 const mainStyle = css`
     height: 100%;
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
+`;
+
+const subheaderStyle = css`
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: ${bfrPrimaryPalette[300]};
+    box-sizing: border-box;
+    box-shadow: 0 8px 6px -6px grey;
 `;
 
 export function QueryPageLayoutComponent(props: {
@@ -91,40 +105,45 @@ export function QueryPageLayoutComponent(props: {
     const handleChartDownload = (): void => props.onDownloadChart();
 
     return (
-        <main css={mainStyle}>
-            <DrawerLayoutComponent
-                isOpen={isOpen}
-                dataIsLoading={props.dataIsLoading}
-                drawerWidth={drawerWidth}
-                dataUniqueValues={props.dataUniqueValues}
-                filterInfo={props.filterInfo}
-                subFilters={props.subFilters}
-                columnFeature={props.data.column}
-                rowFeature={props.data.row}
-                onDisplFeaturesChange={handleChangeDisplFeatures}
-                onDisplFeaturesSwap={handleSwapDisplFeatures}
-                onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
-                onFilterChange={handleChangeFilter}
-                onFilterRemoveAll={handleRemoveAllFilter}
-                onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-            />
-            <QueryPageDrawerControlComponent
-                isOpen={isOpen}
-                drawerWidth={drawerWidth}
-                onDrawerOpenCloseClick={handleClickOpenCloseDrawer}
-                onResizeBarMove={handleMoveResizeBar}
-            />
-            <QueryPageContentLayoutComponent
-                isFilter={props.isFilter}
-                dataIsLoading={props.dataIsLoading}
-                columnNameValues={props.columnNameValues}
-                data={props.data}
-                numberOfIsolates={props.numberOfIsolates}
-                selectedFilter={props.filterInfo.selectedFilter}
-                getPngDownloadUriRef={props.getPngDownloadUriRef}
-                onDisplayOptionsChange={handleChangeDisplayOptions}
-                onDownloadChart={handleChartDownload}
-            />
+        <main>
+            <div css={subheaderStyle}>
+                <HeaderExportContainerComponent />
+            </div>
+            <div css={mainStyle}>
+                <DrawerLayoutComponent
+                    isOpen={isOpen}
+                    dataIsLoading={props.dataIsLoading}
+                    drawerWidth={drawerWidth}
+                    dataUniqueValues={props.dataUniqueValues}
+                    filterInfo={props.filterInfo}
+                    subFilters={props.subFilters}
+                    columnFeature={props.data.column}
+                    rowFeature={props.data.row}
+                    onDisplFeaturesChange={handleChangeDisplFeatures}
+                    onDisplFeaturesSwap={handleSwapDisplFeatures}
+                    onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
+                    onFilterChange={handleChangeFilter}
+                    onFilterRemoveAll={handleRemoveAllFilter}
+                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                />
+                <QueryPageDrawerControlComponent
+                    isOpen={isOpen}
+                    drawerWidth={drawerWidth}
+                    onDrawerOpenCloseClick={handleClickOpenCloseDrawer}
+                    onResizeBarMove={handleMoveResizeBar}
+                />
+                <QueryPageContentLayoutComponent
+                    isFilter={props.isFilter}
+                    dataIsLoading={props.dataIsLoading}
+                    columnNameValues={props.columnNameValues}
+                    data={props.data}
+                    numberOfIsolates={props.numberOfIsolates}
+                    selectedFilter={props.filterInfo.selectedFilter}
+                    getPngDownloadUriRef={props.getPngDownloadUriRef}
+                    onDisplayOptionsChange={handleChangeDisplayOptions}
+                    onDownloadChart={handleChartDownload}
+                />
+            </div>
         </main>
     );
 }

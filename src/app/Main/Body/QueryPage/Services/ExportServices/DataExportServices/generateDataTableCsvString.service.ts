@@ -2,8 +2,8 @@ import {
     DbCollection,
     DbKey,
     resistancesCollection,
-} from "../../../../../Shared/Model/Client_Isolate.model";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
+} from "../../../../../../Shared/Model/Client_Isolate.model";
+import { FilterType } from "../../../../../../Shared/Model/Filter.model";
 import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
 
 /**

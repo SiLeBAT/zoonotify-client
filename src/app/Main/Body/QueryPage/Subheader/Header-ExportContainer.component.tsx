@@ -2,22 +2,22 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import { ISOLATE_URL } from "../../../Shared/URLs";
-import { IsolateDTO } from "../../../Shared/Model/Api_Isolate.model";
-import { FilterContext } from "../../../Shared/Context/FilterContext";
-import { DataContext } from "../../../Shared/Context/DataContext";
+import { ISOLATE_URL } from "../../../../Shared/URLs";
+import { IsolateDTO } from "../../../../Shared/Model/Api_Isolate.model";
+import { FilterContext } from "../../../../Shared/Context/FilterContext";
+import { DataContext } from "../../../../Shared/Context/DataContext";
 import {
     DbCollection,
     DbKey,
     MainFilterList,
-} from "../../../Shared/Model/Client_Isolate.model";
-import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
+} from "../../../../Shared/Model/Client_Isolate.model";
+import { adaptIsolatesFromAPI } from "../../../../Shared/adaptIsolatesFromAPI.service";
 import { HeaderExportDialogComponent } from "./Dialog/Header-ExportDialog.component";
-import { generateExportLabels } from "./ExportServices/generateExportLabels.service";
-import { ApiResponse, callApiService } from "../../../Core/callApi.service";
+import { generateExportLabels } from "../Services/ExportServices/generateExportLabels.service";
+import { ApiResponse, callApiService } from "../../../../Core/callApi.service";
 import { HeaderExportButtonComponent } from "./Header-ExportButton.component";
-import { ExportButtonLabelComponent } from "../../../Shared/Export-ButtonLabel.component";
-import { dataAndStatisticToZipFile } from "./ExportServices/dataAndStatisticToZipFile.service";
+import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
+import { dataAndStatisticToZipFile } from "../Services/ExportServices/dataAndStatisticToZipFile.service";
 
 export function HeaderExportContainerComponent(): JSX.Element {
     const { data } = useContext(DataContext);
