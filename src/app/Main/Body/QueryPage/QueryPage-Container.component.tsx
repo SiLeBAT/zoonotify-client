@@ -43,7 +43,10 @@ import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 import { adaptFilterFromApiService } from "./Services/adaptFilterFromAPI.service";
-import { calculateRowColSumsAbsolute, calculateRowColSumsRelative } from "./Services/TableServices/calculateRowColSums.service";
+import {
+    calculateRowColSumsAbsolute,
+    calculateRowColSumsRelative,
+} from "./Services/TableServices/calculateRowColSums.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -52,7 +55,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
     const [totalNrOfIsol, setTotalNrOfIsol] = useState<number>(0);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
-    const [dataIsLoading, setDataIsLoading] = useState<boolean>(false);
+    const [dataIsMounted, setDataIsMounted] = useState<boolean>(false);
+    const [dataIsLoading, setDataIsLoading] = useState<boolean>(true);
+    const [conditionalValuesAreLoading, setConditionalValuesAreLoading] = useState<boolean>(true);
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
         {}
     );
@@ -214,6 +219,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchAndSetData = async (): Promise<void> => {
+        setDataIsMounted(false);
         const isolateResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             ISOLATE_COUNT_URL
         );
@@ -248,7 +254,50 @@ export function QueryPageContainerComponent(): JSX.Element {
             setSubFilters(adaptedSubFilters);
             setUniqueDataValues(uniqueValuesObject);
             setTotalNrOfIsol(totalNrOfIsolates);
+            setDataIsMounted(true);
         }
+    };
+
+    const fetchNewFilterValues = async (): Promise<void> => {
+        setConditionalValuesAreLoading(true);
+        const newUniqueValues = _.cloneDeep(uniqueDataValues);
+        const filterStatusList: number[] = [];
+        const getConditionalFilterValues = filter.displayedFilters.map(
+            async (mainFilter) => {
+                const selectedFilter = filter.selectedFilter[mainFilter];
+                if (_.isEmpty(selectedFilter)) {
+                    const conditionalFilterUrl = `${FILTER_URL}/${mainFilter}/${history.location.search}`;
+
+                    const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
+                        conditionalFilterUrl
+                    );
+
+                    filterStatusList.push(filterResponse.status);
+
+                    if (filterResponse.data) {
+                        const filterProp: FilterConfigDTO = filterResponse.data;
+
+                        const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
+                            filterProp
+                        );
+                        newUniqueValues[mainFilter] =
+                            uniqueValuesObject[mainFilter];
+                    }
+                }
+            }
+        );
+
+        await Promise.all(getConditionalFilterValues);
+        setUniqueDataValues(newUniqueValues);
+
+        let finalFilterStatus = 200;
+        filterStatusList.forEach((status) => {
+            if (status !== 200) {
+                finalFilterStatus = status;
+            }
+        });
+        setFilterStatus(finalFilterStatus);
+        setConditionalValuesAreLoading(false)
     };
 
     const setTableFromPath = (): void => {
@@ -375,22 +424,28 @@ export function QueryPageContainerComponent(): JSX.Element {
     useEffect(() => {
         setTableFromPath();
         setFilterFromPath();
-    }, [uniqueDataValues]);
+    }, [dataIsMounted]);
 
     useEffect((): void => {
-        if (!_.isEmpty(uniqueDataValues)) {
+        if (dataIsMounted) {
             fetchIsolateCounted();
         }
     }, [filter, data.row, data.column, isolateCountUrl]);
 
+    useEffect((): void => {
+        if (dataIsMounted) {
+            fetchNewFilterValues();
+        }
+    }, [filter.selectedFilter, filter.displayedFilters]);
+
     return (
         <LoadingOrErrorComponent
             status={{ isolateStatus, isolateCountStatus, filterStatus }}
-            dataIsSet={!_.isEmpty(uniqueDataValues)}
+            dataIsSet={dataIsMounted}
             componentToDisplay={
                 <QueryPageLayoutComponent
                     isFilter={isFilter}
-                    dataIsLoading={dataIsLoading}
+                    dataIsLoading={dataIsLoading || conditionalValuesAreLoading}
                     columnNameValues={columnNameValues}
                     data={data}
                     numberOfIsolates={{
