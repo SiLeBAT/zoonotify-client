@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { DialogComponent } from "../../../../Shared/Dialog.component";
+import { DialogComponent } from "../../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
-import { errorColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { errorColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const warningStyle = css`
     display: flex;

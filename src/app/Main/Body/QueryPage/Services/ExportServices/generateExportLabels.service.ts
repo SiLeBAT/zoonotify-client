@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { getCurrentDate } from "../../../../Core/getCurrentDate.service";
-import { FilterType } from "../../../../Shared/Model/Filter.model";
+import { getCurrentDate } from "../../../../../Core/getCurrentDate.service";
+import { FilterType } from "../../../../../Shared/Model/Filter.model";
 
 export interface ExportLabels {
     ZNFilename: string;
