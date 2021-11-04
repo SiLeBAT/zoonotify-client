@@ -57,7 +57,13 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
     const [dataIsMounted, setDataIsMounted] = useState<boolean>(false);
     const [dataIsLoading, setDataIsLoading] = useState<boolean>(true);
-    const [conditionalValuesAreLoading, setConditionalValuesAreLoading] = useState<boolean>(true);
+    const [
+        conditionalValuesAreLoading,
+        setConditionalValuesAreLoading,
+    ] = useState<boolean>(true);
+    const [initialUniqueValues, setInitialUniqueValues] = useState<
+        FilterInterface
+    >({});
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
         {}
     );
@@ -253,6 +259,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
             setSubFilters(adaptedSubFilters);
             setUniqueDataValues(uniqueValuesObject);
+            setInitialUniqueValues(uniqueDataValues);
             setTotalNrOfIsol(totalNrOfIsolates);
             setDataIsMounted(true);
         }
@@ -263,32 +270,34 @@ export function QueryPageContainerComponent(): JSX.Element {
         const newUniqueValues = _.cloneDeep(uniqueDataValues);
         const filterStatusList: number[] = [];
         const getConditionalFilterValues = filter.displayedFilters.map(
-            async (mainFilter) => {
-                const selectedFilter = filter.selectedFilter[mainFilter];
-                if (_.isEmpty(selectedFilter)) {
-                    const conditionalFilterUrl = `${FILTER_URL}/${mainFilter}/${history.location.search}`;
+            async (displayedFilter) => {
+                const urlParams = new URLSearchParams(history.location.search);
+                urlParams.delete("row");
+                urlParams.delete("column");
+                urlParams.delete(displayedFilter);
 
-                    const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
-                        conditionalFilterUrl
+                const selectedFilterString = urlParams.toString();
+                const conditionalFilterUrl = `${FILTER_URL}/${displayedFilter}?${selectedFilterString}`;
+
+                const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
+                    conditionalFilterUrl
+                );
+
+                filterStatusList.push(filterResponse.status);
+
+                if (filterResponse.data) {
+                    const filterProp: FilterConfigDTO = filterResponse.data;
+
+                    const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
+                        filterProp
                     );
-
-                    filterStatusList.push(filterResponse.status);
-
-                    if (filterResponse.data) {
-                        const filterProp: FilterConfigDTO = filterResponse.data;
-
-                        const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
-                            filterProp
-                        );
-                        newUniqueValues[mainFilter] =
-                            uniqueValuesObject[mainFilter];
-                    }
+                    newUniqueValues[displayedFilter] =
+                        uniqueValuesObject[displayedFilter];
                 }
             }
         );
 
         await Promise.all(getConditionalFilterValues);
-        setUniqueDataValues(newUniqueValues);
 
         let finalFilterStatus = 200;
         filterStatusList.forEach((status) => {
@@ -296,8 +305,13 @@ export function QueryPageContainerComponent(): JSX.Element {
                 finalFilterStatus = status;
             }
         });
+        if (finalFilterStatus === 200) {
+            setUniqueDataValues(newUniqueValues);
+        } else {
+            setUniqueDataValues(initialUniqueValues);
+        }
         setFilterStatus(finalFilterStatus);
-        setConditionalValuesAreLoading(false)
+        setConditionalValuesAreLoading(false);
     };
 
     const setTableFromPath = (): void => {
@@ -377,7 +391,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const statTableDataWithSumsAbs = calculateRowColSumsAbsolute(
                 statisticTableDataAbs,
                 columnNames,
-                nrOfSelectedIsolates.toString(),
+                nrOfSelectedIsolates.toString()
             );
             const statTableDataWithSumsRel = calculateRowColSumsRelative(
                 statisticTableDataRel,
