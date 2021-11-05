@@ -38,7 +38,6 @@ export interface ExportButtonProps {
 export function SubHeaderExportButtonComponent(
     props: ExportButtonProps
 ): JSX.Element {
-
     const handleClick = (): void => props.onClickOpen();
 
     return (

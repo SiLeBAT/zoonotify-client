@@ -22,6 +22,7 @@ export function SubHeaderLayoutComponent(props: {
     };
     isOpen: boolean;
     isLoading: boolean;
+    nrOfIsolates: number;
     onExportTableChange: (name: string, checked: boolean) => void;
     onClickOpen: () => void;
     onHandleClose: () => void;
@@ -53,6 +54,7 @@ export function SubHeaderLayoutComponent(props: {
                     exportRowOrStatTable={props.exportRowOrStatTable}
                     buttonLabel={buttonLabel}
                     loading={props.isLoading}
+                    nrOfIsolates={props.nrOfIsolates}
                     onClickClose={handleClose}
                     onClickExport={handleExport}
                     onCheckboxChange={handleChange}

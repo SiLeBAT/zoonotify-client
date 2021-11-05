@@ -4,13 +4,16 @@
         "Text": "You can choose whether to download the complete data set, the displayed statistics or both."
     },
     "Checkbox": {
-        "DataSet": "Selected data set (.csv)",
-        "Stat": "Selected aggregated data set (.csv)", 
+        "DataSet": "Selected data set",
+        "Csv": "(.csv)",
+        "Isolates": "isolates",
+        "Stat": "Selected aggregated data set (.csv)",
         "Chart": "Chart (.png)"
     },
     "FileName": {
         "DataSet": "filtered-data-set",
-        "Stat": "statistics-isolates"
+        "Stat": "statistics-isolates",
+        "Chart": "chart"
     },
     "Warning": "Please select at least one option or cancel the export.",
     "Button": {

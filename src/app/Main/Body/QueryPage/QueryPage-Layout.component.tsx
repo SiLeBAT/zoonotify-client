@@ -112,9 +112,12 @@ export function QueryPageLayoutComponent(props: {
     return (
         <main css={mainStyle}>
             <SubHeaderLayoutComponent
-                exportRowOrStatTable={props.tableExportProps.exportRowOrStatTable}
+                exportRowOrStatTable={
+                    props.tableExportProps.exportRowOrStatTable
+                }
                 isOpen={props.tableExportProps.isOpen}
                 isLoading={props.tableExportProps.isLoading}
+                nrOfIsolates={props.numberOfIsolates.filtered}
                 onExportTableChange={props.tableExportProps.onExportTableChange}
                 onClickOpen={props.tableExportProps.onExportDialogOpenClick}
                 onHandleClose={props.tableExportProps.onExportDialogClose}

@@ -4,13 +4,16 @@
         "Text": "Sie können wählen, ob der komplette Datensatz, die angezeigte Statistik oder beides herunterladen werden soll."
     },
     "Checkbox": {
-        "DataSet": "Ausgewählte Einzeldaten (.csv)",
-        "Stat": "Ausgewählter aggregierter Datensatz (.csv)", 
-        "Chart": "Diagramm (.png)"
+        "DataSet": "Ausgewählte Einzeldaten",
+        "Csv": "(.csv)",
+        "Isolates": "Isolate",
+        "Stat": "Ausgewählter aggregierter Datensatz (.csv)",
+        "Chart": "Grafik (.png)"
     },
     "FileName": {
         "DataSet": "gefilteter-datensatz",
-        "Stat": "statistik-isolate"
+        "Stat": "statistik-isolate",
+        "Chart": "grafik"
     },
     "Warning": "Bitte wählen Sie mindestens eine Option, oder brechen Sie den Export ab.",
     "Button": {

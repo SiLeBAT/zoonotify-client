@@ -20,6 +20,7 @@ export function SubHeaderExportDialogComponent(props: {
     };
     buttonLabel: JSX.Element;
     loading: boolean;
+    nrOfIsolates: number;
     onClickClose: () => void;
     onClickExport: () => Promise<void>;
     onCheckboxChange: (name: string, checked: boolean) => void;
@@ -32,7 +33,7 @@ export function SubHeaderExportDialogComponent(props: {
     const handleExport = (): Promise<void> => props.onClickExport();
 
     const exportStatTable = props.exportRowOrStatTable.stat;
-    const exportRawTable = props.exportRowOrStatTable.raw; 
+    const exportRawTable = props.exportRowOrStatTable.raw;
     const exportChart = props.exportRowOrStatTable.chart;
 
     const fileIsSelect = exportRawTable || exportStatTable || exportChart;
@@ -46,6 +47,7 @@ export function SubHeaderExportDialogComponent(props: {
                 isRaw={exportRawTable}
                 isStat={exportStatTable}
                 isChart={exportChart}
+                nrOfIsolates={props.nrOfIsolates}
             />
             {!fileIsSelect && <p css={warningStyle}>{t("Warning")}</p>}
         </div>

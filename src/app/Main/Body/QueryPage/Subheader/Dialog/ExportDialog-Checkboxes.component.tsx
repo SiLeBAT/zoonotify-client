@@ -15,6 +15,7 @@ export interface CheckboxesProps {
      */
     isStat: boolean;
     isChart: boolean;
+    nrOfIsolates: number;
 }
 
 /**
@@ -30,8 +31,12 @@ export function ExportDialogCheckboxesComponent(
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
+    const rawCheckboxLabel = `${t("Checkbox.DataSet")} (${
+        props.nrOfIsolates
+    } ${t("Checkbox.Isolates")}) ${t("Checkbox.Csv")}`;
+
     const checkboxObjectList: CheckboxesConfig[] = [
-        { name: "raw", label: t("Checkbox.DataSet"), checked: props.isRaw },
+        { name: "raw", label: rawCheckboxLabel, checked: props.isRaw },
         { name: "stat", label: t("Checkbox.Stat"), checked: props.isStat },
         { name: "chart", label: t("Checkbox.Chart"), checked: props.isChart },
     ];
@@ -39,6 +44,6 @@ export function ExportDialogCheckboxesComponent(
     return CheckboxesComponent({
         onCheckboxChange: handleChangeCheckbox,
         checkboxes: checkboxObjectList,
-        size: "default"
+        size: "default",
     });
 }

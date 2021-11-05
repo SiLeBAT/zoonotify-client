@@ -299,7 +299,9 @@ export function QueryPageContainerComponent(): JSX.Element {
         }
 
         let chartImgUri: string | undefined;
-        const znPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
+        const znPngFilename = `ZooNotify_${t(
+            "Export:FileName.Chart"
+        )}_${getCurrentDate()}.png`;
 
         if (exportRowOrStatTable.chart) {
             if (getPngDownloadUriRef.current !== null) {
