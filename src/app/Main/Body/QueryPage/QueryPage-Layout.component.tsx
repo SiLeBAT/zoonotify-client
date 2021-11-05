@@ -52,6 +52,7 @@ export function QueryPageLayoutComponent(props: {
         exportRowOrStatTable: {
             raw: boolean;
             stat: boolean;
+            chart: boolean;
         };
         isOpen: boolean;
         isLoading: boolean;
@@ -69,7 +70,6 @@ export function QueryPageLayoutComponent(props: {
     onFilterRemoveAll: () => void;
     onDisplayOptionsChange: (displayOption: string) => void;
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
-    onDownloadChart: () => void;
 }): JSX.Element {
     const [drawerWidth, setDrawerWidth] = useState<number>(433);
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -108,8 +108,6 @@ export function QueryPageLayoutComponent(props: {
     ): void => {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
-
-    const handleChartDownload = (): void => props.onDownloadChart();
 
     return (
         <main css={mainStyle}>
@@ -154,7 +152,6 @@ export function QueryPageLayoutComponent(props: {
                     selectedFilter={props.filterInfo.selectedFilter}
                     getPngDownloadUriRef={props.getPngDownloadUriRef}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
-                    onDownloadChart={handleChartDownload}
                 />
             </div>
         </main>

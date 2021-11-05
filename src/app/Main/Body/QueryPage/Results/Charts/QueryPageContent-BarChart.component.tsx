@@ -1,17 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { Button } from "@material-ui/core";
-import GetAppIcon from "@material-ui/icons/GetApp";
 import { TFunction } from "i18next";
 import _ from "lodash";
 import { MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
-import {
-    primaryColor,
-    secondaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
 import {
     DataInterface,
     DisplayOptionType,
@@ -25,19 +19,6 @@ const chartOverflowStyle = css`
 const explanationTextStyle = css`
     text-align: center;
     font-size: 0.75rem;
-`;
-const optionBarStyle = css`
-    display: flex;
-    justify-content: flex-end;
-`;
-const exportButtonStyle = css`
-    background: ${primaryColor};
-    &:hover {
-        color: ${secondaryColor};
-        background: ${primaryColor};
-    }
-    display: flex;
-    align-items: center;
 `;
 
 function processingTableDataToApexData(
@@ -128,7 +109,6 @@ export function QueryPageContentBarChartResultsComponent(props: {
     columnAttributes: string[];
     chartData: DataInterface;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
-    onDownloadChart: () => void;
 }): JSX.Element {
     const { t } = useTranslation("QueryPage");
 
@@ -137,8 +117,6 @@ export function QueryPageContentBarChartResultsComponent(props: {
             <p css={explanationTextStyle}>{t("Chart.Explanation")}</p>
         </div>
     );
-
-    const handleClick = (): void => props.onDownloadChart();
 
     const colName = props.chartData.column;
     const rowName = props.chartData.row;
@@ -174,19 +152,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
             );
 
             chartAccordionContent = (
-                <div>
-                    <div css={optionBarStyle}>
-                        <Button
-                            css={exportButtonStyle}
-                            size="small"
-                            variant="contained"
-                            color="primary"
-                            startIcon={<GetAppIcon fontSize="small" />}
-                            onClick={handleClick}
-                        >
-                            {t("Header:Export")}
-                        </Button>
-                    </div>
+
                     <div css={chartOverflowStyle}>
                         <BarChartResultsComponent
                             chartData={processedChartData}
@@ -197,7 +163,6 @@ export function QueryPageContentBarChartResultsComponent(props: {
                             displayAsStacked={displayAsStacked}
                         />
                     </div>
-                </div>
             );
         }
     }

@@ -18,6 +18,7 @@ export function SubHeaderLayoutComponent(props: {
     exportRowOrStatTable: {
         raw: boolean;
         stat: boolean;
+        chart: boolean;
     };
     isOpen: boolean;
     isLoading: boolean;

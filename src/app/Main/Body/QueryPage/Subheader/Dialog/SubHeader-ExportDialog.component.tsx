@@ -16,6 +16,7 @@ export function SubHeaderExportDialogComponent(props: {
     exportRowOrStatTable: {
         raw: boolean;
         stat: boolean;
+        chart: boolean;
     };
     buttonLabel: JSX.Element;
     loading: boolean;
@@ -31,9 +32,10 @@ export function SubHeaderExportDialogComponent(props: {
     const handleExport = (): Promise<void> => props.onClickExport();
 
     const exportStatTable = props.exportRowOrStatTable.stat;
-    const exportRawTable = props.exportRowOrStatTable.raw
+    const exportRawTable = props.exportRowOrStatTable.raw; 
+    const exportChart = props.exportRowOrStatTable.chart;
 
-    const fileIsSelect = exportRawTable || exportStatTable;
+    const fileIsSelect = exportRawTable || exportStatTable || exportChart;
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
@@ -43,6 +45,7 @@ export function SubHeaderExportDialogComponent(props: {
                 onCheckboxChange={handleChangeCheckbox}
                 isRaw={exportRawTable}
                 isStat={exportStatTable}
+                isChart={exportChart}
             />
             {!fileIsSelect && <p css={warningStyle}>{t("Warning")}</p>}
         </div>

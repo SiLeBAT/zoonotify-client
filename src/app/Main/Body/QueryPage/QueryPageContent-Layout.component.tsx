@@ -50,14 +50,12 @@ export function QueryPageContentLayoutComponent(props: {
     selectedFilter: FilterInterface;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplayOptionsChange: (displayOption: string) => void;
-    onDownloadChart: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleChartDownload = (): void => props.onDownloadChart();
 
     return (
         <div css={contentStyle}>
@@ -87,7 +85,6 @@ export function QueryPageContentLayoutComponent(props: {
                     columnAttributes={props.columnNameValues}
                     chartData={props.data}
                     getPngDownloadUriRef={props.getPngDownloadUriRef}
-                    onDownloadChart={handleChartDownload}
                 />
             </div>
         </div>

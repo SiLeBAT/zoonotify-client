@@ -4,8 +4,9 @@
         "Text": "Sie können wählen, ob der komplette Datensatz, die angezeigte Statistik oder beides herunterladen werden soll."
     },
     "Checkbox": {
-        "DataSet": "Gefilteter Datensatz",
-        "Stat": "Statistik der Isolate"
+        "DataSet": "Ausgewählte Einzeldaten (.csv)",
+        "Stat": "Ausgewählter aggregierter Datensatz (.csv)", 
+        "Chart": "Diagramm (.png)"
     },
     "FileName": {
         "DataSet": "gefilteter-datensatz",

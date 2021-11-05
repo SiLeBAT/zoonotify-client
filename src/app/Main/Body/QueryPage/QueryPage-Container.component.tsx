@@ -50,7 +50,6 @@ import {
     IsolateDTO,
 } from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
-import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 import { adaptFilterFromApiService } from "./Services/adaptFilterFromAPI.service";
 import {
     calculateRowColSumsAbsolute,
@@ -59,6 +58,7 @@ import {
 import { dataAndStatisticToZipFile } from "./Services/ExportServices/dataAndStatisticToZipFile.service";
 import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
 import { generateExportLabels } from "./Services/ExportServices/generateExportLabels.service";
+import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -87,9 +87,11 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [exportRowOrStatTable, setExportRowOrStatTable] = useState<{
         raw: boolean;
         stat: boolean;
+        chart: boolean;
     }>({
         raw: true,
         stat: true,
+        chart: true,
     });
 
     const { filter, setFilter } = useContext(FilterContext);
@@ -296,6 +298,15 @@ export function QueryPageContainerComponent(): JSX.Element {
             }
         }
 
+        let chartImgUri: string | undefined;
+        const znPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
+
+        if (exportRowOrStatTable.chart) {
+            if (getPngDownloadUriRef.current !== null) {
+                chartImgUri = await getPngDownloadUriRef.current();
+            }
+        }
+
         dataAndStatisticToZipFile({
             exportRowOrStatTable,
             tableAttributeNames,
@@ -307,7 +318,9 @@ export function QueryPageContainerComponent(): JSX.Element {
                 statData,
                 statKeys,
             },
+            imgData: chartImgUri,
             ZNFilename: exportLabels.ZNFilename,
+            znPngFilename,
             filter: filter.selectedFilter,
             allFilterLabel: exportLabels.allFilterLabel,
             mainFilterLabels: exportLabels.mainFilterLabels,
@@ -330,23 +343,6 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
     const handleExportTables = async (): Promise<void> => {
         fetchIsolatesAndExportZip();
-    };
-
-    const handleChartDownload = (): void => {
-        const znPngFilename = `ZooNotify_chart_${getCurrentDate()}.png`;
-
-        const download = async (): Promise<void> => {
-            if (getPngDownloadUriRef.current !== null) {
-                const imgURI = await getPngDownloadUriRef.current();
-                const a = document.createElement("a");
-                a.href = imgURI;
-                a.target = "_blank";
-                a.download = znPngFilename;
-                a.click();
-            }
-        };
-
-        download();
     };
 
     const fetchAndSetData = async (): Promise<void> => {
@@ -611,7 +607,6 @@ export function QueryPageContainerComponent(): JSX.Element {
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-                    onDownloadChart={handleChartDownload}
                 />
             }
         />

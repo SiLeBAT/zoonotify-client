@@ -14,6 +14,7 @@ export interface CheckboxesProps {
      *  true if statistic data is selected for export
      */
     isStat: boolean;
+    isChart: boolean;
 }
 
 /**
@@ -32,6 +33,7 @@ export function ExportDialogCheckboxesComponent(
     const checkboxObjectList: CheckboxesConfig[] = [
         { name: "raw", label: t("Checkbox.DataSet"), checked: props.isRaw },
         { name: "stat", label: t("Checkbox.Stat"), checked: props.isStat },
+        { name: "chart", label: t("Checkbox.Chart"), checked: props.isChart },
     ];
 
     return CheckboxesComponent({

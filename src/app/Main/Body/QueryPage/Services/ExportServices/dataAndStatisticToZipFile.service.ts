@@ -20,6 +20,7 @@ export interface DataAndStatisticToZipParameter {
     exportRowOrStatTable: {
         raw: boolean;
         stat: boolean;
+        chart: boolean;
     };
     tableAttributeNames: {
         row: string | undefined;
@@ -33,6 +34,8 @@ export interface DataAndStatisticToZipParameter {
         statData: Record<string, string>[];
         statKeys: string[];
     };
+    imgData: string | undefined;
+    znPngFilename: string;
     /**
      * object with the selected filters
      */
@@ -113,6 +116,10 @@ export function dataAndStatisticToZipFile(
             `${zipParameter.subFileNames.stat}_${zipParameter.ZNFilename}`,
             csvRowsStat.join("\n")
         );
+    }
+
+    if (zipParameter.exportRowOrStatTable.chart && zipParameter.imgData !== undefined) {
+        zip.file(zipParameter.znPngFilename, zipParameter.imgData.split(';base64,')[1], {base64: true})
     }
 
     const folderName: string = zipParameter.ZNFilename.replace(".csv", ".zip");

@@ -4,8 +4,9 @@
         "Text": "You can choose whether to download the complete data set, the displayed statistics or both."
     },
     "Checkbox": {
-        "DataSet": "Filtered data set",
-        "Stat": "Statistics of isolates"
+        "DataSet": "Selected data set (.csv)",
+        "Stat": "Selected aggregated data set (.csv)", 
+        "Chart": "Chart (.png)"
     },
     "FileName": {
         "DataSet": "filtered-data-set",
