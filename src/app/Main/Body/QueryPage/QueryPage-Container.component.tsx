@@ -4,10 +4,16 @@ import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
     ClientIsolateCountedGroups,
+    DbCollection,
+    DbKey,
     MainFilterList,
     subFiltersList,
 } from "../../../Shared/Model/Client_Isolate.model";
-import { FILTER_URL, ISOLATE_COUNT_URL } from "../../../Shared/URLs";
+import {
+    FILTER_URL,
+    ISOLATE_COUNT_URL,
+    ISOLATE_URL,
+} from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
     defaultFilter,
@@ -39,7 +45,10 @@ import { generateStatisticTableDataAbsService } from "./Services/TableServices/g
 import { getFeaturesFromPath } from "./Services/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { generateUniqueValuesService } from "./Services/generateUniqueValues.service";
-import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
+import {
+    IsolateCountedDTO,
+    IsolateDTO,
+} from "../../../Shared/Model/Api_Isolate.model";
 import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
 import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 import { adaptFilterFromApiService } from "./Services/adaptFilterFromAPI.service";
@@ -47,6 +56,9 @@ import {
     calculateRowColSumsAbsolute,
     calculateRowColSumsRelative,
 } from "./Services/TableServices/calculateRowColSums.service";
+import { dataAndStatisticToZipFile } from "./Services/ExportServices/dataAndStatisticToZipFile.service";
+import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
+import { generateExportLabels } from "./Services/ExportServices/generateExportLabels.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -64,18 +76,27 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [initialUniqueValues, setInitialUniqueValues] = useState<
         FilterInterface
     >({});
+    const [loadingIsolates, setLoadingIsolates] = useState<boolean>(false);
+    const [exportDialogIsOpen, setExportDialogIsOpen] = useState(false);
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
         {}
     );
     const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>(
         []
     );
+    const [exportRowOrStatTable, setExportRowOrStatTable] = useState<{
+        raw: boolean;
+        stat: boolean;
+    }>({
+        raw: true,
+        stat: true,
+    });
 
     const { filter, setFilter } = useContext(FilterContext);
     const { data, setData } = useContext(DataContext);
 
     const history = useHistory();
-    const { t } = useTranslation(["QueryPage"]);
+    const { t } = useTranslation(["Export", "QueryPage"]);
 
     const isCol: boolean = data.column !== "";
     const isRow: boolean = data.row !== "";
@@ -205,6 +226,110 @@ export function QueryPageContainerComponent(): JSX.Element {
         );
         history.push(newPath);
         setFilter(newFilter);
+    };
+
+    const fetchIsolatesAndExportZip = async (): Promise<void> => {
+        setLoadingIsolates(true);
+        let rawData: DbCollection = [];
+        let rawKeys: DbKey[] = [];
+        let statData: Record<string, string>[] = [];
+        let statKeys: string[] = [];
+
+        const exportLabels = generateExportLabels(filter.mainFilter, t);
+        const subFileNames = {
+            raw: t("Export:FileName.DataSet"),
+            stat: t("Export:FileName.Stat"),
+        };
+
+        const tableAttributeNames: {
+            row: string | undefined;
+            column: string | undefined;
+        } = {
+            row: undefined,
+            column: undefined,
+        };
+
+        if (!_.isEmpty(data.row)) {
+            tableAttributeNames.row = t(`QueryPage:Filters.${data.row}`);
+        } else {
+            tableAttributeNames.row = undefined;
+        }
+        if (!_.isEmpty(data.column)) {
+            tableAttributeNames.column = t(`QueryPage:Filters.${data.column}`);
+        } else {
+            tableAttributeNames.column = undefined;
+        }
+
+        if (exportRowOrStatTable.stat) {
+            if (data.option === "absolute") {
+                statData = data.statisticDataAbsolute;
+            }
+            if (data.option === "relative") {
+                statData = data.statisticDataRelative;
+            }
+            if (!_.isEmpty(statData)) {
+                statKeys = Object.keys(statData[0]);
+            }
+        }
+
+        if (exportRowOrStatTable.raw) {
+            const urlParams = new URLSearchParams(history.location.search);
+            urlParams.delete("row");
+            urlParams.delete("column");
+            const urlParamsString = urlParams.toString();
+            const isolateFilteredUrl = `${ISOLATE_URL}/${urlParamsString}`;
+            const isolateFilteredResponse: ApiResponse<IsolateDTO> = await callApiService(
+                isolateFilteredUrl
+            );
+            const isolateFilteredStatus = isolateFilteredResponse.status;
+            if (
+                isolateFilteredStatus === 200 &&
+                isolateFilteredResponse.data !== undefined
+            ) {
+                const isolateFilteredProp: IsolateDTO =
+                    isolateFilteredResponse.data;
+                const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
+                    isolateFilteredProp
+                );
+                rawData = adaptedFilteredIsolates;
+                rawKeys = MainFilterList;
+            }
+        }
+
+        dataAndStatisticToZipFile({
+            exportRowOrStatTable,
+            tableAttributeNames,
+            rawDataSet: {
+                rawData,
+                rawKeys,
+            },
+            statDataSet: {
+                statData,
+                statKeys,
+            },
+            ZNFilename: exportLabels.ZNFilename,
+            filter: filter.selectedFilter,
+            allFilterLabel: exportLabels.allFilterLabel,
+            mainFilterLabels: exportLabels.mainFilterLabels,
+            mainFilterAttributes: filter.mainFilter,
+            subFileNames,
+        });
+        setExportDialogIsOpen(false);
+        setLoadingIsolates(false);
+    };
+
+    const handleChangeExportData = (name: string, checked: boolean): void => {
+        setExportRowOrStatTable({ ...exportRowOrStatTable, [name]: checked });
+    };
+
+    const handleClickExportDialogOpen = (): void => {
+        setExportDialogIsOpen(true);
+    };
+    const handleCloseExportDialog = (): void => {
+        setExportDialogIsOpen(false);
+    };
+    const handleExportTables = async (): Promise<void> => {
+        fetchIsolatesAndExportZip();
     };
 
     const handleChartDownload = (): void => {
@@ -360,7 +485,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 isolateCountGroups
             );
 
-            const allValuesText = t("Results.NrIsolatesText");
+            const allValuesText = t("QueryPage:Results.NrIsolatesText");
 
             const columnNames = generateTableHeaderValuesService(
                 isCol,
@@ -470,6 +595,15 @@ export function QueryPageContainerComponent(): JSX.Element {
                     subFilters={subFilters}
                     dataUniqueValues={uniqueDataValues}
                     getPngDownloadUriRef={getPngDownloadUriRef}
+                    tableExportProps={{
+                        onExportTableChange: handleChangeExportData,
+                        onExportDialogOpenClick: handleClickExportDialogOpen,
+                        onExportDialogClose: handleCloseExportDialog,
+                        onExportTablesClick: handleExportTables,
+                        exportRowOrStatTable,
+                        isOpen: exportDialogIsOpen,
+                        isLoading: loadingIsolates,
+                    }}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}

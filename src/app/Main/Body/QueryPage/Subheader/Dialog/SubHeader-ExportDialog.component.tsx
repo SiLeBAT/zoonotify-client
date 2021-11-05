@@ -12,9 +12,11 @@ const warningStyle = css`
     font-size: 0.75rem;
 `;
 
-export function HeaderExportDialogComponent(props: {
-    raw: boolean;
-    stat: boolean;
+export function SubHeaderExportDialogComponent(props: {
+    exportRowOrStatTable: {
+        raw: boolean;
+        stat: boolean;
+    };
     buttonLabel: JSX.Element;
     loading: boolean;
     onClickClose: () => void;
@@ -28,7 +30,10 @@ export function HeaderExportDialogComponent(props: {
 
     const handleExport = (): Promise<void> => props.onClickExport();
 
-    const fileIsSelect = props.raw || props.stat;
+    const exportStatTable = props.exportRowOrStatTable.stat;
+    const exportRawTable = props.exportRowOrStatTable.raw
+
+    const fileIsSelect = exportRawTable || exportStatTable;
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
@@ -36,8 +41,8 @@ export function HeaderExportDialogComponent(props: {
         <div>
             <ExportDialogCheckboxesComponent
                 onCheckboxChange={handleChangeCheckbox}
-                isRaw={props.raw}
-                isStat={props.stat}
+                isRaw={exportRawTable}
+                isStat={exportStatTable}
             />
             {!fileIsSelect && <p css={warningStyle}>{t("Warning")}</p>}
         </div>

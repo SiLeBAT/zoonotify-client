@@ -14,26 +14,21 @@ import {
     FeatureType,
 } from "../../../Shared/Context/DataContext";
 import { FilterContextInterface } from "../../../Shared/Context/FilterContext";
-import { HeaderExportContainerComponent } from "./Subheader/Header-ExportContainer.component";
-import { bfrPrimaryPalette } from "../../../Shared/Style/Style-MainTheme.component";
+import { SubHeaderLayoutComponent } from "./Subheader/SubHeader-Layout.component";
 
 const mainStyle = css`
     height: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     box-sizing: border-box;
 `;
 
-const subheaderStyle = css`
-    width: 100%;
-    position: absolute;
-    z-index: 1;
+const queryPageStyle = css`
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    background-color: ${bfrPrimaryPalette[300]};
+    flex: 1 1 0;
+    overflow: auto;
+    flex-direction: row;
     box-sizing: border-box;
-    box-shadow: 0 8px 6px -6px grey;
 `;
 
 export function QueryPageLayoutComponent(props: {
@@ -49,6 +44,18 @@ export function QueryPageLayoutComponent(props: {
     subFilters: ClientSingleFilterConfig[];
     data: DataInterface;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
+    tableExportProps: {
+        onExportTableChange: (name: string, checked: boolean) => void;
+        onExportDialogOpenClick: () => void;
+        onExportDialogClose: () => void;
+        onExportTablesClick: () => void;
+        exportRowOrStatTable: {
+            raw: boolean;
+            stat: boolean;
+        };
+        isOpen: boolean;
+        isLoading: boolean;
+    };
     onDisplFeaturesChange: (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | FeatureType
@@ -105,11 +112,17 @@ export function QueryPageLayoutComponent(props: {
     const handleChartDownload = (): void => props.onDownloadChart();
 
     return (
-        <main>
-            <div css={subheaderStyle}>
-                <HeaderExportContainerComponent />
-            </div>
-            <div css={mainStyle}>
+        <main css={mainStyle}>
+            <SubHeaderLayoutComponent
+                exportRowOrStatTable={props.tableExportProps.exportRowOrStatTable}
+                isOpen={props.tableExportProps.isOpen}
+                isLoading={props.tableExportProps.isLoading}
+                onExportTableChange={props.tableExportProps.onExportTableChange}
+                onClickOpen={props.tableExportProps.onExportDialogOpenClick}
+                onHandleClose={props.tableExportProps.onExportDialogClose}
+                onExportClick={props.tableExportProps.onExportTablesClick}
+            />
+            <div css={queryPageStyle}>
                 <DrawerLayoutComponent
                     isOpen={isOpen}
                     dataIsLoading={props.dataIsLoading}

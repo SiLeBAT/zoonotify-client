@@ -35,7 +35,7 @@ export interface ExportButtonProps {
  * @param props
  * @returns {JSX.Element} - export button component
  */
-export function HeaderExportButtonComponent(
+export function SubHeaderExportButtonComponent(
     props: ExportButtonProps
 ): JSX.Element {
 

@@ -17,13 +17,13 @@ export interface DataAndStatisticToZipParameter {
     /**
      * all info for export (filtered/stat, row&column, dataset)
      */
-    setting: {
+    exportRowOrStatTable: {
         raw: boolean;
         stat: boolean;
-        tableAttributeNames: {
-            row: string | undefined;
-            column: string | undefined;
-        };
+    };
+    tableAttributeNames: {
+        row: string | undefined;
+        column: string | undefined;
     };
     rawDataSet: {
         rawData: DbCollection;
@@ -83,7 +83,7 @@ export function dataAndStatisticToZipFile(
         zipParameter.mainFilterAttributes
     );
 
-    if (zipParameter.setting.raw) {
+    if (zipParameter.exportRowOrStatTable.raw) {
         csvRowsFilteredData.push(parameterHeader);
         csvRowsFilteredData.push(
             generateDataTableCsvString(
@@ -100,11 +100,11 @@ export function dataAndStatisticToZipFile(
         );
     }
 
-    if (zipParameter.setting.stat) {
+    if (zipParameter.exportRowOrStatTable.stat) {
         csvRowsStat.push(parameterHeader);
         csvRowsStat.push(
             generateStatisticTableCsvString(
-                zipParameter.setting.tableAttributeNames,
+                zipParameter.tableAttributeNames,
                 zipParameter.statDataSet
             )
         );
