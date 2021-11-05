@@ -72,6 +72,7 @@ export function DrawerDisplayedFeaturesComponent(
                 <p css={featureSubHeaderStyle}>{t("Drawer.Subtitles.Graph")}</p>
                 <ClearSelectorComponent
                     onClick={handleRemoveAllDisplFeatures}
+                    disabled={props.dataIsLoading}
                 />
             </div>
             <DisplayedFeatureSelectorComponent
