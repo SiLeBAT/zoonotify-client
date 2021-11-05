@@ -2,8 +2,8 @@ import {
     DbCollection,
     DbKey,
     resistancesCollection,
-} from "../../../../../Shared/Model/Client_Isolate.model";
-import { modifyTableDataStringService } from "../../../../../Core/modifyTableDataString.service";
+} from "../../../../../../Shared/Model/Client_Isolate.model";
+import { modifyTableDataStringService } from "../../../../../../Core/modifyTableDataString.service";
 
 /**
  * @desc Transform the data to a string for the CSV file. Elements of one row are separated by comma.

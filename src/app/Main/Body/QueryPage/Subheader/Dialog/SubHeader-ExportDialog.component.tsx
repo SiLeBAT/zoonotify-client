@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { DialogComponent } from "../../../../Shared/Dialog.component";
+import { DialogComponent } from "../../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
-import { errorColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { errorColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 
 const warningStyle = css`
     display: flex;
@@ -12,11 +12,15 @@ const warningStyle = css`
     font-size: 0.75rem;
 `;
 
-export function HeaderExportDialogComponent(props: {
-    raw: boolean;
-    stat: boolean;
+export function SubHeaderExportDialogComponent(props: {
+    exportRowOrStatTable: {
+        raw: boolean;
+        stat: boolean;
+        chart: boolean;
+    };
     buttonLabel: JSX.Element;
     loading: boolean;
+    nrOfIsolates: number;
     onClickClose: () => void;
     onClickExport: () => Promise<void>;
     onCheckboxChange: (name: string, checked: boolean) => void;
@@ -28,7 +32,11 @@ export function HeaderExportDialogComponent(props: {
 
     const handleExport = (): Promise<void> => props.onClickExport();
 
-    const fileIsSelect = props.raw || props.stat;
+    const exportStatTable = props.exportRowOrStatTable.stat;
+    const exportRawTable = props.exportRowOrStatTable.raw;
+    const exportChart = props.exportRowOrStatTable.chart;
+
+    const fileIsSelect = exportRawTable || exportStatTable || exportChart;
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
@@ -36,8 +44,10 @@ export function HeaderExportDialogComponent(props: {
         <div>
             <ExportDialogCheckboxesComponent
                 onCheckboxChange={handleChangeCheckbox}
-                isRaw={props.raw}
-                isStat={props.stat}
+                isRaw={exportRawTable}
+                isStat={exportStatTable}
+                isChart={exportChart}
+                nrOfIsolates={props.nrOfIsolates}
             />
             {!fileIsSelect && <p css={warningStyle}>{t("Warning")}</p>}
         </div>

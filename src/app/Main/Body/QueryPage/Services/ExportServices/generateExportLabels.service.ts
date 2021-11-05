@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
-import { getCurrentDate } from "../../../../Core/getCurrentDate.service";
-import { FilterType } from "../../../../Shared/Model/Filter.model";
+import { TFunction } from "i18next";
+import { getCurrentDate } from "../../../../../Core/getCurrentDate.service";
+import { FilterType } from "../../../../../Shared/Model/Filter.model";
 
 export interface ExportLabels {
     ZNFilename: string;
@@ -14,18 +14,17 @@ export interface ExportLabels {
  * @returns { ExportLabels } - object of labels: for the file, of the main filters, for "all values"
  */
 export function generateExportLabels(
-    mainFilterAttributes: string[]
+    mainFilterAttributes: string[],
+    t: TFunction
 ): ExportLabels {
-    const { t } = useTranslation(["QueryPage"]);
-
     const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
 
     const mainFilterLabels = {} as Record<FilterType, string>;
     mainFilterAttributes.forEach((mainFilter) => {
-        mainFilterLabels[mainFilter] = t(`Filters.${mainFilter}`);
+        mainFilterLabels[mainFilter] = t(`QueryPage:Filters.${mainFilter}`);
     });
 
-    const allFilterLabel: string = t("Filters.All");
+    const allFilterLabel: string = t("QueryPage:Filters.All");
 
     return { ZNFilename, mainFilterLabels, allFilterLabel };
 }

@@ -6,24 +6,25 @@ import {
     MainFilterList,
     DbCollection,
     DbKey,
-} from "../../../../Shared/Model/Client_Isolate.model";
+} from "../../../../../Shared/Model/Client_Isolate.model";
 import {
     FilterType,
     FilterInterface,
-} from "../../../../Shared/Model/Filter.model";
+} from "../../../../../Shared/Model/Filter.model";
 import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
 
 export interface DataAndStatisticToZipParameter {
     /**
      * all info for export (filtered/stat, row&column, dataset)
      */
-    setting: {
+    exportRowOrStatTable: {
         raw: boolean;
         stat: boolean;
-        tableAttributeNames: {
-            row: string | undefined;
-            column: string | undefined;
-        };
+        chart: boolean;
+    };
+    tableAttributeNames: {
+        row: string | undefined;
+        column: string | undefined;
     };
     rawDataSet: {
         rawData: DbCollection;
@@ -33,6 +34,8 @@ export interface DataAndStatisticToZipParameter {
         statData: Record<string, string>[];
         statKeys: string[];
     };
+    imgData: string | undefined;
+    znPngFilename: string;
     /**
      * object with the selected filters
      */
@@ -83,7 +86,7 @@ export function dataAndStatisticToZipFile(
         zipParameter.mainFilterAttributes
     );
 
-    if (zipParameter.setting.raw) {
+    if (zipParameter.exportRowOrStatTable.raw) {
         csvRowsFilteredData.push(parameterHeader);
         csvRowsFilteredData.push(
             generateDataTableCsvString(
@@ -100,11 +103,11 @@ export function dataAndStatisticToZipFile(
         );
     }
 
-    if (zipParameter.setting.stat) {
+    if (zipParameter.exportRowOrStatTable.stat) {
         csvRowsStat.push(parameterHeader);
         csvRowsStat.push(
             generateStatisticTableCsvString(
-                zipParameter.setting.tableAttributeNames,
+                zipParameter.tableAttributeNames,
                 zipParameter.statDataSet
             )
         );
@@ -113,6 +116,10 @@ export function dataAndStatisticToZipFile(
             `${zipParameter.subFileNames.stat}_${zipParameter.ZNFilename}`,
             csvRowsStat.join("\n")
         );
+    }
+
+    if (zipParameter.exportRowOrStatTable.chart && zipParameter.imgData !== undefined) {
+        zip.file(zipParameter.znPngFilename, zipParameter.imgData.split(';base64,')[1], {base64: true})
     }
 
     const folderName: string = zipParameter.ZNFilename.replace(".csv", ".zip");

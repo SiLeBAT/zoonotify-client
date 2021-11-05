@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Button, withStyles } from "@material-ui/core";
-import { onPrimaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { onPrimaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 
 const downloadButtonStyle = css`
     margin-right: 1em;
@@ -35,10 +35,9 @@ export interface ExportButtonProps {
  * @param props
  * @returns {JSX.Element} - export button component
  */
-export function HeaderExportButtonComponent(
+export function SubHeaderExportButtonComponent(
     props: ExportButtonProps
 ): JSX.Element {
-
     const handleClick = (): void => props.onClickOpen();
 
     return (

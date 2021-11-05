@@ -1,7 +1,7 @@
 import {
     FilterInterface,
     FilterType,
-} from "../../../../Shared/Model/Filter.model";
+} from "../../../../../Shared/Model/Filter.model";
 
 /**
  * @desc Convert the selected filter/parameter to save them as a header in the CSV file
