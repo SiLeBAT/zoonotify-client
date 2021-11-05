@@ -15,7 +15,7 @@ const subHeaderStyle = css`
 `;
 
 export function SubHeaderLayoutComponent(props: {
-    exportRowOrStatTable: {
+    chooseExportContent: {
         raw: boolean;
         stat: boolean;
         chart: boolean;
@@ -51,7 +51,7 @@ export function SubHeaderLayoutComponent(props: {
             />
             {props.isOpen && (
                 <SubHeaderExportDialogComponent
-                    exportRowOrStatTable={props.exportRowOrStatTable}
+                    chooseExportContent={props.chooseExportContent}
                     buttonLabel={buttonLabel}
                     loading={props.isLoading}
                     nrOfIsolates={props.nrOfIsolates}

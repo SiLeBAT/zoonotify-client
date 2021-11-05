@@ -13,7 +13,7 @@ const warningStyle = css`
 `;
 
 export function SubHeaderExportDialogComponent(props: {
-    exportRowOrStatTable: {
+    chooseExportContent: {
         raw: boolean;
         stat: boolean;
         chart: boolean;
@@ -32,9 +32,9 @@ export function SubHeaderExportDialogComponent(props: {
 
     const handleExport = (): Promise<void> => props.onClickExport();
 
-    const exportStatTable = props.exportRowOrStatTable.stat;
-    const exportRawTable = props.exportRowOrStatTable.raw;
-    const exportChart = props.exportRowOrStatTable.chart;
+    const exportStatTable = props.chooseExportContent.stat;
+    const exportRawTable = props.chooseExportContent.raw;
+    const exportChart = props.chooseExportContent.chart;
 
     const fileIsSelect = exportRawTable || exportStatTable || exportChart;
 

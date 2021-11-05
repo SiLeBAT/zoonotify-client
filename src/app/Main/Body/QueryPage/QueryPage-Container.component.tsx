@@ -84,7 +84,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>(
         []
     );
-    const [exportRowOrStatTable, setExportRowOrStatTable] = useState<{
+    const [chooseExportContent, setChooseExportContent] = useState<{
         raw: boolean;
         stat: boolean;
         chart: boolean;
@@ -262,7 +262,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             tableAttributeNames.column = undefined;
         }
 
-        if (exportRowOrStatTable.stat) {
+        if (chooseExportContent.stat) {
             if (data.option === "absolute") {
                 statData = data.statisticDataAbsolute;
             }
@@ -274,7 +274,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             }
         }
 
-        if (exportRowOrStatTable.raw) {
+        if (chooseExportContent.raw) {
             const urlParams = new URLSearchParams(history.location.search);
             urlParams.delete("row");
             urlParams.delete("column");
@@ -303,14 +303,14 @@ export function QueryPageContainerComponent(): JSX.Element {
             "Export:FileName.Chart"
         )}_${getCurrentDate()}.png`;
 
-        if (exportRowOrStatTable.chart) {
+        if (chooseExportContent.chart) {
             if (getPngDownloadUriRef.current !== null) {
                 chartImgUri = await getPngDownloadUriRef.current();
             }
         }
 
         dataAndStatisticToZipFile({
-            exportRowOrStatTable,
+            chooseExportContent,
             tableAttributeNames,
             rawDataSet: {
                 rawData,
@@ -334,7 +334,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleChangeExportData = (name: string, checked: boolean): void => {
-        setExportRowOrStatTable({ ...exportRowOrStatTable, [name]: checked });
+        setChooseExportContent({ ...chooseExportContent, [name]: checked });
     };
 
     const handleClickExportDialogOpen = (): void => {
@@ -598,7 +598,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                         onExportDialogOpenClick: handleClickExportDialogOpen,
                         onExportDialogClose: handleCloseExportDialog,
                         onExportTablesClick: handleExportTables,
-                        exportRowOrStatTable,
+                        chooseExportContent,
                         isOpen: exportDialogIsOpen,
                         isLoading: loadingIsolates,
                     }}

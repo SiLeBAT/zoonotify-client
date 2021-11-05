@@ -49,7 +49,7 @@ export function QueryPageLayoutComponent(props: {
         onExportDialogOpenClick: () => void;
         onExportDialogClose: () => void;
         onExportTablesClick: () => void;
-        exportRowOrStatTable: {
+        chooseExportContent: {
             raw: boolean;
             stat: boolean;
             chart: boolean;
@@ -112,8 +112,8 @@ export function QueryPageLayoutComponent(props: {
     return (
         <main css={mainStyle}>
             <SubHeaderLayoutComponent
-                exportRowOrStatTable={
-                    props.tableExportProps.exportRowOrStatTable
+                chooseExportContent={
+                    props.tableExportProps.chooseExportContent
                 }
                 isOpen={props.tableExportProps.isOpen}
                 isLoading={props.tableExportProps.isLoading}
