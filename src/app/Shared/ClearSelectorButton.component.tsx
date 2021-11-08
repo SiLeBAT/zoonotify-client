@@ -34,10 +34,10 @@ const LightTooltip = withStyles(() => ({
  * @param props - onclick to remove the selected values
  * @returns {JSX.Element} - button component with tooltip
  */
-export function ClearSelectorComponent(props:  {
+export function ClearSelectorComponent(props: {
     onClick: () => void;
-}
-): JSX.Element {
+    disabled: boolean;
+}): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
     const mouseOverText = t("QueryPage:Buttons.Delete");
 
@@ -49,6 +49,7 @@ export function ClearSelectorComponent(props:  {
                 <IconButton
                     css={iconButtonStyle}
                     onClick={handleClick}
+                    disabled={props.disabled}
                 >
                     <CancelIcon
                         css={css`
