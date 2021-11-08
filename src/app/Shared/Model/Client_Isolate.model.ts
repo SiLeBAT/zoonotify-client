@@ -63,7 +63,6 @@ export const MainFilterList: DbKey[] = [
     "productionType",
     "matrix",
     "federalState",
-    "resistance",
 ];
 
 export const subFiltersList: string[] = ["serovar", "species", "serotyp"];
