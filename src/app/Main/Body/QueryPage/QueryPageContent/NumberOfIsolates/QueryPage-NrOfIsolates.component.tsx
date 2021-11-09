@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { AccordionComponent } from "../../../../Shared/Accordion.component";
+import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 
 const tableStyle = css`
     table-layout: auto;

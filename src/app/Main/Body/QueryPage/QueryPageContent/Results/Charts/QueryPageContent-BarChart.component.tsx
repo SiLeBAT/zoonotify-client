@@ -4,12 +4,12 @@ import { TFunction } from "i18next";
 import _ from "lodash";
 import { MutableRefObject } from "react";
 import { useTranslation } from "react-i18next";
-import { AccordionComponent } from "../../../../../Shared/Accordion.component";
-import { LoadingProcessComponent } from "../../../../../Shared/LoadingProcess.component";
+import { AccordionComponent } from "../../../../../../Shared/Accordion.component";
+import { LoadingProcessComponent } from "../../../../../../Shared/LoadingProcess.component";
 import {
     DataInterface,
     DisplayOptionType,
-} from "../../../../../Shared/Context/DataContext";
+} from "../../../../../../Shared/Context/DataContext";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 

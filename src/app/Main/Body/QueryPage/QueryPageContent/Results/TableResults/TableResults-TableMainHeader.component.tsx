@@ -3,7 +3,7 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import {
     onPrimaryColor,
     primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../../Shared/Style/Style-MainTheme.component";
 import {
     fixedCellSize,
     fixedHeaderCellWidth,

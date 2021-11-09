@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import {
     CheckboxesComponent,
     CheckboxesConfig,
-} from "../../../../../Shared/Checkboxes.component";
+} from "../../../../Shared/Checkboxes.component";
 
 export interface CheckboxesProps {
     onCheckboxChange: (name: string, checked: boolean) => void;

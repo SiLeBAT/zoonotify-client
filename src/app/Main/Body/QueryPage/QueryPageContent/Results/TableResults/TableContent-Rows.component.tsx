@@ -8,8 +8,8 @@ import {
     defaultTableBorder,
     sumRowColBackgroundColor,
 } from "./ResultsTable.style";
-import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
-import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
+import { DisplayOptionType } from "../../../../../../Shared/Context/DataContext";
+import { getMicroorganismLabelService } from "../../../Services/getMicroorganismLabel";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;

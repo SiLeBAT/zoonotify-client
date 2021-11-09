@@ -11,8 +11,8 @@ import {
 } from "@material-ui/core";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
-import { FilterType } from "../../../../Shared/Model/Filter.model";
-import { getMicroorganismLabelService } from "../Services/getMicroorganismLabel";
+import { FilterType } from "../../../../../Shared/Model/Filter.model";
+import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
 
 const spaceStyle = css`
     padding: 0;

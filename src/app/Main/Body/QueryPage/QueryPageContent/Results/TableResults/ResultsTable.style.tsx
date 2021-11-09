@@ -1,7 +1,7 @@
 import {
     bfrPrimaryPalette,
     primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../../Shared/Style/Style-MainTheme.component";
 
 export const fixedCellSize = 160;
 export const isOnlyRowWidth = 40;

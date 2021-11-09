@@ -12,9 +12,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { TableContentRowsComponent } from "./TableContent-Rows.component";
 import { TableContentHeaderComponent } from "./TableContent-Header.component";
-import { onBackgroundColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { onBackgroundColor } from "../../../../../../Shared/Style/Style-MainTheme.component";
 import { TableContentRowWithColSumComponent } from "./TableContent-RowWithColSums.component";
-import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
+import { DisplayOptionType } from "../../../../../../Shared/Context/DataContext";
 import { SumOptions } from "./TableResults.model";
 
 const headerStyle = css`

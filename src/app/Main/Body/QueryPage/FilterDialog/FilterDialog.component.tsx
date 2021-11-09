@@ -6,11 +6,11 @@ import { useState } from "react";
 import _ from "lodash";
 import DoneIcon from "@material-ui/icons/Done";
 import { Checkbox, createStyles, Divider, FormControlLabel, makeStyles } from "@material-ui/core";
-import { DialogComponent } from "../../../../../../Shared/Dialog.component";
+import { DialogComponent } from "../../../../Shared/Dialog.component";
 import {
     primaryColor,
     secondaryColor,
-} from "../../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../Shared/Style/Style-MainTheme.component";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
 
 const useStyles = makeStyles(() =>
@@ -34,7 +34,7 @@ const linkStyle = css`
     }
 `;
 
-export function FilterSettingDialogComponent(props: {
+export function FilterDialogComponent(props: {
     previousFiltersToDisplay: string[];
     availableFilters: string[];
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;

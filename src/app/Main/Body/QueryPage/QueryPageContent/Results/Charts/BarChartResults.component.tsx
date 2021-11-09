@@ -1,7 +1,7 @@
 import React, { MutableRefObject, useRef, useEffect } from "react";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
-import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../../../../Shared/Style/Style-MainTheme.component";
 import { ApexChartData } from "./ApexChart.model";
 
 export function BarChartResultsComponent(props: {

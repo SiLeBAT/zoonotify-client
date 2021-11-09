@@ -13,10 +13,10 @@ import {
 import {
     bfrDarkgrey,
     primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
-import { DisplayOptionType } from "../../../../../Shared/Context/DataContext";
-import { CheckboxesComponent } from "../../../../../Shared/Checkboxes.component";
-import { smallSize, smallToggleStyle } from "../../../../../Shared/Style/SmallToggleStyle";
+} from "../../../../../../Shared/Style/Style-MainTheme.component";
+import { DisplayOptionType } from "../../../../../../Shared/Context/DataContext";
+import { CheckboxesComponent } from "../../../../../../Shared/Checkboxes.component";
+import { smallSize, smallToggleStyle } from "../../../../../../Shared/Style/SmallToggleStyle";
 import { SumOptions } from "./TableResults.model";
 
 

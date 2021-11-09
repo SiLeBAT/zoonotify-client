@@ -2,8 +2,8 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { ParameterContentListComponent } from "./ParameterContent-List.component";
-import { AccordionComponent } from "../../../../Shared/Accordion.component";
-import { FilterInterface } from "../../../../Shared/Model/Filter.model";
+import { AccordionComponent } from "../../../../../Shared/Accordion.component";
+import { FilterInterface } from "../../../../../Shared/Model/Filter.model";
 
 const parameterBlockStyle = css`
     width: 100%;

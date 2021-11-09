@@ -59,6 +59,13 @@ import { dataAndStatisticToZipFile } from "./Services/ExportServices/dataAndStat
 import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
 import { generateExportLabels } from "./Services/ExportServices/generateExportLabels.service";
 import { getCurrentDate } from "../../../Core/getCurrentDate.service";
+import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
+import { QueryPageContentContainer } from "./QueryPageContent/QueryPageContent-Container";
+import { ExportButtonLabelComponent } from "../../../Shared/Export-ButtonLabel.component";
+import { ExportDialogComponent } from "./ExportDialog/ExportDialog.component";
+import { SubHeaderExportButtonComponent } from "./Subheader/SubHeader-ExportButton.component";
+import { FilterDialogComponent } from "./FilterDialog/FilterDialog.component";
+import { DrawerContainer } from "./Drawer/Drawer-Container.component";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -78,6 +85,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     >({});
     const [loadingIsolates, setLoadingIsolates] = useState<boolean>(false);
     const [exportDialogIsOpen, setExportDialogIsOpen] = useState(false);
+    const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
+        false
+    );
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
         {}
     );
@@ -93,6 +103,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         stat: true,
         chart: true,
     });
+    const [drawerWidth, setDrawerWidth] = useState<number>(433);
+    const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(true);
 
     const { filter, setFilter } = useContext(FilterContext);
     const { data, setData } = useContext(DataContext);
@@ -112,6 +124,18 @@ export function QueryPageContainerComponent(): JSX.Element {
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
     const getPngDownloadUriRef = useRef<(() => Promise<string>) | null>(null);
+
+    const handleClickOpenCloseDrawer = (): void => {
+        if (drawerIsOpen) {
+            setDrawerIsOpen(false);
+        } else {
+            setDrawerIsOpen(true);
+        }
+    };
+
+    const handleMoveResizeBar = (newWidth: number): void => {
+        setDrawerWidth(newWidth);
+    };
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -197,6 +221,14 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilter(newFilter);
     };
 
+    const handleCancelFiltersToDisplay = (): void => {
+        setFilterDialogIsOpen(false);
+    };
+
+    const handleClickOpenFilterSettingDialog = (): void => {
+        setFilterDialogIsOpen(true);
+    };
+
     const handleChangeDisplayOptions = (displayOption: string): void => {
         const optionValue = displayOption as DisplayOptionType;
         setData({
@@ -216,6 +248,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 newSelectedFilters[availableFilter] = [];
             }
         });
+
         const newFilter: FilterContextInterface = {
             ...filter,
             selectedFilter: newSelectedFilters,
@@ -228,6 +261,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         );
         history.push(newPath);
         setFilter(newFilter);
+        setFilterDialogIsOpen(false);
     };
 
     const fetchIsolatesAndExportZip = async (): Promise<void> => {
@@ -236,6 +270,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         let rawKeys: DbKey[] = [];
         let statData: Record<string, string>[] = [];
         let statKeys: string[] = [];
+
+        const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
 
         const exportLabels = generateExportLabels(filter.mainFilter, t);
         const subFileNames = {
@@ -321,7 +357,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 statKeys,
             },
             imgData: chartImgUri,
-            ZNFilename: exportLabels.ZNFilename,
+            ZNFilename,
             znPngFilename,
             filter: filter.selectedFilter,
             allFilterLabel: exportLabels.allFilterLabel,
@@ -575,40 +611,97 @@ export function QueryPageContainerComponent(): JSX.Element {
         }
     }, [filter.selectedFilter, filter.displayedFilters]);
 
+    const isLoading = dataIsLoading || conditionalValuesAreLoading;
+
+    const buttonLabel: JSX.Element = ExportButtonLabelComponent(
+        exportDialogIsOpen
+    );
+
     return (
         <LoadingOrErrorComponent
             status={{ isolateStatus, isolateCountStatus, filterStatus }}
             dataIsSet={dataIsMounted}
             componentToDisplay={
                 <QueryPageLayoutComponent
-                    isFilter={isFilter}
-                    dataIsLoading={dataIsLoading || conditionalValuesAreLoading}
-                    columnNameValues={columnNameValues}
-                    data={data}
-                    numberOfIsolates={{
-                        total: totalNrOfIsol,
-                        filtered: nrOfSelectedIsol,
-                    }}
-                    filterInfo={filter}
-                    subFilters={subFilters}
-                    dataUniqueValues={uniqueDataValues}
-                    getPngDownloadUriRef={getPngDownloadUriRef}
-                    tableExportProps={{
-                        onExportTableChange: handleChangeExportData,
-                        onExportDialogOpenClick: handleClickExportDialogOpen,
-                        onExportDialogClose: handleCloseExportDialog,
-                        onExportTablesClick: handleExportTables,
-                        chooseExportContent,
-                        isOpen: exportDialogIsOpen,
-                        isLoading: loadingIsolates,
-                    }}
-                    onDisplFeaturesChange={handleChangeDisplFeatures}
-                    onDisplFeaturesSwap={handleSwapDisplFeatures}
-                    onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
-                    onFilterChange={handleChangeFilter}
-                    onFilterRemoveAll={handleRemoveAllFilter}
-                    onDisplayOptionsChange={handleChangeDisplayOptions}
-                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                    subHeader={
+                        <SubHeaderExportButtonComponent
+                            onClickOpen={handleClickExportDialogOpen}
+                            buttonLabel={buttonLabel}
+                        />
+                    }
+                    drawer={
+                        <DrawerContainer
+                            isOpen={drawerIsOpen}
+                            dataIsLoading={isLoading}
+                            drawerWidth={drawerWidth}
+                            dataUniqueValues={uniqueDataValues}
+                            filterInfo={filter}
+                            subFilters={subFilters}
+                            columnFeature={data.column}
+                            rowFeature={data.row}
+                            onDisplFeaturesChange={handleChangeDisplFeatures}
+                            onDisplFeaturesSwap={handleSwapDisplFeatures}
+                            onDisplFeaturesRemoveAll={
+                                handleRemoveAllDisplFeatures
+                            }
+                            onFilterChange={handleChangeFilter}
+                            onFilterRemoveAll={handleRemoveAllFilter}
+                            onSubmitFiltersToDisplay={
+                                handleSubmitFiltersToDisplay
+                            }
+                            onOpenFilterDialogClick={
+                                handleClickOpenFilterSettingDialog
+                            }
+                        />
+                    }
+                    drawerControl={
+                        <QueryPageDrawerControlComponent
+                            isOpen={drawerIsOpen}
+                            drawerWidth={drawerWidth}
+                            onDrawerOpenCloseClick={handleClickOpenCloseDrawer}
+                            onResizeBarMove={handleMoveResizeBar}
+                        />
+                    }
+                    queryPageContent={
+                        <QueryPageContentContainer
+                            isFilter={isFilter}
+                            dataIsLoading={isLoading}
+                            columnNameValues={columnNameValues}
+                            data={data}
+                            numberOfIsolates={{
+                                total: totalNrOfIsol,
+                                filtered: nrOfSelectedIsol,
+                            }}
+                            selectedFilter={filter.selectedFilter}
+                            getPngDownloadUriRef={getPngDownloadUriRef}
+                            onDisplayOptionsChange={handleChangeDisplayOptions}
+                        />
+                    }
+                    exportDialog={
+                        <ExportDialogComponent
+                            chooseExportContent={chooseExportContent}
+                            buttonLabel={buttonLabel}
+                            loading={loadingIsolates}
+                            nrOfIsolates={nrOfSelectedIsol}
+                            onClickClose={handleCloseExportDialog}
+                            onClickExport={handleExportTables}
+                            onCheckboxChange={handleChangeExportData}
+                        />
+                    }
+                    exportDialogIsOpen={exportDialogIsOpen}
+                    filterDialog={
+                        <FilterDialogComponent
+                            previousFiltersToDisplay={filter.displayedFilters}
+                            availableFilters={filter.mainFilter}
+                            onSubmitFiltersToDisplay={
+                                handleSubmitFiltersToDisplay
+                            }
+                            onCancelFiltersToDisplay={
+                                handleCancelFiltersToDisplay
+                            }
+                        />
+                    }
+                    filterDialogIsOpen={filterDialogIsOpen}
                 />
             }
         />
