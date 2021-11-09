@@ -1,14 +1,15 @@
 {
     "Content": {
         "Title": "Daten exportieren",
-        "Text": "Sie können wählen, ob der komplette Datensatz, die angezeigte Statistik oder beides herunterladen werden soll."
+        "Text": "Sie können wählen, ob die ausgewählten Einzeldaten, die angezeigten agregierten Daten, die grafische Darstellung oder alles herunterladen werden soll."
     },
     "Checkbox": {
-        "DataSet": "Ausgewählte Einzeldaten",
+        "Raw": "Ausgewählte Einzeldaten",
+        "Raw_Isolates": "Isolate",
+        "Stat": "Ausgewählter aggregierter Datensatz",
+        "Chart": "Grafik",
         "Csv": "(.csv)",
-        "Isolates": "Isolate",
-        "Stat": "Ausgewählter aggregierter Datensatz (.csv)",
-        "Chart": "Grafik (.png)"
+        "Png": "(.png)"
     },
     "FileName": {
         "DataSet": "gefilteter-datensatz",

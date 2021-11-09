@@ -1,14 +1,15 @@
 {
     "Content": {
         "Title": "Exporting Data",
-        "Text": "You can choose whether to download the complete data set, the displayed statistics or both."
+        "Text": "You can choose whether to download the selected data set, the displayed aggregated data, the graphical representation or all of them."
     },
     "Checkbox": {
-        "DataSet": "Selected data set",
+        "Raw": "Selected data set",
+        "Raw_Isolates": "isolates",
+        "Stat": "Selected aggregated data set",
+        "Chart": "Chart",
         "Csv": "(.csv)",
-        "Isolates": "isolates",
-        "Stat": "Selected aggregated data set (.csv)",
-        "Chart": "Chart (.png)"
+        "Png": "(.png)"
     },
     "FileName": {
         "DataSet": "filtered-data-set",

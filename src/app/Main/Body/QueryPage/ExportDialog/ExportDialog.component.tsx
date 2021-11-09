@@ -13,7 +13,7 @@ const warningStyle = css`
 `;
 
 export function ExportDialogComponent(props: {
-    chooseExportContent: {
+    exportOptions: {
         raw: boolean;
         stat: boolean;
         chart: boolean;
@@ -32,11 +32,11 @@ export function ExportDialogComponent(props: {
 
     const handleExport = (): Promise<void> => props.onClickExport();
 
-    const exportStatTable = props.chooseExportContent.stat;
-    const exportRawTable = props.chooseExportContent.raw;
-    const exportChart = props.chooseExportContent.chart;
+    const exportStatTable = props.exportOptions.stat;
+    const exportRawTable = props.exportOptions.raw;
+    const exportChart = props.exportOptions.chart;
 
-    const fileIsSelect = exportRawTable || exportStatTable || exportChart;
+    const exportOptionIsSelected = exportRawTable || exportStatTable || exportChart;
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
@@ -49,7 +49,7 @@ export function ExportDialogComponent(props: {
                 isChart={exportChart}
                 nrOfIsolates={props.nrOfIsolates}
             />
-            {!fileIsSelect && <p css={warningStyle}>{t("Warning")}</p>}
+            {!exportOptionIsSelected && <p css={warningStyle}>{t("Warning")}</p>}
         </div>
     );
 
@@ -62,7 +62,7 @@ export function ExportDialogComponent(props: {
         dialogContent: exportCheckboxes,
         cancelButton: exportCancelButton,
         submitButton: props.buttonLabel,
-        disableSubmitButton: !fileIsSelect,
+        disableSubmitButton: !exportOptionIsSelected,
         onClose: handleClose,
         onSubmitClick: handleExport,
     });

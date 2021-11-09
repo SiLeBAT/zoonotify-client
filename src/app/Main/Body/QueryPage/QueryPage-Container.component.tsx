@@ -94,7 +94,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>(
         []
     );
-    const [chooseExportContent, setChooseExportContent] = useState<{
+    const [exportOptions, setExportOptions] = useState<{
         raw: boolean;
         stat: boolean;
         chart: boolean;
@@ -298,7 +298,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             tableAttributeNames.column = undefined;
         }
 
-        if (chooseExportContent.stat) {
+        if (exportOptions.stat) {
             if (data.option === "absolute") {
                 statData = data.statisticDataAbsolute;
             }
@@ -310,12 +310,12 @@ export function QueryPageContainerComponent(): JSX.Element {
             }
         }
 
-        if (chooseExportContent.raw) {
+        if (exportOptions.raw) {
             const urlParams = new URLSearchParams(history.location.search);
             urlParams.delete("row");
             urlParams.delete("column");
             const urlParamsString = urlParams.toString();
-            const isolateFilteredUrl = `${ISOLATE_URL}/${urlParamsString}`;
+            const isolateFilteredUrl = `${ISOLATE_URL}?${urlParamsString}`;
             const isolateFilteredResponse: ApiResponse<IsolateDTO> = await callApiService(
                 isolateFilteredUrl
             );
@@ -339,14 +339,14 @@ export function QueryPageContainerComponent(): JSX.Element {
             "Export:FileName.Chart"
         )}_${getCurrentDate()}.png`;
 
-        if (chooseExportContent.chart) {
+        if (exportOptions.chart) {
             if (getPngDownloadUriRef.current !== null) {
                 chartImgUri = await getPngDownloadUriRef.current();
             }
         }
 
         dataAndStatisticToZipFile({
-            chooseExportContent,
+            exportOptions,
             tableAttributeNames,
             rawDataSet: {
                 rawData,
@@ -370,7 +370,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const handleChangeExportData = (name: string, checked: boolean): void => {
-        setChooseExportContent({ ...chooseExportContent, [name]: checked });
+        setExportOptions({ ...exportOptions, [name]: checked });
     };
 
     const handleClickExportDialogOpen = (): void => {
@@ -679,7 +679,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     }
                     exportDialog={
                         <ExportDialogComponent
-                            chooseExportContent={chooseExportContent}
+                            exportOptions={exportOptions}
                             buttonLabel={buttonLabel}
                             loading={loadingIsolates}
                             nrOfIsolates={nrOfSelectedIsol}

@@ -17,7 +17,7 @@ export interface DataAndStatisticToZipParameter {
     /**
      * all info for export (filtered/stat, row&column, dataset)
      */
-    chooseExportContent: {
+    exportOptions: {
         raw: boolean;
         stat: boolean;
         chart: boolean;
@@ -86,7 +86,7 @@ export function dataAndStatisticToZipFile(
         zipParameter.mainFilterAttributes
     );
 
-    if (zipParameter.chooseExportContent.raw) {
+    if (zipParameter.exportOptions.raw) {
         csvRowsFilteredData.push(parameterHeader);
         csvRowsFilteredData.push(
             generateDataTableCsvString(
@@ -103,7 +103,7 @@ export function dataAndStatisticToZipFile(
         );
     }
 
-    if (zipParameter.chooseExportContent.stat) {
+    if (zipParameter.exportOptions.stat) {
         csvRowsStat.push(parameterHeader);
         csvRowsStat.push(
             generateStatisticTableCsvString(
@@ -118,7 +118,7 @@ export function dataAndStatisticToZipFile(
         );
     }
 
-    if (zipParameter.chooseExportContent.chart && zipParameter.imgData !== undefined) {
+    if (zipParameter.exportOptions.chart && zipParameter.imgData !== undefined) {
         zip.file(zipParameter.znPngFilename, zipParameter.imgData.split(';base64,')[1], {base64: true})
     }
 
