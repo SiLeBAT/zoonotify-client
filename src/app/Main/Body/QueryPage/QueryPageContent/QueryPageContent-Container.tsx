@@ -30,13 +30,18 @@ export function QueryPageContentContainer(props: {
 
     const contentTitle = t("Content.Title")
 
+    const queryPageInfo = props.isFilter ? (
+        <QueryPageParameterContentComponent
+                selectedFilter={props.selectedFilter}
+            />
+    ) : (
+        <QueryPageIntroTextComponent />
+    )
+
     return (
         <QueryPageContentLayoutComponent 
             status={<QueryPageDatabaseStatusIndicatorComponent />}
-            parameterContent={<QueryPageParameterContentComponent
-                selectedFilter={props.selectedFilter}
-            />}
-            introText={<QueryPageIntroTextComponent />}
+            queryPageInfo={queryPageInfo}
             nrOfIsolates={<QueryPageNrOfIsolatesComponent
                 numberOfIsolates={props.numberOfIsolates}
             />}

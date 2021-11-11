@@ -28,20 +28,18 @@ const queryPageStyle = css`
 `;
 
 export function QueryPageLayoutComponent(props: {
-    subHeader: JSX.Element;
+    subHeaderButton: JSX.Element;
     drawer: JSX.Element;
     drawerControl: JSX.Element;
     queryPageContent: JSX.Element;
     exportDialog: JSX.Element;
     exportDialogIsOpen: boolean;
-    filterDialog: JSX.Element;
-    filterDialogIsOpen: boolean;
 }): JSX.Element {
 
     return (
         <main css={mainStyle}>
             <div css={subHeaderStyle}>
-                {props.subHeader}
+                {props.subHeaderButton}
             </div>
             <div css={queryPageStyle}>
                 {props.drawer}
@@ -50,9 +48,6 @@ export function QueryPageLayoutComponent(props: {
             </div>
             {props.exportDialogIsOpen && (
                 props.exportDialog
-            )}
-            {props.filterDialogIsOpen && (
-                props.filterDialog
             )}
         </main>
     );

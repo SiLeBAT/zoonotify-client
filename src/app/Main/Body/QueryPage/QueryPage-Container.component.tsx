@@ -61,10 +61,8 @@ import { generateExportLabels } from "./Services/ExportServices/generateExportLa
 import { getCurrentDate } from "../../../Core/getCurrentDate.service";
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentContainer } from "./QueryPageContent/QueryPageContent-Container";
-import { ExportButtonLabelComponent } from "../../../Shared/Export-ButtonLabel.component";
 import { ExportDialogComponent } from "./ExportDialog/ExportDialog.component";
 import { SubHeaderExportButtonComponent } from "./Subheader/SubHeader-ExportButton.component";
-import { FilterDialogComponent } from "./FilterDialog/FilterDialog.component";
 import { DrawerContainer } from "./Drawer/Drawer-Container.component";
 
 export function QueryPageContainerComponent(): JSX.Element {
@@ -85,9 +83,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     >({});
     const [loadingIsolates, setLoadingIsolates] = useState<boolean>(false);
     const [exportDialogIsOpen, setExportDialogIsOpen] = useState(false);
-    const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
-        false
-    );
+
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
         {}
     );
@@ -221,14 +217,6 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilter(newFilter);
     };
 
-    const handleCancelFiltersToDisplay = (): void => {
-        setFilterDialogIsOpen(false);
-    };
-
-    const handleClickOpenFilterSettingDialog = (): void => {
-        setFilterDialogIsOpen(true);
-    };
-
     const handleChangeDisplayOptions = (displayOption: string): void => {
         const optionValue = displayOption as DisplayOptionType;
         setData({
@@ -261,7 +249,6 @@ export function QueryPageContainerComponent(): JSX.Element {
         );
         history.push(newPath);
         setFilter(newFilter);
-        setFilterDialogIsOpen(false);
     };
 
     const fetchIsolatesAndExportZip = async (): Promise<void> => {
@@ -613,20 +600,16 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isLoading = dataIsLoading || conditionalValuesAreLoading;
 
-    const buttonLabel: JSX.Element = ExportButtonLabelComponent(
-        exportDialogIsOpen
-    );
-
     return (
         <LoadingOrErrorComponent
             status={{ isolateStatus, isolateCountStatus, filterStatus }}
             dataIsSet={dataIsMounted}
             componentToDisplay={
                 <QueryPageLayoutComponent
-                    subHeader={
+                    subHeaderButton={
                         <SubHeaderExportButtonComponent
                             onClickOpen={handleClickExportDialogOpen}
-                            buttonLabel={buttonLabel}
+                            exportDialogIsOpen={exportDialogIsOpen}
                         />
                     }
                     drawer={
@@ -648,9 +631,6 @@ export function QueryPageContainerComponent(): JSX.Element {
                             onFilterRemoveAll={handleRemoveAllFilter}
                             onSubmitFiltersToDisplay={
                                 handleSubmitFiltersToDisplay
-                            }
-                            onOpenFilterDialogClick={
-                                handleClickOpenFilterSettingDialog
                             }
                         />
                     }
@@ -680,28 +660,15 @@ export function QueryPageContainerComponent(): JSX.Element {
                     exportDialog={
                         <ExportDialogComponent
                             exportOptions={exportOptions}
-                            buttonLabel={buttonLabel}
                             loading={loadingIsolates}
                             nrOfIsolates={nrOfSelectedIsol}
+                            exportDialogIsOpen={exportDialogIsOpen}
                             onClickClose={handleCloseExportDialog}
                             onClickExport={handleExportTables}
                             onCheckboxChange={handleChangeExportData}
                         />
                     }
                     exportDialogIsOpen={exportDialogIsOpen}
-                    filterDialog={
-                        <FilterDialogComponent
-                            previousFiltersToDisplay={filter.displayedFilters}
-                            availableFilters={filter.mainFilter}
-                            onSubmitFiltersToDisplay={
-                                handleSubmitFiltersToDisplay
-                            }
-                            onCancelFiltersToDisplay={
-                                handleCancelFiltersToDisplay
-                            }
-                        />
-                    }
-                    filterDialogIsOpen={filterDialogIsOpen}
                 />
             }
         />

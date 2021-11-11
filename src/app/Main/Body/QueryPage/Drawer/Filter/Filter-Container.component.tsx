@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FilterSelectorListComponent } from "./Filter-SelectorList.component";
 import { ClearSelectorComponent } from "../../../../../Shared/ClearSelectorButton.component";
@@ -11,6 +11,7 @@ import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { FilterContextInterface } from "../../../../../Shared/Context/FilterContext";
 import { FilterLayoutComponent } from "./Filter-Layout.component";
 import { FilterDialogButtonComponent } from "./FilterDialogButton.component";
+import { FilterDialogComponent } from "./FilterDialog/FilterDialog.component";
 
 export function FilterContainer(props: {
     dataIsLoading: boolean;
@@ -23,8 +24,10 @@ export function FilterContainer(props: {
     ) => void;
     onFilterRemoveAll: () => void;
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
-    onOpenFilterDialogClick: () => void;
 }): JSX.Element {
+    const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
+        false
+    );
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeFilter = (
@@ -34,32 +37,57 @@ export function FilterContainer(props: {
     const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
 
     const handleClickOpenFilterSettingDialog = (): void => {
-        props.onOpenFilterDialogClick();
+        setFilterDialogIsOpen(true);
+
     };
+
+    const handleCancelFiltersToDisplay = (): void => {
+        setFilterDialogIsOpen(false);
+    };
+
+    const handleSubmitFiltersToDisplay = (
+        newFiltersToDisplay: string[]
+    ): void => {
+        props.onSubmitFiltersToDisplay(newFiltersToDisplay);
+        setFilterDialogIsOpen(false);
+    };
+
 
     const filterDialogButtonText = t("FilterDialog.ButtonText");
 
     return (
-        <FilterLayoutComponent
-            title={t("Drawer.Subtitles.Filter")}
-            clearSelector={
-                <ClearSelectorComponent onClick={handleRemoveAllFilter} />
-            }
-            filterSelectorList={FilterSelectorListComponent(
-                props.dataIsLoading,
-                props.dataUniqueValues,
-                props.filterInfo.selectedFilter,
-                props.filterInfo.displayedFilters,
-                props.filterInfo.mainFilter,
-                props.subFilters,
-                handleChangeFilter
-            )}
-            filterDialogButton={
-                <FilterDialogButtonComponent
-                    buttonText={filterDialogButtonText}
-                    onOpenFilterDialogClick={handleClickOpenFilterSettingDialog}
+        <div>
+            <FilterLayoutComponent
+                title={t("Drawer.Subtitles.Filter")}
+                clearSelector={
+                    <ClearSelectorComponent onClick={handleRemoveAllFilter} />
+                }
+                filterSelectorList={FilterSelectorListComponent(
+                    props.dataIsLoading,
+                    props.dataUniqueValues,
+                    props.filterInfo.selectedFilter,
+                    props.filterInfo.displayedFilters,
+                    props.filterInfo.mainFilter,
+                    props.subFilters,
+                    handleChangeFilter
+                )}
+                filterDialogButton={
+                    <FilterDialogButtonComponent
+                        buttonText={filterDialogButtonText}
+                        onOpenFilterDialogClick={
+                            handleClickOpenFilterSettingDialog
+                        }
+                    />
+                }
+            />
+            {filterDialogIsOpen && (
+                <FilterDialogComponent
+                    previousFiltersToDisplay={props.filterInfo.displayedFilters}
+                    availableFilters={props.filterInfo.mainFilter}
+                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
+                    onCancelFiltersToDisplay={handleCancelFiltersToDisplay}
                 />
-            }
-        />
+            )}
+        </div>
     );
 }

@@ -35,7 +35,6 @@ export interface DrawerProps {
     ) => void;
     onFilterRemoveAll: () => void;
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
-    onOpenFilterDialogClick: () => void;
 }
 
 /**
@@ -67,9 +66,6 @@ export function DrawerContainer(props: DrawerProps): JSX.Element {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
     };
 
-    const handleClickOpenFilterSettingDialog = (): void => {props.onOpenFilterDialogClick()}
-
-
     return (
         <DrawerLayoutComponent
             filterSelection={
@@ -81,7 +77,6 @@ export function DrawerContainer(props: DrawerProps): JSX.Element {
                     onFilterChange={handleChangeFilter}
                     onFilterRemoveAll={handleRemoveAllFilter}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-                    onOpenFilterDialogClick={handleClickOpenFilterSettingDialog}
                 />
             }
             displayFeatureSelection={

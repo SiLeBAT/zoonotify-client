@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
 import { errorColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 
 const warningStyle = css`
     display: flex;
@@ -18,7 +19,7 @@ export function ExportDialogComponent(props: {
         stat: boolean;
         chart: boolean;
     };
-    buttonLabel: JSX.Element;
+    exportDialogIsOpen: boolean;
     loading: boolean;
     nrOfIsolates: number;
     onClickClose: () => void;
@@ -31,6 +32,10 @@ export function ExportDialogComponent(props: {
         props.onCheckboxChange(name, checked);
 
     const handleExport = (): Promise<void> => props.onClickExport();
+
+    const buttonLabel: JSX.Element = ExportButtonLabelComponent(
+        props.exportDialogIsOpen
+    );
 
     const exportStatTable = props.exportOptions.stat;
     const exportRawTable = props.exportOptions.raw;
@@ -61,7 +66,7 @@ export function ExportDialogComponent(props: {
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,
         cancelButton: exportCancelButton,
-        submitButton: props.buttonLabel,
+        submitButton: buttonLabel,
         disableSubmitButton: !exportOptionIsSelected,
         onClose: handleClose,
         onSubmitClick: handleExport,

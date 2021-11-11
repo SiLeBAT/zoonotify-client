@@ -4,7 +4,7 @@ import _ from "lodash";
 import {
     CheckboxesComponent,
     CheckboxesConfig,
-} from "../../../../Shared/Checkboxes.component";
+} from "../../../../../../Shared/Checkboxes.component";
 
 function generateCheckboxObjectList(
     availableFilters: string[],

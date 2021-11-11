@@ -30,8 +30,7 @@ const resultsBoxStyle = css`
 
 export function QueryPageContentLayoutComponent(props: {
     status: JSX.Element;
-    parameterContent: JSX.Element;
-    introText: JSX.Element;
+    queryPageInfo: JSX.Element;
     nrOfIsolates: JSX.Element;
     tableResults: JSX.Element;
     chartResults: JSX.Element;
@@ -43,11 +42,7 @@ export function QueryPageContentLayoutComponent(props: {
             <p css={headingStyle}>{props.title}</p>
             {props.status}
             <div css={contentBoxStyle}>
-                {props.isFilter ? (
-                    props.parameterContent
-                ) : (
-                    props.introText
-                )}
+                {props.queryPageInfo}
                 {props.nrOfIsolates}
             </div>
             <div css={resultsBoxStyle}>
