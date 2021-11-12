@@ -38,7 +38,6 @@ export function FilterContainer(props: {
 
     const handleClickOpenFilterSettingDialog = (): void => {
         setFilterDialogIsOpen(true);
-
     };
 
     const handleCancelFiltersToDisplay = (): void => {
@@ -52,7 +51,6 @@ export function FilterContainer(props: {
         setFilterDialogIsOpen(false);
     };
 
-
     const filterDialogButtonText = t("FilterDialog.ButtonText");
 
     return (
@@ -60,7 +58,10 @@ export function FilterContainer(props: {
             <FilterLayoutComponent
                 title={t("Drawer.Subtitles.Filter")}
                 clearSelector={
-                    <ClearSelectorComponent onClick={handleRemoveAllFilter} />
+                    <ClearSelectorComponent
+                        onClick={handleRemoveAllFilter}
+                        disabled={props.dataIsLoading}
+                    />
                 }
                 filterSelectorList={FilterSelectorListComponent(
                     props.dataIsLoading,
