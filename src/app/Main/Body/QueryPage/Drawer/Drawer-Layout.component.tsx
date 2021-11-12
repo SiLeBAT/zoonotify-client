@@ -1,15 +1,17 @@
-import React from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import { DrawerFilterComponent } from "./Filter/Drawer-Filter.component";
-import { DrawerDisplayedFeaturesComponent } from "./Displayed_Features/Drawer-DisplFeatures.component";
-import {
-    ClientSingleFilterConfig,
-    FilterInterface,
-    FilterType,
-} from "../../../../Shared/Model/Filter.model";
-import { FeatureType } from "../../../../Shared/Context/DataContext";
-import { FilterContextInterface } from "../../../../Shared/Context/FilterContext";
+import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+
+const filterHeadingStyle = css`
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: ${primaryColor};
+`;
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -35,60 +37,20 @@ const useStyles = makeStyles(() =>
     })
 );
 
-export interface DrawerLayoutProps {
-    /**
-     * true if Drawer is open
-     */
-    isOpen: boolean;
-    dataIsLoading: boolean;
-    drawerWidth: number;
-    dataUniqueValues: FilterInterface;
-    filterInfo: FilterContextInterface;
-    subFilters: ClientSingleFilterConfig[];
-    columnFeature: string;
-    rowFeature: string;
-    onDisplFeaturesChange: (
-        selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | FeatureType
-    ) => void;
-    onDisplFeaturesSwap: () => void;
-    onDisplFeaturesRemoveAll: () => void;
-    onFilterChange: (
-        selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | FeatureType
-    ) => void;
-    onFilterRemoveAll: () => void;
-    onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
-}
-
 /**
  * @desc Returns the Drawer
  * @param props
  * @returns {JSX.Element} - Drawer component
  */
-export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
+export function DrawerLayoutComponent(props: {
+    filterSelection: JSX.Element;
+    displayFeatureSelection: JSX.Element;
+    isOpen: boolean;
+    drawerWidth: number;
+    drawerTitle: string;
+}): JSX.Element {
     const drawerWidthSting = (props.drawerWidth as unknown) as string;
     const classes = useStyles(drawerWidthSting);
-
-    const handleChangeDisplFeatures = (
-        selectedOption: { value: string; label: string } | null,
-        keyName: FilterType | FeatureType
-    ): void => props.onDisplFeaturesChange(selectedOption, keyName);
-    const handleSwapDisplFeatures = (): void => props.onDisplFeaturesSwap();
-    const handleRemoveAllDisplFeatures = (): void =>
-        props.onDisplFeaturesRemoveAll();
-
-    const handleChangeFilter = (
-        selectedOption: { value: string; label: string }[] | null,
-        keyName: FilterType | FeatureType
-    ): void => props.onFilterChange(selectedOption, keyName);
-    const handleRemoveAllFilter = (): void => props.onFilterRemoveAll();
-
-    const handleSubmitFiltersToDisplay = (
-        newFiltersToDisplay: string[]
-    ): void => {
-        props.onSubmitFiltersToDisplay(newFiltersToDisplay);
-    };
 
     return (
         <Drawer
@@ -101,24 +63,9 @@ export function DrawerLayoutComponent(props: DrawerLayoutProps): JSX.Element {
             }}
         >
             <div className={classes.drawerContainer}>
-                <DrawerFilterComponent
-                    dataIsLoading={props.dataIsLoading}
-                    dataUniqueValues={props.dataUniqueValues}
-                    filterInfo={props.filterInfo}
-                    subFilters={props.subFilters}
-                    onFilterChange={handleChangeFilter}
-                    onFilterRemoveAll={handleRemoveAllFilter}
-                    onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
-                />
-                <DrawerDisplayedFeaturesComponent
-                    dataIsLoading={props.dataIsLoading}
-                    columnFeature={props.columnFeature}
-                    rowFeature={props.rowFeature}
-                    mainFilterAttributes={props.filterInfo.mainFilter}
-                    onDisplFeaturesChange={handleChangeDisplFeatures}
-                    onDisplFeaturesSwap={handleSwapDisplFeatures}
-                    onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
-                />
+                <p css={filterHeadingStyle}>{props.drawerTitle}</p>
+                {props.filterSelection}
+                {props.displayFeatureSelection}
             </div>
         </Drawer>
     );

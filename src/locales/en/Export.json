@@ -1,15 +1,20 @@
 {
     "Content": {
         "Title": "Exporting Data",
-        "Text": "You can choose whether to download the complete data set, the displayed statistics or both."
+        "Text": "You can choose whether to download the selected data set, the displayed aggregated data, the graphical representation or all of them."
     },
     "Checkbox": {
-        "DataSet": "Filtered data set",
-        "Stat": "Statistics of isolates"
+        "Raw": "Selected data set",
+        "Raw_Isolates": "isolates",
+        "Stat": "Selected aggregated data set",
+        "Chart": "Chart",
+        "Csv": "(.csv)",
+        "Png": "(.png)"
     },
     "FileName": {
         "DataSet": "filtered-data-set",
-        "Stat": "statistics-isolates"
+        "Stat": "statistics-isolates",
+        "Chart": "chart"
     },
     "Warning": "Please select at least one option or cancel the export.",
     "Button": {
