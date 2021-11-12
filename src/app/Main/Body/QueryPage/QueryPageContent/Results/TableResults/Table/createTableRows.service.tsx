@@ -1,15 +1,16 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import TableCell from "@material-ui/core/TableCell";
 import { useTranslation } from "react-i18next";
+import TableCell from "@material-ui/core/TableCell";
+import { ClassNameMap } from "@material-ui/core/styles/withStyles";
+import { getMicroorganismLabelService } from "../../../../Services/getMicroorganismLabel";
+import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
 import {
-    highlightedTableBorder,
-    fixedCellSize,
     defaultTableBorder,
+    fixedCellSize,
+    highlightedTableBorder,
     sumRowColBackgroundColor,
-} from "./ResultsTable.style";
-import { DisplayOptionType } from "../../../../../../Shared/Context/DataContext";
-import { getMicroorganismLabelService } from "../../../Services/getMicroorganismLabel";
+} from "../ResultsTable.style";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
@@ -30,17 +31,16 @@ const sumTableCellStyle = css`
  * @param classes - material-ui styling of one table cell
  * @returns {JSX.Element} - list of table cell components
  */
-export function TableContentRowsComponent(props: {
+export function createTableRowsService(props: {
     showRowSum: boolean;
     row: Record<string, string>;
     rowAttribute: string;
     displayRow: boolean;
-    classes: Record<"tableCell", string>;
     displayOption: DisplayOptionType;
     colKeys: string[];
+    classes: ClassNameMap<"tableCell">;
 }): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
-
     let rowName: string | JSX.Element = "";
     const rowKey = props.row.name.replace(".", "");
     if (props.displayRow) {
