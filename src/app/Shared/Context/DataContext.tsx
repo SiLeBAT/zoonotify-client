@@ -10,6 +10,8 @@ export interface DataInterface {
     option: DisplayOptionType;
     statisticDataAbsolute: Record<string, string>[];
     statisticDataRelative: Record<string, string>[];
+    statTableDataWithSumsAbs: Record<string, string>[];
+    statTableDataWithSumsRel: Record<string, string>[];
 }
 
 export const defaultData: DataInterface = {
@@ -18,6 +20,8 @@ export const defaultData: DataInterface = {
     option: "absolute",
     statisticDataAbsolute: [],
     statisticDataRelative: [],
+    statTableDataWithSumsAbs: [],
+    statTableDataWithSumsRel: [],
 };
 
 interface ProfileState {

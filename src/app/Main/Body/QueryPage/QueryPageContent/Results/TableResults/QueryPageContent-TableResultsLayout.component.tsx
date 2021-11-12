@@ -62,9 +62,9 @@ export function QueryPageContentTableResultsLayoutComponent(
     );
     const isTable: boolean = props.tableData.row !== "" || props.tableData.column !== ""
 
-    let tableData = props.tableData.statisticDataAbsolute;
+    let tableData = props.tableData.statTableDataWithSumsAbs;
     if (props.tableData.option === "relative") {
-        tableData = props.tableData.statisticDataRelative;
+        tableData = props.tableData.statTableDataWithSumsRel;
     }
 
     if (isTable) {

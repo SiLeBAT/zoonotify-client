@@ -549,8 +549,10 @@ export function QueryPageContainerComponent(): JSX.Element {
             setColumnNameValues(columnNames);
             setData({
                 ...data,
-                statisticDataAbsolute: statTableDataWithSumsAbs,
-                statisticDataRelative: statTableDataWithSumsRel,
+                statisticDataAbsolute: statisticTableDataAbs,
+                statisticDataRelative: statisticTableDataRel,
+                statTableDataWithSumsAbs,
+                statTableDataWithSumsRel,
             });
         }
     };
