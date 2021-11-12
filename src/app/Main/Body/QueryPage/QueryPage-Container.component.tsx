@@ -662,7 +662,6 @@ export function QueryPageContainerComponent(): JSX.Element {
                             exportOptions={exportOptions}
                             loading={loadingIsolates}
                             nrOfIsolates={nrOfSelectedIsol}
-                            exportDialogIsOpen={exportDialogIsOpen}
                             onClickClose={handleCloseExportDialog}
                             onClickExport={handleExportTables}
                             onCheckboxChange={handleChangeExportData}
