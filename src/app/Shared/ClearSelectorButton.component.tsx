@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { IconButton, Tooltip, withStyles } from "@material-ui/core";
-import CancelIcon from "@material-ui/icons/Cancel";
+import { IconButton, Tooltip } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
+import CancelIcon from "@mui/icons-material/Cancel";
 import {
     onBackgroundColor,
     primaryColor,
@@ -50,7 +51,7 @@ export function ClearSelectorComponent(props: {
                     css={iconButtonStyle}
                     onClick={handleClick}
                     disabled={props.disabled}
-                >
+                    size="large">
                     <CancelIcon
                         css={css`
                             height: 20px;

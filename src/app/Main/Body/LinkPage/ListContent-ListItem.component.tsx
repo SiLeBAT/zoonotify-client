@@ -1,6 +1,6 @@
 import React from "react";
-import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 export interface ListItemProps {
     link: string;

@@ -1,14 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import {
-    List,
-    ListItem,
-    ListItemText,
-    makeStyles,
-    Theme,
-    createStyles,
-    ListSubheader,
-} from "@material-ui/core";
+import { List, ListItem, ListItemText, Theme, ListSubheader } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";

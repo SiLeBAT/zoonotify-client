@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useCallback } from "react";
-import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import {
     primaryColor,
     secondaryColor,

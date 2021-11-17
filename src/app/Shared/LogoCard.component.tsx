@@ -1,12 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import {
-    Card,
-    CardContent,
-    CardMedia,
-    makeStyles,
-    Typography,
-} from "@material-ui/core";
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { primaryColor } from "./Style/Style-MainTheme.component";
 
 const titleStyle = css`

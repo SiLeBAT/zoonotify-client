@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { InfoPageAmrsContentComponent } from "./Amrs/InfoPage-AmrsContent.component";
 import { InfoPageFiltersContentComponent } from "./InfoPage-FiltersContent.component";

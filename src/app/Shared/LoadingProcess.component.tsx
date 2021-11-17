@@ -1,11 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import {
-    CircularProgress,
-    createStyles,
-    makeStyles,
-    Theme,
-} from "@material-ui/core";
+import { CircularProgress, Theme } from "@mui/material";
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { primaryColor } from "./Style/Style-MainTheme.component";
 
 const circularProgressStyle = css`

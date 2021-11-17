@@ -1,10 +1,12 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import clsx from "clsx";
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { Theme } from "@mui/material/styles";
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { IconButton } from "@mui/material";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useTranslation } from "react-i18next";
 import { DrawerControlResizeBarComponent } from "./DrawerControl-ResizeBar.component";
 import {
@@ -127,10 +129,7 @@ export function QueryPageDrawerControlComponent(
                     />
                 </div>
             )}
-            <IconButton
-                css={iconButtonStyle}
-                onClick={handleClickOpenCloseDrawer}
-            >
+            <IconButton css={iconButtonStyle} onClick={handleClickOpenCloseDrawer} size="large">
                 {props.isOpen ? (
                     <ChevronLeftIcon css={drawerIconStyle} />
                 ) : (

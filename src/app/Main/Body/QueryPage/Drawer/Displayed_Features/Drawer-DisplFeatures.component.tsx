@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import IconButton from "@material-ui/core/IconButton";
-import SwapVerticalCircleIcon from "@material-ui/icons/SwapVerticalCircle";
+import IconButton from "@mui/material/IconButton";
+import SwapVerticalCircleIcon from "@mui/icons-material/SwapVerticalCircle";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
@@ -89,7 +89,7 @@ export function DrawerDisplayedFeaturesComponent(
                     css={iconButtonStyle}
                     onClick={handleSwapDisplFeatures}
                     disabled={props.dataIsLoading}
-                >
+                    size="large">
                     <SwapVerticalCircleIcon css={iconStyle} />
                 </IconButton>
             </div>
