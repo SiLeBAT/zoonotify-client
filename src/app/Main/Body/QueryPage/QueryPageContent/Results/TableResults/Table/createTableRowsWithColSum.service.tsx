@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
+import { ClassNameMap } from "@material-ui/core/styles/withStyles";
 import TableCell from "@material-ui/core/TableCell";
 import {
-    highlightedTableBorder,
-    fixedCellSize,
     defaultTableBorder,
+    fixedCellSize,
+    highlightedTableBorder,
     sumRowColBackgroundColor,
-} from "./ResultsTable.style";
+} from "../ResultsTable.style";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
@@ -25,12 +26,12 @@ const totalSumStyle = css`
     background-color: ${sumRowColBackgroundColor};
 `;
 
-export function TableContentRowWithColSumComponent(props: {
+export function createTableRowWithColSumService(props: {
     showRowSum: boolean;
     rowWithColSums: Record<string, string> | undefined;
     headerValues: string[];
-    classes: Record<"tableCell", string>;
     colSumLabel: string;
+    classes: ClassNameMap<"tableCell">;
 }): JSX.Element[] {
     const arrayWithColSumCells: JSX.Element[] = [
         <TableCell

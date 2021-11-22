@@ -117,6 +117,7 @@ export function InfoPageComponent(props: {
                         </div>
                     }
                     defaultExpanded={false}
+                    centerContent={false}
                 />
                 <p css={subHeadingStyle} id="filter">
                     {filtersChapterHeading}
@@ -137,6 +138,7 @@ export function InfoPageComponent(props: {
                             </div>
                         }
                         defaultExpanded={false}
+                        centerContent={false}
                     />
                     <AccordionComponent
                         title={t("Methods.Amrs.Name")}
@@ -148,6 +150,7 @@ export function InfoPageComponent(props: {
                             />
                         }
                         defaultExpanded={false}
+                        centerContent={false}
                     />
                 </div>
             </div>

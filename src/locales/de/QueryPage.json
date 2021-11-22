@@ -123,6 +123,14 @@
             }
         },
         "matrix": {
+            "(Konsum)eier, unsortiert": "(Konsum)eier, unsortiert",
+            "Blatt- und Kopfsalate": "Blatt- und Kopfsalate",
+            "Getrocknete Blatt- und Grasprodukte": "Getrocknete Blatt- und Grasprodukte",
+            "Erdbeeren": "Erdbeeren",
+            "Fleischerzeugnisse": "Fleischerzeugnisse",
+            "Kiemeninhalt": "Kiemeninhalt",
+            "Nasenschleimhaut": "Nasenschleimhaut",
+            "Weizenmehl": "Weizenmehl",
             "Frisches Fleisch": "Frisches Fleisch",
             "Blinddarminhalt": "Blinddarminhalt",
             "Sammelmilch": "Sammelmilch",
@@ -155,6 +163,7 @@
             "Salm-Bekämpfung": "Salm-Bekämpfung"
         },
         "federalState": {
+            "keine Anzeige": "Keine Anzeige",
             "Baden-Wuerttemberg": "Baden-Württemberg",
             "Bayern": "Bayern",
             "Berlin": "Berlin",
@@ -173,6 +182,11 @@
             "Thueringen": "Thüringen"
         },
         "samplingStage": {
+            "Dezentrale Ölmühlen": "Dezentrale Ölmühlen",
+            "Mühlen": "Mühlen",
+            "Grenzkontrollstelle": "Grenzkontrollstelle",
+            "Packstellen": "Packstellen",
+            "Verarbeitungsbetrieb": "Verarbeitungsbetrieb",
             "Einzelhandel": "Einzelhandel",
             "Schlachthof": "Schlachthof",
             "Erzeugerbetrieb": "Erzeugerbetrieb",
@@ -187,6 +201,8 @@
             "Futtermittel": "Futtermittel"
         },
         "category": {
+            "Schwein und Rind": "Schwein und Rind",
+            "Wiederkäuer": "Wiederkäuer",
             "Pute": "Pute",
             "Huhn": "Huhn",
             "Rind": "Rind",
@@ -203,6 +219,17 @@
             "Süßwasserfische": "Süßwasserfische"
         },
         "productionType": {
+            "Cypriniden (Karpfenartige)": "Cypriniden (Karpfenartige)",
+            "Getreide": "Getreide",
+            "Lamm": "Lamm", 
+            "Zuchthühner, Mastlinie": "Zuchthühner, Mastlinie",
+            "Zuchtputen": "Zuchtputen",
+            "Wiederkäuer für Milchproduktion": "Wiederkäuer für Milchproduktion",
+            "Lebensmittel aus Blättern und Gräsern": "Lebensmittel aus Blättern und Gräsern",
+            "Obst": "Obst",
+            "Legehennen, konventionell": "Legehennen, konventionell",
+            "Mastrind": "Mastrind",
+            "Mastschwein / Rind": "Mastschwein / Rind",
             "Mastputen": "Mastputen",
             "Masthähnchen": "Masthähnchen",
             "Milchrind, ökologisch": "Milchrind, ökologisch",
@@ -238,12 +265,17 @@
             "Tilapia und Pangasius": "Tilapia und Pangasius"
         },
         "samplingYear": {
+            "2010": "2010",
+            "2011": "2011",
+            "2012": "2012",
+            "2013": "2013",
             "2014": "2014",
             "2015": "2015",
             "2016": "2016",
             "2017": "2017",
             "2018": "2018",
-            "2019": "2019"
+            "2019": "2019", 
+            "2020": "2020"
         },
         "resistance": {
             "GEN": "Gentamicin",

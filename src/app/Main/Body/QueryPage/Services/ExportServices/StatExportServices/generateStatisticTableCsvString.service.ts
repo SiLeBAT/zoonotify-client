@@ -21,12 +21,21 @@ export function generateStatisticTableCsvString(
 
     if (tableAttributeNames.row !== undefined) {
         const headerToPrint: string[] = [...headers];
-        headerToPrint[0] = tableAttributeNames.row;
+        const index = headerToPrint.indexOf("name");
+        if (index > -1) {
+            headerToPrint.splice(index, 1);
+        }
+        headerToPrint.unshift(tableAttributeNames.row)
         StatDataString.push(headerToPrint.join(","));
     } else {
-        StatDataString.push(`,${headers.slice(1).join(",")}`);
+        const headerWithoutRowName: string[]= [...headers];
+        const index = headerWithoutRowName.indexOf("name");
+        if (index > -1) {
+            headerWithoutRowName.splice(index, 1);
+        }
+        StatDataString.push(`,${headerWithoutRowName.join(",")}`);
     }
-
+    
     StatDataString.push(
         generateStatisticRowsCsvString(statDataSet.statData, headers)
     );

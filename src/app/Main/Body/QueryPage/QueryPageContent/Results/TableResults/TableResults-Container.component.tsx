@@ -1,20 +1,13 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import { AccordionComponent } from "../../../../../../Shared/Accordion.component";
 import { ResultsTableOptionsComponent } from "./TableResults-Options.component";
 import { ExplanationTextComponent } from "../../../../../../Shared/ExplanationText.component";
 import { DataInterface } from "../../../../../../Shared/Context/DataContext";
-import { TableResultsTableComponent } from "./TableResults-Table.component";
+import { TableContainer } from "./Table/Table-Container.component";
 import { SumOptions } from "./TableResults.model";
-
-const dataStyle = css`
-    max-width: fit-content;
-    margin: auto;
-    box-sizing: inherit;
-`;
+import { LoadingProcessComponent } from "../../../../../../Shared/LoadingProcess.component";
+import { AccordionComponent } from "../../../../../../Shared/Accordion.component";
 
 export interface TableResultsProps {
     tableIsLoading: boolean;
@@ -28,9 +21,7 @@ export interface TableResultsProps {
  * @param props - info about isCol/isRow and columnAttributes
  * @returns {JSX.Element} - accordion with the result table
  */
-export function QueryPageContentTableResultsLayoutComponent(
-    props: TableResultsProps
-): JSX.Element {
+export function TableResultsContainer(props: TableResultsProps): JSX.Element {
     const [sumOptions, setSumOptions] = useState<SumOptions>({
         showRowSum: true,
         showColSum: true,
@@ -55,30 +46,26 @@ export function QueryPageContentTableResultsLayoutComponent(
         ? ""
         : t(`Filters.${tableColAttribute}`);
 
-    let tableAccordionContent = (
-        <div css={dataStyle}>
-            <ExplanationTextComponent />
-        </div>
-    );
-    const isTable: boolean = props.tableData.row !== "" || props.tableData.column !== ""
+    let tableAccordionContent = <ExplanationTextComponent />;
+    const isTable: boolean =
+        props.tableData.row !== "" || props.tableData.column !== "";
 
-    let tableData = props.tableData.statisticDataAbsolute;
+    let tableData = props.tableData.statTableDataWithSumsAbs;
     if (props.tableData.option === "relative") {
-        tableData = props.tableData.statisticDataRelative;
+        tableData = props.tableData.statTableDataWithSumsRel;
     }
 
-    if (isTable) {
+    if (isTable && !props.tableIsLoading) {
         tableAccordionContent = (
-            <div css={dataStyle}>
+            <div>
                 <ResultsTableOptionsComponent
                     sumOptions={sumOptions}
                     tableOption={props.tableData.option}
                     onDisplayOptionsChange={handleChangeDisplayOptions}
                     onChangeSumOptions={handleSumOptionsChange}
                 />
-                <TableResultsTableComponent
+                <TableContainer
                     sumOptions={sumOptions}
-                    isLoading={props.tableIsLoading}
                     colMainHeader={colMainHeader}
                     rowMainHeader={rowMainHeader}
                     tableData={tableData}
@@ -91,11 +78,26 @@ export function QueryPageContentTableResultsLayoutComponent(
         );
     }
 
+    if (isTable && props.tableIsLoading) {
+        tableAccordionContent = (
+            <div>
+                <ResultsTableOptionsComponent
+                    sumOptions={sumOptions}
+                    tableOption={props.tableData.option}
+                    onDisplayOptionsChange={handleChangeDisplayOptions}
+                    onChangeSumOptions={handleSumOptionsChange}
+                />
+                <LoadingProcessComponent />
+            </div>
+        );
+    }
+
     return (
         <AccordionComponent
             title={accordionHeader}
             content={tableAccordionContent}
             defaultExpanded
+            centerContent
         />
     );
 }

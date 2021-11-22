@@ -44,6 +44,7 @@ export function QueryPageNrOfIsolatesComponent(props: {
                 </table>
             }
             defaultExpanded
+            centerContent={false}
         />
     );
 }
