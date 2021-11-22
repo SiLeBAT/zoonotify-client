@@ -172,7 +172,6 @@ export function QueryPageContentBarChartResultsComponent(props: {
             title={t("Chart.Title")}
             content={chartAccordionContent}
             defaultExpanded
-            centerContent={false}
         />
     );
 }

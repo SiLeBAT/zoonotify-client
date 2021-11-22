@@ -6,7 +6,7 @@ import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrO
 import { QueryPageParameterContentComponent } from "./Parameter/QueryPage-ParameterContent.component";
 import { QueryPageContentLayoutComponent } from "./QueryPageContent-Layout.component";
 import { QueryPageContentBarChartResultsComponent } from "./Results/Charts/QueryPageContent-BarChart.component";
-import { TableResultsContainer } from "./Results/TableResults/TableResults-Container.component";
+import { QueryPageContentTableResultsLayoutComponent } from "./Results/TableResults/QueryPageContent-TableResultsLayout.component";
 import { DataInterface } from "../../../../Shared/Context/DataContext";
 import { FilterInterface } from "../../../../Shared/Model/Filter.model";
 
@@ -45,7 +45,7 @@ export function QueryPageContentContainer(props: {
             nrOfIsolates={<QueryPageNrOfIsolatesComponent
                 numberOfIsolates={props.numberOfIsolates}
             />}
-            tableResults={<TableResultsContainer
+            tableResults={<QueryPageContentTableResultsLayoutComponent
                 tableIsLoading={props.dataIsLoading}
                 columnNameValues={props.columnNameValues}
                 tableData={props.data}

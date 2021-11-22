@@ -17,17 +17,11 @@ const contentStyle = css`
     hyphens: auto;
     text-align: justify;
 `;
-const dataStyle = css`
-    max-width: fit-content;
-    margin: auto;
-    box-sizing: inherit;
-`;
 
 export interface AccordionProps {
     title: string;
     content: JSX.Element;
-    defaultExpanded: boolean;
-    centerContent: boolean;
+    defaultExpanded: boolean
 }
 
 /**
@@ -36,11 +30,6 @@ export interface AccordionProps {
  * @returns {JSX.Element} - accordion with title and content
  */
 export function AccordionComponent(props: AccordionProps): JSX.Element {
-    let { content } = props;
-
-    if (props.centerContent) {
-        content = <div css={dataStyle}>{props.content}</div>;
-    }
     return (
         <Accordion defaultExpanded={props.defaultExpanded}>
             <AccordionSummary
@@ -50,7 +39,9 @@ export function AccordionComponent(props: AccordionProps): JSX.Element {
             >
                 <p css={titleStyle}>{props.title}</p>
             </AccordionSummary>
-            <AccordionDetails css={contentStyle}>{content}</AccordionDetails>
+            <AccordionDetails css={contentStyle}>
+                {props.content}
+            </AccordionDetails>
         </Accordion>
     );
 }

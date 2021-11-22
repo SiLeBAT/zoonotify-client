@@ -13,16 +13,11 @@ export function generateStatisticRowsCsvString<
     const csvTable: string[] = [];
 
     dataArray.forEach((row: T) => {
-        const rowValues: string[] = [];
-        headers.forEach((header) => {
-            if (header === "name") {
-                rowValues.unshift(modifyTableDataStringService(row.name));
-            } else {
-                const rowValue = row[header];
-                rowValues.push(modifyTableDataStringService(`${rowValue}`));
-            }
+        const values: string[] = headers.map((header: K) => {
+            const rowValue = row[header];
+            return modifyTableDataStringService(`${rowValue}`);
         });
-        csvTable.push(rowValues.join(","));
+        csvTable.push(values.join(","));
     });
     const csvTableData: string = csvTable.join("\n");
     return csvTableData;

@@ -123,14 +123,6 @@
             }
         },
         "matrix": {
-            "(Konsum)eier, unsortiert": "Table eggs",
-            "Blatt- und Kopfsalate": "Non pre-cut leafy salads and lettuce",
-            "Getrocknete Blatt- und Grasprodukte": "Dried leave and grass products",
-            "Erdbeeren": "Strawberries",
-            "Fleischerzeugnisse": "Meat preparations",
-            "Kiemeninhalt": "Gills contents",
-            "Nasenschleimhaut": "Nasal mucosa",
-            "Weizenmehl": "Wheat flour/meal",
             "Frisches Fleisch": "Fresh meat",
             "Blinddarminhalt": "Caecum",
             "Sammelmilch": "Raw milk for manufacture",
@@ -163,7 +155,6 @@
             "Salm-Bekämpfung": "Salm-control programs"
         },
         "federalState": {
-            "keine Anzeige": "No indication",
             "Baden-Wuerttemberg": "Baden-Wuerttemberg",
             "Bayern": "Bavaria",
             "Berlin": "Berlin",
@@ -182,11 +173,6 @@
             "Thueringen": "Thuringia"
         },
         "samplingStage": {
-            "Dezentrale Ölmühlen": "Decentralized oil mills",
-            "Mühlen": "Mills",
-            "Grenzkontrollstelle": "Border inspection",
-            "Packstellen": "Egg packing stations",
-            "Verarbeitungsbetrieb": "Processing plant",
             "Einzelhandel": "Retail",
             "Schlachthof": "Slaughterhouse",
             "Erzeugerbetrieb": "Farm",
@@ -201,8 +187,6 @@
             "Futtermittel": "Feed sample"
         },
         "category": {
-            "Schwein und Rind": "Pigs and cattle",
-            "Wiederkäuer": "Ruminants",
             "Pute": "Turkeys",
             "Huhn": "Gallus gallus (fowl)",
             "Rind": "Cattle (bovine animals)",
@@ -219,17 +203,6 @@
             "Süßwasserfische": "Freshwater fish"
         },
         "productionType": {
-            "Cypriniden (Karpfenartige)": "Ciprinids (carp)",
-            "Getreide": "Cereals",
-            "Lamm": "Sheep, lamb", 
-            "Zuchthühner, Mastlinie": "Gallus gallus (fowl) - breeding flocks for broiler production line",
-            "Zuchtputen": "Turkeys - breeding flocks, unspecified",
-            "Wiederkäuer für Milchproduktion": "Ruminants for dairy production",
-            "Lebensmittel aus Blättern und Gräsern": "Foods from leaves and grass",
-            "Obst": "Fruits",
-            "Legehennen, konventionell": "Laying hens, conventional production",
-            "Mastrind": "Beef cattle",
-            "Mastschwein / Rind": "Fattening pigs/cattle ",
             "Mastputen": "Meat production turkeys",
             "Masthähnchen": "Broilers",
             "Milchrind, ökologisch": "Dairy cows, organic producktion",
@@ -265,17 +238,12 @@
             "Tilapia und Pangasius": "Tilapia and pangasius"
         },
         "samplingYear": {
-            "2010": "2010",
-            "2011": "2011",
-            "2012": "2012",
-            "2013": "2013",
             "2014": "2014",
             "2015": "2015",
             "2016": "2016",
             "2017": "2017",
             "2018": "2018",
-            "2019": "2019",
-            "2020": "2020"
+            "2019": "2019"
         },
         "resistance": {
             "GEN": "Gentamicin",

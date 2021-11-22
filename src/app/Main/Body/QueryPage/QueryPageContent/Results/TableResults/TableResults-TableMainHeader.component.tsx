@@ -3,14 +3,14 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import {
     onPrimaryColor,
     primaryColor,
-} from "../../../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../../Shared/Style/Style-MainTheme.component";
 import {
     fixedCellSize,
     fixedHeaderCellWidth,
     isColHeight,
     isOnlyRowHeight,
     isOnlyRowWidth,
-} from "../ResultsTable.style";
+} from "./ResultsTable.style";
 
 const spacerStyle = (
     isRow: boolean,
@@ -58,7 +58,7 @@ export interface TableMainHeaderProps {
  * @param props - info about isRow & isRowAndCol, text of main header
  * @returns {JSX.Element} - one main header component
  */
-export function TableMainHeaderComponent(
+export function TableResultsTableMainHeaderComponent(
     props: TableMainHeaderProps
 ): JSX.Element {
     return (
