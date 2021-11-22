@@ -15,8 +15,8 @@ const tableDivStyle = css`
  * @returns {JSX.Element} - result table
  */
 export function TableLayout(props: {
-    columnMainHeader: JSX.Element | undefined;
-    rowMainHeader: JSX.Element | undefined;
+    columnMainHeader?: JSX.Element;
+    rowMainHeader?: JSX.Element;
     table: JSX.Element;
 }): JSX.Element {
     return (

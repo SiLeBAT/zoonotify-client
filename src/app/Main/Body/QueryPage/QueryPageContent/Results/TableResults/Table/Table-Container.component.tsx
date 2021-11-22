@@ -8,7 +8,7 @@ import { SumOptions } from "../TableResults.model";
 import { TableLayout } from "./Table-Layout.component";
 import { createTableRowsService } from "./createTableRows.service";
 import { createTableHeaderService } from "./createTableHeader.service";
-import { createTableRowWithColSum } from "./createTableRowsWithColSum.service";
+import { createTableRowWithColSumService } from "./createTableRowsWithColSum.service";
 import { onBackgroundColor } from "../../../../../../../Shared/Style/Style-MainTheme.component";
 
 const useStyles = makeStyles({
@@ -88,7 +88,7 @@ export function TableContainer(props: {
 
         tableRows.push(
             <TableRow key="row-with-column-sum">
-                {createTableRowWithColSum({
+                {createTableRowWithColSumService({
                     showRowSum: props.sumOptions.showRowSum,
                     rowWithColSums,
                     headerValues: props.columnNameValues,

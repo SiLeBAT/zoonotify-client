@@ -26,7 +26,7 @@ const totalSumStyle = css`
     background-color: ${sumRowColBackgroundColor};
 `;
 
-export function createTableRowWithColSum(props: {
+export function createTableRowWithColSumService(props: {
     showRowSum: boolean;
     rowWithColSums: Record<string, string> | undefined;
     headerValues: string[];

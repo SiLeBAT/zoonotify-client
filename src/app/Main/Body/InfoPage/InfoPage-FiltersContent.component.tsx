@@ -104,6 +104,7 @@ export function InfoPageFiltersContentComponent(props: {
                         describedFiltersContent
                     )}
                     defaultExpanded={false}
+                    centerContent={false}
                     key={`accordion_${describedFilter}`}
                 />
             );
@@ -132,6 +133,7 @@ export function InfoPageFiltersContentComponent(props: {
                     title={t(`Filters.resistance.Name`)}
                     content={resistanceContent}
                     defaultExpanded={false}
+                    centerContent={false}
                     key="accordion_resistance"
                 />
             );
@@ -146,6 +148,7 @@ export function InfoPageFiltersContentComponent(props: {
                         </div>
                     }
                     defaultExpanded={false}
+                    centerContent={false}
                     key="accordion_samplingContext"
                 />
             );
@@ -155,6 +158,7 @@ export function InfoPageFiltersContentComponent(props: {
                     title={t(`Filters.${describedFilter}.Name`)}
                     content={t(`Filters.${describedFilter}.Description`)}
                     defaultExpanded={false}
+                    centerContent={false}
                     key={`accordion_${describedFilter}`}
                 />
             );

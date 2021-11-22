@@ -48,6 +48,7 @@ export function QueryPageParameterContentComponent(props: {
                 </div>
             }
             defaultExpanded
+            centerContent={false}
         />
     );
 }

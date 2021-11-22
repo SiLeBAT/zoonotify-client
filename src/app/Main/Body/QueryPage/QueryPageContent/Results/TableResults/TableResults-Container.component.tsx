@@ -6,8 +6,8 @@ import { ExplanationTextComponent } from "../../../../../../Shared/ExplanationTe
 import { DataInterface } from "../../../../../../Shared/Context/DataContext";
 import { TableContainer } from "./Table/Table-Container.component";
 import { SumOptions } from "./TableResults.model";
-import { TableResultsLayout } from "./TableResults-Layout.component";
 import { LoadingProcessComponent } from "../../../../../../Shared/LoadingProcess.component";
+import { AccordionComponent } from "../../../../../../Shared/Accordion.component";
 
 export interface TableResultsProps {
     tableIsLoading: boolean;
@@ -21,9 +21,7 @@ export interface TableResultsProps {
  * @param props - info about isCol/isRow and columnAttributes
  * @returns {JSX.Element} - accordion with the result table
  */
-export function TableResultsContainer(
-    props: TableResultsProps
-): JSX.Element {
+export function TableResultsContainer(props: TableResultsProps): JSX.Element {
     const [sumOptions, setSumOptions] = useState<SumOptions>({
         showRowSum: true,
         showColSum: true,
@@ -95,9 +93,11 @@ export function TableResultsContainer(
     }
 
     return (
-        <TableResultsLayout
-            accordionHeader={accordionHeader}
-            tableAccordionContent={tableAccordionContent}
+        <AccordionComponent
+            title={accordionHeader}
+            content={tableAccordionContent}
+            defaultExpanded
+            centerContent
         />
     );
 }
