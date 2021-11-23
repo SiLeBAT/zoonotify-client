@@ -34,7 +34,6 @@ export function QueryPageContentLayoutComponent(props: {
     nrOfIsolates: JSX.Element;
     tableResults: JSX.Element;
     chartResults: JSX.Element;
-    isFilter: boolean;
     title: string;
 }): JSX.Element {
     return (

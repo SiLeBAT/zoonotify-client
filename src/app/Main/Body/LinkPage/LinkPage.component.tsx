@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
 import { LinkPageLinkListComponent } from "./LinkPage-LinkList.component";

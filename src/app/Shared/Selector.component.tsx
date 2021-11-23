@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, keyframes, SerializedStyles } from "@emotion/core";
 import Select, { ValueType, StylesConfig } from "react-select";
-import { InputLabel } from "@material-ui/core";
+import { InputLabel } from "@mui/material";
 import { FilterType } from "./Model/Filter.model";
 import { FeatureType } from "./Context/DataContext";
 
@@ -33,7 +33,7 @@ const labelStyle = (noSelect: boolean, titleColor: string): SerializedStyles => 
     margin-top: 1em;
 `;
 
-const selectStyle: StylesConfig = {
+const selectStyle: StylesConfig<{ value: string; label: string}, boolean> = {
     control: (styles, state) => ({
         ...styles,
         backgroundColor: "white",
@@ -112,7 +112,7 @@ export interface SelectorProps {
      */
     selectAttribute: FilterType | FeatureType;
     onChange: (
-        selectedOption: ValueType<{ value: string; label: string }> | null,
+        selectedOption: ValueType<{ value: string; label: string }, boolean> | null,
         keyName: FilterType | FeatureType
     ) => void;
     /**
@@ -137,7 +137,7 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
         selectedOption: ValueType<{
             value: string;
             label: string;
-        }> | null,
+        }, boolean> | null,
         keyName: FilterType | FeatureType
     ): void => props.onChange(selectedOption, keyName);
 

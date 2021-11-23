@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Button, createStyles, Divider, makeStyles } from "@material-ui/core";
+import { Button, Divider } from "@mui/material";
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useTranslation } from "react-i18next";
 import { AmrKey, AmrsTable, microorganismNames } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";

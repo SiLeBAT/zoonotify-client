@@ -1,5 +1,6 @@
 import React from "react";
-import { List, Tooltip, withStyles } from "@material-ui/core";
+import { List, Tooltip } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import {
     onBackgroundColor,
     onPrimaryColor,

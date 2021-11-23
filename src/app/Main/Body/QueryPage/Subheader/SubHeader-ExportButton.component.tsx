@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { Button, withStyles } from "@material-ui/core";
+import { Button } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 import { onPrimaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
 

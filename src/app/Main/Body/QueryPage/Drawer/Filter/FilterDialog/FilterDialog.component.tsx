@@ -4,8 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import _ from "lodash";
-import DoneIcon from "@material-ui/icons/Done";
-import { Checkbox, createStyles, Divider, FormControlLabel, makeStyles } from "@material-ui/core";
+import DoneIcon from "@mui/icons-material/Done";
+import { Checkbox, Divider, FormControlLabel } from "@mui/material";
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DialogComponent } from "../../../../../../Shared/Dialog.component";
 import {
     primaryColor,
@@ -96,7 +98,7 @@ export function FilterDialogComponent(props: {
     const filterDialogContent = (
         <div>
             <FormControlLabel
-                label={t("FilterDialog.SelectAll")}
+                label={t("FilterDialog.SelectAll") as string}
                 control={
                     <Checkbox
                         checked={allChecked}

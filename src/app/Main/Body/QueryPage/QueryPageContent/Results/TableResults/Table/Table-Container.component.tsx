@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { makeStyles, TableRow } from "@material-ui/core";
+import { TableRow } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
 import { TableContentLayout } from "./TableContent-Layout.component";
 import { TableMainHeaderComponent } from "./TableMainHeader.component";

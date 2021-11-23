@@ -9,6 +9,7 @@ export function BarChartResultsComponent(props: {
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     xAxisLabel: string;
     yAxisLabel: string;
+      // eslint-disable-next-line react/require-default-props
     xAxisMax?: number;
     displayAsStacked: boolean;
 }): JSX.Element {
@@ -23,7 +24,7 @@ export function BarChartResultsComponent(props: {
                 .then((uri: { imgURI: string }) => uri.imgURI);
         };
     }, []);
-    
+
     const chartOptions: ApexOptions = {
         chart: {
             type: "bar",

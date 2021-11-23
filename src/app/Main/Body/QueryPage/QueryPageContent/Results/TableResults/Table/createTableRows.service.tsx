@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import TableCell from "@material-ui/core/TableCell";
-import { ClassNameMap } from "@material-ui/core/styles/withStyles";
+import TableCell from "@mui/material/TableCell";
+import { ClassNameMap } from '@mui/styles';
 import { getMicroorganismLabelService } from "../../../../Services/getMicroorganismLabel";
 import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
 import {

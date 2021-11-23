@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { withStyles, createStyles } from "@material-ui/core/styles";
-import TableCell from "@material-ui/core/TableCell";
+import withStyles from '@mui/styles/withStyles';
+import createStyles from '@mui/styles/createStyles';
+import TableCell from "@mui/material/TableCell";
 import { useTranslation } from "react-i18next";
 import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
 import { onBackgroundColor } from "../../../../../../../Shared/Style/Style-MainTheme.component";
