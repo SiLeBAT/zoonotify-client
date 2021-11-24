@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { List, ListSubheader } from "@material-ui/core";
+import { List, ListSubheader } from "@mui/material";
 import links from "../../../../assets/external_links.json";
 import { LinkListContentComponent } from "./LinkList-ListContent.component";
 

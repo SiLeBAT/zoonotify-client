@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import { ClassNameMap } from "@material-ui/core/styles/withStyles";
-import TableCell from "@material-ui/core/TableCell";
+import { ClassNameMap } from '@mui/styles';
+import TableCell from "@mui/material/TableCell";
 import {
     defaultTableBorder,
     fixedCellSize,

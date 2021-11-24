@@ -64,7 +64,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
     );
 
     const handleChange = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: ValueType<{ value: string; label: string }, boolean>,
         keyName: FilterType | FeatureType
     ): void => {
         if (selectedOption !== undefined && Array.isArray(selectedOption)) {

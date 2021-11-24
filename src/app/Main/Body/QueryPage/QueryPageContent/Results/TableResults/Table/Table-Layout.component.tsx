@@ -15,7 +15,9 @@ const tableDivStyle = css`
  * @returns {JSX.Element} - result table
  */
 export function TableLayout(props: {
+      // eslint-disable-next-line react/require-default-props
     columnMainHeader?: JSX.Element;
+      // eslint-disable-next-line react/require-default-props
     rowMainHeader?: JSX.Element;
     table: JSX.Element;
 }): JSX.Element {

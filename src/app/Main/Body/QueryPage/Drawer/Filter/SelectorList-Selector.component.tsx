@@ -38,7 +38,7 @@ export function SelectorListSelectorComponent(
     const allFilterValues: string[] = props.dataUniqueValues[filterAttribute];
 
     const handleChange = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: ValueType<{ value: string; label: string }, boolean>,
         keyName: FilterType | FeatureType
     ): void => {
         if (selectedOption !== undefined && Array.isArray(selectedOption)) {

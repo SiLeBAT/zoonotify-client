@@ -8,7 +8,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 import { DialogComponent } from "../../../../Shared/Dialog.component";

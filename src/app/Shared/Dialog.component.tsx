@@ -2,15 +2,15 @@ import React from "react";
 import {
     Button,
     CircularProgress,
-    createStyles,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    makeStyles,
     Theme,
-} from "@material-ui/core";
+} from "@mui/material";
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { primaryColor } from "./Style/Style-MainTheme.component";
 
 const useStyles = makeStyles((theme: Theme) =>

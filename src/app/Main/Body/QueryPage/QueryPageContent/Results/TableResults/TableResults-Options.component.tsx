@@ -2,14 +2,9 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import {
-    Radio,
-    FormControl,
-    FormControlLabel,
-    RadioGroup,
-    withStyles,
-    createStyles,
-} from "@material-ui/core";
+import { Radio, FormControl, FormControlLabel, RadioGroup } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
+import createStyles from '@mui/styles/createStyles';
 import {
     bfrDarkgrey,
     primaryColor,

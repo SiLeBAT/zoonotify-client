@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { Tooltip, withStyles } from "@material-ui/core";
+import { Tooltip } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import {

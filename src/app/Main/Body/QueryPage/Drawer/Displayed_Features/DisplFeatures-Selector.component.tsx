@@ -76,7 +76,7 @@ export function DisplayedFeatureSelectorComponent(
               label: t(`Filters.${props.activeFeature}`),
           };
     const handleChange = (
-        selectedOption: ValueType<{ value: string; label: string }>,
+        selectedOption: ValueType<{ value: string; label: string }, boolean>,
         keyName: FilterType | FeatureType
     ): void => {
         if (
