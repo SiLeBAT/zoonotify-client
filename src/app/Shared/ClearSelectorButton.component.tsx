@@ -2,7 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { IconButton, Tooltip } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 import CancelIcon from "@mui/icons-material/Cancel";
 import {
     onBackgroundColor,
@@ -47,18 +47,21 @@ export function ClearSelectorComponent(props: {
     return (
         <div css={buttonAreaStyle}>
             <LightTooltip title={mouseOverText} placement="top">
-                <IconButton
-                    css={iconButtonStyle}
-                    onClick={handleClick}
-                    disabled={props.disabled}
-                    size="large">
-                    <CancelIcon
-                        css={css`
-                            height: 20px;
-                            width: 20px;
-                        `}
-                    />
-                </IconButton>
+                <span>
+                    <IconButton
+                        css={iconButtonStyle}
+                        onClick={handleClick}
+                        disabled={props.disabled}
+                        size="large"
+                    >
+                        <CancelIcon
+                            css={css`
+                                height: 20px;
+                                width: 20px;
+                            `}
+                        />
+                    </IconButton>
+                </span>
             </LightTooltip>
         </div>
     );
