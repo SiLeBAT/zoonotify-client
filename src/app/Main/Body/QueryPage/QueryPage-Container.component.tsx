@@ -411,55 +411,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         }
     };
 
-    const fetchNewFilterValues = async (): Promise<void> => {
-        setConditionalValuesAreLoading(true);
-        const newUniqueValues = _.cloneDeep(uniqueDataValues);
-        const filterStatusList: number[] = [];
-        const getConditionalFilterValues = filter.displayedFilters.map(
-            async (displayedFilter) => {
-                const urlParams = new URLSearchParams(history.location.search);
-                urlParams.delete("row");
-                urlParams.delete("column");
-                urlParams.delete(displayedFilter);
-
-                const selectedFilterString = urlParams.toString();
-                const conditionalFilterUrl = `${FILTER_URL}/${displayedFilter}?${selectedFilterString}`;
-
-                const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
-                    conditionalFilterUrl
-                );
-
-                filterStatusList.push(filterResponse.status);
-
-                if (filterResponse.data) {
-                    const filterProp: FilterConfigDTO = filterResponse.data;
-
-                    const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
-                        filterProp
-                    );
-                    newUniqueValues[displayedFilter] =
-                        uniqueValuesObject[displayedFilter];
-                }
-            }
-        );
-
-        await Promise.all(getConditionalFilterValues);
-
-        let finalFilterStatus = 200;
-        filterStatusList.forEach((status) => {
-            if (status !== 200) {
-                finalFilterStatus = status;
-            }
-        });
-        if (finalFilterStatus === 200) {
-            setUniqueDataValues(newUniqueValues);
-        } else {
-            setUniqueDataValues(initialUniqueValues);
-        }
-        setFilterStatus(finalFilterStatus);
-        setConditionalValuesAreLoading(false);
-    };
-
+    
     const setTableFromPath = (): void => {
         const [rowFromPath, colFromPath] = getFeaturesFromPath(
             history.location.search
@@ -494,7 +446,8 @@ export function QueryPageContainerComponent(): JSX.Element {
                   count: number;
               })[]
             | undefined,
-        nrOfSelectedIsolates: number
+        nrOfSelectedIsolates: number, 
+        uniqueValues: FilterInterface
     ): void => {
         if ((!isCol && !isRow) || isolateCountGroups === undefined) {
             setData({
@@ -511,7 +464,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const columnNames = generateTableHeaderValuesService(
                 isCol,
                 allValuesText,
-                uniqueDataValues,
+                uniqueValues,
                 filter.selectedFilter,
                 colAttribute
             );
@@ -520,7 +473,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 string
             >[] = generateStatisticTableDataAbsService(
                 isRow,
-                uniqueDataValues,
+                uniqueValues,
                 filter.selectedFilter,
                 allValuesText,
                 adaptedIsolateCountGroups,
@@ -557,7 +510,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         }
     };
 
-    const fetchIsolateCounted = async (): Promise<void> => {
+    const fetchIsolateCounted = async (uniqueValues: FilterInterface): Promise<void> => {
         setDataIsLoading(true);
         const countedIsolatesResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
@@ -570,11 +523,72 @@ export function QueryPageContainerComponent(): JSX.Element {
                 countedIsolatesResponse.data;
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
             const isolateCountGroups = isolateCountProp.groups;
-            setDataContext(isolateCountGroups, nrOfSelectedIsolates);
+            setDataContext(isolateCountGroups, nrOfSelectedIsolates, uniqueValues);
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
         setDataIsLoading(false);
     };
+
+    const fetchNewFilterValues = async (): Promise<void> => {
+        setConditionalValuesAreLoading(true);
+        const newUniqueValues = _.cloneDeep(uniqueDataValues);
+        const filterStatusList: number[] = [];
+        const newFilterFor: string[] = [...filter.displayedFilters]
+        if (rowAttribute !== "") {
+            newFilterFor.push(rowAttribute)
+        }
+        if (colAttribute !== "") {
+            newFilterFor.push(colAttribute)
+        }
+
+        const getConditionalFilterValues = newFilterFor.map(
+            async (displayedFilter) => {
+                const urlParams = new URLSearchParams(history.location.search);
+                urlParams.delete("row");
+                urlParams.delete("column");
+                urlParams.delete(displayedFilter);
+
+                const selectedFilterString = urlParams.toString();
+
+                const conditionalFilterUrl = `${FILTER_URL}/${displayedFilter}?${selectedFilterString}`;
+
+                const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
+                    conditionalFilterUrl
+                );
+
+                filterStatusList.push(filterResponse.status);
+
+                if (filterResponse.data) {
+                    const filterProp: FilterConfigDTO = filterResponse.data;
+
+                    const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
+                        filterProp
+                    );
+                    newUniqueValues[displayedFilter] =
+                        uniqueValuesObject[displayedFilter];
+                }
+            }
+        );
+
+        await Promise.all(getConditionalFilterValues);
+        
+        let finalFilterStatus = 200;
+        filterStatusList.forEach((status) => {
+            if (status !== 200) {
+                finalFilterStatus = status;
+            }
+        });
+        if (finalFilterStatus === 200) {
+            setUniqueDataValues(newUniqueValues);
+            await fetchIsolateCounted(newUniqueValues);
+        } else {
+            setUniqueDataValues(initialUniqueValues);
+        }
+
+        setFilterStatus(finalFilterStatus);
+        setConditionalValuesAreLoading(false);
+    };
+
 
     useEffect(() => {
         fetchAndSetData();
@@ -590,15 +604,9 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     useEffect((): void => {
         if (dataIsMounted) {
-            fetchIsolateCounted();
-        }
-    }, [filter, data.row, data.column, isolateCountUrl]);
-
-    useEffect((): void => {
-        if (dataIsMounted) {
             fetchNewFilterValues();
         }
-    }, [filter.selectedFilter, filter.displayedFilters]);
+    }, [filter, data.row, data.column, isolateCountUrl]);
 
     const isLoading = dataIsLoading || conditionalValuesAreLoading;
 
