@@ -43,10 +43,10 @@ import { QueryPageContentContainer } from "./QueryPageContent/QueryPageContent-C
 import { ExportDialogComponent } from "./ExportDialog/ExportDialog.component";
 import { SubHeaderExportButtonComponent } from "./Subheader/SubHeader-ExportButton.component";
 import { DrawerContainer } from "./Drawer/Drawer-Container.component";
-import { getConditionalFilters } from "./Services/ContainerServices/changeFilter.services";
 import { exportZipService } from "./Services/ContainerServices/exportZip.service";
 import { generateDataObjectsService } from "./Services/ContainerServices/generateDataObjects.services";
-import { initializeDataService } from "./Services/ContainerServices/initializeData.service";
+import { fetchInitialDataService } from "./Services/ContainerServices/fetchInitialData.service";
+import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -58,8 +58,8 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [dataIsMounted, setDataIsMounted] = useState<boolean>(false);
     const [dataIsLoading, setDataIsLoading] = useState<boolean>(true);
     const [
-        updateIsLoading,
-        setUpdateIsLoading,
+        updateFilterAndDataIsLoading,
+        setUpdateFilterAndDataIsLoading,
     ] = useState<boolean>(true);
     const [initialUniqueValues, setInitialUniqueValues] = useState<
         FilterInterface
@@ -279,7 +279,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const fetchAndSetInitialData = async (): Promise<void> => {
         setDataIsMounted(false);
-        const initialData = await initializeDataService();
+        const initialData = await fetchInitialDataService();
         setIsolateStatus(initialData.isolateStatus);
         setFilterStatus(initialData.filterStatus);
 
@@ -290,7 +290,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         ) {
             setSubFilters(initialData.subFilters);
             setUniqueDataValues(initialData.uniqueDataValues);
-            setInitialUniqueValues(uniqueDataValues);
+            setInitialUniqueValues(initialData.uniqueDataValues);
             setTotalNrOfIsol(initialData.totalNrOfIsolates);
             setDataIsMounted(true);
         }
@@ -374,9 +374,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const fetchAndUpdateValues = async (): Promise<void> => {
-        setUpdateIsLoading(true);
+        setUpdateFilterAndDataIsLoading(true);
         const urlParams = new URLSearchParams(history.location.search);
-        const conditionalFilters = await getConditionalFilters({
+        const conditionalFilters = await fetchConditionalFilters({
             urlParams,
             uniqueValues: uniqueDataValues,
             colAttribute,
@@ -397,7 +397,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         }
 
         setFilterStatus(finalFilterStatus);
-        setUpdateIsLoading(false);
+        setUpdateFilterAndDataIsLoading(false);
     };
 
     useEffect(() => {
@@ -418,7 +418,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         }
     }, [filter, data.row, data.column, isolateCountUrl]);
 
-    const isLoading = dataIsLoading || updateIsLoading;
+    const isLoading = dataIsLoading || updateFilterAndDataIsLoading;
 
     return (
         <LoadingOrErrorComponent

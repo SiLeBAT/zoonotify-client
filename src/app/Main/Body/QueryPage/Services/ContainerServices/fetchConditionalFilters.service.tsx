@@ -5,7 +5,7 @@ import { FilterConfigDTO } from "../../../../../Shared/Model/Api_Filter.model";
 import { FILTER_URL } from "../../../../../Shared/URLs";
 import { generateUniqueValuesService } from "../generateUniqueValues.service";
 
-export async function getConditionalFilters(props: {
+export async function fetchConditionalFilters(props: {
     urlParams: URLSearchParams;
     uniqueValues: FilterInterface;
     colAttribute: string;

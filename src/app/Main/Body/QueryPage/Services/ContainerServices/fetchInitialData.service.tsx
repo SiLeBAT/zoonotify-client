@@ -10,7 +10,7 @@ import { adaptFilterFromApiService } from "../adaptFilterFromAPI.service";
 import { generateUniqueValuesService } from "../generateUniqueValues.service";
 import { FilterConfigDTO } from "../../../../../Shared/Model/Api_Filter.model";
 
-export async function initializeDataService(): Promise<{
+export async function fetchInitialDataService(): Promise<{
     filterStatus: number;
     isolateStatus: number;
     subFilters?: ClientSingleFilterConfig[];
