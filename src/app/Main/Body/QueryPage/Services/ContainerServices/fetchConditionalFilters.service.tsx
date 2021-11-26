@@ -1,6 +1,9 @@
 import _ from "lodash";
 import { FilterInterface } from "../../../../../Shared/Model/Filter.model";
-import { ApiResponse, callApiService } from "../../../../../Core/callApi.service";
+import {
+    ApiResponse,
+    callApiService,
+} from "../../../../../Core/callApi.service";
 import { FilterConfigDTO } from "../../../../../Shared/Model/Api_Filter.model";
 import { FILTER_URL } from "../../../../../Shared/URLs";
 import { generateUniqueValuesService } from "../generateUniqueValues.service";
@@ -11,7 +14,7 @@ export async function fetchConditionalFilters(props: {
     colAttribute: string;
     rowAttribute: string;
     displayedFilters: string[];
-}): Promise<{ filterStatusList: number[]; newUniqueValues: FilterInterface }> {
+}): Promise<{ status: number; data: FilterInterface }> {
     const newUniqueValues = _.cloneDeep(props.uniqueValues);
     const filterStatusList: number[] = [];
     const newFilterFor: string[] = [...props.displayedFilters];
@@ -53,5 +56,12 @@ export async function fetchConditionalFilters(props: {
 
     await Promise.all(getConditionalFilterValues);
 
-    return { filterStatusList, newUniqueValues };
+    let finalFilterStatus = 200;
+    filterStatusList.forEach((status) => {
+        if (status !== 200) {
+            finalFilterStatus = status;
+        }
+    });
+
+    return { status: finalFilterStatus, data: newUniqueValues };
 }

@@ -375,20 +375,15 @@ export function QueryPageContainerComponent(): JSX.Element {
             rowAttribute,
             displayedFilters: filter.displayedFilters,
         });
-        let finalFilterStatus = 200;
-        conditionalFilters.filterStatusList.forEach((status) => {
-            if (status !== 200) {
-                finalFilterStatus = status;
-            }
-        });
-        if (finalFilterStatus === 200) {
-            setUniqueDataValues(conditionalFilters.newUniqueValues);
-            await fetchIsolateCounted(conditionalFilters.newUniqueValues);
+
+        if (conditionalFilters.status === 200) {
+            setUniqueDataValues(conditionalFilters.data);
+            await fetchIsolateCounted(conditionalFilters.data);
         } else {
             setUniqueDataValues(initialUniqueValues);
         }
 
-        setFilterStatus(finalFilterStatus);
+        setFilterStatus(conditionalFilters.status);
         setUpdateFilterAndDataIsLoading(false);
     };
 
