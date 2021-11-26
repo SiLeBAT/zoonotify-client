@@ -6,9 +6,7 @@ import {
     MainFilterList,
     subFiltersList,
 } from "../../../Shared/Model/Client_Isolate.model";
-import {
-    ISOLATE_COUNT_URL,
-} from "../../../Shared/URLs";
+import { ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
     defaultFilter,
@@ -34,9 +32,7 @@ import { chooseSelectedDisplayedFeaturesService } from "./Services/SelectorServi
 import { chooseSelectedFiltersService } from "./Services/SelectorServices/chooseSelectedFilters.service";
 import { getFeaturesFromPath } from "./Services/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
-import {
-    IsolateCountedDTO,
-} from "../../../Shared/Model/Api_Isolate.model";
+import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
 
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentContainer } from "./QueryPageContent/QueryPageContent-Container";
@@ -103,7 +99,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
 
     const getPngDownloadUriRef = useRef<(() => Promise<string>) | null>(null);
-    
+
     // handle Drawer
 
     const handleClickOpenCloseDrawer = (): void => {
@@ -280,18 +276,14 @@ export function QueryPageContainerComponent(): JSX.Element {
     const fetchAndSetInitialData = async (): Promise<void> => {
         setDataIsMounted(false);
         const initialData = await fetchInitialDataService();
-        setIsolateStatus(initialData.isolateStatus);
-        setFilterStatus(initialData.filterStatus);
+        setIsolateStatus(initialData.status.isolateStatus);
+        setFilterStatus(initialData.status.filterStatus);
 
-        if (
-            initialData.subFilters &&
-            initialData.uniqueDataValues &&
-            initialData.totalNrOfIsolates
-        ) {
-            setSubFilters(initialData.subFilters);
-            setUniqueDataValues(initialData.uniqueDataValues);
-            setInitialUniqueValues(initialData.uniqueDataValues);
-            setTotalNrOfIsol(initialData.totalNrOfIsolates);
+        if (initialData.data) {
+            setSubFilters(initialData.data.subFilters);
+            setUniqueDataValues(initialData.data.uniqueDataValues);
+            setInitialUniqueValues(initialData.data.uniqueDataValues);
+            setTotalNrOfIsol(initialData.data.totalNrOfIsolates);
             setDataIsMounted(true);
         }
     };

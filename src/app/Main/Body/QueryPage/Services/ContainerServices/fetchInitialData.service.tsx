@@ -1,4 +1,7 @@
-import { ApiResponse, callApiService } from "../../../../../Core/callApi.service";
+import {
+    ApiResponse,
+    callApiService,
+} from "../../../../../Core/callApi.service";
 import { IsolateCountedDTO } from "../../../../../Shared/Model/Api_Isolate.model";
 import { FILTER_URL, ISOLATE_COUNT_URL } from "../../../../../Shared/URLs";
 import {
@@ -11,11 +14,12 @@ import { generateUniqueValuesService } from "../generateUniqueValues.service";
 import { FilterConfigDTO } from "../../../../../Shared/Model/Api_Filter.model";
 
 export async function fetchInitialDataService(): Promise<{
-    filterStatus: number;
-    isolateStatus: number;
-    subFilters?: ClientSingleFilterConfig[];
-    uniqueDataValues?: FilterInterface;
-    totalNrOfIsolates?: number;
+    status: { filterStatus: number; isolateStatus: number };
+    data?: {
+        subFilters: ClientSingleFilterConfig[];
+        uniqueDataValues: FilterInterface;
+        totalNrOfIsolates: number;
+    };
 }> {
     const isolateResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
         ISOLATE_COUNT_URL
@@ -46,15 +50,21 @@ export async function fetchInitialDataService(): Promise<{
         });
 
         return {
-            filterStatus: filterResponse.status,
-            isolateStatus: isolateResponse.status,
-            subFilters: adaptedSubFilters,
-            uniqueDataValues: uniqueValuesObject,
-            totalNrOfIsolates,
+            status: {
+                filterStatus: filterResponse.status,
+                isolateStatus: isolateResponse.status,
+            },
+            data: {
+                subFilters: adaptedSubFilters,
+                uniqueDataValues: uniqueValuesObject,
+                totalNrOfIsolates,
+            },
         };
     }
     return {
-        filterStatus: filterResponse.status,
-        isolateStatus: isolateResponse.status,
+        status: {
+            filterStatus: filterResponse.status,
+            isolateStatus: isolateResponse.status,
+        },
     };
 }
