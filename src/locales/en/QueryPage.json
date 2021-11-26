@@ -164,7 +164,7 @@
         },
         "federalState": {
             "keine Anzeige": "No indication",
-            "Baden-Wuerttemberg": "Baden-Wuerttemberg",
+            "Baden-Wuerttemberg": "Baden-Württemberg",
             "Bayern": "Bavaria",
             "Berlin": "Berlin",
             "Brandenburg": "Brandenburg",
@@ -208,7 +208,7 @@
             "Rind": "Cattle (bovine animals)",
             "Pflanzliche Lebensmittel": "Plant-based foods",
             "Schwein": "Pigs",
-            "Meeresfrüchte": "Sea food-Shellfish",
+            "Meeresfrüchte": "Sea food-shellfish",
             "kleine Wiederkäuer": "Small ruminants",
             "Nutztiere": "Livestock",
             "Wildschwein": "Wild boars",
