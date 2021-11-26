@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { environment } from "../../../environment";
-import { onBackgroundColor } from "../../Shared/Style/Style-MainTheme.component";
+import { onBackgroundColor } from "../../Shared/Style/Style-MainTheme";
 
 const dateStyle = css`
     margin: 0;

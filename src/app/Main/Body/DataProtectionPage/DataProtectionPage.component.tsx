@@ -1,9 +1,18 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
 import { ZNPaths } from "../../../Shared/URLs";
-import { contactBfr, contactDP, homePageBfr, linkBDSG, linkDSGVO, mailBfr, mailDP, mailZnSupport } from "./DataProtection.config";
+import {
+    contactBfr,
+    contactDP,
+    homePageBfr,
+    linkBDSG,
+    linkDSGVO,
+    mailBfr,
+    mailDP,
+    mailZnSupport,
+} from "./DataProtection.config";
 
 const dataProtectionStyle = css`
     max-width: 90ch;
@@ -66,9 +75,7 @@ export function DataProtectionPageComponent(): JSX.Element {
                         <tr>{contactBfr.Fax}</tr>
                         <tr>
                             {t("Chapter.1.MailText")}
-                            <a href={`mailto:${mailBfr}`}>
-                                {mailBfr}
-                            </a>
+                            <a href={`mailto:${mailBfr}`}>{mailBfr}</a>
                         </tr>
                         <tr>
                             <a
@@ -92,9 +99,7 @@ export function DataProtectionPageComponent(): JSX.Element {
                         <tr>{contactDP.Fax}</tr>
                         <tr>
                             {t("Chapter.1.MailText")}
-                            <a href={`mailto:${mailDP}`}>
-                                {mailDP}
-                            </a>
+                            <a href={`mailto:${mailDP}`}>{mailDP}</a>
                         </tr>
                     </tbody>
                 </table>
@@ -104,19 +109,11 @@ export function DataProtectionPageComponent(): JSX.Element {
             <div>
                 <p>
                     {t("Chapter.2.Text1")}
-                    <a
-                        href={linkDSGVO}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
+                    <a href={linkDSGVO} target="_blank" rel="noreferrer">
                         {t("Chapter.2.LinkDSGVO")}
                     </a>
                     {t("Chapter.2.Text2")}
-                    <a
-                        href={linkBDSG}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
+                    <a href={linkBDSG} target="_blank" rel="noreferrer">
                         {t("Chapter.2.LinkBDSG")}
                     </a>
                 </p>
@@ -158,9 +155,7 @@ export function DataProtectionPageComponent(): JSX.Element {
             <div>
                 <p>
                     {t("Chapter.3.32.Text1")}{" "}
-                    <a href={`mailto:${mailZnSupport}`}>
-                        {mailZnSupport}
-                    </a>
+                    <a href={`mailto:${mailZnSupport}`}>{mailZnSupport}</a>
                     {t("Chapter.3.32.Text2")}
                 </p>
             </div>
@@ -187,9 +182,7 @@ export function DataProtectionPageComponent(): JSX.Element {
                 <p>{t("Chapter.5.Text5")}</p>
                 <p>
                     {t("Chapter.5.Text6")}
-                    <a href={`mailto:${mailDP}`}>
-                        {mailDP}
-                    </a>
+                    <a href={`mailto:${mailDP}`}>{mailDP}</a>
                     {t("Chapter.5.Text7")}
                 </p>
             </div>

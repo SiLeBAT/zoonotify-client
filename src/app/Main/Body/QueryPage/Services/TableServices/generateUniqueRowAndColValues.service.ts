@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { ClientIsolateCountedGroups } from "../../../../../Shared/Model/Client_Isolate.model";
 
-
 export function generateUniqueRowAndColValuesService(
     allValuesTitle: string,
     isolateCountGroups: ClientIsolateCountedGroups,

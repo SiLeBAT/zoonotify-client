@@ -2,18 +2,23 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { Radio, FormControl, FormControlLabel, RadioGroup } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
-import createStyles from '@mui/styles/createStyles';
+import {
+    Radio,
+    FormControl,
+    FormControlLabel,
+    RadioGroup,
+} from "@mui/material";
 import {
     bfrDarkgrey,
     primaryColor,
-} from "../../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../../Shared/Style/Style-MainTheme";
 import { DisplayOptionType } from "../../../../../../Shared/Context/DataContext";
 import { CheckboxesComponent } from "../../../../../../Shared/Checkboxes.component";
-import { smallSize, smallToggleStyle } from "../../../../../../Shared/Style/SmallToggleStyle";
+import {
+    smallSize,
+    smallToggleStyle,
+} from "../../../../../../Shared/Style/SmallToggleStyle";
 import { SumOptions } from "./TableResults.model";
-
 
 const optionsStyle = css`
     display: flex;
@@ -24,21 +29,6 @@ const optionsHeadingStyle = css`
     font-weight: bold;
     font-size: ${smallSize}rem;
 `;
-
-const BlueRadio = withStyles(() =>
-    createStyles({
-        root: {
-            color: bfrDarkgrey,
-            "&$checked": {
-                color: primaryColor,
-            },
-            "input:hover ~ &": {
-                backgroundColor: "green",
-            },
-        },
-        checked: {},
-    })
-)(Radio);
 
 /**
  * @desc Returns the option bar to display the table numbers as absolute or as relative numbers.
@@ -56,12 +46,14 @@ export function ResultsTableOptionsComponent(props: {
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
-    const handleSumOptionsCheckboxChange = (name: string, checked: boolean): void => {
-            const newIsSumOptions = { ...sumOptions, [name]: checked }
-            setSumOptions(newIsSumOptions);
-            props.onChangeSumOptions(newIsSumOptions);
-    }
-        
+    const handleSumOptionsCheckboxChange = (
+        name: string,
+        checked: boolean
+    ): void => {
+        const newIsSumOptions = { ...sumOptions, [name]: checked };
+        setSumOptions(newIsSumOptions);
+        props.onChangeSumOptions(newIsSumOptions);
+    };
 
     const optionsHeading = t("OptionBar.Title");
     const absoluteText = t("OptionBar.Absolute");
@@ -88,13 +80,41 @@ export function ResultsTableOptionsComponent(props: {
                         <FormControlLabel
                             css={smallToggleStyle}
                             value="absolute"
-                            control={<BlueRadio color="default" size="small" />}
+                            control={
+                                <Radio
+                                    sx={{
+                                        color: bfrDarkgrey,
+                                        "&$checked": {
+                                            color: primaryColor,
+                                        },
+                                        "input:hover ~ &": {
+                                            backgroundColor: "green",
+                                        },
+                                    }}
+                                    color="default"
+                                    size="small"
+                                />
+                            }
                             label={absoluteText}
                         />
                         <FormControlLabel
                             css={smallToggleStyle}
                             value="relative"
-                            control={<BlueRadio color="default" size="small" />}
+                            control={
+                                <Radio
+                                    sx={{
+                                        color: bfrDarkgrey,
+                                        "&$checked": {
+                                            color: primaryColor,
+                                        },
+                                        "input:hover ~ &": {
+                                            backgroundColor: "green",
+                                        },
+                                    }}
+                                    color="default"
+                                    size="small"
+                                />
+                            }
                             label={percentageText}
                         />
                     </RadioGroup>

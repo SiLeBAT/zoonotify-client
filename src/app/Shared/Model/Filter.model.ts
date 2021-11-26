@@ -11,4 +11,4 @@ export interface ClientSingleFilterConfig {
 
 export interface ClientFiltersConfig {
     filters: ClientSingleFilterConfig[];
-  }
+}

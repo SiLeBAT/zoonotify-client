@@ -10,7 +10,7 @@ import {
     onPrimaryColor,
     primaryColor,
     secondaryColor,
-} from "../../../Shared/Style/Style-MainTheme.component";
+} from "../../../Shared/Style/Style-MainTheme";
 
 const infoPageStyle = css`
     width: 60%;
@@ -110,7 +110,6 @@ export function InfoPageComponent(props: {
                                 {t("Background.Paragraph2.Description10")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description11")}
-                                
                             </p>
                             <p>{t("Background.Paragraph3")}</p>
                             <p>{t("Background.Paragraph4")}</p>

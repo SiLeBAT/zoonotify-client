@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Web-basierte Abfrage von Zoonosen Surveillancedaten",
   "scripts": {
+    "prepare": "husky install",
     "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "./node_modules/.bin/eslint . --fix --ext .js,.jsx,.ts,.tsx",
     "serve": "npm run clean && npm run cp:all && webpack-dev-server --open",
@@ -15,36 +16,25 @@
     "cp:localesEn": "npx copyfiles -u 1 -E ./src/locales/en/* ./public",
     "cp:all": "npm run cp:html && npm run cp:assets && npm run cp:localesDe && npm run cp:localesEn",
     "test": "./node_modules/.bin/jest",
-    "test:coverage": "./node_modules/.bin/jest --coverage"
+    "test:coverage": "./node_modules/.bin/jest --coverage",
+    "format": "npx prettier --write src/"
   },
   "repository": {
     "type": "git",
-    "url": "https://review.gerrithub.io/SiLeBAT/zoonotify-client"
+    "url": "https://github.com/SiLeBAT/zoonotify-client.git"
   },
   "keywords": [],
   "author": "Michele Kayser, Dominic Tölle",
   "license": "MIT",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "./hooks/commit-msg ./.git/COMMIT_EDITMSG"
-    }
-  },
-  "lint-staged": {
-    "*.ts|*.tsx": [
-      "npm run lint"
-    ]
-  },
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^10.0.27",
     "@mui/icons-material": "^5.1.1",
     "@mui/material": "^5.1.1",
-    "@mui/styles": "^5.1.1",
+    "@mui/system": "^5.2.1",
     "@types/lodash": "^4.14.159",
     "apexcharts": "^3.26.2",
-    "clsx": "^1.1.1",
     "file-saver": "^2.0.5",
     "i18next": "^19.5.1",
     "i18next-browser-languagedetector": "^6.1.2",
@@ -75,13 +65,11 @@
     "@typescript-eslint/parser": "^3.2.0",
     "copyfiles": "^2.3.0",
     "css-loader": "^3.5.2",
-    "cypress": "^5.5.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-typescript": "^8.0.2",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jest": "^23.13.2",
@@ -91,11 +79,10 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "eslint-plugin-unicorn": "^20.1.0",
-    "husky": "^4.2.5",
+    "husky": "^7.0.4",
     "jest": "^26.6.3",
-    "lint-staged": "^10.2.9",
     "nodemon": "^2.0.4",
-    "prettier": "2.0.5",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.1.4",

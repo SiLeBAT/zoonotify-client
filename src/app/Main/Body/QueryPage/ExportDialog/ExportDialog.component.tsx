@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
-import { errorColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { errorColor } from "../../../../Shared/Style/Style-MainTheme";
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
 
 const warningStyle = css`

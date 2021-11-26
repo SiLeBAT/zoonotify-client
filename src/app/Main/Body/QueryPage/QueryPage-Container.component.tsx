@@ -53,13 +53,10 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
     const [dataIsMounted, setDataIsMounted] = useState<boolean>(false);
     const [dataIsLoading, setDataIsLoading] = useState<boolean>(true);
-    const [
-        updateFilterAndDataIsLoading,
-        setUpdateFilterAndDataIsLoading,
-    ] = useState<boolean>(true);
-    const [initialUniqueValues, setInitialUniqueValues] = useState<
-        FilterInterface
-    >({});
+    const [updateFilterAndDataIsLoading, setUpdateFilterAndDataIsLoading] =
+        useState<boolean>(true);
+    const [initialUniqueValues, setInitialUniqueValues] =
+        useState<FilterInterface>({});
     const [loadingIsolates, setLoadingIsolates] = useState<boolean>(false);
     const [exportDialogIsOpen, setExportDialogIsOpen] = useState(false);
 
@@ -320,9 +317,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         uniqueValues: FilterInterface
     ): Promise<void> => {
         setDataIsLoading(true);
-        const countedIsolatesResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
-            isolateCountUrl
-        );
+        const countedIsolatesResponse: ApiResponse<IsolateCountedDTO> =
+            await callApiService(isolateCountUrl);
 
         setIsolateCountStatus(countedIsolatesResponse.status);
 

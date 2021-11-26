@@ -4,7 +4,6 @@ import { generateOneTableRowObjService } from "./generateOneTableRowObj.service"
 import { generateTableHeaderValuesService } from "./generateTableHeaderValues.service";
 import { generateUniqueRowAndColValuesService } from "./generateUniqueRowAndColValues.service";
 
-
 export function generateStatisticTableDataAbsService(
     isRow: boolean,
     uniqueValues: FilterInterface,
@@ -23,28 +22,27 @@ export function generateStatisticTableDataAbsService(
         rowAttribute
     );
 
-    const [
-        uniqIsolateColValues,
-        uniqIsolateRowValues,
-    ] = generateUniqueRowAndColValuesService(
-        allValuesText,
-        isolateCountGroups,
-        colAttribute,
-        rowAttribute
-    );
+    const [uniqIsolateColValues, uniqIsolateRowValues] =
+        generateUniqueRowAndColValuesService(
+            allValuesText,
+            isolateCountGroups,
+            colAttribute,
+            rowAttribute
+        );
     const statisticTableDataAbs: Record<string, string>[] = [];
 
     rowNameValues.forEach((rowName) => {
-        const tempStatTable: Record<string, string> = generateOneTableRowObjService(
-            rowName,
-            columnNameValues,
-            uniqIsolateColValues,
-            uniqIsolateRowValues,
-            isolateCountGroups,
-            rowAttribute,
-            colAttribute,
-            allValuesText
-        );
+        const tempStatTable: Record<string, string> =
+            generateOneTableRowObjService(
+                rowName,
+                columnNameValues,
+                uniqIsolateColValues,
+                uniqIsolateRowValues,
+                isolateCountGroups,
+                rowAttribute,
+                colAttribute,
+                allValuesText
+            );
         statisticTableDataAbs.push(tempStatTable);
     });
 

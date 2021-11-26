@@ -1,9 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { Box } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
-import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
 
 const filterHeadingStyle = css`
     margin-top: 0.5em;
@@ -13,35 +12,6 @@ const filterHeadingStyle = css`
     line-height: 2rem;
     color: ${primaryColor};
 `;
-
-const ss = createStyles<
-    string,
-    {
-        drawerWidth: string;
-    }
->({
-    drawer: ({ drawerWidth }) => ({
-        width: `${drawerWidth}px`,
-        minWidth: "325px",
-        position: "relative",
-        height: "100%",
-        zIndex: 0,
-    }),
-    drawerPaper: {
-        width: "inherit",
-        zIndex: 0,
-        position: "relative",
-        direction: "rtl",
-        overflow: "auto",
-    },
-    drawerContainer: {
-        direction: "ltr",
-        padding: "1em",
-        height: "100%",
-    },
-});
-
-const useStyles = makeStyles(() => ss);
 
 /**
  * @desc Returns the Drawer
@@ -55,32 +25,40 @@ export function DrawerLayoutComponent(props: {
     drawerWidth: number;
     drawerTitle: string;
 }): JSX.Element {
-    const drawerWidthSting = (props.drawerWidth as unknown) as string;
-    const classes = useStyles({
-        drawerWidth: drawerWidthSting,
-    });
+    const drawerWidthSting = props.drawerWidth as unknown as string;
 
     return (
         <Drawer
-            className={classes.drawer}
-            variant="persistent"
-            anchor="left"
-            open={props.isOpen}
-            classes={{
-                paper: classes.drawerPaper,
-            }}
-            sx={{ 
+            sx={{
+                width: `${drawerWidthSting}px`,
+                minWidth: "325px",
+                position: "relative",
+                height: "100%",
+                zIndex: 0,
                 [`& .MuiDrawer-paper`]: {
                     position: "relative",
                     boxSizing: "border-box",
+                    width: "inherit",
+                    zIndex: 0,
+                    direction: "rtl",
+                    overflow: "auto",
                 },
             }}
+            variant="persistent"
+            anchor="left"
+            open={props.isOpen}
         >
-            <div className={classes.drawerContainer}>
+            <Box
+                sx={{
+                    direction: "ltr",
+                    padding: "1em",
+                    height: "100%",
+                }}
+            >
                 <p css={filterHeadingStyle}>{props.drawerTitle}</p>
                 {props.filterSelection}
                 {props.displayFeatureSelection}
-            </div>
+            </Box>
         </Drawer>
     );
 }

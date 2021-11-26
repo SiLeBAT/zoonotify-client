@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
 
 const contentStyle = css`
     width: 0;

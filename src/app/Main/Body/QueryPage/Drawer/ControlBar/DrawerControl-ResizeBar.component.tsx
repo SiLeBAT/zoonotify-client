@@ -5,7 +5,7 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import {
     primaryColor,
     secondaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../Shared/Style/Style-MainTheme";
 
 const resizeBarStyle = css`
     margin: 0;
@@ -38,7 +38,8 @@ export function DrawerControlResizeBarComponent(
 ): JSX.Element {
     const minDrawerWidth = 325;
 
-    const handleMoveResizeBar = (newWidth: number): void => props.onResizeBarMove(newWidth);
+    const handleMoveResizeBar = (newWidth: number): void =>
+        props.onResizeBarMove(newWidth);
 
     const handleMouseMove = useCallback((e): void => {
         const newWidth: number = e.clientX - document.body.offsetLeft;

@@ -1,7 +1,5 @@
 import { TFunction } from "i18next";
-import {
-    ClientIsolateCountedGroups,
-} from "../../../../../Shared/Model/Client_Isolate.model";
+import { ClientIsolateCountedGroups } from "../../../../../Shared/Model/Client_Isolate.model";
 import { adaptCountedIsolatesGroupsService } from "../adaptCountedIsolatesGroups.service";
 import { calculateRelativeTableData } from "../TableServices/calculateRelativeTableData.service";
 import {
@@ -33,9 +31,8 @@ export function generateDataObjectsService(props: {
 } {
     const { t } = props;
 
-    const adaptedIsolateCountGroups: ClientIsolateCountedGroups = adaptCountedIsolatesGroupsService(
-        props.isolateCountGroups
-    );
+    const adaptedIsolateCountGroups: ClientIsolateCountedGroups =
+        adaptCountedIsolatesGroupsService(props.isolateCountGroups);
 
     const allValuesText = t("QueryPage:Results.NrIsolatesText");
 
@@ -46,19 +43,17 @@ export function generateDataObjectsService(props: {
         props.selectedFilters,
         props.colAttribute
     );
-    const statisticTableDataAbs: Record<
-        string,
-        string
-    >[] = generateStatisticTableDataAbsService(
-        props.isRow,
-        props.uniqueValues,
-        props.selectedFilters,
-        allValuesText,
-        adaptedIsolateCountGroups,
-        columnNames,
-        props.colAttribute,
-        props.rowAttribute
-    );
+    const statisticTableDataAbs: Record<string, string>[] =
+        generateStatisticTableDataAbsService(
+            props.isRow,
+            props.uniqueValues,
+            props.selectedFilters,
+            allValuesText,
+            adaptedIsolateCountGroups,
+            columnNames,
+            props.colAttribute,
+            props.rowAttribute
+        );
 
     const statisticTableDataRel = calculateRelativeTableData(
         statisticTableDataAbs,

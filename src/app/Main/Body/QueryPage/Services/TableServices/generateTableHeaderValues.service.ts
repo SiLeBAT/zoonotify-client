@@ -1,14 +1,12 @@
 import _ from "lodash";
-import {
-    FilterInterface,
-} from "../../../../../Shared/Model/Filter.model";
+import { FilterInterface } from "../../../../../Shared/Model/Filter.model";
 
 export function generateTableHeaderValuesService(
     isSelected: boolean,
     allValuesTitle: string,
     uniqueValues: FilterInterface,
     selectedFilters: FilterInterface,
-    headerAttribute: string,
+    headerAttribute: string
 ): string[] {
     let tableHeaderValues: string[] = [allValuesTitle];
     if (isSelected) {

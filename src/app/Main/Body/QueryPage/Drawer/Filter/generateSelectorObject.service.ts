@@ -3,7 +3,7 @@ import { TFunction } from "i18next";
 export function generateSelectorObject(
     filterAttribute: string,
     selectorArray: string[],
-    t?: TFunction,
+    t?: TFunction
 ): { value: string; label: string }[] {
     return selectorArray.map((filterValue) => {
         if (t !== undefined) {

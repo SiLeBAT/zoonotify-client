@@ -1,6 +1,9 @@
 import { TFunction } from "i18next";
 import _ from "lodash";
-import { ApiResponse, callApiService } from "../../../../../Core/callApi.service";
+import {
+    ApiResponse,
+    callApiService,
+} from "../../../../../Core/callApi.service";
 import { getCurrentDate } from "../../../../../Core/getCurrentDate.service";
 import { adaptIsolatesFromAPI } from "../../../../../Shared/adaptIsolatesFromAPI.service";
 import { IsolateDTO } from "../../../../../Shared/Model/Api_Isolate.model";
@@ -23,9 +26,11 @@ export async function exportZipService(props: {
         raw: boolean;
         stat: boolean;
         chart: boolean;
-    }; 
+    };
     urlParams: URLSearchParams;
-    getPngDownloadUriRef: React.MutableRefObject<(() => Promise<string>) | null>
+    getPngDownloadUriRef: React.MutableRefObject<
+        (() => Promise<string>) | null
+    >;
 }): Promise<void> {
     let rawData: DbCollection = [];
     let rawKeys: DbKey[] = [];
@@ -80,9 +85,8 @@ export async function exportZipService(props: {
         urlParams.delete("column");
         const urlParamsString = urlParams.toString();
         const isolateFilteredUrl = `${ISOLATE_URL}?${urlParamsString}`;
-        const isolateFilteredResponse: ApiResponse<IsolateDTO> = await callApiService(
-            isolateFilteredUrl
-        );
+        const isolateFilteredResponse: ApiResponse<IsolateDTO> =
+            await callApiService(isolateFilteredUrl);
         const isolateFilteredStatus = isolateFilteredResponse.status;
         if (
             isolateFilteredStatus === 200 &&
@@ -90,9 +94,8 @@ export async function exportZipService(props: {
         ) {
             const isolateFilteredProp: IsolateDTO =
                 isolateFilteredResponse.data;
-            const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
-                isolateFilteredProp
-            );
+            const adaptedFilteredIsolates: DbCollection =
+                adaptIsolatesFromAPI(isolateFilteredProp);
             rawData = adaptedFilteredIsolates;
             rawKeys = MainFilterList;
         }

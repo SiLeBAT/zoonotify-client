@@ -17,8 +17,7 @@
  */
 module.exports = function (on, config) {
     // configure plugins here
-  }
+};
 
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-
+// `on` is used to hook into various events Cypress emits
+// `config` is the resolved Cypress config

@@ -6,7 +6,10 @@ import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
-import { bfrDarkgrey, primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import {
+    bfrDarkgrey,
+    primaryColor,
+} from "../../../../../Shared/Style/Style-MainTheme";
 
 function generateTranslatedSelectorObject(
     selectorArray: string[],

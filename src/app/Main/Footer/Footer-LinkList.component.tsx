@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Tooltip } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import {
     primaryColor,
     hoverColor,
-    errorColor
-} from "../../Shared/Style/Style-MainTheme.component";
+    errorColor,
+} from "../../Shared/Style/Style-MainTheme";
 import { ZNPaths } from "../../Shared/URLs";
 
 const footerContentStyle = css`
@@ -52,15 +51,6 @@ const disableLinkStyle = css`
     color: gray;
 `;
 
-const LightTooltip = withStyles(() => ({
-    tooltip: {
-        backgroundColor: "transparent",
-        color: errorColor,
-        fontSize: "9px",
-        paddingRight: 0,
-    },
-}))(Tooltip);
-
 export function FooterLinkListComponent(props: {
     supportMail: string | undefined;
 }): JSX.Element {
@@ -78,11 +68,20 @@ export function FooterLinkListComponent(props: {
     );
 
     if (props.supportMail === undefined) {
-        const supportMailErrorText = t("Content.SupportError")
+        const supportMailErrorText = t("Content.SupportError");
         submitProblemLink = (
-            <LightTooltip title={supportMailErrorText} placement="top">
+            <Tooltip
+                sx={{
+                    backgroundColor: "transparent",
+                    color: errorColor,
+                    fontSize: "9px",
+                    paddingRight: 0,
+                }}
+                title={supportMailErrorText}
+                placement="top"
+            >
                 <p css={disableLinkStyle}>{t("Content.Mail")}</p>
-            </LightTooltip>
+            </Tooltip>
         );
     }
 

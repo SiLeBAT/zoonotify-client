@@ -1,11 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import withStyles from '@mui/styles/withStyles';
-import createStyles from '@mui/styles/createStyles';
 import TableCell from "@mui/material/TableCell";
 import { useTranslation } from "react-i18next";
 import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
-import { onBackgroundColor } from "../../../../../../../Shared/Style/Style-MainTheme.component";
+import { onBackgroundColor } from "../../../../../../../Shared/Style/Style-MainTheme";
 import {
     highlightedTableBorder,
     fixedCellSize,
@@ -34,20 +32,6 @@ const sumCellStyle = css`
     text-align: left;
     white-space: nowrap;
 `;
-const StyledTableCell = withStyles(() =>
-    createStyles({
-        head: {
-            padding: "0.75em",
-            color: onBackgroundColor,
-            borderBottom: highlightedTableBorder,
-            letterSpacing: 0,
-        },
-        body: {
-            color: onBackgroundColor,
-            fontSize: 14,
-        },
-    })
-)(TableCell);
 
 /**
  * @desc Returns list of table cells for the table header
@@ -64,9 +48,18 @@ export function createTableHeaderService(props: {
     const { t } = useTranslation(["QueryPage"]);
     const headerTableCells: JSX.Element[] = [];
     headerTableCells.push(
-        <StyledTableCell key="header-blank" css={blankCellStyle}>
+        <TableCell
+            sx={{
+                padding: "0.75em",
+                color: onBackgroundColor,
+                borderBottom: highlightedTableBorder,
+                letterSpacing: 0,
+            }}
+            key="header-blank"
+            css={blankCellStyle}
+        >
             &nbsp;
-        </StyledTableCell>
+        </TableCell>
     );
     props.headerValues.forEach((headerValue): void => {
         let headerTitle: string | JSX.Element = "";
@@ -103,19 +96,34 @@ export function createTableHeaderService(props: {
         }
 
         headerTableCells.push(
-            <StyledTableCell
+            <TableCell
+                sx={{
+                    padding: "0.75em",
+                    color: onBackgroundColor,
+                    borderBottom: highlightedTableBorder,
+                    letterSpacing: 0,
+                }}
                 key={`header-${headerValue}`}
                 css={headerCellStyle}
             >
                 {headerTitle}
-            </StyledTableCell>
+            </TableCell>
         );
     });
     if (props.showRowSum) {
         headerTableCells.push(
-            <StyledTableCell key="header-row-sum" css={sumCellStyle}>
+            <TableCell
+                sx={{
+                    padding: "0.75em",
+                    color: onBackgroundColor,
+                    borderBottom: highlightedTableBorder,
+                    letterSpacing: 0,
+                }}
+                key="header-row-sum"
+                css={sumCellStyle}
+            >
                 {t("Sums.RowSum")}
-            </StyledTableCell>
+            </TableCell>
         );
     }
     return headerTableCells;

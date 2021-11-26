@@ -1,10 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import clsx from "clsx";
-import { Theme } from "@mui/material/styles";
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useTranslation } from "react-i18next";
@@ -13,7 +9,7 @@ import {
     primaryColor,
     onPrimaryColor,
     bfrLightblue,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../Shared/Style/Style-MainTheme";
 
 const drawerStyle = css`
     flex: 0 0 auto;
@@ -83,40 +79,25 @@ export function QueryPageDrawerControlComponent(
 ): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const useStyles = makeStyles((theme: Theme) =>
-        createStyles({
-            content: {
-                flexGrow: 1,
-                padding: 0,
-                transition: theme.transitions.create("margin", {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-                }),
-                marginLeft: -props.drawerWidth,
-            },
-            contentShift: {
-                transition: theme.transitions.create("margin", {
-                    easing: theme.transitions.easing.easeOut,
-                    duration: theme.transitions.duration.enteringScreen,
-                }),
-                marginLeft: 0,
-            },
-        })
-    );
-    const classes = useStyles();
-
     const handleClickOpenCloseDrawer = (): void =>
         props.onDrawerOpenCloseClick();
     const handleMoveResizeBar = (drawerWidth: number): void =>
         props.onResizeBarMove(drawerWidth);
 
+    const transitionStyles = props.isOpen
+        ? {
+              transition: "margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+              marginLeft: 0,
+              padding: 0,
+          }
+        : {
+              flexGrow: 1,
+              padding: 0,
+              transition: "margin 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
+              marginLeft: -props.drawerWidth,
+          };
     return (
-        <div
-            className={clsx(classes.content, {
-                [classes.contentShift]: props.isOpen,
-            })}
-            css={drawerStyle}
-        >
+        <Box sx={transitionStyles} css={drawerStyle}>
             {!props.isOpen && (
                 <div css={drawerBarStyle}>
                     <p css={drawerTextStyle}>{t("Drawer.Title")}</p>
@@ -129,13 +110,17 @@ export function QueryPageDrawerControlComponent(
                     />
                 </div>
             )}
-            <IconButton css={iconButtonStyle} onClick={handleClickOpenCloseDrawer} size="large">
+            <IconButton
+                css={iconButtonStyle}
+                onClick={handleClickOpenCloseDrawer}
+                size="large"
+            >
                 {props.isOpen ? (
                     <ChevronLeftIcon css={drawerIconStyle} />
                 ) : (
                     <ChevronRightIcon css={drawerIconStyle} />
                 )}
             </IconButton>
-        </div>
+        </Box>
     );
 }

@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import { primaryColor } from "./Style/Style-MainTheme.component";
+import { primaryColor } from "./Style/Style-MainTheme";
 
 const titleStyle = css`
     margin-bottom: 1rem;
@@ -22,17 +21,6 @@ const textStyle = css`
     line-height: 1.6;
     text-align: justify;
 `;
-const logoStyle = css`
-    height: auto;
-    width: auto;
-`;
-const useStyles = makeStyles({
-    root: {
-        padding: "1em",
-        margin: "2.5em auto",
-        width: "50%",
-    },
-});
 
 export interface CardProps {
     title: string;
@@ -46,10 +34,14 @@ export interface CardProps {
  * @returns {JSX.Element} - card with title, subtitle, text and BfR-Logo
  */
 export function LogoCardComponent(props: CardProps): JSX.Element {
-    const classes = useStyles();
-
     return (
-        <Card className={classes.root}>
+        <Card
+            sx={{
+                padding: "1em",
+                margin: "2.5em auto",
+                width: "50%",
+            }}
+        >
             <CardContent>
                 <Typography variant="h1" css={titleStyle}>
                     {props.title}
@@ -63,7 +55,7 @@ export function LogoCardComponent(props: CardProps): JSX.Element {
                 component="img"
                 image="/assets/bfr_logo.gif"
                 title="BfR Logo"
-                css={logoStyle}
+                sx={{ height: "auto", width: "auto" }}
             />
         </Card>
     );

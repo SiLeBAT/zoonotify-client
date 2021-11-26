@@ -2,12 +2,8 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { IconButton, Tooltip } from "@mui/material";
-import withStyles from "@mui/styles/withStyles";
 import CancelIcon from "@mui/icons-material/Cancel";
-import {
-    onBackgroundColor,
-    primaryColor,
-} from "./Style/Style-MainTheme.component";
+import { onBackgroundColor, primaryColor } from "./Style/Style-MainTheme";
 
 const buttonAreaStyle = css`
     margin-top: auto;
@@ -20,15 +16,6 @@ const iconButtonStyle = css`
     padding: 0;
     color: ${primaryColor};
 `;
-
-const LightTooltip = withStyles(() => ({
-    tooltip: {
-        backgroundColor: "transparent",
-        color: onBackgroundColor,
-        fontSize: "9px",
-        margin: "0.2em",
-    },
-}))(Tooltip);
 
 /**
  * @desc Button and tooltip to clear all selected settings.
@@ -46,7 +33,16 @@ export function ClearSelectorComponent(props: {
 
     return (
         <div css={buttonAreaStyle}>
-            <LightTooltip title={mouseOverText} placement="top">
+            <Tooltip
+                title={mouseOverText}
+                placement="top"
+                sx={{
+                    backgroundColor: "transparent",
+                    color: onBackgroundColor,
+                    fontSize: "9px",
+                    margin: "0.2em",
+                }}
+            >
                 <span>
                     <IconButton
                         css={iconButtonStyle}
@@ -62,7 +58,7 @@ export function ClearSelectorComponent(props: {
                         />
                     </IconButton>
                 </span>
-            </LightTooltip>
+            </Tooltip>
         </div>
     );
 }

@@ -21,9 +21,8 @@ export async function fetchInitialDataService(): Promise<{
         totalNrOfIsolates: number;
     };
 }> {
-    const isolateResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
-        ISOLATE_COUNT_URL
-    );
+    const isolateResponse: ApiResponse<IsolateCountedDTO> =
+        await callApiService(ISOLATE_COUNT_URL);
     const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
         FILTER_URL
     );
@@ -35,13 +34,11 @@ export async function fetchInitialDataService(): Promise<{
 
         const filterProp: FilterConfigDTO = filterResponse.data;
 
-        const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
-            filterProp
-        );
+        const uniqueValuesObject: FilterInterface =
+            generateUniqueValuesService(filterProp);
 
-        const adaptedFilterProp: ClientFiltersConfig = adaptFilterFromApiService(
-            filterProp
-        );
+        const adaptedFilterProp: ClientFiltersConfig =
+            adaptFilterFromApiService(filterProp);
         const adaptedSubFilters: ClientSingleFilterConfig[] = [];
         adaptedFilterProp.filters.forEach((adaptedFilter) => {
             if (adaptedFilter.parent !== undefined) {

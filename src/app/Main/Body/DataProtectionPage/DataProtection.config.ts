@@ -11,7 +11,7 @@ export const contactBfr = {
     Street: "Max-Dohrn-Str. 8-10",
     City: "10589 Berlin",
     Phone: "Tel.: 0049 (0)30 18412 0",
-    Fax: "Fax: 0049 (0)30 18412 99099"
+    Fax: "Fax: 0049 (0)30 18412 99099",
 };
 
 export const contactDP = {

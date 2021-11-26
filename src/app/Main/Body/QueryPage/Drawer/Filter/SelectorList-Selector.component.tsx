@@ -8,7 +8,10 @@ import {
 } from "../../../../../Shared/Model/Filter.model";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
-import { bfrDarkgrey, primaryColor } from "../../../../../Shared/Style/Style-MainTheme.component";
+import {
+    bfrDarkgrey,
+    primaryColor,
+} from "../../../../../Shared/Style/Style-MainTheme";
 import { generateSelectorObject } from "./generateSelectorObject.service";
 
 export interface SelectorProps {

@@ -9,7 +9,7 @@ import {
     onPrimaryColor,
     secondaryColor,
     bfrPrimaryPalette,
-} from "../../Shared/Style/Style-MainTheme.component";
+} from "../../Shared/Style/Style-MainTheme";
 import { ZNPaths } from "../../Shared/URLs";
 
 const headerStyle = css`

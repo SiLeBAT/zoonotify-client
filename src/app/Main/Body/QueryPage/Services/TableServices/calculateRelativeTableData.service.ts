@@ -1,7 +1,7 @@
 function calculateRelative(part: number, total: number): string {
     const relative = total === 0 ? 0 : (part / total) * 100;
     const relativeRounded = (Math.round(relative * 100) / 100).toFixed(1);
-    return relativeRounded
+    return relativeRounded;
 }
 /**
  * @desc Calculate the relative numbers of an objectList with absolute numbers

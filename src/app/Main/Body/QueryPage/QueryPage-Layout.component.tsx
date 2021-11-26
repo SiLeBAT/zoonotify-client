@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { bfrPrimaryPalette } from "../../../Shared/Style/Style-MainTheme.component";
+import { bfrPrimaryPalette } from "../../../Shared/Style/Style-MainTheme";
 
 const mainStyle = css`
     height: 100%;
@@ -17,7 +17,7 @@ const subHeaderStyle = css`
     background-color: ${bfrPrimaryPalette[300]};
     box-sizing: border-box;
     box-shadow: 0 8px 6px -6px grey;
-`
+`;
 
 const queryPageStyle = css`
     display: flex;
@@ -35,20 +35,15 @@ export function QueryPageLayoutComponent(props: {
     exportDialog: JSX.Element;
     exportDialogIsOpen: boolean;
 }): JSX.Element {
-
     return (
         <main css={mainStyle}>
-            <div css={subHeaderStyle}>
-                {props.subHeaderButton}
-            </div>
+            <div css={subHeaderStyle}>{props.subHeaderButton}</div>
             <div css={queryPageStyle}>
                 {props.drawer}
                 {props.drawerControl}
                 {props.queryPageContent}
             </div>
-            {props.exportDialogIsOpen && (
-                props.exportDialog
-            )}
+            {props.exportDialogIsOpen && props.exportDialog}
         </main>
     );
 }

@@ -25,9 +25,8 @@ export function FilterContainer(props: {
     onFilterRemoveAll: () => void;
     onSubmitFiltersToDisplay: (newFiltersToDisplay: string[]) => void;
 }): JSX.Element {
-    const [filterDialogIsOpen, setFilterDialogIsOpen] = useState<boolean>(
-        false
-    );
+    const [filterDialogIsOpen, setFilterDialogIsOpen] =
+        useState<boolean>(false);
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeFilter = (

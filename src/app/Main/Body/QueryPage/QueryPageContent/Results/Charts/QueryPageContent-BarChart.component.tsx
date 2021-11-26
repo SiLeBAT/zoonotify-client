@@ -23,8 +23,8 @@ const explanationTextStyle = css`
 
 function processingTableDataToApexData(
     data: Record<string, string>[],
-    dataLabels: string[], 
-    yAttribute: string, 
+    dataLabels: string[],
+    yAttribute: string,
     xAttribute: string,
     t: TFunction
 ): ApexChartData {
@@ -37,10 +37,9 @@ function processingTableDataToApexData(
         });
         let seriesLabel = t("Results.NrIsolatesText");
         if (xAttribute !== "") {
-            const seriesLabelKey = tableRow.name.replace(".", "") 
+            const seriesLabelKey = tableRow.name.replace(".", "");
             seriesLabel = t(`FilterValues.${xAttribute}.${seriesLabelKey}`);
         }
-        
 
         const seriesData = {
             name: seriesLabel,
@@ -51,14 +50,15 @@ function processingTableDataToApexData(
 
     let newDataLabels = [t("Results.NrIsolatesText")];
     if (yAttribute !== "") {
-        const translatedDataLabels: string[] = []
-        dataLabels.forEach(dataLabel => {
-            const dataLabelKey = dataLabel.replace(".", "")
-            translatedDataLabels.push(t(`FilterValues.${yAttribute}.${dataLabelKey}`))
+        const translatedDataLabels: string[] = [];
+        dataLabels.forEach((dataLabel) => {
+            const dataLabelKey = dataLabel.replace(".", "");
+            translatedDataLabels.push(
+                t(`FilterValues.${yAttribute}.${dataLabelKey}`)
+            );
         });
-        newDataLabels = translatedDataLabels
+        newDataLabels = translatedDataLabels;
     }
-    
 
     return {
         series: apexChartSeries,
@@ -125,18 +125,18 @@ export function QueryPageContentBarChartResultsComponent(props: {
 
     let chartData = props.chartData.statisticDataAbsolute;
     let xAxisMax;
-    let displayAsStacked = false
+    let displayAsStacked = false;
     if (props.chartData.option === "relative") {
         chartData = props.chartData.statisticDataRelative;
         xAxisMax = 100;
-        displayAsStacked = true
+        displayAsStacked = true;
     }
 
     if (isChart) {
         const processedChartData = processingTableDataToApexData(
             chartData,
             props.columnAttributes,
-            colName, 
+            colName,
             rowName,
             t
         );
@@ -152,17 +152,16 @@ export function QueryPageContentBarChartResultsComponent(props: {
             );
 
             chartAccordionContent = (
-
-                    <div css={chartOverflowStyle}>
-                        <BarChartResultsComponent
-                            chartData={processedChartData}
-                            getPngDownloadUriRef={props.getPngDownloadUriRef}
-                            xAxisLabel={xAxisLabel}
-                            yAxisLabel={yAxisLabel}
-                            xAxisMax={xAxisMax}
-                            displayAsStacked={displayAsStacked}
-                        />
-                    </div>
+                <div css={chartOverflowStyle}>
+                    <BarChartResultsComponent
+                        chartData={processedChartData}
+                        getPngDownloadUriRef={props.getPngDownloadUriRef}
+                        xAxisLabel={xAxisLabel}
+                        yAxisLabel={yAxisLabel}
+                        xAxisMax={xAxisMax}
+                        displayAsStacked={displayAsStacked}
+                    />
+                </div>
             );
         }
     }

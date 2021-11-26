@@ -1,9 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Button } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
 import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
-import { onPrimaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
+import { onPrimaryColor } from "../../../../Shared/Style/Style-MainTheme";
 
 const downloadButtonStyle = css`
     margin-right: 1em;
@@ -18,14 +17,6 @@ const downloadButtonStyle = css`
         font: 400 14px/20px Arial, sans-serif;
     }
 `;
-
-const DownloadButton = withStyles({
-    root: {
-        "&:hover": {
-            backgroundColor: "transparent",
-        },
-    },
-})(Button);
 
 /**
  * @desc Returns the export button inside the header.
@@ -43,12 +34,17 @@ export function SubHeaderExportButtonComponent(props: {
     );
 
     return (
-        <DownloadButton
+        <Button
+            sx={{
+                "&:hover": {
+                    backgroundColor: "transparent",
+                },
+            }}
             size="small"
             css={downloadButtonStyle}
             onClick={handleClick}
         >
             {buttonLabel}
-        </DownloadButton>
+        </Button>
     );
 }

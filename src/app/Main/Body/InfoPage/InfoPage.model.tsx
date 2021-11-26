@@ -40,5 +40,5 @@ export const microorganismNames: Record<string, JSX.Element> = {
     EnteroFaecium: <i>E. faecium</i>,
     Faecalis: <i>faecalis</i>,
     Faecium: <i>faecium</i>,
-    EnteroFF: <i>Enterococcus faecium/faecalis</i>
+    EnteroFF: <i>Enterococcus faecium/faecalis</i>,
 };

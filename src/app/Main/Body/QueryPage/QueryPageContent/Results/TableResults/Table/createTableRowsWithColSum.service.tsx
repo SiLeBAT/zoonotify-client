@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import { ClassNameMap } from '@mui/styles';
 import TableCell from "@mui/material/TableCell";
 import {
     defaultTableBorder,
@@ -31,12 +30,13 @@ export function createTableRowWithColSumService(props: {
     rowWithColSums: Record<string, string> | undefined;
     headerValues: string[];
     colSumLabel: string;
-    classes: ClassNameMap<"tableCell">;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    style: Record<string, string | number>;
 }): JSX.Element[] {
     const arrayWithColSumCells: JSX.Element[] = [
         <TableCell
             key="header-column-sum"
-            className={props.classes.tableCell}
+            sx={props.style}
             component="th"
             scope="row"
             align="left"
@@ -52,7 +52,7 @@ export function createTableRowWithColSumService(props: {
             arrayWithColSumCells.push(
                 <TableCell
                     key={`isolates-col-sum-${headerValue}`}
-                    className={props.classes.tableCell}
+                    sx={props.style}
                     component="th"
                     scope="row"
                     align="right"
@@ -69,7 +69,7 @@ export function createTableRowWithColSumService(props: {
         arrayWithColSumCells.push(
             <TableCell
                 css={totalSumStyle}
-                className={props.classes.tableCell}
+                sx={props.style}
                 key="sum-total"
                 align="right"
             >

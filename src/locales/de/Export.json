@@ -1,23 +1,23 @@
 {
-    "Content": {
-        "Title": "Daten exportieren",
-        "Text": "Sie können wählen, ob die ausgewählten Einzeldaten, die angezeigten aggregierten Daten, die grafische Darstellung oder alles heruntergeladen werden soll."
-    },
-    "Checkbox": {
-        "Raw": "Ausgewählte Einzeldaten",
-        "Raw_Isolates": "Isolate",
-        "Stat": "Ausgewählter aggregierter Datensatz",
-        "Chart": "Grafik",
-        "Csv": "(.csv)",
-        "Png": "(.png)"
-    },
-    "FileName": {
-        "DataSet": "gefilteter-datensatz",
-        "Stat": "statistik-isolate",
-        "Chart": "grafik"
-    },
-    "Warning": "Bitte wählen Sie mindestens eine Option, oder brechen Sie den Export ab.",
-    "Button": {
-        "Cancel": "Abbrechen"
-    }
+  "Content": {
+    "Title": "Daten exportieren",
+    "Text": "Sie können wählen, ob die ausgewählten Einzeldaten, die angezeigten aggregierten Daten, die grafische Darstellung oder alles heruntergeladen werden soll."
+  },
+  "Checkbox": {
+    "Raw": "Ausgewählte Einzeldaten",
+    "Raw_Isolates": "Isolate",
+    "Stat": "Ausgewählter aggregierter Datensatz",
+    "Chart": "Grafik",
+    "Csv": "(.csv)",
+    "Png": "(.png)"
+  },
+  "FileName": {
+    "DataSet": "gefilteter-datensatz",
+    "Stat": "statistik-isolate",
+    "Chart": "grafik"
+  },
+  "Warning": "Bitte wählen Sie mindestens eine Option, oder brechen Sie den Export ab.",
+  "Button": {
+    "Cancel": "Abbrechen"
+  }
 }

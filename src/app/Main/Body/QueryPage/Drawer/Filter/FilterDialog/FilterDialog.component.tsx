@@ -6,24 +6,12 @@ import { useState } from "react";
 import _ from "lodash";
 import DoneIcon from "@mui/icons-material/Done";
 import { Checkbox, Divider, FormControlLabel } from "@mui/material";
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { DialogComponent } from "../../../../../../Shared/Dialog.component";
 import {
     primaryColor,
     secondaryColor,
-} from "../../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../../Shared/Style/Style-MainTheme";
 import { FilterDialogCheckboxesComponent } from "./FilterDialog-Checkboxes.component";
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        divider: {
-            background: primaryColor,
-            marginLeft: 0,
-            marginRight: 0,
-        },
-    })
-);
 
 const submitButtonStyle = css`
     display: flex;
@@ -46,7 +34,6 @@ export function FilterDialogComponent(props: {
         props.previousFiltersToDisplay
     );
     const { t } = useTranslation(["QueryPage"]);
-    const classes = useStyles();
 
     const handleSubmitFiltersToDisplay = (): void => {
         props.onSubmitFiltersToDisplay(newFiltersToDisplay);
@@ -92,8 +79,10 @@ export function FilterDialogComponent(props: {
         </span>
     );
 
-    const allChecked = props.availableFilters === newFiltersToDisplay
-    const indeterminateChecked = props.availableFilters !== newFiltersToDisplay && !_.isEmpty(newFiltersToDisplay)
+    const allChecked = props.availableFilters === newFiltersToDisplay;
+    const indeterminateChecked =
+        props.availableFilters !== newFiltersToDisplay &&
+        !_.isEmpty(newFiltersToDisplay);
 
     const filterDialogContent = (
         <div>
@@ -103,12 +92,21 @@ export function FilterDialogComponent(props: {
                     <Checkbox
                         checked={allChecked}
                         indeterminate={indeterminateChecked}
-                        onChange={(event) => handleSelectAllCheckBoxChange(event.target.checked)}
+                        onChange={(event) =>
+                            handleSelectAllCheckBoxChange(event.target.checked)
+                        }
                         color="primary"
                     />
                 }
             />
-            <Divider variant="middle" className={classes.divider} />
+            <Divider
+                variant="middle"
+                sx={{
+                    background: primaryColor,
+                    marginLeft: 0,
+                    marginRight: 0,
+                }}
+            />
             <FilterDialogCheckboxesComponent
                 availableFilters={props.availableFilters}
                 filtersToDisplay={newFiltersToDisplay}

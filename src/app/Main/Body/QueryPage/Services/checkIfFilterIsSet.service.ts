@@ -1,5 +1,8 @@
 import _ from "lodash";
-import { FilterInterface, FilterType } from "../../../../Shared/Model/Filter.model";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../Shared/Model/Filter.model";
 
 /**
  * @desc Check if one of all possible filters is selected

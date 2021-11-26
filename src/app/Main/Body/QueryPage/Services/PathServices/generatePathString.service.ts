@@ -1,5 +1,8 @@
 import _ from "lodash";
-import { FilterInterface, FilterType } from "../../../../../Shared/Model/Filter.model";
+import {
+    FilterInterface,
+    FilterType,
+} from "../../../../../Shared/Model/Filter.model";
 import { DataInterface } from "../../../../../Shared/Context/DataContext";
 
 /**
@@ -34,22 +37,20 @@ function getTableParam(key: string, value: string): string {
 export const generatePathStringService = (
     selectedFilter: FilterInterface,
     mainFilters: string[],
-    table: DataInterface,
+    table: DataInterface
 ): string => {
     let newPath = "?";
-    let isFirstAttributeWithValue = true
-    mainFilters.forEach(
-        (attribute: FilterType): void => {
-            if (!_.isEmpty(selectedFilter[attribute])) {
-                newPath += isFirstAttributeWithValue ? "" : "&";
-                selectedFilter[attribute].forEach((filterValue, i) => {
-                    newPath += i === 0 ? "" : "&";
-                    newPath += setParams(attribute, filterValue);
-                });
-                isFirstAttributeWithValue = false
-            }
+    let isFirstAttributeWithValue = true;
+    mainFilters.forEach((attribute: FilterType): void => {
+        if (!_.isEmpty(selectedFilter[attribute])) {
+            newPath += isFirstAttributeWithValue ? "" : "&";
+            selectedFilter[attribute].forEach((filterValue, i) => {
+                newPath += i === 0 ? "" : "&";
+                newPath += setParams(attribute, filterValue);
+            });
+            isFirstAttributeWithValue = false;
         }
-    );
+    });
     newPath += getTableParam("row", table.row);
     newPath += getTableParam("column", table.column);
 

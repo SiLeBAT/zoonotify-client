@@ -1,4 +1,4 @@
 export interface SumOptions {
-    showRowSum: boolean,
-    showColSum: boolean
-  }
+    showRowSum: boolean;
+    showColSum: boolean;
+}

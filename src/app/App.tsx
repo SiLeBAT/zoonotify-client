@@ -1,24 +1,14 @@
 import React, { Suspense } from "react";
 import * as ReactDOM from "react-dom";
-import {
-    ThemeProvider,
-    Theme,
-    StyledEngineProvider,
-    createTheme,
-} from "@mui/material/styles";
-import StylesProvider from "@mui/styles/StylesProvider";
+import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import "../i18n";
 import { FilterProvider } from "./Shared/Context/FilterContext";
 import { DataProvider } from "./Shared/Context/DataContext";
 import { LoadingProcessComponent } from "./Shared/LoadingProcess.component";
 import { MainLayoutComponent } from "./Main/Main-Layout.component";
+import { znTheme } from "./Shared/Style/Style-MainTheme";
 
-declare module "@mui/styles/defaultTheme" {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface DefaultTheme extends Theme {}
-}
-
-const theme = createTheme();
+const theme = znTheme;
 
 ReactDOM.render(
     <StyledEngineProvider injectFirst>
@@ -26,9 +16,7 @@ ReactDOM.render(
             <Suspense fallback={<LoadingProcessComponent />}>
                 <FilterProvider>
                     <DataProvider>
-                        <StylesProvider injectFirst>
-                            <MainLayoutComponent />
-                        </StylesProvider>
+                        <MainLayoutComponent />
                     </DataProvider>
                 </FilterProvider>
             </Suspense>

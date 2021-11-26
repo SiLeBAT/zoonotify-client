@@ -13,20 +13,23 @@ import { modifyTableDataStringService } from "../../../../../../Core/modifyTable
  */
 export function generateDataRowsCsvString(
     dataArray: DbCollection,
-    headers: DbKey[],
+    headers: DbKey[]
 ): string {
     const csvTable: string[] = [];
     dataArray.forEach((row) => {
         let csvRow: string[] = [];
 
-        const resistanceRowArray = new Array(resistancesCollection.length).fill(0)
+        const resistanceRowArray = new Array(resistancesCollection.length).fill(
+            0
+        );
 
         headers.forEach((element) => {
             if (element === "resistance") {
                 row.resistance.forEach((resistance) => {
-                    const resistanceIndex = resistancesCollection.indexOf(resistance) 
-                    resistanceRowArray[resistanceIndex] = 1
-                })
+                    const resistanceIndex =
+                        resistancesCollection.indexOf(resistance);
+                    resistanceRowArray[resistanceIndex] = 1;
+                });
                 csvRow = csvRow.concat(resistanceRowArray);
             } else {
                 const rowValue: string = row[element];

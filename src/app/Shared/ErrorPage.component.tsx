@@ -14,12 +14,12 @@ export function ErrorPageComponent(props: {
 
     const errorString = props.errorStatus.toString();
 
-    let errorText = "GeneralErrorText"
-    let errorTitle = "GeneralErrorTitle"
+    let errorText = "GeneralErrorText";
+    let errorTitle = "GeneralErrorTitle";
 
     if (props.errorStatus === 404) {
-        errorText = "PageNotFoundText"
-        errorTitle = "PageNotFoundTitle"
+        errorText = "PageNotFoundText";
+        errorTitle = "PageNotFoundTitle";
     }
 
     return (
