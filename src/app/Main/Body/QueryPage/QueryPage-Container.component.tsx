@@ -3,17 +3,10 @@ import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
-    ClientIsolateCountedGroups,
-    DbCollection,
-    DbKey,
     MainFilterList,
     subFiltersList,
 } from "../../../Shared/Model/Client_Isolate.model";
-import {
-    FILTER_URL,
-    ISOLATE_COUNT_URL,
-    ISOLATE_URL,
-} from "../../../Shared/URLs";
+import { ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
 import {
     defaultFilter,
@@ -27,7 +20,6 @@ import {
     FeatureType,
 } from "../../../Shared/Context/DataContext";
 import {
-    ClientFiltersConfig,
     ClientSingleFilterConfig,
     FilterInterface,
     FilterType,
@@ -38,32 +30,19 @@ import { QueryPageLayoutComponent } from "./QueryPage-Layout.component";
 import { CheckIfFilterIsSet } from "./Services/checkIfFilterIsSet.service";
 import { chooseSelectedDisplayedFeaturesService } from "./Services/SelectorServices/chooseSelectedDisplFeatures.service";
 import { chooseSelectedFiltersService } from "./Services/SelectorServices/chooseSelectedFilters.service";
-import { calculateRelativeTableData } from "./Services/TableServices/calculateRelativeTableData.service";
-import { adaptCountedIsolatesGroupsService } from "./Services/adaptCountedIsolatesGroups.service";
-import { generateTableHeaderValuesService } from "./Services/TableServices/generateTableHeaderValues.service";
-import { generateStatisticTableDataAbsService } from "./Services/TableServices/generateStatisticTableDataAbs.service";
 import { getFeaturesFromPath } from "./Services/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
-import { generateUniqueValuesService } from "./Services/generateUniqueValues.service";
-import {
-    IsolateCountedDTO,
-    IsolateDTO,
-} from "../../../Shared/Model/Api_Isolate.model";
-import { FilterConfigDTO } from "../../../Shared/Model/Api_Filter.model";
-import { adaptFilterFromApiService } from "./Services/adaptFilterFromAPI.service";
-import {
-    calculateRowColSumsAbsolute,
-    calculateRowColSumsRelative,
-} from "./Services/TableServices/calculateRowColSums.service";
-import { dataAndStatisticToZipFile } from "./Services/ExportServices/dataAndStatisticToZipFile.service";
-import { adaptIsolatesFromAPI } from "../../../Shared/adaptIsolatesFromAPI.service";
-import { generateExportLabels } from "./Services/ExportServices/generateExportLabels.service";
-import { getCurrentDate } from "../../../Core/getCurrentDate.service";
+import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
+
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentContainer } from "./QueryPageContent/QueryPageContent-Container";
 import { ExportDialogComponent } from "./ExportDialog/ExportDialog.component";
 import { SubHeaderExportButtonComponent } from "./Subheader/SubHeader-ExportButton.component";
 import { DrawerContainer } from "./Drawer/Drawer-Container.component";
+import { exportZipService } from "./Services/ContainerServices/exportZip.service";
+import { generateDataObjectsService } from "./Services/ContainerServices/generateDataObjects.services";
+import { fetchInitialDataService } from "./Services/ContainerServices/fetchInitialData.service";
+import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [isolateStatus, setIsolateStatus] = useState<number>();
@@ -75,8 +54,8 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [dataIsMounted, setDataIsMounted] = useState<boolean>(false);
     const [dataIsLoading, setDataIsLoading] = useState<boolean>(true);
     const [
-        conditionalValuesAreLoading,
-        setConditionalValuesAreLoading,
+        updateFilterAndDataIsLoading,
+        setUpdateFilterAndDataIsLoading,
     ] = useState<boolean>(true);
     const [initialUniqueValues, setInitialUniqueValues] = useState<
         FilterInterface
@@ -121,6 +100,8 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const getPngDownloadUriRef = useRef<(() => Promise<string>) | null>(null);
 
+    // handle Drawer
+
     const handleClickOpenCloseDrawer = (): void => {
         if (drawerIsOpen) {
             setDrawerIsOpen(false);
@@ -132,6 +113,8 @@ export function QueryPageContainerComponent(): JSX.Element {
     const handleMoveResizeBar = (newWidth: number): void => {
         setDrawerWidth(newWidth);
     };
+
+    // handle display features
 
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
@@ -182,6 +165,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         setData(newTable);
     };
 
+    // handle filters
+
     const handleChangeFilter = (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
@@ -217,6 +202,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilter(newFilter);
     };
 
+    // handle display options
+
     const handleChangeDisplayOptions = (displayOption: string): void => {
         const optionValue = displayOption as DisplayOptionType;
         setData({
@@ -224,6 +211,8 @@ export function QueryPageContainerComponent(): JSX.Element {
             option: optionValue,
         });
     };
+
+    // handle displayed filters
 
     const handleSubmitFiltersToDisplay = (
         newFiltersToDisplay: string[]
@@ -251,106 +240,18 @@ export function QueryPageContainerComponent(): JSX.Element {
         setFilter(newFilter);
     };
 
+    // handle export
+
     const fetchIsolatesAndExportZip = async (): Promise<void> => {
         setLoadingIsolates(true);
-        let rawData: DbCollection = [];
-        let rawKeys: DbKey[] = [];
-        let statData: Record<string, string>[] = [];
-        let statKeys: string[] = [];
-
-        const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
-
-        const exportLabels = generateExportLabels(filter.mainFilter, t);
-        const subFileNames = {
-            raw: t("Export:FileName.DataSet"),
-            stat: t("Export:FileName.Stat"),
-        };
-
-        const tableAttributeNames: {
-            row: string | undefined;
-            column: string | undefined;
-        } = {
-            row: undefined,
-            column: undefined,
-        };
-
-        if (!_.isEmpty(data.row)) {
-            tableAttributeNames.row = t(`QueryPage:Filters.${data.row}`);
-        } else {
-            tableAttributeNames.row = undefined;
-        }
-        if (!_.isEmpty(data.column)) {
-            tableAttributeNames.column = t(`QueryPage:Filters.${data.column}`);
-        } else {
-            tableAttributeNames.column = undefined;
-        }
-
-        if (exportOptions.stat) {
-            if (data.option === "absolute") {
-                statData = data.statisticDataAbsolute;
-            }
-            if (data.option === "relative") {
-                statData = data.statisticDataRelative;
-            }
-            if (!_.isEmpty(statData)) {
-                statKeys = Object.keys(statData[0]);
-            }
-        }
-
-        if (exportOptions.raw) {
-            const urlParams = new URLSearchParams(history.location.search);
-            urlParams.delete("row");
-            urlParams.delete("column");
-            const urlParamsString = urlParams.toString();
-            const isolateFilteredUrl = `${ISOLATE_URL}?${urlParamsString}`;
-            const isolateFilteredResponse: ApiResponse<IsolateDTO> = await callApiService(
-                isolateFilteredUrl
-            );
-            const isolateFilteredStatus = isolateFilteredResponse.status;
-            if (
-                isolateFilteredStatus === 200 &&
-                isolateFilteredResponse.data !== undefined
-            ) {
-                const isolateFilteredProp: IsolateDTO =
-                    isolateFilteredResponse.data;
-                const adaptedFilteredIsolates: DbCollection = adaptIsolatesFromAPI(
-                    isolateFilteredProp
-                );
-                rawData = adaptedFilteredIsolates;
-                rawKeys = MainFilterList;
-            }
-        }
-
-        let chartImgUri: string | undefined;
-        const znPngFilename = `ZooNotify_${t(
-            "Export:FileName.Chart"
-        )}_${getCurrentDate()}.png`;
-
-        if (exportOptions.chart) {
-            if (getPngDownloadUriRef.current !== null) {
-                chartImgUri = await getPngDownloadUriRef.current();
-            }
-        }
-
-        dataAndStatisticToZipFile({
+        const urlParams = new URLSearchParams(history.location.search);
+        await exportZipService({
+            t,
+            filter,
+            data,
             exportOptions,
-            tableAttributeNames,
-            rawDataSet: {
-                rawData,
-                rawKeys,
-            },
-            statDataSet: {
-                statData,
-                statKeys,
-            },
-            imgData: chartImgUri,
-            ZNFilename,
-            znPngFilename,
-            filter: filter.selectedFilter,
-            allFilterLabel: exportLabels.allFilterLabel,
-            mainFilterLabels: exportLabels.mainFilterLabels,
-            mainFilterAttributes: filter.mainFilter,
-            subFileNames,
+            urlParams,
+            getPngDownloadUriRef,
         });
         setExportDialogIsOpen(false);
         setLoadingIsolates(false);
@@ -370,94 +271,21 @@ export function QueryPageContainerComponent(): JSX.Element {
         fetchIsolatesAndExportZip();
     };
 
-    const fetchAndSetData = async (): Promise<void> => {
+    // data from api
+
+    const fetchAndSetInitialData = async (): Promise<void> => {
         setDataIsMounted(false);
-        const isolateResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
-            ISOLATE_COUNT_URL
-        );
-        const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
-            FILTER_URL
-        );
+        const initialData = await fetchInitialDataService();
+        setIsolateStatus(initialData.status.isolateStatus);
+        setFilterStatus(initialData.status.filterStatus);
 
-        setIsolateStatus(isolateResponse.status);
-        setFilterStatus(filterResponse.status);
-
-        if (isolateResponse.data && filterResponse.data) {
-            const isolateCountProp: IsolateCountedDTO = isolateResponse.data;
-
-            const totalNrOfIsolates = isolateCountProp.totalNumberOfIsolates;
-
-            const filterProp: FilterConfigDTO = filterResponse.data;
-
-            const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
-                filterProp
-            );
-
-            const adaptedFilterProp: ClientFiltersConfig = adaptFilterFromApiService(
-                filterProp
-            );
-            const adaptedSubFilters: ClientSingleFilterConfig[] = [];
-            adaptedFilterProp.filters.forEach((adaptedFilter) => {
-                if (adaptedFilter.parent !== undefined) {
-                    adaptedSubFilters.push(adaptedFilter);
-                }
-            });
-
-            setSubFilters(adaptedSubFilters);
-            setUniqueDataValues(uniqueValuesObject);
-            setInitialUniqueValues(uniqueDataValues);
-            setTotalNrOfIsol(totalNrOfIsolates);
+        if (initialData.data) {
+            setSubFilters(initialData.data.subFilters);
+            setUniqueDataValues(initialData.data.uniqueDataValues);
+            setInitialUniqueValues(initialData.data.uniqueDataValues);
+            setTotalNrOfIsol(initialData.data.totalNrOfIsolates);
             setDataIsMounted(true);
         }
-    };
-
-    const fetchNewFilterValues = async (): Promise<void> => {
-        setConditionalValuesAreLoading(true);
-        const newUniqueValues = _.cloneDeep(uniqueDataValues);
-        const filterStatusList: number[] = [];
-        const getConditionalFilterValues = filter.displayedFilters.map(
-            async (displayedFilter) => {
-                const urlParams = new URLSearchParams(history.location.search);
-                urlParams.delete("row");
-                urlParams.delete("column");
-                urlParams.delete(displayedFilter);
-
-                const selectedFilterString = urlParams.toString();
-                const conditionalFilterUrl = `${FILTER_URL}/${displayedFilter}?${selectedFilterString}`;
-
-                const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
-                    conditionalFilterUrl
-                );
-
-                filterStatusList.push(filterResponse.status);
-
-                if (filterResponse.data) {
-                    const filterProp: FilterConfigDTO = filterResponse.data;
-
-                    const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
-                        filterProp
-                    );
-                    newUniqueValues[displayedFilter] =
-                        uniqueValuesObject[displayedFilter];
-                }
-            }
-        );
-
-        await Promise.all(getConditionalFilterValues);
-
-        let finalFilterStatus = 200;
-        filterStatusList.forEach((status) => {
-            if (status !== 200) {
-                finalFilterStatus = status;
-            }
-        });
-        if (finalFilterStatus === 200) {
-            setUniqueDataValues(newUniqueValues);
-        } else {
-            setUniqueDataValues(initialUniqueValues);
-        }
-        setFilterStatus(finalFilterStatus);
-        setConditionalValuesAreLoading(false);
     };
 
     const setTableFromPath = (): void => {
@@ -488,76 +316,9 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
-    const setDataContext = (
-        isolateCountGroups:
-            | (Record<string, string | Date> & {
-                  count: number;
-              })[]
-            | undefined,
-        nrOfSelectedIsolates: number
-    ): void => {
-        if ((!isCol && !isRow) || isolateCountGroups === undefined) {
-            setData({
-                ...data,
-                statisticDataAbsolute: [],
-            });
-        } else {
-            const adaptedIsolateCountGroups: ClientIsolateCountedGroups = adaptCountedIsolatesGroupsService(
-                isolateCountGroups
-            );
-
-            const allValuesText = t("QueryPage:Results.NrIsolatesText");
-
-            const columnNames = generateTableHeaderValuesService(
-                isCol,
-                allValuesText,
-                uniqueDataValues,
-                filter.selectedFilter,
-                colAttribute
-            );
-            const statisticTableDataAbs: Record<
-                string,
-                string
-            >[] = generateStatisticTableDataAbsService(
-                isRow,
-                uniqueDataValues,
-                filter.selectedFilter,
-                allValuesText,
-                adaptedIsolateCountGroups,
-                columnNames,
-                colAttribute,
-                rowAttribute
-            );
-
-            const statisticTableDataRel = calculateRelativeTableData(
-                statisticTableDataAbs,
-                nrOfSelectedIsolates
-            );
-
-            const statTableDataWithSumsAbs = calculateRowColSumsAbsolute(
-                statisticTableDataAbs,
-                columnNames,
-                nrOfSelectedIsolates.toString()
-            );
-            const statTableDataWithSumsRel = calculateRowColSumsRelative(
-                statisticTableDataRel,
-                columnNames,
-                nrOfSelectedIsolates.toString(),
-                statTableDataWithSumsAbs
-            );
-
-            setColumnNameValues(columnNames);
-            setData({
-                ...data,
-                statisticDataAbsolute: statisticTableDataAbs,
-                statisticDataRelative: statisticTableDataRel,
-                statTableDataWithSumsAbs,
-                statTableDataWithSumsRel,
-            });
-        }
-    };
-
-    const fetchIsolateCounted = async (): Promise<void> => {
+    const fetchIsolateCounted = async (
+        uniqueValues: FilterInterface
+    ): Promise<void> => {
         setDataIsLoading(true);
         const countedIsolatesResponse: ApiResponse<IsolateCountedDTO> = await callApiService(
             isolateCountUrl
@@ -570,14 +331,64 @@ export function QueryPageContainerComponent(): JSX.Element {
                 countedIsolatesResponse.data;
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
             const isolateCountGroups = isolateCountProp.groups;
-            setDataContext(isolateCountGroups, nrOfSelectedIsolates);
+            if ((!isCol && !isRow) || isolateCountGroups === undefined) {
+                setData({
+                    ...data,
+                    statisticDataAbsolute: [],
+                });
+            } else {
+                const dataObjects = generateDataObjectsService({
+                    t,
+                    isolateCountGroups,
+                    nrOfSelectedIsolates,
+                    uniqueValues,
+                    isCol,
+                    isRow,
+                    selectedFilters: filter.selectedFilter,
+                    colAttribute,
+                    rowAttribute,
+                });
+
+                setColumnNameValues(dataObjects.colNames);
+                setData({
+                    ...data,
+                    statisticDataAbsolute: dataObjects.statisticDataAbsolute,
+                    statisticDataRelative: dataObjects.statisticDataRelative,
+                    statTableDataWithSumsAbs:
+                        dataObjects.statTableDataWithSumsAbs,
+                    statTableDataWithSumsRel:
+                        dataObjects.statTableDataWithSumsRel,
+                });
+            }
             setNrOfSelectedIsol(nrOfSelectedIsolates);
         }
         setDataIsLoading(false);
     };
 
+    const fetchAndUpdateValues = async (): Promise<void> => {
+        setUpdateFilterAndDataIsLoading(true);
+        const urlParams = new URLSearchParams(history.location.search);
+        const conditionalFilters = await fetchConditionalFilters({
+            urlParams,
+            uniqueValues: uniqueDataValues,
+            colAttribute,
+            rowAttribute,
+            displayedFilters: filter.displayedFilters,
+        });
+
+        if (conditionalFilters.status === 200) {
+            setUniqueDataValues(conditionalFilters.data);
+            await fetchIsolateCounted(conditionalFilters.data);
+        } else {
+            setUniqueDataValues(initialUniqueValues);
+        }
+
+        setFilterStatus(conditionalFilters.status);
+        setUpdateFilterAndDataIsLoading(false);
+    };
+
     useEffect(() => {
-        fetchAndSetData();
+        fetchAndSetInitialData();
         return () => {
             setData({ ...data, row: "", column: "" });
         };
@@ -590,17 +401,11 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     useEffect((): void => {
         if (dataIsMounted) {
-            fetchIsolateCounted();
+            fetchAndUpdateValues();
         }
     }, [filter, data.row, data.column, isolateCountUrl]);
 
-    useEffect((): void => {
-        if (dataIsMounted) {
-            fetchNewFilterValues();
-        }
-    }, [filter.selectedFilter, filter.displayedFilters]);
-
-    const isLoading = dataIsLoading || conditionalValuesAreLoading;
+    const isLoading = dataIsLoading || updateFilterAndDataIsLoading;
 
     return (
         <LoadingOrErrorComponent
