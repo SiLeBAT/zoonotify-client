@@ -17,6 +17,7 @@ const subHeaderStyle = css`
     background-color: ${bfrPrimaryPalette[300]};
     box-sizing: border-box;
     box-shadow: 0 8px 6px -6px grey;
+    z-index: 10;
 `
 
 const queryPageStyle = css`

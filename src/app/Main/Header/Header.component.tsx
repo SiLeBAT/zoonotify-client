@@ -27,7 +27,8 @@ const mainHeaderStyle = (open: boolean): SerializedStyles => css`
     flex-direction: row;
     justify-content: space-between;
     box-sizing: border-box;
-    box-shadow: 0 8px 6px -6px grey;
+    box-shadow: ${open ? "0 8px 6px -6px grey" : "none"};
+    z-index: 10;
     background-color: ${primaryColor};
     border-bottom: ${open ? `24px solid ${bfrPrimaryPalette[300]}` : "none"};
 `;
