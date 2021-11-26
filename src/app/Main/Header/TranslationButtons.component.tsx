@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
 import i18next from "i18next";
 import { changeAppLanguage } from "../../Core/localization.service";
-import { primaryColor } from "../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../Shared/Style/Style-MainTheme";
 
 const buttonAreaStyle = css`
     margin-left: 2em;

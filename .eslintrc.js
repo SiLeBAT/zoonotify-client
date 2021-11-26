@@ -6,8 +6,7 @@ module.exports = {
         "eslint-comments",
         "jest",
         "promise",
-        "unicorn",
-        "cypress",
+        "unicorn"
     ],
     extends: [
         "airbnb-typescript",
@@ -68,6 +67,5 @@ module.exports = {
         "unicorn/filename-case": "off",
 
         "unicorn/no-null": "off",
-
     },
 };

@@ -1,15 +1,15 @@
 {
-    "Content": {
-        "Bfr": "BfR - Federal Institute for Risk Assessment",
-        "Faq": "FAQ",
-        "Api": "API-docs",
-        "DataProtection": "Data Protection Declaration",
-        "SupportError": "Error: Support is not available",
-        "Mail": "Submit a problem",
-        "MailText": "Please describe your problem. If it is a problem with the visualization at ZooNotify, a screenshot may be helpful."
-    },
-    "Date": {
-        "Text": "Last modified: ",
-        "Layout": "en"
-    }
+  "Content": {
+    "Bfr": "BfR - Federal Institute for Risk Assessment",
+    "Faq": "FAQ",
+    "Api": "API-docs",
+    "DataProtection": "Data Protection Declaration",
+    "SupportError": "Error: Support is not available",
+    "Mail": "Submit a problem",
+    "MailText": "Please describe your problem. If it is a problem with the visualization at ZooNotify, a screenshot may be helpful."
+  },
+  "Date": {
+    "Text": "Last modified: ",
+    "Layout": "en"
+  }
 }

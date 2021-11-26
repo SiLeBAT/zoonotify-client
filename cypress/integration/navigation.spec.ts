@@ -13,11 +13,18 @@ describe("Test navigation", function () {
         cy.url().should("include", "/dataProtectionDeclaration");
     });
     it("check external links ", function () {
-        cy.get('a[href="https://www.bfr.bund.de/de/start.html"]')
-            .should("have.attr", "target", "_blank")
-        cy.get('a[href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/"]')
-            .should("have.attr", "target", "_blank")
-        cy.get('a[href="/api-docs/v1/"]')
-            .should("have.attr", "target", "_blank")
+        cy.get('a[href="https://www.bfr.bund.de/de/start.html"]').should(
+            "have.attr",
+            "target",
+            "_blank"
+        );
+        cy.get(
+            'a[href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/"]'
+        ).should("have.attr", "target", "_blank");
+        cy.get('a[href="/api-docs/v1/"]').should(
+            "have.attr",
+            "target",
+            "_blank"
+        );
     });
 });

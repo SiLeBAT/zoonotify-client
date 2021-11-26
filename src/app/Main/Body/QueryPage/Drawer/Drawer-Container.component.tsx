@@ -45,7 +45,7 @@ export interface DrawerProps {
 export function DrawerContainer(props: DrawerProps): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const drawerTitle = t("Drawer.Title")
+    const drawerTitle = t("Drawer.Title");
     const handleChangeDisplFeatures = (
         selectedOption: { value: string; label: string } | null,
         keyName: FilterType | FeatureType

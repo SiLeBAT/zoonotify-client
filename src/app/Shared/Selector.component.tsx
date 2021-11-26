@@ -5,7 +5,7 @@ import { InputLabel } from "@mui/material";
 import { FilterType } from "./Model/Filter.model";
 import { FeatureType } from "./Context/DataContext";
 
-const defaultColor = "rgb(204, 204, 204)"
+const defaultColor = "rgb(204, 204, 204)";
 
 const hideSelector = (hide: boolean): SerializedStyles => css`
     display: ${hide ? "none" : "grid"};
@@ -22,7 +22,10 @@ const closeText = keyframes`
     0% {left:0px; top:0px;}
     100%   {color:white; left:0px; top:20px;}
 `;
-const labelStyle = (noSelect: boolean, titleColor: string): SerializedStyles => css`
+const labelStyle = (
+    noSelect: boolean,
+    titleColor: string
+): SerializedStyles => css`
     position: relative;
     animation-name: ${noSelect ? closeText : openText};
     animation-duration: 0.25s;
@@ -33,12 +36,14 @@ const labelStyle = (noSelect: boolean, titleColor: string): SerializedStyles => 
     margin-top: 1em;
 `;
 
-const selectStyle: StylesConfig<{ value: string; label: string}, boolean> = {
+const selectStyle: StylesConfig<{ value: string; label: string }, boolean> = {
     control: (styles, state) => ({
         ...styles,
         backgroundColor: "white",
         borderRadius: "0px",
-        borderColor: state.selectProps.mainColor? state.selectProps.mainColor : defaultColor,
+        borderColor: state.selectProps.mainColor
+            ? state.selectProps.mainColor
+            : defaultColor,
         borderTop: "0 !important",
         borderLeft: "0 !important",
         borderRight: "0 !important",
@@ -66,7 +71,9 @@ const selectStyle: StylesConfig<{ value: string; label: string}, boolean> = {
     }),
     dropdownIndicator: (styles, state) => ({
         ...styles,
-        color: state.selectProps.mainColor? state.selectProps.mainColor : defaultColor,
+        color: state.selectProps.mainColor
+            ? state.selectProps.mainColor
+            : defaultColor,
         ":hover": {
             color: state.selectProps.hooverColor,
         },
@@ -74,7 +81,9 @@ const selectStyle: StylesConfig<{ value: string; label: string}, boolean> = {
 
     clearIndicator: (styles, state) => ({
         ...styles,
-        color: state.selectProps.mainColor? state.selectProps.mainColor : defaultColor,
+        color: state.selectProps.mainColor
+            ? state.selectProps.mainColor
+            : defaultColor,
         ":hover": {
             color: state.selectProps.hooverColor,
         },
@@ -112,7 +121,10 @@ export interface SelectorProps {
      */
     selectAttribute: FilterType | FeatureType;
     onChange: (
-        selectedOption: ValueType<{ value: string; label: string }, boolean> | null,
+        selectedOption: ValueType<
+            { value: string; label: string },
+            boolean
+        > | null,
         keyName: FilterType | FeatureType
     ) => void;
     /**
@@ -134,10 +146,13 @@ export interface SelectorProps {
  */
 export function SelectorComponent(props: SelectorProps): JSX.Element {
     const handleChange = (
-        selectedOption: ValueType<{
-            value: string;
-            label: string;
-        }, boolean> | null,
+        selectedOption: ValueType<
+            {
+                value: string;
+                label: string;
+            },
+            boolean
+        > | null,
         keyName: FilterType | FeatureType
     ): void => props.onChange(selectedOption, keyName);
 

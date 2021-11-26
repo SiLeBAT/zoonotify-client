@@ -25,17 +25,17 @@ export function generateStatisticTableCsvString(
         if (index > -1) {
             headerToPrint.splice(index, 1);
         }
-        headerToPrint.unshift(tableAttributeNames.row)
+        headerToPrint.unshift(tableAttributeNames.row);
         StatDataString.push(headerToPrint.join(","));
     } else {
-        const headerWithoutRowName: string[]= [...headers];
+        const headerWithoutRowName: string[] = [...headers];
         const index = headerWithoutRowName.indexOf("name");
         if (index > -1) {
             headerWithoutRowName.splice(index, 1);
         }
         StatDataString.push(`,${headerWithoutRowName.join(",")}`);
     }
-    
+
     StatDataString.push(
         generateStatisticRowsCsvString(statDataSet.statData, headers)
     );

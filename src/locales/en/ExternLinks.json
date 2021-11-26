@@ -1,35 +1,35 @@
 {
-    "TextContent": {
-        "Heading": "Further Information",
-        "Text": "Here you will find links to national and international institutions for consumer health protection and disease surveillance and prevention as well as helpful tools in this subject area. The list makes no claim to completeness. The BfR does not assume any responsibility for the contents of the Internet sites listed here."
-    },
-    "Guidelines": {
-        "Title": "Legal regulations",
-        "AVV": "General administrative regulation on zoonoses in the foodchain",
-        "RL": "Directive 2003/99/EG",
-        "EG": "Regulation (EC) No. 2160/2003",
-        "EU13": "Commission implementing decision (EU) 2013/652/EU",
-        "EU20": "Commission implementing decision (EU) 2020/1729"
-    },
-    "Reports": {
-        "Title": "Reports",
-        "ZoonosenBfR": "Zoonoses: health assessments",
-        "ZoonosenMonitoring": "Reports on zoonoses monitoring according to the general administrative regulation on zoonoses in the foodchain",
-        "AR": "Status report on antibiotic resistance and use in animal husbandry and the food chain",
-        "AMK": "Report of the BMEL on the evaluation of the antibiotic minimization concept of the 16th AMG (Medicines Act) amendment"
-    },
-    "Institutes": {
-        "Title": "Organizations and Institutes",
-        "RKI": "Robert Koch-Institute (RKI)",
-        "BVL": "Federal Office of Consumer Protection and Food Safety (BVL)",
-        "EFSA": "European Food Safety Authority (EFSA)",
-        "ECDC": "European Centre for Disease Prevention and Control (ECDC)",
-        "BMEL": "Federal Ministry of Food and Agriculture (BMEL)"
-    },
-    "Platforms": {
-        "Title": "Online Tools",
-        "Survstat": "Survstat@RKI 2.0",
-        "ArEFSA": "Antimicrobial resistance in Europe - EFSA",
-        "SurveillanceAtlas": "Surveillance Atlas of Infectious Diseases - ECDC"
-    }
+  "TextContent": {
+    "Heading": "Further Information",
+    "Text": "Here you will find links to national and international institutions for consumer health protection and disease surveillance and prevention as well as helpful tools in this subject area. The list makes no claim to completeness. The BfR does not assume any responsibility for the contents of the Internet sites listed here."
+  },
+  "Guidelines": {
+    "Title": "Legal regulations",
+    "AVV": "General administrative regulation on zoonoses in the foodchain",
+    "RL": "Directive 2003/99/EG",
+    "EG": "Regulation (EC) No. 2160/2003",
+    "EU13": "Commission implementing decision (EU) 2013/652/EU",
+    "EU20": "Commission implementing decision (EU) 2020/1729"
+  },
+  "Reports": {
+    "Title": "Reports",
+    "ZoonosenBfR": "Zoonoses: health assessments",
+    "ZoonosenMonitoring": "Reports on zoonoses monitoring according to the general administrative regulation on zoonoses in the foodchain",
+    "AR": "Status report on antibiotic resistance and use in animal husbandry and the food chain",
+    "AMK": "Report of the BMEL on the evaluation of the antibiotic minimization concept of the 16th AMG (Medicines Act) amendment"
+  },
+  "Institutes": {
+    "Title": "Organizations and Institutes",
+    "RKI": "Robert Koch-Institute (RKI)",
+    "BVL": "Federal Office of Consumer Protection and Food Safety (BVL)",
+    "EFSA": "European Food Safety Authority (EFSA)",
+    "ECDC": "European Centre for Disease Prevention and Control (ECDC)",
+    "BMEL": "Federal Ministry of Food and Agriculture (BMEL)"
+  },
+  "Platforms": {
+    "Title": "Online Tools",
+    "Survstat": "Survstat@RKI 2.0",
+    "ArEFSA": "Antimicrobial resistance in Europe - EFSA",
+    "SurveillanceAtlas": "Surveillance Atlas of Infectious Diseases - ECDC"
+  }
 }

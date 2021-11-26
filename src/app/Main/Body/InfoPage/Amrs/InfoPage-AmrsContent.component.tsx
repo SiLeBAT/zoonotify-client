@@ -1,29 +1,9 @@
 import React, { useState } from "react";
 import { Button, Divider } from "@mui/material";
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { useTranslation } from "react-i18next";
 import { AmrKey, AmrsTable, microorganismNames } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
-import { primaryColor } from "../../../../Shared/Style/Style-MainTheme.component";
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        button: {
-            textAlign: "left",
-            backgroundColor: "#f3f7fa",
-            "&:hover": {
-                backgroundColor: "#dae9f5",
-                textDecoration: "underline",
-            },
-        },
-        divider: {
-            background: primaryColor,
-            width: "50%",
-            margin: "auto",
-        },
-    })
-);
+import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
 
 export function InfoPageAmrsContentComponent(props: {
     amrKeys: AmrKey[];
@@ -31,7 +11,6 @@ export function InfoPageAmrsContentComponent(props: {
     onAmrDataExport: (amrKey: AmrKey) => void;
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
-    const classes = useStyles();
 
     const [openAmrDialog, setOpenAmrDialog] = useState<AmrKey | null>(null);
 
@@ -88,7 +67,11 @@ export function InfoPageAmrsContentComponent(props: {
             </p>
             <Divider
                 variant="middle"
-                className={classes.divider}
+                sx={{
+                    background: primaryColor,
+                    width: "50%",
+                    margin: "auto",
+                }}
             />
             <p>
                 {t("Methods.Amrs.Paragraph5.Description1")}
@@ -103,7 +86,14 @@ export function InfoPageAmrsContentComponent(props: {
                     <Button
                         onClick={() => handleOpen(amrKey)}
                         color="primary"
-                        className={classes.button}
+                        sx={{
+                            textAlign: "left",
+                            backgroundColor: "#f3f7fa",
+                            "&:hover": {
+                                backgroundColor: "#dae9f5",
+                                textDecoration: "underline",
+                            },
+                        }}
                     >
                         {props.tableData[amrKey].title}
                     </Button>

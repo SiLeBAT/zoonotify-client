@@ -1,7 +1,7 @@
 import React, { MutableRefObject, useRef, useEffect } from "react";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
-import { primaryColor } from "../../../../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../../../../Shared/Style/Style-MainTheme";
 import { ApexChartData } from "./ApexChart.model";
 
 export function BarChartResultsComponent(props: {
@@ -9,7 +9,7 @@ export function BarChartResultsComponent(props: {
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     xAxisLabel: string;
     yAxisLabel: string;
-      // eslint-disable-next-line react/require-default-props
+    // eslint-disable-next-line react/require-default-props
     xAxisMax?: number;
     displayAsStacked: boolean;
 }): JSX.Element {
@@ -80,7 +80,7 @@ export function BarChartResultsComponent(props: {
                     cssClass: "apexcharts-xaxis-title",
                 },
             },
-            max: props.xAxisMax
+            max: props.xAxisMax,
         },
         yaxis: {
             showForNullSeries: false,

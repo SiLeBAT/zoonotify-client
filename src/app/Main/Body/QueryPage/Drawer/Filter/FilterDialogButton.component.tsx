@@ -5,7 +5,7 @@ import {
     onPrimaryColor,
     primaryColor,
     secondaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../Shared/Style/Style-MainTheme";
 
 const buttonStyle = css`
     width: 100%;

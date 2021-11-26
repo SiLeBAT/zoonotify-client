@@ -30,14 +30,11 @@ export function TableContentLayout(props: {
     tableHeader: JSX.Element[];
     tableRows: JSX.Element[];
 }): JSX.Element {
-
     return (
         <TableContainer component={Paper} css={tableContainerStyle}>
             <Table stickyHeader aria-label="statistic table">
                 <TableHead css={headerStyle}>
-                    <TableRow css={headerStyle}>
-                        {props.tableHeader}
-                    </TableRow>
+                    <TableRow css={headerStyle}>{props.tableHeader}</TableRow>
                 </TableHead>
                 <TableBody>{props.tableRows}</TableBody>
             </Table>

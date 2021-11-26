@@ -3,11 +3,15 @@ import { FilterInterface } from "../Model/Filter.model";
 
 export interface FilterContextInterface {
     mainFilter: string[];
-    displayedFilters: string[]
+    displayedFilters: string[];
     selectedFilter: FilterInterface;
 }
 
-export const defaultFiltersToDisplay = ["microorganism", "samplingYear", "samplingContext"]
+export const defaultFiltersToDisplay = [
+    "microorganism",
+    "samplingYear",
+    "samplingContext",
+];
 
 export const defaultFilter: FilterContextInterface = {
     mainFilter: [],
@@ -25,8 +29,9 @@ export const defaultFilter: FilterContextInterface = {
         samplingYear: [],
         serovar: [],
         species: [],
-        serotyp: []
-    }};
+        serotyp: [],
+    },
+};
 interface ProfileState {
     filter: FilterContextInterface;
     setFilter: React.Dispatch<React.SetStateAction<FilterContextInterface>>;

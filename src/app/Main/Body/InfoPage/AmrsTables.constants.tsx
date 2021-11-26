@@ -18,7 +18,6 @@ function createAmrTable(
     };
 }
 
-
 function createAmrTableOneCutOff(
     substanceClass: string,
     amrSubstance: string,

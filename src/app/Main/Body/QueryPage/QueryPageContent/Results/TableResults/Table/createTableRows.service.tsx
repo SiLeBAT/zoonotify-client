@@ -2,7 +2,6 @@
 import { css, jsx, SerializedStyles } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import TableCell from "@mui/material/TableCell";
-import { ClassNameMap } from '@mui/styles';
 import { getMicroorganismLabelService } from "../../../../Services/getMicroorganismLabel";
 import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
 import {
@@ -38,7 +37,8 @@ export function createTableRowsService(props: {
     displayRow: boolean;
     displayOption: DisplayOptionType;
     colKeys: string[];
-    classes: ClassNameMap<"tableCell">;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    style: Record<string, string | number>;
 }): JSX.Element[] {
     const { t } = useTranslation(["QueryPage"]);
     let rowName: string | JSX.Element = "";
@@ -69,7 +69,7 @@ export function createTableRowsService(props: {
     rowCells.push(
         <TableCell
             key={`isolates-${props.row.name}-name`}
-            className={props.classes.tableCell}
+            sx={props.style}
             component="th"
             scope="row"
             align="left"
@@ -83,7 +83,7 @@ export function createTableRowsService(props: {
         rowCells.push(
             <TableCell
                 key={`isolates-${props.row.name}-${colKey}`}
-                className={props.classes.tableCell}
+                sx={props.style}
                 component="th"
                 scope="row"
                 align="right"
@@ -98,7 +98,7 @@ export function createTableRowsService(props: {
         rowCells.push(
             <TableCell
                 key="isolates-row-sum"
-                className={props.classes.tableCell}
+                sx={props.style}
                 component="th"
                 scope="row"
                 align="right"

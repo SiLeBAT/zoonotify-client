@@ -1,337 +1,337 @@
 {
-    "Content": {
-        "Title": "Abfrageergebnisse",
-        "DataStatus": "Validierte Laborergebnisse nach RL 99/2003/EU - Datenstand {{date}}",
-        "MainText": "ZooNotify ermöglicht, eine Auswahl der Typisierungsergebnisse der an die Nationalen Referenzlaboratorien am BfR gesendeten Isolate abzufragen. Hierbei handelt es sich um Zoonoseereger und Kommensale, die im Rahmen des nationalen Zoonosen-Monitorings nach AVV Zoonosen Lebensmittelkette sowie der Salmonellen-Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden. Sie können eigene Abfragen mit der Filterfunktion links erstellen oder Beispielabfragen [LINK] abrufen und bearbeiten. Dabei erzeugt ZooNotify für Sie downloadbare Tabellen und Grafiken. Abfragen können Sie über die URL reproduzieren und teilen."
+  "Content": {
+    "Title": "Abfrageergebnisse",
+    "DataStatus": "Validierte Laborergebnisse nach RL 99/2003/EU - Datenstand {{date}}",
+    "MainText": "ZooNotify ermöglicht, eine Auswahl der Typisierungsergebnisse der an die Nationalen Referenzlaboratorien am BfR gesendeten Isolate abzufragen. Hierbei handelt es sich um Zoonoseereger und Kommensale, die im Rahmen des nationalen Zoonosen-Monitorings nach AVV Zoonosen Lebensmittelkette sowie der Salmonellen-Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden. Sie können eigene Abfragen mit der Filterfunktion links erstellen oder Beispielabfragen [LINK] abrufen und bearbeiten. Dabei erzeugt ZooNotify für Sie downloadbare Tabellen und Grafiken. Abfragen können Sie über die URL reproduzieren und teilen."
+  },
+  "Results": {
+    "Parameter": "Ausgewählte Filter",
+    "NrIsolatesText": "Anzahl Isolate",
+    "NrIsolatesTextRelative": "Anteil Isolate",
+    "Table": "Tabelle",
+    "Unit": "in %",
+    "per": "je"
+  },
+  "Buttons": {
+    "Delete": "Auswahl zurücksetzen"
+  },
+  "Drawer": {
+    "Title": "Einstellungen",
+    "Subtitles": {
+      "Filter": "Filter",
+      "Graph": "Anzuzeigende Merkmale"
     },
-    "Results": {
-        "Parameter": "Ausgewählte Filter",
-        "NrIsolatesText": "Anzahl Isolate",
-        "NrIsolatesTextRelative": "Anteil Isolate",
-        "Table": "Tabelle",
-        "Unit": "in %",
-        "per": "je"
-    },
-    "Buttons": {
-        "Delete": "Auswahl zurücksetzen"
-    },
-    "Drawer": {
-        "Title": "Einstellungen",
-        "Subtitles": {
-            "Filter": "Filter",
-            "Graph": "Anzuzeigende Merkmale"
-        },
-        "Selector": "--keine weiteren Optionen--",
-        "Graphs": {
-            "Row": "Zeilen / x-Achse",
-            "Column": "Spalten / y-Achse"
-        }
-    },
-    "FilterDialog": {
-        "ButtonText": "Filter auswählen",
-        "SelectAll": "Alle auswählen",
-        "DeselectAll": "Auswahl löschen",
-        "Cancel": "Abbrechen",
-        "Submit": "Anwenden",
-        "TextContentBeforeLink": "Bitte wählen Sie die gewünschten Filter aus. Die ausgewählten Filter werden nach dem Bestätigen angezeigt. Weitere Informationen zu den Filtern finden Sie auf der Seite ",
-        "TextContentAfterLink": ".",
-        "LinkText": "Erläuterungen",
-        "DialogTitle": "Filter auswählen"
-    },
-    "Filters": {
-        "All": "Alle Werte",
-        "microorganism": "Mikroorganismus",
-        "matrix": "Matrix",
-        "samplingContext": "Probenahmegrund",
-        "federalState": "Bundesland",
-        "samplingStage": "Probenahmestelle",
-        "origin": "Probenherkunft",
-        "category": "Tierart/Lebensmittel Oberkategorie",
-        "productionType": "Tierart Produktionsrichtung/Lebensmittel",
-        "resistance": "Antimikrobielle Resistenz",
-        "samplingYear": "Erhebungsjahr",
-        "serovar": "Serovar",
-        "species": "Spezies",
-        "serotyp": "Serotyp"
-    },
-    "FilterValues": {
-        "microorganism": {
-            "Campylobacter spp": "Campylobacter spp.",
-            "E coli": "E. coli",
-            "ESBL/AmpC-E coli": "ESBL/AmpC-E. coli",
-            "Listeria monocytogenes": "L. monocytogenes",
-            "MRSA": "MRSA",
-            "Salmonella spp": "Salmonella spp.",
-            "STEC": "STEC",
-            "CARBA-E coli": "Carba-E. coli",
-            "Enterococcus spp": "Enterococcus spp."
-        },
-        "formattedMicroorganisms": {
-            "Campylobacter spp": {
-                "prefix": "",
-                "name": "",
-                "italicName": "Campylobacter",
-                "suffix": " spp."
-            },
-            "E coli": {
-                "prefix": "",
-                "name": "",
-                "italicName": "E.coli",
-                "suffix": ""
-            },
-            "ESBL/AmpC-E coli": {
-                "prefix": "ESBL/AmpC-",
-                "name": "",
-                "italicName": "E.coli",
-                "suffix": ""
-            },
-            "Listeria monocytogenes": {
-                "prefix": "",
-                "name": "",
-                "italicName": "L. monocytogenes",
-                "suffix": ""
-            },
-            "MRSA": {
-                "prefix": "",
-                "name": "MRSA",
-                "italicName": "",
-                "suffix": ""
-            },
-            "Salmonella spp": {
-                "prefix": "",
-                "name": "",
-                "italicName": "Salmonella",
-                "suffix": " spp."
-            },
-            "STEC": {
-                "prefix": "",
-                "name": "STEC",
-                "italicName": "",
-                "suffix": ""
-            },
-            "CARBA-E coli": {
-                "prefix": "Carba-",
-                "name": "",
-                "italicName": "E.coli",
-                "suffix": ""
-            },
-            "Enterococcus spp": {
-                "prefix": "",
-                "name": "",
-                "italicName": "Enterococcus",
-                "suffix": " spp."
-            }
-        },
-        "matrix": {
-            "(Konsum)eier, unsortiert": "(Konsum)eier, unsortiert",
-            "Blatt- und Kopfsalate": "Blatt- und Kopfsalate",
-            "Getrocknete Blatt- und Grasprodukte": "Getrocknete Blatt- und Grasprodukte",
-            "Erdbeeren": "Erdbeeren",
-            "Fleischerzeugnisse": "Fleischerzeugnisse",
-            "Kiemeninhalt": "Kiemeninhalt",
-            "Nasenschleimhaut": "Nasenschleimhaut",
-            "Weizenmehl": "Weizenmehl",
-            "Frisches Fleisch": "Frisches Fleisch",
-            "Blinddarminhalt": "Blinddarminhalt",
-            "Sammelmilch": "Sammelmilch",
-            "Konsumeier, sortiert": "Konsumeier, sortiert",
-            "Frische Kräuter": "Frische Kräuter",
-            "Kot / Staub": "Kot / Staub",
-            "Rohmilchkäse": "Rohmilchkäse",
-            "Staub": "Staub",
-            "(Hals)haut": "(Hals)haut",
-            "Blattsalate": "Blattsalate",
-            "Kot": "Kot",
-            "Garnelen": "Garnelen",
-            "Schlachtkörper": "Schlachtkörper",
-            "Ölsaaten / Ölfruchte und Extraktionsschrote": "Ölsaaten / Ölfruchte und Extraktionsschrote",
-            "Muscheln": "Muscheln",
-            "Sprossen": "Sprossen",
-            "Tomaten": "Tomaten",
-            "Haut": "Haut",
-            "Streichfähige Rohwürste": "Streichfähige Rohwürste",
-            "Hackfleisch": "Hackfleisch",
-            "Tatar / Schabefleisch": "Tatar / Schabefleisch",
-            "Nasentupfer": "Nasentupfer",
-            "Muskel": "Muskel",
-            "Petersilie": "Petersilie",
-            "Alleinfuttermittel": "Alleinfuttermittel",
-            "Babyspinat": "Babyspinat"
-        },
-        "samplingContext": {
-            "Zoonosen-Monitoring": "Zoonosen-Monitoring",
-            "Salm-Bekämpfung": "Salm-Bekämpfung"
-        },
-        "federalState": {
-            "keine Anzeige": "Keine Anzeige",
-            "Baden-Wuerttemberg": "Baden-Württemberg",
-            "Bayern": "Bayern",
-            "Berlin": "Berlin",
-            "Brandenburg": "Brandenburg",
-            "Bremen": "Bremen",
-            "Hessen": "Hessen",
-            "Nordrhein-Westfalen": "Nordrhein-Westfalen",
-            "Niedersachsen": "Niedersachsen",
-            "Saarland": "Saarland",
-            "Hamburg": "Hamburg",
-            "Schleswig-Holstein": "Schleswig-Holstein",
-            "Sachsen": "Sachsen",
-            "Mecklenburg-Vorpommern": "Mecklenburg-Vorpommern",
-            "Rheinland-Pfalz": "Rheinland-Pfalz",
-            "Sachsen-Anhalt": "Sachsen-Anhalt",
-            "Thueringen": "Thüringen"
-        },
-        "samplingStage": {
-            "Dezentrale Ölmühlen": "Dezentrale Ölmühlen",
-            "Mühlen": "Mühlen",
-            "Grenzkontrollstelle": "Grenzkontrollstelle",
-            "Packstellen": "Packstellen",
-            "Verarbeitungsbetrieb": "Verarbeitungsbetrieb",
-            "Einzelhandel": "Einzelhandel",
-            "Schlachthof": "Schlachthof",
-            "Erzeugerbetrieb": "Erzeugerbetrieb",
-            "Zentrale Ölmühlen": "Zentrale Ölmühlen",
-            "Wildbahn": "Wildbahn",
-            "Einfuhrstelle": "Einfuhrstelle",
-            "Mischfutterwerk": "Mischfutterwerk"
-        },
-        "origin": {
-            "Lebensmittel": "Lebensmittel",
-            "Tier": "Tier",
-            "Futtermittel": "Futtermittel"
-        },
-        "category": {
-            "Schwein und Rind": "Schwein und Rind",
-            "Wiederkäuer": "Wiederkäuer",
-            "Pute": "Pute",
-            "Huhn": "Huhn",
-            "Rind": "Rind",
-            "Pflanzliche Lebensmittel": "Pflanzliche Lebensmittel",
-            "Schwein": "Schwein",
-            "Meeresfrüchte": "Meeresfrüchte",
-            "kleine Wiederkäuer": "kleine Wiederkäuer",
-            "Nutztiere": "Nutztiere",
-            "Wildschwein": "Wildschwein",
-            "Wildwiederkäuer": "Wildwiederkäuer",
-            "Rehwild": "Rehwild",
-            "Geflügel": "Geflügel",
-            "Wildgeflügel": "Wildgeflügel",
-            "Süßwasserfische": "Süßwasserfische"
-        },
-        "productionType": {
-            "Cypriniden (Karpfenartige)": "Cypriniden (Karpfenartige)",
-            "Getreide": "Getreide",
-            "Lamm": "Lamm", 
-            "Zuchthühner, Mastlinie": "Zuchthühner, Mastlinie",
-            "Zuchtputen": "Zuchtputen",
-            "Wiederkäuer für Milchproduktion": "Wiederkäuer für Milchproduktion",
-            "Lebensmittel aus Blättern und Gräsern": "Lebensmittel aus Blättern und Gräsern",
-            "Obst": "Obst",
-            "Legehennen, konventionell": "Legehennen, konventionell",
-            "Mastrind": "Mastrind",
-            "Mastschwein / Rind": "Mastschwein / Rind",
-            "Mastputen": "Mastputen",
-            "Masthähnchen": "Masthähnchen",
-            "Milchrind, ökologisch": "Milchrind, ökologisch",
-            "Milchrind, konventionell": "Milchrind, konventionell",
-            "Legehennen": "Legehennen",
-            "Kräuter": "Kräuter",
-            "Zuchthühner, Legelinie": "Zuchthühner, Legelinie",
-            "Milchrind": "Milchrind",
-            "Mastschwein": "Mastschwein",
-            "Mastkalb / Jungrind": "Mastkalb / Jungrind",
-            "Blattgemüse": "Blattgemüse",
-            "Zuchtsauen": "Zuchtsauen",
-            "Läufer bis 30 kg": "Läufer bis 30 kg",
-            "Krebstiere": "Krebstiere",
-            "Rind": "Rind",
-            "Schaf und Ziege für Milchproduktion": "Schaf und Ziege für Milchproduktion",
-            "Nutztiere": "Nutztiere",
-            "Masthähnchen, konventionell": "Masthähnchen, konventionell",
-            "Wildschwein": "Wildschwein",
-            "Masthähnchen, ökologisch": "Masthähnchen, ökologisch",
-            "Zweischalige Weichtiere": "Zweischalige Weichtiere",
-            "Gemüse": "Gemüse",
-            "Zuchthühner, Lege- und Mastlinie": "Zuchthühner, Lege- und Mastlinie",
-            "Mastschwein bis 50 kg": "Mastschwein bis 50 kg",
-            "Wildwiederkäuer": "Wildwiederkäuer",
-            "Rehwild": "Rehwild",
-            "Mastputen, ökologisch": "Mastputen, ökologisch",
-            "Mastputen, konventionell": "Mastputen, konventionell",
-            "Mastgeflügel": "Mastgeflügel",
-            "Mastschwein, konventionell": "Mastschwein, konventionell",
-            "Enten und Gänse": "Enten und Gänse",
-            "Mastschwein, ökologisch": "Mastschwein, ökologisch",
-            "Tilapia und Pangasius": "Tilapia und Pangasius"
-        },
-        "samplingYear": {
-            "2010": "2010",
-            "2011": "2011",
-            "2012": "2012",
-            "2013": "2013",
-            "2014": "2014",
-            "2015": "2015",
-            "2016": "2016",
-            "2017": "2017",
-            "2018": "2018",
-            "2019": "2019", 
-            "2020": "2020"
-        },
-        "resistance": {
-            "GEN": "Gentamicin",
-            "KAN": "Kanamycin",
-            "STR": "Streptomycin",
-            "CHL": "Chloramphenicol",
-            "CIP": "Ciprofloxacin",
-            "PEN": "Penicillin G",
-            "FOX": "Cefoxitin",
-            "TMP": "Trimethoprim",
-            "SMX": "Sulfamethoxazol",
-            "TET": "Tetrazyklin",
-            "CLI": "Clindamycin",
-            "ERY": "Erythromycin",
-            "MUP": "Mupirocin",
-            "RIF": "Rifampicin",
-            "LZD": "Linezolid",
-            "FUS": "Fusidinsäure",
-            "SYN": "Quinupristin/Dalfopristin",
-            "TIA": "Tiamulin",
-            "VAN": "Vancomycin",
-            "FOT": "Cefotaxim",
-            "TAZ": "Ceftazidim",
-            "NAL": "Nalidixinsäure",
-            "AMP": "Ampicillin",
-            "COL": "Colistin",
-            "AZI": "Azithromycin",
-            "TGC": "Tigecyclin",
-            "FEP": "Cefepim",
-            "F/C": "Cefotaxim + Clavulansäure",
-            "T/C": "Ceftazidim + Clavulansäure",
-            "ETP": "Ertapenem",
-            "IMI": "Imipenem",
-            "MERO": "Meropenem",
-            "TRM": "Temocillin",
-            "DAP": "Daptomycin",
-            "TEC": "Teicoplanin"
-        }
-    },
-    "NrOfIsolates": {
-        "Title": "Anzahl Isolate",
-        "Total": "Gesamt:",
-        "Selected": "Ausgewählt:"
-    },
-    "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine Statistiktabelle anzuzeigen -",
-    "OptionBar": {
-        "Title": "Anzeigeoptionen",
-        "Absolute": "Absolute Zahlen",
-        "Percent": "Prozentual"
-    },
-    "Sums": {
-        "RowSum": "Zeilensumme",
-        "ColSum": "Spaltensumme"
-    },
-    "Chart": {
-        "Title": "Grafik",
-        "Explanation": "- Bitte wählen Sie eine x-Achse/y-Achse aus, um eine graphische Darstellung der Ergebnisse anzuzeigen -"
+    "Selector": "--keine weiteren Optionen--",
+    "Graphs": {
+      "Row": "Zeilen / x-Achse",
+      "Column": "Spalten / y-Achse"
     }
+  },
+  "FilterDialog": {
+    "ButtonText": "Filter auswählen",
+    "SelectAll": "Alle auswählen",
+    "DeselectAll": "Auswahl löschen",
+    "Cancel": "Abbrechen",
+    "Submit": "Anwenden",
+    "TextContentBeforeLink": "Bitte wählen Sie die gewünschten Filter aus. Die ausgewählten Filter werden nach dem Bestätigen angezeigt. Weitere Informationen zu den Filtern finden Sie auf der Seite ",
+    "TextContentAfterLink": ".",
+    "LinkText": "Erläuterungen",
+    "DialogTitle": "Filter auswählen"
+  },
+  "Filters": {
+    "All": "Alle Werte",
+    "microorganism": "Mikroorganismus",
+    "matrix": "Matrix",
+    "samplingContext": "Probenahmegrund",
+    "federalState": "Bundesland",
+    "samplingStage": "Probenahmestelle",
+    "origin": "Probenherkunft",
+    "category": "Tierart/Lebensmittel Oberkategorie",
+    "productionType": "Tierart Produktionsrichtung/Lebensmittel",
+    "resistance": "Antimikrobielle Resistenz",
+    "samplingYear": "Erhebungsjahr",
+    "serovar": "Serovar",
+    "species": "Spezies",
+    "serotyp": "Serotyp"
+  },
+  "FilterValues": {
+    "microorganism": {
+      "Campylobacter spp": "Campylobacter spp.",
+      "E coli": "E. coli",
+      "ESBL/AmpC-E coli": "ESBL/AmpC-E. coli",
+      "Listeria monocytogenes": "L. monocytogenes",
+      "MRSA": "MRSA",
+      "Salmonella spp": "Salmonella spp.",
+      "STEC": "STEC",
+      "CARBA-E coli": "Carba-E. coli",
+      "Enterococcus spp": "Enterococcus spp."
+    },
+    "formattedMicroorganisms": {
+      "Campylobacter spp": {
+        "prefix": "",
+        "name": "",
+        "italicName": "Campylobacter",
+        "suffix": " spp."
+      },
+      "E coli": {
+        "prefix": "",
+        "name": "",
+        "italicName": "E.coli",
+        "suffix": ""
+      },
+      "ESBL/AmpC-E coli": {
+        "prefix": "ESBL/AmpC-",
+        "name": "",
+        "italicName": "E.coli",
+        "suffix": ""
+      },
+      "Listeria monocytogenes": {
+        "prefix": "",
+        "name": "",
+        "italicName": "L. monocytogenes",
+        "suffix": ""
+      },
+      "MRSA": {
+        "prefix": "",
+        "name": "MRSA",
+        "italicName": "",
+        "suffix": ""
+      },
+      "Salmonella spp": {
+        "prefix": "",
+        "name": "",
+        "italicName": "Salmonella",
+        "suffix": " spp."
+      },
+      "STEC": {
+        "prefix": "",
+        "name": "STEC",
+        "italicName": "",
+        "suffix": ""
+      },
+      "CARBA-E coli": {
+        "prefix": "Carba-",
+        "name": "",
+        "italicName": "E.coli",
+        "suffix": ""
+      },
+      "Enterococcus spp": {
+        "prefix": "",
+        "name": "",
+        "italicName": "Enterococcus",
+        "suffix": " spp."
+      }
+    },
+    "matrix": {
+      "(Konsum)eier, unsortiert": "(Konsum)eier, unsortiert",
+      "Blatt- und Kopfsalate": "Blatt- und Kopfsalate",
+      "Getrocknete Blatt- und Grasprodukte": "Getrocknete Blatt- und Grasprodukte",
+      "Erdbeeren": "Erdbeeren",
+      "Fleischerzeugnisse": "Fleischerzeugnisse",
+      "Kiemeninhalt": "Kiemeninhalt",
+      "Nasenschleimhaut": "Nasenschleimhaut",
+      "Weizenmehl": "Weizenmehl",
+      "Frisches Fleisch": "Frisches Fleisch",
+      "Blinddarminhalt": "Blinddarminhalt",
+      "Sammelmilch": "Sammelmilch",
+      "Konsumeier, sortiert": "Konsumeier, sortiert",
+      "Frische Kräuter": "Frische Kräuter",
+      "Kot / Staub": "Kot / Staub",
+      "Rohmilchkäse": "Rohmilchkäse",
+      "Staub": "Staub",
+      "(Hals)haut": "(Hals)haut",
+      "Blattsalate": "Blattsalate",
+      "Kot": "Kot",
+      "Garnelen": "Garnelen",
+      "Schlachtkörper": "Schlachtkörper",
+      "Ölsaaten / Ölfruchte und Extraktionsschrote": "Ölsaaten / Ölfruchte und Extraktionsschrote",
+      "Muscheln": "Muscheln",
+      "Sprossen": "Sprossen",
+      "Tomaten": "Tomaten",
+      "Haut": "Haut",
+      "Streichfähige Rohwürste": "Streichfähige Rohwürste",
+      "Hackfleisch": "Hackfleisch",
+      "Tatar / Schabefleisch": "Tatar / Schabefleisch",
+      "Nasentupfer": "Nasentupfer",
+      "Muskel": "Muskel",
+      "Petersilie": "Petersilie",
+      "Alleinfuttermittel": "Alleinfuttermittel",
+      "Babyspinat": "Babyspinat"
+    },
+    "samplingContext": {
+      "Zoonosen-Monitoring": "Zoonosen-Monitoring",
+      "Salm-Bekämpfung": "Salm-Bekämpfung"
+    },
+    "federalState": {
+      "keine Anzeige": "Keine Anzeige",
+      "Baden-Wuerttemberg": "Baden-Württemberg",
+      "Bayern": "Bayern",
+      "Berlin": "Berlin",
+      "Brandenburg": "Brandenburg",
+      "Bremen": "Bremen",
+      "Hessen": "Hessen",
+      "Nordrhein-Westfalen": "Nordrhein-Westfalen",
+      "Niedersachsen": "Niedersachsen",
+      "Saarland": "Saarland",
+      "Hamburg": "Hamburg",
+      "Schleswig-Holstein": "Schleswig-Holstein",
+      "Sachsen": "Sachsen",
+      "Mecklenburg-Vorpommern": "Mecklenburg-Vorpommern",
+      "Rheinland-Pfalz": "Rheinland-Pfalz",
+      "Sachsen-Anhalt": "Sachsen-Anhalt",
+      "Thueringen": "Thüringen"
+    },
+    "samplingStage": {
+      "Dezentrale Ölmühlen": "Dezentrale Ölmühlen",
+      "Mühlen": "Mühlen",
+      "Grenzkontrollstelle": "Grenzkontrollstelle",
+      "Packstellen": "Packstellen",
+      "Verarbeitungsbetrieb": "Verarbeitungsbetrieb",
+      "Einzelhandel": "Einzelhandel",
+      "Schlachthof": "Schlachthof",
+      "Erzeugerbetrieb": "Erzeugerbetrieb",
+      "Zentrale Ölmühlen": "Zentrale Ölmühlen",
+      "Wildbahn": "Wildbahn",
+      "Einfuhrstelle": "Einfuhrstelle",
+      "Mischfutterwerk": "Mischfutterwerk"
+    },
+    "origin": {
+      "Lebensmittel": "Lebensmittel",
+      "Tier": "Tier",
+      "Futtermittel": "Futtermittel"
+    },
+    "category": {
+      "Schwein und Rind": "Schwein und Rind",
+      "Wiederkäuer": "Wiederkäuer",
+      "Pute": "Pute",
+      "Huhn": "Huhn",
+      "Rind": "Rind",
+      "Pflanzliche Lebensmittel": "Pflanzliche Lebensmittel",
+      "Schwein": "Schwein",
+      "Meeresfrüchte": "Meeresfrüchte",
+      "kleine Wiederkäuer": "kleine Wiederkäuer",
+      "Nutztiere": "Nutztiere",
+      "Wildschwein": "Wildschwein",
+      "Wildwiederkäuer": "Wildwiederkäuer",
+      "Rehwild": "Rehwild",
+      "Geflügel": "Geflügel",
+      "Wildgeflügel": "Wildgeflügel",
+      "Süßwasserfische": "Süßwasserfische"
+    },
+    "productionType": {
+      "Cypriniden (Karpfenartige)": "Cypriniden (Karpfenartige)",
+      "Getreide": "Getreide",
+      "Lamm": "Lamm",
+      "Zuchthühner, Mastlinie": "Zuchthühner, Mastlinie",
+      "Zuchtputen": "Zuchtputen",
+      "Wiederkäuer für Milchproduktion": "Wiederkäuer für Milchproduktion",
+      "Lebensmittel aus Blättern und Gräsern": "Lebensmittel aus Blättern und Gräsern",
+      "Obst": "Obst",
+      "Legehennen, konventionell": "Legehennen, konventionell",
+      "Mastrind": "Mastrind",
+      "Mastschwein / Rind": "Mastschwein / Rind",
+      "Mastputen": "Mastputen",
+      "Masthähnchen": "Masthähnchen",
+      "Milchrind, ökologisch": "Milchrind, ökologisch",
+      "Milchrind, konventionell": "Milchrind, konventionell",
+      "Legehennen": "Legehennen",
+      "Kräuter": "Kräuter",
+      "Zuchthühner, Legelinie": "Zuchthühner, Legelinie",
+      "Milchrind": "Milchrind",
+      "Mastschwein": "Mastschwein",
+      "Mastkalb / Jungrind": "Mastkalb / Jungrind",
+      "Blattgemüse": "Blattgemüse",
+      "Zuchtsauen": "Zuchtsauen",
+      "Läufer bis 30 kg": "Läufer bis 30 kg",
+      "Krebstiere": "Krebstiere",
+      "Rind": "Rind",
+      "Schaf und Ziege für Milchproduktion": "Schaf und Ziege für Milchproduktion",
+      "Nutztiere": "Nutztiere",
+      "Masthähnchen, konventionell": "Masthähnchen, konventionell",
+      "Wildschwein": "Wildschwein",
+      "Masthähnchen, ökologisch": "Masthähnchen, ökologisch",
+      "Zweischalige Weichtiere": "Zweischalige Weichtiere",
+      "Gemüse": "Gemüse",
+      "Zuchthühner, Lege- und Mastlinie": "Zuchthühner, Lege- und Mastlinie",
+      "Mastschwein bis 50 kg": "Mastschwein bis 50 kg",
+      "Wildwiederkäuer": "Wildwiederkäuer",
+      "Rehwild": "Rehwild",
+      "Mastputen, ökologisch": "Mastputen, ökologisch",
+      "Mastputen, konventionell": "Mastputen, konventionell",
+      "Mastgeflügel": "Mastgeflügel",
+      "Mastschwein, konventionell": "Mastschwein, konventionell",
+      "Enten und Gänse": "Enten und Gänse",
+      "Mastschwein, ökologisch": "Mastschwein, ökologisch",
+      "Tilapia und Pangasius": "Tilapia und Pangasius"
+    },
+    "samplingYear": {
+      "2010": "2010",
+      "2011": "2011",
+      "2012": "2012",
+      "2013": "2013",
+      "2014": "2014",
+      "2015": "2015",
+      "2016": "2016",
+      "2017": "2017",
+      "2018": "2018",
+      "2019": "2019",
+      "2020": "2020"
+    },
+    "resistance": {
+      "GEN": "Gentamicin",
+      "KAN": "Kanamycin",
+      "STR": "Streptomycin",
+      "CHL": "Chloramphenicol",
+      "CIP": "Ciprofloxacin",
+      "PEN": "Penicillin G",
+      "FOX": "Cefoxitin",
+      "TMP": "Trimethoprim",
+      "SMX": "Sulfamethoxazol",
+      "TET": "Tetrazyklin",
+      "CLI": "Clindamycin",
+      "ERY": "Erythromycin",
+      "MUP": "Mupirocin",
+      "RIF": "Rifampicin",
+      "LZD": "Linezolid",
+      "FUS": "Fusidinsäure",
+      "SYN": "Quinupristin/Dalfopristin",
+      "TIA": "Tiamulin",
+      "VAN": "Vancomycin",
+      "FOT": "Cefotaxim",
+      "TAZ": "Ceftazidim",
+      "NAL": "Nalidixinsäure",
+      "AMP": "Ampicillin",
+      "COL": "Colistin",
+      "AZI": "Azithromycin",
+      "TGC": "Tigecyclin",
+      "FEP": "Cefepim",
+      "F/C": "Cefotaxim + Clavulansäure",
+      "T/C": "Ceftazidim + Clavulansäure",
+      "ETP": "Ertapenem",
+      "IMI": "Imipenem",
+      "MERO": "Meropenem",
+      "TRM": "Temocillin",
+      "DAP": "Daptomycin",
+      "TEC": "Teicoplanin"
+    }
+  },
+  "NrOfIsolates": {
+    "Title": "Anzahl Isolate",
+    "Total": "Gesamt:",
+    "Selected": "Ausgewählt:"
+  },
+  "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine Statistiktabelle anzuzeigen -",
+  "OptionBar": {
+    "Title": "Anzeigeoptionen",
+    "Absolute": "Absolute Zahlen",
+    "Percent": "Prozentual"
+  },
+  "Sums": {
+    "RowSum": "Zeilensumme",
+    "ColSum": "Spaltensumme"
+  },
+  "Chart": {
+    "Title": "Grafik",
+    "Explanation": "- Bitte wählen Sie eine x-Achse/y-Achse aus, um eine graphische Darstellung der Ergebnisse anzuzeigen -"
+  }
 }

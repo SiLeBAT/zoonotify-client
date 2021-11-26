@@ -1,9 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Card, CardContent, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
 import { useTranslation } from "react-i18next";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme.component";
+import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
 import { LinkPageLinkListComponent } from "./LinkPage-LinkList.component";
 
 const appNameStyle = css`
@@ -18,19 +17,17 @@ const normalTextStyle = css`
     line-height: 1.6;
     text-align: justify;
 `;
-const useStyles = makeStyles({
-    root: {
-        padding: "1em",
-        margin: "4rem auto",
-        width: "50%",
-    },
-});
 
 export function LinkPageComponent(): JSX.Element {
-    const classes = useStyles();
     const { t } = useTranslation(["ExternLinks"]);
     return (
-        <Card className={classes.root}>
+        <Card
+            sx={{
+                padding: "1em",
+                margin: "4rem auto",
+                width: "50%",
+            }}
+        >
             <CardContent>
                 <Typography variant="h1" css={appNameStyle}>
                     {t("TextContent.Heading")}

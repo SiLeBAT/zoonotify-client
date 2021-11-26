@@ -9,9 +9,8 @@ import { FilterConfigDTO } from "../../../../Shared/Model/Api_Filter.model";
 export function generateUniqueValuesService(
     filterProp: FilterConfigDTO
 ): FilterInterface {
-    const adaptedDbFilters: ClientFiltersConfig = adaptFilterFromApiService(
-        filterProp
-    );
+    const adaptedDbFilters: ClientFiltersConfig =
+        adaptFilterFromApiService(filterProp);
 
     const uniqueValuesObject: FilterInterface = {};
 

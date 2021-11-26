@@ -36,18 +36,16 @@ export async function fetchConditionalFilters(props: {
 
             const conditionalFilterUrl = `${FILTER_URL}/${displayedFilter}?${selectedFilterString}`;
 
-            const filterResponse: ApiResponse<FilterConfigDTO> = await callApiService(
-                conditionalFilterUrl
-            );
+            const filterResponse: ApiResponse<FilterConfigDTO> =
+                await callApiService(conditionalFilterUrl);
 
             filterStatusList.push(filterResponse.status);
 
             if (filterResponse.data) {
                 const filterProp: FilterConfigDTO = filterResponse.data;
 
-                const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
-                    filterProp
-                );
+                const uniqueValuesObject: FilterInterface =
+                    generateUniqueValuesService(filterProp);
                 newUniqueValues[displayedFilter] =
                     uniqueValuesObject[displayedFilter];
             }

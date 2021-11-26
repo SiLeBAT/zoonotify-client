@@ -1,8 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { List, ListItem, ListItemText, Theme, ListSubheader } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import createStyles from '@mui/styles/createStyles';
+import { List, ListItem, ListItemText, ListSubheader } from "@mui/material";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
@@ -26,22 +24,6 @@ const parameterValue = css`
         letter-spacing: 0;
     }
 `;
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: "11em",
-        },
-        demo: {
-            backgroundColor: theme.palette.background.paper,
-        },
-        nested: {
-            paddingLeft: 0,
-            lineHeight: "20px",
-            color: "black",
-            fontWeight: "bold",
-        },
-    })
-);
 
 /**
  * @desc Create a ListItem for each parameter
@@ -58,16 +40,17 @@ function createListItemComponent(
         const key = parameter.replace(".", "");
         let parameterName: string | JSX.Element = "";
         if (parameterAttribute === "microorganism") {
-            const translateRootString = `FilterValues.formattedMicroorganisms.${key}`
-            const prefix = t(`${translateRootString}.prefix`)
-            const name = t(`${translateRootString}.name`)
-            const italicName = t(`${translateRootString}.italicName`)
-            const suffix = t(`${translateRootString}.suffix`)
-            parameterName = getMicroorganismLabelService({prefix,
-            name,
-            italicName,
-            suffix}
-            );
+            const translateRootString = `FilterValues.formattedMicroorganisms.${key}`;
+            const prefix = t(`${translateRootString}.prefix`);
+            const name = t(`${translateRootString}.name`);
+            const italicName = t(`${translateRootString}.italicName`);
+            const suffix = t(`${translateRootString}.suffix`);
+            parameterName = getMicroorganismLabelService({
+                prefix,
+                name,
+                italicName,
+                suffix,
+            });
         } else {
             parameterName = t(`FilterValues.${parameterAttribute}.${key}`);
         }
@@ -92,20 +75,26 @@ export interface ListProps {
 }
 
 export function ParameterContentListComponent(props: ListProps): JSX.Element {
-    const classes = useStyles();
     const { t } = useTranslation(["QueryPage"]);
     const label = t(`Filters.${props.parameterLabel}`);
 
     return (
         <List
             dense
-            className={classes.root}
+            sx={{
+                width: "11em",
+            }}
             css={listStyle}
             subheader={
                 <ListSubheader
                     component="div"
                     id="nested-list-subheader"
-                    className={classes.nested}
+                    sx={{
+                        paddingLeft: 0,
+                        lineHeight: "20px",
+                        color: "black",
+                        fontWeight: "bold",
+                    }}
                     css={listHeaderStyle}
                 >
                     {label}

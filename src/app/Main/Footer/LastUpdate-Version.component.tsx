@@ -2,7 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { onPrimaryColor } from "../../Shared/Style/Style-MainTheme.component";
+import { onPrimaryColor } from "../../Shared/Style/Style-MainTheme";
 
 const distanceStyle = css`
     margin: 0;

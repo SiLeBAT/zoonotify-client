@@ -8,7 +8,7 @@ import {
 import {
     bfrDarkgrey,
     primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme.component";
+} from "../../../../../Shared/Style/Style-MainTheme";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import { generateSelectorObject } from "./generateSelectorObject.service";
@@ -52,7 +52,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         props.selectedFilter[props.subFilterAttribute];
     const selectedSubValuesObj = generateSelectorObject(
         props.subFilterAttribute,
-        selectedSubFilterValues,
+        selectedSubFilterValues
     );
     const noFilter: boolean = CheckIfSingleFilterIsSet(
         props.selectedFilter,
@@ -60,7 +60,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
     );
     const dropDownValuesObj = generateSelectorObject(
         props.subFilterAttribute,
-        props.subFilterValues,
+        props.subFilterValues
     );
 
     const handleChange = (

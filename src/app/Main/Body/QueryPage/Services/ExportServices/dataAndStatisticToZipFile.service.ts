@@ -118,8 +118,15 @@ export function dataAndStatisticToZipFile(
         );
     }
 
-    if (zipParameter.exportOptions.chart && zipParameter.imgData !== undefined) {
-        zip.file(zipParameter.znPngFilename, zipParameter.imgData.split(';base64,')[1], {base64: true})
+    if (
+        zipParameter.exportOptions.chart &&
+        zipParameter.imgData !== undefined
+    ) {
+        zip.file(
+            zipParameter.znPngFilename,
+            zipParameter.imgData.split(";base64,")[1],
+            { base64: true }
+        );
     }
 
     const folderName: string = zipParameter.ZNFilename.replace(".csv", ".zip");

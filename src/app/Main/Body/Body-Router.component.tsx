@@ -20,7 +20,10 @@ export function BodyRouterComponent(): JSX.Element {
                 path={ZNPaths.homePagePath}
                 component={HomePageComponent}
             />
-            <Route path={ZNPaths.infoPagePath} component={InfoPageContainerComponent} />
+            <Route
+                path={ZNPaths.infoPagePath}
+                component={InfoPageContainerComponent}
+            />
             <Route
                 path={ZNPaths.queryPagePath}
                 component={QueryPageContainerComponent}

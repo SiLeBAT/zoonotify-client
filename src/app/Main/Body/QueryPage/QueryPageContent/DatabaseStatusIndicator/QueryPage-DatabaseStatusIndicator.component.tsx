@@ -1,8 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from 'react';
-import { callApiService, ApiResponse } from '../../../../../Core/callApi.service';
+import { useEffect, useState } from "react";
+import {
+    callApiService,
+    ApiResponse,
+} from "../../../../../Core/callApi.service";
 import { DatabaseStatusDTO } from "../../../../../Shared/Model/Api_Database.model";
 import { DATABASE_STATUS_URL } from "../../../../../Shared/URLs";
 
@@ -13,7 +16,7 @@ const statusStyle = css`
 export function QueryPageDatabaseStatusIndicatorComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState("");
 
     useEffect(() => {
         callApiService<DatabaseStatusDTO>(DATABASE_STATUS_URL)
@@ -26,8 +29,11 @@ export function QueryPageDatabaseStatusIndicatorComponent(): JSX.Element {
             .catch((error) => {
                 throw error;
             });
-
     }, []);
 
-    return date ? <p css={statusStyle}>{t("Content.DataStatus", {date})}</p> : <p />;
+    return date ? (
+        <p css={statusStyle}>{t("Content.DataStatus", { date })}</p>
+    ) : (
+        <p />
+    );
 }

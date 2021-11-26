@@ -1,9 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import {
-    surfaceColor,
-    primaryColor,
-} from "../../Shared/Style/Style-MainTheme.component";
+import { surfaceColor, primaryColor } from "../../Shared/Style/Style-MainTheme";
 
 const footerStyle = css`
     width: 100%;

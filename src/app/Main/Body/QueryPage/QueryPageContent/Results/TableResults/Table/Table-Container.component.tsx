@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { TableRow } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
 import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
 import { TableContentLayout } from "./TableContent-Layout.component";
 import { TableMainHeaderComponent } from "./TableMainHeader.component";
@@ -10,16 +9,7 @@ import { TableLayout } from "./Table-Layout.component";
 import { createTableRowsService } from "./createTableRows.service";
 import { createTableHeaderService } from "./createTableHeader.service";
 import { createTableRowWithColSumService } from "./createTableRowsWithColSum.service";
-import { onBackgroundColor } from "../../../../../../../Shared/Style/Style-MainTheme.component";
-
-const useStyles = makeStyles({
-    tableCell: {
-        wordWrap: "break-word",
-        padding: "0.75em",
-        color: onBackgroundColor,
-        letterSpacing: 0,
-    },
-});
+import { onBackgroundColor } from "../../../../../../../Shared/Style/Style-MainTheme";
 
 /**
  * @desc Decides if row/colum is selected and return result table or explanation text
@@ -37,12 +27,18 @@ export function TableContainer(props: {
     rowAttribute: string;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
-    const classes = useStyles();
 
     const isCol = props.colAttribute !== "";
     const isRow = props.rowAttribute !== "";
 
     let columnMainHeader: JSX.Element | undefined;
+
+    const tableCellStyle = {
+        wordWrap: "break-word",
+        padding: "0.75em",
+        color: onBackgroundColor,
+        letterSpacing: 0,
+    };
 
     if (isCol) {
         columnMainHeader = (
@@ -77,7 +73,7 @@ export function TableContainer(props: {
                     displayRow: isRow,
                     displayOption: props.tableOption,
                     colKeys: props.columnNameValues,
-                    classes,
+                    style: tableCellStyle,
                 })}
             </TableRow>
         ));
@@ -94,7 +90,7 @@ export function TableContainer(props: {
                     rowWithColSums,
                     headerValues: props.columnNameValues,
                     colSumLabel: t("Sums.ColSum"),
-                    classes,
+                    style: tableCellStyle,
                 })}
             </TableRow>
         );

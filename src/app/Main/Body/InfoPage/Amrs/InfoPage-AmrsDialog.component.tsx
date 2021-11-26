@@ -37,7 +37,7 @@ const starTextStyle = css`
 function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
     Object.keys(row).forEach((rowKey) => {
-        const amrRowKey = rowKey as keyof AmrsTableData
+        const amrRowKey = rowKey as keyof AmrsTableData;
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
@@ -70,11 +70,7 @@ export function InfoPageAmrDialogComponent(props: {
     const dialogTableContent = (
         <div css={dialogContentStyle}>
             <TableContainer css={tableContainerStyle} component={Paper}>
-                <Table
-                    size="small"
-                    stickyHeader
-                    aria-label="amr-table"
-                >
+                <Table size="small" stickyHeader aria-label="amr-table">
                     <TableHead>
                         <TableRow>
                             {props.resistancesTableData.tableHeader.map(

@@ -50,6 +50,6 @@ export function FilterDialogCheckboxesComponent(props: {
     return CheckboxesComponent({
         onCheckboxChange: handleChangeFiltersToDisplay,
         checkboxes: checkboxObjectList,
-        size: "default"
+        size: "default",
     });
 }

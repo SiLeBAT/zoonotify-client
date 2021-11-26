@@ -15,10 +15,10 @@ const tableNumberStyle = css`
 `;
 
 export function QueryPageNrOfIsolatesComponent(props: {
-    numberOfIsolates:{
-        total: number,
-        filtered: number
-    }
+    numberOfIsolates: {
+        total: number;
+        filtered: number;
+    };
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 

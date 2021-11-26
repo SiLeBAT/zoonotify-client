@@ -15,7 +15,6 @@ export function generateExportLabels(
     mainFilterAttributes: string[],
     t: TFunction
 ): ExportLabels {
-
     const mainFilterLabels = {} as Record<FilterType, string>;
     mainFilterAttributes.forEach((mainFilter) => {
         mainFilterLabels[mainFilter] = t(`QueryPage:Filters.${mainFilter}`);
