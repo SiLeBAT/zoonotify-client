@@ -16,6 +16,7 @@ const headerStyle = css`
     width: 100%;
     height: 100%;
     display: flex;
+    z-index: 0;
     flex-direction: column;
     box-sizing: border-box;
 `;
@@ -28,7 +29,7 @@ const mainHeaderStyle = (open: boolean): SerializedStyles => css`
     justify-content: space-between;
     box-sizing: border-box;
     box-shadow: ${open ? "0 8px 6px -6px grey" : "none"};
-    z-index: 10;
+    z-index: 1;
     background-color: ${primaryColor};
     border-bottom: ${open ? `24px solid ${bfrPrimaryPalette[300]}` : "none"};
 `;

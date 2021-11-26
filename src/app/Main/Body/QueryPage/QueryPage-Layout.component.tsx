@@ -17,10 +17,10 @@ const subHeaderStyle = css`
     background-color: ${bfrPrimaryPalette[300]};
     box-sizing: border-box;
     box-shadow: 0 8px 6px -6px grey;
-    z-index: 10;
+    z-index: 1;
 `
-
 const queryPageStyle = css`
+    z-index: 0;
     display: flex;
     flex: 1 1 0;
     overflow: auto;
