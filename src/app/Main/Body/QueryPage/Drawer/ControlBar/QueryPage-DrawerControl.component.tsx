@@ -94,7 +94,7 @@ export function QueryPageDrawerControlComponent(
               flexGrow: 1,
               padding: 0,
               transition: "margin 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-              marginLeft: -props.drawerWidth,
+              marginLeft: `-${props.drawerWidth}px`,
           };
     return (
         <Box sx={transitionStyles} css={drawerStyle}>
