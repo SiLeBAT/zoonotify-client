@@ -363,9 +363,9 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const fetchAndUpdateValues = async (): Promise<void> => {
         setUpdateFilterAndDataIsLoading(true);
-        const urlParams = new URLSearchParams(history.location.search);
+        const parameterURL = history.location.search;
         const conditionalFilters = await fetchConditionalFilters({
-            urlParams,
+            parameterURL,
             uniqueValues: uniqueDataValues,
             colAttribute,
             rowAttribute,

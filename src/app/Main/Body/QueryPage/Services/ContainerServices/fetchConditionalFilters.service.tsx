@@ -9,7 +9,7 @@ import { FILTER_URL } from "../../../../../Shared/URLs";
 import { generateUniqueValuesService } from "../generateUniqueValues.service";
 
 export async function fetchConditionalFilters(props: {
-    urlParams: URLSearchParams;
+    parameterURL: string;
     uniqueValues: FilterInterface;
     colAttribute: string;
     rowAttribute: string;
@@ -27,7 +27,7 @@ export async function fetchConditionalFilters(props: {
 
     const getConditionalFilterValues = newFilterFor.map(
         async (displayedFilter) => {
-            const { urlParams } = props;
+            const urlParams = new URLSearchParams(props.parameterURL);
             urlParams.delete("row");
             urlParams.delete("column");
             urlParams.delete(displayedFilter);
