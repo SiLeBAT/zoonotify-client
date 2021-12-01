@@ -14,6 +14,7 @@ import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import { generateSelectorObject } from "./generateSelectorObject.service";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
+import { replaceAll } from "../../../../../Core/replaceAll.service";
 
 const subFilterSelectorStyle = css`
     display: grid;
@@ -32,6 +33,7 @@ const subFilterTriggerLabelStyle = css`
 
 export interface SelectorProps {
     dataIsLoading: boolean;
+    subFilterParent: string;
     subFilterTrigger: string;
     subFilterValues: string[];
     selectedFilter: FilterInterface;
@@ -50,12 +52,13 @@ export interface SelectorProps {
  * @returns {JSX.Element} - selector component
  */
 export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
+    const { t } = props;
     const selectedSubFilterValues: string[] =
         props.selectedFilter[props.subFilterAttribute];
     const selectedSubValuesObj = generateSelectorObject(
         props.subFilterAttribute,
         selectedSubFilterValues,
-        props.t,
+        t,
         true
     );
     const noFilter: boolean = CheckIfSingleFilterIsSet(
@@ -65,7 +68,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
     const dropDownValuesObj = generateSelectorObject(
         props.subFilterAttribute,
         props.subFilterValues,
-        props.t,
+        t,
         true
     );
 
@@ -83,14 +86,21 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         }
     };
 
-    const subFilterName = props.t(`Subfilters.${props.subFilterAttribute}.name`);
+    const subFilterTriggerLabel = t(
+        `FilterValues.${props.subFilterParent}.${replaceAll(
+            props.subFilterTrigger,
+            ".",
+            ""
+        )}`
+    );
+    const subFilterName = t(`Subfilters.${props.subFilterAttribute}.name`);
 
     return (
         <div
             css={subFilterSelectorStyle}
             key={`subFilter-selector-component-${props.subFilterAttribute}-${props.subFilterTrigger}`}
         >
-            <p css={subFilterTriggerLabelStyle}>{props.subFilterTrigger}</p>
+            <p css={subFilterTriggerLabelStyle}>{subFilterTriggerLabel}</p>
             <SelectorComponent
                 key={`subFilter-selector-${props.subFilterAttribute}-${props.subFilterTrigger}`}
                 mainColor={primaryColor}

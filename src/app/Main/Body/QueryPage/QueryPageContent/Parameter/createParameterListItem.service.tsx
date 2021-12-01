@@ -18,7 +18,7 @@ const parameterValue = css`
     }
 `;
 
-export function createParameterListService(
+export function createParameterListItemService(
     parameterAttribute: FilterType,
     parameterList: string[],
     t: TFunction, 

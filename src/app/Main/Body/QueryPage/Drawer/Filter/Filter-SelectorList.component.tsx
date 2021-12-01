@@ -52,6 +52,7 @@ export function FilterSelectorListComponent(
             subFilters.forEach((subFilter) => {
                 if (filter === subFilter.parent) {
                     const subFilterTrigger = subFilter.trigger;
+                    const subFilterParent = subFilter.parent;
                     if (
                         subFilterTrigger !== undefined &&
                         (_.includes(
@@ -65,6 +66,7 @@ export function FilterSelectorListComponent(
                         filterSelectorsList.push(
                             SubFilterSelectorComponent({
                                 dataIsLoading,
+                                subFilterParent,
                                 subFilterTrigger,
                                 subFilterAttribute,
                                 subFilterValues,
