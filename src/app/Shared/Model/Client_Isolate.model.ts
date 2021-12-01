@@ -65,7 +65,20 @@ export const MainFilterList: DbKey[] = [
     "federalState",
 ];
 
-export const subFiltersList: string[] = ["serovar", "species", "serotyp"];
+export const subFiltersList: string[] = [
+    "serovar",
+    "carba_ampc_carba_phenotype",
+    "esbl_ampc_carba_phenotype",
+    "campy_spez",
+    "entero_spez",
+    "spa_type",
+    "serotype",
+    "clonal_group",
+    "o_group",
+    "h_group",
+    "matrixDetail",
+    "genes",
+];
 
 export const resistancesCollection = [
     "GEN",

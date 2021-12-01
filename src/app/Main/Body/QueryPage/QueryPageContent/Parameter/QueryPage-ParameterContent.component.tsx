@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { ParameterContentListComponent } from "./ParameterContent-List.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import { FilterInterface } from "../../../../../Shared/Model/Filter.model";
+import { subFiltersList } from "../../../../../Shared/Model/Client_Isolate.model";
+import { createParameterListService } from "./createParameterList.service";
 
 const parameterBlockStyle = css`
     width: 100%;
@@ -27,11 +29,26 @@ export function QueryPageParameterContentComponent(props: {
         const elements: JSX.Element[] = [];
         Object.keys(selectedFilters).forEach((filterElement) => {
             if (selectedFilters[filterElement].length !== 0) {
+                let isSubFilter = false;
+                if (subFiltersList.includes(filterElement)){
+                    isSubFilter = true;
+                }
+                let parameterLabel = t(`Filters.${filterElement}`);
+
+                if (isSubFilter) {
+                    parameterLabel = t(`Subfilters.${filterElement}.name`);
+                }
+
+                const parameterList = createParameterListService(filterElement,
+                    selectedFilters[filterElement],
+                    t, 
+                    isSubFilter)  
+
                 elements.push(
                     <ParameterContentListComponent
                         key={`parameter_list_${filterElement}`}
-                        parameterLabel={filterElement}
-                        parameterList={selectedFilters[filterElement]}
+                        parameterLabel={parameterLabel}
+                        parameterValuesList={parameterList}
                     />
                 );
             }
