@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { List, ListSubheader } from "@mui/material";
-import { FilterType } from "../../../../../Shared/Model/Filter.model";
 
 const listStyle = css`
     padding: 0;
@@ -12,11 +11,11 @@ const listHeaderStyle = css`
 `;
 
 export interface ListProps {
-    parameterLabel: FilterType;
+    parameterLabel: string;
     parameterValuesList: JSX.Element[];
 }
 
-export function ParameterContentListComponent(props: ListProps): JSX.Element {
+export function ParameterListLayout(props: ListProps): JSX.Element {
     return (
         <List
             dense

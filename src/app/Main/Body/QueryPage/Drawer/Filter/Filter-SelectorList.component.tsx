@@ -73,7 +73,7 @@ export function FilterSelectorListComponent(
                                 selectedFilter,
                                 onChange: handleChange,
                                 noOptionLabel,
-                                t
+                                t,
                             })
                         );
                     }
