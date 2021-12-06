@@ -1,26 +1,22 @@
 import React from "react";
 import { List, Tooltip } from "@mui/material";
-
-import {
-    onBackgroundColor,
-    onPrimaryColor,
-    primaryColor,
-} from "../../Shared/Style/Style-MainTheme";
+import { useTheme } from "@mui/system";
 import { environment } from "../../../environment";
 import { LastUpdateDateComponent } from "./LastUpdate-Date.component";
 import { LastUpdateVersionComponent } from "./LastUpdate-Version.component";
 
 export function LastUpdateComponent(): JSX.Element {
     const { version } = environment;
+    const theme = useTheme();
     return (
         <Tooltip
             sx={{
                 maxWidth: 200,
                 marginBottom: "1.5em",
                 marginLeft: "10px",
-                color: onPrimaryColor,
-                backgroundColor: primaryColor,
-                border: `2px solid ${onBackgroundColor}`,
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
+                border: `2px solid ${theme.palette.text.primary}`,
             }}
             arrow
             title={
