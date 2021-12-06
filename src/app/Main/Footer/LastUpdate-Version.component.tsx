@@ -1,29 +1,7 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { onPrimaryColor } from "../../Shared/Style/Style-MainTheme";
-
-const distanceStyle = css`
-    margin: 0;
-    padding: 0;
-`;
-const listTextStyle = css`
-    margin: 0;
-    span {
-        font-size: 0.75rem;
-        font-style: italic;
-    }
-`;
-const listIconStyle = css`
-    min-width: min-content;
-    margin: 0.2em;
-    padding: 0;
-`;
-const dotIconStyle = css`
-    font-size: 0.5rem;
-    fill: ${onPrimaryColor};
-`;
+import { useTheme } from "@mui/system";
 
 export interface VersionProps {
     text: string;
@@ -35,12 +13,38 @@ export interface VersionProps {
  * @returns {JSX.Element} - listItem with icon and text
  */
 export function LastUpdateVersionComponent(props: VersionProps): JSX.Element {
+    const theme = useTheme();
+
+    const distanceStyle = {
+        margin: 0,
+        padding: 0,
+    };
+
+    const listTextStyle = {
+        margin: 0,
+        span: {
+            fontSize: "0.75rem",
+            fontStyle: "italic",
+        },
+    };
+
+    const listIconStyle = {
+        minWidth: "min-content",
+        margin: "0.2em",
+        padding: 0,
+    };
+
+    const dotIconStyle = {
+        fontSize: "0.5rem",
+        fill: theme.palette.primary.contrastText,
+    };
+
     return (
-        <ListItem css={distanceStyle}>
-            <ListItemIcon css={listIconStyle}>
-                <FiberManualRecordIcon css={dotIconStyle} />
+        <ListItem sx={distanceStyle}>
+            <ListItemIcon sx={listIconStyle}>
+                <FiberManualRecordIcon sx={dotIconStyle} />
             </ListItemIcon>
-            <ListItemText primary={props.text} css={listTextStyle} />
+            <ListItemText primary={props.text} sx={listTextStyle} />
         </ListItem>
     );
 }

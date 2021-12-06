@@ -1,70 +1,72 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { Tooltip } from "@mui/material";
+import React from "react";
+import { Link, List, ListItem, Tooltip, Typography } from "@mui/material";
+import { Box, SxProps, useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import {
-    primaryColor,
-    hoverColor,
-    errorColor,
-} from "../../Shared/Style/Style-MainTheme";
 import { ZNPaths } from "../../Shared/URLs";
-
-const footerContentStyle = css`
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    flex-grow: 1;
-    text-decoration: none;
-    box-sizing: inherit;
-`;
-const footerElementStyle = css`
-    padding: 0.5em;
-    flex: 1 1 auto;
-    list-style-type: none;
-    cursor: pointer;
-    transition: 0.3s;
-    color: ${primaryColor};
-    &:hover {
-        background-color: ${hoverColor};
-    }
-    box-sizing: inherit;
-`;
-const linkStyle = css`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-self: center;
-    text-decoration: none;
-    color: inherit;
-    &:focus {
-        outline: none;
-    }
-`;
-const disableLinkStyle = css`
-    width: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-self: center;
-    color: gray;
-`;
 
 export function FooterLinkListComponent(props: {
     supportMail: string | undefined;
 }): JSX.Element {
     const { t } = useTranslation(["Footer"]);
 
+    const theme = useTheme();
+
+    const linkStyle = {
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignSelf: "center",
+        textDecoration: "none",
+        color: "inherit",
+        "&:focus": {
+            outline: "none",
+        },
+    };
+
+    const disableLinkStyle = {
+        width: "100%",
+        margin: 0,
+        display: "flex",
+        justifyContent: "center",
+        alignSelf: "center",
+        color: "gray",
+    };
+
+    const footerElementStyle: SxProps = {
+        width: "fit-content",
+        padding: "0.5em",
+        flex: "1 1 auto",
+        listStyleType: "none",
+        cursor: "pointer",
+        transition: "0.3s",
+        color: theme.palette.primary.main,
+        "&:hover": {
+            backgroundColor: "rgb(184, 191, 200)",
+        },
+        boxSizing: "inherit",
+    };
+
+    const footerContentStyle: SxProps = {
+        margin: 0,
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        flexGrow: 1,
+        textDecoration: "none",
+        boxSizing: "inherit",
+    };
+
     let submitProblemLink: JSX.Element = (
-        <a
+        <Link
             href={`mailto: ${
                 props.supportMail
             }?subject=ZooNotify-Problem:&body=${t("Content.MailText")}`}
-            css={linkStyle}
+            sx={linkStyle}
         >
-            {t("Content.Mail")}
-        </a>
+            <Typography>{t("Content.Mail")}</Typography>
+        </Link>
     );
 
     if (props.supportMail === undefined) {
@@ -73,46 +75,48 @@ export function FooterLinkListComponent(props: {
             <Tooltip
                 sx={{
                     backgroundColor: "transparent",
-                    color: errorColor,
+                    color: theme.palette.error.main,
                     fontSize: "9px",
                     paddingRight: 0,
                 }}
                 title={supportMailErrorText}
                 placement="top"
             >
-                <p css={disableLinkStyle}>{t("Content.Mail")}</p>
+                <Box component="p" sx={disableLinkStyle}>
+                    <Typography>{t("Content.Mail")}</Typography>
+                </Box>
             </Tooltip>
         );
     }
 
     return (
-        <ul css={footerContentStyle}>
-            <li css={footerElementStyle}>
-                <a
+        <List sx={footerContentStyle}>
+            <ListItem sx={footerElementStyle}>
+                <Link
                     href="https://www.bfr.bund.de/de/start.html"
                     target="_blank"
                     rel="noreferrer"
-                    css={linkStyle}
+                    sx={linkStyle}
                 >
-                    {t("Content.Bfr")}
-                </a>
-            </li>
-            <li css={footerElementStyle}>
-                <a
+                    <Typography>{t("Content.Bfr")}</Typography>
+                </Link>
+            </ListItem>
+            <ListItem sx={footerElementStyle}>
+                <Link
                     href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/"
                     target="_blank"
                     rel="noreferrer"
-                    css={linkStyle}
+                    sx={linkStyle}
                 >
-                    FoodRisk-Labs
-                </a>
-            </li>
-            <li css={footerElementStyle}>
-                <NavLink to={ZNPaths.dpdPagePath} css={linkStyle}>
-                    {t("Content.DataProtection")}
+                    <Typography>FoodRisk-Labs</Typography>
+                </Link>
+            </ListItem>
+            <ListItem sx={footerElementStyle}>
+                <NavLink to={ZNPaths.dpdPagePath} style={linkStyle}>
+                    <Typography>{t("Content.DataProtection")}</Typography>
                 </NavLink>
-            </li>
-            <li css={footerElementStyle}>{submitProblemLink}</li>
-        </ul>
+            </ListItem>
+            <ListItem sx={footerElementStyle}>{submitProblemLink}</ListItem>
+        </List>
     );
 }
