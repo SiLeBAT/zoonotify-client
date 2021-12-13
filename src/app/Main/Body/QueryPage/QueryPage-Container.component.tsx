@@ -45,9 +45,17 @@ import { fetchInitialDataService } from "./Services/ContainerServices/fetchIniti
 import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
-    const [isolateStatus, setIsolateStatus] = useState<number>();
-    const [isolateCountStatus, setIsolateCountStatus] = useState<number>();
-    const [filterStatus, setFilterStatus] = useState<number>();
+    const [serverStatus, setServerStatus] = useState<{
+        isolateStatus: number | undefined;
+        isolateCountStatus: number | undefined;
+        filterStatus: number | undefined;
+        exportDataStatus: number | undefined;
+    }>({
+        isolateStatus: undefined,
+        isolateCountStatus: undefined,
+        filterStatus: undefined,
+        exportDataStatus: undefined,
+    });
     const [columnNameValues, setColumnNameValues] = useState<string[]>([]);
     const [totalNrOfIsol, setTotalNrOfIsol] = useState<number>(0);
     const [nrOfSelectedIsol, setNrOfSelectedIsol] = useState<number>(0);
@@ -242,7 +250,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const fetchIsolatesAndExportZip = async (): Promise<void> => {
         setLoadingIsolates(true);
         const urlParams = new URLSearchParams(history.location.search);
-        await exportZipService({
+        const exportStatus = await exportZipService({
             t,
             filter,
             data,
@@ -252,6 +260,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
         setExportDialogIsOpen(false);
         setLoadingIsolates(false);
+        setServerStatus({ ...serverStatus, exportDataStatus: exportStatus });
     };
 
     const handleChangeExportData = (name: string, checked: boolean): void => {
@@ -273,8 +282,11 @@ export function QueryPageContainerComponent(): JSX.Element {
     const fetchAndSetInitialData = async (): Promise<void> => {
         setDataIsMounted(false);
         const initialData = await fetchInitialDataService();
-        setIsolateStatus(initialData.status.isolateStatus);
-        setFilterStatus(initialData.status.filterStatus);
+        setServerStatus({
+            ...serverStatus,
+            isolateStatus: initialData.status.isolateStatus,
+            filterStatus: initialData.status.filterStatus,
+        });
 
         if (initialData.data) {
             setSubFilters(initialData.data.subFilters);
@@ -320,8 +332,10 @@ export function QueryPageContainerComponent(): JSX.Element {
         const countedIsolatesResponse: ApiResponse<IsolateCountedDTO> =
             await callApiService(isolateCountUrl);
 
-        setIsolateCountStatus(countedIsolatesResponse.status);
-
+        setServerStatus({
+            ...serverStatus,
+            isolateCountStatus: countedIsolatesResponse.status,
+        });
         if (countedIsolatesResponse.data !== undefined) {
             const isolateCountProp: IsolateCountedDTO =
                 countedIsolatesResponse.data;
@@ -379,7 +393,10 @@ export function QueryPageContainerComponent(): JSX.Element {
             setUniqueDataValues(initialUniqueValues);
         }
 
-        setFilterStatus(conditionalFilters.status);
+        setServerStatus({
+            ...serverStatus,
+            filterStatus: conditionalFilters.status,
+        });
         setUpdateFilterAndDataIsLoading(false);
     };
 
@@ -405,7 +422,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     return (
         <LoadingOrErrorComponent
-            status={{ isolateStatus, isolateCountStatus, filterStatus }}
+            status={serverStatus}
             dataIsSet={dataIsMounted}
             componentToDisplay={
                 <QueryPageLayoutComponent
