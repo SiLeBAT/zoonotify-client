@@ -64,10 +64,8 @@ export function DialogComponent(props: {
                             sx={{
                                 color: `${primaryColor}`,
                                 position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                marginTop: -12,
-                                marginLeft: -12,
+                                top: "10%",
+                                left: "40%",
                             }}
                         />
                     )}
