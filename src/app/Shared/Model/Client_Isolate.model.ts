@@ -65,7 +65,7 @@ export const MainFilterList: DbKey[] = [
     "federalState",
 ];
 
-export const subFiltersList: string[] = [
+export const microorganismSubFiltersList: string[] = [
     "serovar",
     "carba_ampc_carba_phenotype",
     "esbl_ampc_carba_phenotype",
@@ -76,9 +76,48 @@ export const subFiltersList: string[] = [
     "clonal_group",
     "o_group",
     "h_group",
-    "matrixDetail",
     "genes",
 ];
+
+export const matrixSubFiltersList: string[] = [
+    "matrixDetail__(Hals)haut",
+    "matrixDetail__(Konsum)eier, unsortiert",
+    "matrixDetail__Alleinfuttermittel",
+    "matrixDetail__Babyspinat",
+    "matrixDetail__Blatt- und Kopfsalate",
+    "matrixDetail__Blattsalate",
+    "matrixDetail__Blinddarminhalt",
+    "matrixDetail__Erdbeeren",
+    "matrixDetail__Fleischerzeugnisse",
+    "matrixDetail__Frische Kräuter",
+    "matrixDetail__Frisches Fleisch",
+    "matrixDetail__Garnelen",
+    "matrixDetail__Getrocknete Blatt- und Grasprodukte",
+    "matrixDetail__Hackfleisch",
+    "matrixDetail__Haut",
+    "matrixDetail__Kiemeninhalt",
+    "matrixDetail__Konsumeier, sortiert",
+    "matrixDetail__Kot",
+    "matrixDetail__Kot / Staub",
+    "matrixDetail__Muscheln",
+    "matrixDetail__Muskel",
+    "matrixDetail__Nasenschleimhaut",
+    "matrixDetail__Nasentupfer",
+    "matrixDetail__Petersilie",
+    "matrixDetail__Rohmilchkäse",
+    "matrixDetail__Sammelmilch",
+    "matrixDetail__Schlachtkörper",
+    "matrixDetail__Sprossen",
+    "matrixDetail__Staub",
+    "matrixDetail__Streichfähige Rohwürste",
+    "matrixDetail__Tatar / Schabefleisch",
+    "matrixDetail__Tomaten",
+    "matrixDetail__Weizenmehl",
+    "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote",
+];
+
+export const allSubFiltersList =
+    microorganismSubFiltersList.concat(matrixSubFiltersList);
 
 export const resistancesCollection = [
     "GEN",

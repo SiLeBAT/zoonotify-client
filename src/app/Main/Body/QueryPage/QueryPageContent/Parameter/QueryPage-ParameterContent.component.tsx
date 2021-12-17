@@ -2,7 +2,6 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
-import { ListItem, ListItemText } from "@mui/material";
 import { ParameterListLayout } from "./ParameterList-Layout.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import {
@@ -12,7 +11,7 @@ import {
 import {
     DbKey,
     MainFilterList,
-    subFiltersList,
+    allSubFiltersList,
 } from "../../../../../Shared/Model/Client_Isolate.model";
 import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
 import { replaceAll } from "../../../../../Core/replaceAll.service";
@@ -22,17 +21,6 @@ const parameterBlockStyle = css`
     display: flex;
     flex-wrap: wrap;
     flex-grow: 1;
-`;
-const spaceStyle = css`
-    padding: 0;
-    margin: 0;
-`;
-const parameterValue = css`
-    margin-top: 0;
-    margin-left: 2em;
-    span {
-        letter-spacing: 0;
-    }
 `;
 
 function createParameterName(
@@ -84,33 +72,25 @@ function createParameterList(
                 parameterLabel = t(`Subfilters.${filterElement}.name`);
             }
 
-            const listItems: JSX.Element[] = [];
+            const parameterNames: {
+                parameterName: string | JSX.Element;
+                key: string;
+            }[] = [];
             selectedFilters[filterElement].forEach((parameter) => {
-                const parameterListItem = createParameterName(
+                const parameterName = createParameterName(
                     filterElement,
                     parameter,
                     t,
                     isSubFilter
                 );
-                listItems.push(
-                    <ListItem
-                        key={`listItem-${parameterListItem.key}`}
-                        css={spaceStyle}
-                    >
-                        <ListItemText
-                            id={`labelId-${parameterListItem.key}`}
-                            primary={parameterListItem.parameterName}
-                            css={parameterValue}
-                        />
-                    </ListItem>
-                );
+                parameterNames.push(parameterName);
             });
 
             elements.push(
                 <ParameterListLayout
                     key={`parameter_list_${filterElement}`}
                     parameterLabel={parameterLabel}
-                    parameterValuesList={listItems}
+                    parameterNames={parameterNames}
                 />
             );
         }
@@ -132,7 +112,7 @@ export function QueryPageParameterContentComponent(props: {
         false
     );
     const subFiltersParameterList = createParameterList(
-        subFiltersList,
+        allSubFiltersList,
         selectedFilters,
         t,
         true

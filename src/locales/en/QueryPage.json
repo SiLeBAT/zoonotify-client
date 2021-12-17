@@ -1099,48 +1099,221 @@
         "rauh": "rauh"
       }
     },
-    "matrixDetail": {
-      "name": "Matrix detail",
+    "matrixDetail__(Hals)haut": {
+      "name": "Matixdetail",
       "values": {
-        "Einzel(tier)probe": "Einzel(tier)probe",
-        "Eierschalenpools": "Eierschalenpools",
-        "Sackware und lose Ware": "Sackware und lose Ware",
-        "frisch": "Frisch",
-        "insb- Feldsalat, Rucola, Spinat, Eisberg": "Insb. Feldsalat, Rucola, Spinat, Eisberg",
-        "vorgeschnitten, verpackt": "Vorgeschnitten, verpackt",
+        "Einzel(tier)probe": "Einzel(tier)probe"
+      }
+    },
+    "matrixDetail__(Konsum)eier, unsortiert": {
+      "name": "Matixdetail",
+      "values": {
+        "Eierschalenpools": "Eierschalenpools"
+      }
+    },
+    "matrixDetail__Alleinfuttermittel": {
+      "name": "Matixdetail",
+      "values": {
+        "Sackware und lose Ware": "Sackware und lose Ware"
+      }
+    },
+    "matrixDetail__Babyspinat": {
+      "name": "Matixdetail",
+      "values": {
+        "frisch": "frisch"
+      }
+    },
+    "matrixDetail__Blatt- und Kopfsalate": {
+      "name": "Matixdetail",
+      "values": {
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "insb. Feldsalat, Rucola, Spinat, Eisberg"
+      }
+    },
+    "matrixDetail__Blattsalate": {
+      "name": "Matixdetail",
+      "values": {
+        "vorgeschnitten, verpackt": "vorgeschnitten, verpackt"
+      }
+    },
+    "matrixDetail__Blinddarminhalt": {
+      "name": "Matixdetail",
+      "values": {
         "Einzeltierprobe": "Einzeltierprobe",
-        "Poolprobe": "Poolprobe",
-        "wärmebehandelt": "Wärmebehandelt",
-        "lose oder verpackt; geschnitten oder Topfware": "Lose oder verpackt; geschnitten oder Topfware",
-        "gekühlt": "Gekühlt",
-        "gekühlt oder tiefgefroren": "Gekühlt oder tiefgefroren",
-        "gekühlt oder tiefgekühlt": "Gekühlt oder tiefgekühlt",
-        "gekühlt, mit Haut": "Gekühlt, mit Haut",
-        "gekühlt, ohne Haut": "Gekühlt, ohne Haut",
-        "roh": "Roh",
-        "Pulver- oder Blattform": "Pulver- oder Blattform",
+        "Poolprobe": "Poolprobe"
+      }
+    },
+    "matrixDetail__Erdbeeren": {
+      "name": "Matixdetail",
+      "values": {
+        "frisch": "frisch"
+      }
+    },
+    "matrixDetail__Fleischerzeugnisse": {
+      "name": "Matixdetail",
+      "values": {
+        "wärmebehandelt": "wärmebehandelt"
+      }
+    },
+    "matrixDetail__Frische Kräuter": {
+      "name": "Matixdetail",
+      "values": {
+        "lose oder verpackt; geschnitten oder Topfware": "lose oder verpackt; geschnitten oder Topfware"
+      }
+    },
+    "matrixDetail__Frisches Fleisch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt",
+        "gekühlt oder tiefgefroren": "gekühlt oder tiefgefroren",
+        "gekühlt oder tiefgekühlt": "gekühlt oder tiefgekühlt",
+        "gekühlt, mit Haut": "gekühlt, mit Haut",
+        "gekühlt, ohne Haut": "gekühlt, ohne Haut"
+      }
+    },
+    "matrixDetail__Garnelen": {
+      "name": "Matixdetail",
+      "values": {
+        "roh": "roh"
+      }
+    },
+    "matrixDetail__Getrocknete Blatt- und Grasprodukte": {
+      "name": "Matixdetail",
+      "values": {
+        "Pulver- oder Blattform": "Pulver- oder Blattform"
+      }
+    },
+    "matrixDetail__Hackfleisch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt"
+      }
+    },
+    "matrixDetail__Haut": {
+      "name": "Matixdetail",
+      "values": {
         "Hauttupfer": "Hauttupfer",
-        "Tupfer": "Tupfer",
-        "Kiementupfer": "Kiementupfer",
+        "Tupfer": "Tupfer"
+      }
+    },
+    "matrixDetail__Kiemeninhalt": {
+      "name": "Matixdetail",
+      "values": {
+        "Kiementupfer": "Kiementupfer"
+      }
+    },
+    "matrixDetail__Konsumeier, sortiert": {
+      "name": "Matixdetail",
+      "values": {
+        "Eierschalenpools": "Eierschalenpools"
+      }
+    },
+    "matrixDetail__Kot": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzeltierprobe": "Einzeltierprobe",
         "Kloaken- oder Kottupfer": "Kloaken- oder Kottupfer",
-        "Sammelkot": "Sammelkot",
+        "Sammelkot": "Sammelkot"
+      }
+    },
+    "matrixDetail__Kot / Staub": {
+      "name": "Matixdetail",
+      "values": {
         "Sockentupfer": "Sockentupfer",
-        "Stiefelüberzieher / Sockentupfer": "Stiefelüberzieher / Sockentupfer",
-        "lebend, frisch": "Lebend, frisch",
-        "importiert, aus Aquakultur": "Importiert, aus Aquakultur",
-        "Nasentupfer": "Nasentupfer",
-        "tiefgekühlt": "Tiefgekühlt",
+        "Stiefelüberzieher / Sockentupfer": "Stiefelüberzieher / Sockentupfer"
+      }
+    },
+    "matrixDetail__Muscheln": {
+      "name": "Matixdetail",
+      "values": {
+        "lebend, frisch": "lebend, frisch"
+      }
+    },
+    "matrixDetail__Muskel": {
+      "name": "Matixdetail",
+      "values": {
+        "importiert, aus Aquakultur": "importiert, aus Aquakultur"
+      }
+    },
+    "matrixDetail__Nasenschleimhaut": {
+      "name": "Matixdetail",
+      "values": {
+        "Nasentupfer": "Nasentupfer"
+      }
+    },
+    "matrixDetail__Nasentupfer": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzeltierprobe": "Einzeltierprobe"
+      }
+    },
+    "matrixDetail__Petersilie": {
+      "name": "Matixdetail",
+      "values": {
+        "tiefgekühlt": "tiefgekühlt"
+      }
+    },
+    "matrixDetail__Rohmilchkäse": {
+      "name": "Matixdetail",
+      "values": {
         "Schnittkäse": "Schnittkäse",
         "Weichkäse": "Weichkäse",
-        "außer Hartkäse": "Außer Hartkäse",
-        "lose oder verpackt": "Lose oder verpackt",
-        "Staubtupfer": "Staubtupfer",
-        "überwiegend aus Hähnchen- und Putenfleisch": "Überwiegend aus Hähnchen- und Putenfleisch",
-        "überwiegend aus Schweinefleisch": "Überwiegend aus Schweinefleisch",
-        "kleine Sorten": "Kleine Sorten",
-        "vor der Verpackung in der Mühle": "Vor der Verpackung in der Mühle",
+        "außer Hartkäse": "außer Hartkäse"
+      }
+    },
+    "matrixDetail__Sammelmilch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt"
+      }
+    },
+    "matrixDetail__Schlachtkörper": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzel(tier)probe": "Einzel(tier)probe"
+      }
+    },
+    "matrixDetail__Sprossen": {
+      "name": "Matixdetail",
+      "values": {
+        "lose oder verpackt": "lose oder verpackt"
+      }
+    },
+    "matrixDetail__Staub": {
+      "name": "Matixdetail",
+      "values": {
+        "Staubtupfer": "Staubtupfer"
+      }
+    },
+    "matrixDetail__Streichfähige Rohwürste": {
+      "name": "Matixdetail",
+      "values": {
+        "überwiegend aus Hähnchen- und Putenfleisch": "überwiegend aus Hähnchen- und Putenfleisch",
+        "überwiegend aus Schweinefleisch": "überwiegend aus Schweinefleisch"
+      }
+    },
+    "matrixDetail__Tatar / Schabefleisch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt"
+      }
+    },
+    "matrixDetail__Tomaten": {
+      "name": "Matixdetail",
+      "values": {
+        "kleine Sorten": "kleine Sorten"
+      }
+    },
+    "matrixDetail__Weizenmehl": {
+      "name": "Matixdetail",
+      "values": {
+        "vor der Verpackung in der Mühle": "vor der Verpackung in der Mühle"
+      }
+    },
+    "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote": {
+      "name": "Matixdetail",
+      "values": {
         "Raps": "Raps",
-        "hauptsächlich Soja": "Hauptsächlich Soja"
+        "hauptsächlich Soja": "hauptsächlich Soja"
       }
     },
     "genes": {

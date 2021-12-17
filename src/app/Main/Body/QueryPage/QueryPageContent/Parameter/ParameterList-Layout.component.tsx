@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { List, ListSubheader } from "@mui/material";
+import { List, ListItem, ListItemText, ListSubheader } from "@mui/material";
 
 const listStyle = css`
     padding: 0;
@@ -9,10 +9,24 @@ const listStyle = css`
 const listHeaderStyle = css`
     position: relative;
 `;
+const spaceStyle = css`
+    padding: 0;
+    margin: 0;
+`;
+const parameterValue = css`
+    margin-top: 0;
+    margin-left: 2em;
+    span {
+        letter-spacing: 0;
+    }
+`;
 
 export interface ListProps {
     parameterLabel: string;
-    parameterValuesList: JSX.Element[];
+    parameterNames: {
+        parameterName: string | JSX.Element;
+        key: string;
+    }[];
 }
 
 export function ParameterListLayout(props: ListProps): JSX.Element {
@@ -39,7 +53,18 @@ export function ParameterListLayout(props: ListProps): JSX.Element {
                 </ListSubheader>
             }
         >
-            {props.parameterValuesList}
+            {props.parameterNames.map((parameterName) => (
+                <ListItem
+                    key={`listItem-${parameterName.key}`}
+                    css={spaceStyle}
+                >
+                    <ListItemText
+                        id={`labelId-${parameterName.key}`}
+                        primary={parameterName.parameterName}
+                        css={parameterValue}
+                    />
+                </ListItem>
+            ))}
         </List>
     );
 }

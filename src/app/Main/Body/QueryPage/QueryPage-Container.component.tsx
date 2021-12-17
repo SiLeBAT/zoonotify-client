@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
     MainFilterList,
-    subFiltersList,
+    allSubFiltersList,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
@@ -175,7 +175,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
-        const allFiltersList = subFiltersList.concat(MainFilterList);
+        const allFiltersList = allSubFiltersList.concat(MainFilterList);
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
             allFiltersList,
@@ -297,7 +297,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const setFilterFromPath = (): void => {
-        const allFiltersList = subFiltersList.concat(MainFilterList);
+        const allFiltersList = allSubFiltersList.concat(MainFilterList);
         const filterFromPath = getFilterFromPath(
             history.location.search,
             allFiltersList
