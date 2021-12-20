@@ -119,6 +119,9 @@ export const matrixSubFiltersList: string[] = [
 export const allSubFiltersList =
     microorganismSubFiltersList.concat(matrixSubFiltersList);
 
+export const allFiltersList: (string | DbKey)[] =
+    allSubFiltersList.concat(MainFilterList);
+
 export const resistancesCollection = [
     "GEN",
     "KAN",
