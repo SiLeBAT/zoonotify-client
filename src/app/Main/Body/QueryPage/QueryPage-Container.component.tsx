@@ -175,6 +175,19 @@ export function QueryPageContainerComponent(): JSX.Element {
                 [keyName]: chooseSelectedFiltersService(selectedOption),
             },
         };
+        subFilters.forEach((subFilter) => {
+            const subFilterTrigger = subFilter.trigger;
+            if (
+                subFilterTrigger !== undefined &&
+                !_.includes(
+                    newFilter.selectedFilter.microorganism,
+                    subFilterTrigger
+                ) &&
+                !_.includes(newFilter.selectedFilter.matrix, subFilterTrigger)
+            ) {
+                newFilter.selectedFilter[subFilter.id] = [];
+            }
+        });
         const allFiltersList = allSubFiltersList.concat(MainFilterList);
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
