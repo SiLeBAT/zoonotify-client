@@ -13,7 +13,7 @@ const spaceStyle = css`
     padding: 0;
     margin: 0;
 `;
-const parameterValue = css`
+const parameterNameStyle = css`
     margin-top: 0;
     margin-left: 2em;
     span {
@@ -61,7 +61,7 @@ export function ParameterListLayout(props: ListProps): JSX.Element {
                     <ListItemText
                         id={`labelId-${parameterName.key}`}
                         primary={parameterName.parameterName}
-                        css={parameterValue}
+                        css={parameterNameStyle}
                     />
                 </ListItem>
             ))}
