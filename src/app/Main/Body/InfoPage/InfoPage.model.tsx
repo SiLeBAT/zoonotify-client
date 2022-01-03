@@ -3,10 +3,10 @@ import React from "react";
 export interface AmrsTableData {
     substanceClass: string;
     amrSubstance: string;
-    cutOffOne: string;
-    cutOffTwo?: string;
-    concentrationMin: string;
-    concentrationMax: string;
+    valuesPerYearObject: Record<
+        string,
+        { cutOff: string; min: string; max: string }
+    >;
 }
 
 export interface AmrsTable {
@@ -15,16 +15,26 @@ export interface AmrsTable {
     titleString: string;
     description: string;
     tableHeader: string[];
+    tableSubHeader: string[];
     tableRows: AmrsTableData[];
-    commentText: string;
 }
 
-export type AmrKey = "coliSalm" | "coliSalmTwo" | "campy" | "mrsa" | "ef";
+export type AmrKey =
+    | "table1Coli"
+    | "table2Salm"
+    | "table3aCampy"
+    | "table3bCampy"
+    | "table4Mrsa"
+    | "table5Ef";
 
 export const microorganismNames: Record<string, JSX.Element> = {
     Salm: <i>Salmonella</i>,
     Campy: <i>Campylobacter</i>,
-    Listeria: <i>Listeria monocytogenes</i>,
+    Listeria: (
+        <i>
+            Listeria (<i>L.</i>)monocytogenes
+        </i>
+    ),
     ColiFull: <i>Escherichia coli</i>,
     ColiShort: <i>E. coli</i>,
     Staphy: <i>Staphylococcus aureus</i>,
