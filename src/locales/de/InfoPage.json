@@ -71,18 +71,19 @@
         "microorganism-6": {
           "Subname": "Kommensale ",
           "Name": "Escherichia coli",
-          "Abbreviation": "(kommensale E. coli)",
+          "Abbreviation": " (kommensale ",
           "Description": "Über einen weiteren Unterfilter können Sie \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
         },
         "microorganism-7": {
           "Subname": "ESBL und/oder AmpC-bildende ",
           "Name": "Escherichia coli",
-          "Abbreviation": " (ESBL/AmpC-E.coli)",
+          "Abbreviation": " (ESBL/AmpC-",
           "Description": "Über weitere Unterfilter können Sie den \"ESBL_AmpC_Carba_Phänotyp\" (siehe dazu Methoden) und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
         },
         "microorganism-8": {
           "Subname": "Carbapenemase-bildende ",
           "Name": "Escherichia coli",
+          "Abbreviation": " (Carba-",
           "Description": "Über weitere Unterfilter können Sie den \"ESBL_AmpC_Carba_Phänotyp\" (siehe dazu Methoden) und \"antimikrobielle Resistenz\" gegenüber bestimmte Wirkstoffe auswählen."
         },
         "microorganism-9": {
@@ -170,7 +171,8 @@
         },
         "category-3": {
           "Name": "Huhn",
-          "Description": "\"Huhn\" beschreibt Isolate aus der Spezies Gallus gallus. Sie können darunter unterschiedliche Produktionslinien und -formen an verschiedenen Stufen der Lebensmittelgewinnung wählen."
+          "Description1": "\"Huhn\" beschreibt Isolate aus der Spezies ",
+          "Description2": ". Sie können darunter unterschiedliche Produktionslinien und -formen an verschiedenen Stufen der Lebensmittelgewinnung wählen."
         },
         "category-4": {
           "Name": "Pute",
@@ -237,7 +239,8 @@
       "Description3": ", ESBL und/oder AmpC-bildende ",
       "Description4": ", Carbapenemase-bildende ",
       "Description5": " und ",
-      "Description6": " werden auf ihre Resistenz gegenüber antimikrobielle Substanzen am Nationalen Referenzlabor (NRL) für Antibiotikaresistenz am BfR und am NRL Campylobacter getestet. Dafür werden spezielle Wirkstoffpanels verwendet, die sich bei den einzelnen Mikroorganismen unterscheiden. Sie können mit diesem Filter die Wirkstoffe auswählen, die Teil des Panels für die Untersuchung des Ihnen ausgewählten Mikroorganismus sind. Details zur Methodik entnehmen Sie bitte dem unten folgenden Abschnitt \"Antibiotikaresistenztestung\"."
+      "Description6": " werden auf ihre Resistenz gegenüber antimikrobiellen Substanzen am Nationalen Referenzlabor (NRL) für Antibiotikaresistenz am BfR und am NRL ",
+      "Description7": " getestet. Dafür werden spezielle Wirkstoffpanels verwendet, die sich bei den einzelnen Mikroorganismen unterscheiden. Sie können mit diesem Filter die Wirkstoffe auswählen, die Teil des Panels für die Untersuchung des Ihnen ausgewählten Mikroorganismus sind. Details zur Methodik entnehmen Sie bitte dem unten folgenden Abschnitt \"Antibiotikaresistenztestung\"."
     }
   },
   "Methods": {
@@ -245,7 +248,9 @@
     "Isolates": {
       "Name": "Isolatgewinnung",
       "Paragraph1": "Isolate werden im Rahmen des Zoonosen-Monitorings aus Programmen gewonnen, denen eine repräsentative Zufallsstichprobe der jeweils definierten Population, ggf. unter Berücksichtigung definierter Schichtungskriterien auf der jeweils festgelegten Stufe der Lebensmittelkette zugrunde liegt. Bei der Probenahme werden jeweils unabhängige Einheiten beprobt. Um die repräsentative Auswahl der zu beprobenden Betriebe zu gewährleisten, wird in der jeweiligen Region auf der Grundlage einer Gesamtliste der Betriebe eine Zufallsauswahl getroffen. Soweit verfügbar, werden für die Primärisolierung international standardisierte mikrobiologische Nachweisverfahren in den akkreditierten Landesuntersuntersuchungseinrichtungen verwendet. Es können aber auch andere Untersuchungsverfahren eingesetzt werden, soweit sichergestellt werden kann, dass diese gleichwertig zu den vorgeschlagenen Methoden sind. Hierbei ist es insbesondere auch möglich, mittels einer PCR-Methode die Proben zu untersuchen und positive Ergebnisse mittels des kulturellen ISO-Verfahrens zu bestätigen. Soweit die vorgeschlagenen Methoden von den Methoden der amtlichen Sammlung nach § 64 LFGB oder ISO-Methoden abweichen, werden Methodenempfehlungen durch das jeweilige NRL am BfR bereitgestellt.",
-      "Paragraph2": "Isolate, die im Rahmen der Salmonellen Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
+      "Paragraph2-1": "Isolate, die im Rahmen der ",
+      "Paragraph2-2": "Salmonellen Bekämpfungsprogramme beim Geflügel",
+      "Paragraph2-3": "gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
     },
     "Amrs": {
       "Name": "Antibiotikaresistenztestung",
@@ -263,19 +268,32 @@
         "Description3": "), EUVENC (2016-2020) (Enterokokken), EUCAMP (2010-2013) und EUCAMP2 (2014-2020) (",
         "Description4": ") und EUST (2010-2020) (MRSA) der Firma TREK Diagnostic Systems/Thermo Fisher Scientific verwendet."
       },
-      "Paragraph3": "Die Testung auf Resistenzen erfolgte ab dem Jahr 2014 unter Beachtung des Durchführungsbeschlusses 2013/652/EU, in dem das Untersuchungsverfahren, die zu testenden Wirkstoffe sowie die Bewertungskriterien für die Mehrzahl der Erreger festgelegt sind. Soweit dort keine epidemiologischen Cut-Off Werte beschrieben wurden, erfolgte die Bewertung anhand der Empfehlung der European Food Safety Authority (EFSA) in Abstimmung mit dem Europäischen Referenzlabor für Antibiotikaresistenz (EURL-AR).",
+      "Paragraph3": {
+        "Description1": "Die Testung von ",
+        "Description2": " auf Resistenzen in den Jahren 2010-2013 erfolgte auf Basis der Entscheidung 2007/407/EG, in der einheitliche Untersuchungsverfahren, zu testende Wirkstoffe sowie die Bewertungskriterien in der Entscheidung festgelegt sind. Die Testung von ",
+        "Description3": " auf Resistenzen in den Jahren 2010-2013 erfolgte auf Basis der Entscheidung 2007/516/EG zu einer Grundlagenstudie bei Masthähnchen im Jahr 2008."
+      },
       "Paragraph4": {
+        "Description1": "Die Testung von ",
+        "Description2": "  und MRSA auf Resistenzen in den Jahren 2010-2013 erfolgte auf Basis der Empfehlungen der EFSA (EFSA 2012a und EFSA 2012b, siehe unten)."
+      },
+      "Paragraph5": "Die Testung auf Resistenzen erfolgte ab dem Jahr 2014 unter Beachtung des Durchführungsbeschlusses 2013/652/EU, in dem das Untersuchungsverfahren, die zu testenden Wirkstoffe sowie die Bewertungskriterien für die Mehrzahl der Erreger festgelegt sind. Soweit dort keine epidemiologischen Cut-Off Werte beschrieben wurden, erfolgte die Bewertung anhand der Empfehlung der European Food Safety Authority (EFSA) in Abstimmung mit dem Europäischen Referenzlabor für Antibiotikaresistenz (EURL-AR).",
+      "Paragraph6": {
         "Description1": "Die Testung von MRSA und ",
         "Description2": " auf Resistenzen erfolgte ab dem Jahr 2014 auf Basis der Empfehlungen der EFSA (EFSA (2012a): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in methicillin-resistant ",
-        "Description3": " in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in  ",
+        "Description3": " in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in ",
         "Description4": " and indicator ",
         "Description5": " and ",
-        "Description6": " bacteria transmitted through food. EFSA Journal 10(6):2742). ",
-        "Description7": "In ZooNotify werden für alle Substanzen je Mikroorganismus die aktuellsten Bewertungskriterien angewandt, so dass Anzahl resistenter Mikroorganismen von publizierten Werten abweichen kann. Eine Übersicht je Mikroorganismus für alle getesteten Substanzen sowie die jährlich angewandten und berichteten Bewertungskriterien enthalten Tabellen 1 bis 5."
+        "Description6": " bacteria transmitted through food. EFSA Journal 10(6):2742)."
       },
-      "Paragraph5": {
+      "Paragraph7": {
+        "Description1": "In ZooNotify werden für alle Substanzen je Mikroorganismus ",
+        "Description2": "die aktuellsten Bewertungskriterien",
+        "Description3": " angewandt, so dass Anzahl resistenter Mikroorganismen von publizierten Werten abweichen kann. Eine Übersicht je Mikroorganismus für alle getesteten Substanzen sowie die jährlich angewandten und berichteten Bewertungskriterien enthalten Tabellen 1 bis 5."
+      },
+      "Paragraph8": {
         "Description1": "Resistenztestung von ",
-        "Description2": " (kommensale, STEC und resistente). Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2020. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). "
+        "Description2": " (kommensale, STEC und resistente). Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2020. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020)."
       },
       "Table1": {
         "Paragraph": {

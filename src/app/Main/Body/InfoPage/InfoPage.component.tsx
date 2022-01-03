@@ -87,8 +87,8 @@ export function InfoPageComponent(props: {
                             <p>{t("Background.Paragraph1")}</p>
                             <p>
                                 {t("Background.Paragraph2.Description1")}
-                                {microorganismNames.Salm} spp.,{" "}
-                                {microorganismNames.Campy} spp.,{" "}
+                                {microorganismNames.SalmSpp},{" "}
+                                {microorganismNames.CampySpp},{" "}
                                 {microorganismNames.Listeria}
                                 {t("Background.Paragraph2.Description2")}
                                 {microorganismNames.ColiFull}
@@ -97,8 +97,8 @@ export function InfoPageComponent(props: {
                                 {t("Background.Paragraph2.Description4")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description5")}
-                                {microorganismNames.Salm} spp.,{" "}
-                                {microorganismNames.Campy} spp.
+                                {microorganismNames.SalmSpp},{" "}
+                                {microorganismNames.CampySpp}
                                 {t("Background.Paragraph2.Description6")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description7")}
@@ -133,7 +133,11 @@ export function InfoPageComponent(props: {
                         content={
                             <div>
                                 <p>{t("Methods.Isolates.Paragraph1")}</p>
-                                <p>{t("Methods.Isolates.Paragraph2")}</p>
+                                <p>
+                                    {t("Methods.Isolates.Paragraph2-1")}
+                                    <b>{t("Methods.Isolates.Paragraph2-2")}</b>
+                                    {t("Methods.Isolates.Paragraph2-3")}
+                                </p>
                             </div>
                         }
                         defaultExpanded={false}

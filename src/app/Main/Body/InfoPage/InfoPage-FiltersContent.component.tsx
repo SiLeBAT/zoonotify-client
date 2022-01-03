@@ -32,16 +32,35 @@ function generateContentWithSubContent(
         const subFilter: Record<string, string> =
             describedFiltersContent[describedFilterSubKey];
         const subFilterName = subFilter.Name;
-        subContent.push(
-            <p
-                css={subContentNameStyle}
-                key={`${subFilter.Subname}${subFilterName}-name`}
-            >
-                {subFilter.Subname}
-                <i>{subFilterName}</i>
-                {subFilter.Abbreviation}
-            </p>
-        );
+
+        if (
+            describedFilterSubKey === "microorganism-6" ||
+            describedFilterSubKey === "microorganism-7" ||
+            describedFilterSubKey === "microorganism-8"
+        ) {
+            subContent.push(
+                <p
+                    css={subContentNameStyle}
+                    key={`${subFilter.Subname}${subFilterName}-name`}
+                >
+                    {subFilter.Subname}
+                    <i>{subFilterName}</i>
+                    {subFilter.Abbreviation}
+                    {microorganismNames.ColiShort})
+                </p>
+            );
+        } else {
+            subContent.push(
+                <p
+                    css={subContentNameStyle}
+                    key={`${subFilter.Subname}${subFilterName}-name`}
+                >
+                    {subFilter.Subname}
+                    <i>{subFilterName}</i>
+                    {subFilter.Abbreviation}
+                </p>
+            );
+        }
 
         if (describedFilterSubKey === "microorganism-9") {
             subContent.push(
@@ -54,6 +73,17 @@ function generateContentWithSubContent(
                     {subFilter.Description2}
                     {microorganismNames.Faecium}
                     {subFilter.Description3}
+                </p>
+            );
+        } else if (describedFilterSubKey === "category-3") {
+            subContent.push(
+                <p
+                    css={subContentDescriptionStyle}
+                    key={`${subFilter.Subname}${subFilterName}-description`}
+                >
+                    {subFilter.Description1}
+                    {microorganismNames.Gallus}
+                    {subFilter.Description2}
                 </p>
             );
         } else {
@@ -120,8 +150,7 @@ export function InfoPageFiltersContentComponent(props: {
                     key="resistance-description"
                 >
                     {t("Filters.resistance.Description1")}
-                    {microorganismNames.Salm} spp., {microorganismNames.Campy}{" "}
-                    spp.,
+                    {microorganismNames.SalmSpp}, {microorganismNames.CampySpp},
                     {t("Filters.resistance.Description2")}
                     {microorganismNames.ColiShort}
                     {t("Filters.resistance.Description3")}
@@ -129,8 +158,10 @@ export function InfoPageFiltersContentComponent(props: {
                     {t("Filters.resistance.Description4")}
                     {microorganismNames.ColiShort}
                     {t("Filters.resistance.Description5")}
-                    {microorganismNames.Entero} spp.
+                    {microorganismNames.EnteroSpp}
                     {t("Filters.resistance.Description6")}
+                    {microorganismNames.Campy}
+                    {t("Filters.resistance.Description7")}
                 </p>
             );
 

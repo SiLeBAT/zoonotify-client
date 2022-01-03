@@ -109,14 +109,14 @@ export function InfoPageContainerComponent(): JSX.Element {
         introduction: (
             <p>
                 {t("Methods.Amrs.Table2.Paragraph.Description1")}
-                {microorganismNames.Salm} spp.
+                {microorganismNames.SalmSpp}
                 {t("Methods.Amrs.Table2.Paragraph.Description2")}
             </p>
         ),
         title: (
             <div>
                 {t("Methods.Amrs.Table2.TableTitle.Part1")}
-                {microorganismNames.Salm} spp.
+                {microorganismNames.SalmSpp}
             </div>
         ),
         titleString: t("Methods.Amrs.Table2.TableTitleString"),
