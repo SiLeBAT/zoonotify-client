@@ -250,7 +250,7 @@
       "Paragraph1": "Isolate werden im Rahmen des Zoonosen-Monitorings aus Programmen gewonnen, denen eine repräsentative Zufallsstichprobe der jeweils definierten Population, ggf. unter Berücksichtigung definierter Schichtungskriterien auf der jeweils festgelegten Stufe der Lebensmittelkette zugrunde liegt. Bei der Probenahme werden jeweils unabhängige Einheiten beprobt. Um die repräsentative Auswahl der zu beprobenden Betriebe zu gewährleisten, wird in der jeweiligen Region auf der Grundlage einer Gesamtliste der Betriebe eine Zufallsauswahl getroffen. Soweit verfügbar, werden für die Primärisolierung international standardisierte mikrobiologische Nachweisverfahren in den akkreditierten Landesuntersuntersuchungseinrichtungen verwendet. Es können aber auch andere Untersuchungsverfahren eingesetzt werden, soweit sichergestellt werden kann, dass diese gleichwertig zu den vorgeschlagenen Methoden sind. Hierbei ist es insbesondere auch möglich, mittels einer PCR-Methode die Proben zu untersuchen und positive Ergebnisse mittels des kulturellen ISO-Verfahrens zu bestätigen. Soweit die vorgeschlagenen Methoden von den Methoden der amtlichen Sammlung nach § 64 LFGB oder ISO-Methoden abweichen, werden Methodenempfehlungen durch das jeweilige NRL am BfR bereitgestellt.",
       "Paragraph2-1": "Isolate, die im Rahmen der ",
       "Paragraph2-2": "Salmonellen Bekämpfungsprogramme beim Geflügel",
-      "Paragraph2-3": "gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
+      "Paragraph2-3": " gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
     },
     "Amrs": {
       "Name": "Antibiotikaresistenztestung",
@@ -275,7 +275,7 @@
       },
       "Paragraph4": {
         "Description1": "Die Testung von ",
-        "Description2": "  und MRSA auf Resistenzen in den Jahren 2010-2013 erfolgte auf Basis der Empfehlungen der EFSA (EFSA 2012a und EFSA 2012b, siehe unten)."
+        "Description2": " und MRSA auf Resistenzen in den Jahren 2010-2013 erfolgte auf Basis der Empfehlungen der EFSA (EFSA 2012a und EFSA 2012b, siehe unten)."
       },
       "Paragraph5": "Die Testung auf Resistenzen erfolgte ab dem Jahr 2014 unter Beachtung des Durchführungsbeschlusses 2013/652/EU, in dem das Untersuchungsverfahren, die zu testenden Wirkstoffe sowie die Bewertungskriterien für die Mehrzahl der Erreger festgelegt sind. Soweit dort keine epidemiologischen Cut-Off Werte beschrieben wurden, erfolgte die Bewertung anhand der Empfehlung der European Food Safety Authority (EFSA) in Abstimmung mit dem Europäischen Referenzlabor für Antibiotikaresistenz (EURL-AR).",
       "Paragraph6": {
@@ -353,14 +353,14 @@
         "Paragraph": {
           "Description1": "Resistenztestung von ",
           "Description2": " und ",
-          "Description3": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU."
+          "Description3": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU."
         },
         "TableTitle": {
           "Part1": "Tabelle 5: Resistenztestung von ",
           "Part2": " und "
         },
         "TableTitleString": "Tabelle 5: Resistenztestung von Enterococcus faecalis und E. faecium.",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2014 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
       "TableHeaderClass": "Substanzklasse",
       "TableHeaderSubstance": "Wirkstoff",
