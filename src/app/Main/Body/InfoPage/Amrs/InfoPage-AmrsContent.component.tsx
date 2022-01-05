@@ -49,8 +49,10 @@ export function InfoPageAmrsContentComponent(props: {
                 {t("Methods.Amrs.Paragraph2.Description2")}
                 {microorganismNames.ColiShort}
                 {t("Methods.Amrs.Paragraph2.Description3")}
-                {microorganismNames.CampySpp}
+                {microorganismNames.EnteroSpp}
                 {t("Methods.Amrs.Paragraph2.Description4")}
+                {microorganismNames.CampySpp}
+                {t("Methods.Amrs.Paragraph2.Description5")}
             </p>
             <p>
                 {t("Methods.Amrs.Paragraph3.Description1")}

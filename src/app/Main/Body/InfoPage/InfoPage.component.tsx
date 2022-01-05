@@ -50,6 +50,20 @@ const subHeadingStyle = css`
     padding: 0.5em;
 `;
 
+function ParagraphWithBoldText(
+    text1: string,
+    boldText: string,
+    text2: string
+): JSX.Element {
+    return (
+        <p>
+            {text1}
+            <b>{boldText}</b>
+            {text2}
+        </p>
+    );
+}
+
 export function InfoPageComponent(props: {
     describedFilters: string[];
     amrKeys: AmrKey[];
@@ -84,7 +98,11 @@ export function InfoPageComponent(props: {
                     title={backgroundChapterHeading}
                     content={
                         <div>
-                            <p>{t("Background.Paragraph1")}</p>
+                            {ParagraphWithBoldText(
+                                t("Background.Paragraph1.Description1"),
+                                t("Background.Paragraph1.BoldText"),
+                                t("Background.Paragraph1.Description2")
+                            )}
                             <p>
                                 {t("Background.Paragraph2.Description1")}
                                 {microorganismNames.SalmSpp},{" "}
@@ -95,24 +113,34 @@ export function InfoPageComponent(props: {
                                 {t("Background.Paragraph2.Description3")}
                                 {microorganismNames.Staphy}
                                 {t("Background.Paragraph2.Description4")}
-                                {microorganismNames.ColiShort}
+                                <i>{t("Background.Paragraph2.ItalicText")}</i>
                                 {t("Background.Paragraph2.Description5")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description6")}
                                 {microorganismNames.SalmSpp},{" "}
                                 {microorganismNames.CampySpp}
-                                {t("Background.Paragraph2.Description6")}
-                                {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description7")}
-                                {microorganismNames.EnteroFF}
-                                {t("Background.Paragraph2.Description8")}
                                 {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description8")}
+                                {microorganismNames.EnteroFF}
                                 {t("Background.Paragraph2.Description9")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description10")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description11")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description12")}
                             </p>
-                            <p>{t("Background.Paragraph3")}</p>
-                            <p>{t("Background.Paragraph4")}</p>
+                            {ParagraphWithBoldText(
+                                t("Background.Paragraph3.Description1"),
+                                t("Background.Paragraph3.BoldText"),
+                                t("Background.Paragraph3.Description2")
+                            )}
+                            {ParagraphWithBoldText(
+                                t("Background.Paragraph4.Description1"),
+                                t("Background.Paragraph4.BoldText"),
+                                t("Background.Paragraph4.Description2")
+                            )}
                         </div>
                     }
                     defaultExpanded={false}
@@ -132,12 +160,24 @@ export function InfoPageComponent(props: {
                         title={t("Methods.Isolates.Name")}
                         content={
                             <div>
-                                <p>{t("Methods.Isolates.Paragraph1")}</p>
-                                <p>
-                                    {t("Methods.Isolates.Paragraph2-1")}
-                                    <b>{t("Methods.Isolates.Paragraph2-2")}</b>
-                                    {t("Methods.Isolates.Paragraph2-3")}
-                                </p>
+                                {ParagraphWithBoldText(
+                                    t(
+                                        "Methods.Isolates.Paragraph1.Description1"
+                                    ),
+                                    t("Methods.Isolates.Paragraph1.BoldText"),
+                                    t(
+                                        "Methods.Isolates.Paragraph1.Description2"
+                                    )
+                                )}
+                                {ParagraphWithBoldText(
+                                    t(
+                                        "Methods.Isolates.Paragraph2.Description1"
+                                    ),
+                                    t("Methods.Isolates.Paragraph2.BoldText"),
+                                    t(
+                                        "Methods.Isolates.Paragraph2.Description2"
+                                    )
+                                )}
                             </div>
                         }
                         defaultExpanded={false}
