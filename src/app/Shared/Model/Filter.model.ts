@@ -5,7 +5,7 @@ export interface ClientSingleFilterConfig {
     id: string;
     name: string;
     parent?: string;
-    target?: string;
+    trigger?: string;
     values: string[];
 }
 

@@ -51,25 +51,29 @@ export function FilterSelectorListComponent(
             );
             subFilters.forEach((subFilter) => {
                 if (filter === subFilter.parent) {
-                    const subFilterTarget = subFilter.target;
+                    const subFilterTrigger = subFilter.trigger;
+                    const subFilterParent = subFilter.parent;
                     if (
-                        subFilterTarget !== undefined &&
-                        _.includes(
+                        subFilterTrigger !== undefined &&
+                        (_.includes(
                             selectedFilter.microorganism,
-                            subFilterTarget
-                        )
+                            subFilterTrigger
+                        ) ||
+                            _.includes(selectedFilter.matrix, subFilterTrigger))
                     ) {
                         const subFilterAttribute = subFilter.id;
                         const subFilterValues = subFilter.values;
                         filterSelectorsList.push(
                             SubFilterSelectorComponent({
                                 dataIsLoading,
-                                subFilterTarget,
+                                subFilterParent,
+                                subFilterTrigger,
                                 subFilterAttribute,
                                 subFilterValues,
                                 selectedFilter,
                                 onChange: handleChange,
                                 noOptionLabel,
+                                t,
                             })
                         );
                     }

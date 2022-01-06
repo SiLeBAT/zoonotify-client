@@ -3,7 +3,7 @@ export interface FilterConfigDTO {
         id: string;
         name: string;
         parent: string;
-        target: string;
+        trigger: string;
         values: string[] | Date[];
     }[];
 }

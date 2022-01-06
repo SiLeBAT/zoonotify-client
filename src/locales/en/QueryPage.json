@@ -571,6 +571,761 @@
       "TEC": "Teicoplanin"
     }
   },
+  "Subfilters": {
+    "serovar": {
+      "name": "Serovar",
+      "values": {
+        "S-4,12:d:-": "S.4,12:d:-",
+        "S-4,\\[5],12:i:-": "S.4,\\[5],12:i:-",
+        "S-Abony": "S. Abony",
+        "S-Abortusovis": "S. Abortusovis",
+        "S-Adelaide": "S. Adelaide",
+        "S-Agona": "S. Agona",
+        "S-Ajiobo": "S. Ajiobo",
+        "S-Albany": "S. Albany",
+        "S-Amsterdam": "S. Amsterdam",
+        "S-Anatum": "S. Anatum",
+        "S-Bareilly": "S. Bareilly",
+        "S-Berta": "S. Berta",
+        "S-Blockley": "S. Blockley",
+        "S-Bovismorbificans": "S. Bovismorbificans",
+        "S-Braenderup": "S. Braenderup",
+        "S-Brandenburg": "S. Brandenburg",
+        "S-Bredeney": "S. Bredeney",
+        "S-Cerro": "S. Cerro",
+        "S-Chester": "S. Chester",
+        "S-Choleraesuis": "S. Choleraesuis",
+        "S-Coeln": "S. Coeln",
+        "S-Corvallis": "S. Corvallis",
+        "S-Cotham": "S. Cotham",
+        "S-Cremieu": "S. Cremieu",
+        "S-Cubana": "S. Cubana",
+        "S-Derby": "S. Derby",
+        "S-Dublin": "S. Dublin",
+        "S-Durham": "S. Durham",
+        "S-Eboko": "S. Eboko",
+        "S-Enteritidis": "S. Enteritidis",
+        "S-Gallinarum": "S. Gallinarum",
+        "S-Gaminara": "S. Gaminara",
+        "S-Give": "S. Give",
+        "S-Goldcoast": "S. Goldcoast",
+        "S-Hadar": "S. Hadar",
+        "S-Hartford": "S. Hartford",
+        "S-Havana": "S. Havana",
+        "S-Heidelberg": "S. Heidelberg",
+        "S-Hessarek": "S. Hessarek",
+        "S-Hvittingfoss": "S. Hvittingfoss",
+        "S-Idikan": "S. Idikan",
+        "S-Indiana": "S. Indiana",
+        "S-Infantis": "S. Infantis",
+        "S-Isangi": "S. Isangi",
+        "S-Johannesburg": "S. Johannesburg",
+        "S-Kedougou": "S. Kedougou",
+        "S-Kentucky": "S. Kentucky",
+        "S-Kiambu": "S. Kiambu",
+        "S-Kottbus": "S. Kottbus",
+        "S-Leeuwarden": "S. Leeuwarden",
+        "S-Limete": "S. Limete",
+        "S-Litchfield": "S. Litchfield",
+        "S-Liverpool": "S. Liverpool",
+        "S-Livingstone": "S. Livingstone",
+        "S-Llandoff": "S. Llandoff",
+        "S-London": "S. London",
+        "S-Manhattan": "S. Manhattan",
+        "S-Martonos": "S. Martonos",
+        "S-Mbandaka": "S. Mbandaka",
+        "S-Miami": "S. Miami",
+        "S-Minnesota": "S. Minnesota",
+        "S-Montevideo": "S. Montevideo",
+        "S-Muenster": "S. Muenster",
+        "S-Newport": "S. Newport",
+        "S-Nyborg": "S. Nyborg",
+        "S-Ohio": "S. Ohio",
+        "S-Oranienburg": "S. Oranienburg",
+        "S-Ordonez": "S. Ordonez",
+        "S-Orion": "S. Orion",
+        "S-Paratyphi B": "S. Paratyphi B",
+        "S-Paratyphi B (dT+)": "S. Paratyphi B (dT+)",
+        "S-Potsdam": "S. Potsdam",
+        "S-Putten": "S. Putten",
+        "S-Rauform": "S. Rauform",
+        "S-Reading": "S. Reading",
+        "S-Rissen": "S. Rissen",
+        "S-Rubislaw": "S. Rubislaw",
+        "S-Saintpaul": "S. Saintpaul",
+        "S-Schleissheim": "S. Schleissheim",
+        "S-Schwarzengrund": "S. Schwarzengrund",
+        "S-Senftenberg": "S. Senftenberg",
+        "S-Stanley": "S. Stanley",
+        "S-Stanleyville": "S. Stanleyville",
+        "S-Stourbridge": "S. Stourbridge",
+        "S-Subspec- I Rauform": "S. Subspec. I Rauform",
+        "S-Subspez I monophasisch": "S. Subspez I monophasisch",
+        "S-Subspez- I": "S. Subspez. I",
+        "S-Subspez- I monophasisch": "S .Subspez. I monophasisch",
+        "S-Subspez- II": "S. Subspez. II",
+        "S-Subspez- IIIa": "S. Subspez. IIIa",
+        "S-Subspez- IIIb": "S. Subspez. IIIb",
+        "S-Subspez- IIIb monophasisch": "S. Subspez. IIIb monophasisch",
+        "S-Subspez- IV": "S. Subspez. IV",
+        "S-Takoradi": "S. Takoradi",
+        "S-Tennessee": "S. Tennessee",
+        "S-Thompson": "S. Thompson",
+        "S-Typhimurium": "S. Typhimurium",
+        "S-Typhimurium monophasisch": "S. Typhimurium monophasisch",
+        "S-Urbana": "S. Urbana",
+        "S-Virchow": "S. Virchow",
+        "S-Wagenia": "S. Wagenia",
+        "S-Worthington": "S. Worthington",
+        "S-der Gruppe B": "S. of group B",
+        "S-der Gruppe C1": "S. of group C1",
+        "Salm- der Gruppe E": "Salm. of group E",
+        "Subspez- I": "Subspez. I",
+        "keine Salmonelle": "No Salmonella"
+      }
+    },
+    "carba_ampc_carba_phenotype": {
+      "name": "CARBA Phenotype",
+      "values": {
+        "Carbapenemase-verdächtig": "Carbapenemase suspected"
+      }
+    },
+    "esbl_ampc_carba_phenotype": {
+      "name": "ESBL CARBA Phenotype",
+      "values": {
+        "AmpC-verdächtig": "AmpC-suspected",
+        "Carbapenemase-verdächtig": "Carbapenemase-suspected",
+        "ESBL+AmpC-verdächtig": "ESBL+AmpC-suspected",
+        "ESBL-verdächtig": "ESBL-suspected",
+        "Phänotyp nicht ermittelt": "Phenotype not determined",
+        "Phänotyp ungewöhnlich": "Phenotype uncommon"
+      }
+    },
+    "campy_spez": {
+      "name": "Campy Spezies",
+      "values": {
+        "C- coli": "C. coli",
+        "C- fetus": "C. fetus",
+        "C- hyointestinalis": "C. hyointestinalis",
+        "C- jejuni": "C. jejuni",
+        "C- lari": "C. lari"
+      }
+    },
+    "entero_spez": {
+      "name": "Entero Spezies",
+      "values": {
+        "Enterococcus faecalis": "Enterococcus faecalis",
+        "Enterococcus faecium": "Enterococcus faecium"
+      }
+    },
+    "spa_type": {
+      "name": "SPA-type",
+      "values": {
+        "-offen-": "-open-",
+        "n-t-": "n.t.",
+        "t001": "t001",
+        "t002": "t002",
+        "t003": "t003",
+        "t007": "t007",
+        "t008": "t008",
+        "t009": "t009",
+        "t010": "t010",
+        "t011": "t011",
+        "t015": "t015",
+        "t026": "t026",
+        "t032": "t032",
+        "t034": "t034",
+        "t037": "t037",
+        "t10204": "t10204",
+        "t108": "t108",
+        "t10890": "t10890",
+        "t11212": "t11212",
+        "t11475": "t11475",
+        "t1154": "t1154",
+        "t11614": "t11614",
+        "t1170": "t1170",
+        "t1184": "t1184",
+        "t11866": "t11866",
+        "t11887": "t11887",
+        "t1197": "t1197",
+        "t1250": "t1250",
+        "t1255": "t1255",
+        "t1265": "t1265",
+        "t127": "t127",
+        "t12774": "t12774",
+        "t12887": "t12887",
+        "t13108": "t13108",
+        "t13176": "t13176",
+        "t13177": "t13177",
+        "t13310": "t13310",
+        "t1344": "t1344",
+        "t13493": "t13493",
+        "t1379": "t1379",
+        "t1403": "t1403",
+        "t1419": "t1419",
+        "t1422": "t1422",
+        "t14222": "t14222",
+        "t1430": "t1430",
+        "t1451": "t1451",
+        "t1456": "t1456",
+        "t15010": "t15010",
+        "t15199": "t15199",
+        "t15742": "t15742",
+        "t1580": "t1580",
+        "t1606": "t1606",
+        "t16955": "t16955",
+        "t17181": "t17181",
+        "t1793": "t1793",
+        "t18086": "t18086",
+        "t18107": "t18107",
+        "t189": "t189",
+        "t1919": "t1919",
+        "t1928": "t1928",
+        "t1939": "t1939",
+        "t1951": "t1951",
+        "t19979": "t19979",
+        "t2011": "t2011",
+        "t2112": "t2112",
+        "t2123": "t2123",
+        "t2174": "t2174",
+        "t223": "t223",
+        "t2247": "t2247",
+        "t2346": "t2346",
+        "t2370": "t2370",
+        "t2383": "t2383",
+        "t2510": "t2510",
+        "t2576": "t2576",
+        "t2582": "t2582",
+        "t2642": "t2642",
+        "t267": "t267",
+        "t283": "t283",
+        "t2876": "t2876",
+        "t2883": "t2883",
+        "t2970": "t2970",
+        "t304": "t304",
+        "t3041": "t3041",
+        "t324": "t324",
+        "t3276": "t3276",
+        "t337": "t337",
+        "t3380": "t3380",
+        "t3423": "t3423",
+        "t3934": "t3934",
+        "t4132": "t4132",
+        "t4208": "t4208",
+        "t437": "t437",
+        "t4474": "t4474",
+        "t4571": "t4571",
+        "t4652": "t4652",
+        "t4677": "t4677",
+        "t5123": "t5123",
+        "t5210": "t5210",
+        "t5229": "t5229",
+        "t5452": "t5452",
+        "t559": "t559",
+        "t5675": "t5675",
+        "t5706": "t5706",
+        "t571": "t571",
+        "t579": "t579",
+        "t588": "t588",
+        "t6320": "t6320",
+        "t6325": "t6325",
+        "t6367": "t6367",
+        "t6408": "t6408",
+        "t6867": "t6867",
+        "t6903": "t6903",
+        "t742": "t742",
+        "t779": "t779",
+        "t790": "t790",
+        "t8100": "t8100",
+        "t8275": "t8275",
+        "t843": "t843",
+        "t852": "t852",
+        "t8588": "t8588",
+        "t8620": "t8620",
+        "t898": "t898",
+        "t899": "t899",
+        "t917": "t917",
+        "t9296": "t9296",
+        "t9433": "t9433",
+        "t9538": "t9538"
+      }
+    },
+    "serotype": {
+      "name": "Serotype",
+      "values": {
+        "IIa": "IIa",
+        "IIb": "IIb",
+        "IIc": "IIc",
+        "IVb": "IVb",
+        "IVbvariant": "IVbvariant"
+      }
+    },
+    "clonal_group": {
+      "name": "Clonal group",
+      "values": {
+        "andere CC398": "Other CC398",
+        "non CC398": "Non CC398",
+        "t011": "t011",
+        "t034": "t034"
+      }
+    },
+    "o_group": {
+      "name": "O-group",
+      "values": {
+        "(55)": "(55)",
+        "1": "1",
+        "100": "100",
+        "101": "101",
+        "102": "102",
+        "103": "103",
+        "104": "104",
+        "106": "106",
+        "108": "108",
+        "108/130": "108/130",
+        "109": "109",
+        "11": "11",
+        "110": "110",
+        "111": "111",
+        "113": "113",
+        "114": "114",
+        "115": "115",
+        "115 / 152": "115 / 152",
+        "116": "116",
+        "117": "117",
+        "118": "118",
+        "119": "119",
+        "12": "12",
+        "123": "123",
+        "125": "125",
+        "125ac": "125ac",
+        "127": "127",
+        "128": "128",
+        "128ac": "128ac",
+        "129": "129",
+        "129/150": "129/150",
+        "130": "130",
+        "134": "134",
+        "135": "135",
+        "136": "136",
+        "140": "140",
+        "141": "141",
+        "142": "142",
+        "143": "143",
+        "145": "145",
+        "146": "146",
+        "147": "147",
+        "148": "148",
+        "149": "149",
+        "15": "15",
+        "150": "150",
+        "152": "152",
+        "153": "153",
+        "154": "154",
+        "156": "156",
+        "157": "157",
+        "163": "163",
+        "166": "166",
+        "171": "171",
+        "172": "172",
+        "174": "174",
+        "175": "175",
+        "176": "176",
+        "177": "177",
+        "178": "178",
+        "179": "179",
+        "181": "181",
+        "182": "182",
+        "183": "183",
+        "184": "184",
+        "185": "185",
+        "186": "186",
+        "187": "187",
+        "2": "2",
+        "2/74": "2/74",
+        "21": "21",
+        "22": "22",
+        "23": "23",
+        "24": "24",
+        "25": "25",
+        "26": "26",
+        "27": "27",
+        "28": "28",
+        "28ab": "28ab",
+        "28ac": "28ac",
+        "3": "3",
+        "36": "36",
+        "37": "37",
+        "38": "38",
+        "39": "39",
+        "4": "4",
+        "40": "40",
+        "43": "43",
+        "45": "45",
+        "49": "49",
+        "51": "51",
+        "55": "55",
+        "59": "59",
+        "6": "6",
+        "61": "61",
+        "63": "63",
+        "69/150": "69/150",
+        "7": "7",
+        "70": "70",
+        "70 / 71": "70 / 71",
+        "70/71": "70/71",
+        "73": "73",
+        "73 / 77": "73 / 77",
+        "74": "74",
+        "75": "75",
+        "76": "76",
+        "77": "77",
+        "78": "78",
+        "79": "79",
+        "8": "8",
+        "82": "82",
+        "84": "84",
+        "85": "85",
+        "86": "86",
+        "87": "87",
+        "88": "88",
+        "91": "91",
+        "93": "93",
+        "98": "98",
+        "BT": "BT",
+        "NT": "NT",
+        "ONT:H21": "ONT:H21",
+        "nt": "nt",
+        "r": "r",
+        "rauh": "rauh"
+      }
+    },
+    "h_group": {
+      "name": "H-group",
+      "values": {
+        "(2)": "(2)",
+        "(25)": "(25)",
+        "(46)": "(46)",
+        "(9)": "(9)",
+        "11": "11",
+        "12": "12",
+        "16": "16",
+        "18": "18",
+        "19": "19",
+        "2": "2",
+        "20": "20",
+        "21": "21",
+        "25": "25",
+        "25 / 56": "25 / 56",
+        "26": "26",
+        "28": "28",
+        "29": "29",
+        "30": "30",
+        "31": "31",
+        "38": "38",
+        "4": "4",
+        "40": "40",
+        "41": "41",
+        "43": "43",
+        "45": "45",
+        "46": "46",
+        "48": "48",
+        "49": "49",
+        "5": "5",
+        "56": "56",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "H10": "H10",
+        "H12": "H12",
+        "H16": "H16",
+        "H19": "H19",
+        "H2": "H2",
+        "H21": "H21",
+        "H25": "H25",
+        "H25 \\[slash] 56": "H25 \\[slash] 56",
+        "H27": "H27",
+        "H28": "H28",
+        "H30": "H30",
+        "H4": "H4",
+        "H45": "H45",
+        "H48": "H48",
+        "H49": "H49",
+        "H7": "H7",
+        "H8": "H8",
+        "HNM": "HNM",
+        "HNT": "HNT",
+        "Hr": "Hr",
+        "NM": "NM",
+        "NT": "NT",
+        "\\[H10]": "\\[H10]",
+        "\\[H11]": "\\[H11]",
+        "\\[H12]": "\\[H12]",
+        "\\[H14]": "\\[H14]",
+        "\\[H15]": "\\[H15]",
+        "\\[H16]": "\\[H16]",
+        "\\[H18]": "\\[H18]",
+        "\\[H19]": "\\[H19]",
+        "\\[H1]": "\\[H1]",
+        "\\[H20]": "\\[H20]",
+        "\\[H21]": "\\[H21]",
+        "\\[H23]": "\\[H23]",
+        "\\[H25]": "\\[H25]",
+        "\\[H26]": "\\[H26]",
+        "\\[H27]": "\\[H27]",
+        "\\[H28]": "\\[H28]",
+        "\\[H29]": "\\[H29]",
+        "\\[H2]": "\\[H2]",
+        "\\[H30]": "\\[H30]",
+        "\\[H31]": "\\[H31]",
+        "\\[H32]": "\\[H32]",
+        "\\[H33]": "\\[H33]",
+        "\\[H34]": "\\[H34]",
+        "\\[H35]": "\\[H35]",
+        "\\[H40]": "\\[H40]",
+        "\\[H43]": "\\[H43]",
+        "\\[H45]": "\\[H45]",
+        "\\[H48]": "\\[H48]",
+        "\\[H49]": "\\[H49]",
+        "\\[H4]": "\\[H4]",
+        "\\[H52]": "\\[H52]",
+        "\\[H5]": "\\[H5]",
+        "\\[H6]": "\\[H6]",
+        "\\[H7]": "\\[H7]",
+        "\\[H8]": "\\[H8]",
+        "\\[H9]": "\\[H9]",
+        "\\[H]": "\\[H]",
+        "r": "r",
+        "rauh": "rauh"
+      }
+    },
+    "matrixDetail__(Hals)haut": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzel(tier)probe": "Einzel(tier)probe"
+      }
+    },
+    "matrixDetail__(Konsum)eier, unsortiert": {
+      "name": "Matixdetail",
+      "values": {
+        "Eierschalenpools": "Eierschalenpools"
+      }
+    },
+    "matrixDetail__Alleinfuttermittel": {
+      "name": "Matixdetail",
+      "values": {
+        "Sackware und lose Ware": "Sackware und lose Ware"
+      }
+    },
+    "matrixDetail__Babyspinat": {
+      "name": "Matixdetail",
+      "values": {
+        "frisch": "frisch"
+      }
+    },
+    "matrixDetail__Blatt- und Kopfsalate": {
+      "name": "Matixdetail",
+      "values": {
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "insb. Feldsalat, Rucola, Spinat, Eisberg"
+      }
+    },
+    "matrixDetail__Blattsalate": {
+      "name": "Matixdetail",
+      "values": {
+        "vorgeschnitten, verpackt": "vorgeschnitten, verpackt"
+      }
+    },
+    "matrixDetail__Blinddarminhalt": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzeltierprobe": "Einzeltierprobe",
+        "Poolprobe": "Poolprobe"
+      }
+    },
+    "matrixDetail__Erdbeeren": {
+      "name": "Matixdetail",
+      "values": {
+        "frisch": "frisch"
+      }
+    },
+    "matrixDetail__Fleischerzeugnisse": {
+      "name": "Matixdetail",
+      "values": {
+        "wärmebehandelt": "wärmebehandelt"
+      }
+    },
+    "matrixDetail__Frische Kräuter": {
+      "name": "Matixdetail",
+      "values": {
+        "lose oder verpackt; geschnitten oder Topfware": "lose oder verpackt; geschnitten oder Topfware"
+      }
+    },
+    "matrixDetail__Frisches Fleisch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt",
+        "gekühlt oder tiefgefroren": "gekühlt oder tiefgefroren",
+        "gekühlt oder tiefgekühlt": "gekühlt oder tiefgekühlt",
+        "gekühlt, mit Haut": "gekühlt, mit Haut",
+        "gekühlt, ohne Haut": "gekühlt, ohne Haut"
+      }
+    },
+    "matrixDetail__Garnelen": {
+      "name": "Matixdetail",
+      "values": {
+        "roh": "roh"
+      }
+    },
+    "matrixDetail__Getrocknete Blatt- und Grasprodukte": {
+      "name": "Matixdetail",
+      "values": {
+        "Pulver- oder Blattform": "Pulver- oder Blattform"
+      }
+    },
+    "matrixDetail__Hackfleisch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt"
+      }
+    },
+    "matrixDetail__Haut": {
+      "name": "Matixdetail",
+      "values": {
+        "Hauttupfer": "Hauttupfer",
+        "Tupfer": "Tupfer"
+      }
+    },
+    "matrixDetail__Kiemeninhalt": {
+      "name": "Matixdetail",
+      "values": {
+        "Kiementupfer": "Kiementupfer"
+      }
+    },
+    "matrixDetail__Konsumeier, sortiert": {
+      "name": "Matixdetail",
+      "values": {
+        "Eierschalenpools": "Eierschalenpools"
+      }
+    },
+    "matrixDetail__Kot": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzeltierprobe": "Einzeltierprobe",
+        "Kloaken- oder Kottupfer": "Kloaken- oder Kottupfer",
+        "Sammelkot": "Sammelkot"
+      }
+    },
+    "matrixDetail__Kot / Staub": {
+      "name": "Matixdetail",
+      "values": {
+        "Sockentupfer": "Sockentupfer",
+        "Stiefelüberzieher / Sockentupfer": "Stiefelüberzieher / Sockentupfer"
+      }
+    },
+    "matrixDetail__Muscheln": {
+      "name": "Matixdetail",
+      "values": {
+        "lebend, frisch": "lebend, frisch"
+      }
+    },
+    "matrixDetail__Muskel": {
+      "name": "Matixdetail",
+      "values": {
+        "importiert, aus Aquakultur": "importiert, aus Aquakultur"
+      }
+    },
+    "matrixDetail__Nasenschleimhaut": {
+      "name": "Matixdetail",
+      "values": {
+        "Nasentupfer": "Nasentupfer"
+      }
+    },
+    "matrixDetail__Nasentupfer": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzeltierprobe": "Einzeltierprobe"
+      }
+    },
+    "matrixDetail__Petersilie": {
+      "name": "Matixdetail",
+      "values": {
+        "tiefgekühlt": "tiefgekühlt"
+      }
+    },
+    "matrixDetail__Rohmilchkäse": {
+      "name": "Matixdetail",
+      "values": {
+        "Schnittkäse": "Schnittkäse",
+        "Weichkäse": "Weichkäse",
+        "außer Hartkäse": "außer Hartkäse"
+      }
+    },
+    "matrixDetail__Sammelmilch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt"
+      }
+    },
+    "matrixDetail__Schlachtkörper": {
+      "name": "Matixdetail",
+      "values": {
+        "Einzel(tier)probe": "Einzel(tier)probe"
+      }
+    },
+    "matrixDetail__Sprossen": {
+      "name": "Matixdetail",
+      "values": {
+        "lose oder verpackt": "lose oder verpackt"
+      }
+    },
+    "matrixDetail__Staub": {
+      "name": "Matixdetail",
+      "values": {
+        "Staubtupfer": "Staubtupfer"
+      }
+    },
+    "matrixDetail__Streichfähige Rohwürste": {
+      "name": "Matixdetail",
+      "values": {
+        "überwiegend aus Hähnchen- und Putenfleisch": "überwiegend aus Hähnchen- und Putenfleisch",
+        "überwiegend aus Schweinefleisch": "überwiegend aus Schweinefleisch"
+      }
+    },
+    "matrixDetail__Tatar / Schabefleisch": {
+      "name": "Matixdetail",
+      "values": {
+        "gekühlt": "gekühlt"
+      }
+    },
+    "matrixDetail__Tomaten": {
+      "name": "Matixdetail",
+      "values": {
+        "kleine Sorten": "kleine Sorten"
+      }
+    },
+    "matrixDetail__Weizenmehl": {
+      "name": "Matixdetail",
+      "values": {
+        "vor der Verpackung in der Mühle": "vor der Verpackung in der Mühle"
+      }
+    },
+    "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote": {
+      "name": "Matixdetail",
+      "values": {
+        "Raps": "Raps",
+        "hauptsächlich Soja": "hauptsächlich Soja"
+      }
+    },
+    "genes": {
+      "name": "Genes",
+      "values": {
+        "stx1_Gen": "stx1 gen",
+        "stx2_Gen": "stx2 gen",
+        "eae_Gen": "eae gen",
+        "e_hly_Gen": "e hly gen"
+      }
+    }
+  },
   "NrOfIsolates": {
     "Title": "Number of isolates",
     "Total": "Total:",

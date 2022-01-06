@@ -3,7 +3,7 @@ import { saveAs } from "file-saver";
 import { generateParameterHeader } from "./generateParameterHeader.service";
 import { generateStatisticTableCsvString } from "./StatExportServices/generateStatisticTableCsvString.service";
 import {
-    MainFilterList,
+    mainFilterList,
     DbCollection,
     DbKey,
 } from "../../../../../Shared/Model/Client_Isolate.model";
@@ -91,7 +91,7 @@ export function dataAndStatisticToZipFile(
         csvRowsFilteredData.push(
             generateDataTableCsvString(
                 zipParameter.rawDataSet.rawData,
-                MainFilterList,
+                mainFilterList,
                 zipParameter.mainFilterLabels,
                 zipParameter.mainFilterAttributes
             )

@@ -42,7 +42,9 @@ export async function fetchInitialDataService(): Promise<{
         const adaptedSubFilters: ClientSingleFilterConfig[] = [];
         adaptedFilterProp.filters.forEach((adaptedFilter) => {
             if (adaptedFilter.parent !== undefined) {
-                adaptedSubFilters.push(adaptedFilter);
+                if (adaptedFilter.values.length > 1) {
+                    adaptedSubFilters.push(adaptedFilter);
+                }
             }
         });
 

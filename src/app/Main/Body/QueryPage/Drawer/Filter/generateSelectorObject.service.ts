@@ -1,20 +1,32 @@
 import { TFunction } from "i18next";
+import { replaceAll } from "../../../../../Core/replaceAll.service";
 
 export function generateSelectorObject(
     filterAttribute: string,
     selectorArray: string[],
-    t?: TFunction
+    t?: TFunction,
+    isSubFilter = false
 ): { value: string; label: string }[] {
     return selectorArray.map((filterValue) => {
+        let filterValueLabel = filterValue;
         if (t !== undefined) {
-            const filterValueLabel = t(
-                `FilterValues.${filterAttribute}.${filterValue.replace(
-                    ".",
-                    ""
-                )}`
-            );
-            return { value: filterValue, label: filterValueLabel };
+            if (isSubFilter) {
+                filterValueLabel = t(
+                    `Subfilters.${filterAttribute}.values.${replaceAll(
+                        filterValue,
+                        ".",
+                        "-"
+                    )}`
+                );
+            } else {
+                filterValueLabel = t(
+                    `FilterValues.${filterAttribute}.${filterValue.replace(
+                        ".",
+                        ""
+                    )}`
+                );
+            }
         }
-        return { value: filterValue, label: filterValue };
+        return { value: filterValue, label: filterValueLabel };
     });
 }

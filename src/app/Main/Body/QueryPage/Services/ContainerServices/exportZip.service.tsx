@@ -10,7 +10,7 @@ import { IsolateDTO } from "../../../../../Shared/Model/Api_Isolate.model";
 import {
     DbCollection,
     DbKey,
-    MainFilterList,
+    mainFilterList,
 } from "../../../../../Shared/Model/Client_Isolate.model";
 import { ISOLATE_URL } from "../../../../../Shared/URLs";
 import { DataInterface } from "../../../../../Shared/Context/DataContext";
@@ -97,7 +97,7 @@ export async function exportZipService(props: {
             const adaptedFilteredIsolates: DbCollection =
                 adaptIsolatesFromAPI(isolateFilteredProp);
             rawData = adaptedFilteredIsolates;
-            rawKeys = MainFilterList;
+            rawKeys = mainFilterList;
         }
     }
 

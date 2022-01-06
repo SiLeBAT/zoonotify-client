@@ -1,4 +1,5 @@
 import React, { useState, createContext } from "react";
+import { allFiltersList, DbKey } from "../Model/Client_Isolate.model";
 import { FilterInterface } from "../Model/Filter.model";
 
 export interface FilterContextInterface {
@@ -13,24 +14,22 @@ export const defaultFiltersToDisplay = [
     "samplingContext",
 ];
 
+const convertArrayToObject = (array: (string | DbKey)[]): FilterInterface => {
+    const initialValue = {};
+    return array.reduce((obj, item) => {
+        return {
+            ...obj,
+            [item]: [],
+        };
+    }, initialValue);
+};
+
+const defaultSelectedFilters = convertArrayToObject(allFiltersList);
+
 export const defaultFilter: FilterContextInterface = {
     mainFilter: [],
     displayedFilters: defaultFiltersToDisplay,
-    selectedFilter: {
-        microorganism: [],
-        samplingContext: [],
-        matrix: [],
-        federalState: [],
-        samplingStage: [],
-        origin: [],
-        category: [],
-        productionType: [],
-        resistance: [],
-        samplingYear: [],
-        serovar: [],
-        species: [],
-        serotyp: [],
-    },
+    selectedFilter: defaultSelectedFilters,
 };
 interface ProfileState {
     filter: FilterContextInterface;

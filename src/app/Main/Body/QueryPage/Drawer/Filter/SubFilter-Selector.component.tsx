@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { ValueType } from "react-select";
+import { TFunction } from "i18next";
 import {
     FilterInterface,
     FilterType,
@@ -13,13 +14,14 @@ import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import { generateSelectorObject } from "./generateSelectorObject.service";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
+import { replaceAll } from "../../../../../Core/replaceAll.service";
 
 const subFilterSelectorStyle = css`
     display: grid;
     grid-template-columns: 1fr 2fr;
 `;
 
-const subFilterTargetLabelStyle = css`
+const subFilterTriggerLabelStyle = css`
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -31,7 +33,8 @@ const subFilterTargetLabelStyle = css`
 
 export interface SelectorProps {
     dataIsLoading: boolean;
-    subFilterTarget: string;
+    subFilterParent: string;
+    subFilterTrigger: string;
     subFilterValues: string[];
     selectedFilter: FilterInterface;
     subFilterAttribute: FilterType;
@@ -40,6 +43,7 @@ export interface SelectorProps {
         keyName: FilterType | FeatureType
     ) => void;
     noOptionLabel: string;
+    t: TFunction;
 }
 
 /**
@@ -48,11 +52,14 @@ export interface SelectorProps {
  * @returns {JSX.Element} - selector component
  */
 export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
+    const { t } = props;
     const selectedSubFilterValues: string[] =
         props.selectedFilter[props.subFilterAttribute];
     const selectedSubValuesObj = generateSelectorObject(
         props.subFilterAttribute,
-        selectedSubFilterValues
+        selectedSubFilterValues,
+        t,
+        true
     );
     const noFilter: boolean = CheckIfSingleFilterIsSet(
         props.selectedFilter,
@@ -60,7 +67,9 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
     );
     const dropDownValuesObj = generateSelectorObject(
         props.subFilterAttribute,
-        props.subFilterValues
+        props.subFilterValues,
+        t,
+        true
     );
 
     const handleChange = (
@@ -77,19 +86,28 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         }
     };
 
+    const subFilterTriggerLabel = t(
+        `FilterValues.${props.subFilterParent}.${replaceAll(
+            props.subFilterTrigger,
+            ".",
+            ""
+        )}`
+    );
+    const subFilterName = t(`Subfilters.${props.subFilterAttribute}.name`);
+
     return (
         <div
             css={subFilterSelectorStyle}
-            key={`subFilter-selector-component-${props.subFilterAttribute}`}
+            key={`subFilter-selector-component-${props.subFilterAttribute}-${props.subFilterTrigger}`}
         >
-            <p css={subFilterTargetLabelStyle}>{props.subFilterTarget}</p>
+            <p css={subFilterTriggerLabelStyle}>{subFilterTriggerLabel}</p>
             <SelectorComponent
-                key={`subFilter-selector-${props.subFilterAttribute}`}
+                key={`subFilter-selector-${props.subFilterAttribute}-${props.subFilterTrigger}`}
                 mainColor={primaryColor}
                 titleColor={primaryColor}
                 hooverColor={bfrDarkgrey}
                 hooverColorDark={bfrDarkgrey}
-                label={props.subFilterAttribute}
+                label={subFilterName}
                 noOptionLabel={props.noOptionLabel}
                 dropDownValuesObj={dropDownValuesObj}
                 selectedValuesObj={selectedSubValuesObj}
