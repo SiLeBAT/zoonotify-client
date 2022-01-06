@@ -31,11 +31,12 @@ export async function exportZipService(props: {
     getPngDownloadUriRef: React.MutableRefObject<
         (() => Promise<string>) | null
     >;
-}): Promise<void> {
+}): Promise<number> {
     let rawData: DbCollection = [];
     let rawKeys: DbKey[] = [];
     let statData: Record<string, string>[] = [];
     let statKeys: string[] = [];
+    let status = 200;
 
     const { t } = props;
     const { data } = props;
@@ -88,6 +89,7 @@ export async function exportZipService(props: {
         const isolateFilteredResponse: ApiResponse<IsolateDTO> =
             await callApiService(isolateFilteredUrl);
         const isolateFilteredStatus = isolateFilteredResponse.status;
+        status = isolateFilteredStatus;
         if (
             isolateFilteredStatus === 200 &&
             isolateFilteredResponse.data !== undefined
@@ -112,24 +114,28 @@ export async function exportZipService(props: {
         }
     }
 
-    dataAndStatisticToZipFile({
-        exportOptions: props.exportOptions,
-        tableAttributeNames,
-        rawDataSet: {
-            rawData,
-            rawKeys,
-        },
-        statDataSet: {
-            statData,
-            statKeys,
-        },
-        imgData: chartImgUri,
-        ZNFilename,
-        znPngFilename,
-        filter: props.filter.selectedFilter,
-        allFilterLabel: exportLabels.allFilterLabel,
-        mainFilterLabels: exportLabels.mainFilterLabels,
-        mainFilterAttributes: props.filter.mainFilter,
-        subFileNames,
-    });
+    if (status === 200) {
+        dataAndStatisticToZipFile({
+            exportOptions: props.exportOptions,
+            tableAttributeNames,
+            rawDataSet: {
+                rawData,
+                rawKeys,
+            },
+            statDataSet: {
+                statData,
+                statKeys,
+            },
+            imgData: chartImgUri,
+            ZNFilename,
+            znPngFilename,
+            filter: props.filter.selectedFilter,
+            allFilterLabel: exportLabels.allFilterLabel,
+            mainFilterLabels: exportLabels.mainFilterLabels,
+            mainFilterAttributes: props.filter.mainFilter,
+            subFileNames,
+        });
+    }
+
+    return status;
 }

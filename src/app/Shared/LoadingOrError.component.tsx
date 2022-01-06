@@ -14,6 +14,7 @@ export function LoadingOrErrorComponent(props: {
         isolateStatus: number | undefined;
         isolateCountStatus: number | undefined;
         filterStatus: number | undefined;
+        exportDataStatus: number | undefined;
     };
     dataIsSet: boolean;
     componentToDisplay: JSX.Element;
@@ -37,6 +38,14 @@ export function LoadingOrErrorComponent(props: {
         props.status.filterStatus !== undefined
     ) {
         return <ErrorPageComponent errorStatus={props.status.filterStatus} />;
+    }
+    if (
+        props.status.exportDataStatus !== 200 &&
+        props.status.exportDataStatus !== undefined
+    ) {
+        return (
+            <ErrorPageComponent errorStatus={props.status.exportDataStatus} />
+        );
     }
     if (props.dataIsSet) {
         return props.componentToDisplay;
