@@ -53,7 +53,7 @@ export type DbCollection = (Record<DbKeyWithStringValue, string> & {
     resistance: ResistantValue[];
 })[];
 
-export const MainFilterList: DbKey[] = [
+export const mainFilterList: DbKey[] = [
     "microorganism",
     "samplingYear",
     "samplingContext",
@@ -120,7 +120,7 @@ export const allSubFiltersList =
     microorganismSubFiltersList.concat(matrixSubFiltersList);
 
 export const allFiltersList: (string | DbKey)[] =
-    allSubFiltersList.concat(MainFilterList);
+    allSubFiltersList.concat(mainFilterList);
 
 export const resistancesCollection = [
     "GEN",

@@ -10,7 +10,7 @@ import {
 } from "../../../../../Shared/Model/Filter.model";
 import {
     DbKey,
-    MainFilterList,
+    mainFilterList,
     allSubFiltersList,
 } from "../../../../../Shared/Model/Client_Isolate.model";
 import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
@@ -106,7 +106,7 @@ export function QueryPageParameterContentComponent(props: {
     const selectedFilters = props.selectedFilter;
 
     const mainFiltersParameterList = createParameterList(
-        MainFilterList,
+        mainFilterList,
         selectedFilters,
         t,
         false

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import {
-    MainFilterList,
+    mainFilterList,
     allSubFiltersList,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { ISOLATE_COUNT_URL } from "../../../Shared/URLs";
@@ -188,7 +188,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                 newFilter.selectedFilter[subFilter.id] = [];
             }
         });
-        const allFiltersList = allSubFiltersList.concat(MainFilterList);
+        const allFiltersList = allSubFiltersList.concat(mainFilterList);
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
             allFiltersList,
@@ -310,7 +310,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const setFilterFromPath = (): void => {
-        const allFiltersList = allSubFiltersList.concat(MainFilterList);
+        const allFiltersList = allSubFiltersList.concat(mainFilterList);
         const filterFromPath = getFilterFromPath(
             history.location.search,
             allFiltersList
@@ -320,7 +320,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             displFilter = defaultFilter.displayedFilters;
         }
         setFilter({
-            mainFilter: MainFilterList,
+            mainFilter: mainFilterList,
             selectedFilter: filterFromPath.selectedFilters,
             displayedFilters: displFilter,
         });
