@@ -56,6 +56,7 @@ export function FooterLinkListComponent(props: {
         flexGrow: 1,
         textDecoration: "none",
         boxSizing: "inherit",
+        padding: "0",
     };
 
     let submitProblemLink: JSX.Element = (
