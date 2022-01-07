@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
-import { microorganismNames } from "./InfoPage.model";
+import { birdSpecies, microorganismNames } from "./italicNames.constants";
 
 const descriptionStyle = css`
     margin: 0;
@@ -82,7 +82,7 @@ function generateContentWithSubContent(
                     key={`${subFilter.Subname}${subFilterName}-description`}
                 >
                     {subFilter.Description1}
-                    {microorganismNames.Gallus}
+                    {birdSpecies.Gallus}
                     {subFilter.Description2}
                 </p>
             );

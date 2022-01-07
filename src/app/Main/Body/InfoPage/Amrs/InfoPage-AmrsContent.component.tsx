@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Button, Divider } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { AmrKey, AmrsTable, microorganismNames } from "../InfoPage.model";
+import { AmrKey, AmrsTable } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
+import { microorganismNames } from "../italicNames.constants";
 
 export function InfoPageAmrsContentComponent(props: {
     amrKeys: AmrKey[];

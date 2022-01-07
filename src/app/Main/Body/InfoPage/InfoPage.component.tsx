@@ -5,12 +5,13 @@ import { Button } from "@mui/material";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { InfoPageAmrsContentComponent } from "./Amrs/InfoPage-AmrsContent.component";
 import { InfoPageFiltersContentComponent } from "./InfoPage-FiltersContent.component";
-import { AmrKey, AmrsTable, microorganismNames } from "./InfoPage.model";
+import { AmrKey, AmrsTable } from "./InfoPage.model";
 import {
     onPrimaryColor,
     primaryColor,
     secondaryColor,
 } from "../../../Shared/Style/Style-MainTheme";
+import { microorganismNames } from "./italicNames.constants";
 
 const infoPageStyle = css`
     width: 60%;
@@ -50,7 +51,7 @@ const subHeadingStyle = css`
     padding: 0.5em;
 `;
 
-function ParagraphWithBoldText(
+function createParagraphWithBoldText(
     text1: string,
     boldText: string,
     text2: string
@@ -98,10 +99,10 @@ export function InfoPageComponent(props: {
                     title={backgroundChapterHeading}
                     content={
                         <div>
-                            {ParagraphWithBoldText(
+                            {createParagraphWithBoldText(
                                 t("Background.Paragraph1.Description1"),
-                                t("Background.Paragraph1.BoldText"),
-                                t("Background.Paragraph1.Description2")
+                                t("Background.Paragraph1.Description2"),
+                                t("Background.Paragraph1.Description3")
                             )}
                             <p>
                                 {t("Background.Paragraph2.Description1")}
@@ -113,33 +114,33 @@ export function InfoPageComponent(props: {
                                 {t("Background.Paragraph2.Description3")}
                                 {microorganismNames.Staphy}
                                 {t("Background.Paragraph2.Description4")}
-                                <i>{t("Background.Paragraph2.ItalicText")}</i>
-                                {t("Background.Paragraph2.Description5")}
-                                {microorganismNames.ColiShort}
+                                <i>{t("Background.Paragraph2.Description5")}</i>
                                 {t("Background.Paragraph2.Description6")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description7")}
                                 {microorganismNames.SalmSpp},{" "}
                                 {microorganismNames.CampySpp}
-                                {t("Background.Paragraph2.Description7")}
-                                {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description8")}
-                                {microorganismNames.EnteroFF}
-                                {t("Background.Paragraph2.Description9")}
                                 {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description9")}
+                                {microorganismNames.EnteroFF}
                                 {t("Background.Paragraph2.Description10")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description11")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description12")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description13")}
                             </p>
-                            {ParagraphWithBoldText(
+                            {createParagraphWithBoldText(
                                 t("Background.Paragraph3.Description1"),
-                                t("Background.Paragraph3.BoldText"),
-                                t("Background.Paragraph3.Description2")
+                                t("Background.Paragraph3.Description2"),
+                                t("Background.Paragraph3.Description3")
                             )}
-                            {ParagraphWithBoldText(
+                            {createParagraphWithBoldText(
                                 t("Background.Paragraph4.Description1"),
-                                t("Background.Paragraph4.BoldText"),
-                                t("Background.Paragraph4.Description2")
+                                t("Background.Paragraph4.Description2"),
+                                t("Background.Paragraph4.Description3")
                             )}
                         </div>
                     }
@@ -160,22 +161,26 @@ export function InfoPageComponent(props: {
                         title={t("Methods.Isolates.Name")}
                         content={
                             <div>
-                                {ParagraphWithBoldText(
+                                {createParagraphWithBoldText(
                                     t(
                                         "Methods.Isolates.Paragraph1.Description1"
                                     ),
-                                    t("Methods.Isolates.Paragraph1.BoldText"),
                                     t(
                                         "Methods.Isolates.Paragraph1.Description2"
+                                    ),
+                                    t(
+                                        "Methods.Isolates.Paragraph1.Description3"
                                     )
                                 )}
-                                {ParagraphWithBoldText(
+                                {createParagraphWithBoldText(
                                     t(
                                         "Methods.Isolates.Paragraph2.Description1"
                                     ),
-                                    t("Methods.Isolates.Paragraph2.BoldText"),
                                     t(
                                         "Methods.Isolates.Paragraph2.Description2"
+                                    ),
+                                    t(
+                                        "Methods.Isolates.Paragraph2.Description3"
                                     )
                                 )}
                             </div>

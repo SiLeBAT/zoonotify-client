@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { AmrKey, AmrsTable, microorganismNames } from "./InfoPage.model";
+import { AmrKey, AmrsTable } from "./InfoPage.model";
 import { InfoPageComponent } from "./InfoPage.component";
 import { modifyTableDataStringService } from "../../../Core/modifyTableDataString.service";
 import {
@@ -13,6 +13,7 @@ import {
     years2016To2020,
     table5,
 } from "./AmrsTables.constants";
+import { microorganismNames } from "./italicNames.constants";
 
 export function InfoPageContainerComponent(): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);

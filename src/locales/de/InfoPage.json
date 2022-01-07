@@ -17,33 +17,33 @@
     "Name": "Hintergrund",
     "Paragraph1": {
       "Description1": "Für die Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern sowie der Quellen von Erkrankungen des Menschen wird bundesweit einheitlich das ",
-      "BoldText": "Zoonosen-Monitoring",
-      "Description2": " gemäß Zoonosen-Stichprobenplan durchgeführt. Dies trägt dazu bei, die Belange der Richtlinie 2003/99/EG zu erfüllen. Übergreifendes Ziel ist, eine umfassende Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern einschließlich Antibiotikaresistenzen sowie der Quellen von Erkrankungen des Menschen vornehmen zu können. Hierdurch soll auch die Durchführung wichtiger Komponenten der Richtlinie 2003/99/EG sowie des Durchführungsbeschlusses 2013/652/EU bzw. seiner Nachfolgeregelung 2020/1729/EU sichergestellt werden. "
+      "Description2": "Zoonosen-Monitoring",
+      "Description3": " gemäß Zoonosen-Stichprobenplan durchgeführt. Dies trägt dazu bei, die Belange der Richtlinie 2003/99/EG zu erfüllen. Übergreifendes Ziel ist, eine umfassende Bewertung der Entwicklungstendenzen von Zoonosen und Zoonoseerregern einschließlich Antibiotikaresistenzen sowie der Quellen von Erkrankungen des Menschen vornehmen zu können. Hierdurch soll auch die Durchführung wichtiger Komponenten der Richtlinie 2003/99/EG sowie des Durchführungsbeschlusses 2013/652/EU bzw. seiner Nachfolgeregelung 2020/1729/EU sichergestellt werden. "
     },
     "Paragraph2": {
       "Description1": "Die Bedeutung von ",
       "Description2": " und Shiga-Toxin bildenden ",
       "Description3": " (STEC) ergibt sich aus dem gehäuften Vorkommen bzw. der Schwere von Erkrankungsfällen beim Menschen. Zudem handelt es sich um überwachungspflichtige Erreger gemäß Anhang I. A der Richtlinie 2003/99/EG. Bisher werden Erkrankungsfälle des Menschen mit Nutztier-assoziierten Methicillin-resistenten ",
       "Description4": " (MRSA) für Deutschland vor allem bei Personen mit Kontakt zu diesen Nutztieren beschrieben. Allerdings wurde bereits eine weite Verbreitung des Erregers in verschiedenen Nutztierpopulationen (Schwein, Kalb, Pute) sowie in frischem Fleisch hiervon in Deutschland beobachtet. Neben den bei Nutztieren typischen Erregern des klonalen Komplexes CC398 werden auch ",
-      "ItalicText": "spa",
-      "Description5": "-Typen nachgewiesen, die anderen klonalen Komplexen zuzuordnen sind. Dies betont die Notwendigkeit, in regelmäßigen Abständen die Untersuchungen entlang der Lebensmittelkette zu wiederholen, um Veränderungen der Verbreitung auf den verschiedenen Stufen der Lebensmittelkette sowie das Neuauftreten oder das Ausbreiten von Klonen mit neu erworbenen Virulenzfaktoren und/oder Resistenzdeterminanten erkennen zu können. Kommensale ",
-      "Description6": " werden regelmäßig untersucht, um Entwicklungstendenzen von bekannten Resistenzen und neu auftretende Resistenzen frühzeitig erkennen zu können. Mit dem Durchführungsbeschluss 2013/652/EU und seinem ab 2021 gültigen Nachfolgedokument 2020/1729/EU wurde die Untersuchung auf ",
-      "Description7": " und kommensale ",
-      "Description8": " im Hinblick auf Antibiotikaresistenzen verbindlich für alle Mitgliedsstaaten festgelegt. Diese Daten sind wichtig, um die möglichen Quellen und Übertragungswege von resistenten Mikroorganismen entlang der Lebensmittelkette hin zum Menschen abschätzen zu können. Zudem wurde die Untersuchung von Proben auf ",
-      "Description9": " vorgeschlagen, um auch bei grampositiven Erregern verstärkt Resistenzen, insbesondere auch gegen humanmedizinisch besonders wichtige Antibiotika erkennen zu können. Der selektive Nachweis von ESBL/AmpC-bildenden ",
-      "Description10": " wird in die Programme des Zoonosen-Monitorings mit aufgenommen, um die Ausbreitung von Keimen mit der Fähigkeit, Extended-Spektrum Beta-Laktamasen und/oder AmpC Beta-Laktamasen bilden zu können, zu beobachten. Zudem soll das Auftreten von neuen Resistenzen, insbesondere gegen Carbapeneme frühzeitig erkannt werden. Um abschätzen zu können, ob sich Carbapenemase-bildende ",
-      "Description11": " verbreitet haben, werden auch gezielte selektive Untersuchungen auf das Vorkommen von ",
-      "Description12": " mit derartigen Resistenzeigenschaften im Zoonosen-Monitoring aufgenommen. Die Untersuchungen auf diesen Erreger wurden in Programmen entsprechend den Empfehlungen des Beschlusses 2013/652/EU und nach dem Nachfolgedokument 2020/1729/EU ab 2021 verpflichtend durchgeführt."
+      "Description5": "spa",
+      "Description6": "-Typen nachgewiesen, die anderen klonalen Komplexen zuzuordnen sind. Dies betont die Notwendigkeit, in regelmäßigen Abständen die Untersuchungen entlang der Lebensmittelkette zu wiederholen, um Veränderungen der Verbreitung auf den verschiedenen Stufen der Lebensmittelkette sowie das Neuauftreten oder das Ausbreiten von Klonen mit neu erworbenen Virulenzfaktoren und/oder Resistenzdeterminanten erkennen zu können. Kommensale ",
+      "Description7": " werden regelmäßig untersucht, um Entwicklungstendenzen von bekannten Resistenzen und neu auftretende Resistenzen frühzeitig erkennen zu können. Mit dem Durchführungsbeschluss 2013/652/EU und seinem ab 2021 gültigen Nachfolgedokument 2020/1729/EU wurde die Untersuchung auf ",
+      "Description8": " und kommensale ",
+      "Description9": " im Hinblick auf Antibiotikaresistenzen verbindlich für alle Mitgliedsstaaten festgelegt. Diese Daten sind wichtig, um die möglichen Quellen und Übertragungswege von resistenten Mikroorganismen entlang der Lebensmittelkette hin zum Menschen abschätzen zu können. Zudem wurde die Untersuchung von Proben auf ",
+      "Description10": " vorgeschlagen, um auch bei grampositiven Erregern verstärkt Resistenzen, insbesondere auch gegen humanmedizinisch besonders wichtige Antibiotika erkennen zu können. Der selektive Nachweis von ESBL/AmpC-bildenden ",
+      "Description11": " wird in die Programme des Zoonosen-Monitorings mit aufgenommen, um die Ausbreitung von Keimen mit der Fähigkeit, Extended-Spektrum Beta-Laktamasen und/oder AmpC Beta-Laktamasen bilden zu können, zu beobachten. Zudem soll das Auftreten von neuen Resistenzen, insbesondere gegen Carbapeneme frühzeitig erkannt werden. Um abschätzen zu können, ob sich Carbapenemase-bildende ",
+      "Description12": " verbreitet haben, werden auch gezielte selektive Untersuchungen auf das Vorkommen von ",
+      "Description13": " mit derartigen Resistenzeigenschaften im Zoonosen-Monitoring aufgenommen. Die Untersuchungen auf diesen Erreger wurden in Programmen entsprechend den Empfehlungen des Beschlusses 2013/652/EU und nach dem Nachfolgedokument 2020/1729/EU ab 2021 verpflichtend durchgeführt."
     },
     "Paragraph3": {
       "Description1": "Richtlinie 2003/99/EG sieht vor, dass auf den geeigneten Stufen der Lebensmittelkette repräsentative Daten erhoben werden. Gleichzeitig sollen die wichtigsten Lebensmittelgruppen betrachtet werden. Richtlinie 2003/99/EG sieht auch vor, dass jährlich im Bericht über Entwicklungstendenzen und Quellen von Zoonosen, Zoonoseerregern und Antibiotikaresistenzen auch die Daten zur Bewertung der nationalen ",
-      "BoldText": "Salmonellen Bekämpfungsprogramme beim Geflügel",
-      "Description2": " gemäß Verordnung (EG) Nr. 2160/2003 veröffentlicht werden."
+      "Description2": "Salmonellen Bekämpfungsprogramme beim Geflügel",
+      "Description3": " gemäß Verordnung (EG) Nr. 2160/2003 veröffentlicht werden."
     },
     "Paragraph4": {
       "Description1": "Isolate, die in der Umsetzung des Zoonosen-Monitorings und der Salmonellen Bekämpfungsprogramme beim Geflügel gewonnen werden, werden in den Nationalen Referenzlaboratorien (NRL) am BfR bestätigt und weiter mikrobiologisch typisiert. Diese Ergebnisse können über ",
-      "BoldText": "ZooNotify",
-      "Description2": " abgerufen werden."
+      "Description2": "ZooNotify",
+      "Description3": " abgerufen werden."
     }
   },
   "Filters": {
@@ -263,13 +263,13 @@
       "Name": "Isolatgewinnung",
       "Paragraph1": {
         "Description1": "Isolate werden im Rahmen des ",
-        "BoldText": "Zoonosen-Monitorings",
-        "Description2": " aus Programmen gewonnen, denen eine repräsentative Zufallsstichprobe der jeweils definierten Population, ggf. unter Berücksichtigung definierter Schichtungskriterien auf der jeweils festgelegten Stufe der Lebensmittelkette zugrunde liegt. Bei der Probenahme werden jeweils unabhängige Einheiten beprobt. Um die repräsentative Auswahl der zu beprobenden Betriebe zu gewährleisten, wird in der jeweiligen Region auf der Grundlage einer Gesamtliste der Betriebe eine Zufallsauswahl getroffen. Soweit verfügbar, werden für die Primärisolierung international standardisierte mikrobiologische Nachweisverfahren in den akkreditierten Landesuntersuntersuchungseinrichtungen verwendet. Es können aber auch andere Untersuchungsverfahren eingesetzt werden, soweit sichergestellt werden kann, dass diese gleichwertig zu den vorgeschlagenen Methoden sind. Hierbei ist es insbesondere auch möglich, mittels einer PCR-Methode die Proben zu untersuchen und positive Ergebnisse mittels des kulturellen ISO-Verfahrens zu bestätigen. Soweit die vorgeschlagenen Methoden von den Methoden der amtlichen Sammlung nach § 64 LFGB oder ISO-Methoden abweichen, werden Methodenempfehlungen durch das jeweilige NRL am BfR bereitgestellt."
+        "Description2": "Zoonosen-Monitorings",
+        "Description3": " aus Programmen gewonnen, denen eine repräsentative Zufallsstichprobe der jeweils definierten Population, ggf. unter Berücksichtigung definierter Schichtungskriterien auf der jeweils festgelegten Stufe der Lebensmittelkette zugrunde liegt. Bei der Probenahme werden jeweils unabhängige Einheiten beprobt. Um die repräsentative Auswahl der zu beprobenden Betriebe zu gewährleisten, wird in der jeweiligen Region auf der Grundlage einer Gesamtliste der Betriebe eine Zufallsauswahl getroffen. Soweit verfügbar, werden für die Primärisolierung international standardisierte mikrobiologische Nachweisverfahren in den akkreditierten Landesuntersuntersuchungseinrichtungen verwendet. Es können aber auch andere Untersuchungsverfahren eingesetzt werden, soweit sichergestellt werden kann, dass diese gleichwertig zu den vorgeschlagenen Methoden sind. Hierbei ist es insbesondere auch möglich, mittels einer PCR-Methode die Proben zu untersuchen und positive Ergebnisse mittels des kulturellen ISO-Verfahrens zu bestätigen. Soweit die vorgeschlagenen Methoden von den Methoden der amtlichen Sammlung nach § 64 LFGB oder ISO-Methoden abweichen, werden Methodenempfehlungen durch das jeweilige NRL am BfR bereitgestellt."
       },
       "Paragraph2": {
         "Description1": "Isolate, die im Rahmen der ",
-        "BoldText": "Salmonellen Bekämpfungsprogramme beim Geflügel",
-        "Description2": " gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
+        "Description2": "Salmonellen Bekämpfungsprogramme beim Geflügel",
+        "Description3": " gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden, stammen aus Proben, die entsprechend der jeweiligen Vorschriften in Herden von Zuchtgeflügel, Legehennen, Masthähnchen und Mastputen genommen wurden."
       }
     },
     "Amrs": {
@@ -310,7 +310,7 @@
       "Paragraph7": {
         "Description1": "In ZooNotify werden für alle Substanzen je Mikroorganismus ",
         "Description2": "die aktuellsten Bewertungskriterien",
-        "Description3": " angewandt, so dass Anzahl resistenter Mikroorganismen von publizierten Werten abweichen kann. Eine Übersicht je Mikroorganismus für alle getesteten Substanzen sowie die jährlich angewandten und berichteten Bewertungskriterien enthalten Tabellen 1 bis 5."
+        "Description3": " angewandt, so dass die Anzahl resistenter Mikroorganismen von publizierten Werten abweichen kann. Eine Übersicht je Mikroorganismus für alle getesteten Substanzen sowie die jährlich angewandten und berichteten Bewertungskriterien enthalten die Tabellen 1 bis 5."
       },
       "Paragraph8": {
         "Description1": "Resistenztestung von ",

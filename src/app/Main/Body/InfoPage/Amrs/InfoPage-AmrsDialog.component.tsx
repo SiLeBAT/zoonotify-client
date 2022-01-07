@@ -50,8 +50,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             {row.amrSubstance}
         </TableCell>
     );
-    Object.keys(row.valuesPerYearObject).forEach((year) => {
-        const yearValues = row.valuesPerYearObject[year];
+    Object.values(row.valuesPerYearObject).forEach((yearValues) => {
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
