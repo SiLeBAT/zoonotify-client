@@ -50,7 +50,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             {row.amrSubstance}
         </TableCell>
     );
-    Object.values(row.concentrationList).forEach((concentrations) => {
+    row.concentrationList.forEach((concentrations) => {
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
