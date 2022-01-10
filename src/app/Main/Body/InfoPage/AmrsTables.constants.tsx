@@ -3,25 +3,24 @@ import { AmrsTableData } from "./InfoPage.model";
 function createAmrTable(
     substanceClass: string,
     amrSubstance: string,
-    years: string[],
     valuesPerYear: string[][]
 ): AmrsTableData {
-    const valuesPerYearObject: Record<
-        string,
-        { cutOff: string; min: string; max: string }
-    > = {};
-    years.forEach((year, index) => {
-        const yearList = valuesPerYear[index];
-        valuesPerYearObject[year] = {
+    const concentrationList: {
+        cutOff: string;
+        min: string;
+        max: string;
+    }[] = [];
+    valuesPerYear.forEach((yearList) => {
+        concentrationList.push({
             cutOff: yearList[0],
             min: yearList[1],
             max: yearList[2],
-        };
+        });
     });
     return {
         substanceClass,
         amrSubstance,
-        valuesPerYearObject,
+        concentrationList,
     };
 }
 
@@ -42,7 +41,7 @@ export const years2010To2020 = [
 export const years2016To2020 = ["2016", "2017", "2018", "2019", "2020"];
 
 export const table1: AmrsTableData[] = [
-    createAmrTable("Aminoglycoside", "Gentamicin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Gentamicin", [
         ["2", "0,25", "32"],
         ["2", "0,25", "32"],
         ["2", "0,25", "32"],
@@ -55,7 +54,7 @@ export const table1: AmrsTableData[] = [
         ["2", "0,5", "32"],
         ["2", "0,5", "32"],
     ]),
-    createAmrTable("Aminoglycoside", "Kanamycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Kanamycin", [
         ["8", "4", "128"],
         ["8", "4", "128"],
         ["8", "4", "128"],
@@ -68,7 +67,7 @@ export const table1: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("Aminoglycoside", "Streptomycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Streptomycin", [
         ["16", "2", "128"],
         ["16", "2", "128"],
         ["16", "2", "128"],
@@ -81,7 +80,7 @@ export const table1: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("Amphenicole", "Chloramphenicol", years2010To2020, [
+    createAmrTable("Amphenicole", "Chloramphenicol", [
         ["16", "2", "64"],
         ["16", "2", "64"],
         ["16", "2", "64"],
@@ -94,7 +93,7 @@ export const table1: AmrsTableData[] = [
         ["16", "8", "128"],
         ["16", "8", "128"],
     ]),
-    createAmrTable("Amphenicole", "Florfenicol", years2010To2020, [
+    createAmrTable("Amphenicole", "Florfenicol", [
         ["16", "2", "64"],
         ["16", "2", "64"],
         ["16", "2", "64"],
@@ -107,7 +106,7 @@ export const table1: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("Penicilline", "Ampicillin", years2010To2020, [
+    createAmrTable("Penicilline", "Ampicillin", [
         ["8", "0,5", "32"],
         ["8", "0,5", "32"],
         ["8", "0,5", "32"],
@@ -120,7 +119,7 @@ export const table1: AmrsTableData[] = [
         ["8", "1", "64"],
         ["8", "1", "64"],
     ]),
-    createAmrTable("Penicilline", "Temocillin", years2010To2020, [
+    createAmrTable("Penicilline", "Temocillin", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -133,7 +132,7 @@ export const table1: AmrsTableData[] = [
         ["32", "0,5", "128"],
         ["32", "0,5", "128"],
     ]),
-    createAmrTable("Cephalosporine", "Cefotaxim", years2010To2020, [
+    createAmrTable("Cephalosporine", "Cefotaxim", [
         ["0,25", "0,0625", "4"],
         ["0,25", "0,0625", "4"],
         ["0,25", "0,0625", "4"],
@@ -146,7 +145,7 @@ export const table1: AmrsTableData[] = [
         ["0,25", "0,25", "64"],
         ["0,25", "0,25", "64"],
     ]),
-    createAmrTable("Cephalosporine", "Ceftazidim", years2010To2020, [
+    createAmrTable("Cephalosporine", "Ceftazidim", [
         ["0,5", "0,25", "16"],
         ["0,5", "0,25", "16"],
         ["0,5", "0,25", "16"],
@@ -159,7 +158,7 @@ export const table1: AmrsTableData[] = [
         ["0,5", "0,25", "128"],
         ["0,5", "0,25", "128"],
     ]),
-    createAmrTable("Carbapeneme", "Meropenem", years2010To2020, [
+    createAmrTable("Carbapeneme", "Meropenem", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -172,7 +171,7 @@ export const table1: AmrsTableData[] = [
         ["0,125", "0,03", "16"],
         ["0,125", "0,03", "16"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", [
         ["0,03125", "0,008", "8"],
         ["0,03125", "0,008", "8"],
         ["0,0625", "0,008", "8"],
@@ -185,7 +184,7 @@ export const table1: AmrsTableData[] = [
         ["0,0625", "0,015", "8"],
         ["0,0625", "0,015", "8"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", [
         ["16", "4", "64"],
         ["16", "4", "64"],
         ["16", "4", "64"],
@@ -198,7 +197,7 @@ export const table1: AmrsTableData[] = [
         ["16", "4", "128"],
         ["16", "4", "128"],
     ]),
-    createAmrTable("Polymyxine", "Colistin", years2010To2020, [
+    createAmrTable("Polymyxine", "Colistin", [
         ["2", "8", "16"],
         ["2", "8", "16"],
         ["2", "8", "16"],
@@ -211,7 +210,7 @@ export const table1: AmrsTableData[] = [
         ["2", "1", "16"],
         ["2", "1", "16"],
     ]),
-    createAmrTable("Tetrazykline", "Tetrazyklin", years2010To2020, [
+    createAmrTable("Tetrazykline", "Tetrazyklin", [
         ["8", "1", "64"],
         ["8", "1", "64"],
         ["8", "1", "64"],
@@ -224,7 +223,7 @@ export const table1: AmrsTableData[] = [
         ["8", "2", "64"],
         ["8", "2", "64"],
     ]),
-    createAmrTable("Glycylcycline", "Tigecyclin", years2010To2020, [
+    createAmrTable("Glycylcycline", "Tigecyclin", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -237,7 +236,7 @@ export const table1: AmrsTableData[] = [
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
     ]),
-    createAmrTable("Azalide", "Azithromycin", years2010To2020, [
+    createAmrTable("Azalide", "Azithromycin", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -250,7 +249,7 @@ export const table1: AmrsTableData[] = [
         ["16", "2", "64"],
         ["16", "2", "64"],
     ]),
-    createAmrTable("Folatsynthesehemmer", "Trimethoprim", years2010To2020, [
+    createAmrTable("Folatsynthesehemmer", "Trimethoprim", [
         ["2", "0,5", "32"],
         ["2", "0,5", "32"],
         ["2", "0,5", "32"],
@@ -263,7 +262,7 @@ export const table1: AmrsTableData[] = [
         ["2", "0,25", "32"],
         ["2", "0,25", "32"],
     ]),
-    createAmrTable("Sulfonamide", "Sulfamethoxazol", years2010To2020, [
+    createAmrTable("Sulfonamide", "Sulfamethoxazol", [
         ["256", "8", "1024"],
         ["256", "8", "1024"],
         ["64", "8", "1024"],
@@ -279,7 +278,7 @@ export const table1: AmrsTableData[] = [
 ];
 
 export const table2: AmrsTableData[] = [
-    createAmrTable("Aminoglycoside", "Gentamicin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Gentamicin", [
         ["2", "0,25", "32"],
         ["2", "0,25", "32"],
         ["2", "0,25", "32"],
@@ -292,7 +291,7 @@ export const table2: AmrsTableData[] = [
         ["2", "0,5", "32"],
         ["2", "0,5", "32"],
     ]),
-    createAmrTable("Aminoglycoside", "Kanamycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Kanamycin", [
         ["8", "4", "128"],
         ["8", "4", "128"],
         ["8", "4", "128"],
@@ -305,7 +304,7 @@ export const table2: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("Aminoglycoside", "Streptomycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Streptomycin", [
         ["32", "2", "128"],
         ["32", "2", "128"],
         ["16", "2", "128"],
@@ -318,7 +317,7 @@ export const table2: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("Amphenicole", "Chloramphenicol", years2010To2020, [
+    createAmrTable("Amphenicole", "Chloramphenicol", [
         ["16", "2", "64"],
         ["16", "2", "64"],
         ["16", "2", "64"],
@@ -331,7 +330,7 @@ export const table2: AmrsTableData[] = [
         ["16", "8", "128"],
         ["16", "8", "128"],
     ]),
-    createAmrTable("Amphenicole", "Florfenicol", years2010To2020, [
+    createAmrTable("Amphenicole", "Florfenicol", [
         ["16", "2", "64"],
         ["16", "2", "64"],
         ["16", "2", "64"],
@@ -344,7 +343,7 @@ export const table2: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("Penicilline", "Ampicillin", years2010To2020, [
+    createAmrTable("Penicilline", "Ampicillin", [
         ["4", "0,5", "32"],
         ["4", "0,5", "32"],
         ["8", "0,5", "32"],
@@ -357,7 +356,7 @@ export const table2: AmrsTableData[] = [
         ["8", "1", "64"],
         ["8", "1", "64"],
     ]),
-    createAmrTable("Penicilline", "Temocillin", years2010To2020, [
+    createAmrTable("Penicilline", "Temocillin", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -370,7 +369,7 @@ export const table2: AmrsTableData[] = [
         ["32", "0,5", "128"],
         ["32", "0,5", "128"],
     ]),
-    createAmrTable("Cephalosporine", "Cefotaxim", years2010To2020, [
+    createAmrTable("Cephalosporine", "Cefotaxim", [
         ["0,5", "0,0625", "4"],
         ["0,5", "0,0625", "4"],
         ["0,5", "0,0625", "4"],
@@ -383,7 +382,7 @@ export const table2: AmrsTableData[] = [
         ["0,5", "0,25", "4"],
         ["0,5", "0,25", "4"],
     ]),
-    createAmrTable("Cephalosporine", "Ceftazidim", years2010To2020, [
+    createAmrTable("Cephalosporine", "Ceftazidim", [
         ["2", "0,25", "16"],
         ["2", "0,25", "16"],
         ["2", "0,25", "16"],
@@ -396,7 +395,7 @@ export const table2: AmrsTableData[] = [
         ["2", "0,25", "16"],
         ["2", "0,25", "16"],
     ]),
-    createAmrTable("Carbapeneme", "Meropenem", years2010To2020, [
+    createAmrTable("Carbapeneme", "Meropenem", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -409,7 +408,7 @@ export const table2: AmrsTableData[] = [
         ["0,125", "0,03", "16"],
         ["0,125", "0,03", "16"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", [
         ["0,0625", "0,008", "8"],
         ["0,0625", "0,008", "8"],
         ["0,0625", "0,008", "8"],
@@ -422,7 +421,7 @@ export const table2: AmrsTableData[] = [
         ["0,0625", "0,015", "8"],
         ["0,0625", "0,015", "8"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", [
         ["16", "4", "64"],
         ["16", "4", "64"],
         ["16", "4", "64"],
@@ -435,7 +434,7 @@ export const table2: AmrsTableData[] = [
         ["16", "4", "128"],
         ["16", "4", "128"],
     ]),
-    createAmrTable("Polymyxine", "Colistin", years2010To2020, [
+    createAmrTable("Polymyxine", "Colistin", [
         ["2", "8", "16"],
         ["2", "8", "16"],
         ["2", "8", "16"],
@@ -448,7 +447,7 @@ export const table2: AmrsTableData[] = [
         ["2", "1", "16"],
         ["2", "1", "16"],
     ]),
-    createAmrTable("Tetrazykline", "Tetrazyklin", years2010To2020, [
+    createAmrTable("Tetrazykline", "Tetrazyklin", [
         ["8", "1", "64"],
         ["8", "1", "64"],
         ["8", "1", "64"],
@@ -461,7 +460,7 @@ export const table2: AmrsTableData[] = [
         ["8", "2", "64"],
         ["8", "2", "64"],
     ]),
-    createAmrTable("Glycylcycline", "Tigezyklin", years2010To2020, [
+    createAmrTable("Glycylcycline", "Tigezyklin", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -474,7 +473,7 @@ export const table2: AmrsTableData[] = [
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
     ]),
-    createAmrTable("Azalide", "Azithromycin", years2010To2020, [
+    createAmrTable("Azalide", "Azithromycin", [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
@@ -487,7 +486,7 @@ export const table2: AmrsTableData[] = [
         ["16", "2", "64"],
         ["16", "2", "64"],
     ]),
-    createAmrTable("Folatsynthesehemmer", "Trimethoprim", years2010To2020, [
+    createAmrTable("Folatsynthesehemmer", "Trimethoprim", [
         ["2", "0,5", "32"],
         ["2", "0,5", "32"],
         ["2", "0,5", "32"],
@@ -500,7 +499,7 @@ export const table2: AmrsTableData[] = [
         ["2", "0,25", "32"],
         ["2", "0,25", "32"],
     ]),
-    createAmrTable("Sulfonamide", "Sulfamethoxazol", years2010To2020, [
+    createAmrTable("Sulfonamide", "Sulfamethoxazol", [
         ["256", "8", "1024"],
         ["256", "8", "1024"],
         ["256", "8", "1024"],
@@ -516,7 +515,7 @@ export const table2: AmrsTableData[] = [
 ];
 
 export const table3a: AmrsTableData[] = [
-    createAmrTable("Aminoglycoside", "Gentamicin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Gentamicin", [
         ["1", "0,125", "16"],
         ["1", "0,125", "16"],
         ["2", "0,125", "16"],
@@ -529,7 +528,7 @@ export const table3a: AmrsTableData[] = [
         ["2", "0,125", "16"],
         ["2", "0,125", "16"],
     ]),
-    createAmrTable("Aminoglycoside", "Streptomycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Streptomycin", [
         ["2", "1", "16"],
         ["2", "1", "16"],
         ["4", "1", "16"],
@@ -542,7 +541,7 @@ export const table3a: AmrsTableData[] = [
         ["4", "0,25", "16"],
         ["4", "0,25", "16"],
     ]),
-    createAmrTable("Amphenicole", "Chloramphenicol", years2010To2020, [
+    createAmrTable("Amphenicole", "Chloramphenicol", [
         ["16", "2", "32"],
         ["16", "2", "32"],
         ["16", "2", "32"],
@@ -555,7 +554,7 @@ export const table3a: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", [
         ["1", "0,0625", "4"],
         ["1", "0,0625", "4"],
         ["0,5", "0,0625", "4"],
@@ -568,7 +567,7 @@ export const table3a: AmrsTableData[] = [
         ["0,5", "0,12", "16"],
         ["0,5", "0,125", "16"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", [
         ["16", "2", "64"],
         ["16", "2", "64"],
         ["16", "2", "64"],
@@ -581,7 +580,7 @@ export const table3a: AmrsTableData[] = [
         ["16", "1", "64"],
         ["16", "1", "64"],
     ]),
-    createAmrTable("Makrolide", "Erythromycin", years2010To2020, [
+    createAmrTable("Makrolide", "Erythromycin", [
         ["4", "0,5", "32"],
         ["4", "0,5", "32"],
         ["4", "0,5", "32"],
@@ -594,7 +593,7 @@ export const table3a: AmrsTableData[] = [
         ["4", "1", "128"],
         ["4", "1", "128"],
     ]),
-    createAmrTable("Tetrazykline", "Tetrazyklin", years2010To2020, [
+    createAmrTable("Tetrazykline", "Tetrazyklin", [
         ["2", "0,25", "16"],
         ["2", "0,25", "16"],
         ["1", "0,25", "16"],
@@ -610,7 +609,7 @@ export const table3a: AmrsTableData[] = [
 ];
 
 export const table3b: AmrsTableData[] = [
-    createAmrTable("Aminoglycoside", "Gentamicin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Gentamicin", [
         ["2", "0,125", "16"],
         ["2", "0,125", "16"],
         ["2", "0,125", "16"],
@@ -623,7 +622,7 @@ export const table3b: AmrsTableData[] = [
         ["2", "0,125", "16"],
         ["2", "0,125", "16"],
     ]),
-    createAmrTable("Aminoglycoside", "Streptomycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Streptomycin", [
         ["4", "1", "16"],
         ["4", "1", "16"],
         ["4", "1", "16"],
@@ -636,7 +635,7 @@ export const table3b: AmrsTableData[] = [
         ["4", "0,25", "16"],
         ["4", "0,25", "16"],
     ]),
-    createAmrTable("Amphenicole", "Chloramphenicol", years2010To2020, [
+    createAmrTable("Amphenicole", "Chloramphenicol", [
         ["16", "2", "32"],
         ["16", "2", "32"],
         ["16", "2", "32"],
@@ -649,7 +648,7 @@ export const table3b: AmrsTableData[] = [
         ["", "", ""],
         ["", "", ""],
     ]),
-    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", [
         ["1", "0,0625", "4"],
         ["1", "0,0625", "4"],
         ["0,5", "0,0625", "4"],
@@ -662,7 +661,7 @@ export const table3b: AmrsTableData[] = [
         ["0,5", "0,12", "16"],
         ["0,5", "0,125", "16"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Nalidixinsäure", [
         ["32", "2", "64"],
         ["32", "2", "64"],
         ["16", "2", "64"],
@@ -675,7 +674,7 @@ export const table3b: AmrsTableData[] = [
         ["16", "1", "64"],
         ["16", "1", "64"],
     ]),
-    createAmrTable("Makrolide", "Erythromycin", years2010To2020, [
+    createAmrTable("Makrolide", "Erythromycin", [
         ["16", "0,5", "32"],
         ["16", "0,5", "32"],
         ["8", "0,5", "32"],
@@ -688,7 +687,7 @@ export const table3b: AmrsTableData[] = [
         ["8", "1", "128"],
         ["8", "1", "128"],
     ]),
-    createAmrTable("Tetrazykline", "Tetrazyklin", years2010To2020, [
+    createAmrTable("Tetrazykline", "Tetrazyklin", [
         ["2", "0,25", "16"],
         ["2", "0,25", "16"],
         ["2", "0,25", "16"],
@@ -704,7 +703,7 @@ export const table3b: AmrsTableData[] = [
 ];
 
 export const table4: AmrsTableData[] = [
-    createAmrTable("Aminoglycoside", "Gentamicin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Gentamicin", [
         ["2", "1", "16"],
         ["2", "1", "16"],
         ["2", "1", "16"],
@@ -717,7 +716,7 @@ export const table4: AmrsTableData[] = [
         ["2", "1", "16"],
         ["2", "1", "16"],
     ]),
-    createAmrTable("Aminoglycoside", "Kanamycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Kanamycin", [
         ["8", "4", "64"],
         ["8", "4", "64"],
         ["8", "4", "64"],
@@ -730,7 +729,7 @@ export const table4: AmrsTableData[] = [
         ["8", "4", "64"],
         ["8", "4", "64"],
     ]),
-    createAmrTable("Aminoglycoside", "Streptomycin", years2010To2020, [
+    createAmrTable("Aminoglycoside", "Streptomycin", [
         ["16", "4", "32"],
         ["16", "4", "32"],
         ["16", "4", "32"],
@@ -743,7 +742,7 @@ export const table4: AmrsTableData[] = [
         ["16", "4", "32"],
         ["16", "4", "32"],
     ]),
-    createAmrTable("Amphenicole", "Chloramphenicol", years2010To2020, [
+    createAmrTable("Amphenicole", "Chloramphenicol", [
         ["16", "4", "64"],
         ["16", "4", "64"],
         ["16", "4", "64"],
@@ -756,7 +755,7 @@ export const table4: AmrsTableData[] = [
         ["16", "4", "64"],
         ["16", "4", "64"],
     ]),
-    createAmrTable("Penicilline", "Penicillin G", years2010To2020, [
+    createAmrTable("Penicilline", "Penicillin G", [
         ["0,125", "0,125", "2"],
         ["0,125", "0,125", "2"],
         ["0,125", "0,125", "2"],
@@ -769,7 +768,7 @@ export const table4: AmrsTableData[] = [
         ["0,125", "0,125", "2"],
         ["0,125", "0,125", "2"],
     ]),
-    createAmrTable("Cephalosporine", "Cefoxitin", years2010To2020, [
+    createAmrTable("Cephalosporine", "Cefoxitin", [
         ["4", "0,5", "16"],
         ["4", "0,5", "16"],
         ["4", "0,5", "16"],
@@ -782,7 +781,7 @@ export const table4: AmrsTableData[] = [
         ["4", "0,5", "16"],
         ["4", "0,5", "16"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", years2010To2020, [
+    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", [
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
@@ -795,7 +794,7 @@ export const table4: AmrsTableData[] = [
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
     ]),
-    createAmrTable("Tetrazykline", "Tetrazyklin", years2010To2020, [
+    createAmrTable("Tetrazykline", "Tetrazyklin", [
         ["1", "0,5", "16"],
         ["1", "0,5", "16"],
         ["1", "0,5", "16"],
@@ -808,7 +807,7 @@ export const table4: AmrsTableData[] = [
         ["1", "0,5", "16"],
         ["1", "0,5", "16"],
     ]),
-    createAmrTable("Ansamycine", "Rifampicin", years2010To2020, [
+    createAmrTable("Ansamycine", "Rifampicin", [
         ["0,03125", "0,015625", "0,5"],
         ["0,03125", "0,015625", "0,5"],
         ["0,03125", "0,015625", "0,5"],
@@ -821,7 +820,7 @@ export const table4: AmrsTableData[] = [
         ["0,03125", "0,015625", "0,5"],
         ["0,03125", "0,015625", "0,5"],
     ]),
-    createAmrTable("Lincosamide", "Clindamycin", years2010To2020, [
+    createAmrTable("Lincosamide", "Clindamycin", [
         ["0,25", "0,125", "4"],
         ["0,25", "0,125", "4"],
         ["0,25", "0,125", "4"],
@@ -834,7 +833,7 @@ export const table4: AmrsTableData[] = [
         ["0,25", "0,125", "4"],
         ["0,25", "0,125", "4"],
     ]),
-    createAmrTable("Makrolide", "Erythromycin", years2010To2020, [
+    createAmrTable("Makrolide", "Erythromycin", [
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
@@ -847,7 +846,7 @@ export const table4: AmrsTableData[] = [
         ["1", "0,25", "8"],
         ["1", "0,25", "8"],
     ]),
-    createAmrTable("Glykopeptide", "Vancomycin", years2010To2020, [
+    createAmrTable("Glykopeptide", "Vancomycin", [
         ["2", "1", "16"],
         ["2", "1", "16"],
         ["2", "1", "16"],
@@ -860,7 +859,7 @@ export const table4: AmrsTableData[] = [
         ["2", "1", "16"],
         ["2", "1", "16"],
     ]),
-    createAmrTable("Oxazolidinone", "Linezolid", years2010To2020, [
+    createAmrTable("Oxazolidinone", "Linezolid", [
         ["4", "1", "8"],
         ["4", "1", "8"],
         ["4", "1", "8"],
@@ -873,7 +872,7 @@ export const table4: AmrsTableData[] = [
         ["4", "1", "8"],
         ["4", "1", "8"],
     ]),
-    createAmrTable("Pleuromutiline", "Tiamulin", years2010To2020, [
+    createAmrTable("Pleuromutiline", "Tiamulin", [
         ["2", "0,5", "4"],
         ["2", "0,5", "4"],
         ["2", "0,5", "4"],
@@ -886,7 +885,7 @@ export const table4: AmrsTableData[] = [
         ["2", "0,5", "4"],
         ["2", "0,5", "4"],
     ]),
-    createAmrTable("Pseudomonische Säuren", "Mupirocin", years2010To2020, [
+    createAmrTable("Pseudomonische Säuren", "Mupirocin", [
         ["1", "0,5", "256"],
         ["1", "0,5", "256"],
         ["1", "0,5", "256"],
@@ -902,7 +901,7 @@ export const table4: AmrsTableData[] = [
     createAmrTable(
         "Streptogramine",
         "Quinupristin/Dalfopristin",
-        years2010To2020,
+
         [
             ["1", "0,5", "4"],
             ["1", "0,5", "4"],
@@ -917,7 +916,7 @@ export const table4: AmrsTableData[] = [
             ["1", "0,5", "4"],
         ]
     ),
-    createAmrTable("Triterpensäuren", "Fusidinsäure", years2010To2020, [
+    createAmrTable("Triterpensäuren", "Fusidinsäure", [
         ["0,5", "0,5", "4"],
         ["0,5", "0,5", "4"],
         ["0,5", "0,5", "4"],
@@ -930,7 +929,7 @@ export const table4: AmrsTableData[] = [
         ["0,5", "0,5", "4"],
         ["0,5", "0,5", "4"],
     ]),
-    createAmrTable("Folatsynthesehemmer", "Trimethoprim", years2010To2020, [
+    createAmrTable("Folatsynthesehemmer", "Trimethoprim", [
         ["2", "2", "32"],
         ["2", "2", "32"],
         ["2", "2", "32"],
@@ -943,7 +942,7 @@ export const table4: AmrsTableData[] = [
         ["2", "2", "32"],
         ["2", "2", "32"],
     ]),
-    createAmrTable("Sulfonamide", "Sulfamethoxazol", years2010To2020, [
+    createAmrTable("Sulfonamide", "Sulfamethoxazol", [
         ["128", "64", "512"],
         ["128", "64", "512"],
         ["128", "64", "512"],
@@ -959,77 +958,77 @@ export const table4: AmrsTableData[] = [
 ];
 
 export const table5: AmrsTableData[] = [
-    createAmrTable("Aminoglycoside", "Gentamicin", years2016To2020, [
+    createAmrTable("Aminoglycoside", "Gentamicin", [
         ["32", "8", "1024"],
         ["32", "8", "1024"],
         ["32", "8", "1024"],
         ["32", "8", "1024"],
         ["32", "8", "1024"],
     ]),
-    createAmrTable("Amphenicole", "Chloramphenicol", years2016To2020, [
+    createAmrTable("Amphenicole", "Chloramphenicol", [
         ["32", "4", "128"],
         ["32", "4", "128"],
         ["32", "4", "128"],
         ["32", "4", "128"],
         ["32", "4", "128"],
     ]),
-    createAmrTable("Penicilline", "Ampicillin", years2016To2020, [
+    createAmrTable("Penicilline", "Ampicillin", [
         ["4", "0,5", "64"],
         ["4", "0,5", "64"],
         ["4", "0,5", "64"],
         ["4", "0,5", "64"],
         ["4", "0,5", "64"],
     ]),
-    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", years2016To2020, [
+    createAmrTable("(Fluor)chinolone", "Ciprofloxacin", [
         ["4", "0,12", "16"],
         ["4", "0,12", "16"],
         ["4", "0,12", "16"],
         ["4", "0,12", "16"],
         ["4", "0,12", "16"],
     ]),
-    createAmrTable("Tetrazykline", "Tetrazyklin", years2016To2020, [
+    createAmrTable("Tetrazykline", "Tetrazyklin", [
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
     ]),
-    createAmrTable("Glycylcycline", "Tigezyklin", years2016To2020, [
+    createAmrTable("Glycylcycline", "Tigezyklin", [
         ["0,25", "0,03", "4"],
         ["0,25", "0,03", "4"],
         ["0,25", "0,03", "4"],
         ["0,25", "0,03", "4"],
         ["0,25", "0,03", "4"],
     ]),
-    createAmrTable("Makrolide", "Erythromycin", years2016To2020, [
+    createAmrTable("Makrolide", "Erythromycin", [
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
     ]),
-    createAmrTable("Glykopeptide", "Teicoplanin", years2016To2020, [
+    createAmrTable("Glykopeptide", "Teicoplanin", [
         ["2", "0,5", "64"],
         ["2", "0,5", "64"],
         ["2", "0,5", "64"],
         ["2", "0,5", "64"],
         ["2", "0,5", "64"],
     ]),
-    createAmrTable("Glykopeptide", "Vancomycin", years2016To2020, [
+    createAmrTable("Glykopeptide", "Vancomycin", [
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
         ["4", "1", "128"],
     ]),
-    createAmrTable("Lipopeptide", "Daptomycin", years2016To2020, [
+    createAmrTable("Lipopeptide", "Daptomycin", [
         ["4", "0,25", "32"],
         ["4", "0,25", "32"],
         ["4", "0,25", "32"],
         ["4", "0,25", "32"],
         ["4", "0,25", "32"],
     ]),
-    createAmrTable("Oxazolidinone", "Linezolid", years2016To2020, [
+    createAmrTable("Oxazolidinone", "Linezolid", [
         ["4", "0,5", "64"],
         ["4", "0,5", "64"],
         ["4", "0,5", "64"],
@@ -1039,7 +1038,7 @@ export const table5: AmrsTableData[] = [
     createAmrTable(
         "Streptogramine",
         "Quinupristin/Dalfopristin",
-        years2016To2020,
+
         [
             ["1", "0,5", "64"],
             ["1", "0,5", "64"],

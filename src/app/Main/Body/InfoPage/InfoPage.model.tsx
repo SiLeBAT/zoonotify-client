@@ -1,10 +1,11 @@
 export interface AmrsTableData {
     substanceClass: string;
     amrSubstance: string;
-    valuesPerYearObject: Record<
-        string,
-        { cutOff: string; min: string; max: string }
-    >;
+    concentrationList: {
+        cutOff: string;
+        min: string;
+        max: string;
+    }[];
 }
 
 export interface AmrsTable {

@@ -50,7 +50,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             {row.amrSubstance}
         </TableCell>
     );
-    Object.values(row.valuesPerYearObject).forEach((yearValues) => {
+    Object.values(row.concentrationList).forEach((concentrations) => {
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
@@ -59,7 +59,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 align="right"
                 key={`amr-table-cell-${row.amrSubstance}-cutOff`}
             >
-                {yearValues.cutOff}
+                {concentrations.cutOff}
             </TableCell>
         );
         tableCellList.push(
@@ -70,7 +70,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 align="right"
                 key={`amr-table-cell-${row.amrSubstance}-min`}
             >
-                {yearValues.min}
+                {concentrations.min}
             </TableCell>
         );
         tableCellList.push(
@@ -81,7 +81,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 align="right"
                 key={`amr-table-cell-${row.amrSubstance}-max`}
             >
-                {yearValues.max}
+                {concentrations.max}
             </TableCell>
         );
     });
