@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Button, Divider } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { AmrKey, AmrsTable, microorganismNames } from "../InfoPage.model";
+import { AmrKey, AmrsTable } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
+import { microorganismNames } from "../italicNames.constants";
 
 export function InfoPageAmrsContentComponent(props: {
     amrKeys: AmrKey[];
@@ -30,8 +31,9 @@ export function InfoPageAmrsContentComponent(props: {
         <div>
             <p>
                 {t("Methods.Amrs.Paragraph1.Description1")}
-                {microorganismNames.Salm} spp., {microorganismNames.CampyJeC},{" "}
-                {microorganismNames.CampyColiC}, {microorganismNames.ColiFull}
+                {microorganismNames.SalmSpp}, {microorganismNames.CampyJeC},{" "}
+                {microorganismNames.CampyColiC}, {microorganismNames.CampyLari},{" "}
+                {microorganismNames.ColiFullE},
                 {t("Methods.Amrs.Paragraph1.Description2")}
                 {microorganismNames.ColiShort}
                 {t("Methods.Amrs.Paragraph1.Description3")}
@@ -44,26 +46,47 @@ export function InfoPageAmrsContentComponent(props: {
             </p>
             <p>
                 {t("Methods.Amrs.Paragraph2.Description1")}
-                {microorganismNames.Salm} spp.
+                {microorganismNames.SalmSpp}
                 {t("Methods.Amrs.Paragraph2.Description2")}
                 {microorganismNames.ColiShort}
                 {t("Methods.Amrs.Paragraph2.Description3")}
-                {microorganismNames.Campy} spp.
+                {microorganismNames.EnteroSpp}
                 {t("Methods.Amrs.Paragraph2.Description4")}
+                {microorganismNames.CampySpp}
+                {t("Methods.Amrs.Paragraph2.Description5")}
             </p>
-            <p>{t("Methods.Amrs.Paragraph3")}</p>
+            <p>
+                {t("Methods.Amrs.Paragraph3.Description1")}
+                {microorganismNames.SalmSpp}
+                {t("Methods.Amrs.Paragraph3.Description2")}
+                {microorganismNames.CampySpp}
+                {t("Methods.Amrs.Paragraph3.Description3")}
+            </p>
             <p>
                 {t("Methods.Amrs.Paragraph4.Description1")}
-                {microorganismNames.Entero} spp.
+                {microorganismNames.ColiShort}
                 {t("Methods.Amrs.Paragraph4.Description2")}
+            </p>
+            <p>{t("Methods.Amrs.Paragraph5")}</p>
+            <p>
+                {t("Methods.Amrs.Paragraph6.Description1")}
+                {microorganismNames.EnteroSpp}
+                {t("Methods.Amrs.Paragraph6.Description2")}
                 {microorganismNames.Staphy}
-                {t("Methods.Amrs.Paragraph4.Description3")}
+                {t("Methods.Amrs.Paragraph6.Description3")}
                 {microorganismNames.Salm}, {microorganismNames.Campy}
-                {t("Methods.Amrs.Paragraph4.Description4")}
+                {t("Methods.Amrs.Paragraph6.Description4")}
                 {microorganismNames.ColiFull}
-                {t("Methods.Amrs.Paragraph4.Description5")}
-                {microorganismNames.Entero} spp.
-                {t("Methods.Amrs.Paragraph4.Description6")}
+                {t("Methods.Amrs.Paragraph6.Description5")}
+                {microorganismNames.EnteroSpp}
+                {t("Methods.Amrs.Paragraph6.Description6")}
+            </p>
+            <p>
+                <b>
+                    {t("Methods.Amrs.Paragraph7.Description1")}
+                    <u>{t("Methods.Amrs.Paragraph7.Description2")}</u>
+                    {t("Methods.Amrs.Paragraph7.Description3")}
+                </b>
             </p>
             <Divider
                 variant="middle"
@@ -74,11 +97,9 @@ export function InfoPageAmrsContentComponent(props: {
                 }}
             />
             <p>
-                {t("Methods.Amrs.Paragraph5.Description1")}
-                {microorganismNames.Salm} spp.
-                {t("Methods.Amrs.Paragraph5.Description2")}
+                {t("Methods.Amrs.Paragraph8.Description1")}
                 {microorganismNames.ColiFull}
-                {t("Methods.Amrs.Paragraph5.Description3")}
+                {t("Methods.Amrs.Paragraph8.Description2")}
             </p>
             {props.amrKeys.map((amrKey) => (
                 <div key={`${amrKey}-amr-table-dialog`}>

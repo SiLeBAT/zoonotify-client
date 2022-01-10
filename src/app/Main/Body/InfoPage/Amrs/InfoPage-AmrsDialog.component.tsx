@@ -28,24 +28,60 @@ const tableTextStyle = css`
     white-space: nowrap;
 `;
 
-const starTextStyle = css`
-    margin-left: 1em;
-    font-size: 0.75rem;
-    letter-spacing: 0;
-`;
-
 function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
-    Object.keys(row).forEach((rowKey) => {
-        const amrRowKey = rowKey as keyof AmrsTableData;
+    tableCellList.push(
+        <TableCell
+            css={tableTextStyle}
+            component="td"
+            scope="row"
+            key={`amr-table-cell-${row.amrSubstance}-substanceClass`}
+        >
+            {row.substanceClass}
+        </TableCell>
+    );
+    tableCellList.push(
+        <TableCell
+            css={tableTextStyle}
+            component="td"
+            scope="row"
+            key={`amr-table-cell-${row.amrSubstance}-substance`}
+        >
+            {row.amrSubstance}
+        </TableCell>
+    );
+    row.concentrationList.forEach((concentrations) => {
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
                 component="td"
                 scope="row"
-                key={`amr-table-cell-${row.amrSubstance}-${amrRowKey}`}
+                align="right"
+                key={`amr-table-cell-${row.amrSubstance}-cutOff`}
             >
-                {row[amrRowKey]}
+                {concentrations.cutOff}
+            </TableCell>
+        );
+        tableCellList.push(
+            <TableCell
+                css={tableTextStyle}
+                component="td"
+                scope="row"
+                align="right"
+                key={`amr-table-cell-${row.amrSubstance}-min`}
+            >
+                {concentrations.min}
+            </TableCell>
+        );
+        tableCellList.push(
+            <TableCell
+                css={tableTextStyle}
+                component="td"
+                scope="row"
+                align="right"
+                key={`amr-table-cell-${row.amrSubstance}-max`}
+            >
+                {concentrations.max}
             </TableCell>
         );
     });
@@ -73,14 +109,46 @@ export function InfoPageAmrDialogComponent(props: {
                 <Table size="small" stickyHeader aria-label="amr-table">
                     <TableHead>
                         <TableRow>
-                            {props.resistancesTableData.tableHeader.map(
-                                (headerValue) => (
+                            <TableCell
+                                key={`header-amr-${props.resistancesTableData.tableHeader[0]}`}
+                                css={tableTextStyle}
+                                component="th"
+                                colSpan={1}
+                            >
+                                {props.resistancesTableData.tableHeader[0]}
+                            </TableCell>
+                            <TableCell
+                                key={`header-amr-${props.resistancesTableData.tableHeader[1]}`}
+                                css={tableTextStyle}
+                                component="th"
+                                colSpan={1}
+                            >
+                                {props.resistancesTableData.tableHeader[1]}
+                            </TableCell>
+                            {props.resistancesTableData.tableHeader
+                                .slice(2)
+                                .map((headerValue) => (
                                     <TableCell
                                         key={`header-amr-${headerValue}`}
                                         css={tableTextStyle}
                                         component="th"
+                                        colSpan={3}
+                                        align="center"
                                     >
                                         {headerValue}
+                                    </TableCell>
+                                ))}
+                        </TableRow>
+                        <TableRow>
+                            {props.resistancesTableData.tableSubHeader.map(
+                                (subHeaderValue) => (
+                                    <TableCell
+                                        key={`header-amr-${subHeaderValue}`}
+                                        css={tableTextStyle}
+                                        component="th"
+                                        align="right"
+                                    >
+                                        {subHeaderValue}
                                     </TableCell>
                                 )
                             )}
@@ -94,9 +162,6 @@ export function InfoPageAmrDialogComponent(props: {
                         ))}
                     </TableBody>
                 </Table>
-                <p css={starTextStyle}>
-                    {props.resistancesTableData.commentText}
-                </p>
             </TableContainer>
         </div>
     );

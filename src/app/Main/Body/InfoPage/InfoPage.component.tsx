@@ -5,12 +5,13 @@ import { Button } from "@mui/material";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { InfoPageAmrsContentComponent } from "./Amrs/InfoPage-AmrsContent.component";
 import { InfoPageFiltersContentComponent } from "./InfoPage-FiltersContent.component";
-import { AmrKey, AmrsTable, microorganismNames } from "./InfoPage.model";
+import { AmrKey, AmrsTable } from "./InfoPage.model";
 import {
     onPrimaryColor,
     primaryColor,
     secondaryColor,
 } from "../../../Shared/Style/Style-MainTheme";
+import { microorganismNames } from "./italicNames.constants";
 
 const infoPageStyle = css`
     width: 60%;
@@ -50,6 +51,20 @@ const subHeadingStyle = css`
     padding: 0.5em;
 `;
 
+function createParagraphWithBoldText(
+    text1: string,
+    boldText: string,
+    text2: string
+): JSX.Element {
+    return (
+        <p>
+            {text1}
+            <b>{boldText}</b>
+            {text2}
+        </p>
+    );
+}
+
 export function InfoPageComponent(props: {
     describedFilters: string[];
     amrKeys: AmrKey[];
@@ -84,35 +99,49 @@ export function InfoPageComponent(props: {
                     title={backgroundChapterHeading}
                     content={
                         <div>
-                            <p>{t("Background.Paragraph1")}</p>
+                            {createParagraphWithBoldText(
+                                t("Background.Paragraph1.Description1"),
+                                t("Background.Paragraph1.Description2"),
+                                t("Background.Paragraph1.Description3")
+                            )}
                             <p>
                                 {t("Background.Paragraph2.Description1")}
-                                {microorganismNames.Salm} spp.,{" "}
-                                {microorganismNames.Campy} spp.,{" "}
+                                {microorganismNames.SalmSpp},{" "}
+                                {microorganismNames.CampySpp},{" "}
                                 {microorganismNames.Listeria}
                                 {t("Background.Paragraph2.Description2")}
                                 {microorganismNames.ColiFull}
                                 {t("Background.Paragraph2.Description3")}
                                 {microorganismNames.Staphy}
                                 {t("Background.Paragraph2.Description4")}
-                                {microorganismNames.ColiShort}
-                                {t("Background.Paragraph2.Description5")}
-                                {microorganismNames.Salm} spp.,{" "}
-                                {microorganismNames.Campy} spp.
+                                <i>{t("Background.Paragraph2.Description5")}</i>
                                 {t("Background.Paragraph2.Description6")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description7")}
-                                {microorganismNames.EnteroFF}
+                                {microorganismNames.SalmSpp},{" "}
+                                {microorganismNames.CampySpp}
                                 {t("Background.Paragraph2.Description8")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description9")}
-                                {microorganismNames.ColiShort}
+                                {microorganismNames.EnteroFF}
                                 {t("Background.Paragraph2.Description10")}
                                 {microorganismNames.ColiShort}
                                 {t("Background.Paragraph2.Description11")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description12")}
+                                {microorganismNames.ColiShort}
+                                {t("Background.Paragraph2.Description13")}
                             </p>
-                            <p>{t("Background.Paragraph3")}</p>
-                            <p>{t("Background.Paragraph4")}</p>
+                            {createParagraphWithBoldText(
+                                t("Background.Paragraph3.Description1"),
+                                t("Background.Paragraph3.Description2"),
+                                t("Background.Paragraph3.Description3")
+                            )}
+                            {createParagraphWithBoldText(
+                                t("Background.Paragraph4.Description1"),
+                                t("Background.Paragraph4.Description2"),
+                                t("Background.Paragraph4.Description3")
+                            )}
                         </div>
                     }
                     defaultExpanded={false}
@@ -132,8 +161,28 @@ export function InfoPageComponent(props: {
                         title={t("Methods.Isolates.Name")}
                         content={
                             <div>
-                                <p>{t("Methods.Isolates.Paragraph1")}</p>
-                                <p>{t("Methods.Isolates.Paragraph2")}</p>
+                                {createParagraphWithBoldText(
+                                    t(
+                                        "Methods.Isolates.Paragraph1.Description1"
+                                    ),
+                                    t(
+                                        "Methods.Isolates.Paragraph1.Description2"
+                                    ),
+                                    t(
+                                        "Methods.Isolates.Paragraph1.Description3"
+                                    )
+                                )}
+                                {createParagraphWithBoldText(
+                                    t(
+                                        "Methods.Isolates.Paragraph2.Description1"
+                                    ),
+                                    t(
+                                        "Methods.Isolates.Paragraph2.Description2"
+                                    ),
+                                    t(
+                                        "Methods.Isolates.Paragraph2.Description3"
+                                    )
+                                )}
                             </div>
                         }
                         defaultExpanded={false}
