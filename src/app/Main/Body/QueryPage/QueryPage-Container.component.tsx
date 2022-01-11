@@ -101,7 +101,11 @@ export function QueryPageContainerComponent(): JSX.Element {
     const rowAttribute: FilterType = data.row;
     const colAttribute: FilterType = data.column;
 
-    const isolateCountUrl: string = ISOLATE_COUNT_URL + history.location.search;
+    const parameterString = history.location.search
+        .replace("row=", "group-by=")
+        .replace("column=", "group-by=");
+
+    const isolateCountUrl = `${ISOLATE_COUNT_URL}${parameterString}`;
 
     const getPngDownloadUriRef = useRef<(() => Promise<string>) | null>(null);
 
