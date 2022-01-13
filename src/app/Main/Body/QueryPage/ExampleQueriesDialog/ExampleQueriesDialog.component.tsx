@@ -57,7 +57,11 @@ export function DefaultQueriesDialogComponent(props: {
 
     const dialogContent: JSX.Element[] = [];
 
-    const categories: QueryCategories[] = ["animal", "food", "animalFeed"];
+    const categories: QueryCategories[] = [
+        "animalSample",
+        "foodSample",
+        "feedSample",
+    ];
 
     categories.forEach((category) => {
         dialogContent.push(<p>{t(`Subtitles.${category}`)}</p>);

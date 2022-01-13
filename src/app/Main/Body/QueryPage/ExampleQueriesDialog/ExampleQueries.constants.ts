@@ -6,10 +6,10 @@ const defaultQuery2 = "?microorganism=Salmonella+spp.&samplingYear=2015";
 const defaultQuery3 =
     "?microorganism=CARBA-E.+coli&row=microorganism&column=samplingYear";
 
-export type QueryCategories = "animal" | "food" | "animalFeed";
+export type QueryCategories = "animalSample" | "foodSample" | "feedSample";
 
 export const exampleQueriesLists: Record<QueryCategories, string[]> = {
-    animal: [defaultQuery1, defaultQuery2, defaultQuery3],
-    food: [defaultQuery1, defaultQuery2, defaultQuery3],
-    animalFeed: [defaultQuery1, defaultQuery2, defaultQuery3],
+    animalSample: [defaultQuery1, defaultQuery2, defaultQuery3],
+    foodSample: [defaultQuery1, defaultQuery2, defaultQuery3],
+    feedSample: [defaultQuery1, defaultQuery2, defaultQuery3],
 };

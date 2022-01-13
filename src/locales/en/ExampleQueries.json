@@ -4,9 +4,9 @@
     "Text": "Zeitverlauf von Antibiotikaresistenz von Isolaten von Salmonella spp. aus Legehennen, die im Rahmen der Bekämpfungsprogrammen beim Geflügel gewonnen wurden"
   },
   "Subtitles": {
-    "animal": "Animal",
-    "food": "Food",
-    "animalFeed": "Animal feed"
+    "animalSample": "Animal sample",
+    "foodSample": "Food sample",
+    "feedSample": "Feed sample"
   },
   "Queries": {
     "animal": {
@@ -37,7 +37,7 @@
         "Text": "Describe Query2"
       }
     },
-    "animalFeed": {
+    "feedSample": {
       "Query0": {
         "Title": "Query0",
         "Text": "Describe Query0"
