@@ -326,7 +326,7 @@
           "Part1": "Table 1: Resistance testing of "
         },
         "TableTitleString": "Table 1: Resistance testing of Escherichia coli",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Highlighted in blue are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Highlighted with a star are the evaluation criteria used in ZooNotify."
       },
       "Table2": {
         "Paragraph": {
@@ -337,7 +337,7 @@
           "Part1": "Table 2: Resistance testing of "
         },
         "TableTitleString": "Table 2: Resistance testing of Salmonella spp.",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Highlighted in blue are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Highlighted with a star are the evaluation criteria used in ZooNotify."
       },
       "Table3a": {
         "Paragraph": {
@@ -349,7 +349,7 @@
           "Part1": "Table 3a: Resistance testing of "
         },
         "TableTitleString": "Table 3a: Resistance testing of Campylobacter jejuni",
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU. Highlighted in blue are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU. Highlighted with a star are the evaluation criteria used in ZooNotify."
       },
       "Table3b": {
         "Paragraph": "",
@@ -357,7 +357,7 @@
           "Part1": "Table 3b: Resistance testing of "
         },
         "TableTitleString": "Table 3b: Resistance testing of Campylobacter coli.",
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU. Highlighted in blue are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU. Highlighted with a star are the evaluation criteria used in ZooNotify."
       },
       "Table4": {
         "Paragraph": {
@@ -368,7 +368,7 @@
         },
         "TableTitle": "Table 4: Resistance testing of methicillin-resistant ",
         "TableTitleString": "Table 4: Resistance testing of methicillin-resistant Staphylococcus aureus",
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria (epidemiological cut-off values of EUCAST) for the years 2010-2020. Highlighted in blue are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria (epidemiological cut-off values of EUCAST) for the years 2010-2020. Highlighted with a star are the evaluation criteria used in ZooNotify."
       },
       "Table5": {
         "Paragraph": {
@@ -381,7 +381,7 @@
           "Part2": " and "
         },
         "TableTitleString": "Table 5: Resistance testing of Enterococcus faecalis and E. faecium.",
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2016 - 2020. The interpretation was carried out taking into account the specifications in the implementing decision 2013/652/EU. Highlighted in blue are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2016 - 2020. The interpretation was carried out taking into account the specifications in the implementing decision 2013/652/EU. Highlighted with a star are the evaluation criteria used in ZooNotify."
       },
       "TableHeaderClass": "Substances",
       "TableHeaderSubstance": "Active agent",
