@@ -28,22 +28,31 @@ const queryPageStyle = css`
 `;
 
 export function QueryPageLayoutComponent(props: {
-    subHeaderButton: JSX.Element;
+    subHeaderButtons: {
+        exportButton: JSX.Element;
+        defaultQueriesButton: JSX.Element;
+    };
     drawer: JSX.Element;
     drawerControl: JSX.Element;
     queryPageContent: JSX.Element;
     exportDialog: JSX.Element;
     exportDialogIsOpen: boolean;
+    queryDialog: JSX.Element;
+    queryDialogIsOpen: boolean;
 }): JSX.Element {
     return (
         <main css={mainStyle}>
-            <div css={subHeaderStyle}>{props.subHeaderButton}</div>
+            <div css={subHeaderStyle}>
+                {props.subHeaderButtons.defaultQueriesButton}
+                {props.subHeaderButtons.exportButton}
+            </div>
             <div css={queryPageStyle}>
                 {props.drawer}
                 {props.drawerControl}
                 {props.queryPageContent}
             </div>
             {props.exportDialogIsOpen && props.exportDialog}
+            {props.queryDialogIsOpen && props.queryDialog}
         </main>
     );
 }

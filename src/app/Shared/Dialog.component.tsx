@@ -16,11 +16,13 @@ export function DialogComponent(props: {
     dialogContentText: JSX.Element | string;
     dialogContent: JSX.Element;
     cancelButton: JSX.Element | string;
-    submitButton: JSX.Element | string;
+    // eslint-disable-next-line react/require-default-props
+    submitButton?: JSX.Element | string;
     disableSubmitButton: boolean;
     loading: boolean;
     onClose: () => void;
-    onSubmitClick: () => void;
+    // eslint-disable-next-line react/require-default-props
+    onSubmitClick?: () => void;
 }): JSX.Element {
     const theme = useTheme();
 
@@ -28,7 +30,38 @@ export function DialogComponent(props: {
 
     const handleClickCancel = (): void => props.onClose();
 
-    const handleClickSubmit = (): void => props.onSubmitClick();
+    let submitButtonBox;
+    if (props.submitButton !== undefined && props.onSubmitClick !== undefined) {
+        const { onSubmitClick } = props;
+        const handleClickSubmit = (): void => onSubmitClick();
+        submitButtonBox = (
+            <Box
+                sx={{
+                    margin: theme.spacing(1),
+                    position: "relative",
+                }}
+            >
+                <Button
+                    onClick={handleClickSubmit}
+                    color="primary"
+                    disabled={props.disableSubmitButton || props.loading}
+                >
+                    {props.submitButton}
+                </Button>
+                {props.loading && (
+                    <CircularProgress
+                        size={24}
+                        sx={{
+                            color: `${primaryColor}`,
+                            position: "absolute",
+                            top: "10%",
+                            left: "40%",
+                        }}
+                    />
+                )}
+            </Box>
+        );
+    }
 
     return (
         <Dialog open onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -45,31 +78,7 @@ export function DialogComponent(props: {
                 >
                     {props.cancelButton}
                 </Button>
-                <Box
-                    sx={{
-                        margin: theme.spacing(1),
-                        position: "relative",
-                    }}
-                >
-                    <Button
-                        onClick={handleClickSubmit}
-                        color="primary"
-                        disabled={props.disableSubmitButton || props.loading}
-                    >
-                        {props.submitButton}
-                    </Button>
-                    {props.loading && (
-                        <CircularProgress
-                            size={24}
-                            sx={{
-                                color: `${primaryColor}`,
-                                position: "absolute",
-                                top: "10%",
-                                left: "40%",
-                            }}
-                        />
-                    )}
-                </Box>
+                {submitButtonBox}
             </DialogActions>
         </Dialog>
     );

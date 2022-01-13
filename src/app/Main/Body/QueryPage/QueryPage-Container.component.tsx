@@ -43,6 +43,8 @@ import { exportZipService } from "./Services/ContainerServices/exportZip.service
 import { generateDataObjectsService } from "./Services/ContainerServices/generateDataObjects.services";
 import { fetchInitialDataService } from "./Services/ContainerServices/fetchInitialData.service";
 import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
+import { SubHeaderDefaultQueriesButtonComponent } from "./Subheader/SubHeader-DefaultQueries.component";
+import { DefaultQueriesDialogComponent } from "./DefaultQueriesDialog/DefaultQueriesDialog.component";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [serverStatus, setServerStatus] = useState<{
@@ -67,6 +69,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         useState<FilterInterface>({});
     const [loadingIsolates, setLoadingIsolates] = useState<boolean>(false);
     const [exportDialogIsOpen, setExportDialogIsOpen] = useState(false);
+    const [queryDialogIsOpen, setQueryDialogIsOpen] = useState(false);
 
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
         {}
@@ -342,6 +345,22 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
+    const handleClickQueriesDialogOpen = (): void => {
+        setQueryDialogIsOpen(true);
+    };
+
+    const handleCloseQueriesDialog = (): void => {
+        setQueryDialogIsOpen(false);
+    };
+
+    const handleApplyQuery = async (defaultQuery: string): Promise<void> => {
+        const newPath = defaultQuery;
+        history.push(newPath);
+        setFilterFromPath();
+        setTableFromPath();
+        setQueryDialogIsOpen(false);
+    };
+
     const fetchIsolateCounted = async (
         uniqueValues: FilterInterface
     ): Promise<void> => {
@@ -437,18 +456,31 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isLoading = dataIsLoading || updateFilterAndDataIsLoading;
 
+    const subHeaderButtons: {
+        exportButton: JSX.Element;
+        defaultQueriesButton: JSX.Element;
+    } = {
+        exportButton: (
+            <SubHeaderExportButtonComponent
+                onClickOpen={handleClickExportDialogOpen}
+                exportDialogIsOpen={exportDialogIsOpen}
+            />
+        ),
+        defaultQueriesButton: (
+            <SubHeaderDefaultQueriesButtonComponent
+                onClickOpen={handleClickQueriesDialogOpen}
+                defaultQueriesDialogIsOpen={queryDialogIsOpen}
+            />
+        ),
+    };
+
     return (
         <LoadingOrErrorComponent
             status={serverStatus}
             dataIsSet={dataIsMounted}
             componentToDisplay={
                 <QueryPageLayoutComponent
-                    subHeaderButton={
-                        <SubHeaderExportButtonComponent
-                            onClickOpen={handleClickExportDialogOpen}
-                            exportDialogIsOpen={exportDialogIsOpen}
-                        />
-                    }
+                    subHeaderButtons={subHeaderButtons}
                     drawer={
                         <DrawerContainer
                             isOpen={drawerIsOpen}
@@ -505,6 +537,14 @@ export function QueryPageContainerComponent(): JSX.Element {
                         />
                     }
                     exportDialogIsOpen={exportDialogIsOpen}
+                    queryDialog={
+                        <DefaultQueriesDialogComponent
+                            loading={loadingIsolates}
+                            onClickClose={handleCloseQueriesDialog}
+                            onClickDefaultQuery={handleApplyQuery}
+                        />
+                    }
+                    queryDialogIsOpen={queryDialogIsOpen}
                 />
             }
         />
