@@ -44,7 +44,7 @@ import { generateDataObjectsService } from "./Services/ContainerServices/generat
 import { fetchInitialDataService } from "./Services/ContainerServices/fetchInitialData.service";
 import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
 import { SubHeaderDefaultQueriesButtonComponent } from "./Subheader/SubHeader-DefaultQueries.component";
-import { DefaultQueriesDialogComponent } from "./DefaultQueriesDialog/DefaultQueriesDialog.component";
+import { DefaultQueriesDialogComponent } from "./ExampleQueriesDialog/ExampleQueriesDialog.component";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [serverStatus, setServerStatus] = useState<{
@@ -458,7 +458,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const subHeaderButtons: {
         exportButton: JSX.Element;
-        defaultQueriesButton: JSX.Element;
+        exampleQueriesButton: JSX.Element;
     } = {
         exportButton: (
             <SubHeaderExportButtonComponent
@@ -466,10 +466,10 @@ export function QueryPageContainerComponent(): JSX.Element {
                 exportDialogIsOpen={exportDialogIsOpen}
             />
         ),
-        defaultQueriesButton: (
+        exampleQueriesButton: (
             <SubHeaderDefaultQueriesButtonComponent
                 onClickOpen={handleClickQueriesDialogOpen}
-                defaultQueriesDialogIsOpen={queryDialogIsOpen}
+                exampleQueriesDialogIsOpen={queryDialogIsOpen}
             />
         ),
     };

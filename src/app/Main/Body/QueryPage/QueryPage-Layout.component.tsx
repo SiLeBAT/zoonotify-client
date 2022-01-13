@@ -30,7 +30,7 @@ const queryPageStyle = css`
 export function QueryPageLayoutComponent(props: {
     subHeaderButtons: {
         exportButton: JSX.Element;
-        defaultQueriesButton: JSX.Element;
+        exampleQueriesButton: JSX.Element;
     };
     drawer: JSX.Element;
     drawerControl: JSX.Element;
@@ -43,7 +43,7 @@ export function QueryPageLayoutComponent(props: {
     return (
         <main css={mainStyle}>
             <div css={subHeaderStyle}>
-                {props.subHeaderButtons.defaultQueriesButton}
+                {props.subHeaderButtons.exampleQueriesButton}
                 {props.subHeaderButtons.exportButton}
             </div>
             <div css={queryPageStyle}>

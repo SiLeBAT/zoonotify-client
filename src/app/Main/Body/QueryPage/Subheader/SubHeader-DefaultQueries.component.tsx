@@ -36,12 +36,12 @@ const downloadButtonStyle = css`
  */
 export function SubHeaderDefaultQueriesButtonComponent(props: {
     onClickOpen: () => void;
-    defaultQueriesDialogIsOpen: boolean;
+    exampleQueriesDialogIsOpen: boolean;
 }): JSX.Element {
     const handleClick = (): void => props.onClickOpen();
 
     const buttonLabel: JSX.Element = (
-        <div css={buttonLabelStyle(props.defaultQueriesDialogIsOpen)}>
+        <div css={buttonLabelStyle(props.exampleQueriesDialogIsOpen)}>
             <QueryStatsIcon fontSize="small" />
             Beispielabfragen
         </div>
