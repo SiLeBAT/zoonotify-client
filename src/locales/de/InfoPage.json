@@ -326,7 +326,7 @@
           "Part1": "Tabelle 1: Resistenztestung von "
         },
         "TableTitleString": "Tabelle 1: Resistenztestung von Escherichia coli",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Mit einem Stern hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
       "Table2": {
         "Paragraph": {
@@ -337,7 +337,7 @@
           "Part1": "Tabelle 2: Resistenztestung von "
         },
         "TableTitleString": "Tabelle 2: Resistenztestung von Salmonella spp.",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Mit einem Stern hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
       "Table3a": {
         "Paragraph": {
@@ -349,7 +349,7 @@
           "Part1": "Tabelle 3a: Resistenztestung von "
         },
         "TableTitleString": "Tabelle 3a: Resistenztestung von Campylobacter jejuni",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Festlegungen im Durchführungsbeschluss 2013/652/EU. In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Festlegungen im Durchführungsbeschluss 2013/652/EU. Mit einem Stern hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
       "Table3b": {
         "Paragraph": "",
@@ -357,7 +357,7 @@
           "Part1": "Tabelle 3b: Resistenztestung von "
         },
         "TableTitleString": "Tabelle 3b: Resistenztestung von Campylobacter coli.",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Festlegungen im Durchführungsbeschluss 2013/652/EU. In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte unter Berücksichtigung der Festlegungen im Durchführungsbeschluss 2013/652/EU. Mit einem Stern hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
       "Table4": {
         "Paragraph": {
@@ -368,7 +368,7 @@
         },
         "TableTitle": "Tabelle 4: Resistenztestung von Methicillin-resistenten ",
         "TableTitleString": "Tabelle 4: Resistenztestung von Methicillin-resistenten Staphylococcus aureus",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2010-2020. In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien (Epidemiologische Cut-Off Werte von EUCAST) für die Jahre 2010-2020. Mit einem Stern hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
       "Table5": {
         "Paragraph": {
@@ -381,7 +381,7 @@
           "Part2": " und "
         },
         "TableTitleString": "Tabelle 5: Resistenztestung von Enterococcus faecalis und E. faecium.",
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.In blau hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU.Mit einem Stern hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
       "TableHeaderClass": "Substanzklasse",
       "TableHeaderSubstance": "Wirkstoff",
