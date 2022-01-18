@@ -1,0 +1,59 @@
+{
+  "Content": {
+    "Title": "Example queries",
+    "Text": "Zeitverlauf von Antibiotikaresistenz von Isolaten von Salmonella spp. aus Legehennen, die im Rahmen der Bekämpfungsprogrammen beim Geflügel gewonnen wurden"
+  },
+  "Subtitles": {
+    "animalSample": "Animal sample",
+    "foodSample": "Food sample",
+    "feedSample": "Feed sample"
+  },
+  "Queries": {
+    "animalSample": {
+      "Query0": {
+        "Title": "Query0",
+        "Text": "Describe Query0"
+      },
+      "Query1": {
+        "Title": "Query1",
+        "Text": "Describe Query1"
+      },
+      "Query2": {
+        "Title": "Query2",
+        "Text": "Describe Query2"
+      }
+    },
+    "foodSample": {
+      "Query0": {
+        "Title": "Query0",
+        "Text": "Describe Query0"
+      },
+      "Query1": {
+        "Title": "Query1",
+        "Text": "Describe Query1"
+      },
+      "Query2": {
+        "Title": "Query2",
+        "Text": "Describe Query2"
+      }
+    },
+    "feedSample": {
+      "Query0": {
+        "Title": "Query0",
+        "Text": "Describe Query0"
+      },
+      "Query1": {
+        "Title": "Query1",
+        "Text": "Describe Query1"
+      },
+      "Query2": {
+        "Title": "Query2",
+        "Text": "Describe Query2"
+      }
+    }
+  },
+  "Button": {
+    "Submit": "Submit",
+    "Cancel": "Cancel"
+  }
+}

@@ -6,7 +6,10 @@ import { useState } from "react";
 import _ from "lodash";
 import DoneIcon from "@mui/icons-material/Done";
 import { Checkbox, Divider, FormControlLabel } from "@mui/material";
-import { DialogComponent } from "../../../../../../Shared/Dialog.component";
+import {
+    DialogButton,
+    DialogComponent,
+} from "../../../../../../Shared/Dialog.component";
 import {
     primaryColor,
     secondaryColor,
@@ -115,13 +118,19 @@ export function FilterDialogComponent(props: {
         </div>
     );
 
-    const submitFilterToDisplayButton = (
-        <div css={submitButtonStyle}>
-            <DoneIcon fontSize="small" />
-            {t("FilterDialog.Submit")}
-        </div>
-    );
-    const cancelFilterToDisplayButton = t("FilterDialog.Cancel");
+    const submitFilterToDisplayButton: DialogButton = {
+        content: (
+            <div css={submitButtonStyle}>
+                <DoneIcon fontSize="small" />
+                {t("FilterDialog.Submit")}
+            </div>
+        ),
+        onClick: handleSubmitFiltersToDisplay,
+    };
+    const cancelFilterToDisplayButton: DialogButton = {
+        content: t("FilterDialog.Cancel"),
+        onClick: handleCancelFiltersToDisplay,
+    };
 
     return DialogComponent({
         loading: false,
@@ -130,8 +139,5 @@ export function FilterDialogComponent(props: {
         dialogContent: filterDialogContent,
         cancelButton: cancelFilterToDisplayButton,
         submitButton: submitFilterToDisplayButton,
-        disableSubmitButton: false,
-        onClose: handleCancelFiltersToDisplay,
-        onSubmitClick: handleSubmitFiltersToDisplay,
     });
 }

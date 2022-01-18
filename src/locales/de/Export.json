@@ -18,6 +18,7 @@
   },
   "Warning": "Bitte wählen Sie mindestens eine Option, oder brechen Sie den Export ab.",
   "Button": {
+    "Submit": "Exportieren",
     "Cancel": "Abbrechen"
   }
 }

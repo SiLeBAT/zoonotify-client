@@ -10,8 +10,12 @@ import {
     TableRow,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
-import { DialogComponent } from "../../../../Shared/Dialog.component";
+import GetAppIcon from "@mui/icons-material/GetApp";
+import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
+import {
+    DialogButton,
+    DialogComponent,
+} from "../../../../Shared/Dialog.component";
 import { AmrsTable, AmrsTableData } from "../InfoPage.model";
 
 const dialogContentStyle = css`
@@ -166,8 +170,18 @@ export function InfoPageAmrDialogComponent(props: {
         </div>
     );
 
-    const amrTableCancelButton = t("Methods.Amrs.CancelButton");
-    const amrTableSubmitButton = ExportButtonLabelComponent(true);
+    const amrTableCancelButton: DialogButton = {
+        content: t("Methods.Amrs.CancelButton"),
+        onClick: handleClose,
+    };
+    const amrTableSubmitButton: DialogButton = {
+        content: ButtonLabelComponent(
+            <GetAppIcon fontSize="small" />,
+            t("Methods.Amrs.ExportButton"),
+            true
+        ),
+        onClick: handleSubmit,
+    };
 
     return DialogComponent({
         loading: false,
@@ -176,8 +190,5 @@ export function InfoPageAmrDialogComponent(props: {
         dialogContent: dialogTableContent,
         cancelButton: amrTableCancelButton,
         submitButton: amrTableSubmitButton,
-        disableSubmitButton: false,
-        onClose: handleClose,
-        onSubmitClick: handleSubmit,
     });
 }

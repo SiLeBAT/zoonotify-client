@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     mainFilterList,
     allSubFiltersList,
@@ -33,16 +35,16 @@ import { chooseSelectedFiltersService } from "./Services/SelectorServices/choose
 import { getFeaturesFromPath } from "./Services/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
-
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentContainer } from "./QueryPageContent/QueryPageContent-Container";
 import { ExportDialogComponent } from "./ExportDialog/ExportDialog.component";
-import { SubHeaderExportButtonComponent } from "./Subheader/SubHeader-ExportButton.component";
 import { DrawerContainer } from "./Drawer/Drawer-Container.component";
 import { exportZipService } from "./Services/ContainerServices/exportZip.service";
 import { generateDataObjectsService } from "./Services/ContainerServices/generateDataObjects.services";
 import { fetchInitialDataService } from "./Services/ContainerServices/fetchInitialData.service";
 import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
+import { ExampleQueriesDialogComponent } from "./ExampleQueriesDialog/ExampleQueriesDialog.component";
+import { SubHeaderButtonComponent } from "./Subheader/SubHeader-Button.component";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [serverStatus, setServerStatus] = useState<{
@@ -67,6 +69,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         useState<FilterInterface>({});
     const [loadingIsolates, setLoadingIsolates] = useState<boolean>(false);
     const [exportDialogIsOpen, setExportDialogIsOpen] = useState(false);
+    const [queryDialogIsOpen, setQueryDialogIsOpen] = useState(false);
 
     const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
         {}
@@ -342,6 +345,22 @@ export function QueryPageContainerComponent(): JSX.Element {
         });
     };
 
+    const handleClickQueriesDialogOpen = (): void => {
+        setQueryDialogIsOpen(true);
+    };
+
+    const handleCloseQueriesDialog = (): void => {
+        setQueryDialogIsOpen(false);
+    };
+
+    const handleApplyQuery = (exampleQuery: string): void => {
+        const newPath = exampleQuery;
+        history.push(newPath);
+        setFilterFromPath();
+        setTableFromPath();
+        setQueryDialogIsOpen(false);
+    };
+
     const fetchIsolateCounted = async (
         uniqueValues: FilterInterface
     ): Promise<void> => {
@@ -437,18 +456,28 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isLoading = dataIsLoading || updateFilterAndDataIsLoading;
 
+    const subHeaderButtons: JSX.Element[] = [
+        <SubHeaderButtonComponent
+            onClickOpen={handleClickQueriesDialogOpen}
+            dialogIsOpen={queryDialogIsOpen}
+            buttonIcon={<QueryStatsIcon fontSize="small" />}
+            buttonText={t("Header:ExampleQueries")}
+        />,
+        <SubHeaderButtonComponent
+            onClickOpen={handleClickExportDialogOpen}
+            dialogIsOpen={exportDialogIsOpen}
+            buttonIcon={<GetAppIcon fontSize="small" />}
+            buttonText={t("Header:Export")}
+        />,
+    ];
+
     return (
         <LoadingOrErrorComponent
             status={serverStatus}
             dataIsSet={dataIsMounted}
             componentToDisplay={
                 <QueryPageLayoutComponent
-                    subHeaderButton={
-                        <SubHeaderExportButtonComponent
-                            onClickOpen={handleClickExportDialogOpen}
-                            exportDialogIsOpen={exportDialogIsOpen}
-                        />
-                    }
+                    subHeaderButtons={subHeaderButtons}
                     drawer={
                         <DrawerContainer
                             isOpen={drawerIsOpen}
@@ -505,6 +534,14 @@ export function QueryPageContainerComponent(): JSX.Element {
                         />
                     }
                     exportDialogIsOpen={exportDialogIsOpen}
+                    queryDialog={
+                        <ExampleQueriesDialogComponent
+                            loading={loadingIsolates}
+                            onClickClose={handleCloseQueriesDialog}
+                            onClickExampleQuery={handleApplyQuery}
+                        />
+                    }
+                    queryDialogIsOpen={queryDialogIsOpen}
                 />
             }
         />

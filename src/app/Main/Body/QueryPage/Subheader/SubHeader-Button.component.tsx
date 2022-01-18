@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { Button } from "@mui/material";
-import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
+import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
 import { onPrimaryColor } from "../../../../Shared/Style/Style-MainTheme";
 
 const downloadButtonStyle = css`
@@ -23,14 +23,18 @@ const downloadButtonStyle = css`
  * @param props
  * @returns {JSX.Element} - export button component
  */
-export function SubHeaderExportButtonComponent(props: {
+export function SubHeaderButtonComponent(props: {
     onClickOpen: () => void;
-    exportDialogIsOpen: boolean;
+    dialogIsOpen: boolean;
+    buttonIcon: JSX.Element;
+    buttonText: string;
 }): JSX.Element {
     const handleClick = (): void => props.onClickOpen();
 
-    const buttonLabel: JSX.Element = ExportButtonLabelComponent(
-        props.exportDialogIsOpen
+    const buttonLabel: JSX.Element = ButtonLabelComponent(
+        props.buttonIcon,
+        props.buttonText,
+        props.dialogIsOpen
     );
 
     return (
