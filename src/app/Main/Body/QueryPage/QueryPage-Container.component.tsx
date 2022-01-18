@@ -456,27 +456,20 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isLoading = dataIsLoading || updateFilterAndDataIsLoading;
 
-    const subHeaderButtons: {
-        exportButton: JSX.Element;
-        exampleQueriesButton: JSX.Element;
-    } = {
-        exportButton: (
-            <SubHeaderButtonComponent
-                onClickOpen={handleClickExportDialogOpen}
-                dialogIsOpen={exportDialogIsOpen}
-                buttonIcon={<GetAppIcon fontSize="small" />}
-                buttonText={t("Header:Export")}
-            />
-        ),
-        exampleQueriesButton: (
-            <SubHeaderButtonComponent
-                onClickOpen={handleClickQueriesDialogOpen}
-                dialogIsOpen={queryDialogIsOpen}
-                buttonIcon={<QueryStatsIcon fontSize="small" />}
-                buttonText="Beispielabfrage"
-            />
-        ),
-    };
+    const subHeaderButtons: JSX.Element[] = [
+        <SubHeaderButtonComponent
+            onClickOpen={handleClickQueriesDialogOpen}
+            dialogIsOpen={queryDialogIsOpen}
+            buttonIcon={<QueryStatsIcon fontSize="small" />}
+            buttonText={t("Header:ExampleQueries")}
+        />,
+        <SubHeaderButtonComponent
+            onClickOpen={handleClickExportDialogOpen}
+            dialogIsOpen={exportDialogIsOpen}
+            buttonIcon={<GetAppIcon fontSize="small" />}
+            buttonText={t("Header:Export")}
+        />,
+    ];
 
     return (
         <LoadingOrErrorComponent
