@@ -2,7 +2,10 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import GetAppIcon from "@mui/icons-material/GetApp";
-import { DialogComponent } from "../../../../Shared/Dialog.component";
+import {
+    DialogButton,
+    DialogComponent,
+} from "../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
 import { errorColor } from "../../../../Shared/Style/Style-MainTheme";
 import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
@@ -33,16 +36,9 @@ export function ExportDialogComponent(props: {
 
     const handleExport = (): Promise<void> => props.onClickExport();
 
-    const buttonLabel: JSX.Element = ButtonLabelComponent(
-        <GetAppIcon fontSize="small" />,
-        t("Button.Submit"),
-        true
-    );
-
     const exportStatTable = props.exportOptions.stat;
     const exportRawTable = props.exportOptions.raw;
     const exportChart = props.exportOptions.chart;
-
     const exportOptionIsSelected =
         exportRawTable || exportStatTable || exportChart;
 
@@ -63,7 +59,20 @@ export function ExportDialogComponent(props: {
         </div>
     );
 
-    const exportCancelButton = t("Button.Cancel");
+    const exportButton: DialogButton = {
+        content: ButtonLabelComponent(
+            <GetAppIcon fontSize="small" />,
+            t("Button.Submit"),
+            true
+        ),
+        disabled: !exportOptionIsSelected,
+        onClick: handleExport,
+    };
+
+    const exportCancelButton: DialogButton = {
+        content: t("Button.Cancel"),
+        onClick: handleClose,
+    };
 
     return DialogComponent({
         loading: props.loading,
@@ -71,9 +80,6 @@ export function ExportDialogComponent(props: {
         dialogContentText: exportContentText,
         dialogContent: exportCheckboxes,
         cancelButton: exportCancelButton,
-        submitButton: buttonLabel,
-        disableSubmitButton: !exportOptionIsSelected,
-        onClose: handleClose,
-        onSubmitClick: handleExport,
+        submitButton: exportButton,
     });
 }

@@ -11,28 +11,30 @@ import {
 import { Box, useTheme } from "@mui/system";
 import { primaryColor } from "./Style/Style-MainTheme";
 
+export interface DialogButton {
+    content: JSX.Element | string;
+    disabled?: boolean;
+    onClick: () => void;
+}
+
 export function DialogComponent(props: {
     dialogTitle: JSX.Element | string;
     dialogContentText: JSX.Element | string;
     dialogContent: JSX.Element;
-    cancelButton: JSX.Element | string;
+    cancelButton: DialogButton;
     // eslint-disable-next-line react/require-default-props
-    submitButton?: JSX.Element | string;
-    disableSubmitButton: boolean;
+    submitButton?: DialogButton;
     loading: boolean;
-    onClose: () => void;
-    // eslint-disable-next-line react/require-default-props
-    onSubmitClick?: () => void;
 }): JSX.Element {
     const theme = useTheme();
 
-    const handleClose = (): void => props.onClose();
+    const handleClose = (): void => props.cancelButton.onClick();
 
-    const handleClickCancel = (): void => props.onClose();
+    const handleClickCancel = (): void => props.cancelButton.onClick();
 
     let submitButtonBox;
-    if (props.submitButton !== undefined && props.onSubmitClick !== undefined) {
-        const { onSubmitClick } = props;
+    if (props.submitButton !== undefined) {
+        const onSubmitClick = props.submitButton.onClick;
         const handleClickSubmit = (): void => onSubmitClick();
         submitButtonBox = (
             <Box
@@ -44,9 +46,9 @@ export function DialogComponent(props: {
                 <Button
                     onClick={handleClickSubmit}
                     color="primary"
-                    disabled={props.disableSubmitButton || props.loading}
+                    disabled={props.submitButton.disabled || props.loading}
                 >
-                    {props.submitButton}
+                    {props.submitButton.content}
                 </Button>
                 {props.loading && (
                     <CircularProgress
@@ -76,7 +78,7 @@ export function DialogComponent(props: {
                     color="primary"
                     disabled={props.loading}
                 >
-                    {props.cancelButton}
+                    {props.cancelButton.content}
                 </Button>
                 {submitButtonBox}
             </DialogActions>

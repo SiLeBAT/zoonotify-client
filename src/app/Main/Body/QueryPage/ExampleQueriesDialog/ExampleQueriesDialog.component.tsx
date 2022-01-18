@@ -1,7 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@mui/material";
-import { DialogComponent } from "../../../../Shared/Dialog.component";
+import {
+    DialogButton,
+    DialogComponent,
+} from "../../../../Shared/Dialog.component";
 import { AccordionComponent } from "../../../../Shared/Accordion.component";
 import { exampleQueriesLists, QueryCategory } from "./ExampleQueries.constants";
 
@@ -49,7 +52,10 @@ export function ExampleQueriesDialogComponent(props: {
 
     const dialogTitle = t("Content.Title");
     const contentText = t("Content.Text");
-    const cancelButton = t(`Button.Cancel`);
+    const cancelButton: DialogButton = {
+        content: t(`Button.Cancel`),
+        onClick: handleClose,
+    };
 
     const dialogContent: JSX.Element[] = [];
 
@@ -81,7 +87,5 @@ export function ExampleQueriesDialogComponent(props: {
         dialogContentText: contentText,
         dialogContent: <div>{dialogContent}</div>,
         cancelButton,
-        disableSubmitButton: false,
-        onClose: handleClose,
     });
 }
