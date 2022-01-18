@@ -400,6 +400,8 @@ export function QueryPageContainerComponent(): JSX.Element {
                     ...data,
                     statisticDataAbsolute: dataObjects.statisticDataAbsolute,
                     statisticDataRelative: dataObjects.statisticDataRelative,
+                    statisticDataRelativeChart:
+                        dataObjects.statisticDataRelativeChart,
                     statTableDataWithSumsAbs:
                         dataObjects.statTableDataWithSumsAbs,
                     statTableDataWithSumsRel:

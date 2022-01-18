@@ -1,7 +1,10 @@
 import { TFunction } from "i18next";
 import { ClientIsolateCountedGroups } from "../../../../../Shared/Model/Client_Isolate.model";
 import { adaptCountedIsolatesGroupsService } from "../adaptCountedIsolatesGroups.service";
-import { calculateRelativeTableData } from "../TableServices/calculateRelativeTableData.service";
+import {
+    calculateRelativeChartData,
+    calculateRelativeTableData,
+} from "../TableServices/calculateRelativeTableData.service";
 import {
     calculateRowColSumsAbsolute,
     calculateRowColSumsRelative,
@@ -26,6 +29,7 @@ export function generateDataObjectsService(props: {
     colNames: string[];
     statisticDataAbsolute: Record<string, string>[];
     statisticDataRelative: Record<string, string>[];
+    statisticDataRelativeChart: Record<string, string>[];
     statTableDataWithSumsAbs: Record<string, string>[];
     statTableDataWithSumsRel: Record<string, string>[];
 } {
@@ -72,10 +76,15 @@ export function generateDataObjectsService(props: {
         statTableDataWithSumsAbs
     );
 
+    const statisticChartDataRel = calculateRelativeChartData(
+        statTableDataWithSumsAbs
+    );
+
     return {
         colNames: columnNames,
         statisticDataAbsolute: statisticTableDataAbs,
         statisticDataRelative: statisticTableDataRel,
+        statisticDataRelativeChart: statisticChartDataRel,
         statTableDataWithSumsAbs,
         statTableDataWithSumsRel,
     };

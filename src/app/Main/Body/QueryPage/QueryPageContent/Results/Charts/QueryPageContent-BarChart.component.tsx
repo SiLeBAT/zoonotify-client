@@ -127,7 +127,7 @@ export function QueryPageContentBarChartResultsComponent(props: {
     let xAxisMax;
     let displayAsStacked = false;
     if (props.chartData.option === "relative") {
-        chartData = props.chartData.statisticDataRelative;
+        chartData = props.chartData.statisticDataRelativeChart;
         xAxisMax = 100;
         displayAsStacked = true;
     }
