@@ -29,3 +29,33 @@ export function calculateRelativeTableData(
     });
     return statisticTableDataRel;
 }
+
+export function calculateRelativeChartData(
+    objList: Record<string, string>[]
+): Record<string, string>[] {
+    const statisticTableDataRel: Record<string, string>[] = [];
+
+    let colSumObj: Record<string, string> = {};
+    objList.forEach((obj) => {
+        if (obj.name === "colSum") {
+            colSumObj = obj;
+        }
+    });
+    objList.forEach((obj) => {
+        if (obj.name !== "colSum") {
+            const relativeRow: Record<string, string> = { name: obj.name };
+
+            const k = Object.keys(obj);
+            k.forEach((element) => {
+                if (element !== "name") {
+                    relativeRow[element] = calculateRelative(
+                        Number.parseInt(obj[element], 10),
+                        Number.parseInt(colSumObj[element], 10)
+                    );
+                }
+            });
+            statisticTableDataRel.push(relativeRow);
+        }
+    });
+    return statisticTableDataRel;
+}
