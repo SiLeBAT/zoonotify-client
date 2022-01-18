@@ -3,21 +3,17 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@mui/material";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { AccordionComponent } from "../../../../Shared/Accordion.component";
-import {
-    exampleQueriesLists,
-    QueryCategories,
-} from "./ExampleQueries.constants";
+import { exampleQueriesLists, QueryCategory } from "./ExampleQueries.constants";
 
 function QueryAccordion(
-    defaultQuery: string,
+    exampleQuery: string,
     title: string,
     contentText: string,
     buttonText: string,
-    onClickDefaultQuery: (defaultQuery: string) => Promise<void>,
+    onClickExampleQuery: (exampleQuery: string) => void,
     isLoading: boolean
 ): JSX.Element {
-    const handleSubmitQuery = (): Promise<void> =>
-        onClickDefaultQuery(defaultQuery);
+    const handleSubmitQuery = (): void => onClickExampleQuery(exampleQuery);
     const accordionTitle = title;
     const queryContent = (
         <div>
@@ -43,10 +39,10 @@ function QueryAccordion(
     );
 }
 
-export function DefaultQueriesDialogComponent(props: {
+export function ExampleQueriesDialogComponent(props: {
     loading: boolean;
     onClickClose: () => void;
-    onClickDefaultQuery: (defaultQuery: string) => Promise<void>;
+    onClickExampleQuery: (exampleQuery: string) => void;
 }): JSX.Element {
     const { t } = useTranslation(["ExampleQueries"]);
     const handleClose = (): void => props.onClickClose();
@@ -57,7 +53,7 @@ export function DefaultQueriesDialogComponent(props: {
 
     const dialogContent: JSX.Element[] = [];
 
-    const categories: QueryCategories[] = [
+    const categories: QueryCategory[] = [
         "animalSample",
         "foodSample",
         "feedSample",
@@ -65,14 +61,14 @@ export function DefaultQueriesDialogComponent(props: {
 
     categories.forEach((category) => {
         dialogContent.push(<p>{t(`Subtitles.${category}`)}</p>);
-        exampleQueriesLists[category].forEach((defaultQuery, index) => {
+        exampleQueriesLists[category].forEach((exampleQuery, index) => {
             dialogContent.push(
                 QueryAccordion(
-                    defaultQuery,
+                    exampleQuery,
                     t(`Queries.${category}.Query${index}.Title`),
                     t(`Queries.${category}.Query${index}.Text`),
                     t(`Button.Submit`),
-                    props.onClickDefaultQuery,
+                    props.onClickExampleQuery,
                     props.loading
                 )
             );

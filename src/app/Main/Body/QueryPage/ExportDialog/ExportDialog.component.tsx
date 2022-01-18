@@ -1,10 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
 import { errorColor } from "../../../../Shared/Style/Style-MainTheme";
-import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
+import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
 
 const warningStyle = css`
     display: flex;
@@ -32,7 +33,11 @@ export function ExportDialogComponent(props: {
 
     const handleExport = (): Promise<void> => props.onClickExport();
 
-    const buttonLabel: JSX.Element = ExportButtonLabelComponent(true);
+    const buttonLabel: JSX.Element = ButtonLabelComponent(
+        <GetAppIcon fontSize="small" />,
+        t("Button.Submit"),
+        true
+    );
 
     const exportStatTable = props.exportOptions.stat;
     const exportRawTable = props.exportOptions.raw;

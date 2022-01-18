@@ -18,6 +18,7 @@
   },
   "Warning": "Please select at least one option or cancel the export.",
   "Button": {
+    "Submit": "Export",
     "Cancel": "Cancel"
   }
 }

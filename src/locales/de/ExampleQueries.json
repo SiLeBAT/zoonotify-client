@@ -9,7 +9,7 @@
     "feedSample": "Futtermittel"
   },
   "Queries": {
-    "animal": {
+    "animalSample": {
       "Query0": {
         "Title": "Query0",
         "Text": "Describe Query0"
@@ -23,7 +23,7 @@
         "Text": "Describe Query2"
       }
     },
-    "food": {
+    "foodSample": {
       "Query0": {
         "Title": "Query0",
         "Text": "Describe Query0"

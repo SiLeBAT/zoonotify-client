@@ -388,7 +388,8 @@
       "TableHeaderCutOff": "cut-off",
       "TableHeaderMin": "min",
       "TableHeaderMax": "max",
-      "CancelButton": "Cancel"
+      "CancelButton": "Cancel",
+      "ExportButton": "Export"
     }
   }
 }

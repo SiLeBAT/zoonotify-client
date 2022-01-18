@@ -10,7 +10,8 @@ import {
     TableRow,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { ExportButtonLabelComponent } from "../../../../Shared/Export-ButtonLabel.component";
+import GetAppIcon from "@mui/icons-material/GetApp";
+import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
 import { DialogComponent } from "../../../../Shared/Dialog.component";
 import { AmrsTable, AmrsTableData } from "../InfoPage.model";
 
@@ -167,7 +168,11 @@ export function InfoPageAmrDialogComponent(props: {
     );
 
     const amrTableCancelButton = t("Methods.Amrs.CancelButton");
-    const amrTableSubmitButton = ExportButtonLabelComponent(true);
+    const amrTableSubmitButton = ButtonLabelComponent(
+        <GetAppIcon fontSize="small" />,
+        t("Methods.Amrs.ExportButton"),
+        true
+    );
 
     return DialogComponent({
         loading: false,

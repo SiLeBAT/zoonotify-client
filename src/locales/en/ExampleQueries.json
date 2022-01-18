@@ -9,7 +9,7 @@
     "feedSample": "Feed sample"
   },
   "Queries": {
-    "animal": {
+    "animalSample": {
       "Query0": {
         "Title": "Query0",
         "Text": "Describe Query0"
@@ -23,7 +23,7 @@
         "Text": "Describe Query2"
       }
     },
-    "food": {
+    "foodSample": {
       "Query0": {
         "Title": "Query0",
         "Text": "Describe Query0"
@@ -53,7 +53,7 @@
     }
   },
   "Button": {
-    "Submit": "Auswählen",
-    "Cancel": "Abbrechen"
+    "Submit": "Submit",
+    "Cancel": "Cancel"
   }
 }

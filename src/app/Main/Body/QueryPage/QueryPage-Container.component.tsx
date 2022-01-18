@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     mainFilterList,
     allSubFiltersList,
@@ -33,18 +35,16 @@ import { chooseSelectedFiltersService } from "./Services/SelectorServices/choose
 import { getFeaturesFromPath } from "./Services/PathServices/getTableFromPath.service";
 import { ApiResponse, callApiService } from "../../../Core/callApi.service";
 import { IsolateCountedDTO } from "../../../Shared/Model/Api_Isolate.model";
-
 import { QueryPageDrawerControlComponent } from "./Drawer/ControlBar/QueryPage-DrawerControl.component";
 import { QueryPageContentContainer } from "./QueryPageContent/QueryPageContent-Container";
 import { ExportDialogComponent } from "./ExportDialog/ExportDialog.component";
-import { SubHeaderExportButtonComponent } from "./Subheader/SubHeader-ExportButton.component";
 import { DrawerContainer } from "./Drawer/Drawer-Container.component";
 import { exportZipService } from "./Services/ContainerServices/exportZip.service";
 import { generateDataObjectsService } from "./Services/ContainerServices/generateDataObjects.services";
 import { fetchInitialDataService } from "./Services/ContainerServices/fetchInitialData.service";
 import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
-import { SubHeaderDefaultQueriesButtonComponent } from "./Subheader/SubHeader-DefaultQueries.component";
-import { DefaultQueriesDialogComponent } from "./ExampleQueriesDialog/ExampleQueriesDialog.component";
+import { ExampleQueriesDialogComponent } from "./ExampleQueriesDialog/ExampleQueriesDialog.component";
+import { SubHeaderButtonComponent } from "./Subheader/SubHeader-Button.component";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [serverStatus, setServerStatus] = useState<{
@@ -353,8 +353,8 @@ export function QueryPageContainerComponent(): JSX.Element {
         setQueryDialogIsOpen(false);
     };
 
-    const handleApplyQuery = async (defaultQuery: string): Promise<void> => {
-        const newPath = defaultQuery;
+    const handleApplyQuery = (exampleQuery: string): void => {
+        const newPath = exampleQuery;
         history.push(newPath);
         setFilterFromPath();
         setTableFromPath();
@@ -461,15 +461,19 @@ export function QueryPageContainerComponent(): JSX.Element {
         exampleQueriesButton: JSX.Element;
     } = {
         exportButton: (
-            <SubHeaderExportButtonComponent
+            <SubHeaderButtonComponent
                 onClickOpen={handleClickExportDialogOpen}
-                exportDialogIsOpen={exportDialogIsOpen}
+                dialogIsOpen={exportDialogIsOpen}
+                buttonIcon={<GetAppIcon fontSize="small" />}
+                buttonText={t("Header:Export")}
             />
         ),
         exampleQueriesButton: (
-            <SubHeaderDefaultQueriesButtonComponent
+            <SubHeaderButtonComponent
                 onClickOpen={handleClickQueriesDialogOpen}
-                exampleQueriesDialogIsOpen={queryDialogIsOpen}
+                dialogIsOpen={queryDialogIsOpen}
+                buttonIcon={<QueryStatsIcon fontSize="small" />}
+                buttonText="Beispielabfrage"
             />
         ),
     };
@@ -538,10 +542,10 @@ export function QueryPageContainerComponent(): JSX.Element {
                     }
                     exportDialogIsOpen={exportDialogIsOpen}
                     queryDialog={
-                        <DefaultQueriesDialogComponent
+                        <ExampleQueriesDialogComponent
                             loading={loadingIsolates}
                             onClickClose={handleCloseQueriesDialog}
-                            onClickDefaultQuery={handleApplyQuery}
+                            onClickExampleQuery={handleApplyQuery}
                         />
                     }
                     queryDialogIsOpen={queryDialogIsOpen}

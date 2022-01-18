@@ -1,7 +1,5 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
-import GetAppIcon from "@mui/icons-material/GetApp";
-import { useTranslation } from "react-i18next";
 import { secondaryColor } from "./Style/Style-MainTheme";
 
 const buttonLabelStyle = (isOpen: boolean): SerializedStyles => css`
@@ -17,12 +15,15 @@ const buttonLabelStyle = (isOpen: boolean): SerializedStyles => css`
  * @param isOpen - true if export dialog is open
  * @returns {JSX.Element} - label with icon for the export button component
  */
-export function ExportButtonLabelComponent(isOpen: boolean): JSX.Element {
-    const { t } = useTranslation(["Header"]);
+export function ButtonLabelComponent(
+    buttonIcon: JSX.Element,
+    buttonText: string,
+    isOpen: boolean
+): JSX.Element {
     return (
         <div css={buttonLabelStyle(isOpen)}>
-            <GetAppIcon fontSize="small" />
-            {t("Header:Export")}
+            {buttonIcon}
+            {buttonText}
         </div>
     );
 }
