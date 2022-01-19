@@ -116,8 +116,21 @@ export const matrixSubFiltersList: string[] = [
     "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote",
 ];
 
-export const allSubFiltersList =
-    microorganismSubFiltersList.concat(matrixSubFiltersList);
+export const resistanceSubFiltersList = [
+    "resistance__CARBA-E. coli",
+    "resistance__Campylobacter spp.",
+    "resistance__E. coli",
+    "resistance__ESBL/AmpC-E. coli",
+    "resistance__Enterococcus spp.",
+    "resistance__Listeria monocytogenes",
+    "resistance__MRSA",
+    "resistance__STEC",
+    "resistance__Salmonella spp.",
+];
+
+export const allSubFiltersList = microorganismSubFiltersList
+    .concat(matrixSubFiltersList)
+    .concat(resistanceSubFiltersList);
 
 export const allFiltersList: (string | DbKey)[] =
     allSubFiltersList.concat(mainFilterList);
