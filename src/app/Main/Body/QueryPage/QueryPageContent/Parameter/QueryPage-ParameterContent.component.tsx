@@ -2,6 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
+import { Divider } from "@mui/material";
 import { ParameterListLayout } from "./ParameterList-Layout.component";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 import {
@@ -74,9 +75,9 @@ function createParameterList(
             );
             let parameterLabel = t(`Filters.${filterElementForTranslation}`);
             if (isSubFilter) {
-                parameterLabel = t(
+                parameterLabel = `${t(
                     `Subfilters.${filterElementForTranslation}.name`
-                );
+                )} - ${t(`Subfilters.${filterElementForTranslation}.trigger`)}`;
             }
 
             const parameterNames: {
@@ -125,14 +126,20 @@ export function QueryPageParameterContentComponent(props: {
         true
     );
 
-    const parameterElements = mainFiltersParameterList.concat(
-        subFiltersParameterList
-    );
-
     return (
         <AccordionComponent
             title={t("Results.Parameter")}
-            content={<div css={parameterBlockStyle}>{parameterElements}</div>}
+            content={
+                <div>
+                    <div css={parameterBlockStyle}>
+                        {mainFiltersParameterList}
+                    </div>
+                    <Divider />
+                    <div css={parameterBlockStyle}>
+                        {subFiltersParameterList}
+                    </div>
+                </div>
+            }
             defaultExpanded
             centerContent={false}
         />

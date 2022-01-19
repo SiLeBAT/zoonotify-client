@@ -495,48 +495,12 @@
       "2018": "2018",
       "2019": "2019",
       "2020": "2020"
-    },
-    "resistance": {
-      "GEN": "Gentamicin",
-      "KAN": "Kanamycin",
-      "STR": "Streptomycin",
-      "CHL": "Chloramphenicol",
-      "CIP": "Ciprofloxacin",
-      "PEN": "Penicillin G",
-      "FOX": "Cefoxitin",
-      "TMP": "Trimethoprim",
-      "SMX": "Sulfamethoxazol",
-      "TET": "Tetrazyklin",
-      "CLI": "Clindamycin",
-      "ERY": "Erythromycin",
-      "MUP": "Mupirocin",
-      "RIF": "Rifampicin",
-      "LZD": "Linezolid",
-      "FUS": "Fusidinsäure",
-      "SYN": "Quinupristin/Dalfopristin",
-      "TIA": "Tiamulin",
-      "VAN": "Vancomycin",
-      "FOT": "Cefotaxim",
-      "TAZ": "Ceftazidim",
-      "NAL": "Nalidixinsäure",
-      "AMP": "Ampicillin",
-      "COL": "Colistin",
-      "AZI": "Azithromycin",
-      "TGC": "Tigecyclin",
-      "FEP": "Cefepim",
-      "F/C": "Cefotaxim + Clavulansäure",
-      "T/C": "Ceftazidim + Clavulansäure",
-      "ETP": "Ertapenem",
-      "IMI": "Imipenem",
-      "MERO": "Meropenem",
-      "TRM": "Temocillin",
-      "DAP": "Daptomycin",
-      "TEC": "Teicoplanin"
     }
   },
   "Subfilters": {
     "serovar": {
       "name": "Serovar",
+      "trigger": "Salmonella spp.",
       "values": {
         "S-4,12:d:-": "S.4,12:d:-",
         "S-4,\\[5],12:i:-": "S.4,\\[5],12:i:-",
@@ -649,12 +613,14 @@
     },
     "carba_ampc_carba_phenotype": {
       "name": "CARBA Phenotype",
+      "trigger": "CARBA-E. coli",
       "values": {
         "Carbapenemase-verdächtig": "Carbapenemase suspected"
       }
     },
     "esbl_ampc_carba_phenotype": {
       "name": "ESBL CARBA Phenotype",
+      "trigger": "ESBL/AmpC-E. coli",
       "values": {
         "AmpC-verdächtig": "AmpC-suspected",
         "Carbapenemase-verdächtig": "Carbapenemase-suspected",
@@ -666,6 +632,7 @@
     },
     "campy_spez": {
       "name": "Campy Spezies",
+      "trigger": "Campylobacter spp.",
       "values": {
         "C- coli": "C. coli",
         "C- fetus": "C. fetus",
@@ -676,6 +643,7 @@
     },
     "entero_spez": {
       "name": "Entero Spezies",
+      "trigger": "Enterococcus spp.",
       "values": {
         "Enterococcus faecalis": "Enterococcus faecalis",
         "Enterococcus faecium": "Enterococcus faecium"
@@ -683,6 +651,7 @@
     },
     "spa_type": {
       "name": "SPA-type",
+      "trigger": "MRSA",
       "values": {
         "-offen-": "-open-",
         "n-t-": "n.t.",
@@ -815,6 +784,7 @@
     },
     "serotype": {
       "name": "Serotype",
+      "trigger": "Listeria monocytogenes",
       "values": {
         "IIa": "IIa",
         "IIb": "IIb",
@@ -825,6 +795,7 @@
     },
     "clonal_group": {
       "name": "Clonal group",
+      "trigger": "MRSA",
       "values": {
         "andere CC398": "Other CC398",
         "non CC398": "Non CC398",
@@ -834,6 +805,7 @@
     },
     "o_group": {
       "name": "O-group",
+      "trigger": "STEC",
       "values": {
         "(55)": "(55)",
         "1": "1",
@@ -964,6 +936,7 @@
     },
     "h_group": {
       "name": "H-group",
+      "trigger": "STEC",
       "values": {
         "(2)": "(2)",
         "(25)": "(25)",
@@ -1064,42 +1037,49 @@
     },
     "matrixDetail__(Hals)haut": {
       "name": "Matixdetail",
+      "trigger": "(Hals)haut",
       "values": {
         "Einzel(tier)probe": "Einzel(tier)probe"
       }
     },
     "matrixDetail__(Konsum)eier, unsortiert": {
       "name": "Matixdetail",
+      "trigger": "(Konsum)eier, unsortiert",
       "values": {
         "Eierschalenpools": "Eierschalenpools"
       }
     },
     "matrixDetail__Alleinfuttermittel": {
       "name": "Matixdetail",
+      "trigger": "Alleinfuttermittel",
       "values": {
         "Sackware und lose Ware": "Sackware und lose Ware"
       }
     },
     "matrixDetail__Babyspinat": {
       "name": "Matixdetail",
+      "trigger": "Babyspinat",
       "values": {
         "frisch": "frisch"
       }
     },
     "matrixDetail__Blatt- und Kopfsalate": {
       "name": "Matixdetail",
+      "trigger": "Blatt- und Kopfsalate",
       "values": {
         "insb. Feldsalat, Rucola, Spinat, Eisberg": "insb. Feldsalat, Rucola, Spinat, Eisberg"
       }
     },
     "matrixDetail__Blattsalate": {
       "name": "Matixdetail",
+      "trigger": "Blattsalate",
       "values": {
         "vorgeschnitten, verpackt": "vorgeschnitten, verpackt"
       }
     },
     "matrixDetail__Blinddarminhalt": {
       "name": "Matixdetail",
+      "trigger": "Blinddarminhalt",
       "values": {
         "Einzeltierprobe": "Einzeltierprobe",
         "Poolprobe": "Poolprobe"
@@ -1107,24 +1087,28 @@
     },
     "matrixDetail__Erdbeeren": {
       "name": "Matixdetail",
+      "trigger": "Erdbeeren",
       "values": {
         "frisch": "frisch"
       }
     },
     "matrixDetail__Fleischerzeugnisse": {
       "name": "Matixdetail",
+      "trigger": "Fleischerzeugnisse",
       "values": {
         "wärmebehandelt": "wärmebehandelt"
       }
     },
     "matrixDetail__Frische Kräuter": {
       "name": "Matixdetail",
+      "trigger": "Frische Kräuter",
       "values": {
         "lose oder verpackt; geschnitten oder Topfware": "lose oder verpackt; geschnitten oder Topfware"
       }
     },
     "matrixDetail__Frisches Fleisch": {
       "name": "Matixdetail",
+      "trigger": "Frisches Fleisch",
       "values": {
         "gekühlt": "gekühlt",
         "gekühlt oder tiefgefroren": "gekühlt oder tiefgefroren",
@@ -1135,24 +1119,28 @@
     },
     "matrixDetail__Garnelen": {
       "name": "Matixdetail",
+      "trigger": "Garnelen",
       "values": {
         "roh": "roh"
       }
     },
     "matrixDetail__Getrocknete Blatt- und Grasprodukte": {
       "name": "Matixdetail",
+      "trigger": "Getrocknete Blatt- und Grasprodukte",
       "values": {
         "Pulver- oder Blattform": "Pulver- oder Blattform"
       }
     },
     "matrixDetail__Hackfleisch": {
       "name": "Matixdetail",
+      "trigger": "Hackfleisch",
       "values": {
         "gekühlt": "gekühlt"
       }
     },
     "matrixDetail__Haut": {
       "name": "Matixdetail",
+      "trigger": "Haut",
       "values": {
         "Hauttupfer": "Hauttupfer",
         "Tupfer": "Tupfer"
@@ -1160,18 +1148,21 @@
     },
     "matrixDetail__Kiemeninhalt": {
       "name": "Matixdetail",
+      "trigger": "Kiemeninhalt",
       "values": {
         "Kiementupfer": "Kiementupfer"
       }
     },
     "matrixDetail__Konsumeier, sortiert": {
       "name": "Matixdetail",
+      "trigger": "Konsumeier, sortiert",
       "values": {
         "Eierschalenpools": "Eierschalenpools"
       }
     },
     "matrixDetail__Kot": {
       "name": "Matixdetail",
+      "trigger": "Kot",
       "values": {
         "Einzeltierprobe": "Einzeltierprobe",
         "Kloaken- oder Kottupfer": "Kloaken- oder Kottupfer",
@@ -1180,6 +1171,7 @@
     },
     "matrixDetail__Kot / Staub": {
       "name": "Matixdetail",
+      "trigger": "Kot / Staub",
       "values": {
         "Sockentupfer": "Sockentupfer",
         "Stiefelüberzieher / Sockentupfer": "Stiefelüberzieher / Sockentupfer"
@@ -1187,36 +1179,42 @@
     },
     "matrixDetail__Muscheln": {
       "name": "Matixdetail",
+      "trigger": "Muscheln",
       "values": {
         "lebend, frisch": "lebend, frisch"
       }
     },
     "matrixDetail__Muskel": {
       "name": "Matixdetail",
+      "trigger": "Muskel",
       "values": {
         "importiert, aus Aquakultur": "importiert, aus Aquakultur"
       }
     },
     "matrixDetail__Nasenschleimhaut": {
       "name": "Matixdetail",
+      "trigger": "Nasenschleimhaut",
       "values": {
         "Nasentupfer": "Nasentupfer"
       }
     },
     "matrixDetail__Nasentupfer": {
       "name": "Matixdetail",
+      "trigger": "Nasentupfer",
       "values": {
         "Einzeltierprobe": "Einzeltierprobe"
       }
     },
     "matrixDetail__Petersilie": {
       "name": "Matixdetail",
+      "trigger": "Petersilie",
       "values": {
         "tiefgekühlt": "tiefgekühlt"
       }
     },
     "matrixDetail__Rohmilchkäse": {
       "name": "Matixdetail",
+      "trigger": "Rohmilchkäse",
       "values": {
         "Schnittkäse": "Schnittkäse",
         "Weichkäse": "Weichkäse",
@@ -1225,30 +1223,35 @@
     },
     "matrixDetail__Sammelmilch": {
       "name": "Matixdetail",
+      "trigger": "Sammelmilch",
       "values": {
         "gekühlt": "gekühlt"
       }
     },
     "matrixDetail__Schlachtkörper": {
       "name": "Matixdetail",
+      "trigger": "Schlachtkörper",
       "values": {
         "Einzel(tier)probe": "Einzel(tier)probe"
       }
     },
     "matrixDetail__Sprossen": {
       "name": "Matixdetail",
+      "trigger": "Sprossen",
       "values": {
         "lose oder verpackt": "lose oder verpackt"
       }
     },
     "matrixDetail__Staub": {
       "name": "Matixdetail",
+      "trigger": "Staub",
       "values": {
         "Staubtupfer": "Staubtupfer"
       }
     },
     "matrixDetail__Streichfähige Rohwürste": {
       "name": "Matixdetail",
+      "trigger": "Streichfähige Rohwürste",
       "values": {
         "überwiegend aus Hähnchen- und Putenfleisch": "überwiegend aus Hähnchen- und Putenfleisch",
         "überwiegend aus Schweinefleisch": "überwiegend aus Schweinefleisch"
@@ -1256,24 +1259,28 @@
     },
     "matrixDetail__Tatar / Schabefleisch": {
       "name": "Matixdetail",
+      "trigger": "Tatar / Schabefleisch",
       "values": {
         "gekühlt": "gekühlt"
       }
     },
     "matrixDetail__Tomaten": {
       "name": "Matixdetail",
+      "trigger": "Tomaten",
       "values": {
         "kleine Sorten": "kleine Sorten"
       }
     },
     "matrixDetail__Weizenmehl": {
       "name": "Matixdetail",
+      "trigger": "Weizenmehl",
       "values": {
         "vor der Verpackung in der Mühle": "vor der Verpackung in der Mühle"
       }
     },
     "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote": {
       "name": "Matixdetail",
+      "trigger": "Ölsaaten / Ölfruchte und Extraktionsschrote",
       "values": {
         "Raps": "Raps",
         "hauptsächlich Soja": "hauptsächlich Soja"
@@ -1281,6 +1288,7 @@
     },
     "resistance__CARBA-E coli": {
       "name": "Antimicrobial resistance",
+      "trigger": "CARBA-E. coli",
       "values": {
         "AMP": "Ampicillin",
         "AZI": "Azithromycin",
@@ -1300,6 +1308,7 @@
     },
     "resistance__Campylobacter spp": {
       "name": "Antimicrobial resistance",
+      "trigger": "Campylobacter spp.",
       "values": {
         "CHL": "Chloramphenicol",
         "CIP": "Ciprofloxacin",
@@ -1312,6 +1321,7 @@
     },
     "resistance__E coli": {
       "name": "Antimicrobial resistance",
+      "trigger": "E. coli",
       "values": {
         "AMP": "Ampicillin",
         "AZI": "Azithromycin",
@@ -1333,6 +1343,7 @@
     },
     "resistance__ESBL/AmpC-E coli": {
       "name": "Antimicrobial resistance",
+      "trigger": "ESBL/AmpC-E. coli",
       "values": {
         "AMP": "Ampicillin",
         "AZI": "Azithromycin",
@@ -1352,6 +1363,7 @@
     },
     "resistance__Enterococcus spp": {
       "name": "Antimicrobial resistance",
+      "trigger": "Enterococcus spp.",
       "values": {
         "AMP": "Ampicillin",
         "CHL": "Chloramphenicol",
@@ -1368,6 +1380,7 @@
     },
     "resistance__MRSA": {
       "name": "Antimicrobial resistance",
+      "trigger": "MRSA",
       "values": {
         "CHL": "Chloramphenicol",
         "CIP": "Ciprofloxacin",
@@ -1392,6 +1405,7 @@
     },
     "resistance__STEC": {
       "name": "Antimicrobial resistance",
+      "trigger": "STEC",
       "values": {
         "AMP": "Ampicillin",
         "AZI": "Azithromycin",
@@ -1413,6 +1427,7 @@
     },
     "resistance__Salmonella spp": {
       "name": "Antimicrobial resistance",
+      "trigger": "Salmonella spp.",
       "values": {
         "AMP": "Ampicillin",
         "AZI": "Azithromycin",
@@ -1434,6 +1449,7 @@
     },
     "genes": {
       "name": "Genes",
+      "trigger": "STEC",
       "values": {
         "stx1_Gen": "stx1 gen",
         "stx2_Gen": "stx2 gen",
