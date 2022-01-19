@@ -53,10 +53,19 @@ export interface SelectorProps {
  */
 export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
     const { t } = props;
+    const subFilterAttributeForTranslation = replaceAll(
+        props.subFilterAttribute,
+        ".",
+        ""
+    );
+
+    // eslint-disable-next-line no-console
+    console.log(subFilterAttributeForTranslation);
+
     const selectedSubFilterValues: string[] =
         props.selectedFilter[props.subFilterAttribute];
     const selectedSubValuesObj = generateSelectorObject(
-        props.subFilterAttribute,
+        subFilterAttributeForTranslation,
         selectedSubFilterValues,
         t,
         true
@@ -66,7 +75,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         props.subFilterAttribute
     );
     const dropDownValuesObj = generateSelectorObject(
-        props.subFilterAttribute,
+        subFilterAttributeForTranslation,
         props.subFilterValues,
         t,
         true
@@ -93,7 +102,10 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
             ""
         )}`
     );
-    const subFilterName = t(`Subfilters.${props.subFilterAttribute}.name`);
+
+    const subFilterName = t(
+        `Subfilters.${subFilterAttributeForTranslation}.name`
+    );
 
     return (
         <div

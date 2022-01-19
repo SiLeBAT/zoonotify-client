@@ -76,13 +76,13 @@
       "E coli": {
         "prefix": "",
         "name": "",
-        "italicName": "E.coli",
+        "italicName": "E. coli",
         "suffix": ""
       },
       "ESBL/AmpC-E coli": {
         "prefix": "ESBL/AmpC-",
         "name": "",
-        "italicName": "E.coli",
+        "italicName": "E. coli",
         "suffix": ""
       },
       "Listeria monocytogenes": {
@@ -112,7 +112,7 @@
       "CARBA-E coli": {
         "prefix": "Carba-",
         "name": "",
-        "italicName": "E.coli",
+        "italicName": "E. coli",
         "suffix": ""
       },
       "Enterococcus spp": {
@@ -417,43 +417,6 @@
         "2018": "2018",
         "2019": "2019",
         "2020": "2020"
-      },
-      "resistance": {
-        "GEN": "Gentamicin",
-        "KAN": "Kanamycin",
-        "STR": "Streptomycin",
-        "CHL": "Chloramphenicol",
-        "CIP": "Ciprofloxacin",
-        "PEN": "Penicillin G",
-        "FOX": "Cefoxitin",
-        "TMP": "Trimethoprim",
-        "SMX": "Sulfamethoxazol",
-        "TET": "Tetrazyklin",
-        "CLI": "Clindamycin",
-        "ERY": "Erythromycin",
-        "MUP": "Mupirocin",
-        "RIF": "Rifampicin",
-        "LZD": "Linezolid",
-        "FUS": "Fusidinsäure",
-        "SYN": "Quinupristin/Dalfopristin",
-        "TIA": "Tiamulin",
-        "VAN": "Vancomycin",
-        "FOT": "Cefotaxim",
-        "TAZ": "Ceftazidim",
-        "NAL": "Nalidixinsäure",
-        "AMP": "Ampicillin",
-        "COL": "Colistin",
-        "AZI": "Azithromycin",
-        "TGC": "Tigecyclin",
-        "FEP": "Cefepim",
-        "F/C": "Cefotaxim + Clavulansäure",
-        "T/C": "Ceftazidim + Clavulansäure",
-        "ETP": "Ertapenem",
-        "IMI": "Imipenem",
-        "MERO": "Meropenem",
-        "TRM": "Temocillin",
-        "DAP": "Daptomycin",
-        "TEC": "Teicoplanin"
       }
     },
     "category": {
@@ -1314,6 +1277,159 @@
       "values": {
         "Raps": "Raps",
         "hauptsächlich Soja": "hauptsächlich Soja"
+      }
+    },
+    "resistance__CARBA-E coli": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__Campylobacter spp": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "ERY": "Erythromycin",
+        "GEN": "Gentamicin",
+        "NAL": "Nalidixinsäure",
+        "STR": "Streptomycin",
+        "TET": "Tetrazyklin"
+      }
+    },
+    "resistance__E coli": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__ESBL/AmpC-E coli": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__Enterococcus spp": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "AMP": "Ampicillin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "DAP": "Daptomycin",
+        "ERY": "Erythromycin",
+        "GEN": "Gentamicin",
+        "LZD": "Linezolid",
+        "TEC": "Teicoplanin",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "VAN": "Vancomycin"
+      }
+    },
+    "resistance__MRSA": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "CLI": "Clindamycin",
+        "ERY": "Erythromycin",
+        "FOX": "Cefoxitin",
+        "FUS": "Fusidinsäure",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "LZD": "Linezolid",
+        "MUP": "Mupirocin",
+        "PEN": "Penicillin G",
+        "RIF": "Rifampicin",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "SYN": "Quinupristin/Dalfopristin",
+        "TET": "Tetrazyklin",
+        "TIA": "Tiamulin",
+        "TMP": "Trimethoprim",
+        "VAN": "Vancomycin"
+      }
+    },
+    "resistance__STEC": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__Salmonella spp": {
+      "name": "Antimicrobial resistance",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
       }
     },
     "genes": {

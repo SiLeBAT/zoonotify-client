@@ -67,9 +67,16 @@ function createParameterList(
     const elements: JSX.Element[] = [];
     filterList.forEach((filterElement) => {
         if (selectedFilters[filterElement].length !== 0) {
-            let parameterLabel = t(`Filters.${filterElement}`);
+            const filterElementForTranslation = replaceAll(
+                filterElement,
+                ".",
+                ""
+            );
+            let parameterLabel = t(`Filters.${filterElementForTranslation}`);
             if (isSubFilter) {
-                parameterLabel = t(`Subfilters.${filterElement}.name`);
+                parameterLabel = t(
+                    `Subfilters.${filterElementForTranslation}.name`
+                );
             }
 
             const parameterNames: {
@@ -78,7 +85,7 @@ function createParameterList(
             }[] = [];
             selectedFilters[filterElement].forEach((parameter) => {
                 const parameterName = createParameterName(
-                    filterElement,
+                    filterElementForTranslation,
                     parameter,
                     t,
                     isSubFilter
