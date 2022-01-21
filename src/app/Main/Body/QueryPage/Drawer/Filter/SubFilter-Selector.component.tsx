@@ -58,10 +58,6 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         ".",
         ""
     );
-
-    // eslint-disable-next-line no-console
-    console.log(subFilterAttributeForTranslation);
-
     const selectedSubFilterValues: string[] =
         props.selectedFilter[props.subFilterAttribute];
     const selectedSubValuesObj = generateSelectorObject(

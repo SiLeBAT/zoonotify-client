@@ -88,10 +88,11 @@ export function dataAndStatisticToZipFile(
 
     if (zipParameter.exportOptions.raw) {
         csvRowsFilteredData.push(parameterHeader);
+        const tableAttributes: DbKey[] = mainFilterList.concat(["resistance"]);
         csvRowsFilteredData.push(
             generateDataTableCsvString(
                 zipParameter.rawDataSet.rawData,
-                mainFilterList,
+                tableAttributes,
                 zipParameter.mainFilterLabels,
                 zipParameter.mainFilterAttributes
             )

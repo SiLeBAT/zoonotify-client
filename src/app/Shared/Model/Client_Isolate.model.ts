@@ -1,39 +1,77 @@
-export type ResistantValue =
-    | "amp"
-    | "azi"
-    | "chl"
-    | "cip"
-    | "cli"
-    | "col"
-    | "dap"
-    | "ery"
-    | "etp"
-    | "fep"
-    | "fop"
-    | "fox"
-    | "fus"
-    | "f_c"
-    | "gen"
-    | "imi"
-    | "kan"
-    | "lzd"
-    | "mero"
-    | "mup"
-    | "nal"
-    | "pen"
-    | "rif"
-    | "smx"
-    | "str"
-    | "syn"
-    | "taz"
-    | "tec"
-    | "tet"
-    | "tgc"
-    | "tia"
-    | "tmp"
-    | "trm"
-    | "t_c"
-    | "van";
+export type Resistances =
+    | "AMP"
+    | "AZI"
+    | "CHL"
+    | "CIP"
+    | "CLI"
+    | "COL"
+    | "DAP"
+    | "ERY"
+    | "ETP"
+    | "F/C"
+    | "FEP"
+    | "FOT"
+    | "FOX"
+    | "FUS"
+    | "GEN"
+    | "IMI"
+    | "KAN"
+    | "LZD"
+    | "MERO"
+    | "MUP"
+    | "NAL"
+    | "PEN"
+    | "RIF"
+    | "SMX"
+    | "STR"
+    | "SYN"
+    | "T/C"
+    | "TAZ"
+    | "TEC"
+    | "TET"
+    | "TGC"
+    | "TIA"
+    | "TMP"
+    | "TRM"
+    | "VAN";
+
+export const resistancesCollection: Resistances[] = [
+    "AMP",
+    "AZI",
+    "CHL",
+    "CIP",
+    "CLI",
+    "COL",
+    "DAP",
+    "ERY",
+    "ETP",
+    "F/C",
+    "FEP",
+    "FOT",
+    "FOX",
+    "FUS",
+    "GEN",
+    "IMI",
+    "KAN",
+    "LZD",
+    "MERO",
+    "MUP",
+    "NAL",
+    "PEN",
+    "RIF",
+    "SMX",
+    "STR",
+    "SYN",
+    "T/C",
+    "TAZ",
+    "TEC",
+    "TET",
+    "TGC",
+    "TIA",
+    "TMP",
+    "TRM",
+    "VAN",
+];
 
 export type DbKey =
     | "microorganism"
@@ -50,7 +88,7 @@ export type DbKey =
 export type DbKeyWithStringValue = Exclude<DbKey, "resistance">;
 
 export type DbCollection = (Record<DbKeyWithStringValue, string> & {
-    resistance: ResistantValue[];
+    resistance: Record<Resistances, boolean>;
 })[];
 
 export const mainFilterList: DbKey[] = [
@@ -134,44 +172,6 @@ export const allSubFiltersList = microorganismSubFiltersList
 
 export const allFiltersList: (string | DbKey)[] =
     allSubFiltersList.concat(mainFilterList);
-
-export const resistancesCollection = [
-    "GEN",
-    "KAN",
-    "STR",
-    "CHL",
-    "CIP",
-    "PEN",
-    "FOX",
-    "TMP",
-    "SMX",
-    "TET",
-    "CLI",
-    "ERY",
-    "MUP",
-    "RIF",
-    "LZD",
-    "FUS",
-    "SYN",
-    "TIA",
-    "VAN",
-    "FOT",
-    "TAZ",
-    "NAL",
-    "AMP",
-    "COL",
-    "AZI",
-    "TGC",
-    "FEP",
-    "F/C",
-    "T/C",
-    "ETP",
-    "IMI",
-    "MERO",
-    "TRM",
-    "DAP",
-    "TEC",
-];
 
 export type ClientIsolateCountedGroups = (Record<string, string> & {
     count: number;

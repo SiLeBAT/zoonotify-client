@@ -1,5 +1,25 @@
 import { IsolateDTO } from "./Model/Api_Isolate.model";
-import { DbCollection, ResistantValue } from "./Model/Client_Isolate.model";
+import { DbCollection, Resistances } from "./Model/Client_Isolate.model";
+
+function adaptResistances(
+    ApiResistances: Record<
+        Resistances,
+        {
+            value: string;
+            active: boolean;
+        }
+    >
+): Record<Resistances, boolean> {
+    const newResistance: Record<Resistances, boolean> = {} as Record<
+        Resistances,
+        boolean
+    >;
+    Object.keys(ApiResistances).forEach((resistanceKey) => {
+        const key = resistanceKey as Resistances;
+        newResistance[key] = ApiResistances[key].active;
+    });
+    return newResistance;
+}
 
 /**
  * @desc Extracts the desired isolate properties from the api and converts them to a string if necessary.
@@ -28,7 +48,7 @@ export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
             origin,
             category,
             productionType,
-            resistance: Object.keys(resistance) as ResistantValue[],
+            resistance: adaptResistances(resistance),
             samplingYear: String(samplingYear),
         })
     );
