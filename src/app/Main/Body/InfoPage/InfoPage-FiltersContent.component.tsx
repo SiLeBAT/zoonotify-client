@@ -3,7 +3,16 @@ import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
-import { birdSpecies, microorganismNames } from "./italicNames.constants";
+import {
+    birdSpecies,
+    campy,
+    campySpp,
+    coliShort,
+    enteroSpp,
+    faecalis,
+    faecium,
+    salmSpp,
+} from "./italicNames.constants";
 
 const descriptionStyle = css`
     margin: 0;
@@ -46,7 +55,7 @@ function generateContentWithSubContent(
                     {subFilter.Subname}
                     <i>{subFilterName}</i>
                     {subFilter.Abbreviation}
-                    {microorganismNames.ColiShort})
+                    {coliShort})
                 </p>
             );
         } else {
@@ -69,9 +78,9 @@ function generateContentWithSubContent(
                     key={`${subFilter.Subname}${subFilterName}-description`}
                 >
                     {subFilter.Description1}
-                    {microorganismNames.Faecalis}
+                    {faecalis}
                     {subFilter.Description2}
-                    {microorganismNames.Faecium}
+                    {faecium}
                     {subFilter.Description3}
                 </p>
             );
@@ -150,17 +159,16 @@ export function InfoPageFiltersContentComponent(props: {
                     key="resistance-description"
                 >
                     {t("Filters.resistance.Description1")}
-                    {microorganismNames.SalmSpp}, {microorganismNames.CampySpp},
-                    {t("Filters.resistance.Description2")}
-                    {microorganismNames.ColiShort}
+                    {salmSpp}, {campySpp},{t("Filters.resistance.Description2")}
+                    {coliShort}
                     {t("Filters.resistance.Description3")}
-                    {microorganismNames.ColiShort}
+                    {coliShort}
                     {t("Filters.resistance.Description4")}
-                    {microorganismNames.ColiShort}
+                    {coliShort}
                     {t("Filters.resistance.Description5")}
-                    {microorganismNames.EnteroSpp}
+                    {enteroSpp}
                     {t("Filters.resistance.Description6")}
-                    {microorganismNames.Campy}
+                    {campy}
                     {t("Filters.resistance.Description7")}
                 </p>
             );

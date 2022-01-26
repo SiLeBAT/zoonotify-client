@@ -1,63 +1,42 @@
 import React from "react";
-
-export const microorganismNames: Record<string, JSX.Element> = {
-    Salm: <i>Salmonella</i>,
-    SalmSpp: (
-        <span>
-            <i>Salmonella</i> spp.
-        </span>
-    ),
-    Listeria: (
-        <span>
-            <i>Listeria</i> (<i>L.</i>) <i>monocytogenes</i>
-        </span>
-    ),
-    ColiFull: <i>Escherichia coli</i>,
-    ColiFullE: (
-        <span>
-            <i>Escherichia</i> (<i>E.</i>) <i>coli</i>
-        </span>
-    ),
-    ColiShort: <i>E. coli</i>,
-    Staphy: <i>Staphylococcus aureus</i>,
-    Campy: <i>Campylobacter</i>,
-    CampySpp: (
-        <span>
-            <i>Campylobacter</i> spp.
-        </span>
-    ),
-    CampyJeC: (
-        <span>
-            <i>Campylobacter</i> (<i>C.</i>) <i>jejuni</i>
-        </span>
-    ),
-    CampyJe: <i>Campylobacter jejuni</i>,
-    CampyLari: <i>Campylobacter lari</i>,
-    CampyJeShort: <i>C. jejuni</i>,
-    CampyColiC: (
-        <span>
-            <i>Campylobacter</i> (<i>C.</i>) <i>coli</i>
-        </span>
-    ),
-    CampyColi: <i>Campylobacter coli</i>,
-    CampyColiShort: <i>C. coli</i>,
-    EnteroSpp: (
-        <span>
-            <i>Enterococcus</i> spp.
-        </span>
-    ),
-    EnteroFaecalis: <i>Enterococcus faecalis</i>,
-    EnteroFaecalisE: (
-        <span>
-            <i>Enterococcus</i> (<i>E.</i>) <i>faecalis</i>
-        </span>
-    ),
-    EnteroFaecium: <i>E. faecium</i>,
-    Faecalis: <i>faecalis</i>,
-    Faecium: <i>faecium</i>,
-    EnteroFF: <i>Enterococcus faecium/faecalis</i>,
-};
+import { getMicroorgaNameAsHtml } from "./getMicroorgaName.service";
 
 export const birdSpecies: Record<string, JSX.Element> = {
     Gallus: <i>Gallus gallus</i>,
 };
+
+export const salmSpp = getMicroorgaNameAsHtml("spp", "Salm");
+export const enteroSpp = getMicroorgaNameAsHtml("spp", "EnteroFaecalis");
+export const campySpp = getMicroorgaNameAsHtml("spp", "Campy");
+export const faecalis = getMicroorgaNameAsHtml("fullName", "Faecalis");
+export const faecium = getMicroorgaNameAsHtml("fullName", "Faecium");
+export const campy = getMicroorgaNameAsHtml("fullName", "Campy");
+export const staphy = getMicroorgaNameAsHtml("fullName", "Staphy");
+export const coliFull = getMicroorgaNameAsHtml("fullName", "Coli");
+export const listeria = getMicroorgaNameAsHtml("fullName", "Listeria");
+export const enteroFF = getMicroorgaNameAsHtml("fullName", "EnteroFF");
+export const salm = getMicroorgaNameAsHtml("fullName", "Salm");
+export const campyJe = getMicroorgaNameAsHtml("fullName", "CampyJe");
+export const campyColi = getMicroorgaNameAsHtml("fullName", "CampyColi");
+export const campyLari = getMicroorgaNameAsHtml("fullName", "CampyLari");
+export const enteroFaecium = getMicroorgaNameAsHtml(
+    "fullName",
+    "EnteroFaecium"
+);
+export const enteroFaecalis = getMicroorgaNameAsHtml(
+    "fullName",
+    "EnteroFaecalis"
+);
+export const campyJeC = getMicroorgaNameAsHtml("withAbbreviation", "CampyJe");
+export const campyColiC = getMicroorgaNameAsHtml(
+    "withAbbreviation",
+    "CampyColi"
+);
+export const coliFullE = getMicroorgaNameAsHtml("withAbbreviation", "Coli");
+export const enteroFaecalisE = getMicroorgaNameAsHtml(
+    "withAbbreviation",
+    "EnteroFaecalis"
+);
+export const coliShort = getMicroorgaNameAsHtml("shortName", "Coli");
+export const campyJeShort = getMicroorgaNameAsHtml("shortName", "CampyJe");
+export const campyColiShort = getMicroorgaNameAsHtml("shortName", "CampyJe");
