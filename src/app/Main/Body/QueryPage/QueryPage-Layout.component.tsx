@@ -5,6 +5,8 @@ import { bfrPrimaryPalette } from "../../../Shared/Style/Style-MainTheme";
 const mainStyle = css`
     height: 100%;
     display: flex;
+    position: relative;
+    z-index: 0;
     flex-direction: column;
     box-sizing: border-box;
 `;
@@ -12,6 +14,7 @@ const mainStyle = css`
 const subHeaderStyle = css`
     display: flex;
     flex: 0 auto auto;
+    z-index: 1;
     justify-content: flex-end;
     align-items: center;
     background-color: ${bfrPrimaryPalette[300]};
@@ -22,6 +25,7 @@ const subHeaderStyle = css`
 const queryPageStyle = css`
     display: flex;
     flex: 1 1 0;
+    z-index: 0;
     overflow: auto;
     flex-direction: row;
     box-sizing: border-box;
