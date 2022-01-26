@@ -4,7 +4,22 @@ import { useTranslation } from "react-i18next";
 import { AmrKey, AmrsTable } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
 import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
-import { microorganismNames } from "../italicNames.constants";
+import {
+    campy,
+    campyColiC,
+    campyJeC,
+    campyLari,
+    campySpp,
+    coliFull,
+    coliFullE,
+    coliShort,
+    enteroFaecalisE,
+    enteroFaecium,
+    enteroSpp,
+    salm,
+    salmSpp,
+    staphy,
+} from "../italicNames.constants";
 
 export function InfoPageAmrsContentComponent(props: {
     amrKeys: AmrKey[];
@@ -31,54 +46,52 @@ export function InfoPageAmrsContentComponent(props: {
         <div>
             <p>
                 {t("Methods.Amrs.Paragraph1.Description1")}
-                {microorganismNames.SalmSpp}, {microorganismNames.CampyJeC},{" "}
-                {microorganismNames.CampyColiC}, {microorganismNames.CampyLari},{" "}
-                {microorganismNames.ColiFullE},
+                {salmSpp}, {campyJeC}, {campyColiC}, {campyLari}, {coliFullE},
                 {t("Methods.Amrs.Paragraph1.Description2")}
-                {microorganismNames.ColiShort}
+                {coliShort}
                 {t("Methods.Amrs.Paragraph1.Description3")}
-                {microorganismNames.EnteroFaecalisE}
+                {enteroFaecalisE}
                 {t("Methods.Amrs.Paragraph1.Description4")}
-                {microorganismNames.EnteroFaecium}
+                {enteroFaecium}
                 {t("Methods.Amrs.Paragraph1.Description5")}
-                {microorganismNames.Staphy}
+                {staphy}
                 {t("Methods.Amrs.Paragraph1.Description6")}
             </p>
             <p>
                 {t("Methods.Amrs.Paragraph2.Description1")}
-                {microorganismNames.SalmSpp}
+                {salmSpp}
                 {t("Methods.Amrs.Paragraph2.Description2")}
-                {microorganismNames.ColiShort}
+                {coliShort}
                 {t("Methods.Amrs.Paragraph2.Description3")}
-                {microorganismNames.EnteroSpp}
+                {enteroSpp}
                 {t("Methods.Amrs.Paragraph2.Description4")}
-                {microorganismNames.CampySpp}
+                {campySpp}
                 {t("Methods.Amrs.Paragraph2.Description5")}
             </p>
             <p>
                 {t("Methods.Amrs.Paragraph3.Description1")}
-                {microorganismNames.SalmSpp}
+                {salmSpp}
                 {t("Methods.Amrs.Paragraph3.Description2")}
-                {microorganismNames.CampySpp}
+                {campySpp}
                 {t("Methods.Amrs.Paragraph3.Description3")}
             </p>
             <p>
                 {t("Methods.Amrs.Paragraph4.Description1")}
-                {microorganismNames.ColiShort}
+                {coliShort}
                 {t("Methods.Amrs.Paragraph4.Description2")}
             </p>
             <p>{t("Methods.Amrs.Paragraph5")}</p>
             <p>
                 {t("Methods.Amrs.Paragraph6.Description1")}
-                {microorganismNames.EnteroSpp}
+                {enteroSpp}
                 {t("Methods.Amrs.Paragraph6.Description2")}
-                {microorganismNames.Staphy}
+                {staphy}
                 {t("Methods.Amrs.Paragraph6.Description3")}
-                {microorganismNames.Salm}, {microorganismNames.Campy}
+                {salm}, {campy}
                 {t("Methods.Amrs.Paragraph6.Description4")}
-                {microorganismNames.ColiFull}
+                {coliFull}
                 {t("Methods.Amrs.Paragraph6.Description5")}
-                {microorganismNames.EnteroSpp}
+                {enteroSpp}
                 {t("Methods.Amrs.Paragraph6.Description6")}
             </p>
             <p>
@@ -98,7 +111,7 @@ export function InfoPageAmrsContentComponent(props: {
             />
             <p>
                 {t("Methods.Amrs.Paragraph8.Description1")}
-                {microorganismNames.ColiFull}
+                {coliFull}
                 {t("Methods.Amrs.Paragraph8.Description2")}
             </p>
             {props.amrKeys.map((amrKey) => (

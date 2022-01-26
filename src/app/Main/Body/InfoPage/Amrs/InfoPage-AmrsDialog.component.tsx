@@ -54,16 +54,17 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             {row.amrSubstance}
         </TableCell>
     );
-    row.concentrationList.forEach((concentrations) => {
+    Object.keys(row.concentrationList).forEach((year) => {
+        const concentrationPerYear = row.concentrationList[year];
         tableCellList.push(
             <TableCell
                 css={tableTextStyle}
                 component="td"
                 scope="row"
                 align="right"
-                key={`amr-table-cell-${row.amrSubstance}-cutOff`}
+                key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
             >
-                {concentrations.cutOff}
+                {concentrationPerYear.cutOff}
             </TableCell>
         );
         tableCellList.push(
@@ -72,9 +73,9 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 component="td"
                 scope="row"
                 align="right"
-                key={`amr-table-cell-${row.amrSubstance}-min`}
+                key={`amr-table-cell-${row.amrSubstance}-${year}-min`}
             >
-                {concentrations.min}
+                {concentrationPerYear.min}
             </TableCell>
         );
         tableCellList.push(
@@ -83,9 +84,9 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 component="td"
                 scope="row"
                 align="right"
-                key={`amr-table-cell-${row.amrSubstance}-max`}
+                key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
             >
-                {concentrations.max}
+                {concentrationPerYear.max}
             </TableCell>
         );
     });
@@ -106,6 +107,27 @@ export function InfoPageAmrDialogComponent(props: {
     const handleSubmit = (): void => {
         props.onAmrDataExport();
     };
+
+    const tableSubHeader: JSX.Element[] = [];
+
+    Object.keys(props.resistancesTableData.tableSubHeader).forEach(
+        (subHeaderKey) => {
+            props.resistancesTableData.tableSubHeader[subHeaderKey].forEach(
+                (subHeaderValue: string) => {
+                    tableSubHeader.push(
+                        <TableCell
+                            key={`subheader-amr-${subHeaderKey}-${subHeaderValue}`}
+                            css={tableTextStyle}
+                            component="th"
+                            align="right"
+                        >
+                            {subHeaderValue}
+                        </TableCell>
+                    );
+                }
+            );
+        }
+    );
 
     const dialogTableContent = (
         <div css={dialogContentStyle}>
@@ -144,18 +166,23 @@ export function InfoPageAmrDialogComponent(props: {
                                 ))}
                         </TableRow>
                         <TableRow>
-                            {props.resistancesTableData.tableSubHeader.map(
-                                (subHeaderValue) => (
-                                    <TableCell
-                                        key={`header-amr-${subHeaderValue}`}
-                                        css={tableTextStyle}
-                                        component="th"
-                                        align="right"
-                                    >
-                                        {subHeaderValue}
-                                    </TableCell>
-                                )
-                            )}
+                            <TableCell
+                                key="header-amr-emptyCell-class"
+                                css={tableTextStyle}
+                                component="th"
+                                align="right"
+                            >
+                                &nbsp;
+                            </TableCell>
+                            <TableCell
+                                key="header-amr-emptyCell-substance"
+                                css={tableTextStyle}
+                                component="th"
+                                align="right"
+                            >
+                                &nbsp;
+                            </TableCell>
+                            {tableSubHeader}
                         </TableRow>
                     </TableHead>
                     <TableBody>

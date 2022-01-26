@@ -13,7 +13,19 @@ import {
     years2016To2020,
     table5,
 } from "./AmrsTables.constants";
-import { microorganismNames } from "./italicNames.constants";
+import { getMicroorgaNameAsString } from "./getMicroorgaName.service";
+import {
+    coliShort,
+    coliFull,
+    salmSpp,
+    campyJeShort,
+    campyColiShort,
+    campyJe,
+    campyColi,
+    staphy,
+    enteroFaecalis,
+    enteroFaecium,
+} from "./italicNames.constants";
 
 export function InfoPageContainerComponent(): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
@@ -56,23 +68,23 @@ export function InfoPageContainerComponent(): JSX.Element {
         t("samplingYear.2020"),
     ];
 
-    const tableSubHeader2010To2020 = ["", ""];
+    const tableSubHeader2010To2020: Record<string, string[]> = {};
 
-    years2010To2020.forEach(() => {
-        tableSubHeader2010To2020.push(
+    years2010To2020.forEach((year) => {
+        tableSubHeader2010To2020[year] = [
             t("Methods.Amrs.TableHeaderCutOff"),
             t("Methods.Amrs.TableHeaderMin"),
-            t("Methods.Amrs.TableHeaderMax")
-        );
+            t("Methods.Amrs.TableHeaderMax"),
+        ];
     });
 
-    const tableSubHeader2016To2020 = ["", ""];
-    years2016To2020.forEach(() => {
-        tableSubHeader2016To2020.push(
+    const tableSubHeader2016To2020: Record<string, string[]> = {};
+    years2016To2020.forEach((year) => {
+        tableSubHeader2016To2020[year] = [
             t("Methods.Amrs.TableHeaderCutOff"),
             t("Methods.Amrs.TableHeaderMin"),
-            t("Methods.Amrs.TableHeaderMax")
-        );
+            t("Methods.Amrs.TableHeaderMax"),
+        ];
     });
 
     const amrKeys: AmrKey[] = [
@@ -88,19 +100,21 @@ export function InfoPageContainerComponent(): JSX.Element {
         introduction: (
             <p>
                 {t(`Methods.Amrs.Table1.Paragraph.Description1`)}
-                {microorganismNames.ColiShort}
+                {coliShort}
                 {t(`Methods.Amrs.Table1.Paragraph.Description2`)}
-                {microorganismNames.ColiShort}
+                {coliShort}
                 {t(`Methods.Amrs.Table1.Paragraph.Description3`)}
             </p>
         ),
         title: (
             <div>
                 {t("Methods.Amrs.Table1.TableTitle.Part1")}
-                {microorganismNames.ColiFull}
+                {coliFull}
             </div>
         ),
-        titleString: t("Methods.Amrs.Table1.TableTitleString"),
+        titleString: `${t(
+            "Methods.Amrs.Table1.TableTitle.Part1"
+        )} ${getMicroorgaNameAsString("fullName", "Coli")}`,
         description: t("Methods.Amrs.Table1.TableDescription"),
         tableHeader: tableHeader2010To2020,
         tableSubHeader: tableSubHeader2010To2020,
@@ -110,17 +124,19 @@ export function InfoPageContainerComponent(): JSX.Element {
         introduction: (
             <p>
                 {t("Methods.Amrs.Table2.Paragraph.Description1")}
-                {microorganismNames.SalmSpp}
+                {salmSpp}
                 {t("Methods.Amrs.Table2.Paragraph.Description2")}
             </p>
         ),
         title: (
             <div>
                 {t("Methods.Amrs.Table2.TableTitle.Part1")}
-                {microorganismNames.SalmSpp}
+                {salmSpp}
             </div>
         ),
-        titleString: t("Methods.Amrs.Table2.TableTitleString"),
+        titleString: `${t(
+            "Methods.Amrs.Table2.TableTitle.Part1"
+        )} ${getMicroorgaNameAsString("spp", "Salm")}`,
         description: t("Methods.Amrs.Table2.TableDescription"),
         tableHeader: tableHeader2010To2020,
         tableSubHeader: tableSubHeader2010To2020,
@@ -130,19 +146,21 @@ export function InfoPageContainerComponent(): JSX.Element {
         introduction: (
             <p>
                 {t(`Methods.Amrs.Table3a.Paragraph.Description1`)}
-                {microorganismNames.CampyJeShort}
+                {campyJeShort}
                 {t(`Methods.Amrs.Table3a.Paragraph.Description2`)}
-                {microorganismNames.CampyColiShort}
+                {campyColiShort}
                 {t(`Methods.Amrs.Table3a.Paragraph.Description3`)}
             </p>
         ),
         title: (
             <div>
                 {t("Methods.Amrs.Table3a.TableTitle.Part1")}
-                {microorganismNames.CampyJe}
+                {campyJe}
             </div>
         ),
-        titleString: t("Methods.Amrs.Table3a.TableTitleString"),
+        titleString: `${t(
+            "Methods.Amrs.Table3a.TableTitle.Part1"
+        )} ${getMicroorgaNameAsString("fullName", "CampyJe")}`,
         description: t("Methods.Amrs.Table3a.TableDescription"),
         tableHeader: tableHeader2010To2020,
         tableSubHeader: tableSubHeader2010To2020,
@@ -153,10 +171,12 @@ export function InfoPageContainerComponent(): JSX.Element {
         title: (
             <div>
                 {t("Methods.Amrs.Table3b.TableTitle.Part1")}
-                {microorganismNames.CampyColi}
+                {campyColi}
             </div>
         ),
-        titleString: t("Methods.Amrs.Table3b.TableTitleString"),
+        titleString: `${t(
+            "Methods.Amrs.Table3b.TableTitle.Part1"
+        )} ${getMicroorgaNameAsString("fullName", "CampyColi")}`,
         description: t("Methods.Amrs.Table3b.TableDescription"),
         tableHeader: tableHeader2010To2020,
         tableSubHeader: tableSubHeader2010To2020,
@@ -166,7 +186,7 @@ export function InfoPageContainerComponent(): JSX.Element {
         introduction: (
             <p>
                 {t(`Methods.Amrs.Table4.Paragraph.Description1`)}
-                {microorganismNames.Staphy}
+                {staphy}
                 {t(`Methods.Amrs.Table4.Paragraph.Description2`)}
                 <a
                     rel="noreferrer"
@@ -181,10 +201,12 @@ export function InfoPageContainerComponent(): JSX.Element {
         title: (
             <div>
                 {t("Methods.Amrs.Table4.TableTitle")}
-                {microorganismNames.Staphy}
+                {staphy}
             </div>
         ),
-        titleString: t("Methods.Amrs.Table4.TableTitleString"),
+        titleString: `${t(
+            "Methods.Amrs.Table4.TableTitle"
+        )} ${getMicroorgaNameAsString("fullName", "Staphy")}`,
         description: t("Methods.Amrs.Table4.TableDescription"),
         tableHeader: tableHeader2010To2020,
         tableSubHeader: tableSubHeader2010To2020,
@@ -194,21 +216,25 @@ export function InfoPageContainerComponent(): JSX.Element {
         introduction: (
             <p>
                 {t(`Methods.Amrs.Table5.Paragraph.Description1`)}
-                {microorganismNames.EnteroFaecalis}
+                {enteroFaecalis}
                 {t(`Methods.Amrs.Table5.Paragraph.Description2`)}
-                {microorganismNames.EnteroFaecium}
+                {enteroFaecium}
                 {t(`Methods.Amrs.Table5.Paragraph.Description3`)}
             </p>
         ),
         title: (
             <div>
                 {t("Methods.Amrs.Table5.TableTitle.Part1")}
-                {microorganismNames.EnteroFaecalis}
+                {enteroFaecalis}
                 {t("Methods.Amrs.Table5.TableTitle.Part2")}
-                {microorganismNames.EnteroFaecium}
+                {enteroFaecium}
             </div>
         ),
-        titleString: t("Methods.Amrs.Table5.TableTitleString"),
+        titleString: `${t(
+            "Methods.Amrs.Table5.TableTitle.Part1"
+        )} ${getMicroorgaNameAsString("fullName", "EnteroFaecalis")} ${t(
+            "Methods.Amrs.Table5.TableTitle.Part2"
+        )} ${getMicroorgaNameAsString("fullName", "EnteroFaecium")}`,
         description: t("Methods.Amrs.Table5.TableDescription"),
         tableHeader: tableHeader2016To2020,
         tableSubHeader: tableSubHeader2016To2020,
@@ -232,16 +258,34 @@ export function InfoPageContainerComponent(): JSX.Element {
         csvContent += `"${amrTableData[amrKey].description}"`;
         csvContent += "\n";
         csvContent += "\n";
-        csvContent += `"${amrTableData[amrKey].tableHeader.join(",")}"`;
+        csvContent += `${amrTableData[amrKey].tableHeader[0]},`;
+        csvContent += `${amrTableData[amrKey].tableHeader[1]},`;
+        csvContent += `${amrTableData[amrKey].tableHeader
+            .slice(2)
+            .join(",,,")}`;
+        csvContent += "\n";
+
+        csvContent += ",,";
+        Object.keys(amrTableData[amrKey].tableSubHeader).forEach((year) => {
+            const yearSubHeader = amrTableData[amrKey].tableSubHeader[year];
+            csvContent += `${yearSubHeader.join(",")}`;
+        });
         csvContent += "\n";
 
         amrTableData[amrKey].tableRows.forEach((tableRow) => {
-            const rowValues = Object.values(tableRow);
-            const modifiedRowValues = rowValues.map((rowValue) =>
-                modifyTableDataStringService(rowValue)
-            );
-            const modifiedRowValuesString = modifiedRowValues.join(",");
-            csvContent += modifiedRowValuesString;
+            const newRow = [];
+            newRow.push(modifyTableDataStringService(tableRow.substanceClass));
+            newRow.push(modifyTableDataStringService(tableRow.amrSubstance));
+            Object.keys(tableRow.concentrationList).forEach((year) => {
+                const rowValues = Object.values(
+                    tableRow.concentrationList[year]
+                );
+                const modifiedRowValues = rowValues.map((rowValue) =>
+                    modifyTableDataStringService(rowValue)
+                );
+                newRow.push(modifiedRowValues.join(","));
+            });
+            csvContent += newRow.join(",");
             csvContent += "\n";
         });
 

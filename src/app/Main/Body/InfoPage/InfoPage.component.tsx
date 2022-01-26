@@ -11,7 +11,15 @@ import {
     primaryColor,
     secondaryColor,
 } from "../../../Shared/Style/Style-MainTheme";
-import { microorganismNames } from "./italicNames.constants";
+import {
+    campySpp,
+    coliFull,
+    coliShort,
+    enteroFF,
+    listeria,
+    salmSpp,
+    staphy,
+} from "./italicNames.constants";
 
 const infoPageStyle = css`
     width: 60%;
@@ -106,30 +114,27 @@ export function InfoPageComponent(props: {
                             )}
                             <p>
                                 {t("Background.Paragraph2.Description1")}
-                                {microorganismNames.SalmSpp},{" "}
-                                {microorganismNames.CampySpp},{" "}
-                                {microorganismNames.Listeria}
+                                {salmSpp}, {campySpp}, {listeria}
                                 {t("Background.Paragraph2.Description2")}
-                                {microorganismNames.ColiFull}
+                                {coliFull}
                                 {t("Background.Paragraph2.Description3")}
-                                {microorganismNames.Staphy}
+                                {staphy}
                                 {t("Background.Paragraph2.Description4")}
                                 <i>{t("Background.Paragraph2.Description5")}</i>
                                 {t("Background.Paragraph2.Description6")}
-                                {microorganismNames.ColiShort}
+                                {coliShort}
                                 {t("Background.Paragraph2.Description7")}
-                                {microorganismNames.SalmSpp},{" "}
-                                {microorganismNames.CampySpp}
+                                {salmSpp}, {campySpp}
                                 {t("Background.Paragraph2.Description8")}
-                                {microorganismNames.ColiShort}
+                                {coliShort}
                                 {t("Background.Paragraph2.Description9")}
-                                {microorganismNames.EnteroFF}
+                                {enteroFF}
                                 {t("Background.Paragraph2.Description10")}
-                                {microorganismNames.ColiShort}
+                                {coliShort}
                                 {t("Background.Paragraph2.Description11")}
-                                {microorganismNames.ColiShort}
+                                {coliShort}
                                 {t("Background.Paragraph2.Description12")}
-                                {microorganismNames.ColiShort}
+                                {coliShort}
                                 {t("Background.Paragraph2.Description13")}
                             </p>
                             {createParagraphWithBoldText(

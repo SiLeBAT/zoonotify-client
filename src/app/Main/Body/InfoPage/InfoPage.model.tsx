@@ -1,11 +1,14 @@
 export interface AmrsTableData {
     substanceClass: string;
     amrSubstance: string;
-    concentrationList: {
-        cutOff: string;
-        min: string;
-        max: string;
-    }[];
+    concentrationList: Record<
+        string,
+        {
+            cutOff: string;
+            min: string;
+            max: string;
+        }
+    >;
 }
 
 export interface AmrsTable {
@@ -14,7 +17,7 @@ export interface AmrsTable {
     titleString: string;
     description: string;
     tableHeader: string[];
-    tableSubHeader: string[];
+    tableSubHeader: Record<string, string[]>;
     tableRows: AmrsTableData[];
 }
 
@@ -25,3 +28,11 @@ export type AmrKey =
     | "table3bCampy"
     | "table4Mrsa"
     | "table5Ef";
+
+export interface MicroorgaNamePart {
+    name: string;
+    letter?: string;
+    subname?: string;
+}
+
+export type MicroorgaName = MicroorgaNamePart;
