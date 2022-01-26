@@ -112,8 +112,9 @@ export function InfoPageContainerComponent(): JSX.Element {
                 {coliFull}
             </div>
         ),
-        titleString: `${t("Methods.Amrs.Table1.TableTitle.Part1")}
-         ${getMicroorgaNameAsString("fullName", "Coli")}`,
+        titleString: `${t(
+            "Methods.Amrs.Table1.TableTitle.Part1"
+        )} ${getMicroorgaNameAsString("fullName", "Coli")}`,
         description: t("Methods.Amrs.Table1.TableDescription"),
         tableHeader: tableHeader2010To2020,
         tableSubHeader: tableSubHeader2010To2020,

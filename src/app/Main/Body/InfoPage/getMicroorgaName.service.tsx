@@ -87,11 +87,15 @@ export function getMicroorgaNameAsHtml(
         );
     }
 
-    return (
-        <i>
-            {microorgaNames[microorga].name} {microorgaNames[microorga].subname}
-        </i>
-    );
+    if (pattern === "fullName" && microorgaNames[microorga].subname) {
+        return (
+            <i>
+                {microorgaNames[microorga].name}{" "}
+                {microorgaNames[microorga].subname}
+            </i>
+        );
+    }
+    return <i>{microorgaNames[microorga].name}</i>;
 }
 
 export function getMicroorgaNameAsString(
