@@ -8,11 +8,16 @@ import { FooterContainer } from "./Footer/Footer-Container.component";
 const wrapperStyle = css`
     height: 100%;
     display: flex;
+    z-index: 0;
     flex-direction: column;
     box-sizing: border-box;
 `;
+const headerStyle = css`
+    z-index: 1;
+`;
 const bodyStyle = css`
     flex: 1 1 0;
+    z-index: 0;
     box-sizing: border-box;
     overflow: auto;
 `;
@@ -25,7 +30,7 @@ export function MainLayoutComponent(): JSX.Element {
     return (
         <div css={wrapperStyle}>
             <BrowserRouter>
-                <div>
+                <div css={headerStyle}>
                     <HeaderComponent />
                 </div>
                 <div css={bodyStyle}>
