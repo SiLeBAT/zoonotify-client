@@ -10,7 +10,6 @@ import {
     TableRow,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import GetAppIcon from "@mui/icons-material/GetApp";
 import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
 import {
     DialogButton,
@@ -202,11 +201,7 @@ export function InfoPageAmrDialogComponent(props: {
         onClick: handleClose,
     };
     const amrTableSubmitButton: DialogButton = {
-        content: ButtonLabelComponent(
-            <GetAppIcon fontSize="small" />,
-            t("Methods.Amrs.ExportButton"),
-            true
-        ),
+        content: ButtonLabelComponent(t("Methods.Amrs.ExportButton"), true),
         onClick: handleSubmit,
     };
 

@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import _ from "lodash";
-import DoneIcon from "@mui/icons-material/Done";
 import { Checkbox, Divider, FormControlLabel } from "@mui/material";
 import {
     DialogButton,
@@ -119,12 +118,7 @@ export function FilterDialogComponent(props: {
     );
 
     const submitFilterToDisplayButton: DialogButton = {
-        content: (
-            <div css={submitButtonStyle}>
-                <DoneIcon fontSize="small" />
-                {t("FilterDialog.Submit")}
-            </div>
-        ),
+        content: <div css={submitButtonStyle}>{t("FilterDialog.Submit")}</div>,
         onClick: handleSubmitFiltersToDisplay,
     };
     const cancelFilterToDisplayButton: DialogButton = {

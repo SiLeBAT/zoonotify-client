@@ -16,9 +16,9 @@ const buttonLabelStyle = (isOpen: boolean): SerializedStyles => css`
  * @returns {JSX.Element} - label with icon for the export button component
  */
 export function ButtonLabelComponent(
-    buttonIcon: JSX.Element,
     buttonText: string,
-    isOpen: boolean
+    isOpen: boolean,
+    buttonIcon?: JSX.Element
 ): JSX.Element {
     return (
         <div css={buttonLabelStyle(isOpen)}>
