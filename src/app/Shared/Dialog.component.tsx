@@ -47,6 +47,7 @@ export function DialogComponent(props: {
                     onClick={handleClickSubmit}
                     color="primary"
                     disabled={props.submitButton.disabled || props.loading}
+                    variant="contained"
                 >
                     {props.submitButton.content}
                 </Button>

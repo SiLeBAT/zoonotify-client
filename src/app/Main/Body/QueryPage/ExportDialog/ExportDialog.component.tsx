@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { useTranslation } from "react-i18next";
-import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     DialogButton,
     DialogComponent,
@@ -60,11 +59,7 @@ export function ExportDialogComponent(props: {
     );
 
     const exportButton: DialogButton = {
-        content: ButtonLabelComponent(
-            <GetAppIcon fontSize="small" />,
-            t("Button.Submit"),
-            true
-        ),
+        content: ButtonLabelComponent(t("Button.Submit"), true),
         disabled: !exportOptionIsSelected,
         onClick: handleExport,
     };

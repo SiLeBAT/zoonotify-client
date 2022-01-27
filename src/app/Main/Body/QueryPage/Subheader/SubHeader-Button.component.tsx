@@ -32,9 +32,9 @@ export function SubHeaderButtonComponent(props: {
     const handleClick = (): void => props.onClickOpen();
 
     const buttonLabel: JSX.Element = ButtonLabelComponent(
-        props.buttonIcon,
         props.buttonText,
-        props.dialogIsOpen
+        props.dialogIsOpen,
+        props.buttonIcon
     );
 
     return (
