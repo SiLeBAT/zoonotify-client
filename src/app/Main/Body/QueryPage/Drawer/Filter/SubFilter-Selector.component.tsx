@@ -59,7 +59,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         ""
     );
     const selectedSubFilterValues: string[] =
-        props.selectedFilter[props.subFilterAttribute];
+        props.selectedFilter.subfilters[props.subFilterAttribute];
     const selectedSubValuesObj = generateSelectorObject(
         subFilterAttributeForTranslation,
         selectedSubFilterValues,

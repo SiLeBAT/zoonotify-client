@@ -1,6 +1,9 @@
 export type FilterType = string;
 
-export type FilterInterface = Record<FilterType, string[]>;
+export type FilterInterface = {
+    filters: Record<FilterType, string[]>;
+    subfilters: Record<FilterType, string[]>;
+};
 export interface ClientSingleFilterConfig {
     id: string;
     name: string;

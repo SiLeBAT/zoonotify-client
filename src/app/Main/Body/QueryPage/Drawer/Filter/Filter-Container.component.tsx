@@ -29,6 +29,11 @@ export function FilterContainer(props: {
         useState<boolean>(false);
     const { t } = useTranslation(["QueryPage"]);
 
+    const noOptionLabel = t("Drawer.Selector");
+    const displayedFilters = Object.keys(
+        props.filterInfo.selectedFilter.filters
+    );
+
     const handleChangeFilter = (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
@@ -66,9 +71,10 @@ export function FilterContainer(props: {
                     props.dataIsLoading,
                     props.dataUniqueValues,
                     props.filterInfo.selectedFilter,
-                    props.filterInfo.displayedFilters,
-                    props.filterInfo.mainFilter,
+                    displayedFilters,
                     props.subFilters,
+                    noOptionLabel,
+                    t,
                     handleChangeFilter
                 )}
                 filterDialogButton={
@@ -82,8 +88,8 @@ export function FilterContainer(props: {
             />
             {filterDialogIsOpen && (
                 <FilterDialogComponent
-                    previousFiltersToDisplay={props.filterInfo.displayedFilters}
-                    availableFilters={props.filterInfo.mainFilter}
+                    previousFiltersToDisplay={displayedFilters}
+                    availableFilters={props.filterInfo.mainFilters}
                     onSubmitFiltersToDisplay={handleSubmitFiltersToDisplay}
                     onCancelFiltersToDisplay={handleCancelFiltersToDisplay}
                 />

@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import _ from "lodash";
 import { SelectorListSelectorComponent } from "./SelectorList-Selector.component";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
@@ -20,24 +20,23 @@ export function FilterSelectorListComponent(
     dataUniqueValues: FilterInterface,
     selectedFilter: FilterInterface,
     filtersToDisplay: string[],
-    mainFilter: string[],
     subFilters: ClientSingleFilterConfig[],
+    noOptionLabel: string,
+    t: TFunction,
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
     ) => void
 ): JSX.Element[] {
-    const { t } = useTranslation(["QueryPage"]);
-
     const handleChange = (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
     ): void => onChange(selectedOption, keyName);
 
-    const noOptionLabel = t("Drawer.Selector");
-
     const filterSelectorsList: JSX.Element[] = [];
-    mainFilter.forEach((filter) => {
+
+    filtersToDisplay.forEach((filter) => {
+        const attributeLabel = t(`Filters.${filter}`);
         if (_.includes(filtersToDisplay, filter)) {
             filterSelectorsList.push(
                 SelectorListSelectorComponent({
@@ -46,36 +45,48 @@ export function FilterSelectorListComponent(
                     dataUniqueValues,
                     selectedFilter,
                     filterAttribute: filter,
+                    selectorLabel: attributeLabel,
+                    noOptionLabel,
+                    t,
                     onChange: handleChange,
                 })
             );
             subFilters.forEach((subFilter) => {
-                if (filter === subFilter.parent) {
-                    const subFilterTrigger = subFilter.trigger;
-                    const subFilterParent = subFilter.parent;
-                    if (
-                        subFilterTrigger !== undefined &&
-                        (_.includes(
-                            selectedFilter.microorganism,
-                            subFilterTrigger
-                        ) ||
-                            _.includes(selectedFilter.matrix, subFilterTrigger))
-                    ) {
-                        const subFilterAttribute = subFilter.id;
-                        const subFilterValues = subFilter.values;
-                        filterSelectorsList.push(
-                            SubFilterSelectorComponent({
-                                dataIsLoading,
-                                subFilterParent,
-                                subFilterTrigger,
-                                subFilterAttribute,
-                                subFilterValues,
-                                selectedFilter,
-                                onChange: handleChange,
-                                noOptionLabel,
-                                t,
-                            })
-                        );
+                if (
+                    Object.keys(selectedFilter.subfilters).includes(
+                        subFilter.id
+                    )
+                ) {
+                    if (filter === subFilter.parent) {
+                        const subFilterTrigger = subFilter.trigger;
+                        const subFilterParent = subFilter.parent;
+                        if (
+                            subFilterTrigger !== undefined &&
+                            (_.includes(
+                                selectedFilter.filters.microorganism,
+                                subFilterTrigger
+                            ) ||
+                                _.includes(
+                                    selectedFilter.filters.matrix,
+                                    subFilterTrigger
+                                ))
+                        ) {
+                            const subFilterAttribute = subFilter.id;
+                            const subFilterValues = subFilter.values;
+                            filterSelectorsList.push(
+                                SubFilterSelectorComponent({
+                                    dataIsLoading,
+                                    subFilterParent,
+                                    subFilterTrigger,
+                                    subFilterAttribute,
+                                    subFilterValues,
+                                    selectedFilter,
+                                    onChange: handleChange,
+                                    noOptionLabel,
+                                    t,
+                                })
+                            );
+                        }
                     }
                 }
             });
@@ -87,6 +98,9 @@ export function FilterSelectorListComponent(
                     dataUniqueValues,
                     selectedFilter,
                     filterAttribute: filter,
+                    selectorLabel: attributeLabel,
+                    noOptionLabel,
+                    t,
                     onChange: handleChange,
                 })
             );

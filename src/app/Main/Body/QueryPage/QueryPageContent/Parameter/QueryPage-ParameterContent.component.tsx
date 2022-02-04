@@ -9,11 +9,6 @@ import {
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
-import {
-    DbKey,
-    mainFilterList,
-    allSubFiltersList,
-} from "../../../../../Shared/Model/Client_Isolate.model";
 import { getMicroorganismLabelService } from "../../Services/getMicroorganismLabel";
 import { replaceAll } from "../../../../../Core/replaceAll.service";
 
@@ -60,13 +55,12 @@ function createParameterName(
 }
 
 function createParameterList(
-    filterList: DbKey[] | string[],
-    selectedFilters: FilterInterface,
+    selectedFilters: Record<FilterType, string[]>,
     t: TFunction,
     isSubFilter: boolean
 ): JSX.Element[] {
     const elements: JSX.Element[] = [];
-    filterList.forEach((filterElement) => {
+    Object.keys(selectedFilters).forEach((filterElement) => {
         if (selectedFilters[filterElement].length !== 0) {
             const filterElementForTranslation = replaceAll(
                 filterElement,
@@ -114,14 +108,12 @@ export function QueryPageParameterContentComponent(props: {
     const selectedFilters = props.selectedFilter;
 
     const mainFiltersParameterList = createParameterList(
-        mainFilterList,
-        selectedFilters,
+        selectedFilters.filters,
         t,
         false
     );
     const subFiltersParameterList = createParameterList(
-        allSubFiltersList,
-        selectedFilters,
+        selectedFilters.subfilters,
         t,
         true
     );

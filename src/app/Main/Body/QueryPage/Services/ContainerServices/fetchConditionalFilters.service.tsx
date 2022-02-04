@@ -7,6 +7,10 @@ import {
 import { FilterConfigDTO } from "../../../../../Shared/Model/Api_Filter.model";
 import { FILTER_URL } from "../../../../../Shared/URLs";
 import { generateUniqueValuesService } from "../generateUniqueValues.service";
+import {
+    allSubFiltersList,
+    mainFilterList,
+} from "../../../../../Shared/Model/Client_Isolate.model";
 
 export async function fetchConditionalFilters(props: {
     parameterURL: string;
@@ -45,9 +49,13 @@ export async function fetchConditionalFilters(props: {
                 const filterProp: FilterConfigDTO = filterResponse.data;
 
                 const uniqueValuesObject: FilterInterface =
-                    generateUniqueValuesService(filterProp);
-                newUniqueValues[displayedFilter] =
-                    uniqueValuesObject[displayedFilter];
+                    generateUniqueValuesService(
+                        filterProp,
+                        mainFilterList,
+                        allSubFiltersList
+                    );
+                newUniqueValues.filters[displayedFilter] =
+                    uniqueValuesObject.filters[displayedFilter];
             }
         }
     );

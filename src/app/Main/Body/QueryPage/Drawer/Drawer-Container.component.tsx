@@ -84,7 +84,7 @@ export function DrawerContainer(props: DrawerProps): JSX.Element {
                     dataIsLoading={props.dataIsLoading}
                     columnFeature={props.columnFeature}
                     rowFeature={props.rowFeature}
-                    mainFilterAttributes={props.filterInfo.mainFilter}
+                    mainFilterAttributes={props.filterInfo.mainFilters}
                     onDisplFeaturesChange={handleChangeDisplFeatures}
                     onDisplFeaturesSwap={handleSwapDisplFeatures}
                     onDisplFeaturesRemoveAll={handleRemoveAllDisplFeatures}
