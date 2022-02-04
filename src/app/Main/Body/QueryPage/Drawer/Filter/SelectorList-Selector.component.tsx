@@ -1,6 +1,6 @@
 import React from "react";
 import { ValueType } from "react-select";
-import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import {
     FilterInterface,
@@ -20,6 +20,9 @@ export interface SelectorProps {
     dataUniqueValues: FilterInterface;
     selectedFilter: FilterInterface;
     filterAttribute: FilterType;
+    selectorLabel: string;
+    noOptionLabel: string;
+    t: TFunction;
     onChange: (
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
@@ -34,11 +37,11 @@ export interface SelectorProps {
 export function SelectorListSelectorComponent(
     props: SelectorProps
 ): JSX.Element {
-    const { t } = useTranslation(["QueryPage"]);
-
     const { filterAttribute } = props;
-    const filterValues: string[] = props.selectedFilter[filterAttribute];
-    const allFilterValues: string[] = props.dataUniqueValues[filterAttribute];
+    const filterValues: string[] =
+        props.selectedFilter.filters[filterAttribute];
+    const allFilterValues: string[] =
+        props.dataUniqueValues.filters[filterAttribute];
 
     const handleChange = (
         selectedOption: ValueType<{ value: string; label: string }, boolean>,
@@ -62,11 +65,11 @@ export function SelectorListSelectorComponent(
     const dropDownValuesObj: {
         value: string;
         label: string;
-    }[] = generateSelectorObject(filterAttribute, allFilterValues, t);
+    }[] = generateSelectorObject(filterAttribute, allFilterValues, props.t);
     const selectedValuesObj: {
         value: string;
         label: string;
-    }[] = generateSelectorObject(filterAttribute, filterValues, t);
+    }[] = generateSelectorObject(filterAttribute, filterValues, props.t);
 
     return (
         <SelectorComponent
@@ -74,8 +77,8 @@ export function SelectorListSelectorComponent(
             titleColor={bfrDarkgrey}
             hooverColor={primaryColor}
             hooverColorDark={bfrDarkgrey}
-            label={t(`Filters.${filterAttribute}`)}
-            noOptionLabel={t("Drawer.Selector")}
+            label={props.selectorLabel}
+            noOptionLabel={props.noOptionLabel}
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={selectedValuesObj}
             selectAttribute={filterAttribute}

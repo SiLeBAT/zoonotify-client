@@ -43,7 +43,7 @@ export async function exportZipService(props: {
 
     const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
 
-    const exportLabels = generateExportLabels(props.filter.mainFilter, t);
+    const exportLabels = generateExportLabels(props.filter.mainFilters, t);
     const subFileNames = {
         raw: t("Export:FileName.DataSet"),
         stat: t("Export:FileName.Stat"),
@@ -132,7 +132,7 @@ export async function exportZipService(props: {
             filter: props.filter.selectedFilter,
             allFilterLabel: exportLabels.allFilterLabel,
             mainFilterLabels: exportLabels.mainFilterLabels,
-            mainFilterAttributes: props.filter.mainFilter,
+            mainFilterAttributes: props.filter.mainFilters,
             subFileNames,
         });
     }

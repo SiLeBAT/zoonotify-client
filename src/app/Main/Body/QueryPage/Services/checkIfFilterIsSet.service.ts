@@ -15,7 +15,7 @@ export function CheckIfFilterIsSet(
     mainFilterAttributes: string[]
 ): boolean {
     const isFilter = !mainFilterAttributes.every((key) =>
-        _.isEmpty(filter[key])
+        _.isEmpty(filter.filters[key])
     );
     return isFilter;
 }
@@ -30,6 +30,6 @@ export function CheckIfSingleFilterIsSet(
     filter: FilterInterface,
     attribute: FilterType
 ): boolean {
-    const noFilter = _.isEmpty(filter[attribute]);
+    const noFilter = _.isEmpty(filter.filters[attribute]);
     return noFilter;
 }

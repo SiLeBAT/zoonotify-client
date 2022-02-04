@@ -22,9 +22,9 @@ export function generateParameterHeader(
     HeaderRows.push("#Parameter:");
 
     mainFilterAttributes.forEach((element): void => {
-        if (filter[element].length !== 0) {
+        if (filter.filters[element].length !== 0) {
             const headerFilterArray: string[] = [];
-            filter[element].forEach((filterValue) => {
+            filter.filters[element].forEach((filterValue) => {
                 headerFilterArray.push(`"${filterValue}"`);
             });
             const headerFilterString = headerFilterArray.join(";");

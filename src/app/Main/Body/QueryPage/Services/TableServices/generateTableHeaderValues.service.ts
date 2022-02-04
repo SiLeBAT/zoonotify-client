@@ -10,10 +10,12 @@ export function generateTableHeaderValuesService(
 ): string[] {
     let tableHeaderValues: string[] = [allValuesTitle];
     if (isSelected) {
-        const isEmptyFilter = _.isEmpty(selectedFilters[headerAttribute]);
+        const isEmptyFilter = _.isEmpty(
+            selectedFilters.filters[headerAttribute]
+        );
         tableHeaderValues = isEmptyFilter
-            ? uniqueValues[headerAttribute]
-            : selectedFilters[headerAttribute];
+            ? uniqueValues.filters[headerAttribute]
+            : selectedFilters.filters[headerAttribute];
     }
 
     return tableHeaderValues;

@@ -1,5 +1,6 @@
 import _ from "lodash";
 import {
+    ClientSingleFilterConfig,
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
@@ -12,25 +13,40 @@ import {
  */
 export function getFilterFromPath(
     path: string,
-    filterKeys: FilterType[]
-): {
-    selectedFilters: FilterInterface;
-    displayedFilters: string[];
-} {
+    mainFiltersNames: FilterType[],
+    subFiltersNames: FilterType[],
+    subFilters: ClientSingleFilterConfig[]
+): FilterInterface {
     const searchParams = new URLSearchParams(path);
-    const filterFromPath: FilterInterface = {};
-    const displFilterFromPath: string[] = [];
+    const filterFromPath: FilterInterface = { filters: {}, subfilters: {} };
 
-    filterKeys.forEach((filterKey) => {
+    mainFiltersNames.forEach((filterKey) => {
         const filterValues: string[] = searchParams.getAll(filterKey);
-        filterFromPath[filterKey] = filterValues;
         if (!_.isEmpty(filterValues)) {
-            displFilterFromPath.push(filterKey);
+            filterFromPath.filters[filterKey] = filterValues;
+        }
+    });
+    subFiltersNames.forEach((subFilterKey) => {
+        const subFilterValues: string[] = searchParams.getAll(subFilterKey);
+        if (!_.isEmpty(subFilterValues)) {
+            filterFromPath.subfilters[subFilterKey] = subFilterValues;
         }
     });
 
-    return {
-        selectedFilters: filterFromPath,
-        displayedFilters: displFilterFromPath,
-    };
+    subFilters.forEach((subFilter) => {
+        const subFilterTrigger = subFilter.trigger;
+        if (
+            subFilterTrigger !== undefined &&
+            filterFromPath.subfilters[subFilter.id] === undefined &&
+            (_.includes(
+                filterFromPath.filters.microorganism,
+                subFilterTrigger
+            ) ||
+                _.includes(filterFromPath.filters.matrix, subFilterTrigger))
+        ) {
+            filterFromPath.subfilters[subFilter.id] = [];
+        }
+    });
+
+    return filterFromPath;
 }

@@ -66,14 +66,15 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [updateFilterAndDataIsLoading, setUpdateFilterAndDataIsLoading] =
         useState<boolean>(true);
     const [initialUniqueValues, setInitialUniqueValues] =
-        useState<FilterInterface>({});
+        useState<FilterInterface>({ filters: {}, subfilters: {} });
     const [loadingIsolates, setLoadingIsolates] = useState<boolean>(false);
     const [exportDialogIsOpen, setExportDialogIsOpen] = useState(false);
     const [queryDialogIsOpen, setQueryDialogIsOpen] = useState(false);
 
-    const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>(
-        {}
-    );
+    const [uniqueDataValues, setUniqueDataValues] = useState<FilterInterface>({
+        filters: {},
+        subfilters: {},
+    });
     const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>(
         []
     );
@@ -99,7 +100,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     const isRow: boolean = data.row !== "";
     const isFilter: boolean = CheckIfFilterIsSet(
         filter.selectedFilter,
-        filter.mainFilter
+        filter.mainFilters
     );
     const rowAttribute: FilterType = data.row;
     const colAttribute: FilterType = data.column;
@@ -139,7 +140,6 @@ export function QueryPageContainerComponent(): JSX.Element {
         };
         const newPath: string = generatePathStringService(
             filter.selectedFilter,
-            filter.mainFilter,
             newTable
         );
         history.push(newPath);
@@ -155,7 +155,6 @@ export function QueryPageContainerComponent(): JSX.Element {
         };
         const newPath: string = generatePathStringService(
             filter.selectedFilter,
-            filter.mainFilter,
             newTable
         );
         history.push(newPath);
@@ -170,7 +169,6 @@ export function QueryPageContainerComponent(): JSX.Element {
         };
         const newPath: string = generatePathStringService(
             filter.selectedFilter,
-            filter.mainFilter,
             newTable
         );
         history.push(newPath);
@@ -183,44 +181,58 @@ export function QueryPageContainerComponent(): JSX.Element {
         selectedOption: { value: string; label: string }[] | null,
         keyName: FilterType | FeatureType
     ): void => {
-        const newFilter: FilterContextInterface = {
-            ...filter,
-            selectedFilter: {
-                ...filter.selectedFilter,
-                [keyName]: chooseSelectedFiltersService(selectedOption),
-            },
-        };
-        subFilters.forEach((subFilter) => {
-            const subFilterTrigger = subFilter.trigger;
-            if (
-                subFilterTrigger !== undefined &&
-                !_.includes(
-                    newFilter.selectedFilter.microorganism,
-                    subFilterTrigger
-                ) &&
-                !_.includes(newFilter.selectedFilter.matrix, subFilterTrigger)
-            ) {
-                newFilter.selectedFilter[subFilter.id] = [];
-            }
-        });
-        const allFiltersList = allSubFiltersList.concat(mainFilterList);
+        const newFilters: FilterContextInterface = _.cloneDeep(filter);
+
+        if (newFilters.mainFilters.includes(keyName)) {
+            newFilters.selectedFilter.filters[keyName] =
+                chooseSelectedFiltersService(selectedOption);
+            subFilters.forEach((subFilter) => {
+                const subFilterTrigger = subFilter.trigger;
+                if (
+                    subFilterTrigger !== undefined &&
+                    (_.includes(
+                        newFilters.selectedFilter.filters.microorganism,
+                        subFilterTrigger
+                    ) ||
+                        _.includes(
+                            newFilters.selectedFilter.filters.matrix,
+                            subFilterTrigger
+                        ))
+                ) {
+                    newFilters.selectedFilter.subfilters[subFilter.id] = [];
+                }
+            });
+        } else if (allSubFiltersList.includes(keyName)) {
+            newFilters.selectedFilter.subfilters[keyName] =
+                chooseSelectedFiltersService(selectedOption);
+        }
+
         const newPath: string = generatePathStringService(
-            newFilter.selectedFilter,
-            allFiltersList,
+            newFilters.selectedFilter,
             data
         );
         history.push(newPath);
-        setFilter(newFilter);
+        setFilter(newFilters);
     };
 
     const handleRemoveAllFilter = (): void => {
+        const newSelectedFilter: FilterInterface = {
+            filters: {},
+            subfilters: {},
+        };
+
+        Object.keys(filter.selectedFilter.filters).forEach((mainFilter) => {
+            newSelectedFilter.filters[mainFilter] = [];
+        });
+        Object.keys(filter.selectedFilter.subfilters).forEach((subFilter) => {
+            newSelectedFilter.subfilters[subFilter] = [];
+        });
         const newFilter: FilterContextInterface = {
             ...filter,
-            selectedFilter: defaultFilter.selectedFilter,
+            selectedFilter: newSelectedFilter,
         };
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
-            newFilter.mainFilter,
             data
         );
         history.push(newPath);
@@ -245,20 +257,24 @@ export function QueryPageContainerComponent(): JSX.Element {
         const newSelectedFilters: FilterInterface = _.cloneDeep(
             filter.selectedFilter
         );
-        filter.mainFilter.forEach((availableFilter) => {
-            if (!_.includes(newFiltersToDisplay, availableFilter)) {
-                newSelectedFilters[availableFilter] = [];
+        newFiltersToDisplay.forEach((availableFilter) => {
+            if (newSelectedFilters.filters[availableFilter] === undefined) {
+                newSelectedFilters.filters[availableFilter] = [];
+            }
+        });
+
+        Object.keys(newSelectedFilters).forEach((newSelectedFilter) => {
+            if (!newFiltersToDisplay.includes(newSelectedFilter)) {
+                delete newSelectedFilters.filters[newSelectedFilter];
             }
         });
 
         const newFilter: FilterContextInterface = {
             ...filter,
             selectedFilter: newSelectedFilters,
-            displayedFilters: newFiltersToDisplay,
         };
         const newPath: string = generatePathStringService(
             newFilter.selectedFilter,
-            newFilter.mainFilter,
             data
         );
         history.push(newPath);
@@ -329,19 +345,18 @@ export function QueryPageContainerComponent(): JSX.Element {
     };
 
     const setFilterFromPath = (): void => {
-        const allFiltersList = allSubFiltersList.concat(mainFilterList);
-        const filterFromPath = getFilterFromPath(
+        let filterFromPath = getFilterFromPath(
             history.location.search,
-            allFiltersList
+            mainFilterList,
+            allSubFiltersList,
+            subFilters
         );
-        let displFilter: string[] = filterFromPath.displayedFilters;
-        if (_.isEmpty(filterFromPath.displayedFilters)) {
-            displFilter = defaultFilter.displayedFilters;
+        if (_.isEmpty(filterFromPath.filters)) {
+            filterFromPath = defaultFilter.selectedFilter;
         }
         setFilter({
-            mainFilter: mainFilterList,
-            selectedFilter: filterFromPath.selectedFilters,
-            displayedFilters: displFilter,
+            mainFilters: mainFilterList,
+            selectedFilter: filterFromPath,
         });
     };
 
@@ -416,12 +431,13 @@ export function QueryPageContainerComponent(): JSX.Element {
     const fetchAndUpdateValues = async (): Promise<void> => {
         setUpdateFilterAndDataIsLoading(true);
         const parameterURL = history.location.search;
+        const displayedFilters = Object.keys(filter.selectedFilter.filters);
         const conditionalFilters = await fetchConditionalFilters({
             parameterURL,
             uniqueValues: uniqueDataValues,
             colAttribute,
             rowAttribute,
-            displayedFilters: filter.displayedFilters,
+            displayedFilters,
         });
 
         if (conditionalFilters.status === 200) {

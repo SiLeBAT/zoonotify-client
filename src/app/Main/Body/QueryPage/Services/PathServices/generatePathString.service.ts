@@ -28,6 +28,26 @@ function getTableParam(key: string, value: string): string {
     return tableParam;
 }
 
+function getFilterString(
+    filters: Record<FilterType, string[]>,
+    isFirst: boolean
+): string {
+    let pathString = "";
+    let isFirstAttributeWithValue = isFirst;
+
+    Object.keys(filters).forEach((attribute: FilterType): void => {
+        if (!_.isEmpty(filters[attribute])) {
+            pathString += isFirstAttributeWithValue ? "" : "&";
+            filters[attribute].forEach((filterValue, i) => {
+                pathString += i === 0 ? "" : "&";
+                pathString += setParams(attribute, filterValue);
+            });
+            isFirstAttributeWithValue = false;
+        }
+    });
+    return pathString;
+}
+
 /**
  * @desc Convert selected filter and row/column to URL-Path
  * @param filter - object of selected filters
@@ -36,21 +56,13 @@ function getTableParam(key: string, value: string): string {
  */
 export const generatePathStringService = (
     selectedFilter: FilterInterface,
-    mainFilters: string[],
     table: DataInterface
 ): string => {
     let newPath = "?";
-    let isFirstAttributeWithValue = true;
-    mainFilters.forEach((attribute: FilterType): void => {
-        if (!_.isEmpty(selectedFilter[attribute])) {
-            newPath += isFirstAttributeWithValue ? "" : "&";
-            selectedFilter[attribute].forEach((filterValue, i) => {
-                newPath += i === 0 ? "" : "&";
-                newPath += setParams(attribute, filterValue);
-            });
-            isFirstAttributeWithValue = false;
-        }
-    });
+
+    newPath += getFilterString(selectedFilter.filters, true);
+    newPath += getFilterString(selectedFilter.subfilters, false);
+
     newPath += getTableParam("row", table.row);
     newPath += getTableParam("column", table.column);
 

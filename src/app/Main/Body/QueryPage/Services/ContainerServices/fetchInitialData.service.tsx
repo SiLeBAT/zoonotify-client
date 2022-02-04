@@ -12,7 +12,10 @@ import {
 import { adaptFilterFromApiService } from "../adaptFilterFromAPI.service";
 import { generateUniqueValuesService } from "../generateUniqueValues.service";
 import { FilterConfigDTO } from "../../../../../Shared/Model/Api_Filter.model";
-import { allSubFiltersList } from "../../../../../Shared/Model/Client_Isolate.model";
+import {
+    allSubFiltersList,
+    mainFilterList,
+} from "../../../../../Shared/Model/Client_Isolate.model";
 
 export async function fetchInitialDataService(): Promise<{
     status: { filterStatus: number; isolateStatus: number };
@@ -35,8 +38,11 @@ export async function fetchInitialDataService(): Promise<{
 
         const filterProp: FilterConfigDTO = filterResponse.data;
 
-        const uniqueValuesObject: FilterInterface =
-            generateUniqueValuesService(filterProp);
+        const uniqueValuesObject: FilterInterface = generateUniqueValuesService(
+            filterProp,
+            mainFilterList,
+            allSubFiltersList
+        );
 
         const adaptedFilterProp: ClientFiltersConfig =
             adaptFilterFromApiService(filterProp);
