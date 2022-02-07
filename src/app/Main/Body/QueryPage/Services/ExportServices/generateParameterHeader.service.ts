@@ -22,7 +22,14 @@ export function generateParameterHeader(
     HeaderRows.push("#Parameter:");
 
     mainFilterAttributes.forEach((element): void => {
-        if (filter.filters[element].length !== 0) {
+        if (
+            filter.filters[element] === undefined ||
+            filter.filters[element].length === 0
+        ) {
+            HeaderRows.push(
+                `#${mainFilterLabels[element]}: "${allFilterLabel}"`
+            );
+        } else {
             const headerFilterArray: string[] = [];
             filter.filters[element].forEach((filterValue) => {
                 headerFilterArray.push(`"${filterValue}"`);
@@ -30,10 +37,6 @@ export function generateParameterHeader(
             const headerFilterString = headerFilterArray.join(";");
             const completeHeaderString = `#${mainFilterLabels[element]}: ${headerFilterString}`;
             HeaderRows.push(completeHeaderString);
-        } else {
-            HeaderRows.push(
-                `#${mainFilterLabels[element]}: "${allFilterLabel}"`
-            );
         }
     });
     HeaderRows.push(" ");
