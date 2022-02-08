@@ -10,7 +10,8 @@
     "NrIsolatesTextRelative": "Isolates",
     "Table": "Table",
     "Unit": "in %",
-    "per": "per"
+    "per": "per",
+    "subfilters": "Selected Subfilters"
   },
   "Buttons": {
     "Delete": "Delete all"
@@ -49,10 +50,7 @@
     "category": "Animal species / food category",
     "productionType": "Animal species production type / food",
     "resistance": "Antimicrobial resistance",
-    "samplingYear": "Sampling year",
-    "serovar": "Serovar",
-    "species": "Spezies",
-    "serotyp": "Serotyp"
+    "samplingYear": "Sampling year"
   },
   "FilterValues": {
     "microorganism": {

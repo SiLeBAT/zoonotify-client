@@ -7,11 +7,9 @@ import {
     DbCollection,
     DbKey,
 } from "../../../../../Shared/Model/Client_Isolate.model";
-import {
-    FilterType,
-    FilterInterface,
-} from "../../../../../Shared/Model/Filter.model";
+import { FilterInterface } from "../../../../../Shared/Model/Filter.model";
 import { generateDataTableCsvString } from "./DataExportServices/generateDataTableCsvString.service";
+import { ExportLabels } from "./generateExportLabels.service";
 
 export interface DataAndStatisticToZipParameter {
     /**
@@ -45,23 +43,27 @@ export interface DataAndStatisticToZipParameter {
      */
     mainFilterAttributes: string[];
     /**
+     * list with all main filters
+     */
+    subFilterAttributes: string[];
+    /**
      * main filename
      */
     ZNFilename: string;
     /**
-     * "all values" / "Alle Werte"
+     * object with labels of the filters
      */
-    allFilterLabel: string;
-    /**
-     * object with labels of the main filters
-     */
-    mainFilterLabels: Record<FilterType, string>;
+    filterLabels: ExportLabels;
     /**
      *  names of the two different files (data, statistic)
      */
     subFileNames: {
         raw: string;
         stat: string;
+    };
+    titles: {
+        filterTitle: string;
+        subFilterTitle: string;
     };
 }
 
@@ -81,9 +83,10 @@ export function dataAndStatisticToZipFile(
 
     const parameterHeader: string = generateParameterHeader(
         zipParameter.filter,
-        zipParameter.allFilterLabel,
-        zipParameter.mainFilterLabels,
-        zipParameter.mainFilterAttributes
+        zipParameter.filterLabels,
+        zipParameter.mainFilterAttributes,
+        zipParameter.subFilterAttributes,
+        zipParameter.titles
     );
 
     if (zipParameter.exportOptions.raw) {
@@ -93,7 +96,7 @@ export function dataAndStatisticToZipFile(
             generateDataTableCsvString(
                 zipParameter.rawDataSet.rawData,
                 tableAttributes,
-                zipParameter.mainFilterLabels,
+                zipParameter.filterLabels.mainFilterLabels,
                 zipParameter.mainFilterAttributes
             )
         );

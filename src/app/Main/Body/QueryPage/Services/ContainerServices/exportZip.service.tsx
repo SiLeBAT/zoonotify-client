@@ -8,6 +8,7 @@ import { getCurrentDate } from "../../../../../Core/getCurrentDate.service";
 import { adaptIsolatesFromAPI } from "../../../../../Shared/adaptIsolatesFromAPI.service";
 import { IsolateDTO } from "../../../../../Shared/Model/Api_Isolate.model";
 import {
+    allSubFiltersList,
     DbCollection,
     DbKey,
     mainFilterList,
@@ -21,6 +22,7 @@ import { generateExportLabels } from "../ExportServices/generateExportLabels.ser
 export async function exportZipService(props: {
     t: TFunction;
     filter: FilterContextInterface;
+    subFilters: string[];
     data: DataInterface;
     exportOptions: {
         raw: boolean;
@@ -43,7 +45,11 @@ export async function exportZipService(props: {
 
     const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
 
-    const exportLabels = generateExportLabels(props.filter.mainFilters, t);
+    const exportLabels = generateExportLabels(
+        props.filter.mainFilters,
+        allSubFiltersList,
+        t
+    );
     const subFileNames = {
         raw: t("Export:FileName.DataSet"),
         stat: t("Export:FileName.Stat"),
@@ -130,10 +136,14 @@ export async function exportZipService(props: {
             ZNFilename,
             znPngFilename,
             filter: props.filter.selectedFilter,
-            allFilterLabel: exportLabels.allFilterLabel,
-            mainFilterLabels: exportLabels.mainFilterLabels,
+            filterLabels: exportLabels,
             mainFilterAttributes: props.filter.mainFilters,
+            subFilterAttributes: props.subFilters,
             subFileNames,
+            titles: {
+                filterTitle: t("QueryPage:Results.Parameter"),
+                subFilterTitle: t("QueryPage:Results.subfilters"),
+            },
         });
     }
 
