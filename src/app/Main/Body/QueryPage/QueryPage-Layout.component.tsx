@@ -36,10 +36,8 @@ export function QueryPageLayoutComponent(props: {
     drawer: JSX.Element;
     drawerControl: JSX.Element;
     queryPageContent: JSX.Element;
-    exportDialog: JSX.Element;
-    exportDialogIsOpen: boolean;
-    queryDialog: JSX.Element;
-    queryDialogIsOpen: boolean;
+    dialogIsOpen: boolean;
+    dialog: JSX.Element;
 }): JSX.Element {
     return (
         <main css={mainStyle}>
@@ -49,8 +47,7 @@ export function QueryPageLayoutComponent(props: {
                 {props.drawerControl}
                 {props.queryPageContent}
             </div>
-            {props.exportDialogIsOpen && props.exportDialog}
-            {props.queryDialogIsOpen && props.queryDialog}
+            {props.dialogIsOpen && props.dialog}
         </main>
     );
 }

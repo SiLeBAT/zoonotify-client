@@ -24,7 +24,7 @@ const dataStyle = css`
 `;
 
 export interface AccordionProps {
-    title: string;
+    title: string | JSX.Element;
     content: JSX.Element;
     defaultExpanded: boolean;
     centerContent: boolean;

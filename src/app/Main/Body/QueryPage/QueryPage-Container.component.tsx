@@ -480,14 +480,36 @@ export function QueryPageContainerComponent(): JSX.Element {
             dialogIsOpen={queryDialogIsOpen}
             buttonIcon={<QueryStatsIcon fontSize="small" />}
             buttonText={t("Header:ExampleQueries")}
+            key="example_queries_button"
         />,
         <SubHeaderButtonComponent
             onClickOpen={handleClickExportDialogOpen}
             dialogIsOpen={exportDialogIsOpen}
             buttonIcon={<GetAppIcon fontSize="small" />}
             buttonText={t("Header:Export")}
+            key="export_button"
         />,
     ];
+
+    let queryPageDialog = (
+        <ExportDialogComponent
+            exportOptions={exportOptions}
+            loading={loadingIsolates}
+            nrOfIsolates={nrOfSelectedIsol}
+            onClickClose={handleCloseExportDialog}
+            onClickExport={handleExportTables}
+            onCheckboxChange={handleChangeExportData}
+        />
+    );
+    if (queryDialogIsOpen) {
+        queryPageDialog = (
+            <ExampleQueriesDialogComponent
+                loading={loadingIsolates}
+                onClickClose={handleCloseQueriesDialog}
+                onClickExampleQuery={handleApplyQuery}
+            />
+        );
+    }
 
     return (
         <LoadingOrErrorComponent
@@ -541,25 +563,8 @@ export function QueryPageContainerComponent(): JSX.Element {
                             onDisplayOptionsChange={handleChangeDisplayOptions}
                         />
                     }
-                    exportDialog={
-                        <ExportDialogComponent
-                            exportOptions={exportOptions}
-                            loading={loadingIsolates}
-                            nrOfIsolates={nrOfSelectedIsol}
-                            onClickClose={handleCloseExportDialog}
-                            onClickExport={handleExportTables}
-                            onCheckboxChange={handleChangeExportData}
-                        />
-                    }
-                    exportDialogIsOpen={exportDialogIsOpen}
-                    queryDialog={
-                        <ExampleQueriesDialogComponent
-                            loading={loadingIsolates}
-                            onClickClose={handleCloseQueriesDialog}
-                            onClickExampleQuery={handleApplyQuery}
-                        />
-                    }
-                    queryDialogIsOpen={queryDialogIsOpen}
+                    dialogIsOpen={exportDialogIsOpen || queryDialogIsOpen}
+                    dialog={queryPageDialog}
                 />
             }
         />
