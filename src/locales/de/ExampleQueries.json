@@ -1,54 +1,106 @@
 {
   "Content": {
     "Title": "Beispielabfragen",
-    "Text": "Zeitverlauf von Antibiotikaresistenz von Isolaten von Salmonella spp. aus Legehennen, die im Rahmen der Bekämpfungsprogrammen beim Geflügel gewonnen wurden"
+    "Text": "Hier finden Sie eine Auswahl von nützlichen Abfragen zu Zoonoseerregern entlang der Lebensmittelkette von Futtermitteln über Tiere hin zu den Lebensmitteln. Sie können diese als Grundlage nutzen und durch das Setzen weiterer Filter ergänzen, besonders nützlich, um mit ZooNotify vertraut zu werden."
   },
   "Subtitles": {
-    "animalSample": "Tier",
+    "animalSample": "Tiere",
     "foodSample": "Lebensmittel",
     "feedSample": "Futtermittel"
   },
   "Queries": {
     "animalSample": {
       "Query0": {
-        "Title": "Query0",
-        "Text": "Describe Query0"
+        "Title": {
+          "Part1": "Escherichia coli",
+          "Part2": " aus Proben von Schweinen"
+        },
+        "Text": {
+          "Part1": "Kommensale ",
+          "Part2": "Escherichia coli",
+          "Part3": " Isolate aus Tierprobenproben von Mastschweinen, Zoonosen-Monitoring, 2011 - 2019"
+        }
       },
       "Query1": {
-        "Title": "Query1",
-        "Text": "Describe Query1"
+        "Title": {
+          "Part1": "Salmonella ",
+          "Part2": " spp. aus Proben von Legehennen"
+        },
+        "Text": {
+          "Part1": "Salmonellensolate aus Proben von Legehennenbeständen je Bundesland, Salmonellenbekämpfungsprogramme nach Verordnung (EG) Nr. 2160/2003, 2011 - 2020",
+          "Part2": "",
+          "Part3": ""
+        }
       },
       "Query2": {
-        "Title": "Query2",
-        "Text": "Describe Query2"
-      }
-    },
-    "foodSample": {
-      "Query0": {
-        "Title": "Query0",
-        "Text": "Describe Query0"
-      },
-      "Query1": {
-        "Title": "Query1",
-        "Text": "Describe Query1"
-      },
-      "Query2": {
-        "Title": "Query2",
-        "Text": "Describe Query2"
+        "Title": {
+          "Part1": "",
+          "Part2": "MRSA aus Proben von Rindern"
+        },
+        "Text": {
+          "Part1": "MRSA aus Proben verschiedener Matrizes von Mastkälbern, Mast- und Milchrindern unterschieldicher Produktionsrichtungen, Zoonosen-Monitoring, 2010 - 2019",
+          "Part2": "",
+          "Part3": ""
+        }
       }
     },
     "feedSample": {
       "Query0": {
-        "Title": "Query0",
-        "Text": "Describe Query0"
+        "Title": {
+          "Part1": "Salmonella",
+          "Part2": " spp. in Futtermittelproben"
+        },
+        "Text": {
+          "Part1": "Salmonellenisolate aus Proben von verschiedenen Futtermitteln, Zoonosen-Monitoring, 2012 - 2019",
+          "Part2": "",
+          "Part3": ""
+        }
+      }
+    },
+    "foodSample": {
+      "Query0": {
+        "Title": {
+          "Part1": "",
+          "Part2": "STEC aus pflanzlichen Lebenmittelproben"
+        },
+        "Text": {
+          "Part1": "STEC Isolate aus Proben pflanzlicher Lebensmittel aus verschiedenen Probenahmestellen, Zoonosen-Monitoring, 2012 - 2020",
+          "Part2": "",
+          "Part3": ""
+        }
       },
       "Query1": {
-        "Title": "Query1",
-        "Text": "Describe Query1"
+        "Title": {
+          "Part1": "L. monocytogenes",
+          "Part2": " aus Lebensmittelproben von Geflügel"
+        },
+        "Text": {
+          "Part1": "Isolate von ",
+          "Part2": "L. monocytogenes",
+          "Part3": " aus Proben verschiedener Matrizes von Masthähnchen und Mastgeflügel im Einzelhandel, Zoonosen-Monitoring, 2012 - 2020"
+        }
       },
       "Query2": {
-        "Title": "Query2",
-        "Text": "Describe Query2"
+        "Title": {
+          "Part1": "L. monocytogenes",
+          "Part2": " aus Lebensmittelproben von Meerestieren und Süßwasserfischen"
+        },
+        "Text": {
+          "Part1": "Isolate von ",
+          "Part2": "L. monocytogenes",
+          "Part3": " aus Proben von Krebstieren und Tilapia/Pangasius im Einzelhandel, Zoonosen-Monitoring, 2015 - 2019"
+        }
+      },
+      "Query3": {
+        "Title": {
+          "Part1": "Campylobacter",
+          "Part2": " spp. aus Lebensmittelproben von Huhn und Pute"
+        },
+        "Text": {
+          "Part1": "Isolate von ",
+          "Part2": "Campylobacter",
+          "Part3": " spp. aus Proben verschiedener Matrizes von Legehennen und Mastgeflügel in unterschiedlichen Probenahmestellen, Zoonosen-Monitoring, 2011 - 2020"
+        }
       }
     }
   },

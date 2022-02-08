@@ -10,8 +10,9 @@ import { exampleQueriesLists, QueryCategory } from "./ExampleQueries.constants";
 
 function QueryAccordion(
     exampleQuery: string,
-    title: string,
-    contentText: string,
+    title: JSX.Element,
+    key: string,
+    contentText: JSX.Element,
     buttonText: string,
     onClickExampleQuery: (exampleQuery: string) => void,
     isLoading: boolean
@@ -25,6 +26,7 @@ function QueryAccordion(
                 onClick={handleSubmitQuery}
                 color="primary"
                 disabled={isLoading}
+                variant="contained"
             >
                 {buttonText}
             </Button>
@@ -37,7 +39,7 @@ function QueryAccordion(
             content={queryContent}
             defaultExpanded={false}
             centerContent
-            key={`accordion_query_${title}`}
+            key={`accordion_query_${key}`}
         />
     );
 }
@@ -60,19 +62,40 @@ export function ExampleQueriesDialogComponent(props: {
     const dialogContent: JSX.Element[] = [];
 
     const categories: QueryCategory[] = [
+        "feedSample",
         "animalSample",
         "foodSample",
-        "feedSample",
     ];
 
     categories.forEach((category) => {
-        dialogContent.push(<p>{t(`Subtitles.${category}`)}</p>);
+        dialogContent.push(
+            <p key={`query_${category}`}>{t(`Subtitles.${category}`)}</p>
+        );
         exampleQueriesLists[category].forEach((exampleQuery, index) => {
+            const sampleTitle: JSX.Element = (
+                <span>
+                    <i>{t(`Queries.${category}.Query${index}.Title.Part1`)}</i>
+                    {t(`Queries.${category}.Query${index}.Title.Part2`)}
+                </span>
+            );
+
+            const sampleKey =
+                t(`Queries.${category}.Query${index}.Title.Part1`) +
+                t(`Queries.${category}.Query${index}.Title.Part2`);
+
+            const sampleText: JSX.Element = (
+                <span>
+                    {t(`Queries.${category}.Query${index}.Text.Part1`)}
+                    <i>{t(`Queries.${category}.Query${index}.Text.Part2`)}</i>
+                    {t(`Queries.${category}.Query${index}.Text.Part3`)}
+                </span>
+            );
             dialogContent.push(
                 QueryAccordion(
                     exampleQuery,
-                    t(`Queries.${category}.Query${index}.Title`),
-                    t(`Queries.${category}.Query${index}.Text`),
+                    sampleTitle,
+                    sampleKey,
+                    sampleText,
                     t(`Button.Submit`),
                     props.onClickExampleQuery,
                     props.loading
