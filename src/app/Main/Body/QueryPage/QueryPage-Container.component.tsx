@@ -289,6 +289,7 @@ export function QueryPageContainerComponent(): JSX.Element {
         const exportStatus = await exportZipService({
             t,
             filter,
+            subFilters: Object.keys(filter.selectedFilter.subfilters),
             data,
             exportOptions,
             urlParams,

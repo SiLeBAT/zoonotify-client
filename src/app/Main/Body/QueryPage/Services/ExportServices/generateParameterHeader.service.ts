@@ -1,8 +1,28 @@
-import {
-    FilterInterface,
-    FilterType,
-} from "../../../../../Shared/Model/Filter.model";
+import { FilterInterface } from "../../../../../Shared/Model/Filter.model";
+import { ExportLabels } from "./generateExportLabels.service";
 
+function generateFilterHeader(
+    filterAttributes: string[],
+    filters: Record<string, string[]>,
+    filterLabels: Record<string, string>,
+    allFilterLabel: string
+): string[] {
+    const filterHeader: string[] = [];
+    filterAttributes.forEach((filter): void => {
+        if (filters[filter] === undefined || filters[filter].length === 0) {
+            filterHeader.push(`#${filterLabels[filter]}: "${allFilterLabel}"`);
+        } else {
+            const headerFilterArray: string[] = [];
+            filters[filter].forEach((filterValue) => {
+                headerFilterArray.push(`"${filterValue}"`);
+            });
+            const headerFilterString = headerFilterArray.join(";");
+            const completeHeaderString = `#${filterLabels[filter]}: ${headerFilterString}`;
+            filterHeader.push(completeHeaderString);
+        }
+    });
+    return filterHeader;
+}
 /**
  * @desc Convert the selected filter/parameter to save them as a header in the CSV file
  * @param filter - object with the selected filters
@@ -13,33 +33,42 @@ import {
  */
 export function generateParameterHeader(
     filter: FilterInterface,
-    allFilterLabel: string,
-    mainFilterLabels: Record<FilterType, string>,
-    mainFilterAttributes: string[]
+    filterLabels: ExportLabels,
+    mainFilterAttributes: string[],
+    subFilterAttributes: string[],
+    titles: {
+        filterTitle: string;
+        subFilterTitle: string;
+    }
 ): string {
-    const HeaderRows: string[] = [];
-    HeaderRows.push("\uFEFF");
-    HeaderRows.push("#Parameter:");
+    let selectedFilterHeader: string[] = [];
+    selectedFilterHeader.push("\uFEFF");
+    selectedFilterHeader.push(`#${titles.filterTitle}:`);
 
-    mainFilterAttributes.forEach((element): void => {
-        if (
-            filter.filters[element] === undefined ||
-            filter.filters[element].length === 0
-        ) {
-            HeaderRows.push(
-                `#${mainFilterLabels[element]}: "${allFilterLabel}"`
-            );
-        } else {
-            const headerFilterArray: string[] = [];
-            filter.filters[element].forEach((filterValue) => {
-                headerFilterArray.push(`"${filterValue}"`);
-            });
-            const headerFilterString = headerFilterArray.join(";");
-            const completeHeaderString = `#${mainFilterLabels[element]}: ${headerFilterString}`;
-            HeaderRows.push(completeHeaderString);
-        }
-    });
-    HeaderRows.push(" ");
+    const mainFilterParameterHeader = generateFilterHeader(
+        mainFilterAttributes,
+        filter.filters,
+        filterLabels.mainFilterLabels,
+        filterLabels.allFilterLabel
+    );
+    selectedFilterHeader = selectedFilterHeader.concat(
+        mainFilterParameterHeader
+    );
 
-    return HeaderRows.join("\n");
+    selectedFilterHeader.push(`#${titles.subFilterTitle}:`);
+    const subFilterParameterHeader = generateFilterHeader(
+        subFilterAttributes,
+        filter.subfilters,
+        filterLabels.subFilterLabels,
+        filterLabels.allFilterLabel
+    );
+    selectedFilterHeader = selectedFilterHeader.concat(
+        subFilterParameterHeader
+    );
+
+    selectedFilterHeader.push(" ");
+
+    const selectedFilterHeaderString = selectedFilterHeader.join("\n");
+
+    return selectedFilterHeaderString;
 }

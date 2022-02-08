@@ -10,7 +10,8 @@
     "NrIsolatesTextRelative": "Anteil Isolate",
     "Table": "Tabelle",
     "Unit": "in %",
-    "per": "je"
+    "per": "je",
+    "subfilters": "Ausgewählte Subfilter"
   },
   "Buttons": {
     "Delete": "Auswahl zurücksetzen"
@@ -49,10 +50,7 @@
     "category": "Tierart/Lebensmittel Oberkategorie",
     "productionType": "Tierart Produktionsrichtung/Lebensmittel",
     "resistance": "Antimikrobielle Resistenz",
-    "samplingYear": "Erhebungsjahr",
-    "serovar": "Serovar",
-    "species": "Spezies",
-    "serotyp": "Serotyp"
+    "samplingYear": "Erhebungsjahr"
   },
   "FilterValues": {
     "microorganism": {
