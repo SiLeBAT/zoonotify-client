@@ -500,8 +500,8 @@
       "name": "Serovar",
       "trigger": "Salmonella spp.",
       "values": {
-        "S-4,12:d:-": "S.4,12:d:-",
-        "S-4,\\[5],12:i:-": "S.4,\\[5],12:i:-",
+        "S-4,12d-": "S.4,12:d:-",
+        "S-4,\\[5],12i-": "S.4,\\[5],12:i:-",
         "S-Abony": "S. Abony",
         "S-Abortusovis": "S. Abortusovis",
         "S-Adelaide": "S. Adelaide",

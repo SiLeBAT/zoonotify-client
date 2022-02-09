@@ -40,12 +40,14 @@ function createParameterName(
             suffix,
         });
     } else if (isSubFilter) {
+        const filterValueWithNoDot = replaceAll(parameter, ".", "-");
+        const filterValueToTranslate = replaceAll(
+            filterValueWithNoDot,
+            ":",
+            ""
+        );
         parameterName = t(
-            `Subfilters.${parameterAttribute}.values.${replaceAll(
-                parameter,
-                ".",
-                "-"
-            )}`
+            `Subfilters.${parameterAttribute}.values.${filterValueToTranslate}`
         );
     } else {
         parameterName = t(`FilterValues.${parameterAttribute}.${key}`);
