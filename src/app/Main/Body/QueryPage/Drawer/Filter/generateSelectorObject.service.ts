@@ -11,12 +11,14 @@ export function generateSelectorObject(
         let filterValueLabel = filterValue;
         if (t !== undefined) {
             if (isSubFilter) {
+                const filterValueWithNoDot = replaceAll(filterValue, ".", "-");
+                const filterValueToTranslate = replaceAll(
+                    filterValueWithNoDot,
+                    ":",
+                    ""
+                );
                 filterValueLabel = t(
-                    `Subfilters.${filterAttribute}.values.${replaceAll(
-                        filterValue,
-                        ".",
-                        "-"
-                    )}`
+                    `Subfilters.${filterAttribute}.values.${filterValueToTranslate}`
                 );
             } else {
                 filterValueLabel = t(
