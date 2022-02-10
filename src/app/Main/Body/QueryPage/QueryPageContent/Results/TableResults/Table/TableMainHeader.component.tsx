@@ -36,6 +36,8 @@ const tableTitleStyle = (isRow: boolean): SerializedStyles => css`
     color: ${onPrimaryColor};
     writing-mode: ${isRow ? "vertical-lr" : "none"};
     transform: ${isRow ? "rotate(180deg)" : "none"};
+    padding-top: ${isRow ? "0.5em" : "0"};
+    padding-right: ${isRow ? "0" : "0.5em"};
 `;
 
 export interface TableMainHeaderProps {
