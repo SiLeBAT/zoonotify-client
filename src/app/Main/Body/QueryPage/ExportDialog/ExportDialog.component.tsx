@@ -7,7 +7,6 @@ import {
 } from "../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
 import { errorColor } from "../../../../Shared/Style/Style-MainTheme";
-import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
 
 const warningStyle = css`
     display: flex;
@@ -59,7 +58,7 @@ export function ExportDialogComponent(props: {
     );
 
     const exportButton: DialogButton = {
-        content: ButtonLabelComponent(t("Button.Submit"), true),
+        content: t("Button.Submit"),
         disabled: !exportOptionIsSelected,
         onClick: handleExport,
     };
