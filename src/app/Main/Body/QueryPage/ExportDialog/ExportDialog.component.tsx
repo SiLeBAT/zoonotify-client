@@ -39,6 +39,7 @@ export function ExportDialogComponent(props: {
     const exportChart = props.exportOptions.chart;
     const exportOptionIsSelected =
         exportRawTable || exportStatTable || exportChart;
+    const noExportOptionSelected = !exportOptionIsSelected;
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
@@ -51,9 +52,7 @@ export function ExportDialogComponent(props: {
                 isChart={exportChart}
                 nrOfIsolates={props.nrOfIsolates}
             />
-            {!exportOptionIsSelected && (
-                <p css={warningStyle}>{t("Warning")}</p>
-            )}
+            {noExportOptionSelected && <p css={warningStyle}>{t("Warning")}</p>}
         </div>
     );
 

@@ -40,6 +40,8 @@ export async function exportZipService(props: {
     let statKeys: string[] = [];
     let status = 200;
 
+    const exportOptions = _.cloneDeep(props.exportOptions);
+
     const { t } = props;
     const { data } = props;
 
@@ -75,14 +77,18 @@ export async function exportZipService(props: {
     }
 
     if (props.exportOptions.stat) {
-        if (data.option === "absolute") {
-            statData = data.statisticDataAbsolute;
-        }
-        if (data.option === "relative") {
-            statData = data.statisticDataRelative;
-        }
-        if (!_.isEmpty(statData)) {
-            statKeys = Object.keys(statData[0]);
+        if (_.isEmpty(data.row) && _.isEmpty(data.column)) {
+            exportOptions.stat = false;
+        } else {
+            if (data.option === "absolute") {
+                statData = data.statisticDataAbsolute;
+            }
+            if (data.option === "relative") {
+                statData = data.statisticDataRelative;
+            }
+            if (!_.isEmpty(statData)) {
+                statKeys = Object.keys(statData[0]);
+            }
         }
     }
 
@@ -122,7 +128,7 @@ export async function exportZipService(props: {
 
     if (status === 200) {
         dataAndStatisticToZipFile({
-            exportOptions: props.exportOptions,
+            exportOptions,
             tableAttributeNames,
             rawDataSet: {
                 rawData,
