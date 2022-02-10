@@ -20,6 +20,7 @@ const subHeaderStyle = css`
     background-color: ${bfrPrimaryPalette[300]};
     box-sizing: border-box;
     box-shadow: 0 8px 6px -6px grey;
+    padding-right: 1em;
 `;
 
 const queryPageStyle = css`
@@ -32,7 +33,7 @@ const queryPageStyle = css`
 `;
 
 export function QueryPageLayoutComponent(props: {
-    subHeaderButtons: JSX.Element[];
+    subHeaderButtons: JSX.Element;
     drawer: JSX.Element;
     drawerControl: JSX.Element;
     queryPageContent: JSX.Element;

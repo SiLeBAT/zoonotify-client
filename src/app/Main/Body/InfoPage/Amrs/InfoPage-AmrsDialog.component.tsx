@@ -10,7 +10,6 @@ import {
     TableRow,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { ButtonLabelComponent } from "../../../../Shared/ButtonLabel.component";
 import {
     DialogButton,
     DialogComponent,
@@ -201,7 +200,7 @@ export function InfoPageAmrDialogComponent(props: {
         onClick: handleClose,
     };
     const amrTableSubmitButton: DialogButton = {
-        content: ButtonLabelComponent(t("Methods.Amrs.ExportButton"), true),
+        content: t("Methods.Amrs.ExportButton"),
         onClick: handleSubmit,
     };
 

@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import { Stack } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     mainFilterList,
@@ -475,22 +476,22 @@ export function QueryPageContainerComponent(): JSX.Element {
 
     const isLoading = dataIsLoading || updateFilterAndDataIsLoading;
 
-    const subHeaderButtons: JSX.Element[] = [
-        <SubHeaderButtonComponent
-            onClickOpen={handleClickQueriesDialogOpen}
-            dialogIsOpen={queryDialogIsOpen}
-            buttonIcon={<QueryStatsIcon fontSize="small" />}
-            buttonText={t("Header:ExampleQueries")}
-            key="example_queries_button"
-        />,
-        <SubHeaderButtonComponent
-            onClickOpen={handleClickExportDialogOpen}
-            dialogIsOpen={exportDialogIsOpen}
-            buttonIcon={<GetAppIcon fontSize="small" />}
-            buttonText={t("Header:Export")}
-            key="export_button"
-        />,
-    ];
+    const subHeaderButtons: JSX.Element = (
+        <Stack direction="row" spacing={1}>
+            <SubHeaderButtonComponent
+                onClickOpen={handleClickQueriesDialogOpen}
+                buttonIcon={<SearchIcon fontSize="small" />}
+                buttonText={t("Header:ExampleQueries")}
+                key="example_queries_button"
+            />
+            <SubHeaderButtonComponent
+                onClickOpen={handleClickExportDialogOpen}
+                buttonIcon={<GetAppIcon fontSize="small" />}
+                buttonText={t("Header:Export")}
+                key="export_button"
+            />
+        </Stack>
+    );
 
     let queryPageDialog = (
         <ExportDialogComponent
