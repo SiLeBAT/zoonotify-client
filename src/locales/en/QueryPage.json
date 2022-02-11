@@ -1459,7 +1459,8 @@
   "NrOfIsolates": {
     "Title": "Number of isolates",
     "Total": "Total:",
-    "Selected": "Selected:"
+    "Selected": "Selected:",
+    "InfoText": "Isolates that have not been tested are not differentiated. You will find this information in the export of the selected data set."
   },
   "Explanation": "- Please select a row/column to display a statistic table -",
   "OptionBar": {
