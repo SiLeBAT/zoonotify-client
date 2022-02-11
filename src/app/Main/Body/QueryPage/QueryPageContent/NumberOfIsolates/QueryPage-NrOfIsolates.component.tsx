@@ -1,17 +1,16 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { Box } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 
-const tableStyle = css`
-    table-layout: auto;
-`;
 const tableTextStyle = css`
-    padding-right: 1em;
     font-weight: bold;
+    padding-right: 1em;
 `;
-const tableNumberStyle = css`
-    padding-right: 5em;
+const textStyle = css`
+    font-size: 0.75rem;
 `;
 
 export function QueryPageNrOfIsolatesComponent(props: {
@@ -26,22 +25,30 @@ export function QueryPageNrOfIsolatesComponent(props: {
         <AccordionComponent
             title={t("NrOfIsolates.Title")}
             content={
-                <table css={tableStyle}>
-                    <tbody>
-                        <tr>
-                            <td css={tableTextStyle}>
+                <Box>
+                    <Grid container spacing={0.5} columns={5}>
+                        <Grid item xs={2}>
+                            <span css={tableTextStyle}>
                                 {t("NrOfIsolates.Total")}
-                            </td>
-                            <td css={tableNumberStyle}>
-                                {props.numberOfIsolates.total}
-                            </td>
-                            <td css={tableTextStyle}>
+                            </span>
+                            <span>{props.numberOfIsolates.total}</span>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <span css={tableTextStyle}>
                                 {t("NrOfIsolates.Selected")}
-                            </td>
-                            <td>{props.numberOfIsolates.filtered}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </span>
+                            <span>{props.numberOfIsolates.filtered}</span>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <span>&nbsp;</span>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <span css={textStyle}>
+                                {t("NrOfIsolates.InfoText")}
+                            </span>
+                        </Grid>
+                    </Grid>
+                </Box>
             }
             defaultExpanded
             centerContent={false}

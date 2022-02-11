@@ -1240,7 +1240,8 @@
   "NrOfIsolates": {
     "Title": "Anzahl Isolate",
     "Total": "Gesamt:",
-    "Selected": "Ausgewählt:"
+    "Selected": "Ausgewählt:",
+    "InfoText": "Nicht getestete Isolate werden nicht differenziert. Diese Information finden sie im Export der ausgewählten Einzeldaten"
   },
   "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine Statistiktabelle anzuzeigen -",
   "OptionBar": {
