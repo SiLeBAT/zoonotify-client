@@ -560,7 +560,6 @@ export function QueryPageContainerComponent(): JSX.Element {
                                 total: totalNrOfIsol,
                                 filtered: nrOfSelectedIsol,
                             }}
-                            selectedFilter={filter.selectedFilter}
                             getPngDownloadUriRef={getPngDownloadUriRef}
                             onDisplayOptionsChange={handleChangeDisplayOptions}
                         />

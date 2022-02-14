@@ -30,8 +30,7 @@ const resultsBoxStyle = css`
 
 export function QueryPageContentLayoutComponent(props: {
     status: JSX.Element;
-    queryPageInfo: JSX.Element;
-    nrOfIsolates: JSX.Element;
+    infoContent: JSX.Element[];
     tableResults: JSX.Element;
     chartResults: JSX.Element;
     title: string;
@@ -40,10 +39,7 @@ export function QueryPageContentLayoutComponent(props: {
         <div css={contentStyle}>
             <p css={headingStyle}>{props.title}</p>
             {props.status}
-            <div css={contentBoxStyle}>
-                {props.queryPageInfo}
-                {props.nrOfIsolates}
-            </div>
+            <div css={contentBoxStyle}>{props.infoContent}</div>
             <div css={resultsBoxStyle}>
                 {props.tableResults}
                 {props.chartResults}
