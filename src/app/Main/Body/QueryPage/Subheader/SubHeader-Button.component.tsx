@@ -5,19 +5,6 @@ import {
     secondaryColor,
 } from "../../../../Shared/Style/Style-MainTheme";
 
-const subHeaderButtonStyle = {
-    padding: "2px 4px",
-    "line-height": "0px",
-    "text-transform": "none",
-    color: `${onPrimaryColor}`,
-    span: {
-        "margin-right": "2px",
-    },
-    "&:hover": {
-        color: `${secondaryColor}`,
-    },
-};
-
 /**
  * @desc Returns the export button inside the header.
  * @param props
@@ -32,7 +19,18 @@ export function SubHeaderButtonComponent(props: {
 
     return (
         <Button
-            sx={subHeaderButtonStyle}
+            sx={{
+                padding: "2px 4px",
+                lineHeight: "0px",
+                textTransform: "none",
+                color: `${onPrimaryColor}`,
+                span: {
+                    marginRight: "2px",
+                },
+                "&:hover": {
+                    color: `${secondaryColor}`,
+                },
+            }}
             size="small"
             onClick={handleClick}
             startIcon={props.buttonIcon}

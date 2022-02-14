@@ -45,8 +45,8 @@ export function AccordionComponent(props: AccordionProps): JSX.Element {
         <Accordion defaultExpanded={props.defaultExpanded}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+                aria-controls="shared-accordion-content"
+                id="shared-accordion-header"
             >
                 <p css={titleStyle}>{props.title}</p>
             </AccordionSummary>
