@@ -325,7 +325,7 @@
         "TableTitle": {
           "Part1": "Table 1: Resistance testing of "
         },
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Highlighted with * are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
       },
       "Table2": {
         "Paragraph": {
@@ -335,7 +335,7 @@
         "TableTitle": {
           "Part1": "Table 2: Resistance testing of "
         },
-        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2010 - 2019. Die Bewertung erfolgte soweit möglich unter Beachtung der Festlegung im Durchführungsbeschluss 2013/652/EU. Wenn dies nicht möglich war, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Highlighted with * are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
       },
       "Table3a": {
         "Paragraph": {
@@ -346,14 +346,14 @@
         "TableTitle": {
           "Part1": "Table 3a: Resistance testing of "
         },
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU. Highlighted with * are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
       },
       "Table3b": {
         "Paragraph": "",
         "TableTitle": {
           "Part1": "Table 3b: Resistance testing of "
         },
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU. Highlighted with * are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
       },
       "Table4": {
         "Paragraph": {
@@ -363,7 +363,7 @@
           "Description3": ") for the years 2010-2020."
         },
         "TableTitle": "Table 4: Resistance testing of methicillin-resistant ",
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria (epidemiological cut-off values of EUCAST) for the years 2010-2020. Highlighted with * are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
       },
       "Table5": {
         "Paragraph": {
@@ -375,10 +375,10 @@
           "Part1": "Table 5: Resistance testing of ",
           "Part2": " and "
         },
-        "TableDescription": "Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2016 - 2020. The interpretation was carried out taking into account the specifications in the implementing decision 2013/652/EU. Highlighted with * are the evaluation criteria used in ZooNotify."
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2016 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
       },
-      "TableHeaderClass": "Substances",
-      "TableHeaderSubstance": "Active agent",
+      "TableHeaderClass": "Substance class",
+      "TableHeaderSubstance": "Substance",
       "TableHeaderCutOff": "cut-off",
       "TableHeaderMin": "min",
       "TableHeaderMax": "max",
