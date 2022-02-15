@@ -201,6 +201,8 @@ export function QueryPageContainerComponent(): JSX.Element {
                         ))
                 ) {
                     newFilters.selectedFilter.subfilters[subFilter.id] = [];
+                } else {
+                    delete newFilters.selectedFilter.subfilters[subFilter.id];
                 }
             });
         } else if (allSubFiltersList.includes(keyName)) {
