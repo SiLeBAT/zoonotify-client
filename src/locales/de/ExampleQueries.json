@@ -18,7 +18,7 @@
         "Text": {
           "Part1": "Kommensale ",
           "Part2": "Escherichia coli",
-          "Part3": " Isolate aus Tierprobenproben von Mastschweinen, Zoonosen-Monitoring, 2011 - 2019"
+          "Part3": " Isolate aus Tierprobenproben von Mastschweinen, Zoonosen-Monitoring, 2011 - 2019."
         }
       },
       "Query1": {
@@ -27,7 +27,7 @@
           "Part2": " spp. aus Proben von Legehennen"
         },
         "Text": {
-          "Part1": "Salmonellensolate aus Proben von Legehennenbeständen je Bundesland, Salmonellenbekämpfungsprogramme nach Verordnung (EG) Nr. 2160/2003, 2011 - 2020",
+          "Part1": "Salmonellensolate aus Proben von Legehennenbeständen je Bundesland, Salmonellenbekämpfungsprogramme nach Verordnung (EG) Nr. 2160/2003, 2011 - 2020.",
           "Part2": "",
           "Part3": ""
         }
@@ -38,7 +38,7 @@
           "Part2": "MRSA aus Proben von Rindern"
         },
         "Text": {
-          "Part1": "MRSA aus Proben verschiedener Matrizes von Mastkälbern, Mast- und Milchrindern unterschieldicher Produktionsrichtungen, Zoonosen-Monitoring, 2010 - 2019",
+          "Part1": "MRSA aus Proben verschiedener Matrizes von Mastkälbern, Mast- und Milchrindern unterschieldicher Produktionsrichtungen, Zoonosen-Monitoring, 2010 - 2019.",
           "Part2": "",
           "Part3": ""
         }
@@ -51,7 +51,7 @@
           "Part2": " spp. in Futtermittelproben"
         },
         "Text": {
-          "Part1": "Salmonellenisolate aus Proben von verschiedenen Futtermitteln, Zoonosen-Monitoring, 2012 - 2019",
+          "Part1": "Salmonellenisolate aus Proben von verschiedenen Futtermitteln, Zoonosen-Monitoring, 2012 - 2019.",
           "Part2": "",
           "Part3": ""
         }
@@ -61,10 +61,10 @@
       "Query0": {
         "Title": {
           "Part1": "",
-          "Part2": "STEC aus pflanzlichen Lebenmittelproben"
+          "Part2": "STEC aus pflanzlichen Lebensmittelproben"
         },
         "Text": {
-          "Part1": "STEC Isolate aus Proben pflanzlicher Lebensmittel aus verschiedenen Probenahmestellen, Zoonosen-Monitoring, 2012 - 2020",
+          "Part1": "STEC Isolate aus Proben pflanzlicher Lebensmittel aus verschiedenen Probenahmestellen, Zoonosen-Monitoring, 2012 - 2020.",
           "Part2": "",
           "Part3": ""
         }
