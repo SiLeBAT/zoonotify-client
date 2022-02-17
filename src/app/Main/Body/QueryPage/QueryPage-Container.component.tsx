@@ -508,6 +508,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     let queryPageDialog = (
         <ExportDialogComponent
             exportOptions={exportOptions}
+            noTableFeatures={_.isEmpty(data.column) && _.isEmpty(data.row)}
             loading={loadingIsolates}
             nrOfIsolates={nrOfSelectedIsol}
             onClickClose={handleCloseExportDialog}

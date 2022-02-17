@@ -21,6 +21,7 @@ export function ExportDialogComponent(props: {
         stat: boolean;
         chart: boolean;
     };
+    noTableFeatures: boolean;
     loading: boolean;
     nrOfIsolates: number;
     onClickClose: () => void;
@@ -43,6 +44,12 @@ export function ExportDialogComponent(props: {
 
     const exportDialogTitle = t("Content.Title");
     const exportContentText = t("Content.Text");
+
+    let warningText = t("Warning.noOptions");
+    if (props.noTableFeatures) {
+        warningText = t("Warning.noFeatures");
+    }
+    const showWarning = noExportOptionSelected || props.noTableFeatures;
     const exportCheckboxes = (
         <div>
             <ExportDialogCheckboxesComponent
@@ -50,9 +57,10 @@ export function ExportDialogComponent(props: {
                 isRaw={exportRawTable}
                 isStat={exportStatTable}
                 isChart={exportChart}
+                statAndChartExportIsDisabled={props.noTableFeatures}
                 nrOfIsolates={props.nrOfIsolates}
             />
-            {noExportOptionSelected && <p css={warningStyle}>{t("Warning")}</p>}
+            {showWarning && <p css={warningStyle}>{warningText}</p>}
         </div>
     );
 

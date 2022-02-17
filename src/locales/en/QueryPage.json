@@ -953,7 +953,7 @@
       "trigger": "Faeces / dust",
       "values": {
         "Sockentupfer": "Boot swabs",
-        "Stiefelüberzieher / Sockentupfer": "Boot swabs"
+        "Stiefelüberzieher / Sockentupfer": "Boot swabs / socks"
       }
     },
     "matrixDetail__Muscheln": {
