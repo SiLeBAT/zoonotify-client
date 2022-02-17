@@ -392,7 +392,7 @@
     },
     "carba_ampc_carba_phenotype": {
       "name": "CARBA Phänotyp",
-      "trigger": "CARBA-E. coli",
+      "trigger": "Carba-E. coli",
       "values": {
         "Carbapenemase-verdächtig": "Carbapenemase verdächtig"
       }
@@ -815,49 +815,49 @@
       }
     },
     "matrixDetail__(Hals)haut": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "(Hals)haut",
       "values": {
         "Einzel(tier)probe": "Einzel(tier)probe"
       }
     },
     "matrixDetail__(Konsum)eier, unsortiert": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "(Konsum)eier, unsortiert",
       "values": {
         "Eierschalenpools": "Eierschalenpools"
       }
     },
     "matrixDetail__Alleinfuttermittel": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Alleinfuttermittel",
       "values": {
         "Sackware und lose Ware": "Sackware und lose Ware"
       }
     },
     "matrixDetail__Babyspinat": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Babyspinat",
       "values": {
-        "frisch": "frisch"
+        "frisch": "Frisch"
       }
     },
     "matrixDetail__Blatt- und Kopfsalate": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Blatt- und Kopfsalate",
       "values": {
-        "insb. Feldsalat, Rucola, Spinat, Eisberg": "insb. Feldsalat, Rucola, Spinat, Eisberg"
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "Insb. Feldsalat, Rucola, Spinat, Eisberg"
       }
     },
     "matrixDetail__Blattsalate": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Blattsalate",
       "values": {
-        "vorgeschnitten, verpackt": "vorgeschnitten, verpackt"
+        "vorgeschnitten, verpackt": "Vorgeschnitten, verpackt"
       }
     },
     "matrixDetail__Blinddarminhalt": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Blinddarminhalt",
       "values": {
         "Einzeltierprobe": "Einzeltierprobe",
@@ -865,60 +865,60 @@
       }
     },
     "matrixDetail__Erdbeeren": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Erdbeeren",
       "values": {
-        "frisch": "frisch"
+        "frisch": "Frisch"
       }
     },
     "matrixDetail__Fleischerzeugnisse": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Fleischerzeugnisse",
       "values": {
-        "wärmebehandelt": "wärmebehandelt"
+        "wärmebehandelt": "Wärmebehandelt"
       }
     },
     "matrixDetail__Frische Kräuter": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Frische Kräuter",
       "values": {
-        "lose oder verpackt; geschnitten oder Topfware": "lose oder verpackt; geschnitten oder Topfware"
+        "lose oder verpackt; geschnitten oder Topfware": "Lose oder verpackt; geschnitten oder Topfware"
       }
     },
     "matrixDetail__Frisches Fleisch": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Frisches Fleisch",
       "values": {
-        "gekühlt": "gekühlt",
-        "gekühlt oder tiefgefroren": "gekühlt oder tiefgefroren",
-        "gekühlt oder tiefgekühlt": "gekühlt oder tiefgekühlt",
-        "gekühlt, mit Haut": "gekühlt, mit Haut",
-        "gekühlt, ohne Haut": "gekühlt, ohne Haut"
+        "gekühlt": "Gekühlt",
+        "gekühlt oder tiefgefroren": "Gekühlt oder tiefgefroren",
+        "gekühlt oder tiefgekühlt": "Gekühlt oder tiefgekühlt",
+        "gekühlt, mit Haut": "Gekühlt, mit Haut",
+        "gekühlt, ohne Haut": "Gekühlt, ohne Haut"
       }
     },
     "matrixDetail__Garnelen": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Garnelen",
       "values": {
-        "roh": "roh"
+        "roh": "Roh"
       }
     },
     "matrixDetail__Getrocknete Blatt- und Grasprodukte": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Getrocknete Blatt- und Grasprodukte",
       "values": {
         "Pulver- oder Blattform": "Pulver- oder Blattform"
       }
     },
     "matrixDetail__Hackfleisch": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Hackfleisch",
       "values": {
-        "gekühlt": "gekühlt"
+        "gekühlt": "Gekühlt"
       }
     },
     "matrixDetail__Haut": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Haut",
       "values": {
         "Hauttupfer": "Hauttupfer",
@@ -926,21 +926,21 @@
       }
     },
     "matrixDetail__Kiemeninhalt": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Kiemeninhalt",
       "values": {
         "Kiementupfer": "Kiementupfer"
       }
     },
     "matrixDetail__Konsumeier, sortiert": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Konsumeier, sortiert",
       "values": {
         "Eierschalenpools": "Eierschalenpools"
       }
     },
     "matrixDetail__Kot": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Kot",
       "values": {
         "Einzeltierprobe": "Einzeltierprobe",
@@ -949,7 +949,7 @@
       }
     },
     "matrixDetail__Kot / Staub": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Kot / Staub",
       "values": {
         "Sockentupfer": "Sockentupfer",
@@ -957,117 +957,117 @@
       }
     },
     "matrixDetail__Muscheln": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Muscheln",
       "values": {
-        "lebend, frisch": "lebend, frisch"
+        "lebend, frisch": "Lebend, frisch"
       }
     },
     "matrixDetail__Muskel": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Muskel",
       "values": {
-        "importiert, aus Aquakultur": "importiert, aus Aquakultur"
+        "importiert, aus Aquakultur": "Importiert, aus Aquakultur"
       }
     },
     "matrixDetail__Nasenschleimhaut": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Nasenschleimhaut",
       "values": {
         "Nasentupfer": "Nasentupfer"
       }
     },
     "matrixDetail__Nasentupfer": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Nasentupfer",
       "values": {
         "Einzeltierprobe": "Einzeltierprobe"
       }
     },
     "matrixDetail__Petersilie": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Petersilie",
       "values": {
-        "tiefgekühlt": "tiefgekühlt"
+        "tiefgekühlt": "Tiefgekühlt"
       }
     },
     "matrixDetail__Rohmilchkäse": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Rohmilchkäse",
       "values": {
         "Schnittkäse": "Schnittkäse",
         "Weichkäse": "Weichkäse",
-        "außer Hartkäse": "außer Hartkäse"
+        "außer Hartkäse": "Außer Hartkäse"
       }
     },
     "matrixDetail__Sammelmilch": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Sammelmilch",
       "values": {
-        "gekühlt": "gekühlt"
+        "gekühlt": "Gekühlt"
       }
     },
     "matrixDetail__Schlachtkörper": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Schlachtkörper",
       "values": {
         "Einzel(tier)probe": "Einzel(tier)probe"
       }
     },
     "matrixDetail__Sprossen": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Sprossen",
       "values": {
-        "lose oder verpackt": "lose oder verpackt"
+        "lose oder verpackt": "Lose oder verpackt"
       }
     },
     "matrixDetail__Staub": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Staub",
       "values": {
         "Staubtupfer": "Staubtupfer"
       }
     },
     "matrixDetail__Streichfähige Rohwürste": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Streichfähige Rohwürste",
       "values": {
-        "überwiegend aus Hähnchen- und Putenfleisch": "überwiegend aus Hähnchen- und Putenfleisch",
-        "überwiegend aus Schweinefleisch": "überwiegend aus Schweinefleisch"
+        "überwiegend aus Hähnchen- und Putenfleisch": "Überwiegend aus Hähnchen- und Putenfleisch",
+        "überwiegend aus Schweinefleisch": "Überwiegend aus Schweinefleisch"
       }
     },
     "matrixDetail__Tatar / Schabefleisch": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Tatar / Schabefleisch",
       "values": {
-        "gekühlt": "gekühlt"
+        "gekühlt": "Gekühlt"
       }
     },
     "matrixDetail__Tomaten": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Tomaten",
       "values": {
-        "kleine Sorten": "kleine Sorten"
+        "kleine Sorten": "Kleine Sorten"
       }
     },
     "matrixDetail__Weizenmehl": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Weizenmehl",
       "values": {
-        "vor der Verpackung in der Mühle": "vor der Verpackung in der Mühle"
+        "vor der Verpackung in der Mühle": "Vor der Verpackung in der Mühle"
       }
     },
     "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote": {
-      "name": "Matixdetail",
+      "name": "Matrixdetail",
       "trigger": "Ölsaaten / Ölfruchte und Extraktionsschrote",
       "values": {
         "Raps": "Raps",
-        "hauptsächlich Soja": "hauptsächlich Soja"
+        "hauptsächlich Soja": "Hauptsächlich Soja"
       }
     },
     "resistance__CARBA-E coli": {
       "name": "Antibiotikaresistenz",
-      "trigger": "CARBA-E. coli",
+      "trigger": "Carba-E. coli",
       "values": {
         "AMP": "Ampicillin",
         "AZI": "Azithromycin",
@@ -1241,7 +1241,7 @@
     "Title": "Anzahl Isolate",
     "Total": "Gesamt:",
     "Selected": "Ausgewählt:",
-    "InfoText": "Nicht getestete Isolate werden nicht differenziert. Diese Information finden sie im Export der ausgewählten Einzeldaten"
+    "InfoText": "In dieser Anzeige wird nicht zwischen negativ und nicht getesteten Isolaten differenziert. Diese Information finden Sie in der exportierten Datei zu den ausgewählten Einzeldaten."
   },
   "Explanation": "- Bitte wählen Sie eine Zeile/Spalte aus, um eine Statistiktabelle anzuzeigen -",
   "OptionBar": {
