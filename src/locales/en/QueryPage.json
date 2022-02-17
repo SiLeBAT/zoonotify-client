@@ -132,7 +132,7 @@
       "Frisches Fleisch": "Fresh meat",
       "Blinddarminhalt": "Caecum",
       "Sammelmilch": "Raw milk for manufacture",
-      "Konsumeier, sortiert": "Table eggs",
+      "Konsumeier, sortiert": "Eggs",
       "Frische Kräuter": "Fresh herbs",
       "Kot / Staub": "Faeces / dust",
       "Rohmilchkäse": "Cheeses made from raw or low heat-treated milk",
@@ -193,229 +193,10 @@
       "Einfuhrstelle": "Border inspection",
       "Mischfutterwerk": "Compound feed plant"
     },
-    "FilterValues": {
-      "microorganism": {
-        "Campylobacter spp": "Campylobacter spp.",
-        "E coli": "E. coli",
-        "ESBL/AmpC-E coli": "ESBL/AmpC-E. coli",
-        "Listeria monocytogenes": "L. monocytogenes",
-        "MRSA": "MRSA",
-        "Salmonella spp": "Salmonella spp.",
-        "STEC": "STEC",
-        "CARBA-E coli": "Carba-E. coli",
-        "Enterococcus spp": "Enterococcus spp."
-      },
-      "formattedMicroorganisms": {
-        "Campylobacter spp": {
-          "prefix": "",
-          "name": "",
-          "italicName": "Campylobacter",
-          "suffix": " spp."
-        },
-        "E coli": {
-          "prefix": "",
-          "name": "",
-          "italicName": "E.coli",
-          "suffix": ""
-        },
-        "ESBL/AmpC-E coli": {
-          "prefix": "ESBL/AmpC-",
-          "name": "",
-          "italicName": "E.coli",
-          "suffix": ""
-        },
-        "Listeria monocytogenes": {
-          "prefix": "",
-          "name": "",
-          "italicName": "L. monocytogenes",
-          "suffix": ""
-        },
-        "MRSA": {
-          "prefix": "",
-          "name": "MRSA",
-          "italicName": "",
-          "suffix": ""
-        },
-        "Salmonella spp": {
-          "prefix": "",
-          "name": "",
-          "italicName": "Salmonella",
-          "suffix": " spp."
-        },
-        "STEC": {
-          "prefix": "",
-          "name": "STEC",
-          "italicName": "",
-          "suffix": ""
-        },
-        "CARBA-E coli": {
-          "prefix": "Carba-",
-          "name": "",
-          "italicName": "E.coli",
-          "suffix": ""
-        },
-        "Enterococcus spp": {
-          "prefix": "",
-          "name": "",
-          "italicName": "Enterococcus",
-          "suffix": " spp."
-        }
-      },
-      "matrix": {
-        "(Konsum)eier, unsortiert": "Table eggs",
-        "Blatt- und Kopfsalate": "Non pre-cut leafy salads and lettuce",
-        "Getrocknete Blatt- und Grasprodukte": "Dried leave and grass products",
-        "Erdbeeren": "Strawberries",
-        "Fleischerzeugnisse": "Meat preparations",
-        "Kiemeninhalt": "Gills contents",
-        "Nasenschleimhaut": "Nasal mucosa",
-        "Weizenmehl": "Wheat flour/meal",
-        "Frisches Fleisch": "Fresh meat",
-        "Blinddarminhalt": "Caecum",
-        "Sammelmilch": "Raw milk for manufacture",
-        "Konsumeier, sortiert": "Table eggs",
-        "Frische Kräuter": "Fresh herbs",
-        "Kot / Staub": "Faeces / dust",
-        "Rohmilchkäse": "Cheeses made from raw or low heat-treated milk",
-        "Staub": "Dust",
-        "(Hals)haut": "(Neck)skin",
-        "Blattsalate": "Leaf salad",
-        "Kot": "Faeces",
-        "Garnelen": "Shrimps",
-        "Schlachtkörper": "Carcase",
-        "Ölsaaten / Ölfruchte und Extraktionsschrote": "Feed material of oil seed or fruit origin",
-        "Muscheln": "Mussels",
-        "Sprossen": "Seeds, sprouted",
-        "Tomaten": "Tomatoes",
-        "Haut": "Skin",
-        "Streichfähige Rohwürste": "Meat products - spreadable fermented sausages",
-        "Hackfleisch": "Minced meat",
-        "Tatar / Schabefleisch": "Minced meat",
-        "Nasentupfer": "Nasal swab",
-        "Muskel": "Muscle",
-        "Petersilie": "Parsley",
-        "Alleinfuttermittel": "Complete feedingstuffs",
-        "Babyspinat": "Baby spinach"
-      },
-      "samplingContext": {
-        "Zoonosen-Monitoring": "Zoonoses-Monitoring",
-        "Salm-Bekämpfung": "Salm-control programs"
-      },
-      "federalState": {
-        "keine Anzeige": "No indication",
-        "Baden-Wuerttemberg": "Baden-Württemberg",
-        "Bayern": "Bavaria",
-        "Berlin": "Berlin",
-        "Brandenburg": "Brandenburg",
-        "Bremen": "Bremen",
-        "Hessen": "Hesse",
-        "Nordrhein-Westfalen": "Northrhine-Westphalia",
-        "Niedersachsen": "Lower Saxony",
-        "Saarland": "Saarland",
-        "Hamburg": "Hamburg",
-        "Schleswig-Holstein": "Schleswig-Holstein",
-        "Sachsen": "Saxony",
-        "Mecklenburg-Vorpommern": "Mecklenburg Western Pomerania",
-        "Rheinland-Pfalz": "Rhineland Palatinate",
-        "Sachsen-Anhalt": "Saxony-Anhalt",
-        "Thueringen": "Thuringia"
-      },
-      "samplingStage": {
-        "Dezentrale Ölmühlen": "Decentralized oil mills",
-        "Mühlen": "Mills",
-        "Grenzkontrollstelle": "Border inspection",
-        "Packstellen": "Egg packing stations",
-        "Verarbeitungsbetrieb": "Processing plant",
-        "Einzelhandel": "Retail",
-        "Schlachthof": "Slaughterhouse",
-        "Erzeugerbetrieb": "Farm",
-        "Zentrale Ölmühlen": "Central oil mills",
-        "Wildbahn": "Hunting",
-        "Einfuhrstelle": "Border inspection",
-        "Mischfutterwerk": "Compound feed plant"
-      },
-      "origin": {
-        "Lebensmittel": "Food sample",
-        "Tier": "Animal sample",
-        "Futtermittel": "Feed sample"
-      },
-      "category": {
-        "Schwein und Rind": "Pigs and cattle",
-        "Wiederkäuer": "Ruminants",
-        "Pute": "Turkeys",
-        "Huhn": "Gallus gallus (fowl)",
-        "Rind": "Cattle (bovine animals)",
-        "Pflanzliche Lebensmittel": "Plant-based foods",
-        "Schwein": "Pigs",
-        "Meeresfrüchte": "Sea food-shellfish",
-        "kleine Wiederkäuer": "Small ruminants",
-        "Nutztiere": "Livestock",
-        "Wildschwein": "Wild boars",
-        "Wildwiederkäuer": "Wild ruminants",
-        "Rehwild": "Roe deer",
-        "Geflügel": "Poultry",
-        "Wildgeflügel": "Wildfowl",
-        "Süßwasserfische": "Freshwater fish"
-      },
-      "productionType": {
-        "Cypriniden (Karpfenartige)": "Ciprinids (carp)",
-        "Getreide": "Cereals",
-        "Lamm": "Sheep, lamb",
-        "Zuchthühner, Mastlinie": "Gallus gallus (fowl) - breeding flocks for broiler production line",
-        "Zuchtputen": "Turkeys - breeding flocks, unspecified",
-        "Wiederkäuer für Milchproduktion": "Ruminants for dairy production",
-        "Lebensmittel aus Blättern und Gräsern": "Foods from leaves and grass",
-        "Obst": "Fruits",
-        "Legehennen, konventionell": "Laying hens, conventional production",
-        "Mastrind": "Beef cattle",
-        "Mastschwein / Rind": "Fattening pigs/cattle ",
-        "Mastputen": "Meat production turkeys",
-        "Masthähnchen": "Broilers",
-        "Milchrind, ökologisch": "Dairy cows, organic producktion",
-        "Milchrind, konventionell": "Dairy cows, conventional production",
-        "Legehennen": "Laying hens",
-        "Kräuter": "Herbs",
-        "Zuchthühner, Legelinie": "Breeding flocks for egg production line",
-        "Milchrind": "Dairy cows",
-        "Mastschwein": "Fattening pigs",
-        "Mastkalb / Jungrind": "Calves (under or around 1 year)",
-        "Blattgemüse": "Vegetables - leaves",
-        "Zuchtsauen": "Breeding animals - sows",
-        "Läufer bis 30 kg": "Weaners to growers up to 30 kg",
-        "Krebstiere": "Crustaceans",
-        "Rind": "Cattle (bovine animals)",
-        "Schaf und Ziege für Milchproduktion": "Milk sheep and goats",
-        "Nutztiere": "Livestock",
-        "Masthähnchen, konventionell": "Broilers, conventional production",
-        "Wildschwein": "Wild boars",
-        "Masthähnchen, ökologisch": "Broilers, organic production",
-        "Zweischalige Weichtiere": "Live bivalve molluscs",
-        "Gemüse": "Vegetables",
-        "Zuchthühner, Lege- und Mastlinie": "Breeding flocks for egg and broiler production lines",
-        "Mastschwein bis 50 kg": "Fattening pigs up to 50 kg",
-        "Wildwiederkäuer": "Wild ruminants",
-        "Rehwild": "Roe deer",
-        "Mastputen, ökologisch": "Meat production turkeys, organic production",
-        "Mastputen, konventionell": "Meat production turkeys, conventional production",
-        "Mastgeflügel": "Meat production poultry",
-        "Mastschwein, konventionell": "Fattening pigs, conventional production",
-        "Enten und Gänse": "Ducks and geese",
-        "Mastschwein, ökologisch": "Fattening pigs, organic production",
-        "Tilapia und Pangasius": "Tilapia and pangasius"
-      },
-      "samplingYear": {
-        "2010": "2010",
-        "2011": "2011",
-        "2012": "2012",
-        "2013": "2013",
-        "2014": "2014",
-        "2015": "2015",
-        "2016": "2016",
-        "2017": "2017",
-        "2018": "2018",
-        "2019": "2019",
-        "2020": "2020"
-      }
+    "origin": {
+      "Lebensmittel": "Food sample",
+      "Tier": "Animal sample",
+      "Futtermittel": "Feed sample"
     },
     "category": {
       "Schwein und Rind": "Pigs and cattle",
@@ -425,7 +206,7 @@
       "Rind": "Cattle (bovine animals)",
       "Pflanzliche Lebensmittel": "Plant-based foods",
       "Schwein": "Pigs",
-      "Meeresfrüchte": "Sea food-Shellfish",
+      "Meeresfrüchte": "Sea food-shellfish",
       "kleine Wiederkäuer": "Small ruminants",
       "Nutztiere": "Livestock",
       "Wildschwein": "Wild boars",
@@ -611,7 +392,7 @@
     },
     "carba_ampc_carba_phenotype": {
       "name": "CARBA Phenotype",
-      "trigger": "CARBA-E. coli",
+      "trigger": "Carba-E. coli",
       "values": {
         "Carbapenemase-verdächtig": "Carbapenemase suspected"
       }
@@ -1034,259 +815,259 @@
       }
     },
     "matrixDetail__(Hals)haut": {
-      "name": "Matixdetail",
-      "trigger": "(Hals)haut",
+      "name": "Matrix detail",
+      "trigger": "(Neck)skin",
       "values": {
-        "Einzel(tier)probe": "Einzel(tier)probe"
+        "Einzel(tier)probe": "Single (animal) sample"
       }
     },
     "matrixDetail__(Konsum)eier, unsortiert": {
-      "name": "Matixdetail",
+      "name": "Matrix detail",
       "trigger": "(Konsum)eier, unsortiert",
       "values": {
-        "Eierschalenpools": "Eierschalenpools"
+        "Eierschalenpools": "Pools of shells"
       }
     },
     "matrixDetail__Alleinfuttermittel": {
-      "name": "Matixdetail",
-      "trigger": "Alleinfuttermittel",
+      "name": "Matrix detail",
+      "trigger": "Complete feedingstuffs",
       "values": {
-        "Sackware und lose Ware": "Sackware und lose Ware"
+        "Sackware und lose Ware": "Loose or packaged in sacks"
       }
     },
     "matrixDetail__Babyspinat": {
-      "name": "Matixdetail",
-      "trigger": "Babyspinat",
+      "name": "Matrix detail",
+      "trigger": "Baby spinach",
       "values": {
-        "frisch": "frisch"
+        "frisch": "Fresh"
       }
     },
     "matrixDetail__Blatt- und Kopfsalate": {
-      "name": "Matixdetail",
-      "trigger": "Blatt- und Kopfsalate",
+      "name": "Matrix detail",
+      "trigger": "Non pre-cut leafy salads and lettuce",
       "values": {
-        "insb. Feldsalat, Rucola, Spinat, Eisberg": "insb. Feldsalat, Rucola, Spinat, Eisberg"
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "Esp. lamb's lettuce, arugula, spinach, iceberg"
       }
     },
     "matrixDetail__Blattsalate": {
-      "name": "Matixdetail",
-      "trigger": "Blattsalate",
+      "name": "Matrix detail",
+      "trigger": "Leaf salads",
       "values": {
-        "vorgeschnitten, verpackt": "vorgeschnitten, verpackt"
+        "vorgeschnitten, verpackt": "Pre-cut, packaged"
       }
     },
     "matrixDetail__Blinddarminhalt": {
-      "name": "Matixdetail",
-      "trigger": "Blinddarminhalt",
+      "name": "Matrix detail",
+      "trigger": "Caecum",
       "values": {
-        "Einzeltierprobe": "Einzeltierprobe",
-        "Poolprobe": "Poolprobe"
+        "Einzeltierprobe": "Single animal sample",
+        "Poolprobe": "Pooled sample"
       }
     },
     "matrixDetail__Erdbeeren": {
-      "name": "Matixdetail",
-      "trigger": "Erdbeeren",
+      "name": "Matrix detail",
+      "trigger": "Strawberries",
       "values": {
-        "frisch": "frisch"
+        "frisch": "Fresh"
       }
     },
     "matrixDetail__Fleischerzeugnisse": {
-      "name": "Matixdetail",
-      "trigger": "Fleischerzeugnisse",
+      "name": "Matrix detail",
+      "trigger": "Meat preparations",
       "values": {
-        "wärmebehandelt": "wärmebehandelt"
+        "wärmebehandelt": "heat-treated"
       }
     },
     "matrixDetail__Frische Kräuter": {
-      "name": "Matixdetail",
-      "trigger": "Frische Kräuter",
+      "name": "Matrix detail",
+      "trigger": "Fresh herbs",
       "values": {
-        "lose oder verpackt; geschnitten oder Topfware": "lose oder verpackt; geschnitten oder Topfware"
+        "lose oder verpackt; geschnitten oder Topfware": "Loose or packaged; pre-cut or in pots"
       }
     },
     "matrixDetail__Frisches Fleisch": {
-      "name": "Matixdetail",
-      "trigger": "Frisches Fleisch",
+      "name": "Matrix detail",
+      "trigger": "Fresh meat",
       "values": {
-        "gekühlt": "gekühlt",
-        "gekühlt oder tiefgefroren": "gekühlt oder tiefgefroren",
-        "gekühlt oder tiefgekühlt": "gekühlt oder tiefgekühlt",
-        "gekühlt, mit Haut": "gekühlt, mit Haut",
-        "gekühlt, ohne Haut": "gekühlt, ohne Haut"
+        "gekühlt": "Chilled",
+        "gekühlt oder tiefgefroren": "Chilled or frozen",
+        "gekühlt oder tiefgekühlt": "Chilled or frozen",
+        "gekühlt, mit Haut": "Chilled, skinned",
+        "gekühlt, ohne Haut": "Chilled, ohne Haut"
       }
     },
     "matrixDetail__Garnelen": {
-      "name": "Matixdetail",
-      "trigger": "Garnelen",
+      "name": "Matrix detail",
+      "trigger": "Shrimps",
       "values": {
-        "roh": "roh"
+        "roh": "Raw"
       }
     },
     "matrixDetail__Getrocknete Blatt- und Grasprodukte": {
-      "name": "Matixdetail",
-      "trigger": "Getrocknete Blatt- und Grasprodukte",
+      "name": "Matrix detail",
+      "trigger": "Dried leave and grass products",
       "values": {
-        "Pulver- oder Blattform": "Pulver- oder Blattform"
+        "Pulver- oder Blattform": "Powder or leaves"
       }
     },
     "matrixDetail__Hackfleisch": {
-      "name": "Matixdetail",
-      "trigger": "Hackfleisch",
+      "name": "Matrix detail",
+      "trigger": "Minced meat",
       "values": {
-        "gekühlt": "gekühlt"
+        "gekühlt": "Chilled"
       }
     },
     "matrixDetail__Haut": {
-      "name": "Matixdetail",
-      "trigger": "Haut",
+      "name": "Matrix detail",
+      "trigger": "Skin",
       "values": {
-        "Hauttupfer": "Hauttupfer",
-        "Tupfer": "Tupfer"
+        "Hauttupfer": "Skin swabs",
+        "Tupfer": "Swabs"
       }
     },
     "matrixDetail__Kiemeninhalt": {
-      "name": "Matixdetail",
-      "trigger": "Kiemeninhalt",
+      "name": "Matrix detail",
+      "trigger": "Gills contents",
       "values": {
-        "Kiementupfer": "Kiementupfer"
+        "Kiementupfer": "Gill swabs"
       }
     },
     "matrixDetail__Konsumeier, sortiert": {
-      "name": "Matixdetail",
-      "trigger": "Konsumeier, sortiert",
+      "name": "Matrix detail",
+      "trigger": "Eggs",
       "values": {
-        "Eierschalenpools": "Eierschalenpools"
+        "Eierschalenpools": "Pools of shells"
       }
     },
     "matrixDetail__Kot": {
-      "name": "Matixdetail",
-      "trigger": "Kot",
+      "name": "Matrix detail",
+      "trigger": "Faeces",
       "values": {
-        "Einzeltierprobe": "Einzeltierprobe",
-        "Kloaken- oder Kottupfer": "Kloaken- oder Kottupfer",
-        "Sammelkot": "Sammelkot"
+        "Einzeltierprobe": "Single animal sample",
+        "Kloaken- oder Kottupfer": "Cloacal or faecal swabs",
+        "Sammelkot": "Composite faecal sample"
       }
     },
     "matrixDetail__Kot / Staub": {
-      "name": "Matixdetail",
-      "trigger": "Kot / Staub",
+      "name": "Matrix detail",
+      "trigger": "Faeces / dust",
       "values": {
-        "Sockentupfer": "Sockentupfer",
-        "Stiefelüberzieher / Sockentupfer": "Stiefelüberzieher / Sockentupfer"
+        "Sockentupfer": "Boot swabs",
+        "Stiefelüberzieher / Sockentupfer": "Boot swabs"
       }
     },
     "matrixDetail__Muscheln": {
-      "name": "Matixdetail",
-      "trigger": "Muscheln",
+      "name": "Matrix detail",
+      "trigger": "Mussels",
       "values": {
-        "lebend, frisch": "lebend, frisch"
+        "lebend, frisch": "Live, fresh"
       }
     },
     "matrixDetail__Muskel": {
-      "name": "Matixdetail",
-      "trigger": "Muskel",
+      "name": "Matrix detail",
+      "trigger": "Muscle",
       "values": {
-        "importiert, aus Aquakultur": "importiert, aus Aquakultur"
+        "importiert, aus Aquakultur": "Imported, aquaculture production"
       }
     },
     "matrixDetail__Nasenschleimhaut": {
-      "name": "Matixdetail",
-      "trigger": "Nasenschleimhaut",
+      "name": "Matrix detail",
+      "trigger": "Nasal mucosa",
       "values": {
-        "Nasentupfer": "Nasentupfer"
+        "Nasentupfer": "Nasal swab"
       }
     },
     "matrixDetail__Nasentupfer": {
-      "name": "Matixdetail",
-      "trigger": "Nasentupfer",
+      "name": "Matrix detail",
+      "trigger": "Nasal swab",
       "values": {
-        "Einzeltierprobe": "Einzeltierprobe"
+        "Einzeltierprobe": "Single animal sample"
       }
     },
     "matrixDetail__Petersilie": {
-      "name": "Matixdetail",
-      "trigger": "Petersilie",
+      "name": "Matrix detail",
+      "trigger": "Parsley",
       "values": {
-        "tiefgekühlt": "tiefgekühlt"
+        "tiefgekühlt": "Frozen"
       }
     },
     "matrixDetail__Rohmilchkäse": {
-      "name": "Matixdetail",
-      "trigger": "Rohmilchkäse",
+      "name": "Matrix detail",
+      "trigger": "Cheeses made from raw or low heat-treated milk",
       "values": {
-        "Schnittkäse": "Schnittkäse",
-        "Weichkäse": "Weichkäse",
-        "außer Hartkäse": "außer Hartkäse"
+        "Schnittkäse": "Hard cheese",
+        "Weichkäse": "Soft cheeses",
+        "außer Hartkäse": "except hard cheeses"
       }
     },
     "matrixDetail__Sammelmilch": {
-      "name": "Matixdetail",
-      "trigger": "Sammelmilch",
+      "name": "Matrix detail",
+      "trigger": "Raw milk for manufacture",
       "values": {
-        "gekühlt": "gekühlt"
+        "gekühlt": "Chilled"
       }
     },
     "matrixDetail__Schlachtkörper": {
-      "name": "Matixdetail",
-      "trigger": "Schlachtkörper",
+      "name": "Matrix detail",
+      "trigger": "Carcase",
       "values": {
-        "Einzel(tier)probe": "Einzel(tier)probe"
+        "Einzel(tier)probe": "Single (animal) sample"
       }
     },
     "matrixDetail__Sprossen": {
-      "name": "Matixdetail",
-      "trigger": "Sprossen",
+      "name": "Matrix detail",
+      "trigger": "Seeds, sprouted",
       "values": {
-        "lose oder verpackt": "lose oder verpackt"
+        "lose oder verpackt": "Loose or packaged"
       }
     },
     "matrixDetail__Staub": {
-      "name": "Matixdetail",
-      "trigger": "Staub",
+      "name": "Matrix detail",
+      "trigger": "Dust",
       "values": {
-        "Staubtupfer": "Staubtupfer"
+        "Staubtupfer": "Dust swabs"
       }
     },
     "matrixDetail__Streichfähige Rohwürste": {
-      "name": "Matixdetail",
-      "trigger": "Streichfähige Rohwürste",
+      "name": "Matrix detail",
+      "trigger": "Meat products - spreadable fermented sausages",
       "values": {
-        "überwiegend aus Hähnchen- und Putenfleisch": "überwiegend aus Hähnchen- und Putenfleisch",
-        "überwiegend aus Schweinefleisch": "überwiegend aus Schweinefleisch"
+        "überwiegend aus Hähnchen- und Putenfleisch": "Mainly from chicken and turkey meat",
+        "überwiegend aus Schweinefleisch": "Mainly from pork"
       }
     },
     "matrixDetail__Tatar / Schabefleisch": {
-      "name": "Matixdetail",
-      "trigger": "Tatar / Schabefleisch",
+      "name": "Matrix detail",
+      "trigger": "Minced meat",
       "values": {
-        "gekühlt": "gekühlt"
+        "gekühlt": "Chilled"
       }
     },
     "matrixDetail__Tomaten": {
-      "name": "Matixdetail",
-      "trigger": "Tomaten",
+      "name": "Matrix detail",
+      "trigger": "Tomatoes",
       "values": {
-        "kleine Sorten": "kleine Sorten"
+        "kleine Sorten": "Small varieties"
       }
     },
     "matrixDetail__Weizenmehl": {
-      "name": "Matixdetail",
-      "trigger": "Weizenmehl",
+      "name": "Matrix detail",
+      "trigger": "Wheat flour/meal",
       "values": {
-        "vor der Verpackung in der Mühle": "vor der Verpackung in der Mühle"
+        "vor der Verpackung in der Mühle": "Before packing in the mill"
       }
     },
     "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote": {
-      "name": "Matixdetail",
-      "trigger": "Ölsaaten / Ölfruchte und Extraktionsschrote",
+      "name": "Matrix detail",
+      "trigger": "Feed material of oil seed or fruit origin",
       "values": {
-        "Raps": "Raps",
-        "hauptsächlich Soja": "hauptsächlich Soja"
+        "Raps": "Rapeseed",
+        "hauptsächlich Soja": "Mainly soy"
       }
     },
     "resistance__CARBA-E coli": {
       "name": "Antimicrobial resistance",
-      "trigger": "CARBA-E. coli",
+      "trigger": "Carba-E. coli",
       "values": {
         "AMP": "Ampicillin",
         "AZI": "Azithromycin",
@@ -1460,7 +1241,7 @@
     "Title": "Number of isolates",
     "Total": "Total:",
     "Selected": "Selected:",
-    "InfoText": "Isolates that have not been tested are not differentiated. You will find this information in the export of the selected data set."
+    "InfoText": "This display does not differentiate between negative and non-tested isolates. This information can be found in the export of the selected data set."
   },
   "Explanation": "- Please select a row/column to display a statistic table -",
   "OptionBar": {
