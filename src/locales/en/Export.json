@@ -16,7 +16,10 @@
     "Stat": "statistics-isolates",
     "Chart": "chart"
   },
-  "Warning": "Please select at least one option or cancel the export.",
+  "Warning": {
+    "noFeatures": "For the export of the selected aggregated data set and the chart, please select a 'displayed feature' on the query page.",
+    "noOptions": "Please select at least one option or cancel the export."
+  },
   "Button": {
     "Submit": "Export",
     "Cancel": "Cancel"

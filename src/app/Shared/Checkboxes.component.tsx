@@ -7,6 +7,7 @@ export type CheckboxesConfig = {
     name: string;
     label: string;
     checked: boolean;
+    disabled?: boolean;
 };
 
 export interface CheckboxesProps {
@@ -34,6 +35,7 @@ export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
                 control={
                     <Checkbox
                         checked={checkbox.checked}
+                        disabled={checkbox.disabled}
                         onChange={(event) =>
                             handleChangeCheckbox(
                                 event.target.name,

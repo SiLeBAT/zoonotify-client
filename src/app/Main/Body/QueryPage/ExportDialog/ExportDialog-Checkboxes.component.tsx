@@ -15,6 +15,7 @@ export interface CheckboxesProps {
      */
     isStat: boolean;
     isChart: boolean;
+    statAndChartExportIsDisabled: boolean;
     nrOfIsolates: number;
 }
 
@@ -39,10 +40,27 @@ export function ExportDialogCheckboxesComponent(
 
     const chartCheckboxLabel = `${t("Checkbox.Chart")}  ${t("Checkbox.Png")}`;
 
+    let statIsChecked = props.isStat;
+    let chartIsChecked = props.isChart;
+    if (props.statAndChartExportIsDisabled) {
+        statIsChecked = false;
+        chartIsChecked = false;
+    }
+
     const checkboxObjectList: CheckboxesConfig[] = [
         { name: "raw", label: rawCheckboxLabel, checked: props.isRaw },
-        { name: "stat", label: statCheckboxLabel, checked: props.isStat },
-        { name: "chart", label: chartCheckboxLabel, checked: props.isChart },
+        {
+            name: "stat",
+            label: statCheckboxLabel,
+            checked: statIsChecked,
+            disabled: props.statAndChartExportIsDisabled,
+        },
+        {
+            name: "chart",
+            label: chartCheckboxLabel,
+            checked: chartIsChecked,
+            disabled: props.statAndChartExportIsDisabled,
+        },
     ];
 
     return CheckboxesComponent({
