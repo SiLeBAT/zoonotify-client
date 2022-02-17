@@ -189,18 +189,28 @@ export function QueryPageContainerComponent(): JSX.Element {
                 chooseSelectedFiltersService(selectedOption);
             subFilters.forEach((subFilter) => {
                 const subFilterTrigger = subFilter.trigger;
-                if (
-                    subFilterTrigger !== undefined &&
-                    (_.includes(
+                const displayedSubfilters = Object.keys(
+                    newFilters.selectedFilter.subfilters
+                );
+                const subFilterTriggerIsNotUndefined =
+                    subFilterTrigger !== undefined;
+                const triggerIsSelected =
+                    _.includes(
                         newFilters.selectedFilter.filters.microorganism,
                         subFilterTrigger
                     ) ||
-                        _.includes(
-                            newFilters.selectedFilter.filters.matrix,
-                            subFilterTrigger
-                        ))
-                ) {
-                    newFilters.selectedFilter.subfilters[subFilter.id] = [];
+                    _.includes(
+                        newFilters.selectedFilter.filters.matrix,
+                        subFilterTrigger
+                    );
+                const subFilterIsNew = !_.includes(
+                    displayedSubfilters,
+                    subFilter.id
+                );
+                if (subFilterTriggerIsNotUndefined && triggerIsSelected) {
+                    if (subFilterIsNew) {
+                        newFilters.selectedFilter.subfilters[subFilter.id] = [];
+                    }
                 } else {
                     delete newFilters.selectedFilter.subfilters[subFilter.id];
                 }
