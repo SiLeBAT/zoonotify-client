@@ -38,6 +38,7 @@ export interface DataAndStatisticToZipParameter {
      * object with the selected filters
      */
     filter: FilterInterface;
+    filteredSubFilterHeaderList: string[];
     /**
      * list with all main filters
      */
@@ -91,12 +92,18 @@ export function dataAndStatisticToZipFile(
 
     if (zipParameter.exportOptions.raw) {
         csvRowsFilteredData.push(parameterHeader);
-        const tableAttributes: DbKey[] = mainFilterList.concat(["resistance"]);
+        const tableAttributes: DbKey[] = mainFilterList.concat([
+            "matrixDetail",
+            "characteristics",
+            "resistance",
+        ]);
         csvRowsFilteredData.push(
             generateDataTableCsvString(
                 zipParameter.rawDataSet.rawData,
                 tableAttributes,
+                zipParameter.filteredSubFilterHeaderList,
                 zipParameter.filterLabels.mainFilterLabels,
+                zipParameter.filterLabels.subFilterTableHeader,
                 zipParameter.mainFilterAttributes
             )
         );

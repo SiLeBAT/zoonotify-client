@@ -1,6 +1,8 @@
 import {
     DbCollection,
     DbKey,
+    genesCollection,
+    microorganismSubFiltersList,
     resistancesCollection,
 } from "../../../../../../Shared/Model/Client_Isolate.model";
 import { FilterType } from "../../../../../../Shared/Model/Filter.model";
@@ -17,16 +19,36 @@ import { generateDataRowsCsvString } from "./generateDataRowsCsvString.service";
 export function generateDataTableCsvString(
     data: DbCollection,
     keys: DbKey[],
+    filteredSubFilterHeaderList: string[],
     mainFilterLabels: Record<FilterType, string>,
+    subFilterLabels: Record<string, string>,
     mainFilterAttributes: string[]
 ): string {
+    const characteristicHeader =
+        microorganismSubFiltersList.concat(genesCollection);
+    const filteredCharacteristicHeader = characteristicHeader.filter(
+        (value) => {
+            return value !== "genes";
+        }
+    );
     const FilteredDataString: string[] = [];
+
     let headerArray: string[] = mainFilterAttributes
-        .filter((mainFilter) => mainFilter !== "resistance")
+        .filter(
+            (mainFilter) =>
+                mainFilter !== "resistance" && mainFilter !== "characteristic"
+        )
         .map((element) => mainFilterLabels[element]);
+    headerArray = headerArray.concat(
+        filteredSubFilterHeaderList.map(
+            (subFilter) => subFilterLabels[subFilter]
+        )
+    );
     headerArray = headerArray.concat(resistancesCollection);
     FilteredDataString.push(headerArray.join(","));
-    FilteredDataString.push(generateDataRowsCsvString(data, keys));
+    FilteredDataString.push(
+        generateDataRowsCsvString(data, keys, filteredCharacteristicHeader)
+    );
 
     return FilteredDataString.join("\n");
 }

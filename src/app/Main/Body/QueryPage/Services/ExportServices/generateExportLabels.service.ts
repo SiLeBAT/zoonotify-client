@@ -1,10 +1,12 @@
 import { TFunction } from "i18next";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
 import { replaceAll } from "../../../../../Core/replaceAll.service";
+import { genesCollection } from "../../../../../Shared/Model/Client_Isolate.model";
 
 export interface ExportLabels {
     mainFilterLabels: Record<FilterType, string>;
     subFilterLabels: Record<FilterType, string>;
+    subFilterTableHeader: Record<FilterType, string>;
     allFilterLabel: string;
 }
 
@@ -16,6 +18,7 @@ export interface ExportLabels {
 export function generateExportLabels(
     mainFilterAttributes: string[],
     subFilterAttributes: string[],
+    subFilterHeaderList: string[],
     t: TFunction
 ): ExportLabels {
     const mainFilterLabels = {} as Record<FilterType, string>;
@@ -32,7 +35,27 @@ export function generateExportLabels(
         )}_${t(`QueryPage:Subfilters.${subFilterKey}.trigger`)}`;
     });
 
+    const subFilterTableHeader = {} as Record<FilterType, string>;
+
+    subFilterHeaderList.forEach((headerSubFilter) => {
+        const subFilterHeaderKey = replaceAll(headerSubFilter, ".", "");
+        if (genesCollection.includes(headerSubFilter)) {
+            subFilterTableHeader[headerSubFilter] = `${t(
+                `QueryPage:Subfilters.genes.values.${subFilterHeaderKey}`
+            )}`;
+        } else {
+            subFilterTableHeader[headerSubFilter] = `${t(
+                `QueryPage:Subfilters.${subFilterHeaderKey}.name`
+            )}`;
+        }
+    });
+
     const allFilterLabel: string = t("QueryPage:Filters.All");
 
-    return { mainFilterLabels, subFilterLabels, allFilterLabel };
+    return {
+        mainFilterLabels,
+        subFilterLabels,
+        subFilterTableHeader,
+        allFilterLabel,
+    };
 }
