@@ -814,6 +814,50 @@
         "rauh": "rauh"
       }
     },
+    "matrixDetail": {
+      "name": "Matrixdetail",
+      "values": {
+        "Einzel(tier)probe": "Single (animal) sample",
+        "Eierschalenpools": "Pools of shells",
+        "Sackware und lose Ware": "Loose or packaged in sacks",
+        "frisch": "Fresh",
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "Esp. lamb's lettuce, arugula, spinach, iceberg",
+        "vorgeschnitten, verpackt": "Pre-cut, packaged",
+        "Poolprobe": "Pooled sample",
+        "wärmebehandelt": "heat-treated",
+        "lose oder verpackt; geschnitten oder Topfware": "Loose or packaged; pre-cut or in pots",
+        "gekühlt": "Chilled",
+        "gekühlt oder tiefgefroren": "Chilled or frozen",
+        "gekühlt oder tiefgekühlt": "Chilled or frozen",
+        "gekühlt, mit Haut": "Chilled, skinned",
+        "gekühlt, ohne Haut": "Chilled, ohne Haut",
+        "roh": "Raw",
+        "Pulver- oder Blattform": "Powder or leaves",
+        "Hauttupfer": "Skin swabs",
+        "Tupfer": "Swabs",
+        "Kiementupfer": "Gill swabs",
+        "Kloaken- oder Kottupfer": "Cloacal or faecal swabs",
+        "Sammelkot": "Composite faecal sample",
+        "Sockentupfer": "Boot swabs",
+        "Stiefelüberzieher / Sockentupfer": "Boot swabs / socks",
+        "lebend, frisch": "Live, fresh",
+        "importiert, aus Aquakultur": "Imported, aquaculture production",
+        "Nasentupfer": "Nasal swab",
+        "Einzeltierprobe": "Single animal sample",
+        "tiefgekühlt": "Frozen",
+        "Schnittkäse": "Hard cheese",
+        "Weichkäse": "Soft cheeses",
+        "außer Hartkäse": "except hard cheeses",
+        "lose oder verpackt": "Loose or packaged",
+        "Staubtupfer": "Dust swabs",
+        "überwiegend aus Hähnchen- und Putenfleisch": "Mainly from chicken and turkey meat",
+        "überwiegend aus Schweinefleisch": "Mainly from pork",
+        "kleine Sorten": "Small varieties",
+        "vor der Verpackung in der Mühle": "Before packing in the mill",
+        "Raps": "Rapeseed",
+        "hauptsächlich Soja": "Mainly soy"
+      }
+    },
     "matrixDetail__(Hals)haut": {
       "name": "Matrix detail",
       "trigger": "(Neck)skin",
@@ -1230,10 +1274,10 @@
       "name": "Genes",
       "trigger": "STEC",
       "values": {
-        "stx1_Gen": "stx1 gen",
-        "stx2_Gen": "stx2 gen",
-        "eae_Gen": "eae gen",
-        "e_hly_Gen": "e hly gen"
+        "stx1": "stx1 gen",
+        "stx2": "stx2 gen",
+        "eae": "eae gen",
+        "e_hly": "e hly gen"
       }
     }
   },

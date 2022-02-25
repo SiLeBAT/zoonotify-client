@@ -12,19 +12,7 @@ export interface IsolateDTO {
         productionType: string;
         matrix: string;
         matrixDetail: string;
-        characteristics: {
-            sepecies: string;
-            serovar: string;
-            serotype: string;
-            spa_typ: string;
-            o_group: string;
-            h_group: string;
-            stx1: string;
-            stx2: string;
-            eae: string;
-            e_hly: string;
-            ampc_carba_phenotype: string;
-        };
+        characteristics: Record<string, string>;
         resistance: Record<
             Resistances,
             {

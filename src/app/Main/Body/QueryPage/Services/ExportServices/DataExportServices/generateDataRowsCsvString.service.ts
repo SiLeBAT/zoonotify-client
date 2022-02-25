@@ -14,7 +14,8 @@ import { modifyTableDataStringService } from "../../../../../../Core/modifyTable
  */
 export function generateDataRowsCsvString(
     dataArray: DbCollection,
-    headers: DbKey[]
+    headers: DbKey[],
+    characteristicHeader: string[]
 ): string {
     const csvTable: string[] = [];
     dataArray.forEach((row) => {
@@ -24,8 +25,8 @@ export function generateDataRowsCsvString(
             0
         );
 
-        headers.forEach((element) => {
-            if (element === "resistance") {
+        headers.forEach((headerValue) => {
+            if (headerValue === "resistance") {
                 const testedResistances = Object.keys(row.resistance);
                 const notTestedResistances = resistancesCollection.filter(
                     (x) => !testedResistances.includes(x)
@@ -45,8 +46,18 @@ export function generateDataRowsCsvString(
                     resistanceRowArray[resistanceIndex] = "-";
                 });
                 csvRow = csvRow.concat(resistanceRowArray);
+            } else if (headerValue === "characteristics") {
+                characteristicHeader.forEach((charHeader) => {
+                    if (row.characteristics[charHeader] !== undefined) {
+                        const rowValue: string =
+                            row.characteristics[charHeader];
+                        csvRow.push(modifyTableDataStringService(rowValue));
+                    } else {
+                        csvRow.push("-");
+                    }
+                });
             } else {
-                const rowValue: string = row[element];
+                const rowValue: string = row[headerValue];
                 csvRow.push(modifyTableDataStringService(rowValue));
             }
         });

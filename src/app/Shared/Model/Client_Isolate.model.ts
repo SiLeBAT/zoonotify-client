@@ -83,12 +83,20 @@ export type DbKey =
     | "category"
     | "productionType"
     | "samplingYear"
-    | "resistance";
+    | "resistance"
+    | "characteristics"
+    | "matrixDetail";
 
-export type DbKeyWithStringValue = Exclude<DbKey, "resistance">;
+export type DbKeyExcludeResistance = Exclude<DbKey, "resistance">;
+export type DbKeyWithStringValue = Exclude<
+    DbKeyExcludeResistance,
+    "characteristics"
+>;
 
 export type DbCollection = (Record<DbKeyWithStringValue, string> & {
     resistance: Record<Resistances, boolean>;
+} & {
+    characteristics: Record<string, string>;
 })[];
 
 export const mainFilterList: DbKey[] = [
@@ -116,6 +124,8 @@ export const microorganismSubFiltersList: string[] = [
     "h_group",
     "genes",
 ];
+
+export const genesCollection: string[] = ["stx1", "stx2", "eae", "e_hly"];
 
 export const matrixSubFiltersList: string[] = [
     "matrixDetail__(Hals)haut",

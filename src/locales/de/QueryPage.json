@@ -814,6 +814,50 @@
         "rauh": "rauh"
       }
     },
+    "matrixDetail": {
+      "name": "Matrixdetail",
+      "values": {
+        "Einzel(tier)probe": "Einzel(tier)probe",
+        "Eierschalenpools": "Eierschalenpools",
+        "Sackware und lose Ware": "Sackware und lose Ware",
+        "frisch": "Frisch",
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "Insb. Feldsalat, Rucola, Spinat, Eisberg",
+        "vorgeschnitten, verpackt": "Vorgeschnitten, verpackt",
+        "Poolprobe": "Poolprobe",
+        "wärmebehandelt": "Wärmebehandelt",
+        "lose oder verpackt; geschnitten oder Topfware": "Lose oder verpackt; geschnitten oder Topfware",
+        "gekühlt": "Gekühlt",
+        "gekühlt oder tiefgefroren": "Gekühlt oder tiefgefroren",
+        "gekühlt oder tiefgekühlt": "Gekühlt oder tiefgekühlt",
+        "gekühlt, mit Haut": "Gekühlt, mit Haut",
+        "gekühlt, ohne Haut": "Gekühlt, ohne Haut",
+        "roh": "Roh",
+        "Pulver- oder Blattform": "Pulver- oder Blattform",
+        "Hauttupfer": "Hauttupfer",
+        "Tupfer": "Tupfer",
+        "Kiementupfer": "Kiementupfer",
+        "Kloaken- oder Kottupfer": "Kloaken- oder Kottupfer",
+        "Sammelkot": "Sammelkot",
+        "Sockentupfer": "Sockentupfer",
+        "Stiefelüberzieher / Sockentupfer": "Stiefelüberzieher / Sockentupfer",
+        "lebend, frisch": "Lebend, frisch",
+        "importiert, aus Aquakultur": "Importiert, aus Aquakultur",
+        "Nasentupfer": "Nasentupfer",
+        "Einzeltierprobe": "Einzeltierprobe",
+        "tiefgekühlt": "Tiefgekühlt",
+        "Schnittkäse": "Schnittkäse",
+        "Weichkäse": "Weichkäse",
+        "außer Hartkäse": "Außer Hartkäse",
+        "lose oder verpackt": "Lose oder verpackt",
+        "Staubtupfer": "Staubtupfer",
+        "überwiegend aus Hähnchen- und Putenfleisch": "Überwiegend aus Hähnchen- und Putenfleisch",
+        "überwiegend aus Schweinefleisch": "Überwiegend aus Schweinefleisch",
+        "kleine Sorten": "Kleine Sorten",
+        "vor der Verpackung in der Mühle": "Vor der Verpackung in der Mühle",
+        "Raps": "Raps",
+        "hauptsächlich Soja": "Hauptsächlich Soja"
+      }
+    },
     "matrixDetail__(Hals)haut": {
       "name": "Matrixdetail",
       "trigger": "(Hals)haut",
@@ -1230,10 +1274,10 @@
       "name": "Gene",
       "trigger": "STEC",
       "values": {
-        "stx1_Gen": "stx1 Gen",
-        "stx2_Gen": "stx2 Gen",
-        "eae_Gen": "eae Gen",
-        "e_hly_Gen": "e hly Gen"
+        "stx1": "stx1 Gen",
+        "stx2": "stx2 Gen",
+        "eae": "eae Gen",
+        "e_hly": "e hly Gen"
       }
     }
   },

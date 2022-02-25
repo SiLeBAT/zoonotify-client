@@ -11,13 +11,16 @@ import {
     allSubFiltersList,
     DbCollection,
     DbKey,
+    genesCollection,
     mainFilterList,
+    microorganismSubFiltersList,
 } from "../../../../../Shared/Model/Client_Isolate.model";
 import { ISOLATE_URL } from "../../../../../Shared/URLs";
 import { DataInterface } from "../../../../../Shared/Context/DataContext";
 import { FilterContextInterface } from "../../../../../Shared/Context/FilterContext";
 import { dataAndStatisticToZipFile } from "../ExportServices/dataAndStatisticToZipFile.service";
 import { generateExportLabels } from "../ExportServices/generateExportLabels.service";
+import { adaptApiIsolatesService } from "../ExportServices/adaptApiIsolates.service";
 
 export async function exportZipService(props: {
     t: TFunction;
@@ -47,9 +50,18 @@ export async function exportZipService(props: {
 
     const ZNFilename = `ZooNotify_${getCurrentDate()}.csv`;
 
+    const subFilterHeaderList = ["matrixDetail"]
+        .concat(microorganismSubFiltersList)
+        .concat(genesCollection);
+
+    const filteredSubFilterHeaderList = subFilterHeaderList.filter((value) => {
+        return value !== "genes";
+    });
+
     const exportLabels = generateExportLabels(
         props.filter.mainFilters,
         allSubFiltersList,
+        filteredSubFilterHeaderList,
         t
     );
     const subFileNames = {
@@ -110,7 +122,11 @@ export async function exportZipService(props: {
                 isolateFilteredResponse.data;
             const adaptedFilteredIsolates: DbCollection =
                 adaptIsolatesFromAPI(isolateFilteredProp);
-            rawData = adaptedFilteredIsolates;
+            const translatedIsolates: DbCollection = adaptApiIsolatesService(
+                adaptedFilteredIsolates,
+                t
+            );
+            rawData = translatedIsolates;
             rawKeys = mainFilterList;
         }
     }
@@ -143,6 +159,7 @@ export async function exportZipService(props: {
             znPngFilename,
             filter: props.filter.selectedFilter,
             filterLabels: exportLabels,
+            filteredSubFilterHeaderList,
             mainFilterAttributes: props.filter.mainFilters,
             subFilterAttributes: props.subFilters,
             subFileNames,

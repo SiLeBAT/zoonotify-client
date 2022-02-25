@@ -39,6 +39,8 @@ export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
             productionType,
             resistance,
             samplingYear,
+            characteristics,
+            matrixDetail,
         }) => ({
             microorganism,
             samplingContext,
@@ -50,6 +52,8 @@ export function adaptIsolatesFromAPI(isolateProp: IsolateDTO): DbCollection {
             productionType,
             resistance: adaptResistances(resistance),
             samplingYear: String(samplingYear),
+            characteristics,
+            matrixDetail,
         })
     );
 
