@@ -2,7 +2,11 @@
   "Content": {
     "Title": "Abfrageergebnisse",
     "DataStatus": "Validierte Laborergebnisse nach RL 99/2003/EU - Datenstand {{date}}",
-    "MainText": "ZooNotify ermöglicht, eine Auswahl der Typisierungsergebnisse der an die Nationalen Referenzlaboratorien am BfR gesendeten Isolate abzufragen. Hierbei handelt es sich um Zoonoseereger und Kommensale, die im Rahmen des nationalen Zoonosen-Monitorings nach AVV Zoonosen Lebensmittelkette sowie der Salmonellen-Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden. Sie können eigene Abfragen mit der Filterfunktion links erstellen oder Beispielabfragen [LINK] abrufen und bearbeiten. Dabei erzeugt ZooNotify für Sie downloadbare Tabellen und Grafiken. Abfragen können Sie über die URL reproduzieren und teilen."
+    "MainText": {
+      "Part1": "ZooNotify ermöglicht, eine Auswahl der Typisierungsergebnisse der an die Nationalen Referenzlaboratorien am BfR gesendeten Isolate abzufragen. Hierbei handelt es sich um Zoonoseereger und Kommensale, die im Rahmen des nationalen Zoonosen-Monitorings nach AVV Zoonosen Lebensmittelkette sowie der Salmonellen-Bekämpfungsprogramme beim Geflügel gemäß Verordnung (EG) Nr. 2160/2003 gewonnen werden. Sie können eigene Abfragen mit der Filterfunktion links erstellen oder ",
+      "Part2": "Beispielabfragen",
+      "Part3": " abrufen und bearbeiten. Dabei erzeugt ZooNotify für Sie downloadbare Tabellen und Grafiken. Abfragen können Sie über die URL reproduzieren und teilen."
+    }
   },
   "Results": {
     "Parameter": "Ausgewählte Filter",

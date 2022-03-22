@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const normalTextStyle = css`
@@ -10,8 +10,13 @@ const normalTextStyle = css`
     hyphens: auto;
 `;
 
-export function QueryPageIntroTextComponent(): JSX.Element {
+export function QueryPageIntroTextComponent(props: {
+    onClickOpen: () => void;
+}): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
+
+    const handleClick = (): void => props.onClickOpen();
+
     return (
         <Card
             sx={{
@@ -20,7 +25,16 @@ export function QueryPageIntroTextComponent(): JSX.Element {
         >
             <CardContent>
                 <Typography css={normalTextStyle}>
-                    {t("Content.MainText")}
+                    {t("Content.MainText.Part1")}
+                    <Button
+                        variant="text"
+                        onClick={handleClick}
+                        size="small"
+                        sx={{ padding: 0, textTransform: "none" }}
+                    >
+                        {t("Content.MainText.Part2")}
+                    </Button>
+                    {t("Content.MainText.Part3")}
                 </Typography>
             </CardContent>
         </Card>

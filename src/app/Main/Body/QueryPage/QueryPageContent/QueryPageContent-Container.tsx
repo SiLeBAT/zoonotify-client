@@ -20,11 +20,14 @@ export function QueryPageContentContainer(props: {
     };
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     onDisplayOptionsChange: (displayOption: string) => void;
+    onClickOpenExampleQueries: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
+    const handleClickOpenExampleQueries = (): void =>
+        props.onClickOpenExampleQueries();
 
     const contentTitle = t("Content.Title");
 
@@ -37,7 +40,10 @@ export function QueryPageContentContainer(props: {
 
     if (!props.isFilter) {
         queryPageInfo = [
-            <QueryPageIntroTextComponent key="introText-Info" />,
+            <QueryPageIntroTextComponent
+                key="introText-Info"
+                onClickOpen={handleClickOpenExampleQueries}
+            />,
             <QueryPageNrOfIsolatesComponent
                 numberOfIsolates={props.numberOfIsolates}
                 key="nrOfIsolates-Info"

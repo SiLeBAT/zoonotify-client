@@ -710,6 +710,9 @@ export function QueryPageContainerComponent(): JSX.Element {
                             }}
                             getPngDownloadUriRef={getPngDownloadUriRef}
                             onDisplayOptionsChange={handleChangeDisplayOptions}
+                            onClickOpenExampleQueries={
+                                handleClickQueriesDialogOpen
+                            }
                         />
                     }
                     dialogIsOpen={exportDialogIsOpen || queryDialogIsOpen}
