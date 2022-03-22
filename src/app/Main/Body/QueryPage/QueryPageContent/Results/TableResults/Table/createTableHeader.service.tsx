@@ -1,37 +1,62 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import TableCell from "@mui/material/TableCell";
 import { useTranslation } from "react-i18next";
 import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
 import { onBackgroundColor } from "../../../../../../../Shared/Style/Style-MainTheme";
 import {
     highlightedTableBorder,
-    fixedCellSize,
+    fixedCellSizeRowValue,
     defaultTableBorder,
     sumRowColBackgroundColor,
+    fixedCellSizeIcon,
 } from "../ResultsTable.style";
 import { getMicroorganismLabelService } from "../../../../Services/getMicroorganismLabel";
 
-const blankCellStyle = css`
-    box-sizing: border-box;
-    border-right: ${defaultTableBorder};
-    width: ${fixedCellSize}px;
-    min-width: ${fixedCellSize}px;
-`;
-const headerCellStyle = css`
-    box-sizing: border-box;
-    border-right: ${defaultTableBorder};
-    text-align: right;
-    white-space: nowrap;
-`;
-const sumCellStyle = css`
-    box-sizing: border-box;
-    border-right: ${defaultTableBorder};
-    border-left: ${highlightedTableBorder};
-    background-color: ${sumRowColBackgroundColor};
-    text-align: left;
-    white-space: nowrap;
-`;
+const emptyCellStyleIcon = {
+    padding: "0.75em",
+    color: onBackgroundColor,
+    borderBottom: highlightedTableBorder,
+    letterSpacing: 0,
+    boxSizing: "border-box",
+    borderRight: defaultTableBorder,
+    width: `${fixedCellSizeIcon}px`,
+    minWidth: `${fixedCellSizeIcon}px`,
+} as const;
+
+const emptyCellStyle = {
+    padding: "0.75em",
+    color: onBackgroundColor,
+    borderBottom: highlightedTableBorder,
+    letterSpacing: 0,
+    boxSizing: "border-box",
+    borderRight: `${defaultTableBorder}`,
+    width: `${fixedCellSizeRowValue}px`,
+    minWidth: `${fixedCellSizeRowValue}px`,
+} as const;
+
+const cellStyle = {
+    padding: "0.75em",
+    color: onBackgroundColor,
+    borderBottom: highlightedTableBorder,
+    letterSpacing: 0,
+    boxSizing: "border-box",
+    borderRight: defaultTableBorder,
+    textAlign: "right",
+    whiteSpace: "nowrap",
+} as const;
+
+const sumCellStyle = {
+    padding: "0.75em",
+    color: onBackgroundColor,
+    letterSpacing: 0,
+    boxSizing: "border-box",
+    borderRight: defaultTableBorder,
+    borderLeft: highlightedTableBorder,
+    borderBottom: highlightedTableBorder,
+    backgroundColor: sumRowColBackgroundColor,
+    textAlign: "left",
+    whiteSpace: "nowrap",
+} as const;
 
 /**
  * @desc Returns list of table cells for the table header
@@ -44,23 +69,25 @@ export function createTableHeaderService(props: {
     colAttribute: string;
     tableOption: DisplayOptionType;
     isCol: boolean;
-}): JSX.Element[] {
+    isSubFilter: boolean;
+}): JSX.Element[][] {
     const { t } = useTranslation(["QueryPage"]);
     const headerTableCells: JSX.Element[] = [];
+
+    if (props.isSubFilter) {
+        headerTableCells.push(
+            <TableCell sx={emptyCellStyleIcon} key="header-blank">
+                &nbsp;
+            </TableCell>
+        );
+    }
+
     headerTableCells.push(
-        <TableCell
-            sx={{
-                padding: "0.75em",
-                color: onBackgroundColor,
-                borderBottom: highlightedTableBorder,
-                letterSpacing: 0,
-            }}
-            key="header-blank"
-            css={blankCellStyle}
-        >
+        <TableCell sx={emptyCellStyle} key="header-blank2">
             &nbsp;
         </TableCell>
     );
+    const headerValueCells: JSX.Element[] = [];
     props.headerValues.forEach((headerValue): void => {
         let headerTitle: string | JSX.Element = "";
         if (props.isCol) {
@@ -95,36 +122,22 @@ export function createTableHeaderService(props: {
             headerTitle = t("Results.NrIsolatesText");
         }
 
-        headerTableCells.push(
-            <TableCell
-                sx={{
-                    padding: "0.75em",
-                    color: onBackgroundColor,
-                    borderBottom: highlightedTableBorder,
-                    letterSpacing: 0,
-                }}
-                key={`header-${headerValue}`}
-                css={headerCellStyle}
-            >
+        const headerCell = (
+            <TableCell sx={cellStyle} key={`header-${headerValue}`}>
                 {headerTitle}
             </TableCell>
         );
+
+        headerValueCells.push(headerCell);
+        headerTableCells.push(headerCell);
     });
+
     if (props.showRowSum) {
         headerTableCells.push(
-            <TableCell
-                sx={{
-                    padding: "0.75em",
-                    color: onBackgroundColor,
-                    borderBottom: highlightedTableBorder,
-                    letterSpacing: 0,
-                }}
-                key="header-row-sum"
-                css={sumCellStyle}
-            >
+            <TableCell sx={sumCellStyle} key="header-row-sum">
                 {t("Sums.RowSum")}
             </TableCell>
         );
     }
-    return headerTableCells;
+    return [headerTableCells, headerValueCells];
 }

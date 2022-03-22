@@ -5,23 +5,19 @@ import {
     primaryColor,
 } from "../../../../../../../Shared/Style/Style-MainTheme";
 import {
-    fixedCellSize,
-    fixedHeaderCellWidth,
+    fixedCellSizeIcon,
+    fixedCellSizeRowValue,
     isColHeight,
     isOnlyRowHeight,
     isOnlyRowWidth,
 } from "../ResultsTable.style";
 
 const spacerStyle = (
-    isRow: boolean,
-    isRowAndCol: boolean
+    spacerWidth: number,
+    spacerHeight: number
 ): SerializedStyles => css`
-    width: ${isRow
-        ? `${isOnlyRowWidth}px`
-        : (isRowAndCol
-        ? `${fixedHeaderCellWidth}px`
-        : `${fixedCellSize}px`)};
-    height: ${isRow ? `${isOnlyRowHeight}px` : `${isColHeight}px`};
+    width: ${`${spacerWidth}px`};
+    height: ${`${spacerHeight}px`};
 `;
 
 const titleDivStyle = (isRow: boolean): SerializedStyles => css`
@@ -49,6 +45,7 @@ export interface TableMainHeaderProps {
      *  true if row and col are selected
      */
     isRowAndCol: boolean;
+    isSubFilter: boolean;
     /**
      *  text content of the main header
      */
@@ -63,9 +60,21 @@ export interface TableMainHeaderProps {
 export function TableMainHeaderComponent(
     props: TableMainHeaderProps
 ): JSX.Element {
+    let spaceWidth = fixedCellSizeRowValue;
+
+    if (props.isRow) {
+        spaceWidth = isOnlyRowWidth;
+    } else if (props.isRowAndCol && props.isSubFilter) {
+        spaceWidth = fixedCellSizeRowValue + fixedCellSizeIcon + isColHeight;
+    } else if (props.isRowAndCol && !props.isSubFilter) {
+        spaceWidth = fixedCellSizeRowValue + isColHeight;
+    }
+
+    const spacerHeight = props.isRow ? isOnlyRowHeight : isColHeight;
+
     return (
         <div css={titleDivStyle(props.isRow)}>
-            <div css={spacerStyle(props.isRow, props.isRowAndCol)}>&nbsp;</div>
+            <div css={spacerStyle(spaceWidth, spacerHeight)}>&nbsp;</div>
             <p css={tableTitleStyle(props.isRow)}>{props.text}</p>
         </div>
     );

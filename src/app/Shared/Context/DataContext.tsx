@@ -4,6 +4,11 @@ import { FilterType } from "../Model/Filter.model";
 export type FeatureType = "row" | "column";
 export type DisplayOptionType = "absolute" | "relative";
 
+export type SubFilterDataType = Record<
+    string,
+    { tableRows: Record<string, string>[]; subFilterName: string }
+>;
+
 export interface DataInterface {
     row: FilterType;
     column: FilterType;
@@ -13,6 +18,8 @@ export interface DataInterface {
     statisticDataRelativeChart: Record<string, string>[];
     statTableDataWithSumsAbs: Record<string, string>[];
     statTableDataWithSumsRel: Record<string, string>[];
+    statisticSubTableDataAbs: SubFilterDataType;
+    statisticSubTableDataRel: SubFilterDataType;
 }
 
 export const defaultData: DataInterface = {
@@ -24,6 +31,8 @@ export const defaultData: DataInterface = {
     statisticDataRelativeChart: [],
     statTableDataWithSumsAbs: [],
     statTableDataWithSumsRel: [],
+    statisticSubTableDataAbs: {},
+    statisticSubTableDataRel: {},
 };
 
 interface ProfileState {

@@ -9,7 +9,8 @@ import { ClientIsolateCountedGroups } from "../../../../Shared/Model/Client_Isol
 export function adaptCountedIsolatesGroupsService(
     countedIsolatesGroups: (Record<string, string | Date> & {
         count: number;
-    })[]
+    })[],
+    subFilterForTable?: string
 ): ClientIsolateCountedGroups {
     const adaptedGroups: (Record<string, string> & {
         count: number;
@@ -19,18 +20,16 @@ export function adaptCountedIsolatesGroupsService(
         const adaptedGroup = _.cloneDeep(element);
         if (element.samplingYear !== undefined) {
             adaptedGroup.samplingYear = String(adaptedGroup.samplingYear);
-            adaptedGroups.push(
-                adaptedGroup as Record<string, string> & {
-                    count: number;
-                }
-            );
-        } else {
-            adaptedGroups.push(
-                adaptedGroup as Record<string, string> & {
-                    count: number;
-                }
-            );
         }
+        if (subFilterForTable) {
+            adaptedGroup[subFilterForTable] = element.characteristicValue;
+            delete adaptedGroup.characteristicValue;
+        }
+        adaptedGroups.push(
+            adaptedGroup as Record<string, string> & {
+                count: number;
+            }
+        );
     });
 
     return adaptedGroups;

@@ -3,7 +3,7 @@ import { css, jsx, SerializedStyles } from "@emotion/core";
 import TableCell from "@mui/material/TableCell";
 import {
     defaultTableBorder,
-    fixedCellSize,
+    fixedCellSizeRowValue,
     highlightedTableBorder,
     sumRowColBackgroundColor,
 } from "../ResultsTable.style";
@@ -13,8 +13,8 @@ const tableCellStyle = (isName: boolean): SerializedStyles => css`
     border-right: ${defaultTableBorder};
     border-top: ${highlightedTableBorder};
     background-color: ${sumRowColBackgroundColor};
-    width: ${isName ? `${fixedCellSize}px` : "auto"};
-    min-width: ${isName ? `${fixedCellSize}px` : "auto"};
+    width: ${isName ? `${fixedCellSizeRowValue}px` : "auto"};
+    min-width: ${isName ? `${fixedCellSizeRowValue}px` : "auto"};
 `;
 
 const totalSumStyle = css`
@@ -27,13 +27,22 @@ const totalSumStyle = css`
 
 export function createTableRowWithColSumService(props: {
     showRowSum: boolean;
+    isSubFilter: boolean;
     rowWithColSums: Record<string, string> | undefined;
     headerValues: string[];
     colSumLabel: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     style: Record<string, string | number>;
 }): JSX.Element[] {
-    const arrayWithColSumCells: JSX.Element[] = [
+    const arrayWithColSumCells: JSX.Element[] = [];
+
+    if (props.isSubFilter) {
+        arrayWithColSumCells.push(
+            <TableCell css={tableCellStyle(false)} key="header-blank">
+                &nbsp;
+            </TableCell>
+        );
+    }
+    arrayWithColSumCells.push(
         <TableCell
             key="header-column-sum"
             sx={props.style}
@@ -43,9 +52,8 @@ export function createTableRowWithColSumService(props: {
             css={tableCellStyle(true)}
         >
             {props.colSumLabel}
-        </TableCell>,
-    ];
-
+        </TableCell>
+    );
     if (props.rowWithColSums !== undefined) {
         const { rowWithColSums } = props;
         props.headerValues.forEach((headerValue) => {

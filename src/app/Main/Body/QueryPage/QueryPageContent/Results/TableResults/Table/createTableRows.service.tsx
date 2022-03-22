@@ -1,21 +1,38 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from "@emotion/core";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import TableCell from "@mui/material/TableCell";
+import IconButton from "@mui/material/IconButton";
+import { TableRow } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { getMicroorganismLabelService } from "../../../../Services/getMicroorganismLabel";
-import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
+import {
+    DisplayOptionType,
+    SubFilterDataType,
+} from "../../../../../../../Shared/Context/DataContext";
 import {
     defaultTableBorder,
-    fixedCellSize,
+    fixedCellSizeIcon,
+    fixedCellSizeRowValue,
     highlightedTableBorder,
     sumRowColBackgroundColor,
 } from "../ResultsTable.style";
+import { subTableComponent } from "./subTable.component";
 
 const tableCellStyle = (isName: boolean): SerializedStyles => css`
     box-sizing: border-box;
     border-right: ${defaultTableBorder};
-    width: ${isName ? `${fixedCellSize}px` : "auto"};
-    min-width: ${isName ? `${fixedCellSize}px` : "auto"};
+    width: ${isName ? `${fixedCellSizeRowValue}px` : "auto"};
+    min-width: ${isName ? `${fixedCellSizeRowValue}px` : "auto"};
+`;
+const tableCellStyleIcon = css`
+    box-sizing: border-box;
+    border-right: ${defaultTableBorder};
+    padding: 0em;
+    width: ${`${fixedCellSizeIcon}px`};
+    min-width: ${`${fixedCellSizeIcon}px`};
 `;
 const sumTableCellStyle = css`
     box-sizing: border-box;
@@ -37,10 +54,31 @@ export function createTableRowsService(props: {
     displayRow: boolean;
     displayOption: DisplayOptionType;
     colKeys: string[];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     style: Record<string, string | number>;
-}): JSX.Element[] {
+    tableHeader: JSX.Element[];
+    subTableData: SubFilterDataType;
+}): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
+
+    const [subTableIsOpen, setSubTableIsOpen] = useState<boolean>(false);
+    const handleOpenSubTable = (): void => setSubTableIsOpen(!subTableIsOpen);
+
+    const isSubFilterTable = Object.keys(props.subTableData).includes(
+        props.row.name
+    );
+
+    let subTable: JSX.Element | undefined;
+
+    if (isSubFilterTable) {
+        subTable = subTableComponent({
+            rowName: props.row.name,
+            tableHeader: props.tableHeader,
+            subTableIsOpen,
+            subTableData: props.subTableData,
+            t,
+        });
+    }
+
     let rowName: string | JSX.Element = "";
     const rowKey = props.row.name.replace(".", "");
     if (props.displayRow) {
@@ -66,6 +104,47 @@ export function createTableRowsService(props: {
     }
 
     const rowCells: JSX.Element[] = [];
+
+    if (props.rowAttribute === "microorganism") {
+        if (isSubFilterTable) {
+            rowCells.push(
+                <TableCell
+                    key={`iconButtonCell-${props.row.name}`}
+                    sx={props.style}
+                    component="th"
+                    scope="row"
+                    align="left"
+                    css={tableCellStyleIcon}
+                >
+                    <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={handleOpenSubTable}
+                    >
+                        {subTableIsOpen ? (
+                            <KeyboardArrowUpIcon />
+                        ) : (
+                            <KeyboardArrowDownIcon />
+                        )}
+                    </IconButton>
+                </TableCell>
+            );
+        } else {
+            rowCells.push(
+                <TableCell
+                    key={`iconButtonCell-${props.row.name}`}
+                    sx={props.style}
+                    component="th"
+                    scope="row"
+                    align="left"
+                    css={tableCellStyleIcon}
+                >
+                    &nbsp;
+                </TableCell>
+            );
+        }
+    }
+
     rowCells.push(
         <TableCell
             key={`isolates-${props.row.name}-name`}
@@ -108,5 +187,11 @@ export function createTableRowsService(props: {
             </TableCell>
         );
     }
-    return rowCells;
+
+    return (
+        <React.Fragment key={`row-subTable-${props.row.name}`}>
+            <TableRow key={`row-main-${props.row.name}`}>{rowCells}</TableRow>
+            {isSubFilterTable && subTable}
+        </React.Fragment>
+    );
 }

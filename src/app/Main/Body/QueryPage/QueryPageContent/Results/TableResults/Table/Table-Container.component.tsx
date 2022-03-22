@@ -1,7 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { TableRow } from "@mui/material";
-import { DisplayOptionType } from "../../../../../../../Shared/Context/DataContext";
+import {
+    DisplayOptionType,
+    SubFilterDataType,
+} from "../../../../../../../Shared/Context/DataContext";
 import { TableContentLayout } from "./TableContent-Layout.component";
 import { TableMainHeaderComponent } from "./TableMainHeader.component";
 import { SumOptions } from "../TableResults.model";
@@ -21,10 +24,12 @@ export function TableContainer(props: {
     colMainHeader: string;
     rowMainHeader: string;
     tableData: Record<string, string>[];
+    subTableData: SubFilterDataType;
     tableOption: DisplayOptionType;
     columnNameValues: string[];
     colAttribute: string;
     rowAttribute: string;
+    isSubFilter: boolean;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
@@ -44,6 +49,7 @@ export function TableContainer(props: {
         columnMainHeader = (
             <TableMainHeaderComponent
                 isRow={false}
+                isSubFilter={props.isSubFilter}
                 text={props.colMainHeader}
                 isRowAndCol={isCol && isRow}
             />
@@ -56,27 +62,37 @@ export function TableContainer(props: {
         rowMainHeader = (
             <TableMainHeaderComponent
                 isRow
+                isSubFilter={props.isSubFilter}
                 text={props.rowMainHeader}
                 isRowAndCol={isCol && isRow}
             />
         );
     }
 
+    const [tableHeader, tableValuesHeader] = createTableHeaderService({
+        showRowSum: props.sumOptions.showRowSum,
+        headerValues: props.columnNameValues,
+        colAttribute: props.colAttribute,
+        tableOption: props.tableOption,
+        isCol,
+        isSubFilter: props.isSubFilter,
+    });
+
     const tableRows: JSX.Element[] = props.tableData
         .filter((row) => row.name !== "colSum")
-        .map((row) => (
-            <TableRow key={`row-${row.name}`}>
-                {createTableRowsService({
-                    showRowSum: props.sumOptions.showRowSum,
-                    row,
-                    rowAttribute: props.rowAttribute,
-                    displayRow: isRow,
-                    displayOption: props.tableOption,
-                    colKeys: props.columnNameValues,
-                    style: tableCellStyle,
-                })}
-            </TableRow>
-        ));
+        .map((row) =>
+            createTableRowsService({
+                showRowSum: props.sumOptions.showRowSum,
+                row,
+                rowAttribute: props.rowAttribute,
+                displayRow: isRow,
+                displayOption: props.tableOption,
+                colKeys: props.columnNameValues,
+                style: tableCellStyle,
+                tableHeader: tableValuesHeader,
+                subTableData: props.subTableData,
+            })
+        );
 
     if (props.sumOptions.showColSum) {
         const rowWithColSums = props.tableData.filter(
@@ -87,6 +103,7 @@ export function TableContainer(props: {
             <TableRow key="row-with-column-sum">
                 {createTableRowWithColSumService({
                     showRowSum: props.sumOptions.showRowSum,
+                    isSubFilter: props.isSubFilter,
                     rowWithColSums,
                     headerValues: props.columnNameValues,
                     colSumLabel: t("Sums.ColSum"),
@@ -95,14 +112,6 @@ export function TableContainer(props: {
             </TableRow>
         );
     }
-
-    const tableHeader = createTableHeaderService({
-        showRowSum: props.sumOptions.showRowSum,
-        headerValues: props.columnNameValues,
-        colAttribute: props.colAttribute,
-        tableOption: props.tableOption,
-        isCol,
-    });
 
     return (
         <TableLayout

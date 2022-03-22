@@ -10,6 +10,7 @@ import { DataInterface } from "../../../../Shared/Context/DataContext";
 
 export function QueryPageContentContainer(props: {
     isFilter: boolean;
+    isSubFilter: boolean;
     dataIsLoading: boolean;
     columnNameValues: string[];
     data: DataInterface;
@@ -51,6 +52,7 @@ export function QueryPageContentContainer(props: {
             tableResults={
                 <TableResultsContainer
                     tableIsLoading={props.dataIsLoading}
+                    isSubFilter={props.isSubFilter}
                     columnNameValues={props.columnNameValues}
                     tableData={props.data}
                     onDisplayOptionsChange={handleChangeDisplayOptions}

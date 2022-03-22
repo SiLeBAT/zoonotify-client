@@ -43,18 +43,23 @@ export function generateDataObjectsService(props: {
     const columnNames = generateTableHeaderValuesService(
         props.isCol,
         allValuesText,
-        props.uniqueValues,
-        props.selectedFilters,
+        props.uniqueValues.filters,
+        props.selectedFilters.filters,
         props.colAttribute
+    );
+    const rowNameValues = generateTableHeaderValuesService(
+        props.isRow,
+        allValuesText,
+        props.uniqueValues.filters,
+        props.selectedFilters.filters,
+        props.rowAttribute
     );
     const statisticTableDataAbs: Record<string, string>[] =
         generateStatisticTableDataAbsService(
-            props.isRow,
-            props.uniqueValues,
-            props.selectedFilters,
             allValuesText,
             adaptedIsolateCountGroups,
             columnNames,
+            rowNameValues,
             props.colAttribute,
             props.rowAttribute
         );
