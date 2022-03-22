@@ -11,6 +11,7 @@ import { AccordionComponent } from "../../../../../../Shared/Accordion.component
 
 export interface TableResultsProps {
     tableIsLoading: boolean;
+    isSubFilter: boolean;
     columnNameValues: string[];
     tableData: DataInterface;
     onDisplayOptionsChange: (displayOption: string) => void;
@@ -69,10 +70,12 @@ export function TableResultsContainer(props: TableResultsProps): JSX.Element {
                     colMainHeader={colMainHeader}
                     rowMainHeader={rowMainHeader}
                     tableData={tableData}
+                    subTableData={props.tableData.statisticSubTableDataAbs}
                     tableOption={props.tableData.option}
                     columnNameValues={props.columnNameValues}
                     colAttribute={tableColAttribute}
                     rowAttribute={tableRowAttribute}
+                    isSubFilter={props.isSubFilter}
                 />
             </div>
         );

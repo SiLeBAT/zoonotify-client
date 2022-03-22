@@ -21,6 +21,7 @@ export async function fetchInitialDataService(): Promise<{
     status: { filterStatus: number; isolateStatus: number };
     data?: {
         subFilters: ClientSingleFilterConfig[];
+        mainFilterWithSubFilters: string[];
         uniqueDataValues: FilterInterface;
         totalNrOfIsolates: number;
     };
@@ -47,13 +48,18 @@ export async function fetchInitialDataService(): Promise<{
         const adaptedFilterProp: ClientFiltersConfig =
             adaptFilterFromApiService(filterProp);
         const adaptedSubFilters: ClientSingleFilterConfig[] = [];
+        const mainFilterWithSubFilters: string[] = [];
         adaptedFilterProp.filters.forEach((adaptedFilter) => {
+            const subFilterParent = adaptedFilter.parent;
             if (
-                adaptedFilter.parent !== undefined &&
+                subFilterParent !== undefined &&
                 allSubFiltersList.includes(adaptedFilter.id)
             ) {
                 if (adaptedFilter.values.length > 1) {
                     adaptedSubFilters.push(adaptedFilter);
+                    if (!mainFilterWithSubFilters.includes(subFilterParent)) {
+                        mainFilterWithSubFilters.push(subFilterParent);
+                    }
                 }
             }
         });
@@ -65,6 +71,7 @@ export async function fetchInitialDataService(): Promise<{
             },
             data: {
                 subFilters: adaptedSubFilters,
+                mainFilterWithSubFilters,
                 uniqueDataValues: uniqueValuesObject,
                 totalNrOfIsolates,
             },

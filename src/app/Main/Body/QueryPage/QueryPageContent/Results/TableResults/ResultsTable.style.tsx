@@ -3,11 +3,11 @@ import {
     primaryColor,
 } from "../../../../../../Shared/Style/Style-MainTheme";
 
-export const fixedCellSize = 160;
+export const fixedCellSizeRowValue = 160;
+export const fixedCellSizeIcon = 35;
 export const isOnlyRowWidth = 40;
 export const isOnlyRowHeight = 50;
 export const isColHeight = 40;
-export const fixedHeaderCellWidth = fixedCellSize + isColHeight;
 
 export const defaultTableBorder = "1px solid lightgrey";
 

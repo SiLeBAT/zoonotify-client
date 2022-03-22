@@ -1,26 +1,22 @@
 import { ClientIsolateCountedGroups } from "../../../../../Shared/Model/Client_Isolate.model";
-import { FilterInterface } from "../../../../../Shared/Model/Filter.model";
 import { generateOneTableRowObjService } from "./generateOneTableRowObj.service";
-import { generateTableHeaderValuesService } from "./generateTableHeaderValues.service";
 import { generateUniqueRowAndColValuesService } from "./generateUniqueRowAndColValues.service";
 
 export function generateStatisticTableDataAbsService(
-    isRow: boolean,
-    uniqueValues: FilterInterface,
-    selectedFilters: FilterInterface,
     allValuesText: string,
     isolateCountGroups: ClientIsolateCountedGroups,
     columnNameValues: string[],
+    rowNameValues: string[],
     colAttribute: string,
     rowAttribute: string
 ): Record<string, string>[] {
-    const rowNameValues = generateTableHeaderValuesService(
+    /* const rowNameValues = generateTableHeaderValuesService(
         isRow,
         allValuesText,
         uniqueValues,
         selectedFilters,
         rowAttribute
-    );
+    ); */
 
     const [uniqIsolateColValues, uniqIsolateRowValues] =
         generateUniqueRowAndColValuesService(
@@ -29,6 +25,7 @@ export function generateStatisticTableDataAbsService(
             colAttribute,
             rowAttribute
         );
+
     const statisticTableDataAbs: Record<string, string>[] = [];
 
     rowNameValues.forEach((rowName) => {

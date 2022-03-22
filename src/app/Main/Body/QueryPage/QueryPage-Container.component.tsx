@@ -8,6 +8,8 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     mainFilterList,
     allSubFiltersList,
+    microorganismSubFiltersList,
+    ClientIsolateCountedGroups,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
@@ -21,6 +23,7 @@ import {
     DataContext,
     DataInterface,
     FeatureType,
+    SubFilterDataType,
 } from "../../../Shared/Context/DataContext";
 import {
     ClientSingleFilterConfig,
@@ -46,6 +49,10 @@ import { fetchInitialDataService } from "./Services/ContainerServices/fetchIniti
 import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
 import { ExampleQueriesDialogComponent } from "./ExampleQueriesDialog/ExampleQueriesDialog.component";
 import { SubHeaderButtonComponent } from "./Subheader/SubHeader-Button.component";
+import { calculateRelativeTableData } from "./Services/TableServices/calculateRelativeTableData.service";
+import { generateStatisticTableDataAbsService } from "./Services/TableServices/generateStatisticTableDataAbs.service";
+import { adaptCountedIsolatesGroupsService } from "./Services/adaptCountedIsolatesGroups.service";
+import { generateTableHeaderValuesService } from "./Services/TableServices/generateTableHeaderValues.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [serverStatus, setServerStatus] = useState<{
@@ -79,6 +86,9 @@ export function QueryPageContainerComponent(): JSX.Element {
     const [subFilters, setSubFilters] = useState<ClientSingleFilterConfig[]>(
         []
     );
+    const [mainFilterWithSubFilters, setMainFilterWithSubFilters] = useState<
+        string[]
+    >([]);
     const [exportOptions, setExportOptions] = useState<{
         raw: boolean;
         stat: boolean;
@@ -340,6 +350,9 @@ export function QueryPageContainerComponent(): JSX.Element {
 
         if (initialData.data) {
             setSubFilters(initialData.data.subFilters);
+            setMainFilterWithSubFilters(
+                initialData.data.mainFilterWithSubFilters
+            );
             setUniqueDataValues(initialData.data.uniqueDataValues);
             setInitialUniqueValues(initialData.data.uniqueDataValues);
             setTotalNrOfIsol(initialData.data.totalNrOfIsolates);
@@ -407,6 +420,7 @@ export function QueryPageContainerComponent(): JSX.Element {
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
             const isolateCountGroups = isolateCountProp.groups;
             if ((!isCol && !isRow) || isolateCountGroups === undefined) {
+                // TODO: reset all?
                 setData({
                     ...data,
                     statisticDataAbsolute: [],
@@ -424,6 +438,123 @@ export function QueryPageContainerComponent(): JSX.Element {
                     rowAttribute,
                 });
 
+                const allSubTablesAbs: SubFilterDataType = {};
+                const allSubTablesRel: SubFilterDataType = {};
+
+                const getTableForSubFilter = subFilters.map(
+                    async (subFilter) => {
+                        const allFilters = !CheckIfFilterIsSet(
+                            filter.selectedFilter,
+                            filter.mainFilters
+                        );
+                        const selectedFilters =
+                            filter.selectedFilter.filters[data.row];
+                        if (subFilter.trigger !== undefined) {
+                            if (
+                                (subFilter.parent === data.row &&
+                                    selectedFilters.includes(
+                                        subFilter.trigger
+                                    ) &&
+                                    microorganismSubFiltersList.includes(
+                                        subFilter.id
+                                    )) ||
+                                allFilters
+                            ) {
+                                const subFilterForTable = subFilter.id;
+                                const paramString = history.location.search;
+                                const isolateCountParams = new URLSearchParams(
+                                    paramString
+                                );
+                                isolateCountParams.set(
+                                    "row",
+                                    subFilterForTable
+                                );
+                                const isolateCountParamsString =
+                                    isolateCountParams
+                                        .toString()
+                                        .replace("row=", "group-by=")
+                                        .replace("column=", "group-by=");
+                                const subIsolatesCountUrl = `${ISOLATE_COUNT_URL}?${isolateCountParamsString}`;
+                                const countedSubIsolatesResponse: ApiResponse<IsolateCountedDTO> =
+                                    await callApiService(subIsolatesCountUrl);
+                                if (
+                                    countedSubIsolatesResponse.data !==
+                                        undefined &&
+                                    countedSubIsolatesResponse.data.groups !==
+                                        undefined
+                                ) {
+                                    const allValuesText = t(
+                                        "QueryPage:Results.NrIsolatesText"
+                                    );
+                                    const adaptedSubIsolateCountGroups: ClientIsolateCountedGroups =
+                                        adaptCountedIsolatesGroupsService(
+                                            countedSubIsolatesResponse.data
+                                                .groups,
+                                            subFilterForTable
+                                        );
+
+                                    const columnNames =
+                                        generateTableHeaderValuesService(
+                                            isCol,
+                                            allValuesText,
+                                            uniqueValues.filters,
+                                            filter.selectedFilter.filters,
+                                            data.column
+                                        );
+                                    const rowNameValues =
+                                        generateTableHeaderValuesService(
+                                            isRow,
+                                            allValuesText,
+                                            uniqueValues.subfilters,
+                                            filter.selectedFilter.subfilters,
+                                            subFilterForTable
+                                        );
+                                    const statisticSubTableDataAbs: Record<
+                                        string,
+                                        string
+                                    >[] = generateStatisticTableDataAbsService(
+                                        allValuesText,
+                                        adaptedSubIsolateCountGroups,
+                                        columnNames,
+                                        rowNameValues,
+                                        data.column,
+                                        subFilterForTable
+                                    );
+
+                                    const isolateSubCountProp: IsolateCountedDTO =
+                                        countedSubIsolatesResponse.data;
+                                    const nrOfSelectedSubIsolates =
+                                        isolateSubCountProp.totalNumberOfIsolates;
+
+                                    const statisticSubTableDataRel =
+                                        calculateRelativeTableData(
+                                            statisticSubTableDataAbs,
+                                            nrOfSelectedSubIsolates
+                                        );
+                                    allSubTablesAbs[subFilter.trigger] = {
+                                        tableRows: statisticSubTableDataAbs,
+                                        subFilterName: subFilterForTable,
+                                    };
+                                    allSubTablesRel[subFilter.trigger] = {
+                                        tableRows: statisticSubTableDataRel,
+                                        subFilterName: subFilterForTable,
+                                    };
+                                }
+                            }
+                        }
+                    }
+                );
+
+                const getAllSubTables = mainFilterWithSubFilters.map(
+                    async (selectedMainFilter) => {
+                        if (selectedMainFilter === data.row) {
+                            await Promise.all(getTableForSubFilter);
+                        }
+                    }
+                );
+
+                await Promise.all(getAllSubTables);
+
                 setColumnNameValues(dataObjects.colNames);
                 setData({
                     ...data,
@@ -435,6 +566,8 @@ export function QueryPageContainerComponent(): JSX.Element {
                         dataObjects.statTableDataWithSumsAbs,
                     statTableDataWithSumsRel:
                         dataObjects.statTableDataWithSumsRel,
+                    statisticSubTableDataAbs: allSubTablesAbs,
+                    statisticSubTableDataRel: allSubTablesRel,
                 });
             }
             setNrOfSelectedIsol(nrOfSelectedIsolates);
@@ -487,6 +620,7 @@ export function QueryPageContainerComponent(): JSX.Element {
     }, [filter, data.row, data.column, isolateCountUrl]);
 
     const isLoading = dataIsLoading || updateFilterAndDataIsLoading;
+    const showSubFilterInTable = mainFilterWithSubFilters.includes(data.row);
 
     const subHeaderButtons: JSX.Element = (
         <Stack direction="row" spacing={1}>
@@ -566,6 +700,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                     queryPageContent={
                         <QueryPageContentContainer
                             isFilter={isFilter}
+                            isSubFilter={showSubFilterInTable}
                             dataIsLoading={isLoading}
                             columnNameValues={columnNameValues}
                             data={data}
