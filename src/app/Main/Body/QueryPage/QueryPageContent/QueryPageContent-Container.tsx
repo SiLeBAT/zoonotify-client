@@ -34,6 +34,7 @@ export function QueryPageContentContainer(props: {
     let queryPageInfo: JSX.Element[] = [
         <QueryPageNrOfIsolatesComponent
             numberOfIsolates={props.numberOfIsolates}
+            filtersAreSelected={props.isFilter}
             key="nrOfIsolates-Info"
         />,
     ];
@@ -46,6 +47,7 @@ export function QueryPageContentContainer(props: {
             />,
             <QueryPageNrOfIsolatesComponent
                 numberOfIsolates={props.numberOfIsolates}
+                filtersAreSelected={props.isFilter}
                 key="nrOfIsolates-Info"
             />,
         ];
