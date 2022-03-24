@@ -267,15 +267,17 @@ export function InfoPageContainerComponent(): JSX.Element {
             .join(",,,")}`;
         csvContent += "\n";
 
-        csvContent += ",,";
+        csvContent += ",,,";
         Object.keys(amrTableData[amrKey].tableSubHeader).forEach((year) => {
             const yearSubHeader = amrTableData[amrKey].tableSubHeader[year];
             csvContent += `${yearSubHeader.join(",")}`;
+            csvContent += ",";
         });
         csvContent += "\n";
 
         amrTableData[amrKey].tableRows.forEach((tableRow) => {
             const newRow = [];
+            newRow.push(modifyTableDataStringService(tableRow.shortSubstance));
             newRow.push(modifyTableDataStringService(tableRow.substanceClass));
             newRow.push(modifyTableDataStringService(tableRow.amrSubstance));
             Object.keys(tableRow.concentrationList).forEach((year) => {
