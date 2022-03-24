@@ -18,6 +18,7 @@ export function QueryPageNrOfIsolatesComponent(props: {
         total: number;
         filtered: number;
     };
+    filtersAreSelected: boolean;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
 
@@ -33,20 +34,22 @@ export function QueryPageNrOfIsolatesComponent(props: {
                             </span>
                             <span>{props.numberOfIsolates.total}</span>
                         </Grid>
-                        <Grid item xs={3}>
-                            <span css={tableTextStyle}>
-                                {t("NrOfIsolates.Selected")}
-                            </span>
-                            <span>{props.numberOfIsolates.filtered}</span>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <span>&nbsp;</span>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <span css={textStyle}>
-                                {t("NrOfIsolates.InfoText")}
-                            </span>
-                        </Grid>
+                        {props.filtersAreSelected && [
+                            <Grid item xs={3} key="NrOfFilteredIsolates">
+                                <span css={tableTextStyle}>
+                                    {t("NrOfIsolates.Selected")}
+                                </span>
+                                <span>{props.numberOfIsolates.filtered}</span>
+                            </Grid>,
+                            <Grid item xs={2} key="empty">
+                                <span>&nbsp;</span>
+                            </Grid>,
+                            <Grid item xs={3} key="InfoText">
+                                <span css={textStyle}>
+                                    {t("NrOfIsolates.InfoText")}
+                                </span>
+                            </Grid>,
+                        ]}
                     </Grid>
                 </Box>
             }
