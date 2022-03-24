@@ -37,6 +37,16 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             css={tableTextStyle}
             component="td"
             scope="row"
+            key={`amr-table-cell-${row.amrSubstance}-short`}
+        >
+            {row.shortSubstance}
+        </TableCell>
+    );
+    tableCellList.push(
+        <TableCell
+            css={tableTextStyle}
+            component="td"
+            scope="row"
             key={`amr-table-cell-${row.amrSubstance}-substanceClass`}
         >
             {row.substanceClass}
@@ -127,30 +137,42 @@ export function InfoPageAmrDialogComponent(props: {
         }
     );
 
+    const nrOfSubstanceHeaderCells = 3;
+    const substanceTableHeader = [];
+    const spacingCells = [];
+
+    for (let i = 0; i < nrOfSubstanceHeaderCells; i += 1) {
+        substanceTableHeader.push(
+            <TableCell
+                key={`header-amr-${props.resistancesTableData.tableHeader[i]}`}
+                css={tableTextStyle}
+                component="th"
+                colSpan={1}
+            >
+                {props.resistancesTableData.tableHeader[i]}
+            </TableCell>
+        );
+        spacingCells.push(
+            <TableCell
+                key={`header-amr-emptyCell-class-${i}`}
+                css={tableTextStyle}
+                component="th"
+                align="right"
+            >
+                &nbsp;
+            </TableCell>
+        );
+    }
+
     const dialogTableContent = (
         <div css={dialogContentStyle}>
             <TableContainer css={tableContainerStyle} component={Paper}>
                 <Table size="small" stickyHeader aria-label="amr-table">
                     <TableHead>
                         <TableRow>
-                            <TableCell
-                                key={`header-amr-${props.resistancesTableData.tableHeader[0]}`}
-                                css={tableTextStyle}
-                                component="th"
-                                colSpan={1}
-                            >
-                                {props.resistancesTableData.tableHeader[0]}
-                            </TableCell>
-                            <TableCell
-                                key={`header-amr-${props.resistancesTableData.tableHeader[1]}`}
-                                css={tableTextStyle}
-                                component="th"
-                                colSpan={1}
-                            >
-                                {props.resistancesTableData.tableHeader[1]}
-                            </TableCell>
+                            {substanceTableHeader}
                             {props.resistancesTableData.tableHeader
-                                .slice(2)
+                                .slice(nrOfSubstanceHeaderCells)
                                 .map((headerValue) => (
                                     <TableCell
                                         key={`header-amr-${headerValue}`}
@@ -164,22 +186,7 @@ export function InfoPageAmrDialogComponent(props: {
                                 ))}
                         </TableRow>
                         <TableRow>
-                            <TableCell
-                                key="header-amr-emptyCell-class"
-                                css={tableTextStyle}
-                                component="th"
-                                align="right"
-                            >
-                                &nbsp;
-                            </TableCell>
-                            <TableCell
-                                key="header-amr-emptyCell-substance"
-                                css={tableTextStyle}
-                                component="th"
-                                align="right"
-                            >
-                                &nbsp;
-                            </TableCell>
+                            {spacingCells}
                             {tableSubHeader}
                         </TableRow>
                     </TableHead>

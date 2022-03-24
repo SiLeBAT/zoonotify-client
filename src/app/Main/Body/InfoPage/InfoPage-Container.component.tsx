@@ -44,6 +44,7 @@ export function InfoPageContainerComponent(): JSX.Element {
     ];
 
     const tableHeader2010To2020 = [
+        t("Methods.Amrs.TableHeaderShortSub"),
         t("Methods.Amrs.TableHeaderClass"),
         t("Methods.Amrs.TableHeaderSubstance"),
         t("samplingYear.2010"),
@@ -59,6 +60,7 @@ export function InfoPageContainerComponent(): JSX.Element {
         t("samplingYear.2020"),
     ];
     const tableHeader2016To2020 = [
+        t("Methods.Amrs.TableHeaderShortSub"),
         t("Methods.Amrs.TableHeaderClass"),
         t("Methods.Amrs.TableHeaderSubstance"),
         t("samplingYear.2016"),
