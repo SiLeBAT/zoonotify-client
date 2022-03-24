@@ -377,6 +377,7 @@
         },
         "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche (min - max) sowie die Bewertungskriterien (epidemiologische cut-offs) für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Beachtung der Festlegungen im Durchführungsbeschluss 2013/652/EU. Wenn keine Festlegung vorlag, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Mit * hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
+      "TableHeaderShortSub": "Wirkstoff Kürzel",
       "TableHeaderClass": "Substanzklasse",
       "TableHeaderSubstance": "Wirkstoff",
       "TableHeaderCutOff": "cut-off",

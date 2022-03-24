@@ -377,6 +377,7 @@
         },
         "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2016 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
       },
+      "TableHeaderShortSub": "Substance abbreviation",
       "TableHeaderClass": "Substance class",
       "TableHeaderSubstance": "Substance",
       "TableHeaderCutOff": "cut-off",

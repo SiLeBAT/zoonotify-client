@@ -1,4 +1,5 @@
 export interface AmrsTableData {
+    shortSubstance: string;
     substanceClass: string;
     amrSubstance: string;
     concentrationList: Record<
