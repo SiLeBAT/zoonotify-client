@@ -1,0 +1,39 @@
+{
+  "Heading": "Long-term evaluations",
+  "Export": "Export",
+  "feed": {
+    "mainTitle": "Feed",
+    "accordions": {
+      "accordion_0": {
+        "title": "Futter_0",
+        "description": "in Futermittel 0"
+      }
+    }
+  },
+  "animal": {
+    "mainTitle": "Animal",
+    "accordions": {
+      "accordion_0": {
+        "title": "Trend in resistance of commensal E. coli from broiler flocks faecal dust 2010-2019",
+        "description": "Trend in resistance of commensal E. coli from broiler flocks. Data for the study in the zoonoses monitoring 2010-2019."
+      }
+    }
+  },
+  "food": {
+    "mainTitle": "Food",
+    "accordions": {
+      "accordion_0": {
+        "title": "Multiple resistance of Salmonella isolates chicken 2010-2019",
+        "description": "Multiple resistance of Salmonella isolates from zoonoses monitoring in the chicken meat food chain. Aggregated data for the study years 2010-2019."
+      },
+      "accordion_1": {
+        "title": "Change in resistance of Salmonella from chicken meat in retail trade 2010-2019",
+        "description": "Change in resistance of Salmonella from retail chicken meat in zoonoses monitoring over time. Data for the study years 2010-2019."
+      },
+      "accordion_2": {
+        "title": "Trend in resistance of commensal E. coli from chicken meat in retail trade 2010-2019",
+        "description": "Trend in resistance of commensal E. coli from retail chicken meat in zoonoses monitoring. Data for the study years 2010-2019."
+      }
+    }
+  }
+}

@@ -11,7 +11,7 @@
     "prebuild": "npm run clean",
     "clean": "npx rimraf public/*",
     "cp:html": "npx copyfiles -u 1 ./src/**/*.html ./public",
-    "cp:assets": "npx copyfiles -u 1 ./src/assets/* ./public",
+    "cp:assets": "npx copyfiles -u 1 ./src/assets/**/* ./public",
     "cp:localesDe": "npx copyfiles -u 1 -E ./src/locales/de/* ./public",
     "cp:localesEn": "npx copyfiles -u 1 -E ./src/locales/en/* ./public",
     "cp:all": "npm run cp:html && npm run cp:assets && npm run cp:localesDe && npm run cp:localesEn",

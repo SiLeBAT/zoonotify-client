@@ -7,6 +7,7 @@ import { DataProtectionPageComponent } from "./DataProtectionPage/DataProtection
 import { ZNPaths } from "../../Shared/URLs";
 import { ErrorPageComponent } from "../../Shared/ErrorPage.component";
 import { InfoPageContainerComponent } from "./InfoPage/InfoPage-Container.component";
+import { EvaluationsPageContainerComponent } from "./EvaluationsPage/EvaluationsPage-Container.component";
 
 function ErrorPage(): JSX.Element {
     return <ErrorPageComponent errorStatus={404} />;
@@ -27,6 +28,10 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 path={ZNPaths.queryPagePath}
                 component={QueryPageContainerComponent}
+            />
+            <Route
+                path={ZNPaths.evaluationsPagePath}
+                component={EvaluationsPageContainerComponent}
             />
             <Route path={ZNPaths.linkPagePath} component={LinkPageComponent} />
             <Route
