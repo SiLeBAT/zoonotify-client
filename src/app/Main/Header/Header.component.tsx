@@ -76,6 +76,7 @@ export function HeaderComponent(): JSX.Element {
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
     const [queryOpen, setQueryOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
+    const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
 
     const { pathname } = useLocation();
@@ -94,6 +95,11 @@ export function HeaderComponent(): JSX.Element {
             setLinkOpen(true);
         } else {
             setLinkOpen(false);
+        }
+        if (pathname === ZNPaths.evaluationsPagePath) {
+            setEvaluationsOpen(true);
+        } else {
+            setEvaluationsOpen(false);
         }
     });
 
@@ -118,6 +124,12 @@ export function HeaderComponent(): JSX.Element {
                         css={navLinkStyle(queryOpen)}
                     >
                         {t("Query")}
+                    </NavLink>
+                    <NavLink
+                        to={ZNPaths.evaluationsPagePath}
+                        css={navLinkStyle(evaluationsOpen)}
+                    >
+                        {t("Evaluations")}
                     </NavLink>
                     <NavLink
                         to={ZNPaths.linkPagePath}

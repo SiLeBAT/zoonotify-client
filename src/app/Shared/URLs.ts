@@ -3,6 +3,7 @@ export const ZNPaths = {
     linkPagePath: "/links",
     infoPagePath: "/explanations",
     queryPagePath: "/query",
+    evaluationsPagePath: "/evaluations",
     dpdPagePath: "/dataProtectionDeclaration",
 };
 const VERSION_ROOT = "/v1";
