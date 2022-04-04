@@ -52,8 +52,10 @@ export function TableResultsContainer(props: TableResultsProps): JSX.Element {
         props.tableData.row !== "" || props.tableData.column !== "";
 
     let tableData = props.tableData.statTableDataWithSumsAbs;
+    let subTableData = props.tableData.statisticSubTableDataAbs;
     if (props.tableData.option === "relative") {
         tableData = props.tableData.statTableDataWithSumsRel;
+        subTableData = props.tableData.statisticSubTableDataRel;
     }
 
     if (isTable && !props.tableIsLoading) {
@@ -70,7 +72,7 @@ export function TableResultsContainer(props: TableResultsProps): JSX.Element {
                     colMainHeader={colMainHeader}
                     rowMainHeader={rowMainHeader}
                     tableData={tableData}
-                    subTableData={props.tableData.statisticSubTableDataAbs}
+                    subTableData={subTableData}
                     tableOption={props.tableData.option}
                     columnNameValues={props.columnNameValues}
                     colAttribute={tableColAttribute}
