@@ -67,7 +67,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         true
     );
     const noFilter: boolean = CheckIfSingleFilterIsSet(
-        props.selectedFilter,
+        props.selectedFilter.subfilters,
         props.subFilterAttribute
     );
     const dropDownValuesObj = generateSelectorObject(
