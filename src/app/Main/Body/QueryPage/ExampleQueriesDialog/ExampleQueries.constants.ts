@@ -8,7 +8,7 @@ const exampleQuery2 =
 const exampleQuery3 =
     "?microorganism=Salmonella+spp.&samplingContext=Salm-Bek%C3%A4mpfung&productionType=Legehennen&row=samplingYear&column=federalState";
 const exampleQuery4 =
-    "?microorganism=Salmonella+spp.&samplingContext=Salm-Bek%C3%A4mpfung&productionType=Legehennen&row=samplingYear&column=federalState";
+    "?microorganism=MRSA&productionType=Mastkalb+%2F+Jungrind&productionType=Mastrind&productionType=Milchrind&productionType=Milchrind%2C+konventionell&productionType=Milchrind%2C+%C3%B6kologisch&productionType=Rind&row=productionType&column=matrix";
 
 // food samples
 const exampleQuery5 =
