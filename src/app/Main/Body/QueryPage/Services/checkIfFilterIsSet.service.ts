@@ -27,9 +27,9 @@ export function CheckIfFilterIsSet(
  * @returns {boolean} - true if the specific filter is not selected
  */
 export function CheckIfSingleFilterIsSet(
-    filter: FilterInterface,
+    filters: Record<FilterType, string[]>,
     attribute: FilterType
 ): boolean {
-    const noFilter = _.isEmpty(filter.filters[attribute]);
+    const noFilter = _.isEmpty(filters[attribute]);
     return noFilter;
 }

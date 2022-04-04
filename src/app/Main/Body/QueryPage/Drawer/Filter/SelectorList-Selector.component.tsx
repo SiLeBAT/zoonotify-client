@@ -58,7 +58,7 @@ export function SelectorListSelectorComponent(
     };
 
     const noFilter: boolean = CheckIfSingleFilterIsSet(
-        props.selectedFilter,
+        props.selectedFilter.filters,
         filterAttribute
     );
 
