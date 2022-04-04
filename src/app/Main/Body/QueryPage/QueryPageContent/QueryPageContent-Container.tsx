@@ -4,7 +4,7 @@ import { QueryPageDatabaseStatusIndicatorComponent } from "./DatabaseStatusIndic
 import { QueryPageIntroTextComponent } from "./IntroText/QueryPage-IntroText.component";
 import { QueryPageNrOfIsolatesComponent } from "./NumberOfIsolates/QueryPage-NrOfIsolates.component";
 import { QueryPageContentLayoutComponent } from "./QueryPageContent-Layout.component";
-import { QueryPageContentBarChartResultsComponent } from "./Results/Charts/QueryPageContent-BarChart.component";
+import { QueryPageBarChartContainer } from "./Results/Charts/QueryPageBarChart-Container";
 import { TableResultsContainer } from "./Results/TableResults/TableResults-Container.component";
 import { DataInterface } from "../../../../Shared/Context/DataContext";
 
@@ -67,7 +67,7 @@ export function QueryPageContentContainer(props: {
                 />
             }
             chartResults={
-                <QueryPageContentBarChartResultsComponent
+                <QueryPageBarChartContainer
                     chartIsLoading={props.dataIsLoading}
                     columnAttributes={props.columnNameValues}
                     chartData={props.data}

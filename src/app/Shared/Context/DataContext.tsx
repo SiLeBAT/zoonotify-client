@@ -20,6 +20,7 @@ export interface DataInterface {
     statTableDataWithSumsRel: Record<string, string>[];
     statisticSubTableDataAbs: SubFilterDataType;
     statisticSubTableDataRel: SubFilterDataType;
+    statisticSubTableDataRelChart: SubFilterDataType;
 }
 
 export const defaultData: DataInterface = {
@@ -33,6 +34,7 @@ export const defaultData: DataInterface = {
     statTableDataWithSumsRel: [],
     statisticSubTableDataAbs: {},
     statisticSubTableDataRel: {},
+    statisticSubTableDataRelChart: {},
 };
 
 interface ProfileState {
