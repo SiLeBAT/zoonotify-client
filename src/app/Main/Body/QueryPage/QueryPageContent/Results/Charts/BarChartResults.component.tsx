@@ -9,16 +9,16 @@ export function BarChartResultsComponent(props: {
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     xAxisLabel: string;
     yAxisLabel: string;
-    // eslint-disable-next-line react/require-default-props
-    xAxisMax?: number;
     displayAsStacked: boolean;
+    xAxisMax: number | undefined;
 }): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const barChartRef = useRef<any>(null);
 
+    const { getPngDownloadUriRef } = props;
+
     useEffect(() => {
-        // eslint-disable-next-line no-param-reassign
-        props.getPngDownloadUriRef.current = async () => {
+        getPngDownloadUriRef.current = async () => {
             return barChartRef.current?.chart
                 .dataURI()
                 .then((uri: { imgURI: string }) => uri.imgURI);
@@ -104,6 +104,7 @@ export function BarChartResultsComponent(props: {
             onItemClick: {
                 toggleDataSeries: false,
             },
+            height: 50,
         },
     };
 

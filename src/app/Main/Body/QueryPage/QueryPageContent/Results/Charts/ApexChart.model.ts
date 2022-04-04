@@ -5,3 +5,9 @@ export type ApexChartData = {
         data: number[];
     }[];
 };
+
+export type ApexChartInfo = {
+    xAxisLabel: string;
+    yAxisLabel: string;
+    data: ApexChartData;
+};

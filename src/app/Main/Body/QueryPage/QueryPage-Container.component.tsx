@@ -49,10 +49,14 @@ import { fetchInitialDataService } from "./Services/ContainerServices/fetchIniti
 import { fetchConditionalFilters } from "./Services/ContainerServices/fetchConditionalFilters.service";
 import { ExampleQueriesDialogComponent } from "./ExampleQueriesDialog/ExampleQueriesDialog.component";
 import { SubHeaderButtonComponent } from "./Subheader/SubHeader-Button.component";
-import { calculateRelativeTableData } from "./Services/TableServices/calculateRelativeTableData.service";
+import {
+    calculateRelativeChartData,
+    calculateRelativeTableData,
+} from "./Services/TableServices/calculateRelativeTableData.service";
 import { generateStatisticTableDataAbsService } from "./Services/TableServices/generateStatisticTableDataAbs.service";
 import { adaptCountedIsolatesGroupsService } from "./Services/adaptCountedIsolatesGroups.service";
 import { generateTableHeaderValuesService } from "./Services/TableServices/generateTableHeaderValues.service";
+import { calculateRowColSumsAbsolute } from "./Services/TableServices/calculateRowColSums.service";
 
 export function QueryPageContainerComponent(): JSX.Element {
     const [serverStatus, setServerStatus] = useState<{
@@ -440,6 +444,7 @@ export function QueryPageContainerComponent(): JSX.Element {
 
                 const allSubTablesAbs: SubFilterDataType = {};
                 const allSubTablesRel: SubFilterDataType = {};
+                const allSubCharts: SubFilterDataType = {};
 
                 const getTableForSubFilter = subFilters.map(
                     async (subFilter) => {
@@ -531,12 +536,29 @@ export function QueryPageContainerComponent(): JSX.Element {
                                             statisticSubTableDataAbs,
                                             nrOfSelectedSubIsolates
                                         );
+
+                                    const statisticSubTableDataAbsSum =
+                                        calculateRowColSumsAbsolute(
+                                            statisticSubTableDataAbs,
+                                            columnNames,
+                                            nrOfSelectedIsolates.toString()
+                                        );
+
+                                    const statisticSubChartDataRel =
+                                        calculateRelativeChartData(
+                                            statisticSubTableDataAbsSum
+                                        );
+
                                     allSubTablesAbs[subFilter.trigger] = {
                                         tableRows: statisticSubTableDataAbs,
                                         subFilterName: subFilterForTable,
                                     };
                                     allSubTablesRel[subFilter.trigger] = {
                                         tableRows: statisticSubTableDataRel,
+                                        subFilterName: subFilterForTable,
+                                    };
+                                    allSubCharts[subFilter.trigger] = {
+                                        tableRows: statisticSubChartDataRel,
                                         subFilterName: subFilterForTable,
                                     };
                                 }
@@ -568,6 +590,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                         dataObjects.statTableDataWithSumsRel,
                     statisticSubTableDataAbs: allSubTablesAbs,
                     statisticSubTableDataRel: allSubTablesRel,
+                    statisticSubTableDataRelChart: allSubCharts,
                 });
             }
             setNrOfSelectedIsol(nrOfSelectedIsolates);
