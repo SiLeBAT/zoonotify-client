@@ -1,26 +1,6 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { primaryColor } from "./Style/Style-MainTheme";
-
-const titleStyle = css`
-    margin-bottom: 1rem;
-    font-size: 3rem;
-    text-align: center;
-    font-weight: normal;
-    color: ${primaryColor};
-`;
-const subtitleStyle = css`
-    margin: 1em 0;
-    font-size: 0.85rem;
-    font-weight: normal;
-    text-align: center;
-`;
-const textStyle = css`
-    font-size: 0.85rem;
-    line-height: 1.6;
-    text-align: justify;
-`;
 
 export interface CardProps {
     title: string;
@@ -43,19 +23,42 @@ export function LogoCardComponent(props: CardProps): JSX.Element {
             }}
         >
             <CardContent>
-                <Typography variant="h1" css={titleStyle}>
+                <Typography
+                    variant="h1"
+                    sx={{
+                        marginBottom: "1rem",
+                        fontSize: "3rem",
+                        textAlign: "center",
+                        fontWeight: "normal",
+                        color: `${primaryColor}`,
+                    }}
+                >
                     {props.title}
                 </Typography>
-                <Typography variant="h2" css={subtitleStyle}>
+                <Typography
+                    sx={{
+                        margin: "1em 0",
+                        fontSize: "0.85rem",
+                        textAlign: "center",
+                    }}
+                >
                     {props.subtitle}
                 </Typography>
-                <Typography css={textStyle}>{props.text}</Typography>
+                <Typography
+                    sx={{
+                        fontSize: "0.85rem",
+                        lineHeight: "1.6",
+                        textAlign: "justify",
+                    }}
+                >
+                    {props.text}
+                </Typography>
             </CardContent>
             <CardMedia
                 component="img"
-                image="/assets/bfr_logo.gif"
+                image="/assets/bfr_logo.png"
                 title="BfR Logo"
-                sx={{ height: "auto", width: "auto" }}
+                sx={{ height: "auto", width: "12em", padding: "16px" }}
             />
         </Card>
     );
