@@ -1,5 +1,4 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import {
     Paper,
     Table,
@@ -16,25 +15,17 @@ import {
 } from "../../../../Shared/Dialog.component";
 import { AmrsTable, AmrsTableData } from "../InfoPage.model";
 
-const dialogContentStyle = css`
-    height: inherit;
-    overflow-y: auto;
-`;
-const tableContainerStyle = css`
-    height: 100%;
-`;
-
-const tableTextStyle = css`
-    font-size: 0.75rem;
-    letter-spacing: 0;
-    white-space: nowrap;
-`;
+const tableTextStyle = {
+    fontSize: "0.75rem",
+    letterSpacing: "0",
+    whiteSpace: "nowrap",
+} as const;
 
 function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
     tableCellList.push(
         <TableCell
-            css={tableTextStyle}
+            sx={tableTextStyle}
             component="td"
             scope="row"
             key={`amr-table-cell-${row.amrSubstance}-short`}
@@ -44,7 +35,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     );
     tableCellList.push(
         <TableCell
-            css={tableTextStyle}
+            sx={tableTextStyle}
             component="td"
             scope="row"
             key={`amr-table-cell-${row.amrSubstance}-substanceClass`}
@@ -54,7 +45,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     );
     tableCellList.push(
         <TableCell
-            css={tableTextStyle}
+            sx={tableTextStyle}
             component="td"
             scope="row"
             key={`amr-table-cell-${row.amrSubstance}-substance`}
@@ -66,7 +57,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
         const concentrationPerYear = row.concentrationList[year];
         tableCellList.push(
             <TableCell
-                css={tableTextStyle}
+                sx={tableTextStyle}
                 component="td"
                 scope="row"
                 align="right"
@@ -77,7 +68,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
         );
         tableCellList.push(
             <TableCell
-                css={tableTextStyle}
+                sx={tableTextStyle}
                 component="td"
                 scope="row"
                 align="right"
@@ -88,7 +79,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
         );
         tableCellList.push(
             <TableCell
-                css={tableTextStyle}
+                sx={tableTextStyle}
                 component="td"
                 scope="row"
                 align="right"
@@ -125,7 +116,7 @@ export function InfoPageAmrDialogComponent(props: {
                     tableSubHeader.push(
                         <TableCell
                             key={`subheader-amr-${subHeaderKey}-${subHeaderValue}`}
-                            css={tableTextStyle}
+                            sx={tableTextStyle}
                             component="th"
                             align="right"
                         >
@@ -145,7 +136,7 @@ export function InfoPageAmrDialogComponent(props: {
         substanceTableHeader.push(
             <TableCell
                 key={`header-amr-${props.resistancesTableData.tableHeader[i]}`}
-                css={tableTextStyle}
+                sx={tableTextStyle}
                 component="th"
                 colSpan={1}
             >
@@ -155,7 +146,7 @@ export function InfoPageAmrDialogComponent(props: {
         spacingCells.push(
             <TableCell
                 key={`header-amr-emptyCell-class-${i}`}
-                css={tableTextStyle}
+                sx={tableTextStyle}
                 component="th"
                 align="right"
             >
@@ -165,41 +156,42 @@ export function InfoPageAmrDialogComponent(props: {
     }
 
     const dialogTableContent = (
-        <div css={dialogContentStyle}>
-            <TableContainer css={tableContainerStyle} component={Paper}>
-                <Table size="small" stickyHeader aria-label="amr-table">
-                    <TableHead>
-                        <TableRow>
-                            {substanceTableHeader}
-                            {props.resistancesTableData.tableHeader
-                                .slice(nrOfSubstanceHeaderCells)
-                                .map((headerValue) => (
-                                    <TableCell
-                                        key={`header-amr-${headerValue}`}
-                                        css={tableTextStyle}
-                                        component="th"
-                                        colSpan={3}
-                                        align="center"
-                                    >
-                                        {headerValue}
-                                    </TableCell>
-                                ))}
+        <TableContainer
+            sx={{ height: "inherit", overflowY: "auto" }}
+            component={Paper}
+        >
+            <Table size="small" stickyHeader aria-label="amr-table">
+                <TableHead>
+                    <TableRow>
+                        {substanceTableHeader}
+                        {props.resistancesTableData.tableHeader
+                            .slice(nrOfSubstanceHeaderCells)
+                            .map((headerValue) => (
+                                <TableCell
+                                    key={`header-amr-${headerValue}`}
+                                    css={tableTextStyle}
+                                    component="th"
+                                    colSpan={3}
+                                    align="center"
+                                >
+                                    {headerValue}
+                                </TableCell>
+                            ))}
+                    </TableRow>
+                    <TableRow>
+                        {spacingCells}
+                        {tableSubHeader}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {props.resistancesTableData.tableRows.map((row) => (
+                        <TableRow key={`amr-table-row-${row.amrSubstance}`}>
+                            {createTableRowCells(row)}
                         </TableRow>
-                        <TableRow>
-                            {spacingCells}
-                            {tableSubHeader}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.resistancesTableData.tableRows.map((row) => (
-                            <TableRow key={`amr-table-row-${row.amrSubstance}`}>
-                                {createTableRowCells(row)}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </div>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 
     const amrTableCancelButton: DialogButton = {
