@@ -4,7 +4,6 @@ import { useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { AmrKey, AmrsTable } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
-import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
 import {
     campy,
     campyColiC,
@@ -108,7 +107,7 @@ export function InfoPageAmrsContentComponent(props: {
             <Divider
                 variant="middle"
                 sx={{
-                    background: primaryColor,
+                    background: theme.palette.primary.main,
                     width: "50%",
                     margin: "1em auto",
                 }}
