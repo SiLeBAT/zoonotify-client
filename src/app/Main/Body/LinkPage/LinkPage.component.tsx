@@ -1,22 +1,8 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
 import { LinkPageLinkListComponent } from "./LinkPage-LinkList.component";
-
-const appNameStyle = css`
-    margin-bottom: 1rem;
-    font-size: 3rem;
-    text-align: center;
-    font-weight: normal;
-    color: ${primaryColor};
-`;
-const normalTextStyle = css`
-    font-size: 0.85rem;
-    line-height: 1.6;
-    text-align: justify;
-`;
 
 export function LinkPageComponent(): JSX.Element {
     const { t } = useTranslation(["ExternLinks"]);
@@ -29,10 +15,25 @@ export function LinkPageComponent(): JSX.Element {
             }}
         >
             <CardContent>
-                <Typography variant="h1" css={appNameStyle}>
+                <Typography
+                    variant="h1"
+                    sx={{
+                        marginBottom: "1rem",
+                        fontSize: "3rem",
+                        textAlign: "center",
+                        fontWeight: "normal",
+                        color: `${primaryColor}`,
+                    }}
+                >
                     {t("TextContent.Heading")}
                 </Typography>
-                <Typography css={normalTextStyle}>
+                <Typography
+                    sx={{
+                        fontSize: "0.85rem",
+                        lineHeight: "1.6",
+                        textAlign: "justify",
+                    }}
+                >
                     {t("TextContent.Text")}
                 </Typography>
                 {LinkPageLinkListComponent()}
