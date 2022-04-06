@@ -22,7 +22,7 @@ function createParagraphWithBoldText(
     text2: string
 ): JSX.Element {
     return (
-        <Typography>
+        <Typography sx={{ marginBottom: "1em" }} component="p">
             {text1}
             <b>{boldText}</b>
             {text2}
@@ -72,7 +72,7 @@ export function InfoPageComponent(props: {
                 t("Background.Paragraph1.Description2"),
                 t("Background.Paragraph1.Description3")
             )}
-            <p>
+            <Typography sx={{ marginBottom: "1em" }} component="p">
                 {t("Background.Paragraph2.Description1")}
                 {salmSpp}, {campySpp}, {listeria}
                 {t("Background.Paragraph2.Description2")}
@@ -96,7 +96,7 @@ export function InfoPageComponent(props: {
                 {t("Background.Paragraph2.Description12")}
                 {coliShort}
                 {t("Background.Paragraph2.Description13")}
-            </p>
+            </Typography>
             {createParagraphWithBoldText(
                 t("Background.Paragraph3.Description1"),
                 t("Background.Paragraph3.Description2"),
