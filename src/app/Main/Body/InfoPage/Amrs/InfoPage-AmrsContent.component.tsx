@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Divider } from "@mui/material";
+import { Button, Divider, Typography } from "@mui/material";
+import { useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { AmrKey, AmrsTable } from "../InfoPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
@@ -26,6 +27,7 @@ export function InfoPageAmrsContentComponent(props: {
     tableData: Record<AmrKey, AmrsTable>;
     onAmrDataExport: (amrKey: AmrKey) => void;
 }): JSX.Element {
+    const theme = useTheme();
     const { t } = useTranslation(["InfoPage"]);
 
     const [openAmrDialog, setOpenAmrDialog] = useState<AmrKey | null>(null);
@@ -44,7 +46,7 @@ export function InfoPageAmrsContentComponent(props: {
 
     return (
         <div>
-            <p>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
                 {t("Methods.Amrs.Paragraph1.Description1")}
                 {salmSpp}, {campyJeC}, {campyColiC}, {campyLari}, {coliFullE},
                 {t("Methods.Amrs.Paragraph1.Description2")}
@@ -56,8 +58,8 @@ export function InfoPageAmrsContentComponent(props: {
                 {t("Methods.Amrs.Paragraph1.Description5")}
                 {staphy}
                 {t("Methods.Amrs.Paragraph1.Description6")}
-            </p>
-            <p>
+            </Typography>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
                 {t("Methods.Amrs.Paragraph2.Description1")}
                 {salmSpp}
                 {t("Methods.Amrs.Paragraph2.Description2")}
@@ -67,21 +69,23 @@ export function InfoPageAmrsContentComponent(props: {
                 {t("Methods.Amrs.Paragraph2.Description4")}
                 {campySpp}
                 {t("Methods.Amrs.Paragraph2.Description5")}
-            </p>
-            <p>
+            </Typography>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
                 {t("Methods.Amrs.Paragraph3.Description1")}
                 {salmSpp}
                 {t("Methods.Amrs.Paragraph3.Description2")}
                 {campySpp}
                 {t("Methods.Amrs.Paragraph3.Description3")}
-            </p>
-            <p>
+            </Typography>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
                 {t("Methods.Amrs.Paragraph4.Description1")}
                 {coliShort}
                 {t("Methods.Amrs.Paragraph4.Description2")}
-            </p>
-            <p>{t("Methods.Amrs.Paragraph5")}</p>
-            <p>
+            </Typography>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
+                {t("Methods.Amrs.Paragraph5")}
+            </Typography>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
                 {t("Methods.Amrs.Paragraph6.Description1")}
                 {enteroSpp}
                 {t("Methods.Amrs.Paragraph6.Description2")}
@@ -93,34 +97,36 @@ export function InfoPageAmrsContentComponent(props: {
                 {t("Methods.Amrs.Paragraph6.Description5")}
                 {enteroSpp}
                 {t("Methods.Amrs.Paragraph6.Description6")}
-            </p>
-            <p>
+            </Typography>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
                 <b>
                     {t("Methods.Amrs.Paragraph7.Description1")}
                     <u>{t("Methods.Amrs.Paragraph7.Description2")}</u>
                     {t("Methods.Amrs.Paragraph7.Description3")}
                 </b>
-            </p>
+            </Typography>
             <Divider
                 variant="middle"
                 sx={{
                     background: primaryColor,
                     width: "50%",
-                    margin: "auto",
+                    margin: "1em auto",
                 }}
             />
-            <p>
+            <Typography component="p" sx={{ paddingBottom: "1em" }}>
                 {t("Methods.Amrs.Paragraph8.Description1")}
                 {coliFull}
                 {t("Methods.Amrs.Paragraph8.Description2")}
-            </p>
+            </Typography>
             {props.amrKeys.map((amrKey) => (
                 <div key={`${amrKey}-amr-table-dialog`}>
-                    {props.tableData[amrKey].introduction}
+                    <Typography component="p">
+                        {props.tableData[amrKey].introduction}
+                    </Typography>
                     <Button
                         onClick={() => handleOpen(amrKey)}
-                        color="primary"
                         sx={{
+                            color: theme.palette.primary.main,
                             textAlign: "left",
                             backgroundColor: "#f3f7fa",
                             "&:hover": {

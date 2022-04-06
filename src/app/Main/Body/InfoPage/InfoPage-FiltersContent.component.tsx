@@ -1,8 +1,8 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
+import { Typography } from "@mui/material";
+import { Theme, useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
 import {
     birdSpecies,
     campy,
@@ -14,26 +14,19 @@ import {
     salmSpp,
 } from "./italicNames.constants";
 
-const descriptionStyle = css`
-    margin: 0;
-    hyphens: auto;
-    text-align: justify;
-`;
-
-const subContentNameStyle = css`
-    margin-bottom: 0.25em;
-    color: ${primaryColor};
-`;
-const subContentDescriptionStyle = css`
-    margin-top: 0;
-    padding-left: 1.5em;
-    hyphens: auto;
-    text-align: justify;
-`;
+const subContentDescriptionStyle = {
+    marginTop: "0",
+    marginBottom: "1em",
+    paddingLeft: "1.5em",
+    hyphens: "auto",
+    textAlign: "justify",
+    lineHight: "1.6",
+} as const;
 
 function generateContentWithSubContent(
     filterDescription: string,
-    describedFiltersContent: Record<string, Record<string, string>>
+    describedFiltersContent: Record<string, Record<string, string>>,
+    theme: Theme
 ): JSX.Element {
     const subContent: JSX.Element[] = [];
 
@@ -42,74 +35,95 @@ function generateContentWithSubContent(
             describedFiltersContent[describedFilterSubKey];
         const subFilterName = subFilter.Name;
 
+        let descriptionName: string | JSX.Element = subFilterName;
+        let descriptionText: string | JSX.Element = subFilter.Description;
+
         if (
             describedFilterSubKey === "microorganism-6" ||
             describedFilterSubKey === "microorganism-7" ||
             describedFilterSubKey === "microorganism-8"
         ) {
-            subContent.push(
-                <p
-                    css={subContentNameStyle}
-                    key={`${subFilter.Subname}${subFilterName}-name`}
-                >
+            descriptionName = (
+                <span>
                     {subFilter.Subname}
                     <i>{subFilterName}</i>
                     {subFilter.Abbreviation}
                     {coliShort})
-                </p>
+                </span>
             );
-        } else {
-            subContent.push(
-                <p
-                    css={subContentNameStyle}
-                    key={`${subFilter.Subname}${subFilterName}-name`}
-                >
+        } else if (
+            describedFilterSubKey === "microorganism-1" ||
+            describedFilterSubKey === "microorganism-2" ||
+            describedFilterSubKey === "microorganism-3" ||
+            describedFilterSubKey === "microorganism-4" ||
+            describedFilterSubKey === "microorganism-5" ||
+            describedFilterSubKey === "microorganism-9"
+        ) {
+            descriptionName = (
+                <span>
                     {subFilter.Subname}
                     <i>{subFilterName}</i>
                     {subFilter.Abbreviation}
-                </p>
+                </span>
             );
         }
 
         if (describedFilterSubKey === "microorganism-9") {
-            subContent.push(
-                <p
-                    css={subContentDescriptionStyle}
-                    key={`${subFilter.Subname}${subFilterName}-description`}
-                >
+            descriptionText = (
+                <span>
                     {subFilter.Description1}
                     {faecalis}
                     {subFilter.Description2}
                     {faecium}
                     {subFilter.Description3}
-                </p>
+                </span>
             );
         } else if (describedFilterSubKey === "category-3") {
-            subContent.push(
-                <p
-                    css={subContentDescriptionStyle}
-                    key={`${subFilter.Subname}${subFilterName}-description`}
-                >
+            descriptionText = (
+                <span>
                     {subFilter.Description1}
                     {birdSpecies.Gallus}
-                    {subFilter.Description2}
-                </p>
-            );
-        } else {
-            subContent.push(
-                <p
-                    css={subContentDescriptionStyle}
-                    key={`${subFilter.Subname}${subFilterName}-description`}
-                >
-                    {subFilter.Description}
-                </p>
+                    {subFilter.Description2}{" "}
+                </span>
             );
         }
+        subContent.push(
+            <Typography
+                component="p"
+                sx={{
+                    marginBottom: "0.25em",
+                    color: theme.palette.primary.main,
+                }}
+                key={`${subFilter.Subname}${subFilterName}-name`}
+            >
+                {descriptionName}
+            </Typography>
+        );
+        subContent.push(
+            <Typography
+                component="p"
+                sx={subContentDescriptionStyle}
+                key={`${subFilter.Subname}${subFilterName}-description`}
+            >
+                {descriptionText}
+            </Typography>
+        );
     });
 
     const content: JSX.Element = (
         <div>
-            <p css={descriptionStyle}>{filterDescription}</p>
+            <Typography
+                component="p"
+                sx={{
+                    margin: 0,
+                    marginBottom: "1em",
+                    hyphens: "auto",
+                    textAlign: "justify",
+                    lineHeight: "1.6",
+                }}
+            >
+                {filterDescription}
+            </Typography>
             {subContent}
         </div>
     );
@@ -120,6 +134,7 @@ function generateContentWithSubContent(
 export function InfoPageFiltersContentComponent(props: {
     describedFilters: string[];
 }): JSX.Element {
+    const theme = useTheme();
     const { t } = useTranslation(["InfoPage"]);
 
     const filterAccordionsList: JSX.Element[] = [];
@@ -145,7 +160,8 @@ export function InfoPageFiltersContentComponent(props: {
                     title={t(`Filters.${describedFilter}.Name`)}
                     content={generateContentWithSubContent(
                         filterDescription,
-                        describedFiltersContent
+                        describedFiltersContent,
+                        theme
                     )}
                     defaultExpanded={false}
                     centerContent={false}
@@ -154,10 +170,7 @@ export function InfoPageFiltersContentComponent(props: {
             );
         } else if (describedFilter === "resistance") {
             const resistanceContent = (
-                <p
-                    css={subContentDescriptionStyle}
-                    key="resistance-description"
-                >
+                <Typography component="p" key="resistance-description">
                     {t("Filters.resistance.Description1")}
                     {salmSpp}, {campySpp},{t("Filters.resistance.Description2")}
                     {coliShort}
@@ -170,7 +183,7 @@ export function InfoPageFiltersContentComponent(props: {
                     {t("Filters.resistance.Description6")}
                     {campy}
                     {t("Filters.resistance.Description7")}
-                </p>
+                </Typography>
             );
 
             filterAccordionsList.push(
@@ -188,8 +201,15 @@ export function InfoPageFiltersContentComponent(props: {
                     title={t(`Filters.samplingContext.Name`)}
                     content={
                         <div>
-                            <p>{t(`Filters.samplingContext.Description1`)}</p>
-                            <p>{t(`Filters.samplingContext.Description2`)}</p>
+                            <Typography
+                                component="p"
+                                sx={{ margin: 0, paddingBottom: "0.5em" }}
+                            >
+                                {t(`Filters.samplingContext.Description1`)}
+                            </Typography>
+                            <Typography component="p" sx={{ margin: 0 }}>
+                                {t(`Filters.samplingContext.Description2`)}
+                            </Typography>
                         </div>
                     }
                     defaultExpanded={false}
@@ -201,7 +221,11 @@ export function InfoPageFiltersContentComponent(props: {
             filterAccordionsList.push(
                 <AccordionComponent
                     title={t(`Filters.${describedFilter}.Name`)}
-                    content={t(`Filters.${describedFilter}.Description`)}
+                    content={
+                        <Typography component="p">
+                            {t(`Filters.${describedFilter}.Description`)}{" "}
+                        </Typography>
+                    }
                     defaultExpanded={false}
                     centerContent={false}
                     key={`accordion_${describedFilter}`}

@@ -9,7 +9,6 @@ import {
     DialogTitle,
 } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
-import { primaryColor } from "./Style/Style-MainTheme";
 
 export interface DialogButton {
     content: JSX.Element | string;
@@ -45,7 +44,9 @@ export function DialogComponent(props: {
             >
                 <Button
                     onClick={handleClickSubmit}
-                    color="primary"
+                    sx={{
+                        backgroundColor: theme.palette.primary.main,
+                    }}
                     disabled={props.submitButton.disabled || props.loading}
                     variant="contained"
                 >
@@ -55,7 +56,7 @@ export function DialogComponent(props: {
                     <CircularProgress
                         size={24}
                         sx={{
-                            color: `${primaryColor}`,
+                            color: theme.palette.primary.main,
                             position: "absolute",
                             top: "10%",
                             left: "40%",
@@ -76,7 +77,9 @@ export function DialogComponent(props: {
             <DialogActions>
                 <Button
                     onClick={handleClickCancel}
-                    color="primary"
+                    sx={{
+                        color: theme.palette.primary.main,
+                    }}
                     disabled={props.loading}
                 >
                     {props.cancelButton.content}
