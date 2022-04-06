@@ -1,11 +1,13 @@
 import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
+import { useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
 import { LinkPageLinkListComponent } from "./LinkPage-LinkList.component";
 
 export function LinkPageComponent(): JSX.Element {
     const { t } = useTranslation(["ExternLinks"]);
+    const theme = useTheme();
+
     return (
         <Card
             sx={{
@@ -22,7 +24,7 @@ export function LinkPageComponent(): JSX.Element {
                         fontSize: "3rem",
                         textAlign: "center",
                         fontWeight: "normal",
-                        color: `${primaryColor}`,
+                        color: theme.palette.primary.main,
                     }}
                 >
                     {t("TextContent.Heading")}
