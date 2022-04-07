@@ -1,7 +1,7 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
+import { Link, List, ListItem, Typography } from "@mui/material";
+import { Box, useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
 import { ZNPaths } from "../../../Shared/URLs";
 import {
     contactBfr,
@@ -14,190 +14,310 @@ import {
     mailZnSupport,
 } from "./DataProtection.config";
 
-const dataProtectionStyle = css`
-    max-width: 90ch;
-    min-width: 241px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 8px 75px;
-    overflow: auto;
-    text-align: justify;
-    line-height: 1.6;
-`;
-const dataProtectionMainHeaderStyle = css`
-    margin-top: 3%;
-    padding-bottom: 1.5%;
-    text-align: center;
-    font-weight: normal;
-    border-bottom: 1px solid ${primaryColor};
-`;
-const dataProtectionHeaderStyle = css`
-    margin-top: 3%;
-    font-weight: bold;
-    text-align: center;
-`;
-const dataProtectionSubheaderStyle = css`
-    font-weight: bold;
-    text-align: center;
-`;
-const dataProtectionFooterStyle = css`
-    border-top: 1px solid ${primaryColor};
-`;
-const dataProtectionFooterDateStyle = css`
-    font-size: 0.75em;
-`;
-const dataProtectionListStyle = css`
-    list-style-type: lower-alpha;
-`;
+const dataProtectionHeaderStyle = {
+    margin: "1em 0",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    textAlign: "center",
+} as const;
+
+const dataProtectionSubheaderStyle = {
+    margin: "0.5em",
+    fontWeight: "bold",
+    textAlign: "center",
+} as const;
+
+const paragraphStyle = {
+    padding: "0.5em 0",
+} as const;
+
+const listStyle = {
+    listStyleType: "lower-alpha",
+    marginLeft: "2em",
+    lineHeight: 1.8,
+} as const;
+
+const listItemStyle = {
+    display: "list-item",
+    padding: 0,
+} as const;
 
 export function DataProtectionPageComponent(): JSX.Element {
+    const theme = useTheme();
     const { t } = useTranslation(["DataProtection"]);
+
+    const linkColorStyle = {
+        color: theme.palette.primary.main,
+    };
+
     return (
-        <article css={dataProtectionStyle}>
-            <h1 css={dataProtectionMainHeaderStyle}>{t("Heading")}</h1>
-            <p>
+        <Box
+            sx={{
+                maxWidth: "90ch",
+                minWidth: "241px",
+                textAlign: "justify",
+                margin: "2em auto",
+            }}
+        >
+            <Typography
+                variant="h1"
+                sx={{
+                    marginBottom: "1rem",
+                    paddingBottom: "0.5em",
+                    fontSize: "3rem",
+                    textAlign: "center",
+                    fontWeight: "normal",
+                    color: theme.palette.primary.main,
+                    borderBottom: `1px solid ${theme.palette.primary.main}`,
+                }}
+            >
+                {t("Heading")}
+            </Typography>
+            <Typography component="p" sx={paragraphStyle}>
                 {t("Description.DescriptionText1")}
-                <a href={ZNPaths.homePagePath}>
+                <Link href={ZNPaths.homePagePath} sx={linkColorStyle}>
                     {t("Description.DescriptionLink")}
-                </a>
+                </Link>
                 {t("Description.DescriptionText2")}
-            </p>
+            </Typography>
 
-            <h3 css={dataProtectionHeaderStyle}>{t("Chapter.1.Heading")}</h3>
+            <Typography variant="h6" sx={dataProtectionHeaderStyle}>
+                {t("Chapter.1.Heading")}
+            </Typography>
             <div>
-                <p>{t("Chapter.1.Text1")}</p>
-                <table>
-                    <tbody>
-                        <tr>{t("Chapter.1.BfrName")}</tr>
-                        <tr>{contactBfr.Street}</tr>
-                        <tr>{contactBfr.City}</tr>
-                        <tr>{contactBfr.Phone}</tr>
-                        <tr>{contactBfr.Fax}</tr>
-                        <tr>
-                            {t("Chapter.1.MailText")}
-                            <a href={`mailto:${mailBfr}`}>{mailBfr}</a>
-                        </tr>
-                        <tr>
-                            <a
-                                href={homePageBfr}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                {homePageBfr}
-                            </a>
-                        </tr>
-                    </tbody>
-                </table>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.1.Text1")}
+                </Typography>
+                <List dense>
+                    <ListItem>{t("Chapter.1.BfrName")}</ListItem>
+                    <ListItem>{contactBfr.Street}</ListItem>
+                    <ListItem>{contactBfr.City}</ListItem>
+                    <ListItem>{contactBfr.Phone}</ListItem>
+                    <ListItem>{contactBfr.Fax}</ListItem>
+                    <ListItem>
+                        {t("Chapter.1.MailText")}
+                        <Link href={`mailto:${mailBfr}`} sx={linkColorStyle}>
+                            {mailBfr}
+                        </Link>
+                    </ListItem>
+                    <ListItem>
+                        <Link
+                            href={homePageBfr}
+                            target="_blank"
+                            rel="noreferrer"
+                            sx={linkColorStyle}
+                        >
+                            {homePageBfr}
+                        </Link>
+                    </ListItem>
+                </List>
                 <br />
-                <p> {t("Chapter.1.Text2")} </p>
-                <table>
-                    <tbody>
-                        <tr>{contactDP.Name}</tr>
-                        <tr>{contactDP.Street}</tr>
-                        <tr>{contactDP.City}</tr>
-                        <tr>{contactDP.Phone}</tr>
-                        <tr>{contactDP.Fax}</tr>
-                        <tr>
-                            {t("Chapter.1.MailText")}
-                            <a href={`mailto:${mailDP}`}>{mailDP}</a>
-                        </tr>
-                    </tbody>
-                </table>
+                <Typography component="p" sx={paragraphStyle}>
+                    {" "}
+                    {t("Chapter.1.Text2")}{" "}
+                </Typography>
+                <List dense>
+                    <ListItem>{contactDP.Name}</ListItem>
+                    <ListItem>{contactDP.Street}</ListItem>
+                    <ListItem>{contactDP.City}</ListItem>
+                    <ListItem>{contactDP.Phone}</ListItem>
+                    <ListItem>{contactDP.Fax}</ListItem>
+                    <ListItem>
+                        {t("Chapter.1.MailText")}
+                        <Link href={`mailto:${mailDP}`} sx={linkColorStyle}>
+                            {mailDP}
+                        </Link>
+                    </ListItem>
+                </List>
             </div>
 
-            <h3 css={dataProtectionHeaderStyle}>{t("Chapter.2.Heading")}</h3>
+            <Typography variant="h6" sx={dataProtectionHeaderStyle}>
+                {t("Chapter.2.Heading")}
+            </Typography>
             <div>
-                <p>
+                <Typography component="p" sx={paragraphStyle}>
                     {t("Chapter.2.Text1")}
-                    <a href={linkDSGVO} target="_blank" rel="noreferrer">
+                    <Link
+                        href={linkDSGVO}
+                        target="_blank"
+                        rel="noreferrer"
+                        sx={linkColorStyle}
+                    >
                         {t("Chapter.2.LinkDSGVO")}
-                    </a>
+                    </Link>
                     {t("Chapter.2.Text2")}
-                    <a href={linkBDSG} target="_blank" rel="noreferrer">
+                    <Link
+                        href={linkBDSG}
+                        target="_blank"
+                        rel="noreferrer"
+                        sx={linkColorStyle}
+                    >
                         {t("Chapter.2.LinkBDSG")}
-                    </a>
-                </p>
-                <p>{t("Chapter.2.Text3")}</p>
-                <p>{t("Chapter.2.Text4")}</p>
-                <p>{t("Chapter.2.Text5")}</p>
-                <p>{t("Chapter.2.Text6")}</p>
-                <p>{t("Chapter.2.Text7")}</p>
-                <p>{t("Chapter.2.Text8")}</p>
+                    </Link>
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.2.Text3")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.2.Text4")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.2.Text5")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.2.Text6")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.2.Text7")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.2.Text8")}
+                </Typography>
             </div>
 
-            <h3 css={dataProtectionHeaderStyle}>{t("Chapter.3.Heading")}</h3>
-            <h4 css={dataProtectionSubheaderStyle}>
+            <Typography variant="h6" sx={dataProtectionHeaderStyle}>
+                {t("Chapter.3.Heading")}
+            </Typography>
+            <Typography sx={dataProtectionSubheaderStyle}>
                 {t("Chapter.3.31.Heading")}
-            </h4>
+            </Typography>
             <div>
-                <p>{t("Chapter.3.31.Text1")}</p>
-                <ul css={dataProtectionListStyle}>
-                    <li>{t("Chapter.3.31.Data.a")}</li>
-                    <li>{t("Chapter.3.31.Data.b")}</li>
-                    <li>{t("Chapter.3.31.Data.c")}</li>
-                    <li>{t("Chapter.3.31.Data.d")}</li>
-                    <li>{t("Chapter.3.31.Data.e")}</li>
-                    <li>{t("Chapter.3.31.Data.f")}</li>
-                </ul>
-                <p>{t("Chapter.3.31.Text2")}</p>
-                <p>{t("Chapter.3.31.Text3")}</p>
-                <ul css={dataProtectionListStyle}>
-                    <li>{t("Chapter.3.31.Reasons.a")}</li>
-                    <li>{t("Chapter.3.31.Reasons.b")}</li>
-                    <li>{t("Chapter.3.31.Reasons.c")}</li>
-                </ul>
-                <p>{t("Chapter.3.31.Text4")}</p>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.3.31.Text1")}
+                </Typography>
+                <List dense sx={listStyle}>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Data.a")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Data.b")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Data.c")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Data.d")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Data.e")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Data.f")}
+                    </ListItem>
+                </List>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.3.31.Text2")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.3.31.Text3")}
+                </Typography>
+                <List dense sx={listStyle}>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Reasons.a")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Reasons.b")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.3.31.Reasons.c")}
+                    </ListItem>
+                </List>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.3.31.Text4")}
+                </Typography>
             </div>
 
-            <h4 css={dataProtectionSubheaderStyle}>
+            <Typography sx={dataProtectionSubheaderStyle}>
                 {t("Chapter.3.32.Heading")}
-            </h4>
+            </Typography>
             <div>
-                <p>
+                <Typography component="p" sx={paragraphStyle}>
                     {t("Chapter.3.32.Text1")}{" "}
-                    <a href={`mailto:${mailZnSupport}`}>{mailZnSupport}</a>
+                    <Link href={`mailto:${mailZnSupport}`} sx={linkColorStyle}>
+                        {mailZnSupport}
+                    </Link>
                     {t("Chapter.3.32.Text2")}
-                </p>
+                </Typography>
             </div>
 
-            <h3 css={dataProtectionHeaderStyle}>{t("Chapter.4.Heading")}</h3>
+            <Typography variant="h6" sx={dataProtectionHeaderStyle}>
+                {t("Chapter.4.Heading")}
+            </Typography>
             <div>
-                <p>{t("Chapter.4.Text")}</p>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.4.Text")}
+                </Typography>
             </div>
 
-            <h3 css={dataProtectionHeaderStyle}>{t("Chapter.5.Heading")}</h3>
+            <Typography variant="h6" sx={dataProtectionHeaderStyle}>
+                {t("Chapter.5.Heading")}
+            </Typography>
             <div>
-                <p>{t("Chapter.5.Text1")}</p>
-                <ul css={dataProtectionListStyle}>
-                    <li>{t("Chapter.5.Rights.a")}</li>
-                    <li>{t("Chapter.5.Rights.b")}</li>
-                    <li>{t("Chapter.5.Rights.c")}</li>
-                    <li>{t("Chapter.5.Rights.d")}</li>
-                    <li>{t("Chapter.5.Rights.e")}</li>
-                    <li>{t("Chapter.5.Rights.f")}</li>
-                </ul>
-                <p>{t("Chapter.5.Text2")}</p>
-                <p>{t("Chapter.5.Text3")}</p>
-                <p>{t("Chapter.5.Text4")}</p>
-                <p>{t("Chapter.5.Text5")}</p>
-                <p>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.5.Text1")}
+                </Typography>
+                <List dense sx={listStyle}>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.5.Rights.a")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.5.Rights.b")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.5.Rights.c")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.5.Rights.d")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.5.Rights.e")}
+                    </ListItem>
+                    <ListItem sx={listItemStyle}>
+                        {t("Chapter.5.Rights.f")}
+                    </ListItem>
+                </List>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.5.Text2")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.5.Text3")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.5.Text4")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.5.Text5")}
+                </Typography>
+                <Typography component="p" sx={paragraphStyle}>
                     {t("Chapter.5.Text6")}
-                    <a href={`mailto:${mailDP}`}>{mailDP}</a>
+                    <Link href={`mailto:${mailDP}`} sx={linkColorStyle}>
+                        {mailDP}
+                    </Link>
                     {t("Chapter.5.Text7")}
-                </p>
+                </Typography>
             </div>
 
-            <h3 css={dataProtectionHeaderStyle}>{t("Chapter.6.Heading")}</h3>
+            <Typography variant="h6" sx={dataProtectionHeaderStyle}>
+                {t("Chapter.6.Heading")}
+            </Typography>
             <div>
-                <p>{t("Chapter.6.Text")}</p>
+                <Typography component="p" sx={paragraphStyle}>
+                    {t("Chapter.6.Text")}
+                </Typography>
             </div>
 
-            <footer css={dataProtectionFooterStyle}>
-                <span css={dataProtectionFooterDateStyle}>
+            <Box
+                component="footer"
+                sx={{
+                    width: "100%",
+                    borderTop: `1px solid ${theme.palette.primary.main}`,
+                }}
+            >
+                <Typography variant="caption">
                     {t("CreationDate.Text")}
                     <time>{t("CreationDate.Date")}</time>
-                </span>
-            </footer>
-        </article>
+                </Typography>
+            </Box>
+        </Box>
     );
 }
