@@ -1,6 +1,6 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+import React from "react";
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { useTheme } from "@mui/system";
 import { smallToggleStyle } from "./Style/SmallToggleStyle";
 
 export type CheckboxesConfig = {
@@ -22,6 +22,7 @@ export interface CheckboxesProps {
  * @returns {JSX.Element} - checkboxes component
  */
 export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
+    const theme = useTheme();
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
 
@@ -31,7 +32,7 @@ export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
 
         checkboxesList.push(
             <FormControlLabel
-                css={props.size === "small" ? smallToggleStyle : null}
+                sx={props.size === "small" ? smallToggleStyle : null}
                 control={
                     <Checkbox
                         checked={checkbox.checked}
@@ -43,7 +44,12 @@ export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
                             )
                         }
                         name={checkbox.name}
-                        color="primary"
+                        sx={{
+                            color: theme.palette.primary.main,
+                            "&.Mui-checked": {
+                                color: theme.palette.primary.main,
+                            },
+                        }}
                     />
                 }
                 label={checkbox.label}

@@ -1,18 +1,13 @@
 import React from "react";
-import { ValueType } from "react-select";
 import { TFunction } from "i18next";
-import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import {
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
-import {
-    bfrDarkgrey,
-    primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme";
 import { generateSelectorObject } from "./generateSelectorObject.service";
+import { SelectorValue } from "../../../../../Shared/Model/Selector.model";
 
 export interface SelectorProps {
     dataIsLoading: boolean;
@@ -44,7 +39,7 @@ export function SelectorListSelectorComponent(
         props.dataUniqueValues.filters[filterAttribute];
 
     const handleChange = (
-        selectedOption: ValueType<{ value: string; label: string }, boolean>,
+        selectedOption: SelectorValue,
         keyName: FilterType | FeatureType
     ): void => {
         if (selectedOption !== undefined && Array.isArray(selectedOption)) {
@@ -56,11 +51,6 @@ export function SelectorListSelectorComponent(
             props.onChange(null, keyName);
         }
     };
-
-    const noFilter: boolean = CheckIfSingleFilterIsSet(
-        props.selectedFilter.filters,
-        filterAttribute
-    );
 
     const dropDownValuesObj: {
         value: string;
@@ -74,9 +64,6 @@ export function SelectorListSelectorComponent(
     return (
         <SelectorComponent
             key={`filter-selector-${filterAttribute}`}
-            titleColor={bfrDarkgrey}
-            hooverColor={primaryColor}
-            hooverColorDark={bfrDarkgrey}
             label={props.selectorLabel}
             noOptionLabel={props.noOptionLabel}
             dropDownValuesObj={dropDownValuesObj}
@@ -84,7 +71,6 @@ export function SelectorListSelectorComponent(
             selectAttribute={filterAttribute}
             onChange={handleChange}
             isMulti
-            isNotSelected={noFilter}
             isDisabled={props.dataIsLoading}
             hide={props.hide}
         />

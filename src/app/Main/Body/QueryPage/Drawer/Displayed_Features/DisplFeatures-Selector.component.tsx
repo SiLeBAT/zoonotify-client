@@ -1,15 +1,11 @@
 import React from "react";
-import { ValueType } from "react-select";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import _ from "lodash";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { FilterType } from "../../../../../Shared/Model/Filter.model";
-import {
-    bfrDarkgrey,
-    primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme";
+import { SelectorValue } from "../../../../../Shared/Model/Selector.model";
 
 function generateTranslatedSelectorObject(
     selectorArray: string[],
@@ -79,7 +75,7 @@ export function DisplayedFeatureSelectorComponent(
               label: t(`Filters.${props.activeFeature}`),
           };
     const handleChange = (
-        selectedOption: ValueType<{ value: string; label: string }, boolean>,
+        selectedOption: SelectorValue,
         keyName: FilterType | FeatureType
     ): void => {
         if (
@@ -89,10 +85,7 @@ export function DisplayedFeatureSelectorComponent(
         ) {
             const option = selectedOption as { value: string; label: string };
             if (option.value !== props.activeFeature) {
-                props.onChange(
-                    selectedOption as { value: string; label: string },
-                    keyName
-                );
+                props.onChange(option, keyName);
             }
         } else {
             props.onChange(null, keyName);
@@ -102,9 +95,6 @@ export function DisplayedFeatureSelectorComponent(
     return (
         <SelectorComponent
             label={props.label}
-            titleColor={bfrDarkgrey}
-            hooverColor={primaryColor}
-            hooverColorDark={bfrDarkgrey}
             noOptionLabel={t("Drawer.Selector")}
             dropDownValuesObj={dropDownValuesObj}
             selectedValuesObj={
@@ -113,7 +103,6 @@ export function DisplayedFeatureSelectorComponent(
             selectAttribute={props.selectAttribute}
             onChange={handleChange}
             isMulti={false}
-            isNotSelected={isNotSelected}
             isDisabled={props.dataIsLoading}
             hide={false}
         />

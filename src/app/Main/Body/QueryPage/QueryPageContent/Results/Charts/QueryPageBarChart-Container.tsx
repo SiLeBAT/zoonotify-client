@@ -10,6 +10,7 @@ import {
     DataInterface,
     DisplayOptionType,
 } from "../../../../../../Shared/Context/DataContext";
+import { ExplanationTextComponent } from "../../../../../../Shared/ExplanationText.component";
 import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 import { processingTableDataToApexData } from "./processingTableDataToApexData.service";
@@ -17,10 +18,6 @@ import { ChatWithSubChartsComponent } from "./ChartWithSubCharts.component";
 
 const chartOverflowStyle = css`
     overflow: auto;
-`;
-const explanationTextStyle = css`
-    text-align: center;
-    font-size: 0.75rem;
 `;
 
 function generateAxisLabels(
@@ -76,9 +73,7 @@ export function QueryPageBarChartContainer(props: {
     };
 
     let chartAccordionContent = (
-        <div>
-            <p css={explanationTextStyle}>{t("Chart.Explanation")}</p>
-        </div>
+        <ExplanationTextComponent text={t("Chart.Explanation")} />
     );
 
     const colName = props.chartData.column;

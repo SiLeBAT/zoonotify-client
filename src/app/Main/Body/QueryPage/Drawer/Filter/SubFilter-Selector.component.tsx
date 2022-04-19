@@ -1,20 +1,15 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { ValueType } from "react-select";
 import { TFunction } from "i18next";
 import {
     FilterInterface,
     FilterType,
 } from "../../../../../Shared/Model/Filter.model";
-import {
-    bfrDarkgrey,
-    primaryColor,
-} from "../../../../../Shared/Style/Style-MainTheme";
 import { SelectorComponent } from "../../../../../Shared/Selector.component";
-import { CheckIfSingleFilterIsSet } from "../../Services/checkIfFilterIsSet.service";
 import { generateSelectorObject } from "./generateSelectorObject.service";
 import { FeatureType } from "../../../../../Shared/Context/DataContext";
 import { replaceAll } from "../../../../../Core/replaceAll.service";
+import { SelectorValue } from "../../../../../Shared/Model/Selector.model";
 
 const subFilterSelectorStyle = css`
     display: grid;
@@ -66,10 +61,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
         t,
         true
     );
-    const noFilter: boolean = CheckIfSingleFilterIsSet(
-        props.selectedFilter.subfilters,
-        props.subFilterAttribute
-    );
+
     const dropDownValuesObj = generateSelectorObject(
         subFilterAttributeForTranslation,
         props.subFilterValues,
@@ -78,7 +70,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
     );
 
     const handleChange = (
-        selectedOption: ValueType<{ value: string; label: string }, boolean>,
+        selectedOption: SelectorValue,
         keyName: FilterType | FeatureType
     ): void => {
         if (selectedOption !== undefined && Array.isArray(selectedOption)) {
@@ -111,10 +103,7 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
             <p css={subFilterTriggerLabelStyle}>{subFilterTriggerLabel}</p>
             <SelectorComponent
                 key={`subFilter-selector-${props.subFilterAttribute}-${props.subFilterTrigger}`}
-                mainColor={primaryColor}
-                titleColor={primaryColor}
-                hooverColor={bfrDarkgrey}
-                hooverColorDark={bfrDarkgrey}
+                subFilter
                 label={subFilterName}
                 noOptionLabel={props.noOptionLabel}
                 dropDownValuesObj={dropDownValuesObj}
@@ -122,7 +111,6 @@ export function SubFilterSelectorComponent(props: SelectorProps): JSX.Element {
                 selectAttribute={props.subFilterAttribute}
                 onChange={handleChange}
                 isMulti
-                isNotSelected={noFilter}
                 isDisabled={props.dataIsLoading}
                 hide={false}
             />
