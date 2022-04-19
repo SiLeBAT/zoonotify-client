@@ -83,7 +83,7 @@ export function FooterLinkListComponent(props: {
                 title={supportMailErrorText}
                 placement="top"
             >
-                <Box component="p" sx={disableLinkStyle}>
+                <Box sx={disableLinkStyle}>
                     <Typography>{t("Content.Mail")}</Typography>
                 </Box>
             </Tooltip>

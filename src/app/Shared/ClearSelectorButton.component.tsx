@@ -1,21 +1,7 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { onBackgroundColor, primaryColor } from "./Style/Style-MainTheme";
-
-const buttonAreaStyle = css`
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-`;
-
-const iconButtonStyle = css`
-    height: fit-content;
-    padding: 0;
-    color: ${primaryColor};
-`;
 
 /**
  * @desc Button and tooltip to clear all selected settings.
@@ -27,38 +13,43 @@ export function ClearSelectorComponent(props: {
     disabled: boolean;
 }): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
+    const theme = useTheme();
     const mouseOverText = t("QueryPage:Buttons.Delete");
 
     const handleClick = (): void => props.onClick();
 
     return (
-        <div css={buttonAreaStyle}>
+        <Box sx={{ marginTop: "auto", display: "flex", alignItems: "center" }}>
             <Tooltip
                 title={mouseOverText}
                 placement="top"
                 sx={{
                     backgroundColor: "transparent",
-                    color: onBackgroundColor,
+                    color: theme.palette.primary.contrastText,
                     fontSize: "9px",
                     margin: "0.2em",
                 }}
             >
                 <span>
                     <IconButton
-                        css={iconButtonStyle}
+                        sx={{
+                            height: "fit-content",
+                            padding: 0,
+                            color: theme.palette.primary.main,
+                        }}
                         onClick={handleClick}
                         disabled={props.disabled}
                         size="large"
                     >
                         <CancelIcon
-                            css={css`
-                                height: 20px;
-                                width: 20px;
-                            `}
+                            sx={{
+                                height: "20px",
+                                width: "20px",
+                            }}
                         />
                     </IconButton>
                 </span>
             </Tooltip>
-        </div>
+        </Box>
     );
 }

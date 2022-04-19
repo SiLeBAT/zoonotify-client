@@ -47,7 +47,9 @@ export function TableResultsContainer(props: TableResultsProps): JSX.Element {
         ? ""
         : t(`Filters.${tableColAttribute}`);
 
-    let tableAccordionContent = <ExplanationTextComponent />;
+    let tableAccordionContent = (
+        <ExplanationTextComponent text={t("Explanation")} />
+    );
     const isTable: boolean =
         props.tableData.row !== "" || props.tableData.column !== "";
 

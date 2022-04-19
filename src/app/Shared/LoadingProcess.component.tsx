@@ -1,13 +1,6 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/system";
-import { primaryColor } from "./Style/Style-MainTheme";
-
-const circularProgressStyle = css`
-    margin: 3em auto;
-    color: ${primaryColor};
-`;
 
 export function LoadingProcessComponent(): JSX.Element {
     const theme = useTheme();
@@ -21,7 +14,9 @@ export function LoadingProcessComponent(): JSX.Element {
                 },
             }}
         >
-            <CircularProgress css={circularProgressStyle} />
+            <CircularProgress
+                sx={{ margin: "3em auto", color: theme.palette.primary.main }}
+            />
         </Box>
     );
 }

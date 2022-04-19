@@ -1,12 +1,10 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { useTranslation } from "react-i18next";
+import React from "react";
+import { Typography } from "@mui/material";
 
-const explanationTextStyle = css`
-    font-size: 0.75rem;
-`;
-
-export function ExplanationTextComponent(): JSX.Element {
-    const { t } = useTranslation("QueryPage");
-    return <p css={explanationTextStyle}>{t("Explanation")}</p>;
+export function ExplanationTextComponent(props: { text: string }): JSX.Element {
+    return (
+        <Typography sx={{ fontSize: "0.75rem", textAlign: "center" }}>
+            {props.text}
+        </Typography>
+    );
 }

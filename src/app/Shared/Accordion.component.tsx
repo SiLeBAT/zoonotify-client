@@ -1,27 +1,9 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-const titleStyle = css`
-    margin: 0;
-    font-weight: bold;
-    font-size: 1rem;
-`;
-const contentStyle = css`
-    margin-left: 2em;
-    margin-right: 2em;
-    display: block;
-    hyphens: auto;
-    text-align: justify;
-`;
-const dataStyle = css`
-    max-width: fit-content;
-    margin: auto;
-    box-sizing: inherit;
-`;
+import { Box, Typography } from "@mui/material";
 
 export interface AccordionProps {
     title: string | JSX.Element;
@@ -39,7 +21,17 @@ export function AccordionComponent(props: AccordionProps): JSX.Element {
     let { content } = props;
 
     if (props.centerContent) {
-        content = <div css={dataStyle}>{props.content}</div>;
+        content = (
+            <Box
+                sx={{
+                    maxWidth: "fit-content",
+                    margin: "auto",
+                    boxSizing: "inherit",
+                }}
+            >
+                {props.content}
+            </Box>
+        );
     }
     return (
         <Accordion defaultExpanded={props.defaultExpanded}>
@@ -48,9 +40,23 @@ export function AccordionComponent(props: AccordionProps): JSX.Element {
                 aria-controls="shared-accordion-content"
                 id="shared-accordion-header"
             >
-                <p css={titleStyle}>{props.title}</p>
+                <Typography
+                    sx={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}
+                >
+                    {props.title}
+                </Typography>
             </AccordionSummary>
-            <AccordionDetails css={contentStyle}>{content}</AccordionDetails>
+            <AccordionDetails
+                sx={{
+                    marginLeft: "2em",
+                    marginRight: "2em",
+                    display: "block",
+                    hyphens: "auto",
+                    textAlign: "justify",
+                }}
+            >
+                {content}
+            </AccordionDetails>
         </Accordion>
     );
 }
