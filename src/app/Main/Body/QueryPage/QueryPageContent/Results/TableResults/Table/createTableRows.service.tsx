@@ -105,7 +105,10 @@ export function createTableRowsService(props: {
 
     const rowCells: JSX.Element[] = [];
 
-    if (props.rowAttribute === "microorganism") {
+    if (
+        props.rowAttribute === "microorganism" ||
+        props.rowAttribute === "matrix"
+    ) {
         if (isSubFilterTable) {
             rowCells.push(
                 <TableCell

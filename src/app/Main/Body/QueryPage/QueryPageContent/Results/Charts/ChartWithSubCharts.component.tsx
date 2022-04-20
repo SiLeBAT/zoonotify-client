@@ -38,6 +38,7 @@ function TabPanel(props: TabPanelProps): JSX.Element {
  * @returns {JSX.Element} - accordion with the result chart
  */
 export function ChatWithSubChartsComponent(props: {
+    mainAttribute: string;
     mainChartData: ApexChartInfo;
     getPngDownloadUriRef: MutableRefObject<(() => Promise<string>) | null>;
     processedSubChatsList: ApexChartInfo[];
@@ -55,6 +56,7 @@ export function ChatWithSubChartsComponent(props: {
         displayAsStacked,
         mainChartData,
         processedSubChatsList,
+        mainAttribute,
     } = props;
 
     const handleChange = props.onChange;
@@ -69,7 +71,7 @@ export function ChatWithSubChartsComponent(props: {
                     variant="scrollable"
                     aria-label="basic tabs example"
                 >
-                    <Tab label={t(`Filters.microorganism`)} value={0} />
+                    <Tab label={t(`Filters.${mainAttribute}`)} value={0} />
                     {labelList.map((label, index) => (
                         <Tab
                             key={`Tab_${label}`}

@@ -25,7 +25,7 @@ function generateAxisLabels(
     rowName: string,
     colName: string,
     displayOption: DisplayOptionType,
-    rowNamePath: string
+    xAxisName: string
 ): [string, string] {
     let xAxisLabel = "";
     let yAxisLabel = "";
@@ -33,11 +33,11 @@ function generateAxisLabels(
         if (displayOption === "relative") {
             xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t(
                 "Results.per"
-            )} ${t(rowNamePath)} ${t("Results.Unit")}`;
+            )} ${xAxisName} ${t("Results.Unit")}`;
         } else if (displayOption === "absolute") {
             xAxisLabel = `${t("Results.NrIsolatesText")} ${t(
                 "Results.per"
-            )} ${t(rowNamePath)}`;
+            )} ${xAxisName}`;
         }
     } else if (displayOption === "relative") {
         xAxisLabel = `${t("Results.NrIsolatesTextRelative")} ${t(
@@ -110,7 +110,7 @@ export function QueryPageBarChartContainer(props: {
                 rowName,
                 colName,
                 props.chartData.option,
-                `Filters.${rowName}`
+                t(`Filters.${rowName}`)
             );
 
             const processedChatDataList: {
@@ -120,7 +120,7 @@ export function QueryPageBarChartContainer(props: {
             }[] = [];
             const labelList: string[] = [];
 
-            if (rowName === "microorganism") {
+            if (rowName === "microorganism" || rowName === "matrix") {
                 Object.keys(subChartData).forEach((subChartKey) => {
                     const { subFilterName } = subChartData[subChartKey];
                     const processedSubChartData = processingTableDataToApexData(
@@ -131,23 +131,31 @@ export function QueryPageBarChartContainer(props: {
                         true,
                         t
                     );
+                    let subFilterLabel = t(`Subfilters.${subFilterName}.name`);
+
+                    if (rowName === "matrix") {
+                        subFilterLabel = `${t(
+                            `Subfilters.${subFilterName}.name`
+                        )} ${t(`Subfilters.${subFilterName}.trigger`)}`;
+                    }
                     const [xAxisSubLabel, yAxisSubLabel] = generateAxisLabels(
                         t,
                         subFilterName,
                         colName,
                         props.chartData.option,
-                        `Subfilters.${subFilterName}.name`
+                        subFilterLabel
                     );
                     processedChatDataList.push({
                         xAxisLabel: xAxisSubLabel,
                         yAxisLabel: yAxisSubLabel,
                         data: processedSubChartData,
                     });
-                    labelList.push(t(`Subfilters.${subFilterName}.name`));
+                    labelList.push(subFilterLabel);
                 });
 
                 chartAccordionContent = (
                     <ChatWithSubChartsComponent
+                        mainAttribute={rowName}
                         mainChartData={{
                             xAxisLabel,
                             yAxisLabel,
