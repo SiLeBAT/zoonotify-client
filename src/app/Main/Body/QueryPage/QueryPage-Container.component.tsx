@@ -10,6 +10,7 @@ import {
     allSubFiltersList,
     microorganismSubFiltersList,
     ClientIsolateCountedGroups,
+    matrixSubFilterList,
 } from "../../../Shared/Model/Client_Isolate.model";
 import { ISOLATE_COUNT_URL } from "../../../Shared/URLs";
 import { LoadingOrErrorComponent } from "../../../Shared/LoadingOrError.component";
@@ -452,18 +453,35 @@ export function QueryPageContainerComponent(): JSX.Element {
                             filter.selectedFilter,
                             filter.mainFilters
                         );
-                        const selectedFilters =
-                            filter.selectedFilter.filters[data.row];
+
+                        let selectedFilters: string[] = [];
+
+                        if (
+                            filter.selectedFilter.filters[data.row] !==
+                            undefined
+                        ) {
+                            selectedFilters =
+                                filter.selectedFilter.filters[data.row];
+                        }
+
+                        const rowHasSubFilters = subFilter.parent === data.row;
+                        let subFilterList: string[] = [];
+                        if (data.row === "microorganism") {
+                            subFilterList = microorganismSubFiltersList;
+                        } else if (data.row === "matrix") {
+                            subFilterList = matrixSubFilterList;
+                        }
+
+                        const subFilterIncludesId = subFilterList.includes(
+                            subFilter.id
+                        );
+
                         if (subFilter.trigger !== undefined) {
                             if (
-                                (subFilter.parent === data.row &&
-                                    selectedFilters.includes(
-                                        subFilter.trigger
-                                    ) &&
-                                    microorganismSubFiltersList.includes(
-                                        subFilter.id
-                                    )) ||
-                                allFilters
+                                rowHasSubFilters &&
+                                subFilterIncludesId &&
+                                (allFilters ||
+                                    selectedFilters.includes(subFilter.trigger))
                             ) {
                                 const subFilterForTable = subFilter.id;
                                 const paramString = history.location.search;

@@ -125,6 +125,17 @@ export const microorganismSubFiltersList: string[] = [
     "genes",
 ];
 
+export const matrixSubFilterList: string[] = [
+    "matrixDetail__Blinddarminhalt",
+    "matrixDetail__Frisches Fleisch ",
+    "matrixDetail__Haut",
+    "matrixDetail__Kot",
+    "matrixDetail__Kot / Staub",
+    "matrixDetail__Rohmilchkäse",
+    "matrixDetail__Streichfähige Rohwürste",
+    "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote",
+];
+
 export const genesCollection: string[] = ["stx1", "stx2", "eae", "e_hly"];
 
 export const matrixSubFiltersList: string[] = [
