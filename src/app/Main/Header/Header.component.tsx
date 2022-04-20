@@ -20,10 +20,7 @@ const headerStyle = css`
     box-sizing: border-box;
 `;
 
-const mainHeaderStyle = (
-    open: boolean,
-    queryPageOpen: boolean
-): SerializedStyles => css`
+const mainHeaderStyle = (queryPageOpen: boolean): SerializedStyles => css`
     width: 100%;
     height: 100%;
     display: flex;
@@ -32,7 +29,9 @@ const mainHeaderStyle = (
     box-sizing: border-box;
     box-shadow: ${queryPageOpen ? "none" : "0 8px 6px -6px grey"};
     background-color: ${primaryColor};
-    border-bottom: ${open ? `24px solid ${bfrPrimaryPalette[300]}` : "none"};
+    border-bottom: ${queryPageOpen
+        ? "none"
+        : `24px solid ${bfrPrimaryPalette[300]}`};
 `;
 const appNameStyle = css`
     padding: 0.5em 1em 0.5em 1em;
@@ -105,7 +104,7 @@ export function HeaderComponent(): JSX.Element {
 
     return (
         <header css={headerStyle}>
-            <div css={mainHeaderStyle(infoOpen || linkOpen, queryOpen)}>
+            <div css={mainHeaderStyle(queryOpen)}>
                 <div css={leftHeaderStyle}>
                     <NavLink to={ZNPaths.homePagePath} css={appNameStyle}>
                         ZooNotify
