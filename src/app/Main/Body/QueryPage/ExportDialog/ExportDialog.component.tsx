@@ -1,19 +1,12 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
+import { Typography } from "@mui/material";
+import { useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import {
     DialogButton,
     DialogComponent,
 } from "../../../../Shared/Dialog.component";
 import { ExportDialogCheckboxesComponent } from "./ExportDialog-Checkboxes.component";
-import { errorColor } from "../../../../Shared/Style/Style-MainTheme";
-
-const warningStyle = css`
-    display: flex;
-    color: ${errorColor};
-    margin-left: 2em;
-    font-size: 0.75rem;
-`;
 
 export function ExportDialogComponent(props: {
     exportOptions: {
@@ -29,6 +22,7 @@ export function ExportDialogComponent(props: {
     onCheckboxChange: (name: string, checked: boolean) => void;
 }): JSX.Element {
     const { t } = useTranslation(["Export"]);
+    const theme = useTheme();
     const handleClose = (): void => props.onClickClose();
     const handleChangeCheckbox = (name: string, checked: boolean): void =>
         props.onCheckboxChange(name, checked);
@@ -60,7 +54,17 @@ export function ExportDialogComponent(props: {
                 statAndChartExportIsDisabled={props.noTableFeatures}
                 nrOfIsolates={props.nrOfIsolates}
             />
-            {showWarning && <p css={warningStyle}>{warningText}</p>}
+            {showWarning && (
+                <Typography
+                    component="p"
+                    sx={{
+                        color: theme.palette.error.main,
+                        fontSize: "0.75rem",
+                    }}
+                >
+                    {warningText}
+                </Typography>
+            )}
         </div>
     );
 
