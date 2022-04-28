@@ -1,30 +1,23 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/react";
-import { Button } from "@mui/material";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
+import React from "react";
+import { Box, Button } from "@mui/material";
+import { useTheme } from "@mui/system";
 import { Evaluation, EvaluationCategory } from "./Evaluations.model";
-
-const navButtonDisplayStyle = css`
-    display: grid;
-`;
-const navButtonListStyle = css`
-    margin: 0 auto;
-    display: grid;
-`;
 
 export function EvaluationsPageNavButtonComponent(props: {
     evaluationsData: Evaluation;
 }): JSX.Element {
+    const theme = useTheme();
     return (
-        <div css={navButtonDisplayStyle}>
-            <div css={navButtonListStyle}>
+        <Box sx={{ display: "grid" }}>
+            <Box sx={{ margin: "0 auto", display: "grid" }}>
                 {Object.keys(props.evaluationsData).map((category) => (
                     <Button
                         variant="contained"
                         sx={{
                             margin: "0.25em",
                             textAlign: "center",
-                            backgroundColor: `${primaryColor}`,
+                            backgroundColor: theme.palette.primary.main,
+                            color: theme.palette.primary.contrastText,
                         }}
                         href={`#${category}`}
                         key={`nav_button-${category}`}
@@ -36,7 +29,7 @@ export function EvaluationsPageNavButtonComponent(props: {
                         }
                     </Button>
                 ))}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }

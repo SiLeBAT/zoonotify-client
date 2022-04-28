@@ -1,28 +1,14 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/react";
+import React from "react";
 import {
     Box,
     Button,
     Card,
     CardContent,
     CardMedia,
+    Link,
     Typography,
 } from "@mui/material";
-import { primaryColor } from "../../../Shared/Style/Style-MainTheme";
-
-const chartBoxStyle = css`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-
-const downloadLinkStyle = css`
-    width: 100%;
-    padding: 0.5em 1em;
-    color: inherit;
-    text-decoration: none;
-`;
+import { useTheme } from "@mui/system";
 
 export function EvaluationsPageCardComponent(props: {
     title: string;
@@ -30,6 +16,7 @@ export function EvaluationsPageCardComponent(props: {
     chartPath: string;
     downloadButtonText: string;
 }): JSX.Element {
+    const theme = useTheme();
     return (
         <Card
             sx={{
@@ -58,7 +45,14 @@ export function EvaluationsPageCardComponent(props: {
                     </Typography>
                 </CardContent>
             </Box>
-            <div css={chartBoxStyle}>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
                 <CardMedia
                     component="img"
                     image={props.chartPath}
@@ -71,14 +65,23 @@ export function EvaluationsPageCardComponent(props: {
                         width: "30%",
                         margin: "0.5em",
                         padding: "0em",
-                        backgroundColor: `${primaryColor}`,
+                        backgroundColor: theme.palette.primary.main,
                     }}
                 >
-                    <a href={props.chartPath} download css={downloadLinkStyle}>
+                    <Link
+                        href={props.chartPath}
+                        download
+                        sx={{
+                            width: "100%",
+                            padding: "0.5em 1em",
+                            color: "inherit",
+                            textDecoration: "none",
+                        }}
+                    >
                         {props.downloadButtonText}
-                    </a>
+                    </Link>
                 </Button>
-            </div>
+            </Box>
         </Card>
     );
 }

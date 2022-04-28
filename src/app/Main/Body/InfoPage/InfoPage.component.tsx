@@ -51,10 +51,6 @@ export function InfoPageComponent(props: {
         textAlign: "center",
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.primary.contrastText,
-        "&:hover": {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-        },
     } as const;
 
     const handleExportAmrData = (amrKey: AmrKey): void => {
@@ -143,10 +139,18 @@ export function InfoPageComponent(props: {
             </Typography>
             <Box sx={{ display: "grid" }}>
                 <Box sx={{ margin: "0 auto", display: "grid" }}>
-                    <Button sx={navButtonStyle} href="#filter">
+                    <Button
+                        variant="contained"
+                        sx={navButtonStyle}
+                        href="#filter"
+                    >
                         {filtersChapterHeading}
                     </Button>
-                    <Button sx={navButtonStyle} href="#methods">
+                    <Button
+                        variant="contained"
+                        sx={navButtonStyle}
+                        href="#methods"
+                    >
                         {methodsChapterHeading}
                     </Button>
                 </Box>
