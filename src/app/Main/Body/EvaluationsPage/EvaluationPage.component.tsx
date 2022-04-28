@@ -1,34 +1,9 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/react";
-
+import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/system";
+import React from "react";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
-import {
-    primaryColor,
-    onPrimaryColor,
-} from "../../../Shared/Style/Style-MainTheme";
 import { EvaluationsPageCardComponent } from "./EvaluationPage-Card.component";
 import { Evaluation, EvaluationCategory } from "./Evaluations.model";
-
-const infoPageStyle = css`
-    width: 60%;
-    margin: 2em auto;
-`;
-
-const headingStyle = css`
-    min-width: 7em;
-    padding-bottom: 0.5em;
-    font-size: 3rem;
-    text-align: center;
-    font-weight: normal;
-    color: ${primaryColor};
-    border-bottom: 1px solid ${primaryColor};
-`;
-
-const subHeadingStyle = css`
-    background-color: ${primaryColor};
-    color: ${onPrimaryColor};
-    padding: 0.5em;
-`;
 
 export function EvaluationsPageComponent(props: {
     heading: string;
@@ -36,20 +11,42 @@ export function EvaluationsPageComponent(props: {
     navButtonComponent: JSX.Element;
     downloadButtonText: string;
 }): JSX.Element {
+    const theme = useTheme();
     return (
-        <div css={infoPageStyle}>
-            <p css={headingStyle}>{props.heading}</p>
+        <Box sx={{ width: "60%", margin: "2em auto" }}>
+            <Typography
+                variant="h1"
+                sx={{
+                    marginBottom: "1rem",
+                    paddingBottom: "0.5em",
+                    fontSize: "3rem",
+                    textAlign: "center",
+                    fontWeight: "normal",
+                    color: theme.palette.primary.main,
+                    borderBottom: `1px solid ${theme.palette.primary.main}`,
+                }}
+            >
+                {props.heading}
+            </Typography>
             {props.navButtonComponent}
             <div>
                 {Object.keys(props.evaluationsData).map((category) => (
                     <div key={`main-category-${category}`}>
-                        <p css={subHeadingStyle} id={category}>
+                        <Typography
+                            sx={{
+                                backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.primary.contrastText,
+                                padding: "0.5em",
+                                margin: "1em 0",
+                            }}
+                            id={category}
+                        >
                             {
                                 props.evaluationsData[
                                     category as EvaluationCategory
                                 ].mainTitle
                             }
-                        </p>
+                        </Typography>
                         <div>
                             {props.evaluationsData[
                                 category as EvaluationCategory
@@ -75,6 +72,6 @@ export function EvaluationsPageComponent(props: {
                     </div>
                 ))}
             </div>
-        </div>
+        </Box>
     );
 }
