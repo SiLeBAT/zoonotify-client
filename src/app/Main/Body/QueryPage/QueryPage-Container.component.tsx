@@ -425,7 +425,6 @@ export function QueryPageContainerComponent(): JSX.Element {
             const nrOfSelectedIsolates = isolateCountProp.totalNumberOfIsolates;
             const isolateCountGroups = isolateCountProp.groups;
             if ((!isCol && !isRow) || isolateCountGroups === undefined) {
-                // TODO: reset all?
                 setData({
                     ...data,
                     statisticDataAbsolute: [],
@@ -500,6 +499,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                                 const subIsolatesCountUrl = `${ISOLATE_COUNT_URL}?${isolateCountParamsString}`;
                                 const countedSubIsolatesResponse: ApiResponse<IsolateCountedDTO> =
                                     await callApiService(subIsolatesCountUrl);
+
                                 if (
                                     countedSubIsolatesResponse.data !==
                                         undefined &&
@@ -512,8 +512,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                                     const adaptedSubIsolateCountGroups: ClientIsolateCountedGroups =
                                         adaptCountedIsolatesGroupsService(
                                             countedSubIsolatesResponse.data
-                                                .groups,
-                                            subFilterForTable
+                                                .groups
                                         );
 
                                     const columnNames =
@@ -532,6 +531,7 @@ export function QueryPageContainerComponent(): JSX.Element {
                                             filter.selectedFilter.subfilters,
                                             subFilterForTable
                                         );
+
                                     const statisticSubTableDataAbs: Record<
                                         string,
                                         string
