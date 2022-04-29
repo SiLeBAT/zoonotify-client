@@ -1,15 +1,8 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { MutableRefObject, ReactNode, SyntheticEvent } from "react";
+import React, { MutableRefObject, ReactNode, SyntheticEvent } from "react";
 import { TFunction } from "i18next";
-import { Tabs, Tab } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Tabs, Tab } from "@mui/material";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 import { ApexChartInfo } from "./ApexChart.model";
-
-const chartOverflowStyle = css`
-    overflow: auto;
-`;
 
 interface TabPanelProps {
     index: number;
@@ -81,7 +74,7 @@ export function ChatWithSubChartsComponent(props: {
                     ))}
                 </Tabs>
             </Box>
-            <div css={chartOverflowStyle}>
+            <Box sx={{ overflow: "auto" }}>
                 <TabPanel value={value} index={0}>
                     <BarChartResultsComponent
                         chartData={mainChartData.data}
@@ -108,7 +101,7 @@ export function ChatWithSubChartsComponent(props: {
                         />
                     </TabPanel>
                 ))}
-            </div>
+            </Box>
         </div>
     );
 

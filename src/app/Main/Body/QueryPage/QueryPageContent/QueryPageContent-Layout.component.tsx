@@ -1,32 +1,25 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { primaryColor } from "../../../../Shared/Style/Style-MainTheme";
+import React from "react";
+import { Typography, Box } from "@mui/material";
+import { useTheme } from "@mui/system";
 
-const contentStyle = css`
-    width: 0;
-    padding: 2em;
-    flex: 1 1 0;
-    hyphens: auto;
-    box-sizing: border-box;
-    overflow: auto;
-`;
-const contentBoxStyle = css`
-    max-width: 45em;
-    margin: auto;
-    box-sizing: border-box;
-`;
-const headingStyle = css`
-    margin: 0;
-    min-width: 7em;
-    font-size: 3rem;
-    text-align: center;
-    font-weight: normal;
-    color: ${primaryColor};
-`;
+const contentStyle = {
+    width: 0,
+    padding: "2em",
+    flex: "1 1 0",
+    hyphens: "auto",
+    boxSizing: "border-box",
+    overflow: "auto",
+} as const;
 
-const resultsBoxStyle = css`
-    margin-top: 2em;
-`;
+const contentBoxStyle = {
+    maxWidth: "45em",
+    margin: "auto",
+    boxSizing: "border-box",
+} as const;
+
+const resultsBoxStyle = {
+    marginTop: "2em",
+} as const;
 
 export function QueryPageContentLayoutComponent(props: {
     status: JSX.Element;
@@ -35,15 +28,26 @@ export function QueryPageContentLayoutComponent(props: {
     chartResults: JSX.Element;
     title: string;
 }): JSX.Element {
+    const theme = useTheme();
+
+    const headingStyle = {
+        margin: 0,
+        minWidth: "7em",
+        fontSize: "3rem",
+        textAlign: "center",
+        fontWeight: "normal",
+        color: theme.palette.primary.main,
+    } as const;
+
     return (
-        <div css={contentStyle}>
-            <p css={headingStyle}>{props.title}</p>
+        <Box sx={contentStyle}>
+            <Typography sx={headingStyle}>{props.title}</Typography>
             {props.status}
-            <div css={contentBoxStyle}>{props.infoContent}</div>
-            <div css={resultsBoxStyle}>
+            <Box sx={contentBoxStyle}>{props.infoContent}</Box>
+            <Box sx={resultsBoxStyle}>
                 {props.tableResults}
                 {props.chartResults}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }

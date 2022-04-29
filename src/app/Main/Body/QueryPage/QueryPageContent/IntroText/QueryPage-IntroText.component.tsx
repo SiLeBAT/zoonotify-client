@@ -1,14 +1,6 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-
-const normalTextStyle = css`
-    font-size: 0.85rem;
-    line-height: 1.6;
-    text-align: justify;
-    hyphens: auto;
-`;
 
 export function QueryPageIntroTextComponent(props: {
     onClickOpen: () => void;
@@ -24,7 +16,14 @@ export function QueryPageIntroTextComponent(props: {
             }}
         >
             <CardContent>
-                <Typography css={normalTextStyle}>
+                <Typography
+                    sx={{
+                        fontSize: "0.85rem",
+                        lineHeight: "1.6",
+                        textAlign: "justify",
+                        hyphens: "auto",
+                    }}
+                >
                     {t("Content.MainText.Part1")}
                     <Button
                         variant="text"

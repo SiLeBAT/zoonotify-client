@@ -1,17 +1,10 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { Box } from "@mui/material";
+import React from "react";
+import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../../../Shared/Accordion.component";
 
-const tableTextStyle = css`
-    font-weight: bold;
-    padding-right: 1em;
-`;
-const textStyle = css`
-    font-size: 0.75rem;
-`;
+const tableTextStyle = { fontWeight: "bold", paddingRight: "1em" } as const;
 
 export function QueryPageNrOfIsolatesComponent(props: {
     numberOfIsolates: {
@@ -29,25 +22,32 @@ export function QueryPageNrOfIsolatesComponent(props: {
                 <Box>
                     <Grid container spacing={0.5} columns={5}>
                         <Grid item xs={2}>
-                            <span css={tableTextStyle}>
+                            <Typography component="span" sx={tableTextStyle}>
                                 {t("NrOfIsolates.Total")}
-                            </span>
-                            <span>{props.numberOfIsolates.total}</span>
+                            </Typography>
+                            <Typography component="span">
+                                {props.numberOfIsolates.total}
+                            </Typography>
                         </Grid>
                         {props.filtersAreSelected && [
                             <Grid item xs={3} key="NrOfFilteredIsolates">
-                                <span css={tableTextStyle}>
+                                <Typography
+                                    component="span"
+                                    sx={tableTextStyle}
+                                >
                                     {t("NrOfIsolates.Selected")}
-                                </span>
-                                <span>{props.numberOfIsolates.filtered}</span>
+                                </Typography>
+                                <Typography component="span">
+                                    {props.numberOfIsolates.filtered}
+                                </Typography>
                             </Grid>,
                             <Grid item xs={2} key="empty">
-                                <span>&nbsp;</span>
+                                <Typography component="span">&nbsp;</Typography>
                             </Grid>,
                             <Grid item xs={3} key="InfoText">
-                                <span css={textStyle}>
+                                <Typography sx={{ fontSize: "0.75rem" }}>
                                     {t("NrOfIsolates.InfoText")}
-                                </span>
+                                </Typography>
                             </Grid>,
                         ]}
                     </Grid>

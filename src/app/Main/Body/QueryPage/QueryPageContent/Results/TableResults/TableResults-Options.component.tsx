@@ -1,17 +1,14 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 import {
     Radio,
     FormControl,
     FormControlLabel,
     RadioGroup,
+    Box,
+    Typography,
 } from "@mui/material";
-import {
-    bfrDarkgrey,
-    primaryColor,
-} from "../../../../../../Shared/Style/Style-MainTheme";
+import { useTheme } from "@mui/system";
 import { DisplayOptionType } from "../../../../../../Shared/Context/DataContext";
 import { CheckboxesComponent } from "../../../../../../Shared/Checkboxes.component";
 import {
@@ -19,16 +16,6 @@ import {
     smallToggleStyle,
 } from "../../../../../../Shared/Style/SmallToggleStyle";
 import { SumOptions } from "./TableResults.model";
-
-const optionsStyle = css`
-    display: flex;
-    justify-content: space-between;
-`;
-const optionsHeadingStyle = css`
-    margin: auto 2em auto 0;
-    font-weight: bold;
-    font-size: ${smallSize}rem;
-`;
 
 /**
  * @desc Returns the option bar to display the table numbers as absolute or as relative numbers.
@@ -43,6 +30,14 @@ export function ResultsTableOptionsComponent(props: {
 }): JSX.Element {
     const [sumOptions, setSumOptions] = useState<SumOptions>(props.sumOptions);
     const { t } = useTranslation(["QueryPage"]);
+    const theme = useTheme();
+
+    const radioButtonStyle = {
+        "&.Mui-checked": {
+            color: theme.palette.primary.main,
+        },
+    };
+
     const handleChangeDisplayOptions = (displayOption: string): void =>
         props.onDisplayOptionsChange(displayOption);
 
@@ -63,13 +58,22 @@ export function ResultsTableOptionsComponent(props: {
 
     return (
         <div>
-            <p css={optionsHeadingStyle}>{optionsHeading}</p>
-            <div css={optionsStyle}>
+            <Typography
+                component="p"
+                sx={{
+                    margin: "auto 2em auto 0",
+                    fontWeight: "bold",
+                    fontSize: `${smallSize}rem`,
+                }}
+            >
+                {optionsHeading}
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <FormControl component="fieldset">
                     <RadioGroup
-                        css={css`
-                            margin-bottom: 9px;
-                        `}
+                        sx={{
+                            marginBottom: "9px",
+                        }}
                         aria-label="options"
                         name="options"
                         value={props.tableOption}
@@ -78,19 +82,11 @@ export function ResultsTableOptionsComponent(props: {
                         }
                     >
                         <FormControlLabel
-                            css={smallToggleStyle}
+                            sx={smallToggleStyle}
                             value="absolute"
                             control={
                                 <Radio
-                                    sx={{
-                                        color: bfrDarkgrey,
-                                        "&$checked": {
-                                            color: primaryColor,
-                                        },
-                                        "input:hover ~ &": {
-                                            backgroundColor: "green",
-                                        },
-                                    }}
+                                    sx={radioButtonStyle}
                                     color="default"
                                     size="small"
                                 />
@@ -98,19 +94,11 @@ export function ResultsTableOptionsComponent(props: {
                             label={absoluteText}
                         />
                         <FormControlLabel
-                            css={smallToggleStyle}
+                            sx={smallToggleStyle}
                             value="relative"
                             control={
                                 <Radio
-                                    sx={{
-                                        color: bfrDarkgrey,
-                                        "&$checked": {
-                                            color: primaryColor,
-                                        },
-                                        "input:hover ~ &": {
-                                            backgroundColor: "green",
-                                        },
-                                    }}
+                                    sx={radioButtonStyle}
                                     color="default"
                                     size="small"
                                 />
@@ -135,7 +123,7 @@ export function ResultsTableOptionsComponent(props: {
                     ],
                     size: "small",
                 })}
-            </div>
+            </Box>
         </div>
     );
 }
