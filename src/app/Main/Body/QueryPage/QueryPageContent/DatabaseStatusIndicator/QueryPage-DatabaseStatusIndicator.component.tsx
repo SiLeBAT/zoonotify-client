@@ -1,17 +1,12 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
 import {
     callApiService,
     ApiResponse,
 } from "../../../../../Core/callApi.service";
 import { DatabaseStatusDTO } from "../../../../../Shared/Model/Api_Database.model";
 import { DATABASE_STATUS_URL } from "../../../../../Shared/URLs";
-
-const statusStyle = css`
-    text-align: center;
-`;
 
 export function QueryPageDatabaseStatusIndicatorComponent(): JSX.Element {
     const { t } = useTranslation(["QueryPage"]);
@@ -32,7 +27,9 @@ export function QueryPageDatabaseStatusIndicatorComponent(): JSX.Element {
     }, []);
 
     return date ? (
-        <p css={statusStyle}>{t("Content.DataStatus", { date })}</p>
+        <Typography sx={{ textAlign: "center" }}>
+            {t("Content.DataStatus", { date })}
+        </Typography>
     ) : (
         <p />
     );

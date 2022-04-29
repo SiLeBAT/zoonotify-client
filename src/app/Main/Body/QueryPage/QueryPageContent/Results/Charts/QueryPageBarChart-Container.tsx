@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { MutableRefObject, SyntheticEvent, useState } from "react";
+import React, { MutableRefObject, SyntheticEvent, useState } from "react";
 import { TFunction } from "i18next";
-import _ from "lodash";
 import { useTranslation } from "react-i18next";
+import { Box } from "@mui/material";
+import _ from "lodash";
 import { AccordionComponent } from "../../../../../../Shared/Accordion.component";
 import { LoadingProcessComponent } from "../../../../../../Shared/LoadingProcess.component";
 import {
@@ -15,10 +14,6 @@ import { ApexChartData } from "./ApexChart.model";
 import { BarChartResultsComponent } from "./BarChartResults.component";
 import { processingTableDataToApexData } from "./processingTableDataToApexData.service";
 import { ChatWithSubChartsComponent } from "./ChartWithSubCharts.component";
-
-const chartOverflowStyle = css`
-    overflow: auto;
-`;
 
 function generateAxisLabels(
     t: TFunction,
@@ -173,7 +168,7 @@ export function QueryPageBarChartContainer(props: {
                 );
             } else {
                 chartAccordionContent = (
-                    <div css={chartOverflowStyle}>
+                    <Box sx={{ overflow: "auto" }}>
                         <BarChartResultsComponent
                             chartData={processedChartData}
                             getPngDownloadUriRef={props.getPngDownloadUriRef}
@@ -182,7 +177,7 @@ export function QueryPageBarChartContainer(props: {
                             xAxisMax={xAxisMax}
                             displayAsStacked={displayAsStacked}
                         />
-                    </div>
+                    </Box>
                 );
             }
         }
