@@ -4,7 +4,6 @@ import { Button, Typography } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
 import { InfoPageAmrsContentComponent } from "./Amrs/InfoPage-AmrsContent.component";
-import { InfoPageFiltersContentComponent } from "./InfoPage-FiltersContent.component";
 import { AmrKey, AmrsTable } from "./InfoPage.model";
 import {
     campySpp,
@@ -31,7 +30,6 @@ function createParagraphWithBoldText(
 }
 
 export function InfoPageComponent(props: {
-    describedFilters: string[];
     amrKeys: AmrKey[];
     tableData: Record<AmrKey, AmrsTable>;
     onAmrDataExport: (amrKey: AmrKey) => void;
@@ -58,7 +56,6 @@ export function InfoPageComponent(props: {
     };
 
     const backgroundChapterHeading = t("Background.Name");
-    const filtersChapterHeading = t("Filters.Name");
     const methodsChapterHeading = t("Methods.Name");
 
     const backgroundAccordionContent = (
@@ -142,13 +139,6 @@ export function InfoPageComponent(props: {
                     <Button
                         variant="contained"
                         sx={navButtonStyle}
-                        href="#filter"
-                    >
-                        {filtersChapterHeading}
-                    </Button>
-                    <Button
-                        variant="contained"
-                        sx={navButtonStyle}
                         href="#methods"
                     >
                         {methodsChapterHeading}
@@ -161,12 +151,6 @@ export function InfoPageComponent(props: {
                     content={backgroundAccordionContent}
                     defaultExpanded={false}
                     centerContent={false}
-                />
-                <Typography sx={subHeadingStyle} id="filter">
-                    {filtersChapterHeading}
-                </Typography>
-                <InfoPageFiltersContentComponent
-                    describedFilters={props.describedFilters}
                 />
                 <Typography sx={subHeadingStyle} id="methods">
                     {methodsChapterHeading}
