@@ -20,18 +20,16 @@ const headerStyle = css`
     box-sizing: border-box;
 `;
 
-const mainHeaderStyle = (queryPageOpen: boolean): SerializedStyles => css`
+const mainHeaderStyle = (): SerializedStyles => css`
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     box-sizing: border-box;
-    box-shadow: ${queryPageOpen ? "none" : "0 8px 6px -6px grey"};
+    box-shadow: "0 8px 6px -6px grey";
     background-color: ${primaryColor};
-    border-bottom: ${queryPageOpen
-        ? "none"
-        : `24px solid ${bfrPrimaryPalette[300]}`};
+    border-bottom: ${`24px solid ${bfrPrimaryPalette[300]}`};
 `;
 const appNameStyle = css`
     padding: 0.5em 1em 0.5em 1em;
@@ -73,18 +71,12 @@ const rightHeaderStyle = css`
  */
 export function HeaderComponent(): JSX.Element {
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
-    const [queryOpen, setQueryOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
 
     const { pathname } = useLocation();
     useEffect(() => {
-        if (pathname === ZNPaths.queryPagePath) {
-            setQueryOpen(true);
-        } else {
-            setQueryOpen(false);
-        }
         if (pathname === ZNPaths.infoPagePath) {
             setInfoOpen(true);
         } else {
@@ -104,7 +96,7 @@ export function HeaderComponent(): JSX.Element {
 
     return (
         <header css={headerStyle}>
-            <div css={mainHeaderStyle(queryOpen)}>
+            <div css={mainHeaderStyle()}>
                 <div css={leftHeaderStyle}>
                     <NavLink to={ZNPaths.homePagePath} css={appNameStyle}>
                         ZooNotify
@@ -117,12 +109,6 @@ export function HeaderComponent(): JSX.Element {
                         css={navLinkStyle(infoOpen)}
                     >
                         {t("Info")}
-                    </NavLink>
-                    <NavLink
-                        to={ZNPaths.queryPagePath}
-                        css={navLinkStyle(queryOpen)}
-                    >
-                        {t("Query")}
                     </NavLink>
                     <NavLink
                         to={ZNPaths.evaluationsPagePath}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { QueryPageContainerComponent } from "./QueryPage/QueryPage-Container.component";
 import { HomePageComponent } from "./HomePage/HomePage.component";
 import { LinkPageComponent } from "./LinkPage/LinkPage.component";
 import { DataProtectionPageComponent } from "./DataProtectionPage/DataProtectionPage.component";
@@ -24,10 +23,6 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 path={ZNPaths.infoPagePath}
                 component={InfoPageContainerComponent}
-            />
-            <Route
-                path={ZNPaths.queryPagePath}
-                component={QueryPageContainerComponent}
             />
             <Route
                 path={ZNPaths.evaluationsPagePath}

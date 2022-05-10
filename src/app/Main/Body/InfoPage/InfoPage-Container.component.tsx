@@ -30,19 +30,6 @@ import {
 export function InfoPageContainerComponent(): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
 
-    const describedFilters = [
-        "microorganism",
-        "samplingYear",
-        "samplingContext",
-        "origin",
-        "samplingStage",
-        "category",
-        "productionType",
-        "matrix",
-        "federalState",
-        "resistance",
-    ];
-
     const tableHeader2010To2020 = [
         t("Methods.Amrs.TableHeaderShortSub"),
         t("Methods.Amrs.TableHeaderClass"),
@@ -310,7 +297,6 @@ export function InfoPageContainerComponent(): JSX.Element {
         <InfoPageComponent
             amrKeys={amrKeys}
             tableData={amrTableData}
-            describedFilters={describedFilters}
             onAmrDataExport={handleExportAmrData}
         />
     );
