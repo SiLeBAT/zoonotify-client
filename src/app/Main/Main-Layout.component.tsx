@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import { css } from "@emotion/core";
 import { BrowserRouter } from "react-router-dom";
 import { HeaderComponent } from "./Header/Header.component";

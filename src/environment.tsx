@@ -1,9 +1,9 @@
-import { version, znConfig } from "../package.json";
+import PACKAGE from "../package.json";
 
-const { lastChange } = znConfig;
+const { lastChange } = PACKAGE.znConfig;
 
 export const environment = {
     appName: "ZooNotify",
-    version,
+    version: PACKAGE.version,
     lastChange,
 };

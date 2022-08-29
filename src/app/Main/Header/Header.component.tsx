@@ -1,4 +1,3 @@
-/** @jsx jsx */
 // eslint-disable-next-line import/named
 import { css, SerializedStyles } from "@emotion/core";
 import { useState, useEffect } from "react";
