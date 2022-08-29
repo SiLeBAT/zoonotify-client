@@ -14,10 +14,10 @@ function adaptResistances(
         Resistances,
         boolean
     >;
-    Object.keys(ApiResistances).forEach((resistanceKey) => {
+    for (const resistanceKey of Object.keys(ApiResistances)) {
         const key = resistanceKey as Resistances;
         newResistance[key] = ApiResistances[key].active;
-    });
+    }
     return newResistance;
 }
 

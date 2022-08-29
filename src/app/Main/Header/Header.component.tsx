@@ -1,5 +1,6 @@
 /** @jsx jsx */
-import { css, jsx, SerializedStyles } from "@emotion/core";
+// eslint-disable-next-line import/named
+import { css, SerializedStyles } from "@emotion/core";
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -11,6 +12,7 @@ import {
     bfrPrimaryPalette,
 } from "../../Shared/Style/Style-MainTheme";
 import { ZNPaths } from "../../Shared/URLs";
+import {} from "@emotion/react";
 
 const headerStyle = css`
     width: 100%;

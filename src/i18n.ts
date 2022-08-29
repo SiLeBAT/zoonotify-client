@@ -24,4 +24,4 @@ i18n.use(HttpApi)
     });
 
 // eslint-disable-next-line import/no-default-export
-export default i18n;
+export { default } from "i18next";

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, List, ListItem, Tooltip, Typography } from "@mui/material";
+// eslint-disable-next-line import/named
 import { Box, SxProps, useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";

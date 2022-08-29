@@ -59,22 +59,22 @@ export function InfoPageContainerComponent(): JSX.Element {
 
     const tableSubHeader2010To2020: Record<string, string[]> = {};
 
-    years2010To2020.forEach((year) => {
+    for (const year of years2010To2020) {
         tableSubHeader2010To2020[year] = [
             t("Methods.Amrs.TableHeaderCutOff"),
             t("Methods.Amrs.TableHeaderMin"),
             t("Methods.Amrs.TableHeaderMax"),
         ];
-    });
+    }
 
     const tableSubHeader2016To2020: Record<string, string[]> = {};
-    years2016To2020.forEach((year) => {
+    for (const year of years2016To2020) {
         tableSubHeader2016To2020[year] = [
             t("Methods.Amrs.TableHeaderCutOff"),
             t("Methods.Amrs.TableHeaderMin"),
             t("Methods.Amrs.TableHeaderMax"),
         ];
-    });
+    }
 
     const amrKeys: AmrKey[] = [
         "table1Coli",
@@ -255,19 +255,19 @@ export function InfoPageContainerComponent(): JSX.Element {
         csvContent += "\n";
 
         csvContent += ",,,";
-        Object.keys(amrTableData[amrKey].tableSubHeader).forEach((year) => {
+        for (const year of Object.keys(amrTableData[amrKey].tableSubHeader)) {
             const yearSubHeader = amrTableData[amrKey].tableSubHeader[year];
             csvContent += `${yearSubHeader.join(",")}`;
             csvContent += ",";
-        });
+        }
         csvContent += "\n";
 
-        amrTableData[amrKey].tableRows.forEach((tableRow) => {
+        for (const tableRow of amrTableData[amrKey].tableRows) {
             const newRow = [];
             newRow.push(modifyTableDataStringService(tableRow.shortSubstance));
             newRow.push(modifyTableDataStringService(tableRow.substanceClass));
             newRow.push(modifyTableDataStringService(tableRow.amrSubstance));
-            Object.keys(tableRow.concentrationList).forEach((year) => {
+            for (const year of Object.keys(tableRow.concentrationList)) {
                 const rowValues = Object.values(
                     tableRow.concentrationList[year]
                 );
@@ -275,10 +275,10 @@ export function InfoPageContainerComponent(): JSX.Element {
                     modifyTableDataStringService(rowValue)
                 );
                 newRow.push(modifiedRowValues.join(","));
-            });
+            }
             csvContent += newRow.join(",");
             csvContent += "\n";
-        });
+        }
 
         const csvTable = csvContent;
         const amrFileName = `${amrTableData[amrKey].titleString}.csv`

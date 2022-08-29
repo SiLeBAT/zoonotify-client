@@ -15,10 +15,7 @@ module.exports = {
         "plugin:jest/recommended",
         "plugin:promise/recommended",
         "plugin:import/recommended",
-        "plugin:unicorn/recommended",
-        "prettier",
-        "prettier/react",
-        "prettier/@typescript-eslint",
+        "prettier"
     ],
     parserOptions: {
         project: "./tsconfig.json",

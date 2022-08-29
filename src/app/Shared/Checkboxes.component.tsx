@@ -27,7 +27,7 @@ export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
         props.onCheckboxChange(name, checked);
 
     const checkboxesList: JSX.Element[] = [];
-    props.checkboxes.forEach((checkbox) => {
+    for (const checkbox of props.checkboxes) {
         const checkboxKey = `checkbox-${checkbox.name}`;
 
         checkboxesList.push(
@@ -56,6 +56,6 @@ export function CheckboxesComponent(props: CheckboxesProps): JSX.Element {
                 key={checkboxKey}
             />
         );
-    });
+    }
     return <FormGroup>{checkboxesList}</FormGroup>;
 }

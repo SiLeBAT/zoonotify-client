@@ -187,12 +187,16 @@ export const resistanceSubFiltersList = [
     "resistance__Salmonella spp.",
 ];
 
-export const allSubFiltersList = microorganismSubFiltersList
-    .concat(matrixSubFiltersList)
-    .concat(resistanceSubFiltersList);
+export const allSubFiltersList = [
+    ...microorganismSubFiltersList,
+    ...matrixSubFiltersList,
+    ...resistanceSubFiltersList,
+];
 
-export const allFiltersList: (string | DbKey)[] =
-    allSubFiltersList.concat(mainFilterList);
+export const allFiltersList: (string | DbKey)[] = [
+    ...allSubFiltersList,
+    ...mainFilterList,
+];
 
 export type ClientIsolateCountedGroups = (Record<string, string> & {
     count: number;

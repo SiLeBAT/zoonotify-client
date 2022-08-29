@@ -1,4 +1,5 @@
 import React from "react";
+// eslint-disable-next-line import/named
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { EvaluationsPageComponent } from "./EvaluationPage.component";

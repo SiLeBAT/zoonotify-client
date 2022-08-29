@@ -16,13 +16,13 @@ function createAmrTable(
         }
     > = {};
 
-    valuesPerYear.forEach((yearList, index) => {
+    for (const [index, yearList] of valuesPerYear.entries()) {
         concentrationList[years[index]] = {
             cutOff: yearList[0],
             min: yearList[1],
             max: yearList[2],
         };
-    });
+    }
     return {
         shortSubstance,
         substanceClass,

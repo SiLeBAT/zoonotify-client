@@ -91,7 +91,6 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
             disabled={props.isDisabled}
             renderInput={(params) => (
                 <StyledTextField
-                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...params}
                     variant="standard"
                     label={props.label}
@@ -124,7 +123,6 @@ export function SelectorComponent(props: SelectorProps): JSX.Element {
                 disabled={props.isDisabled}
                 renderInput={(params) => (
                     <StyledTextField
-                        // eslint-disable-next-line react/jsx-props-no-spreading
                         {...params}
                         variant="standard"
                         label={props.label}

@@ -31,9 +31,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             key={`amr-table-cell-${row.amrSubstance}-short`}
         >
             {row.shortSubstance}
-        </TableCell>
-    );
-    tableCellList.push(
+        </TableCell>,
         <TableCell
             sx={tableTextStyle}
             component="td"
@@ -41,9 +39,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             key={`amr-table-cell-${row.amrSubstance}-substanceClass`}
         >
             {row.substanceClass}
-        </TableCell>
-    );
-    tableCellList.push(
+        </TableCell>,
         <TableCell
             sx={tableTextStyle}
             component="td"
@@ -53,7 +49,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             {row.amrSubstance}
         </TableCell>
     );
-    Object.keys(row.concentrationList).forEach((year) => {
+    for (const year of Object.keys(row.concentrationList)) {
         const concentrationPerYear = row.concentrationList[year];
         tableCellList.push(
             <TableCell
@@ -64,9 +60,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
             >
                 {concentrationPerYear.cutOff}
-            </TableCell>
-        );
-        tableCellList.push(
+            </TableCell>,
             <TableCell
                 sx={tableTextStyle}
                 component="td"
@@ -75,9 +69,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 key={`amr-table-cell-${row.amrSubstance}-${year}-min`}
             >
                 {concentrationPerYear.min}
-            </TableCell>
-        );
-        tableCellList.push(
+            </TableCell>,
             <TableCell
                 sx={tableTextStyle}
                 component="td"
@@ -88,7 +80,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 {concentrationPerYear.max}
             </TableCell>
         );
-    });
+    }
     return tableCellList;
 }
 
@@ -109,24 +101,24 @@ export function InfoPageAmrDialogComponent(props: {
 
     const tableSubHeader: JSX.Element[] = [];
 
-    Object.keys(props.resistancesTableData.tableSubHeader).forEach(
-        (subHeaderKey) => {
-            props.resistancesTableData.tableSubHeader[subHeaderKey].forEach(
-                (subHeaderValue: string) => {
-                    tableSubHeader.push(
-                        <TableCell
-                            key={`subheader-amr-${subHeaderKey}-${subHeaderValue}`}
-                            sx={tableTextStyle}
-                            component="th"
-                            align="right"
-                        >
-                            {subHeaderValue}
-                        </TableCell>
-                    );
-                }
-            );
-        }
-    );
+    for (const subHeaderKey of Object.keys(
+        props.resistancesTableData.tableSubHeader
+    )) {
+        props.resistancesTableData.tableSubHeader[subHeaderKey].forEach(
+            (subHeaderValue: string) => {
+                tableSubHeader.push(
+                    <TableCell
+                        key={`subheader-amr-${subHeaderKey}-${subHeaderValue}`}
+                        sx={tableTextStyle}
+                        component="th"
+                        align="right"
+                    >
+                        {subHeaderValue}
+                    </TableCell>
+                );
+            }
+        );
+    }
 
     const nrOfSubstanceHeaderCells = 3;
     const substanceTableHeader = [];

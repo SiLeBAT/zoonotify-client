@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import { css } from "@emotion/core";
 import { BrowserRouter } from "react-router-dom";
 import { HeaderComponent } from "./Header/Header.component";
 import { BodyRouterComponent } from "./Body/Body-Router.component";

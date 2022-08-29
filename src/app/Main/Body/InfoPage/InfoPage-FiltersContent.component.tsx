@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
+// eslint-disable-next-line import/named
 import { Theme, useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { AccordionComponent } from "../../../Shared/Accordion.component";
@@ -30,7 +31,7 @@ function generateContentWithSubContent(
 ): JSX.Element {
     const subContent: JSX.Element[] = [];
 
-    Object.keys(describedFiltersContent).forEach((describedFilterSubKey) => {
+    for (const describedFilterSubKey of Object.keys(describedFiltersContent)) {
         const subFilter: Record<string, string> =
             describedFiltersContent[describedFilterSubKey];
         const subFilterName = subFilter.Name;
@@ -97,9 +98,7 @@ function generateContentWithSubContent(
                 key={`${subFilter.Subname}${subFilterName}-name`}
             >
                 {descriptionName}
-            </Typography>
-        );
-        subContent.push(
+            </Typography>,
             <Typography
                 component="p"
                 sx={subContentDescriptionStyle}
@@ -108,7 +107,7 @@ function generateContentWithSubContent(
                 {descriptionText}
             </Typography>
         );
-    });
+    }
 
     const content: JSX.Element = (
         <div>
@@ -139,100 +138,110 @@ export function InfoPageFiltersContentComponent(props: {
 
     const filterAccordionsList: JSX.Element[] = [];
 
-    props.describedFilters.forEach((describedFilter) => {
-        if (
-            describedFilter === "microorganism" ||
-            describedFilter === "origin" ||
-            describedFilter === "samplingStage" ||
-            describedFilter === "category"
-        ) {
-            const describedFiltersContent: Record<
-                string,
-                Record<string, string>
-            > = t(`Filters.${describedFilter}.${describedFilter}-types`, {
-                returnObjects: true,
-            });
-            const filterDescription: string = t(
-                `Filters.${describedFilter}.Description`
-            );
-            filterAccordionsList.push(
-                <AccordionComponent
-                    title={t(`Filters.${describedFilter}.Name`)}
-                    content={generateContentWithSubContent(
-                        filterDescription,
-                        describedFiltersContent,
-                        theme
-                    )}
-                    defaultExpanded={false}
-                    centerContent={false}
-                    key={`accordion_${describedFilter}`}
-                />
-            );
-        } else if (describedFilter === "resistance") {
-            const resistanceContent = (
-                <Typography component="p" key="resistance-description">
-                    {t("Filters.resistance.Description1")}
-                    {salmSpp}, {campySpp},{t("Filters.resistance.Description2")}
-                    {coliShort}
-                    {t("Filters.resistance.Description3")}
-                    {coliShort}
-                    {t("Filters.resistance.Description4")}
-                    {coliShort}
-                    {t("Filters.resistance.Description5")}
-                    {enteroSpp}
-                    {t("Filters.resistance.Description6")}
-                    {campy}
-                    {t("Filters.resistance.Description7")}
-                </Typography>
-            );
+    for (const describedFilter of props.describedFilters) {
+        switch (describedFilter) {
+            case "microorganism":
+            case "origin":
+            case "samplingStage":
+            case "category": {
+                const describedFiltersContent: Record<
+                    string,
+                    Record<string, string>
+                > = t(`Filters.${describedFilter}.${describedFilter}-types`, {
+                    returnObjects: true,
+                });
+                const filterDescription: string = t(
+                    `Filters.${describedFilter}.Description`
+                );
+                filterAccordionsList.push(
+                    <AccordionComponent
+                        title={t(`Filters.${describedFilter}.Name`)}
+                        content={generateContentWithSubContent(
+                            filterDescription,
+                            describedFiltersContent,
+                            theme
+                        )}
+                        defaultExpanded={false}
+                        centerContent={false}
+                        key={`accordion_${describedFilter}`}
+                    />
+                );
 
-            filterAccordionsList.push(
-                <AccordionComponent
-                    title={t(`Filters.resistance.Name`)}
-                    content={resistanceContent}
-                    defaultExpanded={false}
-                    centerContent={false}
-                    key="accordion_resistance"
-                />
-            );
-        } else if (describedFilter === "samplingContext") {
-            filterAccordionsList.push(
-                <AccordionComponent
-                    title={t(`Filters.samplingContext.Name`)}
-                    content={
-                        <div>
-                            <Typography
-                                component="p"
-                                sx={{ margin: 0, paddingBottom: "0.5em" }}
-                            >
-                                {t(`Filters.samplingContext.Description1`)}
+                break;
+            }
+            case "resistance": {
+                const resistanceContent = (
+                    <Typography component="p" key="resistance-description">
+                        {t("Filters.resistance.Description1")}
+                        {salmSpp}, {campySpp},
+                        {t("Filters.resistance.Description2")}
+                        {coliShort}
+                        {t("Filters.resistance.Description3")}
+                        {coliShort}
+                        {t("Filters.resistance.Description4")}
+                        {coliShort}
+                        {t("Filters.resistance.Description5")}
+                        {enteroSpp}
+                        {t("Filters.resistance.Description6")}
+                        {campy}
+                        {t("Filters.resistance.Description7")}
+                    </Typography>
+                );
+
+                filterAccordionsList.push(
+                    <AccordionComponent
+                        title={t(`Filters.resistance.Name`)}
+                        content={resistanceContent}
+                        defaultExpanded={false}
+                        centerContent={false}
+                        key="accordion_resistance"
+                    />
+                );
+
+                break;
+            }
+            case "samplingContext": {
+                filterAccordionsList.push(
+                    <AccordionComponent
+                        title={t(`Filters.samplingContext.Name`)}
+                        content={
+                            <div>
+                                <Typography
+                                    component="p"
+                                    sx={{ margin: 0, paddingBottom: "0.5em" }}
+                                >
+                                    {t(`Filters.samplingContext.Description1`)}
+                                </Typography>
+                                <Typography component="p" sx={{ margin: 0 }}>
+                                    {t(`Filters.samplingContext.Description2`)}
+                                </Typography>
+                            </div>
+                        }
+                        defaultExpanded={false}
+                        centerContent={false}
+                        key="accordion_samplingContext"
+                    />
+                );
+
+                break;
+            }
+            default: {
+                filterAccordionsList.push(
+                    <AccordionComponent
+                        title={t(`Filters.${describedFilter}.Name`)}
+                        content={
+                            <Typography component="p">
+                                {t(`Filters.${describedFilter}.Description`)}{" "}
                             </Typography>
-                            <Typography component="p" sx={{ margin: 0 }}>
-                                {t(`Filters.samplingContext.Description2`)}
-                            </Typography>
-                        </div>
-                    }
-                    defaultExpanded={false}
-                    centerContent={false}
-                    key="accordion_samplingContext"
-                />
-            );
-        } else {
-            filterAccordionsList.push(
-                <AccordionComponent
-                    title={t(`Filters.${describedFilter}.Name`)}
-                    content={
-                        <Typography component="p">
-                            {t(`Filters.${describedFilter}.Description`)}{" "}
-                        </Typography>
-                    }
-                    defaultExpanded={false}
-                    centerContent={false}
-                    key={`accordion_${describedFilter}`}
-                />
-            );
+                        }
+                        defaultExpanded={false}
+                        centerContent={false}
+                        key={`accordion_${describedFilter}`}
+                    />
+                );
+            }
         }
-    });
+    }
 
     return <div>{filterAccordionsList}</div>;
 }

@@ -21,7 +21,6 @@ export function DialogComponent(props: {
     dialogContentText: JSX.Element | string;
     dialogContent: JSX.Element;
     cancelButton: DialogButton;
-    // eslint-disable-next-line react/require-default-props
     submitButton?: DialogButton;
     loading: boolean;
 }): JSX.Element {
