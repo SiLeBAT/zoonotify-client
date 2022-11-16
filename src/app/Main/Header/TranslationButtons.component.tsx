@@ -1,6 +1,7 @@
-import { css } from "@emotion/core";
-import styled from "@emotion/styled";
+/** @jsxImportSource @emotion/react */
 import { useState, useEffect } from "react";
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
 import i18next from "i18next";
 import { changeAppLanguage } from "../../Core/localization.service";
 import { primaryColor } from "../../Shared/Style/Style-MainTheme";

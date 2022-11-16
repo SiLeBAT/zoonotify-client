@@ -1,4 +1,5 @@
-import { css } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import { BrowserRouter } from "react-router-dom";
 import { HeaderComponent } from "./Header/Header.component";
 import { BodyRouterComponent } from "./Body/Body-Router.component";
@@ -11,6 +12,7 @@ const wrapperStyle = css`
     flex-direction: column;
     box-sizing: border-box;
 `;
+
 const headerStyle = css`
     z-index: 1;
 `;

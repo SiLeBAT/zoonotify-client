@@ -1,6 +1,7 @@
-// eslint-disable-next-line import/named
-import { css, SerializedStyles } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
 import { useState, useEffect } from "react";
+// eslint-disable-next-line import/named
+import { SerializedStyles } from "@emotion/core";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { TranslationButtonsComponent } from "./TranslationButtons.component";
@@ -11,7 +12,7 @@ import {
     bfrPrimaryPalette,
 } from "../../Shared/Style/Style-MainTheme";
 import { ZNPaths } from "../../Shared/URLs";
-import {} from "@emotion/react";
+import { css } from "@emotion/react";
 
 const headerStyle = css`
     width: 100%;
