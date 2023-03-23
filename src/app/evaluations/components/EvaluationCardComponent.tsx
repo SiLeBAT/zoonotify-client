@@ -1,4 +1,3 @@
-import React from "react";
 import {
     Box,
     Button,
@@ -9,8 +8,9 @@ import {
     Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
+import React from "react";
 
-export function EvaluationsPageCardComponent(props: {
+export function EvaluationsCardComponent(props: {
     title: string;
     description: string;
     chartPath: string;
