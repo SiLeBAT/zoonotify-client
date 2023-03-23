@@ -1,7 +1,7 @@
 {
   "Heading": "Long-term evaluations",
   "Export": "Export",
-  "feed": {
+  "FUTTERMITTEL": {
     "mainTitle": "Feed",
     "accordions": {
       "accordion_0": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "animal": {
+  "TIERE": {
     "mainTitle": "Animal",
     "accordions": {
       "accordion_0": {
@@ -19,7 +19,7 @@
       }
     }
   },
-  "food": {
+  "LEBENSMITTEL": {
     "mainTitle": "Food",
     "accordions": {
       "accordion_0": {

@@ -1,9 +1,10 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { EvaluationsMainComponent } from "../../../evaluations/pages/EvaluationsMainComponent";
 import { DataProtectionPageComponent } from "../../../pages/data_protection/DataProtectionPage.component";
 import { ErrorPageComponent } from "../../../pages/error/ErrorPage.component";
-import { EvaluationsPageContainerComponent } from "../../../pages/evaluations/EvaluationsPage-Container.component";
-import { InfoPageContainerComponent } from "../../../pages/information/InfoPage-Container.component";
+
+import { InfoPageContainerComponent } from "../../../pages/explanation/InfoPage-Container.component";
 import { LinkPageComponent } from "../../../pages/links/LinkPage.component";
 import { WelcomePage } from "../../../pages/welcome/welcome_page";
 import { pageRoute } from "./routes";
@@ -26,7 +27,7 @@ export function BodyRouterComponent(): JSX.Element {
             />
             <Route
                 path={pageRoute.evaluationsPagePath}
-                component={EvaluationsPageContainerComponent}
+                component={EvaluationsMainComponent}
             />
             <Route
                 path={pageRoute.linkPagePath}
