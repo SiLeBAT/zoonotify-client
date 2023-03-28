@@ -6,7 +6,7 @@
     "prepare": "husky install",
     "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "./node_modules/.bin/eslint . --fix --ext .js,.jsx,.ts,.tsx",
-    "serve": "npm run clean && npm run cp:all && webpack-dev-server --open",
+    "start": "npm run clean && npm run cp:all && webpack-dev-server --open",
     "build": "./node_modules/.bin/webpack && npm run cp:all",
     "prebuild": "npm run clean",
     "clean": "npx rimraf public/*",

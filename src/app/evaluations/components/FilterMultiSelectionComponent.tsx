@@ -13,6 +13,7 @@ import { SelectionItem } from "../model/Evaluations.model";
 type FilterMultiSelectionComponentProps = {
     selectedItems: string[];
     selectionOptions: SelectionItem[];
+    name: string;
     label: string;
     actions: {
         handleChange: (event: { target: { value: string } }) => void;
@@ -21,8 +22,9 @@ type FilterMultiSelectionComponentProps = {
 
 export function FilterMultiSelectionComponent({
     selectedItems,
-    selectionOptions: itemSelection,
+    selectionOptions,
     label,
+    name,
     actions,
 }: FilterMultiSelectionComponentProps): JSX.Element {
     return (
@@ -31,6 +33,7 @@ export function FilterMultiSelectionComponent({
             <Select
                 labelId="select-label"
                 id="select"
+                name={name}
                 multiple
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -41,7 +44,7 @@ export function FilterMultiSelectionComponent({
                 renderValue={(selected) => selected.join(", ")}
                 onChange={actions.handleChange}
             >
-                {itemSelection.map((item) => (
+                {selectionOptions.map((item) => (
                     <MenuItem key={item.value} value={item.value}>
                         <Checkbox
                             checked={selectedItems.indexOf(item.value) > -1}
