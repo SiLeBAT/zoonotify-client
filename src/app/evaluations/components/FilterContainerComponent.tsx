@@ -21,9 +21,10 @@ export function FilterContainerComponent({
                     gap: 2,
                 }}
             >
-                {selectionConfig.slice(0, 3).map((config) => (
+                {selectionConfig.slice(1, 3).map((config) => (
                     <FilterMultiSelectionComponent
                         key={config.label}
+                        name={config.id}
                         selectedItems={config.selectedItems}
                         selectionOptions={config.selectionOptions}
                         label={config.label}
@@ -44,6 +45,7 @@ export function FilterContainerComponent({
             >
                 {selectionConfig.slice(3, 6).map((config) => (
                     <FilterMultiSelectionComponent
+                        name={config.id}
                         key={config.label}
                         selectedItems={config.selectedItems}
                         selectionOptions={config.selectionOptions}
@@ -65,6 +67,7 @@ export function FilterContainerComponent({
             >
                 {selectionConfig.slice(6, 7).map((config) => (
                     <FilterMultiSelectionComponent
+                        name={config.id}
                         key={config.label}
                         selectedItems={config.selectedItems}
                         selectionOptions={config.selectionOptions}

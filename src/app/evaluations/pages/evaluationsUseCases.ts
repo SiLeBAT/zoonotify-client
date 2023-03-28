@@ -1,4 +1,3 @@
-import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import {
     CMS_API_ENDPOINT,
     CMS_BASE_ENDPOINT,
@@ -9,6 +8,7 @@ import {
     DivisionToken,
     Evaluation,
     EvaluationAttributesDTO,
+    FilterSelection,
     SelectionFilterConfig,
     SelectionItem,
 } from "./../model/Evaluations.model";
@@ -16,6 +16,7 @@ import {
 import { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { UseCase } from "../../shared/model/UseCases";
 
 type EvaluationPageModel = {
@@ -72,8 +73,19 @@ const matrix = [
     "HALS_HAUT",
 ];
 
-const otherDetails = ["KEINE", "HPCL_WHO", "HUMANMEDIZIN"];
+const otherDetail = ["KEINE", "HPCL_WHO", "HUMANMEDIZIN"];
 
+const division = ["FUTTERMITTEL", "TIERE", "LEBENSMITTEL"];
+
+const initialFilterSelection: FilterSelection = {
+    matrix,
+    otherDetail,
+    productionType,
+    diagramType,
+    category,
+    microorganism,
+    division,
+};
 function getTranslations(t: TFunction): EvaluationPageTranslations {
     const downloadButtonText = t("Export");
     const heading = t("Heading");
@@ -112,25 +124,39 @@ const useEvaluationPageComponent: UseCase<
     const [evaluationsData, setEvaluationsData] = useState({
         ...emptyDivisions,
     });
-    const availableDivisions: SelectionItem[] = toSelectionItem(
-        Object.keys(evaluationsData)
-    );
-    const availableMicroorganisms: SelectionItem[] =
-        toSelectionItem(microorganism);
-    const availableCategories: SelectionItem[] = toSelectionItem(category);
-    const availableDiagramType: SelectionItem[] = toSelectionItem(diagramType);
-    const availableProductionType: SelectionItem[] =
-        toSelectionItem(productionType);
-    const availableMatrix: SelectionItem[] = toSelectionItem(matrix);
-    const availableOtherDetails: SelectionItem[] =
-        toSelectionItem(otherDetails);
+
+    const availableOptions = {
+        matrix: toSelectionItem(matrix),
+        otherDetail: toSelectionItem(otherDetail),
+        productionType: toSelectionItem(productionType),
+        diagramType: toSelectionItem(diagramType),
+        category: toSelectionItem(category),
+        microorganism: toSelectionItem(microorganism),
+        division: toSelectionItem(division),
+    };
 
     const { downloadButtonText, heading } = getTranslations(t);
 
+    const [selectedFilters, setSelectedFilters] = useState(
+        initialFilterSelection
+    );
+
+    const createQueryString = (selection: FilterSelection): string => {
+        const result = Object.entries(selection)
+            .map(([key, value]) => {
+                return value
+                    .map((v) => "filters[" + key + "][$eq]=" + v)
+                    .join("&");
+            })
+            .join("&");
+        return result;
+    };
     useEffect(() => {
+        const qString = createQueryString(selectedFilters);
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callApiService<DataContainer<CMSResponse<EvaluationAttributesDTO>[]>>(
-            CMS_API_ENDPOINT + "/evaluations?populate=diagram"
+            CMS_API_ENDPOINT + "/evaluations?populate=diagram&" + qString
         )
             .then((response) => {
                 const result: Evaluation = {
@@ -141,10 +167,10 @@ const useEvaluationPageComponent: UseCase<
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     data.forEach(
                         (entry: CMSResponse<EvaluationAttributesDTO>) => {
-                            const division: DivisionToken = entry.attributes
-                                .division as DivisionToken;
-                            if (result[division]) {
-                                result[division].data.push({
+                            const divisionToken: DivisionToken = entry
+                                .attributes.division as DivisionToken;
+                            if (result[divisionToken]) {
+                                result[divisionToken].data.push({
                                     ...entry.attributes,
                                     chartPath:
                                         CMS_BASE_ENDPOINT +
@@ -161,141 +187,43 @@ const useEvaluationPageComponent: UseCase<
             .catch((error) => {
                 throw error;
             });
-    }, []);
+    }, [selectedFilters]);
 
-    //Should be Reducer?
-    const [selectedDivision, setSelectedDivision] = useState<string[]>([
-        ...availableDivisions.map((s) => s.value),
-    ]);
-
-    const [selectedMicroorganisms, setSelectedMicroorganisms] = useState<
-        string[]
-    >([...availableMicroorganisms.map((s) => s.value)]);
-
-    const [selectedCategory, setSelectedCategory] = useState<string[]>([
-        ...availableCategories.map((s) => s.value),
-    ]);
-
-    const [selectedDiagramType, setSelectedDiagramType] = useState<string[]>([
-        ...availableDiagramType.map((s) => s.value),
-    ]);
-
-    const [selectedProductionType, setSelectedProductionType] = useState<
-        string[]
-    >([...availableProductionType.map((s) => s.value)]);
-
-    const [selectedMatrix, setSelectedMatrix] = useState<string[]>([
-        ...availableMatrix.map((s) => s.value),
-    ]);
-
-    const [selectedOtherDetails, setSelectedOtherDetails] = useState<string[]>([
-        ...availableOtherDetails.map((s) => s.value),
-    ]);
-
-    const selectionConfig: SelectionFilterConfig[] = [
-        {
-            label: "Bereich",
-            selectedItems: selectedDivision,
-            selectionOptions: availableDivisions,
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
-                setSelectedDivision(
-                    // On autofill we get a stringified value.
-                    typeof value === "string" ? value.split(",") : value
-                );
-            },
-        },
-        {
-            label: "Mikroorganismus",
-            selectedItems: selectedMicroorganisms,
-            selectionOptions: availableMicroorganisms,
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
-                setSelectedMicroorganisms(
-                    // On autofill we get a stringified value.
-                    typeof value === "string" ? value.split(",") : value
-                );
-            },
-        },
-        {
-            label: "Tierart/Lebensmittel Oberkategorie",
-            selectedItems: selectedCategory,
-            selectionOptions: availableCategories,
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
-                setSelectedCategory(
-                    // On autofill we get a stringified value.
-                    typeof value === "string" ? value.split(",") : value
-                );
-            },
-        },
-        {
-            label: "Diagrammtyp",
-            selectedItems: selectedDiagramType,
-            selectionOptions: availableDiagramType,
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
-                setSelectedDiagramType(
-                    // On autofill we get a stringified value.
-                    typeof value === "string" ? value.split(",") : value
-                );
-            },
-        },
-        {
-            label: "Tierart Produktionsrichtung/Lebensmittel",
-            selectedItems: selectedProductionType,
-            selectionOptions: availableProductionType,
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
-                setSelectedProductionType(
-                    // On autofill we get a stringified value.
-                    typeof value === "string" ? value.split(",") : value
-                );
-            },
-        },
-        {
-            label: "Matrix",
-            selectedItems: selectedMatrix,
-            selectionOptions: availableMatrix,
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
-                setSelectedMatrix(
-                    // On autofill we get a stringified value.
-                    typeof value === "string" ? value.split(",") : value
-                );
-            },
-        },
-        {
-            label: "Weitere Details",
-            selectedItems: selectedOtherDetails,
-            selectionOptions: availableOtherDetails,
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
-                setSelectedOtherDetails(
-                    // On autofill we get a stringified value.
-                    typeof value === "string" ? value.split(",") : value
-                );
-            },
-        },
+    const availableFilters = [
+        "otherDetail",
+        "matrix",
+        "productionType",
+        "diagramType",
+        "category",
+        "microorganism",
+        "division",
     ];
 
-    const showDivision = (division: string): boolean => {
-        return selectedDivision.includes(division);
+    const selectionConfig: SelectionFilterConfig[] = availableFilters.map(
+        (filter) => ({
+            label: filter,
+            id: filter,
+            selectedItems: selectedFilters[filter as keyof FilterSelection],
+            selectionOptions: availableOptions[filter as keyof FilterSelection],
+            handleChange: (event: { target: { value: string } }): void => {
+                const {
+                    target: { value },
+                } = event;
+
+                setSelectedFilters((prev) => {
+                    const newFilters = { ...prev };
+                    newFilters[filter as keyof FilterSelection] =
+                        typeof value === "string" ? value.split(",") : value;
+                    return newFilters;
+                });
+            },
+        })
+    );
+
+    const showDivision = (div: string): boolean => {
+        return selectedFilters.division.includes(div);
     };
+
     return {
         model: {
             downloadButtonText,

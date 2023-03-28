@@ -53,8 +53,19 @@ export interface SelectionItem {
     displayName: string;
 }
 
+export type FilterSelection = {
+    matrix: string[];
+    otherDetail: string[];
+    productionType: string[];
+    diagramType: string[];
+    category: string[];
+    microorganism: string[];
+    division: string[];
+};
+
 export type SelectionFilterConfig = {
     label: string;
+    id: string;
     selectedItems: string[];
     selectionOptions: SelectionItem[];
     handleChange: (event: { target: { value: string } }) => void;

@@ -17,6 +17,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                     .filter((value) => operations.showDivision(value))
                     .map((division) => (
                         <EvaluationDivisionContainer
+                            key={division}
                             divisionData={
                                 model.evaluationsData[division as DivisionToken]
                             }
