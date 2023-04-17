@@ -4,22 +4,24 @@ import { EvaluationDivisionDataComponent } from "./EvaluationDivisionData";
 import { EvaluationDivisionHeaderComponent } from "./EvaluationDivisionHeader";
 
 type EvaluationDivisionContainerProps = {
+    title: string;
     divisionData: DivisionData;
     downloadButtonText: string;
 };
 
 export function EvaluationDivisionContainer({
+    title,
     divisionData,
     downloadButtonText,
 }: EvaluationDivisionContainerProps): JSX.Element {
     return (
-        <div key={`main-category-${divisionData.title}`}>
+        <div key={`main-category-${title}`}>
             <EvaluationDivisionHeaderComponent
-                divisionTitle={divisionData.title}
+                divisionTitle={title}
             ></EvaluationDivisionHeaderComponent>
 
             <EvaluationDivisionDataComponent
-                data={divisionData.data}
+                data={divisionData}
                 downloadButtonText={downloadButtonText}
             ></EvaluationDivisionDataComponent>
         </div>

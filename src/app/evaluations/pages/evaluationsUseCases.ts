@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import {
     CMS_API_ENDPOINT,
     CMS_BASE_ENDPOINT,
@@ -21,7 +22,7 @@ import { UseCase } from "../../shared/model/UseCases";
 
 type EvaluationPageModel = {
     downloadButtonText: string;
-    heading: string;
+    heading: Record<string, string>;
     evaluationsData: Evaluation;
     selectionConfig: SelectionFilterConfig[];
 };
@@ -31,7 +32,7 @@ type EvaluationPageOperations = {
 
 type EvaluationPageTranslations = {
     downloadButtonText: string;
-    heading: string;
+    heading: Record<string, string>;
 };
 
 const microorganism = [
@@ -88,14 +89,19 @@ const initialFilterSelection: FilterSelection = {
 };
 function getTranslations(t: TFunction): EvaluationPageTranslations {
     const downloadButtonText = t("Export");
-    const heading = t("Heading");
+    const heading = {
+        main: t("Heading"),
+        FUTTERMITTEL: t("FUTTERMITTEL"),
+        TIERE: t("TIERE"),
+        LEBENSMITTEL: t("LEBENSMITTEL"),
+    };
     return { downloadButtonText, heading };
 }
 
-function toSelectionItem(stringItems: string[]): SelectionItem[] {
+function toSelectionItem(stringItems: string[], t: TFunction): SelectionItem[] {
     return stringItems.map((item: string) => ({
         value: item,
-        displayName: item,
+        displayName: t(item),
     }));
 }
 
@@ -107,18 +113,9 @@ const useEvaluationPageComponent: UseCase<
     const { t } = useTranslation(["ExplanationPage"]);
 
     const emptyDivisions: Evaluation = {
-        FUTTERMITTEL: {
-            title: t(`FUTTERMITTEL.mainTitle`),
-            data: [],
-        },
-        TIERE: {
-            title: t(`TIERE.mainTitle`),
-            data: [],
-        },
-        LEBENSMITTEL: {
-            title: t(`LEBENSMITTEL.mainTitle`),
-            data: [],
-        },
+        FUTTERMITTEL: [],
+        TIERE: [],
+        LEBENSMITTEL: [],
     };
 
     const [evaluationsData, setEvaluationsData] = useState({
@@ -126,13 +123,13 @@ const useEvaluationPageComponent: UseCase<
     });
 
     const availableOptions = {
-        matrix: toSelectionItem(matrix),
-        otherDetail: toSelectionItem(otherDetail),
-        productionType: toSelectionItem(productionType),
-        diagramType: toSelectionItem(diagramType),
-        category: toSelectionItem(category),
-        microorganism: toSelectionItem(microorganism),
-        division: toSelectionItem(division),
+        matrix: toSelectionItem(matrix, t),
+        otherDetail: toSelectionItem(otherDetail, t),
+        productionType: toSelectionItem(productionType, t),
+        diagramType: toSelectionItem(diagramType, t),
+        category: toSelectionItem(category, t),
+        microorganism: toSelectionItem(microorganism, t),
+        division: toSelectionItem(division, t),
     };
 
     const { downloadButtonText, heading } = getTranslations(t);
@@ -156,7 +153,11 @@ const useEvaluationPageComponent: UseCase<
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callApiService<DataContainer<CMSResponse<EvaluationAttributesDTO>[]>>(
-            CMS_API_ENDPOINT + "/evaluations?populate=diagram&" + qString
+            CMS_API_ENDPOINT +
+                "/evaluations?locale=" +
+                i18next.language +
+                "&populate=diagram&" +
+                qString
         )
             .then((response) => {
                 const result: Evaluation = {
@@ -170,7 +171,7 @@ const useEvaluationPageComponent: UseCase<
                             const divisionToken: DivisionToken = entry
                                 .attributes.division as DivisionToken;
                             if (result[divisionToken]) {
-                                result[divisionToken].data.push({
+                                result[divisionToken].push({
                                     ...entry.attributes,
                                     chartPath:
                                         CMS_BASE_ENDPOINT +
@@ -187,7 +188,7 @@ const useEvaluationPageComponent: UseCase<
             .catch((error) => {
                 throw error;
             });
-    }, [selectedFilters]);
+    }, [selectedFilters, i18next.language]);
 
     const availableFilters = [
         "otherDetail",

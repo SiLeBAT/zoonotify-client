@@ -13,10 +13,8 @@ export type EvaluationEntry = {
     chartPath: string;
 };
 
-export type DivisionData = {
-    title: string;
-    data: EvaluationEntry[];
-};
+export type DivisionData = EvaluationEntry[];
+
 export type Evaluation = Record<DivisionToken, DivisionData>;
 
 export type EvaluationPaths = Record<DivisionToken, Record<string, string>>;

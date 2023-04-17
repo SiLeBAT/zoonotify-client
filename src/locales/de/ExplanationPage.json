@@ -1,39 +1,40 @@
 {
   "Heading": "Langzeitauswertungen",
   "Export": "Exportieren",
-  "FUTTERMITTEL": {
-    "mainTitle": "Futtermittel",
-    "accordions": {
-      "accordion_0": {
-        "title": "Futter_0",
-        "description": "in Futermittel 0"
-      }
-    }
-  },
-  "TIERE": {
-    "mainTitle": "Tiere",
-    "accordions": {
-      "accordion_0": {
-        "title": "Trend der Resistenz von kommersalen E. coli aus Masthähnchenbeständen Kot-Staub 2010-2019",
-        "description": "Trend der Resistenz von kommersalen E. coli aus Masthähnchenbeständen. Daten für die Untersuchung im Zoonosen-monitoring 2010-2019."
-      }
-    }
-  },
-  "LEBENSMITTEL": {
-    "mainTitle": "Lebensmittel",
-    "accordions": {
-      "accordion_0": {
-        "title": "Mehrfachresistenz von Salmonellenisolaten Huhn 2010-2019",
-        "description": "Mehrfachresistenz von Salmonellenisolaten aus dem Zoonosen-Monitoring in der Lebensmittelkette Hähnchenfleisch. Aggregierte Daten für die Untersuchungsjahre 2010-2019."
-      },
-      "accordion_1": {
-        "title": "Veränderung der Resistenz von Salmonellen aus Hähnchenfleisch im Einzelhandel 2010-2019",
-        "description": "Veränderung der Resistenz von Salmonellen aus Hähnchenfleisch im Einzelhandel im Zoonosen-Monitoring im Zeitverlauf. Daten für die Untersuchungsjahre 2010-2019."
-      },
-      "accordion_2": {
-        "title": "Trend der Resistenz von kommersalen E. coli aus Hähnchenfleisch im Einzelhandel 2010-2019",
-        "description": "Trend der Resistenz von kommersalen E. coli aus Hähnchenfleisch im Einzelhandel im Zoonosen-Monitoring. Daten für die Untersuchungsjahre 2010-2019."
-      }
-    }
-  }
+  "FUTTERMITTEL": "Futtermittel",
+  "TIERE": "Tiere",
+  "LEBENSMITTEL": "Lebensmittel",
+  "E_COLI": "E. coli",
+  "CAMPYLOBACTER_SPP": "Campylobacter spp.",
+  "ESBL_AmpC_E_COLI": "ESBL/AmpC E. coli",
+  "LISTERIS_MONOCYTOGENES": "Listeria Monocytogenes",
+  "MRSA": "MRSA",
+  "SALMONELLA_SPP": "Salmonella spp.",
+  "STEC": "STEC",
+  "CARBA_E_COLI": "CARBA E. coli",
+  "ENTEROCOCCUS_SPP": "Enterococcis spp.",
+  "HUHN": "Huhn",
+  "PUTE": "Pute",
+  "SCHWEIN": "Schwein",
+  "RIND": "Rind",
+  "AGG_TABELLE": "Agg. Tabelle",
+  "ERREGERCHARAK": "Erregercharakterisitc",
+  "SUBSTANZ_GRAPH": "Substanz Graph",
+  "TREND_DIAGRAMM": "Trend Diagramm",
+  "LEGEHENNEN": "Legehennen",
+  "MASTHAENCHEN": "Masthaenchen",
+  "MASTKALB_JUNGRIND": "Mastkalb/Jungrind",
+  "MASTPUTEN": "Mastpute",
+  "MASTSCHWEIN": "Mastschwein",
+  "ZUCHTHUEHNER_LEGE_UND_MASTLINIE": "Zuchthuehner, Lege- und Mastlinie",
+  "ALLE": "Alle",
+  "BLINDDARMINHALT": "Blinddarminhalt",
+  "FRISCHES_FLEISCH": "Frisches Fleisch",
+  "HACKFLEISCH": "Hackfleisch",
+  "KOT_STAUB": "Kot/Staub",
+  "SCHLACHTKOERPER": "Schlachtkoerper",
+  "HALS_HAUT": "(Hals)Haut",
+  "KEINE": "Keine",
+  "HPCL_WHO": "hpCl-WHO",
+  "HUMANMEDIZIN": "Wichtig fuer die Humanmedizin"
 }

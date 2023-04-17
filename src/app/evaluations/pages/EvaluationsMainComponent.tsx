@@ -10,7 +10,9 @@ export function EvaluationsMainComponent(): JSX.Element {
     const { model, operations } = useEvaluationPageComponent(null);
     return (
         <Box sx={{ width: "60%", margin: "2em auto" }}>
-            <MainComponentHeader heading={model.heading}></MainComponentHeader>
+            <MainComponentHeader
+                heading={model.heading.main}
+            ></MainComponentHeader>
             <FilterContainerComponent selectionConfig={model.selectionConfig} />
             <div>
                 {Object.keys(model.evaluationsData)
@@ -18,6 +20,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                     .map((division) => (
                         <EvaluationDivisionContainer
                             key={division}
+                            title={model.heading[division]}
                             divisionData={
                                 model.evaluationsData[division as DivisionToken]
                             }
