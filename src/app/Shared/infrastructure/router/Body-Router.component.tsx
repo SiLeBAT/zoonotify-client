@@ -6,7 +6,7 @@ import { ErrorPageComponent } from "../../../pages/error/ErrorPage.component";
 
 import { InfoPageContainerComponent } from "../../../pages/explanation/InfoPage-Container.component";
 import { LinkPageComponent } from "../../../pages/links/LinkPage.component";
-import { WelcomePage } from "../../../pages/welcome/welcome_page";
+import { WelcomeMainComponent } from "../../../welcome/pages/WelcomeMainComponent";
 import { pageRoute } from "./routes";
 
 function ErrorPage(): JSX.Element {
@@ -19,7 +19,7 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 exact
                 path={pageRoute.homePagePath}
-                component={WelcomePage}
+                component={WelcomeMainComponent}
             />
             <Route
                 path={pageRoute.infoPagePath}

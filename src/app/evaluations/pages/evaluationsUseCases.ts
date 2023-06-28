@@ -4,8 +4,6 @@ import {
     CMS_BASE_ENDPOINT,
 } from "../../shared/infrastructure/router/routes";
 import {
-    CMSResponse,
-    DataContainer,
     DivisionToken,
     Evaluation,
     EvaluationAttributesDTO,
@@ -18,6 +16,7 @@ import { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
+import { CMSResponse, DataContainer } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
 
 type EvaluationPageModel = {
@@ -171,13 +170,15 @@ const useEvaluationPageComponent: UseCase<
                             const divisionToken: DivisionToken = entry
                                 .attributes.division as DivisionToken;
                             if (result[divisionToken]) {
-                                result[divisionToken].push({
-                                    ...entry.attributes,
-                                    chartPath:
-                                        CMS_BASE_ENDPOINT +
-                                        entry.attributes.diagram.data[0]
-                                            .attributes.url,
-                                });
+                                if (entry.attributes.diagram.data !== null) {
+                                    result[divisionToken].push({
+                                        ...entry.attributes,
+                                        chartPath:
+                                            CMS_BASE_ENDPOINT +
+                                            entry.attributes.diagram.data[0]
+                                                .attributes.url,
+                                    });
+                                }
                             }
                         }
                     );

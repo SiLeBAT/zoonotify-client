@@ -1,3 +1,10 @@
+import {
+    CMSAttributeDTO,
+    CMSResponse,
+    DataContainer,
+    DiagramAttributes,
+} from "../../shared/model/CMS.model";
+
 export type DivisionToken = "FUTTERMITTEL" | "TIERE" | "LEBENSMITTEL";
 
 export type EvaluationEntry = {
@@ -19,21 +26,6 @@ export type Evaluation = Record<DivisionToken, DivisionData>;
 
 export type EvaluationPaths = Record<DivisionToken, Record<string, string>>;
 
-export type CMSResponse<T> = {
-    id: number;
-    attributes: T;
-};
-
-export interface CMSAttributeDTO {
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    locale: string;
-}
-export type DataContainer<T> = {
-    data: T;
-};
-export type DiagramAttributes = { url: string };
 export interface EvaluationAttributesDTO extends CMSAttributeDTO {
     title: string;
     description: string;
