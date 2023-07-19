@@ -1,4 +1,3 @@
-import i18next from "i18next";
 import {
     CMS_API_ENDPOINT,
     CMS_BASE_ENDPOINT,
@@ -12,7 +11,7 @@ import {
     SelectionItem,
 } from "./../model/Evaluations.model";
 // eslint-disable-next-line import/named
-import { TFunction } from "i18next";
+import i18next, { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
