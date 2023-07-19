@@ -1,5 +1,5 @@
-export interface InfoDTO {
-    version: string;
-    lastChange: string;
-    supportContact: string;
+import { CMSAttributeDTO } from "./CMS.model";
+
+export interface ConfigurationAttributesDTO extends CMSAttributeDTO {
+    supportEmail: string;
 }

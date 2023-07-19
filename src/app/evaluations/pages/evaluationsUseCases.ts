@@ -1,7 +1,7 @@
 import {
-    CMS_API_ENDPOINT,
     CMS_BASE_ENDPOINT,
-} from "../../shared/infrastructure/router/routes";
+    EVALUATIONS,
+} from "./../../shared/infrastructure/router/routes";
 import {
     DivisionToken,
     Evaluation,
@@ -15,7 +15,7 @@ import i18next, { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { CMSResponse, DataContainer } from "../../shared/model/CMS.model";
+import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
 
 type EvaluationPageModel = {
@@ -150,12 +150,10 @@ const useEvaluationPageComponent: UseCase<
         const qString = createQueryString(selectedFilters);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        callApiService<DataContainer<CMSResponse<EvaluationAttributesDTO>[]>>(
-            CMS_API_ENDPOINT +
-                "/evaluations?locale=" +
-                i18next.language +
-                "&populate=diagram&" +
-                qString
+        callApiService<
+            CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
+        >(
+            `${EVALUATIONS}?locale=${i18next.language}&populate=diagram&${qString}`
         )
             .then((response) => {
                 const result: Evaluation = {
@@ -165,7 +163,7 @@ const useEvaluationPageComponent: UseCase<
                     const data = response.data.data;
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     data.forEach(
-                        (entry: CMSResponse<EvaluationAttributesDTO>) => {
+                        (entry: CMSEntity<EvaluationAttributesDTO>) => {
                             const divisionToken: DivisionToken = entry
                                 .attributes.division as DivisionToken;
                             if (result[divisionToken]) {

@@ -1,6 +1,6 @@
 import {
     CMSAttributeDTO,
-    CMSResponse,
+    CMSEntity,
     DataContainer,
     DiagramAttributes,
 } from "../../shared/model/CMS.model";
@@ -36,7 +36,7 @@ export interface EvaluationAttributesDTO extends CMSAttributeDTO {
     productionType: string;
     matrix: string;
     otherDetails: string;
-    diagram: DataContainer<CMSResponse<DiagramAttributes>[]>;
+    diagram: DataContainer<CMSEntity<DiagramAttributes>[]>;
 }
 export interface SelectionItem {
     value: string;
