@@ -1,13 +1,6 @@
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CardMedia,
-    Link,
-    Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, Link } from "@mui/material";
 import { useTheme } from "@mui/system";
+import Markdown from "markdown-to-jsx";
 import React, { useCallback, useState } from "react";
 import ImageViewer from "react-simple-image-viewer";
 
@@ -48,13 +41,7 @@ export function EvaluationsCardComponent(props: {
                             flex: "1 0 auto",
                         }}
                     >
-                        <Typography
-                            variant="subtitle1"
-                            color="text.secondary"
-                            component="div"
-                        >
-                            {props.description}
-                        </Typography>
+                        <Markdown>{props.description}</Markdown>
                     </CardContent>
                 </Box>
                 <Box
