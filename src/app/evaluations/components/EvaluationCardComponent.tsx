@@ -8,7 +8,8 @@ import {
     Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
-import React from "react";
+import React, { useCallback, useState } from "react";
+import ImageViewer from "react-simple-image-viewer";
 
 export function EvaluationsCardComponent(props: {
     title: string;
@@ -17,71 +18,98 @@ export function EvaluationsCardComponent(props: {
     downloadButtonText: string;
 }): JSX.Element {
     const theme = useTheme();
+    const [isViewerOpen, setIsViewerOpen] = useState(false);
+    const openImageViewer = useCallback(() => {
+        setIsViewerOpen(true);
+    }, []);
+
+    const closeImageViewer = (): void => {
+        setIsViewerOpen(false);
+    };
+
     return (
-        <Card
-            sx={{
-                display: "flex",
-                borderRadius: 0,
-                boxShadow: 0,
-            }}
-        >
-            <Box
+        <>
+            <Card
                 sx={{
                     display: "flex",
-                    flexDirection: "column",
+                    borderRadius: 0,
+                    boxShadow: 0,
                 }}
             >
-                <CardContent
+                <Box
                     sx={{
-                        flex: "1 0 auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "50%",
                     }}
                 >
-                    <Typography
-                        variant="subtitle1"
-                        color="text.secondary"
-                        component="div"
-                    >
-                        {props.description}
-                    </Typography>
-                </CardContent>
-            </Box>
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
-                <CardMedia
-                    component="img"
-                    image={props.chartPath}
-                    alt={props.title}
-                />
-                <Button
-                    color="primary"
-                    variant="contained"
-                    sx={{
-                        width: "30%",
-                        margin: "0.5em",
-                        padding: "0em",
-                        backgroundColor: theme.palette.primary.main,
-                    }}
-                >
-                    <Link
-                        href={props.chartPath}
-                        download
+                    <CardContent
                         sx={{
-                            width: "100%",
-                            padding: "0.5em 1em",
-                            color: "inherit",
-                            textDecoration: "none",
+                            flex: "1 0 auto",
                         }}
                     >
-                        {props.downloadButtonText}
-                    </Link>
-                </Button>
-            </Box>
-        </Card>
+                        <Typography
+                            variant="subtitle1"
+                            color="text.secondary"
+                            component="div"
+                        >
+                            {props.description}
+                        </Typography>
+                    </CardContent>
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "50%",
+                    }}
+                >
+                    <CardMedia
+                        component="img"
+                        image={props.chartPath}
+                        alt={props.title}
+                        onClick={() => openImageViewer()}
+                    />
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        sx={{
+                            width: "30%",
+                            margin: "0.5em",
+                            padding: "0em",
+                            backgroundColor: theme.palette.primary.main,
+                        }}
+                    >
+                        <Link
+                            href={props.chartPath}
+                            download
+                            sx={{
+                                width: "100%",
+                                padding: "0.5em 1em",
+                                color: "inherit",
+                                textDecoration: "none",
+                            }}
+                        >
+                            {props.downloadButtonText}
+                        </Link>
+                    </Button>
+                </Box>
+            </Card>
+            {isViewerOpen && (
+                <ImageViewer
+                    src={[props.chartPath]}
+                    currentIndex={0}
+                    onClose={closeImageViewer}
+                    disableScroll={true}
+                    backgroundStyle={{
+                        backgroundColor: "rgba(0,0,0,0.9)",
+                        zIndex: 2,
+                    }}
+                    closeOnClickOutside={true}
+                />
+            )}
+        </>
     );
 }
