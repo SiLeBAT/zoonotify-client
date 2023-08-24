@@ -55,6 +55,7 @@ export function EvaluationsCardComponent(props: {
                 >
                     <CardMedia
                         component="img"
+                        sx={{ cursor: "pointer" }}
                         image={props.chartPath}
                         alt={props.title}
                         onClick={() => openImageViewer()}
@@ -92,7 +93,6 @@ export function EvaluationsCardComponent(props: {
                     disableScroll={true}
                     backgroundStyle={{
                         backgroundColor: "rgba(0,0,0,0.9)",
-                        zIndex: 2,
                     }}
                     closeOnClickOutside={true}
                 />
