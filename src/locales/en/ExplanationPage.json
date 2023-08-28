@@ -22,7 +22,7 @@
   "SUBSTANZ_GRAPH": "Substance Graph",
   "TREND_DIAGRAMM": "Trend Diagram",
   "LEGEHENNEN": "Laying hens",
-  "MASTHAENCHEN": "Broilers",
+  "MASTHAEHNCHEN": "Broilers",
   "MASTKALB_JUNGRIND": "Calves (under or around 1 year)",
   "MASTPUTEN": "Meat production turkeys",
   "MASTSCHWEIN": "Fattening pigs",
@@ -34,7 +34,6 @@
   "KOT_STAUB": "Faeces/dust",
   "SCHLACHTKOERPER": "Carcase",
   "HALS_HAUT": "(Neck)skin",
-  "KEINE": "None",
-  "HPCL_WHO": "hpCl-WHO",
-  "HUMANMEDIZIN": "Important for human medicine"
+  "DIVERSE": "Diverse",
+  "MULTIPLE": "Multiple"
 }

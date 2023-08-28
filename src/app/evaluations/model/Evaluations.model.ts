@@ -16,7 +16,7 @@ export type EvaluationEntry = {
     diagramType: string;
     productionType: string;
     matrix: string;
-    otherDetails: string;
+
     chartPath: string;
 };
 
@@ -35,7 +35,7 @@ export interface EvaluationAttributesDTO extends CMSAttributeDTO {
     diagramType: string;
     productionType: string;
     matrix: string;
-    otherDetails: string;
+
     diagram: DataContainer<CMSEntity<DiagramAttributes>[]>;
 }
 export interface SelectionItem {
@@ -45,7 +45,6 @@ export interface SelectionItem {
 
 export type FilterSelection = {
     matrix: string[];
-    otherDetail: string[];
     productionType: string[];
     diagramType: string[];
     category: string[];

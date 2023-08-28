@@ -22,7 +22,7 @@
   "SUBSTANZ_GRAPH": "Substanz Graph",
   "TREND_DIAGRAMM": "Trend Diagramm",
   "LEGEHENNEN": "Legehennen",
-  "MASTHAENCHEN": "Masthaenchen",
+  "MASTHAEHNCHEN": "Masthaehnchen",
   "MASTKALB_JUNGRIND": "Mastkalb/Jungrind",
   "MASTPUTEN": "Mastpute",
   "MASTSCHWEIN": "Mastschwein",
@@ -34,7 +34,6 @@
   "KOT_STAUB": "Kot/Staub",
   "SCHLACHTKOERPER": "Schlachtkoerper",
   "HALS_HAUT": "(Hals)Haut",
-  "KEINE": "Keine",
-  "HPCL_WHO": "hpCl-WHO",
-  "HUMANMEDIZIN": "Wichtig fuer die Humanmedizin"
+  "DIVERSE": "Diverse",
+  "MULTIPLE": "Mehrere"
 }
