@@ -8,7 +8,9 @@ export function EvaluationsCardComponent(props: {
     title: string;
     description: string;
     chartPath: string;
-    downloadButtonText: string;
+    dataPath: string;
+    downloadGraphButtonText: string;
+    downloadDataButtonText: string;
 }): JSX.Element {
     const theme = useTheme();
     const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -60,29 +62,60 @@ export function EvaluationsCardComponent(props: {
                         alt={props.title}
                         onClick={() => openImageViewer()}
                     />
-                    <Button
-                        color="primary"
-                        variant="contained"
+                    <Box
                         sx={{
-                            width: "30%",
-                            margin: "0.5em",
-                            padding: "0em",
-                            backgroundColor: theme.palette.primary.main,
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: "50%",
                         }}
                     >
-                        <Link
-                            href={props.chartPath}
-                            download
+                        <Button
+                            color="primary"
+                            variant="contained"
                             sx={{
-                                width: "100%",
-                                padding: "0.5em 1em",
-                                color: "inherit",
-                                textDecoration: "none",
+                                margin: "0.5em",
+                                padding: "0em",
+                                backgroundColor: theme.palette.primary.main,
                             }}
                         >
-                            {props.downloadButtonText}
-                        </Link>
-                    </Button>
+                            <Link
+                                href={props.dataPath}
+                                download
+                                sx={{
+                                    width: "100%",
+                                    padding: "0.5em 1em",
+                                    color: "inherit",
+                                    textDecoration: "none",
+                                }}
+                            >
+                                {props.downloadDataButtonText}
+                            </Link>
+                        </Button>
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            sx={{
+                                margin: "0.5em",
+                                padding: "0em",
+                                backgroundColor: theme.palette.primary.main,
+                            }}
+                        >
+                            <Link
+                                href={props.chartPath}
+                                download
+                                sx={{
+                                    width: "100%",
+                                    padding: "0.5em 1em",
+                                    color: "inherit",
+                                    textDecoration: "none",
+                                }}
+                            >
+                                {props.downloadGraphButtonText}
+                            </Link>
+                        </Button>
+                    </Box>
                 </Box>
             </Card>
             {isViewerOpen && (

@@ -5,12 +5,14 @@ import { EvaluationsCardComponent } from "./EvaluationCardComponent";
 
 type EvaluationDivisionDataProps = {
     data: EvaluationEntry[];
-    downloadButtonText: string;
+    downloadGraphButtonText: string;
+    downloadDataButtonText: string;
 };
 
 export function EvaluationDivisionDataComponent({
     data,
-    downloadButtonText,
+    downloadGraphButtonText,
+    downloadDataButtonText,
 }: EvaluationDivisionDataProps): JSX.Element {
     return (
         <div>
@@ -23,7 +25,9 @@ export function EvaluationDivisionDataComponent({
                             title={evaluation.title}
                             description={evaluation.description}
                             chartPath={evaluation.chartPath}
-                            downloadButtonText={downloadButtonText}
+                            dataPath={evaluation.dataPath}
+                            downloadGraphButtonText={downloadGraphButtonText}
+                            downloadDataButtonText={downloadDataButtonText}
                         />
                     }
                     defaultExpanded={false}
