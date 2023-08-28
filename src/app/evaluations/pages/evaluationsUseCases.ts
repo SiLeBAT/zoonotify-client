@@ -44,7 +44,7 @@ const microorganism = [
     "CARBA_E_COLI",
     "ENTEROCOCCUS_SPP",
 ];
-const category = ["HUHN", "PUTE", "SCHWEIN", "RIND"];
+const category = ["HUHN", "PUTE", "SCHWEIN", "RIND", "DIVERSE"];
 const diagramType = [
     "AGG_TABELLE",
     "ERREGERCHARAK",
@@ -54,31 +54,29 @@ const diagramType = [
 const productionType = [
     "HUHN",
     "LEGEHENNEN",
-    "MASTHAENCHEN",
+    "MASTHAEHNCHEN",
     "MASTKALB_JUNGRIND",
     "MASTPUTEN",
     "MASTSCHWEIN",
     "PUTE",
     "RIND",
     "ZUCHTHUEHNER_LEGE_UND_MASTLINIE",
+    "DIVERSE",
 ];
 const matrix = [
-    "ALLE",
     "BLINDDARMINHALT",
     "FRISCHES_FLEISCH",
     "HACKFLEISCH",
     "KOT_STAUB",
     "SCHLACHTKOERPER",
     "HALS_HAUT",
+    "MULTIPLE",
 ];
-
-const otherDetail = ["KEINE", "HPCL_WHO", "HUMANMEDIZIN"];
 
 const division = ["FUTTERMITTEL", "TIERE", "LEBENSMITTEL"];
 
 const initialFilterSelection: FilterSelection = {
     matrix,
-    otherDetail,
     productionType,
     diagramType,
     category,
@@ -122,7 +120,6 @@ const useEvaluationPageComponent: UseCase<
 
     const availableOptions = {
         matrix: toSelectionItem(matrix, t),
-        otherDetail: toSelectionItem(otherDetail, t),
         productionType: toSelectionItem(productionType, t),
         diagramType: toSelectionItem(diagramType, t),
         category: toSelectionItem(category, t),
