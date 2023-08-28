@@ -2,7 +2,7 @@ import {
     CMSAttributeDTO,
     CMSEntity,
     DataContainer,
-    DiagramAttributes,
+    MediaAttributes,
 } from "../../shared/model/CMS.model";
 
 export type DivisionToken = "FUTTERMITTEL" | "TIERE" | "LEBENSMITTEL";
@@ -16,8 +16,8 @@ export type EvaluationEntry = {
     diagramType: string;
     productionType: string;
     matrix: string;
-
     chartPath: string;
+    dataPath: string;
 };
 
 export type DivisionData = EvaluationEntry[];
@@ -35,8 +35,8 @@ export interface EvaluationAttributesDTO extends CMSAttributeDTO {
     diagramType: string;
     productionType: string;
     matrix: string;
-
-    diagram: DataContainer<CMSEntity<DiagramAttributes>[]>;
+    diagram: DataContainer<CMSEntity<MediaAttributes>[]>;
+    csv_data: DataContainer<CMSEntity<MediaAttributes>>;
 }
 export interface SelectionItem {
     value: string;

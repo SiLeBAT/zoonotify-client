@@ -19,7 +19,8 @@ import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
 
 type EvaluationPageModel = {
-    downloadButtonText: string;
+    downloadGraphButtonText: string;
+    downloadDataButtonText: string;
     heading: Record<string, string>;
     evaluationsData: Evaluation;
     selectionConfig: SelectionFilterConfig[];
@@ -29,7 +30,8 @@ type EvaluationPageOperations = {
 };
 
 type EvaluationPageTranslations = {
-    downloadButtonText: string;
+    downloadDataButtonText: string;
+    downloadGraphButtonText: string;
     heading: Record<string, string>;
 };
 
@@ -84,14 +86,15 @@ const initialFilterSelection: FilterSelection = {
     division,
 };
 function getTranslations(t: TFunction): EvaluationPageTranslations {
-    const downloadButtonText = t("Export");
+    const downloadGraphButtonText = t("Export");
+    const downloadDataButtonText = t("Data_Download");
     const heading = {
         main: t("Heading"),
         FUTTERMITTEL: t("FUTTERMITTEL"),
         TIERE: t("TIERE"),
         LEBENSMITTEL: t("LEBENSMITTEL"),
     };
-    return { downloadButtonText, heading };
+    return { downloadGraphButtonText, downloadDataButtonText, heading };
 }
 
 function toSelectionItem(stringItems: string[], t: TFunction): SelectionItem[] {
@@ -127,7 +130,8 @@ const useEvaluationPageComponent: UseCase<
         division: toSelectionItem(division, t),
     };
 
-    const { downloadButtonText, heading } = getTranslations(t);
+    const { downloadGraphButtonText, downloadDataButtonText, heading } =
+        getTranslations(t);
 
     const [selectedFilters, setSelectedFilters] = useState(
         initialFilterSelection
@@ -150,7 +154,7 @@ const useEvaluationPageComponent: UseCase<
         callApiService<
             CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
         >(
-            `${EVALUATIONS}?locale=${i18next.language}&populate=diagram&${qString}`
+            `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&${qString}`
         )
             .then((response) => {
                 const result: Evaluation = {
@@ -170,6 +174,10 @@ const useEvaluationPageComponent: UseCase<
                                         chartPath:
                                             CMS_BASE_ENDPOINT +
                                             entry.attributes.diagram.data[0]
+                                                .attributes.url,
+                                        dataPath:
+                                            CMS_BASE_ENDPOINT +
+                                            entry.attributes.csv_data.data
                                                 .attributes.url,
                                     });
                                 }
@@ -222,7 +230,8 @@ const useEvaluationPageComponent: UseCase<
 
     return {
         model: {
-            downloadButtonText,
+            downloadDataButtonText,
+            downloadGraphButtonText,
             heading,
             evaluationsData,
             selectionConfig,

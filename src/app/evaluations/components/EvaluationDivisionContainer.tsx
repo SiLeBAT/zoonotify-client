@@ -6,13 +6,15 @@ import { EvaluationDivisionHeaderComponent } from "./EvaluationDivisionHeader";
 type EvaluationDivisionContainerProps = {
     title: string;
     divisionData: DivisionData;
-    downloadButtonText: string;
+    downloadGraphButtonText: string;
+    downloadDataButtonText: string;
 };
 
 export function EvaluationDivisionContainer({
     title,
     divisionData,
-    downloadButtonText,
+    downloadGraphButtonText,
+    downloadDataButtonText,
 }: EvaluationDivisionContainerProps): JSX.Element {
     return (
         <div key={`main-category-${title}`}>
@@ -22,7 +24,8 @@ export function EvaluationDivisionContainer({
 
             <EvaluationDivisionDataComponent
                 data={divisionData}
-                downloadButtonText={downloadButtonText}
+                downloadDataButtonText={downloadDataButtonText}
+                downloadGraphButtonText={downloadGraphButtonText}
             ></EvaluationDivisionDataComponent>
         </div>
     );

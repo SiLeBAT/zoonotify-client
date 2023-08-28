@@ -24,7 +24,12 @@ export function EvaluationsMainComponent(): JSX.Element {
                             divisionData={
                                 model.evaluationsData[division as DivisionToken]
                             }
-                            downloadButtonText={model.downloadButtonText}
+                            downloadGraphButtonText={
+                                model.downloadGraphButtonText
+                            }
+                            downloadDataButtonText={
+                                model.downloadDataButtonText
+                            }
                         ></EvaluationDivisionContainer>
                     ))}
             </div>

@@ -17,4 +17,4 @@ export interface CMSAttributeDTO {
 export type DataContainer<T> = {
     data: T;
 };
-export type DiagramAttributes = { url: string };
+export type MediaAttributes = { url: string };
