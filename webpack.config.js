@@ -1,6 +1,7 @@
 const path = require("path");
 const backendURL = "http://localhost:3000";
 const contentBase = path.resolve(__dirname, "public");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     mode: "development",
@@ -49,4 +50,9 @@ module.exports = {
             },
         ],
     },
+    plugins: [
+        new Dotenv({
+            path: `./.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`
+        })
+    ]   
 };
