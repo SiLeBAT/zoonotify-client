@@ -205,7 +205,7 @@ const useEvaluationPageComponent: UseCase<
 
     const selectionConfig: SelectionFilterConfig[] = availableFilters.map(
         (filter) => ({
-            label: filter,
+            label: t(filter.toUpperCase()),
             id: filter,
             selectedItems: selectedFilters[filter as keyof FilterSelection],
             selectionOptions: availableOptions[filter as keyof FilterSelection],
