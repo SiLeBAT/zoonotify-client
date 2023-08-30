@@ -173,7 +173,7 @@ const useEvaluationPageComponent: UseCase<
                                         ...entry.attributes,
                                         chartPath:
                                             CMS_BASE_ENDPOINT +
-                                            entry.attributes.diagram.data[0]
+                                            entry.attributes.diagram.data
                                                 .attributes.url,
                                         dataPath:
                                             CMS_BASE_ENDPOINT +

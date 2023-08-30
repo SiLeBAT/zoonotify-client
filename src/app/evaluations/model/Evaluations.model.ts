@@ -35,7 +35,7 @@ export interface EvaluationAttributesDTO extends CMSAttributeDTO {
     diagramType: string;
     productionType: string;
     matrix: string;
-    diagram: DataContainer<CMSEntity<MediaAttributes>[]>;
+    diagram: DataContainer<CMSEntity<MediaAttributes>>;
     csv_data: DataContainer<CMSEntity<MediaAttributes>>;
 }
 export interface SelectionItem {
