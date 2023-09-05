@@ -48,7 +48,7 @@ const microorganism = [
 ];
 const category = ["HUHN", "PUTE", "SCHWEIN", "RIND", "DIVERSE"];
 const diagramType = [
-    "AGG_TABELLE",
+    "MDR",
     "ERREGERCHARAK",
     "SUBSTANZ_GRAPH",
     "TREND_DIAGRAMM",
