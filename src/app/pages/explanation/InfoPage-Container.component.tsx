@@ -90,13 +90,13 @@ export function InfoPageContainerComponent(): JSX.Element {
 
     const table1Coli: AmrsTable = {
         introduction: (
-            <p>
+            <>
                 {t(`Methods.Amrs.Table1.Paragraph.Description1`)}
                 {coliShort}
                 {t(`Methods.Amrs.Table1.Paragraph.Description2`)}
                 {coliShort}
                 {t(`Methods.Amrs.Table1.Paragraph.Description3`)}
-            </p>
+            </>
         ),
         title: (
             <div>
@@ -114,11 +114,11 @@ export function InfoPageContainerComponent(): JSX.Element {
     };
     const table2Salm: AmrsTable = {
         introduction: (
-            <p>
+            <>
                 {t("Methods.Amrs.Table2.Paragraph.Description1")}
                 {salmSpp}
                 {t("Methods.Amrs.Table2.Paragraph.Description2")}
-            </p>
+            </>
         ),
         title: (
             <div>
@@ -136,13 +136,13 @@ export function InfoPageContainerComponent(): JSX.Element {
     };
     const table3aCampy: AmrsTable = {
         introduction: (
-            <p>
+            <>
                 {t(`Methods.Amrs.Table3a.Paragraph.Description1`)}
                 {campyJeShort}
                 {t(`Methods.Amrs.Table3a.Paragraph.Description2`)}
                 {campyColiShort}
                 {t(`Methods.Amrs.Table3a.Paragraph.Description3`)}
-            </p>
+            </>
         ),
         title: (
             <div>
@@ -159,7 +159,7 @@ export function InfoPageContainerComponent(): JSX.Element {
         tableRows: table3a,
     };
     const table3bCampy: AmrsTable = {
-        introduction: <p>{t(`Methods.Amrs.Table3b.Paragraph`)}</p>,
+        introduction: <>{t(`Methods.Amrs.Table3b.Paragraph`)}</>,
         title: (
             <div>
                 {t("Methods.Amrs.Table3b.TableTitle.Part1")}
@@ -176,7 +176,7 @@ export function InfoPageContainerComponent(): JSX.Element {
     };
     const table4Mrsa: AmrsTable = {
         introduction: (
-            <p>
+            <>
                 {t(`Methods.Amrs.Table4.Paragraph.Description1`)}
                 {staphy}
                 {t(`Methods.Amrs.Table4.Paragraph.Description2`)}
@@ -188,7 +188,7 @@ export function InfoPageContainerComponent(): JSX.Element {
                     {t(`Methods.Amrs.Table4.Paragraph.EucastLink`)}
                 </a>
                 {t(`Methods.Amrs.Table4.Paragraph.Description3`)}
-            </p>
+            </>
         ),
         title: (
             <div>
@@ -206,13 +206,13 @@ export function InfoPageContainerComponent(): JSX.Element {
     };
     const table5Ef: AmrsTable = {
         introduction: (
-            <p>
+            <>
                 {t(`Methods.Amrs.Table5.Paragraph.Description1`)}
                 {enteroFaecalis}
                 {t(`Methods.Amrs.Table5.Paragraph.Description2`)}
                 {enteroFaecium}
                 {t(`Methods.Amrs.Table5.Paragraph.Description3`)}
-            </p>
+            </>
         ),
         title: (
             <div>
