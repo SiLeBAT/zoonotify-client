@@ -119,7 +119,7 @@ export function InfoPageAmrsContentComponent(props: {
             </Typography>
             {props.amrKeys.map((amrKey) => (
                 <div key={`${amrKey}-amr-table-dialog`}>
-                    <Typography component="p">
+                    <Typography component="p" sx={{ pt: 2, pb: 2 }}>
                         {props.tableData[amrKey].introduction}
                     </Typography>
                     <Button
