@@ -75,7 +75,7 @@ const matrix = [
     "MULTIPLE",
 ];
 
-const division = ["FUTTERMITTEL", "TIERE", "LEBENSMITTEL"];
+const division = ["FUTTERMITTEL", "TIERE", "LEBENSMITTEL", "MULTIPLE"];
 
 const initialFilterSelection: FilterSelection = {
     matrix,
@@ -93,6 +93,7 @@ function getTranslations(t: TFunction): EvaluationPageTranslations {
         FUTTERMITTEL: t("FUTTERMITTEL"),
         TIERE: t("TIERE"),
         LEBENSMITTEL: t("LEBENSMITTEL"),
+        MULTIPLE: t("MULTIPLE"),
     };
     return { downloadGraphButtonText, downloadDataButtonText, heading };
 }
@@ -115,6 +116,7 @@ const useEvaluationPageComponent: UseCase<
         FUTTERMITTEL: [],
         TIERE: [],
         LEBENSMITTEL: [],
+        MULTIPLE: [],
     };
 
     const [evaluationsData, setEvaluationsData] = useState({
