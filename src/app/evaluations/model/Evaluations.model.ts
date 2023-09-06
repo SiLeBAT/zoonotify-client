@@ -5,7 +5,11 @@ import {
     MediaAttributes,
 } from "../../shared/model/CMS.model";
 
-export type DivisionToken = "FUTTERMITTEL" | "TIERE" | "LEBENSMITTEL";
+export type DivisionToken =
+    | "FUTTERMITTEL"
+    | "TIERE"
+    | "LEBENSMITTEL"
+    | "MULTIPLE";
 
 export type EvaluationEntry = {
     title: string;
