@@ -14,13 +14,14 @@ export function LinkListContentComponent(
 ): JSX.Element[] {
     const { t } = useTranslation(["ExternLinks"]);
     const elements: JSX.Element[] = [];
-    for (const linkObject of linkList) {
+    linkList.map((linkObject, index) =>
         elements.push(
             <ListContentListItemComponent
+                key={`ListContentListItemComponent` + index}
                 link={linkObject.Link}
                 text={t(`${category}.${linkObject.Text}`)}
             />
-        );
-    }
+        )
+    );
     return elements;
 }

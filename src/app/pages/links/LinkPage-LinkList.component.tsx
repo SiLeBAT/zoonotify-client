@@ -8,9 +8,10 @@ export function LinkPageLinkListComponent(): JSX.Element[] {
     const { t } = useTranslation(["ExternLinks"]);
     const linkJson = links;
     const elements: JSX.Element[] = [];
-    for (const category of linkJson.LinkComponent) {
+    linkJson.LinkComponent.map((category, index) =>
         elements.push(
             <List
+                key={`Title` + index}
                 subheader={
                     <ListSubheader>
                         {t(`${category.Title}.Title`)}
@@ -20,7 +21,7 @@ export function LinkPageLinkListComponent(): JSX.Element[] {
             >
                 {LinkListContentComponent(category.Title, category.Links)}
             </List>
-        );
-    }
+        )
+    );
     return elements;
 }
