@@ -32,8 +32,8 @@ jobs:
       - name: Upload to QA using Web FTP
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
-          server: QA_Server 
-          username: zoono_0 
-          password: cHSaT5WvEZH4BxQa 
+          server: ${{ secrets.QA_SERVER }}
+          username: ${{ secrets.QA_FTP_USER }}
+          password: ${{ secrets.QA_FTP_PASS }}
           local-dir: './public'
           server-dir: '/'
