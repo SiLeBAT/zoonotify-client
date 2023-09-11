@@ -18,3 +18,8 @@ body {
 span.react-simple-image-viewer__close {
     top: 80px;
 }
+
+button em {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}

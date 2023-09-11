@@ -1,8 +1,8 @@
-import React, { useState } from "react";
 import { Button, Divider, Typography } from "@mui/material";
 import { useTheme } from "@mui/system";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AmrKey, AmrsTable } from "../InfoPage.model";
+import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
 import { InfoPageAmrDialogComponent } from "./InfoPage-AmrsDialog.component";
 import {
     campy,
@@ -19,7 +19,7 @@ import {
     salm,
     salmSpp,
     staphy,
-} from "../italicNames.constants";
+} from "./italicNames.constants";
 
 export function InfoPageAmrsContentComponent(props: {
     amrKeys: AmrKey[];

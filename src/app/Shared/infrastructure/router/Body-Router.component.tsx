@@ -4,7 +4,7 @@ import { EvaluationsMainComponent } from "../../../evaluations/pages/Evaluations
 import { DataProtectionPageComponent } from "../../../pages/data_protection/DataProtectionPage.component";
 import { ErrorPageComponent } from "../../../pages/error/ErrorPage.component";
 
-import { InfoPageContainerComponent } from "../../../pages/explanation/InfoPage-Container.component";
+import { InfoPageContainerComponent } from "../../../explanation/pages/InfoPage-Container.component";
 import { LinkPageComponent } from "../../../pages/links/LinkPage.component";
 import { WelcomeMainComponent } from "../../../welcome/pages/WelcomeMainComponent";
 import { pageRoute } from "./routes";

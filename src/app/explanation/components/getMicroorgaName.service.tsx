@@ -1,5 +1,5 @@
 import React from "react";
-import { MicroorgaName } from "./InfoPage.model";
+import { MicroorgaName } from "../model/ExplanationPage.model";
 
 export const microorgaNames: Record<string, MicroorgaName> = {
     Salm: {
@@ -108,7 +108,7 @@ export function getMicroorgaNameAsString(
 
     if (pattern === "withAbbreviation") {
         return `${microorgaNames[microorga].name} (
-                ${microorgaNames[microorga].letter}.) 
+                ${microorgaNames[microorga].letter}.)
                 ${microorgaNames[microorga].subname}`;
     }
     if (pattern === "shortName") {

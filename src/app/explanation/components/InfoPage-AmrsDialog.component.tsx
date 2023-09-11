@@ -12,9 +12,9 @@ import { useTranslation } from "react-i18next";
 import {
     DialogButton,
     DialogComponent,
-} from "../../../shared/components/dialog/Dialog.component";
+} from "../../shared/components/dialog/Dialog.component";
 
-import { AmrsTable, AmrsTableData } from "../InfoPage.model";
+import { AmrsTable, AmrsTableData } from "../model/ExplanationPage.model";
 
 const tableTextStyle = {
     fontSize: "0.75rem",

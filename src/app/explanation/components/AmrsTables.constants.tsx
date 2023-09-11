@@ -1,4 +1,4 @@
-import { AmrsTableData } from "./InfoPage.model";
+import { AmrsTableData } from "../model/ExplanationPage.model";
 
 function createAmrTable(
     shortSubstance: string,
