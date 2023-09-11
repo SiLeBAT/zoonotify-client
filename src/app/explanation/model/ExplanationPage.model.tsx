@@ -1,3 +1,5 @@
+import { CMSAttributeDTO } from "../../shared/model/CMS.model";
+
 export interface AmrsTableData {
     shortSubstance: string;
     substanceClass: string;
@@ -22,13 +24,7 @@ export interface AmrsTable {
     tableRows: AmrsTableData[];
 }
 
-export type AmrKey =
-    | "table1Coli"
-    | "table2Salm"
-    | "table3aCampy"
-    | "table3bCampy"
-    | "table4Mrsa"
-    | "table5Ef";
+export type AmrKey = "1" | "2" | "3a" | "3b" | "4" | "5";
 
 export interface MicroorgaNamePart {
     name: string;
@@ -37,3 +33,26 @@ export interface MicroorgaNamePart {
 }
 
 export type MicroorgaName = MicroorgaNamePart;
+
+export interface ExplanationDTO {
+    title: string;
+    description: string;
+    section: string;
+}
+
+export interface ExplanationAttributesDTO
+    extends CMSAttributeDTO,
+        ExplanationDTO {}
+
+export type ExplanationCollection = {
+    [key: string]: ExplanationDTO[];
+};
+
+export interface AMRTablesDTO {
+    table_id: string;
+    description: string;
+    title: string;
+    yearly_cut_off: JSON;
+}
+
+export interface AMRTableAttributesDTO extends CMSAttributeDTO, AMRTablesDTO {}

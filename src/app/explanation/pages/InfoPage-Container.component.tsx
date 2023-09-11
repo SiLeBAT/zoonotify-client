@@ -9,10 +9,8 @@ import {
     table5,
     years2010To2020,
     years2016To2020,
-} from "./AmrsTables.constants";
-import { getMicroorgaNameAsString } from "./getMicroorgaName.service";
-import { InfoPageComponent } from "./InfoPage.component";
-import { AmrKey, AmrsTable } from "./InfoPage.model";
+} from "../components/AmrsTables.constants";
+import { getMicroorgaNameAsString } from "../components/getMicroorgaName.service";
 import {
     campyColi,
     campyColiShort,
@@ -24,7 +22,9 @@ import {
     enteroFaecium,
     salmSpp,
     staphy,
-} from "./italicNames.constants";
+} from "../components/italicNames.constants";
+import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
+import { InfoPageComponent } from "./ExplanationMainComponent";
 
 export function InfoPageContainerComponent(): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
@@ -78,15 +78,6 @@ export function InfoPageContainerComponent(): JSX.Element {
             t("Methods.Amrs.TableHeaderMax"),
         ];
     }
-
-    const amrKeys: AmrKey[] = [
-        "table1Coli",
-        "table2Salm",
-        "table3aCampy",
-        "table3bCampy",
-        "table4Mrsa",
-        "table5Ef",
-    ];
 
     const table1Coli: AmrsTable = {
         introduction: (
@@ -234,12 +225,12 @@ export function InfoPageContainerComponent(): JSX.Element {
     };
 
     const amrTableData: Record<AmrKey, AmrsTable> = {
-        table1Coli,
-        table2Salm,
-        table3aCampy,
-        table3bCampy,
-        table4Mrsa,
-        table5Ef,
+        1: table1Coli,
+        2: table2Salm,
+        ["3a"]: table3aCampy,
+        ["3b"]: table3bCampy,
+        4: table4Mrsa,
+        5: table5Ef,
     };
 
     const handleExportAmrData = (amrKey: AmrKey): void => {
@@ -298,7 +289,6 @@ export function InfoPageContainerComponent(): JSX.Element {
 
     return (
         <InfoPageComponent
-            amrKeys={amrKeys}
             tableData={amrTableData}
             onAmrDataExport={handleExportAmrData}
         />
