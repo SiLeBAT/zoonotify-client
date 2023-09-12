@@ -23,17 +23,28 @@ jobs:
 
       - name: Build main.bundle.js
         run: npm run build:qa
+      
+      - name: Upload build folder as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: public_folder_artifact
+          path: public
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download public artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: public_folder_artifact
+          
       - name: Upload to QA using Web FTP
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
           server: ${{ secrets.QA_SERVER }}
           username: ${{ secrets.QA_FTP_USER }}
           password: ${{ secrets.QA_FTP_PASS }}
-          local-dir: '../../public/'
+          local-dir: 'public'
           server-dir: '/'
