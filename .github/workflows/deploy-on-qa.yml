@@ -49,3 +49,4 @@ jobs:
           password: ${{ secrets.QA_FTP_PASS }}
           local-dir: './public/'
           server-dir: '/'
+          protocol: 'ftps'
