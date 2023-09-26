@@ -22,7 +22,8 @@ jobs:
         run: npm ci
 
       - name: Build main.bundle.js
-        run: npm run build:qa
+        run: npm run build:qa -- --env=version=${{ github.run_id }} --env=lastChange=${{ github.event.repository.updated_at}}
+      - run: npm run cp:all
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v2

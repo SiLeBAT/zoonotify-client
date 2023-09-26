@@ -1,9 +1,7 @@
-import PACKAGE from "../package.json";
-
-const { lastChange } = PACKAGE.znConfig;
-
+declare const webappVersion: string;
+declare const lastChange: string;
 export const environment = {
     appName: "ZooNotify",
-    version: PACKAGE.version,
-    lastChange,
+    version: webappVersion,
+    lastChange: lastChange,
 };

@@ -24,12 +24,9 @@ export function LastUpdateDateComponent(): JSX.Element {
         <Box component="p" sx={dateStyle}>
             <Typography variant="caption">
                 {t("Date.Text")}{" "}
-                {moment(
-                    lastChange,
-                    "YYYY-MM-DD HH:mm:ss ZZ",
-                    dateLayout,
-                    true
-                ).format("DD.MM.YYYY")}
+                {moment(lastChange, moment.ISO_8601, dateLayout, true).format(
+                    "DD.MM.YYYY"
+                )}
             </Typography>
         </Box>
     );
