@@ -1,8 +1,8 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import { EvaluationEntry } from "../model/Evaluations.model";
 import { EvaluationsCardComponent } from "./EvaluationCardComponent";
-
 type EvaluationDivisionDataProps = {
     data: EvaluationEntry[];
     downloadGraphButtonText: string;
@@ -18,7 +18,7 @@ export function EvaluationDivisionDataComponent({
         <div>
             {data.map((evaluation) => (
                 <ZNAccordion
-                    key={`accordion-${evaluation.title}`}
+                    key={`accordion-${uuidv4()}`}
                     title={evaluation.title}
                     content={
                         <EvaluationsCardComponent

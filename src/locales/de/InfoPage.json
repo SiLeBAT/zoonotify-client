@@ -13,7 +13,8 @@
     "2017": "2017",
     "2018": "2018",
     "2019": "2019",
-    "2020": "2020"
+    "2020": "2020",
+    "2021": "2021"
   },
   "Title": "Erläuterungen",
   "Background": {
@@ -368,15 +369,23 @@
         "TableTitle": "Tabelle 4: Resistenztestung von Methicillin-resistenten ",
         "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche (min - max) sowie die Bewertungskriterien (epidemiologische cut-offs) für die Jahre 2010 - 2020. Die Bewertung erfolgte unter Beachtung der Festlegungen im Durchführungsbeschluss 2013/652/EU. Wenn keine Festlegung vorlag, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Mit * hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },
-      "Table5": {
+      "Table5a": {
         "Paragraph": {
           "Description1": "Resistenztestung von ",
-          "Description2": " und ",
           "Description3": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU."
         },
         "TableTitle": {
-          "Part1": "Tabelle 5: Resistenztestung von ",
-          "Part2": " und "
+          "Part1": "Tabelle 5a: Resistenztestung von "
+        },
+        "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche (min - max) sowie die Bewertungskriterien (epidemiologische cut-offs) für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Beachtung der Festlegungen im Durchführungsbeschluss 2013/652/EU. Wenn keine Festlegung vorlag, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Mit * hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
+      },
+      "Table5b": {
+        "Paragraph": {
+          "Description1": "Resistenztestung von ",
+          "Description3": ". Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche sowie die Bewertungskriterien für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Berücksichtigung der Vorgaben im Durchführungsbeschluss 2013/652/EU."
+        },
+        "TableTitle": {
+          "Part1": "Tabelle 5b: Resistenztestung von "
         },
         "TableDescription": "Übersicht über die eingesetzten Substanzen, die getesteten Konzentrationsbereiche (min - max) sowie die Bewertungskriterien (epidemiologische cut-offs) für die Jahre 2016 - 2020. Die Bewertung erfolgte unter Beachtung der Festlegungen im Durchführungsbeschluss 2013/652/EU. Wenn keine Festlegung vorlag, wurden die Empfehlungen der EFSA herangezogen (EFSA 2020). Mit * hervorgehoben sind die in ZooNotify angewandten Bewertungskriterien."
       },

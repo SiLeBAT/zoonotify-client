@@ -1,12 +1,13 @@
-import React from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Typography } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Markdown from "markdown-to-jsx";
+import React from "react";
 
 export interface AccordionProps {
-    title: string | JSX.Element;
+    title: string;
     content: JSX.Element;
     defaultExpanded: boolean;
     centerContent: boolean;
@@ -43,7 +44,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                 <Typography
                     sx={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}
                 >
-                    {props.title}
+                    <Markdown>{props.title}</Markdown>
                 </Typography>
             </AccordionSummary>
             <AccordionDetails
