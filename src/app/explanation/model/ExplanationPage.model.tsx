@@ -24,7 +24,7 @@ export interface AmrsTable {
     tableRows: AmrsTableData[];
 }
 
-export type AmrKey = "1" | "2" | "3a" | "3b" | "4" | "5";
+export type AmrKey = "1" | "2" | "3a" | "3b" | "4" | "5a" | "5b";
 
 export interface MicroorgaNamePart {
     name: string;
