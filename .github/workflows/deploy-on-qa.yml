@@ -27,7 +27,7 @@ jobs:
         id: version  # this is used on variable path
 
       - name: Build main.bundle.js
-        run: npm run build:qa -- --env=version=${{ github.event.head_commit.id }} --env=lastChange=${{ steps.version.outputs.builddate }}
+        run: npm run build:qa -- --env=version=${{ github.event.head_commit.id::7 }} --env=lastChange=${{ steps.version.outputs.builddate }}
       - run: npm run cp:all
 
       - name: Archive build artifacts
