@@ -42,6 +42,7 @@ export function ExplanationTermComponent(props: {
                                     backgroundColor: "#dae9f5",
                                     textDecoration: "underline",
                                 },
+                                margin: "1rem",
                             },
                         },
                     },

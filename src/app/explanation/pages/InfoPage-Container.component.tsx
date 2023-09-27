@@ -6,9 +6,10 @@ import {
     table3a,
     table3b,
     table4,
-    table5,
-    years2010To2020,
-    years2016To2020,
+    table5a,
+    table5b,
+    years2010To2021,
+    years2016To2021,
 } from "../components/AmrsTables.constants";
 import { getMicroorgaNameAsString } from "../components/getMicroorgaName.service";
 import {
@@ -33,10 +34,12 @@ export function InfoPageContainerComponent(): JSX.Element {
         return `"${inputString.replace(/"/g, '\\"').replace("undefined", "")}"`;
     }
 
-    const tableHeader2010To2020 = [
+    const abInfo = [
         t("Methods.Amrs.TableHeaderShortSub"),
         t("Methods.Amrs.TableHeaderClass"),
         t("Methods.Amrs.TableHeaderSubstance"),
+    ];
+    const tableHeader2010To2021 = [
         t("samplingYear.2010"),
         t("samplingYear.2011"),
         t("samplingYear.2012"),
@@ -48,21 +51,20 @@ export function InfoPageContainerComponent(): JSX.Element {
         t("samplingYear.2018"),
         t("samplingYear.2019"),
         t("samplingYear.2020"),
-    ];
-    const tableHeader2016To2020 = [
-        t("Methods.Amrs.TableHeaderShortSub"),
-        t("Methods.Amrs.TableHeaderClass"),
-        t("Methods.Amrs.TableHeaderSubstance"),
+        t("samplingYear.2021"),
+    ].reverse();
+    const tableHeader2016To2021 = [
         t("samplingYear.2016"),
         t("samplingYear.2017"),
         t("samplingYear.2018"),
         t("samplingYear.2019"),
         t("samplingYear.2020"),
-    ];
+        t("samplingYear.2021"),
+    ].reverse();
 
     const tableSubHeader2010To2020: Record<string, string[]> = {};
 
-    for (const year of years2010To2020) {
+    for (const year of years2010To2021) {
         tableSubHeader2010To2020[year] = [
             t("Methods.Amrs.TableHeaderCutOff"),
             t("Methods.Amrs.TableHeaderMin"),
@@ -71,7 +73,7 @@ export function InfoPageContainerComponent(): JSX.Element {
     }
 
     const tableSubHeader2016To2020: Record<string, string[]> = {};
-    for (const year of years2016To2020) {
+    for (const year of years2016To2021) {
         tableSubHeader2016To2020[year] = [
             t("Methods.Amrs.TableHeaderCutOff"),
             t("Methods.Amrs.TableHeaderMin"),
@@ -99,7 +101,7 @@ export function InfoPageContainerComponent(): JSX.Element {
             "Methods.Amrs.Table1.TableTitle.Part1"
         )} ${getMicroorgaNameAsString("fullName", "Coli")}`,
         description: t("Methods.Amrs.Table1.TableDescription"),
-        tableHeader: tableHeader2010To2020,
+        tableHeader: [...abInfo, ...tableHeader2010To2021],
         tableSubHeader: tableSubHeader2010To2020,
         tableRows: table1,
     };
@@ -121,7 +123,7 @@ export function InfoPageContainerComponent(): JSX.Element {
             "Methods.Amrs.Table2.TableTitle.Part1"
         )} ${getMicroorgaNameAsString("spp", "Salm")}`,
         description: t("Methods.Amrs.Table2.TableDescription"),
-        tableHeader: tableHeader2010To2020,
+        tableHeader: [...abInfo, ...tableHeader2010To2021],
         tableSubHeader: tableSubHeader2010To2020,
         tableRows: table2,
     };
@@ -145,7 +147,7 @@ export function InfoPageContainerComponent(): JSX.Element {
             "Methods.Amrs.Table3a.TableTitle.Part1"
         )} ${getMicroorgaNameAsString("fullName", "CampyJe")}`,
         description: t("Methods.Amrs.Table3a.TableDescription"),
-        tableHeader: tableHeader2010To2020,
+        tableHeader: [...abInfo, ...tableHeader2010To2021],
         tableSubHeader: tableSubHeader2010To2020,
         tableRows: table3a,
     };
@@ -161,7 +163,7 @@ export function InfoPageContainerComponent(): JSX.Element {
             "Methods.Amrs.Table3b.TableTitle.Part1"
         )} ${getMicroorgaNameAsString("fullName", "CampyColi")}`,
         description: t("Methods.Amrs.Table3b.TableDescription"),
-        tableHeader: tableHeader2010To2020,
+        tableHeader: [...abInfo, ...tableHeader2010To2021],
         tableSubHeader: tableSubHeader2010To2020,
         tableRows: table3b,
     };
@@ -191,37 +193,54 @@ export function InfoPageContainerComponent(): JSX.Element {
             "Methods.Amrs.Table4.TableTitle"
         )} ${getMicroorgaNameAsString("fullName", "Staphy")}`,
         description: t("Methods.Amrs.Table4.TableDescription"),
-        tableHeader: tableHeader2010To2020,
+        tableHeader: [...abInfo, ...tableHeader2010To2021],
         tableSubHeader: tableSubHeader2010To2020,
         tableRows: table4,
     };
-    const table5Ef: AmrsTable = {
+    const table5aEfaecalis: AmrsTable = {
         introduction: (
             <>
-                {t(`Methods.Amrs.Table5.Paragraph.Description1`)}
+                {t(`Methods.Amrs.Table5a.Paragraph.Description1`)}
                 {enteroFaecalis}
-                {t(`Methods.Amrs.Table5.Paragraph.Description2`)}
-                {enteroFaecium}
-                {t(`Methods.Amrs.Table5.Paragraph.Description3`)}
+                {t(`Methods.Amrs.Table5a.Paragraph.Description3`)}
             </>
         ),
         title: (
             <div>
-                {t("Methods.Amrs.Table5.TableTitle.Part1")}
+                {t("Methods.Amrs.Table5a.TableTitle.Part1")}
                 {enteroFaecalis}
-                {t("Methods.Amrs.Table5.TableTitle.Part2")}
+            </div>
+        ),
+        titleString: `${t(
+            "Methods.Amrs.Table5a.TableTitle.Part1"
+        )} ${getMicroorgaNameAsString("fullName", "EnteroFaecalis")}`,
+        description: t("Methods.Amrs.Table5a.TableDescription"),
+        tableHeader: [...abInfo, ...tableHeader2016To2021],
+        tableSubHeader: tableSubHeader2016To2020,
+        tableRows: table5a,
+    };
+
+    const table5bEfaecium: AmrsTable = {
+        introduction: (
+            <>
+                {t(`Methods.Amrs.Table5b.Paragraph.Description1`)}
+                {enteroFaecium}
+                {t(`Methods.Amrs.Table5b.Paragraph.Description3`)}
+            </>
+        ),
+        title: (
+            <div>
+                {t("Methods.Amrs.Table5b.TableTitle.Part1")}
                 {enteroFaecium}
             </div>
         ),
         titleString: `${t(
-            "Methods.Amrs.Table5.TableTitle.Part1"
-        )} ${getMicroorgaNameAsString("fullName", "EnteroFaecalis")} ${t(
-            "Methods.Amrs.Table5.TableTitle.Part2"
+            "Methods.Amrs.Table5b.TableTitle.Part1"
         )} ${getMicroorgaNameAsString("fullName", "EnteroFaecium")}`,
-        description: t("Methods.Amrs.Table5.TableDescription"),
-        tableHeader: tableHeader2016To2020,
+        description: t("Methods.Amrs.Table5b.TableDescription"),
+        tableHeader: [...abInfo, ...tableHeader2016To2021],
         tableSubHeader: tableSubHeader2016To2020,
-        tableRows: table5,
+        tableRows: table5b,
     };
 
     const amrTableData: Record<AmrKey, AmrsTable> = {
@@ -230,7 +249,8 @@ export function InfoPageContainerComponent(): JSX.Element {
         ["3a"]: table3aCampy,
         ["3b"]: table3bCampy,
         4: table4Mrsa,
-        5: table5Ef,
+        ["5a"]: table5aEfaecalis,
+        ["5b"]: table5bEfaecium,
     };
 
     const handleExportAmrData = (amrKey: AmrKey): void => {

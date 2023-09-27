@@ -35,6 +35,7 @@ type EvaluationPageTranslations = {
     heading: Record<string, string>;
 };
 
+const maxPageSize = 250;
 const microorganism = [
     "E_COLI",
     "CAMPYLOBACTER_SPP",
@@ -156,7 +157,7 @@ const useEvaluationPageComponent: UseCase<
         callApiService<
             CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
         >(
-            `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&${qString}`
+            `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&${qString}&pagination[pageSize]=${maxPageSize}`
         )
             .then((response) => {
                 const result: Evaluation = {
