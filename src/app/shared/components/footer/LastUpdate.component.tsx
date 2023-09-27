@@ -8,6 +8,7 @@ import { LastUpdateVersionComponent } from "./LastUpdate-Version.component";
 export function LastUpdateComponent(): JSX.Element {
     const { version } = environment;
     const theme = useTheme();
+    const cmsVersion = window.sessionStorage.getItem("cms-version");
     return (
         <Tooltip
             sx={{
@@ -23,7 +24,7 @@ export function LastUpdateComponent(): JSX.Element {
                 <>
                     <List dense>
                         <LastUpdateVersionComponent
-                            text={`server version@${version}`}
+                            text={`server version@${cmsVersion}`}
                         />
                         <LastUpdateVersionComponent
                             text={`client version@${version}`}
