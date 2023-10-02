@@ -143,6 +143,9 @@ const useEvaluationPageComponent: UseCase<
     const createQueryString = (selection: FilterSelection): string => {
         const result = Object.entries(selection)
             .map(([key, value]) => {
+                if (value.length === 0) {
+                    return "filters[" + key + "][$eq]=" + "NULL&";
+                }
                 return value
                     .map((v) => "filters[" + key + "][$eq]=" + v)
                     .join("&");
