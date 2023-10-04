@@ -1,12 +1,10 @@
 import { Box, Button } from "@mui/material";
 import { useTheme } from "@mui/system";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 export function IndexHeaderComponent(props: {
     headers: string[];
 }): JSX.Element {
-    const { t } = useTranslation(["InfoPage"]);
     const theme = useTheme();
 
     const navButtonStyle = {
@@ -18,15 +16,15 @@ export function IndexHeaderComponent(props: {
 
     return (
         <Box sx={{ margin: "0 auto", display: "grid" }}>
-            {props.headers.map((sectionToken: string) => {
+            {props.headers.map((sectionHeader: string) => {
                 return (
                     <Button
-                        key={sectionToken}
+                        key={sectionHeader}
                         variant="contained"
                         sx={navButtonStyle}
-                        href={"#" + sectionToken}
+                        href={"#" + sectionHeader}
                     >
-                        {t(sectionToken)}
+                        {sectionHeader}
                     </Button>
                 );
             })}
