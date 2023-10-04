@@ -126,6 +126,7 @@ export function EvaluationsCardComponent(props: {
                     disableScroll={true}
                     backgroundStyle={{
                         backgroundColor: "rgba(0,0,0,0.9)",
+                        maxHeight: "95%",
                     }}
                     closeOnClickOutside={true}
                 />
