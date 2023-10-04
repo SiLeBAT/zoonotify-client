@@ -16,6 +16,39 @@
     "2020": "2020"
   },
   "Title": "Explanations",
+  "Background": {
+    "Name": "Background",
+    "Paragraph1": {
+      "Description1": "In order to assess trends in zoonoses and zoonotic agents and sources of human diseases, the national ",
+      "Description2": "zoonoses-monitoring",
+      "Description3": " in accordance with the zoonotic sampling plan is carried out uniformly nationwide. This helps to fulfil the requirements of Directive 2003/99/EC. The overarching objective is to be able to conduct a comprehensive assessment of trends in zoonoses and zoonotic agents, including antimicrobial resistance, and sources of human diseases. This also aims to ensure the implementation of key elements of Directive 2003/99/EC and Implementing Decision 2013/652/EU or its successor, 2020/1729/EU. "
+    },
+    "Paragraph2": {
+      "Description1": "The importance of ",
+      "Description2": " and Shiga toxin-forming ",
+      "Description3": " (STEC) stems from the frequency or severity of cases of human disease. They are also agents subject to surveillance in accordance with Annex I. A to Directive 2003/99/EC. To date, cases of human illness with livestock-associated methicillin-resistant ",
+      "Description4": " (MRSA) have been described for Germany, especially for people with contact with these farmed animals. However, a large spread of the pathogen has already been observed in various livestock populations (pigs, calves, turkeys) and in fresh meat thereof in Germany. In addition to the pathogens of the clonal complex CC398 typical of farm animals, ",
+      "Description5": "spa",
+      "Description6": "-types are also detected that are attributable to other clonal complexes. This underlines the need to repeat at regular intervals the studies along the food chain in order to detect changes in distribution at different stages of the food chain, as well as the emergence or spread of clones with newly acquired virulence factors and/or resistance determinants. Commensal ",
+      "Description7": " are regularly investigated to identify trends in known resistance and emerging resistance at an early stage. Implementing Decision 2013/652/EU and its successor document 2020/1729/EU, valid from 2021, made the investigation of ",
+      "Description8": " and commensal ",
+      "Description9": " for antimicrobial resistance mandatory for all member states. These data are important to assess the possible sources and transmission pathways of resistant microorganisms along the food chain to humans. In addition, the investigation of samples for ",
+      "Description10": " was proposed in order to detect increased resistance, particularly against antibiotics of critical importance to human health, among gram positive pathogens. Selective detection of ESBL/AmpC-forming ",
+      "Description11": " is included in zoonoses monitoring programmes to monitor the spread of microorganisms with the ability to form extended spectrum beta-lactalamases and/or AmpC beta-lactalamases. Furthermore, the emergence of new resistance, especially against carbapenems, is to be recognized at an early stage. In order to assess whether carbapenemase-forming ",
+      "Description12": " have spread, targeted selective studies are also carried out to determine the presence of ",
+      "Description13": " with such resistance properties in the national zoonoses-monitoring. Studies on this type of microorganism are carried out in programmes in accordance with the recommendations of Implementing Decision 2013/652/EU and the successor 2020/1729/EU from 2021 onwards."
+    },
+    "Paragraph3": {
+      "Description1": "Directive 2003/99/EC provides that representative data are to be collected at the appropriate stages of the food chain. At the same time, the main food commodities are to be considered. Directive 2003/99/EC also provides that the annual report on trends and sources of zoonoses, zoonotic agents and antimicrobial resistance shall also publish data on the assessment of national ",
+      "Description2": "Salmonella control programmes in poultry",
+      "Description3": "in accordance with Regulation (EC) No 2160/2003."
+    },
+    "Paragraph4": {
+      "Description1": "Isolates obtained in the implementation of zoonoses-monitoring and Salmonella control programmes in poultry are confirmed at the BfR National Reference Laboratories (NRL) and continue to be microbiologically typed. These results since 2010 can be accessed via ",
+      "Description2": "ZooNotify",
+      "Description3": "."
+    }
+  },
   "Filters": {
     "Name": "Filters and subfilters",
     "microorganism": {
@@ -225,6 +258,145 @@
       "Description5": " and ",
       "Description6": " were tested for their resistance to antimicrobial substances at the NRL for Antibiotic Resistance at BfR and at the NRL ",
       "Description7": ". Special panels of active substances are used for this purpose, which differ for the individual microorganisms. You can use this filter to select the active substances that are part of the panel for testing the microorganism you have selected. For details on the methodology, please refer to the section \"Antibiotic resistance testing\" below."
+    }
+  },
+  "Methods": {
+    "Name": "Methods",
+    "Isolates": {
+      "Name": "Isolate collection",
+      "Paragraph1": {
+        "Description1": "Isolates are obtained in the framework of ",
+        "Description2": "zoonoses-monitoring",
+        "Description3": " from programmes based on a representative random sample of the respective defined population, if necessary taking into account defined stratification criteria at the respective defined stage of the food chain. During sampling, independent units are sampled in each case. To ensure representative selection of operations to be sampled, a random selection is made in the respective region based on a registry of operations. Where available, internationally standardized microbiological detection methods are used for primary isolation at accredited regional laboratories. However, other testing methods may also be used as long as it can be ensured that they are equivalent to the proposed methods. In particular, it is also possible to test samples by PCR and to confirm positive results by a cultural ISO procedure. Method recommendations are provided by the respective NRL at BfR as far as the proposed methods deviate from the official collection according to § 64 LFGB or ISO methods."
+      },
+      "Paragraph2": {
+        "Description1": "Isolates obtained within the ",
+        "Description2": "Salmonella control programmes in poultry",
+        "Description3": " according to Regulation (EC) No. 2160/2003 are derived from samples taken in flocks of breeding poultry, laying hens, broilers and fattening turkeys according to the respective regulations."
+      }
+    },
+    "Amrs": {
+      "Name": "Antimicrobial resistance testing",
+      "Paragraph1": {
+        "Description1": "All ",
+        "Description2": " Shiga-Toxin producing ",
+        "Description3": " (STEC), ",
+        "Description4": " and ",
+        "Description5": ", and methicillin-resistant ",
+        "Description6": " (MRSA) isolates displayed in ZooNotify were tested using the designated, internationally accepted, quantitative methods for resistance determination (Bouillon microdilution method according to ISO 20776-1:2006 and CLSI M07, respectively) at the National Reference Laboratory (NRL) for Antibiotic Resistance and according to CLSI VET06 and M45A at the NRL for Campylobacter."
+      },
+      "Paragraph2": {
+        "Description1": "The isolates were subjected to a spectrum of antimicrobial substances established at BfR. For this purpose, ready-made plate formats EUMVS2 (2010-2013) and EUVSEC (2014-2020) (",
+        "Description2": " and ",
+        "Description3": "), EUVENC (2016-2020) (",
+        "Description4": "), EUCAMP (2010-2013) and EUCAMP2 (2014-2020) (",
+        "Description5": ") and EUST (2010-2020) (MRSA) from TREK Diagnostic Systems/Thermo Fisher Scientific were used."
+      },
+      "Paragraph3": {
+        "Description1": "Resistance testing of ",
+        "Description2": " in 2010-2013 was carried out legally based on Decision 2007/407/EC, which lays down uniform testing methods, active substances to be tested and the interpretation criteria in the Decision. Resistance testing of ",
+        "Description3": " in the years 2010-2013 was carried out legally based on Decision 2007/516/EC on a baseline study in broilers in 2008."
+      },
+      "Paragraph4": {
+        "Description1": "The testing of ",
+        "Description2": " and MRSA for resistance in 2010-2013 was based on the recommendations of EFSA (EFSA 2012a and EFSA 2012b, see below)."
+      },
+      "Paragraph5": "From 2014 onwards, resistance testing was carried out in accordance with the Implementing Decision 2013/652/EU, which defines the testing procedure, the active substances to be tested and the interpretive criteria for the majority of pathogens. Insofar as no epidemiological cut-off values were described there, the interpretive was carried out on the basis of the recommendation of the European Food Safety Authority (EFSA) in coordination with the European Reference Laboratory for Antimicrobial Resistance (EURL-AR).",
+      "Paragraph6": {
+        "Description1": "Testing of MRSA and ",
+        "Description2": " for resistance was based on EFSA recommendations (EFSA (2012a): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in methicillin-resistant ",
+        "Description3": " in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in ",
+        "Description4": " and indicator ",
+        "Description5": " and ",
+        "Description6": " bacteria transmitted through food. EFSA Journal 10(6):2742)."
+      },
+      "Paragraph7": {
+        "Description1": "In ZooNotify, the ",
+        "Description2": "most current interpretation criteria",
+        "Description3": " are applied for all substances per microorganism, so that the number of resistant microorganisms may deviate from published numbers. An overview per microorganism for all tested substances as well as the annually applied and reported interpretation criteria is given in tables 1 to 5."
+      },
+      "Paragraph8": {
+        "Description1": " Resistance testing oF ",
+        "Description2": " (commensal, STEC and resistant). Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out as far as possible in compliance with the specification in Implementing Decision 2013/652/EU. If this was not possible, the recommendations of EFSA were used (EFSA 2020)."
+      },
+      "Table1": {
+        "Paragraph": {
+          "Description1": "The grouping of isolates of ESBL/AmpC-",
+          "Description2": " and carbapenemase-forming ",
+          "Description3": " based on their phenotypic characteristics via the subfilter \"ESBL_AmpC_Carba_Phenotype\" was performed according to the 2017 EFSA and ECDC criteria (The European Union summary report on antimicrobial resistance in zoonotic and indicator bacteria from humans, animals and food in 2015. EFSA Journal 2017;15(2):4694, 212 pp. doi:10.2903/j.efsa.2017 .4694)."
+        },
+        "TableTitle": {
+          "Part1": "Table 1: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table2": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+          "Description2": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. As far as possible, the interpretation was carried out in compliance with the specification in Implementing Decision 2013/652/EU. If this was not possible, the recommendations of EFSA were used (EFSA 2020)."
+        },
+        "TableTitle": {
+          "Part1": "Table 2: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table3a": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+          "Description2": " and ",
+          "Description3": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU."
+        },
+        "TableTitle": {
+          "Part1": "Table 3a: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table3b": {
+        "Paragraph": "",
+        "TableTitle": {
+          "Part1": "Table 3b: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table4": {
+        "Paragraph": {
+          "Description1": "Resistance testing of methicillin-resistant ",
+          "Description2": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria (epidemiological cut-off values of ",
+          "EucastLink": "EUCAST",
+          "Description3": ") for the years 2010-2020."
+        },
+        "TableTitle": "Table 4: Resistance testing of methicillin-resistant ",
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table5a": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+          "Description3": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2016 - 2020. The interpretation was carried out taking into account the specifications in the implementing decision 2013/652/EU."
+        },
+        "TableTitle": {
+          "Part1": "Table 5a: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2016 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table5b": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+
+          "Description3": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2016 - 2020. The interpretation was carried out taking into account the specifications in the implementing decision 2013/652/EU."
+        },
+        "TableTitle": {
+          "Part1": "Table 5b: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2016 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "TableHeaderShortSub": "Substance abbreviation",
+      "TableHeaderClass": "Substance class",
+      "TableHeaderSubstance": "Substance",
+      "TableHeaderCutOff": "cut-off",
+      "TableHeaderMin": "min",
+      "TableHeaderMax": "max",
+      "CancelButton": "Cancel",
+      "ExportButton": "Export"
     }
   }
 }
