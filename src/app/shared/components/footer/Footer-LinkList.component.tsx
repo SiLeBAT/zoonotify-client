@@ -43,7 +43,7 @@ export function FooterLinkListComponent(props: {
         transition: "0.3s",
         color: theme.palette.primary.main,
         "&:hover": {
-            backgroundColor: "rgb(184, 191, 200)",
+            backgroundColor: theme.palette.secondary.main,
         },
         boxSizing: "inherit",
     };
