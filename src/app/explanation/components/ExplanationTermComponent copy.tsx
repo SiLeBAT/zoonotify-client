@@ -37,9 +37,11 @@ export function ExplanationTermComponent(props: {
                             },
                             sx: {
                                 color: theme.palette.primary.main,
-                                backgroundColor: "#f3f7fa",
+                                backgroundColor:
+                                    theme.palette.primary.contrastText,
                                 "&:hover": {
-                                    backgroundColor: "#dae9f5",
+                                    backgroundColor:
+                                        theme.palette.secondary.main,
                                     textDecoration: "underline",
                                 },
                                 margin: "1rem",

@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 import { NavLink, useLocation } from "react-router-dom";
 import { pageRoute } from "../../infrastructure/router/routes";
 import {
-    bfrPrimaryPalette,
     onPrimaryColor,
+    onSecondaryColor,
     primaryColor,
     secondaryColor,
 } from "../../style/Style-MainTheme";
@@ -31,7 +31,8 @@ const mainHeaderStyle = (): SerializedStyles => css`
     box-sizing: border-box;
     box-shadow: "0 8px 6px -6px grey";
     background-color: ${primaryColor};
-    border-bottom: ${`24px solid ${bfrPrimaryPalette[300]}`};
+    border-bottom: ${`24px solid ${secondaryColor}`};
+    color: ${onSecondaryColor};
 `;
 const appNameStyle = css`
     padding: 0.5em 1em 0.5em 1em;
@@ -46,13 +47,13 @@ const navLinkStyle = (open: boolean): SerializedStyles => css`
     padding: 0.5em 1em 0.5em 1em;
     font-size: 1rem;
     text-decoration: none;
-    color: ${onPrimaryColor};
-    background-color: ${open ? `${bfrPrimaryPalette[300]}` : "none"};
+    background-color: ${open ? `${secondaryColor}` : "none"};
+    color: ${open ? `${onSecondaryColor}` : `${onPrimaryColor}`};
     &:focus {
         outline: none;
     }
     &:hover {
-        color: ${secondaryColor};
+        color: ${open ? `${onSecondaryColor}` : `${secondaryColor}`};
     }
 `;
 const leftHeaderStyle = css`
