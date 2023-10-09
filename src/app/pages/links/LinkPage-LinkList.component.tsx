@@ -1,27 +1,85 @@
-import { List, ListSubheader } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import links from "../../../assets/external_links.json";
-import { LinkListContentComponent } from "./LinkList-ListContent.component";
+import { List, ListSubheader } from "@mui/material";
+import axios from "axios";
+import { ListContentListItemComponent } from "./ListContent-ListItem.component";
 
-export function LinkPageLinkListComponent(): JSX.Element[] {
+interface ExternalLink {
+    Name: string;
+    Link: string;
+    category:
+        | "legal regulation"
+        | "Reports"
+        | "Organizations and Institutes"
+        | "Online Tools";
+}
+
+interface ApiData {
+    id: number;
+    attributes: ExternalLink;
+}
+
+interface ApiResponse {
+    data: ApiData[];
+    meta: {
+        pagination: {
+            page: number;
+            pageSize: number;
+            pageCount: number;
+            total: number;
+        };
+    };
+}
+
+export function LinkPageLinkListComponent(): JSX.Element {
     const { t } = useTranslation(["ExternLinks"]);
-    const linkJson = links;
-    const elements: JSX.Element[] = [];
-    linkJson.LinkComponent.map((category, index) =>
-        elements.push(
-            <List
-                key={`Title` + index}
-                subheader={
+    const [linkData, setLinkData] = useState<ExternalLink[]>([]);
+
+    useEffect(() => {
+        const apiEndpoint = "http://localhost:1337/api/externallinks";
+        axios
+            .get<ApiResponse>(apiEndpoint)
+            .then((response) => {
+                const extractedLinks = response.data.data.map(
+                    (item) => item.attributes
+                );
+                setLinkData(extractedLinks);
+                return null; // Added this line to resolve linting error.
+            })
+            .catch((error) => {
+                console.error("Error fetching data: ", error);
+            });
+    }, []);
+
+    // Function to group the links by their category
+    const groupByCategory = (
+        links: ExternalLink[]
+    ): Record<string, ExternalLink[]> => {
+        return links.reduce<Record<string, ExternalLink[]>>((acc, link) => {
+            if (!acc[link.category]) acc[link.category] = [];
+            acc[link.category].push(link);
+            return acc;
+        }, {});
+    };
+
+    const groupedLinks = groupByCategory(linkData);
+
+    return (
+        <div>
+            {Object.entries(groupedLinks).map(([category, links]) => (
+                <List key={category}>
                     <ListSubheader>
-                        {t(`${category.Title}.Title`)}
+                        {t(`${category}.Title`, category)}
                     </ListSubheader>
-                }
-                dense
-            >
-                {LinkListContentComponent(category.Title, category.Links)}
-            </List>
-        )
+                    {links.map((link, index) => (
+                        <ListContentListItemComponent
+                            key={`Link${index}`}
+                            link={link.Link}
+                            text={link.Name}
+                        />
+                    ))}
+                </List>
+            ))}
+        </div>
     );
-    return elements;
 }

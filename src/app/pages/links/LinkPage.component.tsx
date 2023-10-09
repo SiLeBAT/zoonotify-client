@@ -38,7 +38,7 @@ export function LinkPageComponent(): JSX.Element {
                 >
                     {t("TextContent.Text")}
                 </Typography>
-                {LinkPageLinkListComponent()}
+                <LinkPageLinkListComponent />
             </CardContent>
         </Card>
     );
