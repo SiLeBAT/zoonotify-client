@@ -64,6 +64,7 @@ const productionType = [
     "PUTE",
     "RIND",
     "ZUCHTHUEHNER_LEGE_UND_MASTLINIE",
+    "MILCHRIND",
     "DIVERSE",
 ];
 const matrix = [
@@ -73,6 +74,7 @@ const matrix = [
     "KOT_STAUB",
     "SCHLACHTKOERPER",
     "HALS_HAUT",
+    "MILCH",
     "MULTIPLE",
 ];
 
