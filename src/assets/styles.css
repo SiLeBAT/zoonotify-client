@@ -2,6 +2,20 @@ html {
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: "Roboto", sans-serif;
+    src: url("/fonts/Roboto/Roboto-Black.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-BlackItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Bold.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-BoldItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Italic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Light.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-LightItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Medium.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-MediumItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+}
+
 html,
 body {
     font-family: "Roboto", sans-serif;
