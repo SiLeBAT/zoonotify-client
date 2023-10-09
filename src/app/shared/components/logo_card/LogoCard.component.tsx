@@ -1,6 +1,7 @@
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 import { primaryColor } from "../../style/Style-MainTheme";
+import { LogoComponent } from "./Logo.component";
 
 export interface CardProps {
     title: string;
@@ -54,12 +55,7 @@ export function LogoCardComponent(props: CardProps): JSX.Element {
                     {props.text}
                 </Typography>
             </CardContent>
-            <CardMedia
-                component="img"
-                image="/assets/bfr_logo.png"
-                title="BfR Logo"
-                sx={{ height: "auto", width: "12em", padding: "16px" }}
-            />
+            <LogoComponent></LogoComponent>
         </Card>
     );
 }
