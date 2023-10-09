@@ -3,5 +3,6 @@
   "MainText": "ZooNotify offers the possibility to query a simplified dataset of the pathogen detections in the food chain collected according to RL 99/2003/EU (Zoonoses Directive) and their properties submitted to the Federal Institute for Risk Assessment (BfR). With individual queries or by editing predefined sample queries, tables and graphs can be generated according to your own needs.",
   "SelectorIntro": "Please click on the topics below to expand the list of the interactive database:",
   "SelectorLable": "Data sets: ",
-  "SelectorText": "Please, select a data set"
+  "SelectorText": "Please, select a data set",
+  "Initative": "A BfR initative:"
 }
