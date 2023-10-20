@@ -1,7 +1,6 @@
 import { Link, List, ListItem, Tooltip, Typography } from "@mui/material";
 import React from "react";
-// eslint-disable-next-line import/named
-import { Box, SxProps, useTheme } from "@mui/system";
+import { Box, useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { pageRoute } from "../../infrastructure/router/routes";
@@ -9,8 +8,7 @@ import { pageRoute } from "../../infrastructure/router/routes";
 export function FooterLinkListComponent(props: {
     supportMail: string | undefined;
 }): JSX.Element {
-    const { t } = useTranslation(["Footer"]);
-
+    const { t, i18n } = useTranslation(["Footer"]);
     const theme = useTheme();
 
     const linkStyle = {
@@ -34,7 +32,7 @@ export function FooterLinkListComponent(props: {
         color: "gray",
     };
 
-    const footerElementStyle: SxProps = {
+    const footerElementStyle = {
         width: "fit-content",
         padding: "0.5em",
         flex: "1 1 auto",
@@ -48,7 +46,7 @@ export function FooterLinkListComponent(props: {
         boxSizing: "inherit",
     };
 
-    const footerContentStyle: SxProps = {
+    const footerContentStyle = {
         margin: 0,
         display: "flex",
         flexDirection: "row",
@@ -62,7 +60,7 @@ export function FooterLinkListComponent(props: {
 
     let submitProblemLink: JSX.Element = (
         <Link
-            href={`mailto: ${
+            href={`mailto:${
                 props.supportMail
             }?subject=ZooNotify-Problem:&body=${t("Content.MailText")}`}
             sx={linkStyle}
@@ -91,11 +89,17 @@ export function FooterLinkListComponent(props: {
         );
     }
 
+    // Determine BfR link based on the current language.
+    const bfrLink =
+        i18n.language === "en"
+            ? "https://www.bfr.bund.de/en/home.html"
+            : "https://www.bfr.bund.de/de/start.html";
+
     return (
         <List sx={footerContentStyle}>
             <ListItem sx={footerElementStyle}>
                 <Link
-                    href="https://www.bfr.bund.de/de/start.html"
+                    href={bfrLink}
                     target="_blank"
                     rel="noreferrer"
                     sx={linkStyle}
