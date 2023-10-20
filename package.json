@@ -4,8 +4,8 @@
   "description": "Web-basierte Abfrage von Zoonosen Surveillancedaten",
   "scripts": {
     "prepare": "husky install",
-    "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "./node_modules/.bin/eslint . --fix --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --fix --ext .js,.jsx,.ts,.tsx",
     "start": "npm run clean && npm run cp:all && webpack-dev-server --open",
     "start:qa": "npm run clean && npm run cp:all && webpack-dev-server --node-env qa --open",
     "start:prod": "npm run clean && npm run cp:all && webpack-dev-server --node-env production --open",
