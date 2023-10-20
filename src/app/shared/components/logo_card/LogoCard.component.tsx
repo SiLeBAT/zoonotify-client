@@ -1,12 +1,12 @@
-import { Card, CardContent, Typography } from "@mui/material";
 import React from "react";
+import { Card, CardContent, Typography } from "@mui/material";
 import { primaryColor } from "../../style/Style-MainTheme";
 import { LogoComponent } from "./Logo.component";
 
 export interface CardProps {
     title: string;
     subtitle: string;
-    text: string;
+    text: React.ReactNode; // Change the type to React.ReactNode
 }
 
 /**
@@ -45,15 +45,15 @@ export function LogoCardComponent(props: CardProps): JSX.Element {
                 >
                     {props.subtitle}
                 </Typography>
-                <Typography
-                    sx={{
+                <div
+                    style={{
                         fontSize: "0.85rem",
                         lineHeight: "1.6",
                         textAlign: "justify",
                     }}
                 >
                     {props.text}
-                </Typography>
+                </div>
             </CardContent>
             <LogoComponent></LogoComponent>
         </Card>
