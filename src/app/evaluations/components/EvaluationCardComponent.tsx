@@ -27,6 +27,7 @@ export function EvaluationsCardComponent(props: {
             <Card
                 sx={{
                     display: "flex",
+                    flexDirection: ["column", "row"],
                     borderRadius: 0,
                     boxShadow: 0,
                 }}
@@ -35,7 +36,7 @@ export function EvaluationsCardComponent(props: {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        width: "50%",
+                        width: ["100%", "50%"],
                     }}
                 >
                     <CardContent
@@ -52,7 +53,7 @@ export function EvaluationsCardComponent(props: {
                         flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "center",
-                        width: "50%",
+                        width: ["100%", "50%"],
                     }}
                 >
                     <CardMedia
@@ -65,10 +66,11 @@ export function EvaluationsCardComponent(props: {
                     <Box
                         sx={{
                             display: "flex",
-                            flexDirection: "row",
+                            flexDirection: ["column", "row"],
                             justifyContent: "center",
                             alignItems: "center",
-                            width: "50%",
+                            width: "100%",
+                            mt: 2,
                         }}
                     >
                         <Button
@@ -78,6 +80,12 @@ export function EvaluationsCardComponent(props: {
                                 margin: "0.5em",
                                 padding: "0em",
                                 backgroundColor: theme.palette.primary.main,
+                                "@media (max-width: 450px)": {
+                                    fontSize: "0.7em",
+                                },
+                                "@media (max-width: 350px)": {
+                                    fontSize: "0.6em",
+                                },
                             }}
                         >
                             <Link
@@ -100,6 +108,12 @@ export function EvaluationsCardComponent(props: {
                                 margin: "0.5em",
                                 padding: "0em",
                                 backgroundColor: theme.palette.primary.main,
+                                "@media (max-width: 450px)": {
+                                    fontSize: "0.7em",
+                                },
+                                "@media (max-width: 350px)": {
+                                    fontSize: "0.6em",
+                                },
                             }}
                         >
                             <Link
