@@ -17,7 +17,8 @@ type Category =
 interface ExternalLink {
     name: string;
     link: string;
-    category: Category; // Use the defined Category type
+    category: Category;
+    ordernumber: number;
 }
 
 type ExternalLinkResponse = CMSResponse<
@@ -37,7 +38,9 @@ export function LinkPageLinkListComponent(): JSX.Element {
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
     useEffect(() => {
-        const apiEndpoint = "http://localhost:1337/api/externallinks";
+        // Updated the API endpoint to include sorting by ordernumber in descending order
+        const apiEndpoint =
+            "http://localhost:1337/api/externallinks?_sort=ordernumber:DESC";
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
@@ -47,7 +50,7 @@ export function LinkPageLinkListComponent(): JSX.Element {
                     );
                     setLinkData(extractedLinks);
                 }
-                return null; // Add this return statement
+                return null;
             })
             .catch((error) => {
                 console.error("Error fetching data: ", error);
@@ -61,7 +64,7 @@ export function LinkPageLinkListComponent(): JSX.Element {
             if (!acc[link.category]) acc[link.category] = [];
             acc[link.category].push(link);
             return acc;
-        }, {} as Record<Category, ExternalLink[]>); // Initialize with an empty object
+        }, {} as Record<Category, ExternalLink[]>);
     };
 
     const groupedLinks = groupByCategory(linkData);
