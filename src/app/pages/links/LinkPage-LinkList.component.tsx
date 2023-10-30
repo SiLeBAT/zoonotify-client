@@ -18,7 +18,7 @@ interface ExternalLink {
     name: string;
     link: string;
     category: Category;
-    ordernumber: number;
+    priority: number;
 }
 
 type ExternalLinkResponse = CMSResponse<
@@ -38,9 +38,9 @@ export function LinkPageLinkListComponent(): JSX.Element {
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
     useEffect(() => {
-        // Updated the API endpoint to include sorting by ordernumber in descending order
+        // Updated the API endpoint to include sorting by priority in descending order
         const apiEndpoint =
-            "http://localhost:1337/api/externallinks?_sort=ordernumber:DESC";
+            "http://localhost:1337/api/externallinks?_sort=priority:DESC";
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
