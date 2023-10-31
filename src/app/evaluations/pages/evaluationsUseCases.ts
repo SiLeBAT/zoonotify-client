@@ -12,7 +12,7 @@ import {
 } from "./../model/Evaluations.model";
 // eslint-disable-next-line import/named
 import i18next, { TFunction } from "i18next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
@@ -21,17 +21,25 @@ import { UseCase } from "../../shared/model/UseCases";
 type EvaluationPageModel = {
     downloadGraphButtonText: string;
     downloadDataButtonText: string;
+    filterButtonText: string;
+    searchButtonText: string;
     heading: Record<string, string>;
     evaluationsData: Evaluation;
     selectionConfig: SelectionFilterConfig[];
+    selectedFilters: FilterSelection;
 };
+
 type EvaluationPageOperations = {
     showDivision: (division: string) => boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fetchData: (filter: FilterSelection) => any;
 };
 
 type EvaluationPageTranslations = {
     downloadDataButtonText: string;
     downloadGraphButtonText: string;
+    filterButtonText: string;
+    searchButtonText: string;
     heading: Record<string, string>;
 };
 
@@ -91,6 +99,8 @@ const initialFilterSelection: FilterSelection = {
 function getTranslations(t: TFunction): EvaluationPageTranslations {
     const downloadGraphButtonText = t("Export");
     const downloadDataButtonText = t("Data_Download");
+    const searchButtonText = t("Search");
+    const filterButtonText = t("Filter");
     const heading = {
         main: t("Heading"),
         FUTTERMITTEL: t("FUTTERMITTEL"),
@@ -98,7 +108,13 @@ function getTranslations(t: TFunction): EvaluationPageTranslations {
         LEBENSMITTEL: t("LEBENSMITTEL"),
         MULTIPLE: t("MULTIPLE"),
     };
-    return { downloadGraphButtonText, downloadDataButtonText, heading };
+    return {
+        downloadGraphButtonText,
+        downloadDataButtonText,
+        heading,
+        searchButtonText,
+        filterButtonText,
+    };
 }
 
 function toSelectionItem(stringItems: string[], t: TFunction): SelectionItem[] {
@@ -135,8 +151,13 @@ const useEvaluationPageComponent: UseCase<
         division: toSelectionItem(division, t),
     };
 
-    const { downloadGraphButtonText, downloadDataButtonText, heading } =
-        getTranslations(t);
+    const {
+        downloadGraphButtonText,
+        downloadDataButtonText,
+        heading,
+        searchButtonText,
+        filterButtonText,
+    } = getTranslations(t);
 
     const [selectedFilters, setSelectedFilters] = useState(
         initialFilterSelection
@@ -155,8 +176,9 @@ const useEvaluationPageComponent: UseCase<
             .join("&");
         return result;
     };
-    useEffect(() => {
-        const qString = createQueryString(selectedFilters);
+
+    const fetchData = (filter: FilterSelection): void => {
+        const qString = createQueryString(filter);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callApiService<
@@ -199,7 +221,7 @@ const useEvaluationPageComponent: UseCase<
             .catch((error) => {
                 throw error;
             });
-    }, [selectedFilters, i18next.language]);
+    };
 
     const availableFilters = [
         "otherDetail",
@@ -226,6 +248,7 @@ const useEvaluationPageComponent: UseCase<
                     const newFilters = { ...prev };
                     newFilters[filter as keyof FilterSelection] =
                         typeof value === "string" ? value.split(",") : value;
+
                     return newFilters;
                 });
             },
@@ -240,12 +263,16 @@ const useEvaluationPageComponent: UseCase<
         model: {
             downloadDataButtonText,
             downloadGraphButtonText,
+            searchButtonText,
+            filterButtonText,
             heading,
             evaluationsData,
             selectionConfig,
+            selectedFilters,
         },
         operations: {
             showDivision,
+            fetchData,
         },
     };
 };
