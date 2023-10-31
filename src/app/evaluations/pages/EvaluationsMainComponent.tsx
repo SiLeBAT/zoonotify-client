@@ -9,11 +9,11 @@ import {
     styled,
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import React from "react";
+import React, { useEffect } from "react";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import { EvaluationDivisionContainer } from "../components/EvaluationDivisionContainer";
 import { FilterContainerComponent } from "../components/FilterContainerComponent";
-import { DivisionToken } from "../model/Evaluations.model";
+import { DivisionToken, FilterSelection } from "../model/Evaluations.model";
 import { useEvaluationPageComponent } from "./evaluationsUseCases";
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +28,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export function EvaluationsMainComponent(): JSX.Element {
     const { model, operations } = useEvaluationPageComponent(null);
     const { t } = useTranslation(["ExplanationPage"]);
-    const handleDelete = (label: string, index: number): void => {
+    const handleChipDelete = (label: string, index: number): void => {
         const result = model.selectionConfig.filter((config) => {
             return config.label == label;
         });
@@ -46,11 +46,19 @@ export function EvaluationsMainComponent(): JSX.Element {
             }
         }
     };
-    const [checked, setChecked] = React.useState(false);
+    const [showFilters, setShowFilters] = React.useState(false);
 
-    const handleChange = (): void => {
-        setChecked((prev) => !prev);
+    const handleFilterBtnClick = (): void => {
+        setShowFilters((prev) => !prev);
     };
+
+    const handleSearchBtnClick = (filter: FilterSelection): void => {
+        operations.fetchData(filter);
+    };
+
+    useEffect(() => {
+        operations.fetchData(model.selectedFilters);
+    }, []); // No dependency, will only run once
 
     return (
         <>
@@ -89,7 +97,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                         variant="filled"
                                         label={config.label + ": All"}
                                         onDelete={() =>
-                                            handleDelete(config.label, -1)
+                                            handleChipDelete(config.label, -1)
                                         }
                                     />
                                 );
@@ -116,7 +124,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                                     t(item)
                                                 }
                                                 onDelete={() =>
-                                                    handleDelete(
+                                                    handleChipDelete(
                                                         config.label,
                                                         itemIndex
                                                     )
@@ -135,7 +143,7 @@ export function EvaluationsMainComponent(): JSX.Element {
             <Stack direction="row" spacing={2}>
                 <Collapse
                     orientation="horizontal"
-                    in={checked}
+                    in={showFilters}
                     collapsedSize={40}
                     sx={{
                         maxWidth: "30%",
@@ -145,12 +153,20 @@ export function EvaluationsMainComponent(): JSX.Element {
                         },
                     }}
                 >
-                    {checked && (
+                    {showFilters && (
                         <>
                             <Stack direction="row" spacing={2}>
                                 <div style={{ height: "auto", width: "95%" }}>
                                     <FilterContainerComponent
                                         selectionConfig={model.selectionConfig}
+                                        searchButtonText={
+                                            model.searchButtonText
+                                        }
+                                        handleSearchBtnClick={(
+                                            data: FilterSelection
+                                        ) => {
+                                            handleSearchBtnClick(data);
+                                        }}
                                     />
                                 </div>
                                 <div
@@ -163,7 +179,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                     <IconButton
                                         color="primary"
                                         aria-label="apply filter"
-                                        onClick={handleChange}
+                                        onClick={handleFilterBtnClick}
                                         sx={{
                                             position: "relative !important",
                                             top: "calc(50% - 10px) !important",
@@ -175,11 +191,11 @@ export function EvaluationsMainComponent(): JSX.Element {
                             </Stack>
                         </>
                     )}
-                    {!checked && (
+                    {!showFilters && (
                         <IconButton
                             color="primary"
                             aria-label="apply filter"
-                            onClick={handleChange}
+                            onClick={handleFilterBtnClick}
                             sx={{
                                 position: "relative",
                                 top: "calc(50% - 10px)",
