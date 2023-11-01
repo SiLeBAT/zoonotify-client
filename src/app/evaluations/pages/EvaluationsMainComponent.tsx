@@ -56,98 +56,119 @@ export function EvaluationsMainComponent(): JSX.Element {
         operations.fetchData(filter);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const headerRef: any = React.createRef();
+    const [heightFromTop, setHeightFromTop] = React.useState(200);
+
+    const getHeightOffset = (): number => {
+        if (headerRef?.current?.clientHeight) {
+            return headerRef?.current?.clientHeight + 113;
+        }
+        return 200;
+    };
+
     useEffect(() => {
         operations.fetchData(model.selectedFilters);
+        setHeightFromTop(getHeightOffset());
     }, []); // No dependency, will only run once
+
+    useEffect(() => {
+        setHeightFromTop(getHeightOffset());
+    }, [model.selectionConfig]); // No dependency, will only run once
 
     return (
         <>
-            <Box sx={{ width: "60%", margin: "2em auto" }}>
-                <MainComponentHeader
-                    heading={model.heading.main}
-                ></MainComponentHeader>
-            </Box>
-            <Grid container spacing={2}>
-                <Grid
-                    item
-                    xs={12}
-                    md={12}
-                    sx={{
-                        display: "inline",
-                        float: "right",
-                    }}
-                >
-                    {model.selectionConfig.map((config, index) => {
-                        if (
-                            config &&
-                            config.selectedItems &&
-                            config.selectedItems.length > 0 &&
-                            config.selectionOptions &&
-                            config.selectionOptions.length > 0
-                        ) {
+            <Box ref={headerRef}>
+                <Box sx={{ width: "60%", margin: "0.5em auto" }}>
+                    <MainComponentHeader
+                        heading={model.heading.main}
+                    ></MainComponentHeader>
+                </Box>
+                <Grid container spacing={2}>
+                    <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        sx={{
+                            display: "inline",
+                            float: "right",
+                            paddingTop: "0 !important",
+                        }}
+                    >
+                        {model.selectionConfig.map((config, index) => {
                             if (
-                                config.selectedItems.length ==
-                                config.selectionOptions.length
+                                config &&
+                                config.selectedItems &&
+                                config.selectedItems.length > 0 &&
+                                config.selectionOptions &&
+                                config.selectionOptions.length > 0
                             ) {
-                                return (
-                                    <Chip
-                                        key={`Chip` + index}
-                                        sx={{ margin: "3px !important" }}
-                                        color="warning"
-                                        variant="filled"
-                                        label={config.label + ": All"}
-                                        onDelete={() =>
-                                            handleChipDelete(config.label, -1)
-                                        }
-                                    />
+                                if (
+                                    config.selectedItems.length ==
+                                    config.selectionOptions.length
+                                ) {
+                                    return (
+                                        <Chip
+                                            key={`Chip` + index}
+                                            sx={{ margin: "3px !important" }}
+                                            color="warning"
+                                            variant="filled"
+                                            label={config.label + ": All"}
+                                            onDelete={() =>
+                                                handleChipDelete(
+                                                    config.label,
+                                                    -1
+                                                )
+                                            }
+                                        />
+                                    );
+                                }
+                                return config.selectedItems.map(
+                                    (item, itemIndex) => {
+                                        if (item)
+                                            return (
+                                                <Chip
+                                                    key={
+                                                        `Chip` +
+                                                        index +
+                                                        "_" +
+                                                        itemIndex
+                                                    }
+                                                    sx={{
+                                                        margin: "3px !important",
+                                                    }}
+                                                    color="warning"
+                                                    variant="filled"
+                                                    label={
+                                                        config.label +
+                                                        ": " +
+                                                        t(item)
+                                                    }
+                                                    onDelete={() =>
+                                                        handleChipDelete(
+                                                            config.label,
+                                                            itemIndex
+                                                        )
+                                                    }
+                                                />
+                                            );
+                                        else return;
+                                    }
                                 );
                             }
-                            return config.selectedItems.map(
-                                (item, itemIndex) => {
-                                    if (item)
-                                        return (
-                                            <Chip
-                                                key={
-                                                    `Chip` +
-                                                    index +
-                                                    "_" +
-                                                    itemIndex
-                                                }
-                                                sx={{
-                                                    margin: "3px !important",
-                                                }}
-                                                color="warning"
-                                                variant="filled"
-                                                label={
-                                                    config.label +
-                                                    ": " +
-                                                    t(item)
-                                                }
-                                                onDelete={() =>
-                                                    handleChipDelete(
-                                                        config.label,
-                                                        itemIndex
-                                                    )
-                                                }
-                                            />
-                                        );
-                                    else return;
-                                }
-                            );
-                        }
-                        return;
-                    })}
+                            return;
+                        })}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Box>
 
             <Stack direction="row" spacing={2}>
                 <Collapse
                     orientation="horizontal"
                     in={showFilters}
-                    collapsedSize={40}
+                    collapsedSize={30}
                     sx={{
                         maxWidth: "30%",
-                        height: "75vh",
                         "&& .MuiCollapse-wrapperInner": {
                             width: "100%",
                         },
@@ -181,8 +202,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                         aria-label="apply filter"
                                         onClick={handleFilterBtnClick}
                                         sx={{
-                                            position: "relative !important",
-                                            top: "calc(50% - 10px) !important",
+                                            top: "65% !important",
                                         }}
                                     >
                                         <FilterAltIcon />
@@ -197,8 +217,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                             aria-label="apply filter"
                             onClick={handleFilterBtnClick}
                             sx={{
-                                position: "relative",
-                                top: "calc(50% - 10px)",
+                                top: "45%",
                             }}
                         >
                             <FilterAltIcon />
@@ -206,7 +225,15 @@ export function EvaluationsMainComponent(): JSX.Element {
                     )}
                 </Collapse>
 
-                <Item style={{ height: "auto", width: "100%" }}>
+                <Item
+                    style={{
+                        height: `calc(100vh - ${heightFromTop}px)`,
+                        maxHeight: `calc(100vh - ${heightFromTop}px)`,
+                        overflowY: "scroll",
+                        width: "100%",
+                        boxShadow: "15px 0 15px -15px inset",
+                    }}
+                >
                     <div>
                         {Object.keys(model.evaluationsData)
                             .filter((value) => operations.showDivision(value))
