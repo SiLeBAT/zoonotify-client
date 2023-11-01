@@ -31,7 +31,7 @@ const mainHeaderStyle = (): SerializedStyles => css`
     box-sizing: border-box;
     box-shadow: "0 8px 6px -6px grey";
     background-color: ${primaryColor};
-    border-bottom: ${`24px solid ${secondaryColor}`};
+    border-bottom: ${`5px solid ${secondaryColor}`};
     color: ${onSecondaryColor};
 `;
 const appNameStyle = css`

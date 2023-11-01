@@ -52,7 +52,7 @@ export function FilterContainerComponent({
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    padding: 2,
+                    padding: 1,
                     justifyContent: "space-between",
                     gap: 2,
                 }}
@@ -74,7 +74,7 @@ export function FilterContainerComponent({
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    padding: 2,
+                    padding: 1,
                     justifyContent: "space-between",
                     gap: 2,
                 }}
@@ -96,7 +96,7 @@ export function FilterContainerComponent({
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    padding: 2,
+                    padding: 1,
                     justifyContent: "space-between",
                     gap: 2,
                 }}
@@ -118,7 +118,7 @@ export function FilterContainerComponent({
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    padding: 2,
+                    padding: 1,
                     justifyContent: "space-between",
                     gap: 2,
                 }}
