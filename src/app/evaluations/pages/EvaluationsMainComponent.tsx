@@ -113,7 +113,9 @@ export function EvaluationsMainComponent(): JSX.Element {
                                             sx={{ margin: "3px !important" }}
                                             color="warning"
                                             variant="filled"
-                                            label={config.label + ": All"}
+                                            label={
+                                                config.label + ": " + t("ALLE")
+                                            }
                                             onDelete={() =>
                                                 handleChipDelete(
                                                     config.label,
