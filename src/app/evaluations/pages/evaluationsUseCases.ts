@@ -47,7 +47,7 @@ const maxPageSize = 250;
 const microorganism = [
     "E_COLI",
     "CAMPYLOBACTER_SPP",
-    "ESBL_AmpC_E_COLI",
+    "ESBL_AMPC_E_COLI",
     "LISTERIS_MONOCYTOGENES",
     "MRSA",
     "SALMONELLA_SPP",

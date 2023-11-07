@@ -15,7 +15,7 @@
   "LEBENSMITTEL": "Food",
   "E_COLI": "E. coli",
   "CAMPYLOBACTER_SPP": "Campylobacter spp.",
-  "ESBL_AmpC_E_COLI": "ESBL/AmpC E. coli",
+  "ESBL_AMPC_E_COLI": "ESBL/AmpC E. coli",
   "LISTERIS_MONOCYTOGENES": "Listeria Monocytogenes",
   "MRSA": "MRSA",
   "SALMONELLA_SPP": "Salmonella spp.",
