@@ -129,6 +129,9 @@ export function FilterContainerComponent({
                         handleSearch();
                     }}
                     startIcon={<SearchIcon />}
+                    sx={{
+                        margin: "8px",
+                    }}
                 >
                     {searchButtonText}
                 </Button>
