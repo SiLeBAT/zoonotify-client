@@ -75,7 +75,7 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     useEffect(() => {
         setHeightFromTop(getHeightOffset());
-    }, [model.selectionConfig]); // No dependency, will only run once
+    }, [model.selectionConfig]);
 
     return (
         <>
@@ -238,25 +238,28 @@ export function EvaluationsMainComponent(): JSX.Element {
                     }}
                 >
                     <div>
-                        {Object.keys(model.evaluationsData)
-                            .filter((value) => operations.showDivision(value))
-                            .map((division) => (
-                                <EvaluationDivisionContainer
-                                    key={division}
-                                    title={model.heading[division]}
-                                    divisionData={
-                                        model.evaluationsData[
-                                            division as DivisionToken
-                                        ]
-                                    }
-                                    downloadGraphButtonText={
-                                        model.downloadGraphButtonText
-                                    }
-                                    downloadDataButtonText={
-                                        model.downloadDataButtonText
-                                    }
-                                ></EvaluationDivisionContainer>
-                            ))}
+                        {!model.loading &&
+                            Object.keys(model.evaluationsData)
+                                .filter((value) =>
+                                    operations.showDivision(value)
+                                )
+                                .map((division) => (
+                                    <EvaluationDivisionContainer
+                                        key={division}
+                                        title={model.heading[division]}
+                                        divisionData={
+                                            model.evaluationsData[
+                                                division as DivisionToken
+                                            ]
+                                        }
+                                        downloadGraphButtonText={
+                                            model.downloadGraphButtonText
+                                        }
+                                        downloadDataButtonText={
+                                            model.downloadDataButtonText
+                                        }
+                                    ></EvaluationDivisionContainer>
+                                ))}
                     </div>
                 </Item>
             </Stack>
