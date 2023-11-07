@@ -63,13 +63,12 @@ const diagramType = [
     "TREND_DIAGRAMM",
 ];
 const productionType = [
-    "HUHN",
     "LEGEHENNEN",
     "MASTHAEHNCHEN",
     "MASTKALB_JUNGRIND",
+    "MASTRIND",
     "MASTPUTEN",
     "MASTSCHWEIN",
-    "PUTE",
     "RIND",
     "ZUCHTHUEHNER_LEGE_UND_MASTLINIE",
     "MILCHRIND",
