@@ -1,8 +1,9 @@
 import {
     Box,
-    Chip,
+    // Button,
+    // Chip,
     Collapse,
-    Grid,
+    // Grid,
     IconButton,
     Paper,
     Stack,
@@ -15,7 +16,7 @@ import { EvaluationDivisionContainer } from "../components/EvaluationDivisionCon
 import { FilterContainerComponent } from "../components/FilterContainerComponent";
 import { DivisionToken, FilterSelection } from "../model/Evaluations.model";
 import { useEvaluationPageComponent } from "./evaluationsUseCases";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -27,25 +28,25 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export function EvaluationsMainComponent(): JSX.Element {
     const { model, operations } = useEvaluationPageComponent(null);
-    const { t } = useTranslation(["ExplanationPage"]);
-    const handleChipDelete = (label: string, index: number): void => {
-        const result = model.selectionConfig.filter((config) => {
-            return config.label == label;
-        });
-        if (result && result.length > 0) {
-            if (index > -1) {
-                const dataCopy = JSON.parse(
-                    JSON.stringify(result[0].selectedItems)
-                );
-                dataCopy.splice(index, 1);
-                result[0].handleChange({
-                    target: { value: dataCopy.toString() },
-                });
-            } else {
-                result[0].handleChange({ target: { value: "" } });
-            }
-        }
-    };
+    // const { t } = useTranslation(["ExplanationPage"]);
+    // const handleChipDelete = (label: string, index: number): void => {
+    //     const result = model.selectionConfig.filter((config) => {
+    //         return config.label == label;
+    //     });
+    //     if (result && result.length > 0) {
+    //         if (index > -1) {
+    //             const dataCopy = JSON.parse(
+    //                 JSON.stringify(result[0].selectedItems)
+    //             );
+    //             dataCopy.splice(index, 1);
+    //             result[0].handleChange({
+    //                 target: { value: dataCopy.toString() },
+    //             });
+    //         } else {
+    //             result[0].handleChange({ target: { value: "" } });
+    //         }
+    //     }
+    // };
     const [showFilters, setShowFilters] = React.useState(false);
 
     const handleFilterBtnClick = (): void => {
@@ -58,13 +59,13 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const headerRef: any = React.createRef();
-    const [heightFromTop, setHeightFromTop] = React.useState(200);
+    const [heightFromTop, setHeightFromTop] = React.useState(230);
 
     const getHeightOffset = (): number => {
         if (headerRef?.current?.clientHeight) {
-            return headerRef?.current?.clientHeight + 113;
+            return headerRef?.current?.clientHeight + 130;
         }
-        return 200;
+        return 230;
     };
 
     useEffect(() => {
@@ -84,7 +85,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                         heading={model.heading.main}
                     ></MainComponentHeader>
                 </Box>
-                <Grid container spacing={2}>
+                {/* <Grid container spacing={2}>
                     <Grid
                         item
                         xs={12}
@@ -161,7 +162,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                             return;
                         })}
                     </Grid>
-                </Grid>
+                </Grid> */}
             </Box>
 
             <Stack direction="row" spacing={2}>
