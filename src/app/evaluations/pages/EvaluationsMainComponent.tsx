@@ -2,7 +2,10 @@ import {
     Box,
     // Button,
     // Chip,
+    // Button,
+    // Chip,
     Collapse,
+    // Grid,
     // Grid,
     IconButton,
     Paper,
@@ -47,7 +50,7 @@ export function EvaluationsMainComponent(): JSX.Element {
     //         }
     //     }
     // };
-    const [showFilters, setShowFilters] = React.useState(false);
+    const [showFilters, setShowFilters] = React.useState(true);
 
     const handleFilterBtnClick = (): void => {
         setShowFilters((prev) => !prev);
