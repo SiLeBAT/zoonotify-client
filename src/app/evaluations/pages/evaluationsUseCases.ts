@@ -179,7 +179,6 @@ const useEvaluationPageComponent: UseCase<
     const fetchData = (filter: FilterSelection): void => {
         const qString = createQueryString(filter);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callApiService<
             CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
         >(
@@ -191,8 +190,15 @@ const useEvaluationPageComponent: UseCase<
                 };
                 if (response.data) {
                     const data = response.data.data;
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    data.forEach(
+                    // Assuming the title is a direct attribute of entry.attributes, adjust if necessary.
+                    // Sorting before processing each entry.
+                    const sortedData = data.sort((a, b) => {
+                        const titleA = a.attributes.title.toUpperCase(); // Assuming 'title' is the attribute
+                        const titleB = b.attributes.title.toUpperCase();
+                        return titleA.localeCompare(titleB);
+                    });
+
+                    sortedData.forEach(
                         (entry: CMSEntity<EvaluationAttributesDTO>) => {
                             const divisionToken: DivisionToken = entry
                                 .attributes.division as DivisionToken;
