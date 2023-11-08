@@ -192,71 +192,66 @@ export function EvaluationsMainComponent(): JSX.Element {
                 >
                     {showFilters && (
                         <>
-                            <Stack
-                                direction="row"
-                                spacing={2}
-                                style={{ height: "100%" }}
-                            >
-                                <div style={{ width: "95%" }}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            padding: 1,
-                                            justifyContent: "center",
-                                            gap: 2,
-                                        }}
-                                    >
-                                        <Typography variant="h3">
-                                            {t("Filter_Settings")}
-                                        </Typography>
-                                    </Box>
-
-                                    <FilterContainerComponent
-                                        selectionConfig={model.selectionConfig}
-                                        searchButtonText={
-                                            model.searchButtonText
-                                        }
-                                        handleSearchBtnClick={(
-                                            data: FilterSelection
-                                        ) => {
-                                            handleSearchBtnClick(data);
-                                        }}
-                                    />
-                                </div>
-                                <div
-                                    style={{
-                                        height: "auto",
-                                        width: "5%",
-                                        margin: 0,
+                            <div>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        padding: 1,
+                                        justifyContent: "center",
+                                        gap: 2,
                                     }}
                                 >
-                                    <IconButton
-                                        color="primary"
-                                        aria-label="apply filter"
-                                        onClick={handleFilterBtnClick}
-                                        sx={{
-                                            top: "41% !important",
-                                            padding: "0",
-                                            height: "48px",
-                                            width: "48px",
+                                    <Typography variant="h3">
+                                        {t("Filter_Settings")}
+                                    </Typography>
+                                </Box>
+
+                                <FilterContainerComponent
+                                    selectionConfig={model.selectionConfig}
+                                    searchButtonText={model.searchButtonText}
+                                    handleSearchBtnClick={(
+                                        data: FilterSelection
+                                    ) => {
+                                        handleSearchBtnClick(data);
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <IconButton
+                                    color="primary"
+                                    aria-label="apply filter"
+                                    onClick={handleFilterBtnClick}
+                                    sx={{
+                                        position: "absolute",
+                                        top: "45%",
+                                        left: "30%",
+                                        borderRadius: "50%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        fontSize: "22px",
+                                        cursor: "pointer",
+                                        color: `${backgroundColor}`,
+                                        ":hover": {
                                             backgroundColor: `${primaryColor}`,
-                                            color: `${backgroundColor}`,
-                                            ":hover": {
-                                                backgroundColor: `${primaryColor}`,
-                                            },
-                                            background: `linear-gradient( 90deg , ${backgroundColor} 56%, ${primaryColor} 26%)`,
-                                            "&& svg": {
-                                                marginLeft: "10px",
-                                                marginRight: "-10px",
-                                                fontSize: "xxx-large",
-                                            },
-                                        }}
-                                    >
-                                        <KeyboardArrowLeftRoundedIcon />
-                                    </IconButton>
-                                </div>
-                            </Stack>
+                                        },
+                                        backgroundColor: `${primaryColor}`,
+                                        background: `linear-gradient( 90deg , ${backgroundColor} 50%, ${primaryColor} 50%)`,
+                                        padding: "0",
+                                        height: "48px",
+                                        width: "48px",
+                                        marginLeft: "-24px",
+                                        "&& svg": {
+                                            marginLeft: "10px",
+                                            marginRight: "-10px",
+                                            fontSize: "xxx-large",
+                                        },
+                                    }}
+                                >
+                                    <KeyboardArrowLeftRoundedIcon />
+                                </IconButton>
+                            </div>
                         </>
                     )}
                     {!showFilters && (
@@ -268,20 +263,19 @@ export function EvaluationsMainComponent(): JSX.Element {
                         >
                             <div
                                 style={{
-                                    position: "fixed",
-                                    top: "25%",
-                                    left: "1%",
+                                    display: "inline-block",
+                                    transform:
+                                        "rotate(-90deg) translateX(-110%)",
+                                    transformOrigin: "top left",
+                                    width: "max-content",
+                                    zIndex: "100",
+                                    position: "absolute",
+                                    left: "10px",
                                 }}
                             >
                                 <Typography
                                     variant="h3"
                                     sx={{
-                                        position: "absolute",
-                                        marginLeft: "-100%",
-                                        transform:
-                                            "rotate(270deg) translate(0, 20px)",
-                                        transformOrigin: "left bottom",
-                                        width: "100vh",
                                         color: `${backgroundColor}`,
                                     }}
                                 >
