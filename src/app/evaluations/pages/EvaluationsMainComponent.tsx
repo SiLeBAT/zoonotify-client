@@ -7,16 +7,22 @@ import {
     IconButton,
     Paper,
     Stack,
+    Typography,
     styled,
 } from "@mui/material";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
+import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import React, { useEffect } from "react";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import { EvaluationDivisionContainer } from "../components/EvaluationDivisionContainer";
 import { FilterContainerComponent } from "../components/FilterContainerComponent";
 import { DivisionToken, FilterSelection } from "../model/Evaluations.model";
 import { useEvaluationPageComponent } from "./evaluationsUseCases";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import {
+    primaryColor,
+    backgroundColor,
+} from "../../shared/style/Style-MainTheme";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -28,7 +34,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export function EvaluationsMainComponent(): JSX.Element {
     const { model, operations } = useEvaluationPageComponent(null);
-    // const { t } = useTranslation(["ExplanationPage"]);
+    const { t } = useTranslation(["ExplanationPage"]);
     // const handleChipDelete = (label: string, index: number): void => {
     //     const result = model.selectionConfig.filter((config) => {
     //         return config.label == label;
@@ -165,13 +171,20 @@ export function EvaluationsMainComponent(): JSX.Element {
                 </Grid> */}
             </Box>
 
-            <Stack direction="row" spacing={2}>
+            <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                    "&& .MuiPaper-root": {},
+                }}
+            >
                 <Collapse
                     orientation="horizontal"
                     in={showFilters}
-                    collapsedSize={30}
+                    collapsedSize={50}
                     sx={{
                         maxWidth: "30%",
+                        borderRight: "1px solid gray",
                         "&& .MuiCollapse-wrapperInner": {
                             width: "100%",
                         },
@@ -179,8 +192,26 @@ export function EvaluationsMainComponent(): JSX.Element {
                 >
                     {showFilters && (
                         <>
-                            <Stack direction="row" spacing={2}>
-                                <div style={{ height: "auto", width: "95%" }}>
+                            <Stack
+                                direction="row"
+                                spacing={2}
+                                style={{ height: "100%" }}
+                            >
+                                <div style={{ width: "95%" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            padding: 1,
+                                            justifyContent: "center",
+                                            gap: 2,
+                                        }}
+                                    >
+                                        <Typography variant="h3">
+                                            {t("Filter_Settings")}
+                                        </Typography>
+                                    </Box>
+
                                     <FilterContainerComponent
                                         selectionConfig={model.selectionConfig}
                                         searchButtonText={
@@ -205,26 +236,83 @@ export function EvaluationsMainComponent(): JSX.Element {
                                         aria-label="apply filter"
                                         onClick={handleFilterBtnClick}
                                         sx={{
-                                            top: "65% !important",
+                                            top: "41% !important",
+                                            padding: "0",
+                                            height: "48px",
+                                            width: "48px",
+                                            backgroundColor: `${primaryColor}`,
+                                            color: `${backgroundColor}`,
+                                            ":hover": {
+                                                backgroundColor: `${primaryColor}`,
+                                            },
+                                            background: `linear-gradient( 90deg , ${backgroundColor} 56%, ${primaryColor} 26%)`,
+                                            "&& svg": {
+                                                marginLeft: "10px",
+                                                marginRight: "-10px",
+                                                fontSize: "xxx-large",
+                                            },
                                         }}
                                     >
-                                        <FilterAltIcon />
+                                        <KeyboardArrowLeftRoundedIcon />
                                     </IconButton>
                                 </div>
                             </Stack>
                         </>
                     )}
                     {!showFilters && (
-                        <IconButton
-                            color="primary"
-                            aria-label="apply filter"
-                            onClick={handleFilterBtnClick}
-                            sx={{
-                                top: "45%",
+                        <div
+                            style={{
+                                backgroundColor: `${primaryColor}`,
+                                height: "100%",
                             }}
                         >
-                            <FilterAltIcon />
-                        </IconButton>
+                            <div
+                                style={{
+                                    position: "fixed",
+                                    top: "25%",
+                                    left: "1%",
+                                }}
+                            >
+                                <Typography
+                                    variant="h3"
+                                    sx={{
+                                        position: "absolute",
+                                        marginLeft: "-100%",
+                                        transform:
+                                            "rotate(270deg) translate(0, 20px)",
+                                        transformOrigin: "left bottom",
+                                        width: "100vh",
+                                        color: `${backgroundColor}`,
+                                    }}
+                                >
+                                    {t("Filter_Settings")}
+                                </Typography>
+                            </div>
+
+                            <IconButton
+                                color="primary"
+                                aria-label="apply filter"
+                                onClick={handleFilterBtnClick}
+                                sx={{
+                                    top: "45%",
+                                    left: "1.5%",
+                                    position: "absolute",
+                                    height: "48px",
+                                    width: "48px",
+                                    backgroundColor: `${primaryColor}`,
+                                    color: "rgb(255, 255, 255)",
+                                    ":hover": {
+                                        backgroundColor: `${primaryColor}`,
+                                    },
+                                    "&& svg": {
+                                        marginRight: "-15px",
+                                        fontSize: "xxx-large",
+                                    },
+                                }}
+                            >
+                                <KeyboardArrowRightRoundedIcon />
+                            </IconButton>
+                        </div>
                     )}
                 </Collapse>
 
