@@ -65,13 +65,13 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const headerRef: any = React.createRef();
-    const [heightFromTop, setHeightFromTop] = React.useState(230);
+    const [heightFromTop, setHeightFromTop] = React.useState(200);
 
     const getHeightOffset = (): number => {
         if (headerRef?.current?.clientHeight) {
-            return headerRef?.current?.clientHeight + 130;
+            return headerRef?.current?.clientHeight + 100;
         }
-        return 230;
+        return 200;
     };
 
     useEffect(() => {
@@ -85,92 +85,6 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     return (
         <>
-            <Box ref={headerRef}>
-                <Box sx={{ width: "60%", margin: "0.5em auto" }}>
-                    <MainComponentHeader
-                        heading={model.heading.main}
-                    ></MainComponentHeader>
-                </Box>
-                {/* <Grid container spacing={2}>
-                    <Grid
-                        item
-                        xs={12}
-                        md={12}
-                        sx={{
-                            display: "inline",
-                            float: "right",
-                            paddingTop: "0 !important",
-                        }}
-                    >
-                        {model.selectionConfig.map((config, index) => {
-                            if (
-                                config &&
-                                config.selectedItems &&
-                                config.selectedItems.length > 0 &&
-                                config.selectionOptions &&
-                                config.selectionOptions.length > 0
-                            ) {
-                                if (
-                                    config.selectedItems.length ==
-                                    config.selectionOptions.length
-                                ) {
-                                    return (
-                                        <Chip
-                                            key={`Chip` + index}
-                                            sx={{ margin: "3px !important" }}
-                                            color="warning"
-                                            variant="filled"
-                                            label={
-                                                config.label + ": " + t("ALLE")
-                                            }
-                                            onDelete={() =>
-                                                handleChipDelete(
-                                                    config.label,
-                                                    -1
-                                                )
-                                            }
-                                        />
-                                    );
-                                }
-                                return config.selectedItems.map(
-                                    (item, itemIndex) => {
-                                        if (item)
-                                            return (
-                                                <Chip
-                                                    key={
-                                                        `Chip` +
-                                                        index +
-                                                        "_" +
-                                                        itemIndex
-                                                    }
-                                                    sx={{
-                                                        margin: "3px !important",
-                                                    }}
-                                                    color="warning"
-                                                    variant="filled"
-                                                    label={
-                                                        config.label +
-                                                        ": " +
-                                                        t(item)
-                                                    }
-                                                    onDelete={() =>
-                                                        handleChipDelete(
-                                                            config.label,
-                                                            itemIndex
-                                                        )
-                                                    }
-                                                />
-                                            );
-                                        else return;
-                                    }
-                                );
-                            }
-                            return;
-                        })}
-                    </Grid>
-                </Grid> */}
-            </Box>
-
             <Stack
                 direction="row"
                 spacing={2}
@@ -192,7 +106,12 @@ export function EvaluationsMainComponent(): JSX.Element {
                 >
                     {showFilters && (
                         <>
-                            <div>
+                            <div
+                                style={{
+                                    zIndex: "100",
+                                    position: "relative",
+                                }}
+                            >
                                 <Box
                                     sx={{
                                         display: "flex",
@@ -217,6 +136,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                     }}
                                 />
                             </div>
+
                             <div>
                                 <IconButton
                                     color="primary"
@@ -312,14 +232,102 @@ export function EvaluationsMainComponent(): JSX.Element {
 
                 <Item
                     style={{
-                        height: `calc(100vh - ${heightFromTop}px)`,
-                        maxHeight: `calc(100vh - ${heightFromTop}px)`,
-                        overflowY: "scroll",
                         width: "100%",
                         boxShadow: "15px 0 15px -15px inset",
                     }}
                 >
-                    <div>
+                    <Box ref={headerRef}>
+                        <Box>
+                            <MainComponentHeader
+                                heading={model.heading.main}
+                            ></MainComponentHeader>
+                        </Box>
+                        {/* <Grid container spacing={2}>
+                    <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        sx={{
+                            display: "inline",
+                            float: "right",
+                            paddingTop: "0 !important",
+                        }}
+                    >
+                        {model.selectionConfig.map((config, index) => {
+                            if (
+                                config &&
+                                config.selectedItems &&
+                                config.selectedItems.length > 0 &&
+                                config.selectionOptions &&
+                                config.selectionOptions.length > 0
+                            ) {
+                                if (
+                                    config.selectedItems.length ==
+                                    config.selectionOptions.length
+                                ) {
+                                    return (
+                                        <Chip
+                                            key={`Chip` + index}
+                                            sx={{ margin: "3px !important" }}
+                                            color="warning"
+                                            variant="filled"
+                                            label={
+                                                config.label + ": " + t("ALLE")
+                                            }
+                                            onDelete={() =>
+                                                handleChipDelete(
+                                                    config.label,
+                                                    -1
+                                                )
+                                            }
+                                        />
+                                    );
+                                }
+                                return config.selectedItems.map(
+                                    (item, itemIndex) => {
+                                        if (item)
+                                            return (
+                                                <Chip
+                                                    key={
+                                                        `Chip` +
+                                                        index +
+                                                        "_" +
+                                                        itemIndex
+                                                    }
+                                                    sx={{
+                                                        margin: "3px !important",
+                                                    }}
+                                                    color="warning"
+                                                    variant="filled"
+                                                    label={
+                                                        config.label +
+                                                        ": " +
+                                                        t(item)
+                                                    }
+                                                    onDelete={() =>
+                                                        handleChipDelete(
+                                                            config.label,
+                                                            itemIndex
+                                                        )
+                                                    }
+                                                />
+                                            );
+                                        else return;
+                                    }
+                                );
+                            }
+                            return;
+                        })}
+                    </Grid>
+                </Grid> */}
+                    </Box>
+                    <div
+                        style={{
+                            height: `calc(100vh - ${heightFromTop}px)`,
+                            maxHeight: `calc(100vh - ${heightFromTop}px)`,
+                            overflowY: "scroll",
+                        }}
+                    >
                         {!model.loading &&
                             Object.keys(model.evaluationsData)
                                 .filter((value) =>
