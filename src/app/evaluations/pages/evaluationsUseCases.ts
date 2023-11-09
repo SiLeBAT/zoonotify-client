@@ -18,6 +18,7 @@ import { callApiService } from "../../shared/infrastructure/api/callApi.service"
 import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
 
+
 type EvaluationPageModel = {
     downloadGraphButtonText: string;
     downloadDataButtonText: string;
@@ -27,6 +28,7 @@ type EvaluationPageModel = {
     evaluationsData: Evaluation;
     selectionConfig: SelectionFilterConfig[];
     selectedFilters: FilterSelection;
+    loading: boolean;
 };
 
 type EvaluationPageOperations = {
@@ -162,6 +164,8 @@ const useEvaluationPageComponent: UseCase<
         initialFilterSelection
     );
 
+    const [loading, setLoading] = useState(true);
+
     const createQueryString = (selection: FilterSelection): string => {
         const result = Object.entries(selection)
             .map(([key, value]) => {
@@ -178,6 +182,9 @@ const useEvaluationPageComponent: UseCase<
 
     const fetchData = (filter: FilterSelection): void => {
         const qString = createQueryString(filter);
+
+        setLoading(true);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
         callApiService<
             CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
@@ -221,9 +228,11 @@ const useEvaluationPageComponent: UseCase<
                     );
                 }
                 setEvaluationsData(result);
+                setLoading(false);
                 return result;
             })
             .catch((error) => {
+                setLoading(false);
                 throw error;
             });
     };
@@ -274,6 +283,7 @@ const useEvaluationPageComponent: UseCase<
             evaluationsData,
             selectionConfig,
             selectedFilters,
+            loading,
         },
         operations: {
             showDivision,
