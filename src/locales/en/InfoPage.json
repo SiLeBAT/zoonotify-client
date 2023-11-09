@@ -1,7 +1,9 @@
 {
-  "GRAPHIKEN": "Graphs",
+  "HINTERGRUND": "Background",
   "METHODEN": "Methods",
+  "GRAPHIKEN": "Graphs",
   "DATEN": "Data",
+
   "samplingYear": {
     "2010": "2010",
     "2011": "2011",
