@@ -61,7 +61,6 @@ const useExplanationPageComponent: UseCase<
     const handleClose = (): void => {
         setOpenAmrDialog(false);
     };
-    console.log("Translation for HINTERGRUND:", t("Hintergrund"));
 
     useEffect(() => {
         callApiService<
@@ -79,9 +78,6 @@ const useExplanationPageComponent: UseCase<
                         translatedSection: t(entry.attributes.section),
                     }));
 
-                    // Log the cmsData to make sure the section values are what we expect
-                    console.log("CMS Data:", cmsData);
-
                     // Define the order of the sections as they appear in the enum
                     const orderedSections = [
                         "HINTERGRUND",
@@ -90,9 +86,6 @@ const useExplanationPageComponent: UseCase<
                         "DATEN",
                     ];
 
-                    // Log the orderedSections to ensure the order is correct
-                    console.log("Ordered Sections:", orderedSections);
-
                     // Order the cmsData based on the index of each item's section in the orderedSections
                     const orderedCmsData = cmsData.sort((a, b) => {
                         const aIndex = orderedSections.indexOf(a.section);
@@ -100,17 +93,11 @@ const useExplanationPageComponent: UseCase<
                         return aIndex - bIndex;
                     });
 
-                    // Log the ordered data to see if it's sorted correctly
-                    console.log("Ordered CMS Data:", orderedCmsData);
-
                     // Group the ordered data by section
                     const sectionKeyedData = lodash.groupBy(
                         orderedCmsData,
                         "translatedSection"
                     );
-
-                    // Log the grouped data to verify the structure
-                    console.log("Section Keyed Data:", sectionKeyedData);
 
                     setExplanationCollection(sectionKeyedData);
 
