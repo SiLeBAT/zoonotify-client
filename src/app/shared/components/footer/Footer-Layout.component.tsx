@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, useTheme } from "@mui/system";
+import { footerHeight } from "./../../../shared/style/Style-MainTheme";
 
 export function FooterLayoutComponent(props: {
     lastUpdateComponent: JSX.Element;
@@ -11,6 +12,7 @@ export function FooterLayoutComponent(props: {
             component="footer"
             sx={{
                 width: "100%",
+                height: `${footerHeight}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",

@@ -22,6 +22,9 @@ export const onSecondaryColor = bfrBlue;
 export const onSurfaceColor = bfrBlack;
 export const onErrorColor = bfrBlack;
 
+export const headerHeight = "42px";
+export const footerHeight = "42px";
+
 /*
  * Theme generated using this tool: http://mcg.mbitson.com
  * The primary color (value 500) used was the bfr-blue.
