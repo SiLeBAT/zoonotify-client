@@ -1,5 +1,8 @@
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
     Box,
+    Card,
+    CardContent,
     // Button,
     // Chip,
     Collapse,
@@ -9,7 +12,6 @@ import {
     Stack,
     styled,
 } from "@mui/material";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import React, { useEffect } from "react";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import { EvaluationDivisionContainer } from "../components/EvaluationDivisionContainer";
@@ -85,6 +87,25 @@ export function EvaluationsMainComponent(): JSX.Element {
                         heading={model.heading.main}
                     ></MainComponentHeader>
                 </Box>
+                <Card
+                    sx={{
+                        padding: "1em",
+                        margin: "2.5em auto",
+                        width: "50%",
+                    }}
+                >
+                    <CardContent>
+                        <div
+                            style={{
+                                fontSize: "0.85rem",
+                                lineHeight: "1.6",
+                                textAlign: "justify",
+                            }}
+                        >
+                            {model.howto}
+                        </div>
+                    </CardContent>
+                </Card>
                 {/* <Grid container spacing={2}>
                     <Grid
                         item

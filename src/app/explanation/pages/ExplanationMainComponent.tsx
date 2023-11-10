@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Markdown from "markdown-to-jsx";
 import React from "react";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
@@ -6,7 +7,6 @@ import { ExplanationTermComponent } from "../components/ExplanationTermComponent
 import { InfoPageAmrDialogComponent } from "../components/InfoPage-AmrsDialog.component";
 import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
 import { useExplanationPageComponent } from "./explanationUseCases";
-import { useTheme } from "@mui/material/styles";
 export function InfoPageComponent(props: {
     tableData: Record<AmrKey, AmrsTable>;
     onAmrDataExport: (amrKey: AmrKey) => void;
@@ -42,7 +42,6 @@ export function InfoPageComponent(props: {
             >
                 {model.title}
             </Typography>
-            {/* Removed IndexHeaderComponent here */}
             <div>
                 {model.mainSection.length > 0 ? (
                     <ZNAccordion
