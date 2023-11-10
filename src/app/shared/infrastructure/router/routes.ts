@@ -12,4 +12,5 @@ export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
 export const EXPLANATION = `${CMS_API_ENDPOINT}/explanations`;
 export const EVALUATIONS = `${CMS_API_ENDPOINT}/evaluations`;
+export const EVALUATION_INFO = `${CMS_API_ENDPOINT}/evaluation-information`;
 export const AMR_TABLE = `${CMS_API_ENDPOINT}/resistance-tables`;
