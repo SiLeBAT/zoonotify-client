@@ -11,12 +11,13 @@ import {
     onSecondaryColor,
     primaryColor,
     secondaryColor,
+    headerHeight,
 } from "../../style/Style-MainTheme";
 import { TranslationButtonsComponent } from "./TranslationButtons.component";
 
 const headerStyle = css`
     width: 100%;
-    height: 100%;
+    height: ${headerHeight};
     display: flex;
     flex-direction: column;
     box-sizing: border-box;

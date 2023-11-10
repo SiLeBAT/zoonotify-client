@@ -1,5 +1,9 @@
 import { Box, Button, Card, CardContent, CardMedia, Link } from "@mui/material";
 import { useTheme } from "@mui/system";
+import {
+    footerHeight,
+    headerHeight,
+} from "./../../shared/style/Style-MainTheme";
 import Markdown from "markdown-to-jsx";
 import React, { useCallback, useState } from "react";
 import ImageViewer from "react-simple-image-viewer";
@@ -140,7 +144,8 @@ export function EvaluationsCardComponent(props: {
                     disableScroll={true}
                     backgroundStyle={{
                         backgroundColor: "rgba(0,0,0,0.9)",
-                        maxHeight: "95%",
+                        maxHeight: `calc(100vh - ${footerHeight} - ${headerHeight})`,
+                        top: `${headerHeight}`,
                     }}
                     closeOnClickOutside={true}
                 />
