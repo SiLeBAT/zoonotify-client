@@ -18,7 +18,6 @@ import { callApiService } from "../../shared/infrastructure/api/callApi.service"
 import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
 
-
 type EvaluationPageModel = {
     downloadGraphButtonText: string;
     downloadDataButtonText: string;
