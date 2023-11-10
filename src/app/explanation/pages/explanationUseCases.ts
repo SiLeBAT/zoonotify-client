@@ -4,14 +4,10 @@ import * as lodash from "lodash";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import {
-    AMR_TABLE,
-    EXPLANATION,
-} from "../../shared/infrastructure/router/routes";
+import { EXPLANATION } from "../../shared/infrastructure/router/routes";
 import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
 import {
-    AMRTableAttributesDTO,
     AMRTablesDTO,
     ExplanationAttributesDTO,
     ExplanationCollection,
@@ -52,7 +48,7 @@ const useExplanationPageComponent: UseCase<
     const [explanationCollection, setExplanationCollection] =
         useState<ExplanationCollection>({});
     const [mainSection, setMainSection] = useState<ExplanationDTO[]>([]);
-    const [amrData, setAmrData] = useState<AMRTablesDTO[]>([]);
+    const [amrData] = useState<AMRTablesDTO[]>([]);
     const [currentAMRID, setCurrentAMRID] = useState<string>("");
     const [openAmrDialog, setOpenAmrDialog] = useState<boolean>(false);
 
@@ -67,60 +63,52 @@ const useExplanationPageComponent: UseCase<
     };
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callApiService<
             CMSResponse<CMSEntity<ExplanationAttributesDTO>[], unknown>
         >(`${EXPLANATION}?locale=${i18next.language}`)
             .then((response) => {
                 if (response.data) {
                     const data = response.data.data;
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const cmsData = data.map((entry) => ({
                         title: entry.attributes.title,
                         description: entry.attributes.description,
-                        section: t(entry.attributes.section),
+                        // Directly use the untranslated section for sorting purposes
+                        section: entry.attributes.section,
+                        // Include translatedSection for display purposes
+                        translatedSection: t(entry.attributes.section),
                     }));
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const sectionKeyedData: any = lodash.groupBy(
-                        cmsData,
-                        "section"
+
+                    // Define the order of the sections as they appear in the enum
+                    const orderedSections = [
+                        "HINTERGRUND",
+                        "METHODEN",
+                        "GRAPHIKEN",
+                        "DATEN",
+                    ];
+
+                    // Order the cmsData based on the index of each item's section in the orderedSections
+                    const orderedCmsData = cmsData.sort((a, b) => {
+                        const aIndex = orderedSections.indexOf(a.section);
+                        const bIndex = orderedSections.indexOf(b.section);
+                        return aIndex - bIndex;
+                    });
+
+                    // Group the ordered data by section
+                    const sectionKeyedData = lodash.groupBy(
+                        orderedCmsData,
+                        "translatedSection"
                     );
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    const { HAUPT: _, ...sectionsWithoutMain } =
-                        sectionKeyedData;
 
-                    setExplanationCollection(sectionsWithoutMain);
-                    setMainSection(sectionKeyedData.HAUPT || []);
+                    setExplanationCollection(sectionKeyedData);
+
+                    setMainSection(sectionKeyedData.MAIN || []);
                 }
                 return response;
             })
             .catch((error) => {
                 throw error;
             });
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        callApiService<
-            CMSResponse<CMSEntity<AMRTableAttributesDTO>[], unknown>
-        >(`${AMR_TABLE}?locale=${i18next.language}`)
-            .then((response) => {
-                if (response.data) {
-                    const data = response.data.data;
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const cmsData: AMRTablesDTO[] = data.map((entry) => ({
-                        title: entry.attributes.title,
-                        description: entry.attributes.description,
-                        table_id: entry.attributes.table_id,
-                        yearly_cut_off: entry.attributes.yearly_cut_off,
-                    }));
-
-                    setAmrData(cmsData);
-                }
-                return response;
-            })
-            .catch((error) => {
-                throw error;
-            });
-    }, [i18next.language]);
+    }, [i18next.language, t]);
 
     return {
         model: {

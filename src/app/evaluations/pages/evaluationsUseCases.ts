@@ -1,23 +1,24 @@
 import {
     CMS_BASE_ENDPOINT,
     EVALUATIONS,
+    EVALUATION_INFO,
 } from "./../../shared/infrastructure/router/routes";
 import {
     DivisionToken,
     Evaluation,
     EvaluationAttributesDTO,
+    EvaluationInformationAttributesDTO,
     FilterSelection,
     SelectionFilterConfig,
     SelectionItem,
 } from "./../model/Evaluations.model";
 // eslint-disable-next-line import/named
 import i18next, { TFunction } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
-
 
 type EvaluationPageModel = {
     downloadGraphButtonText: string;
@@ -29,6 +30,7 @@ type EvaluationPageModel = {
     selectionConfig: SelectionFilterConfig[];
     selectedFilters: FilterSelection;
     loading: boolean;
+    howto: string;
 };
 
 type EvaluationPageOperations = {
@@ -131,6 +133,8 @@ const useEvaluationPageComponent: UseCase<
     EvaluationPageOperations
 > = () => {
     const { t } = useTranslation(["ExplanationPage"]);
+
+    const [howto, setHowto] = useState("");
 
     const emptyDivisions: Evaluation = {
         FUTTERMITTEL: [],
@@ -273,6 +277,22 @@ const useEvaluationPageComponent: UseCase<
         return selectedFilters.division.includes(div);
     };
 
+    useEffect(() => {
+        callApiService<
+            CMSResponse<CMSEntity<EvaluationInformationAttributesDTO>, unknown>
+        >(`${EVALUATION_INFO}?locale=${i18next.language}`)
+            .then((response) => {
+                if (response.data) {
+                    const data = response.data.data;
+                    setHowto(data.attributes.content);
+                }
+                return response;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }, [i18next.language]);
+
     return {
         model: {
             downloadDataButtonText,
@@ -284,6 +304,7 @@ const useEvaluationPageComponent: UseCase<
             selectionConfig,
             selectedFilters,
             loading,
+            howto,
         },
         operations: {
             showDivision,

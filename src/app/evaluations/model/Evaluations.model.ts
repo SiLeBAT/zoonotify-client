@@ -63,3 +63,7 @@ export type SelectionFilterConfig = {
     selectionOptions: SelectionItem[];
     handleChange: (event: { target: { value: string } }) => void;
 };
+
+export interface EvaluationInformationAttributesDTO extends CMSAttributeDTO {
+    content: string;
+}

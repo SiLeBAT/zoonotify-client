@@ -1,5 +1,7 @@
 import {
     Box,
+    Card,
+    CardContent,
     // Button,
     // Chip,
     Collapse,
@@ -242,6 +244,25 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 heading={model.heading.main}
                             ></MainComponentHeader>
                         </Box>
+                        <Card
+                            sx={{
+                                // padding: "1em",
+                                margin: "1.5em auto",
+                                width: "70%",
+                            }}
+                        >
+                            <CardContent>
+                                <div
+                                    style={{
+                                        fontSize: "0.85rem",
+                                        lineHeight: "1.6",
+                                        textAlign: "justify",
+                                    }}
+                                >
+                                    {model.howto}
+                                </div>
+                            </CardContent>
+                        </Card>
                         {/* <Grid container spacing={2}>
                     <Grid
                         item
