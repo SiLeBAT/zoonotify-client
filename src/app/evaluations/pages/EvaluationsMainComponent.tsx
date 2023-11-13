@@ -110,7 +110,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                         <>
                             <div
                                 style={{
-                                    zIndex: "100",
+                                    zIndex: "101",
                                     position: "relative",
                                 }}
                             >
@@ -139,15 +139,19 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 />
                             </div>
 
-                            <div>
+                            <div
+                                style={{
+                                    float: "inline-end",
+                                }}
+                            >
                                 <IconButton
                                     color="primary"
                                     aria-label="apply filter"
                                     onClick={handleFilterBtnClick}
                                     sx={{
+                                        zIndex: "100",
                                         position: "absolute",
                                         top: "45%",
-                                        left: "30%",
                                         borderRadius: "50%",
                                         display: "flex",
                                         alignItems: "center",
@@ -211,7 +215,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 onClick={handleFilterBtnClick}
                                 sx={{
                                     top: "45%",
-                                    left: "1.5%",
+                                    left: "25px",
                                     position: "absolute",
                                     height: "48px",
                                     width: "48px",
