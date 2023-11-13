@@ -76,7 +76,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                 headerRef?.current?.clientHeight +
                 Number(footerHeight) +
                 Number(headerHeight) +
-                40
+                18
             );
         }
         return 230;
