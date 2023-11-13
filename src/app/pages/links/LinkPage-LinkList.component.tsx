@@ -74,9 +74,7 @@ export function LinkPageLinkListComponent(): JSX.Element {
         <div>
             {Object.entries(groupedLinks).map(([category, links]) => (
                 <List key={category}>
-                    <ListSubheader>
-                        {t(`${category}.Title`, category)}
-                    </ListSubheader>
+                    <ListSubheader>{t(`${category}`, category)}</ListSubheader>
                     {links.map((link, index) => (
                         <ListContentListItemComponent
                             key={`Link${index}`}
