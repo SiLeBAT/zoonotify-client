@@ -22,8 +22,8 @@ export const onSecondaryColor = bfrBlue;
 export const onSurfaceColor = bfrBlack;
 export const onErrorColor = bfrBlack;
 
-export const headerHeight = "42px";
-export const footerHeight = "42px";
+export const headerHeight = "42";
+export const footerHeight = "42";
 
 /*
  * Theme generated using this tool: http://mcg.mbitson.com

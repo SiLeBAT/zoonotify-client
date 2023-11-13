@@ -17,7 +17,7 @@ import { TranslationButtonsComponent } from "./TranslationButtons.component";
 
 const headerStyle = css`
     width: 100%;
-    height: ${headerHeight};
+    height: ${headerHeight}px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
