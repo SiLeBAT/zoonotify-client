@@ -12,7 +12,6 @@ import {
     Typography,
     styled,
 } from "@mui/material";
-import Markdown from "markdown-to-jsx";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
@@ -27,7 +26,6 @@ import { FilterContainerComponent } from "../components/FilterContainerComponent
 import { DivisionToken, FilterSelection } from "../model/Evaluations.model";
 import { useEvaluationPageComponent } from "./evaluationsUseCases";
 // import { useTranslation } from "react-i18next";
-import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -144,6 +142,8 @@ export function EvaluationsMainComponent(): JSX.Element {
                                     ) => {
                                         handleSearchBtnClick(data);
                                     }}
+                                    howToHeading={model.howToHeading}
+                                    howToContent={model.howto}
                                 />
                             </div>
 
@@ -256,20 +256,6 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 heading={model.heading.main}
                             ></MainComponentHeader>
                         </Box>
-                        <div
-                            style={{
-                                margin: "2.5em auto",
-                                width: "50%",
-                            }}
-                        >
-                            <ZNAccordion
-                                key="howTo"
-                                title={model.howToHeading}
-                                content={<Markdown>{model.howto}</Markdown>}
-                                defaultExpanded={false}
-                                centerContent={false}
-                            />
-                        </div>
                         {/* <Grid container spacing={2}>
                     <Grid
                         item
