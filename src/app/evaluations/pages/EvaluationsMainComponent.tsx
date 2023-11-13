@@ -1,4 +1,3 @@
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
     Box,
     Card,
@@ -10,15 +9,22 @@ import {
     IconButton,
     Paper,
     Stack,
+    Typography,
     styled,
 } from "@mui/material";
+import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
+import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import React, { useEffect } from "react";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import { EvaluationDivisionContainer } from "../components/EvaluationDivisionContainer";
 import { FilterContainerComponent } from "../components/FilterContainerComponent";
 import { DivisionToken, FilterSelection } from "../model/Evaluations.model";
 import { useEvaluationPageComponent } from "./evaluationsUseCases";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import {
+    primaryColor,
+    backgroundColor,
+} from "../../shared/style/Style-MainTheme";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -30,7 +36,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export function EvaluationsMainComponent(): JSX.Element {
     const { model, operations } = useEvaluationPageComponent(null);
-    // const { t } = useTranslation(["ExplanationPage"]);
+    const { t } = useTranslation(["ExplanationPage"]);
     // const handleChipDelete = (label: string, index: number): void => {
     //     const result = model.selectionConfig.filter((config) => {
     //         return config.label == label;
@@ -61,13 +67,13 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const headerRef: any = React.createRef();
-    const [heightFromTop, setHeightFromTop] = React.useState(230);
+    const [heightFromTop, setHeightFromTop] = React.useState(200);
 
     const getHeightOffset = (): number => {
         if (headerRef?.current?.clientHeight) {
-            return headerRef?.current?.clientHeight + 130;
+            return headerRef?.current?.clientHeight + 120;
         }
-        return 230;
+        return 200;
     };
 
     useEffect(() => {
@@ -81,32 +87,187 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     return (
         <>
-            <Box ref={headerRef}>
-                <Box sx={{ width: "60%", margin: "0.5em auto" }}>
-                    <MainComponentHeader
-                        heading={model.heading.main}
-                    ></MainComponentHeader>
-                </Box>
-                <Card
+            <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                    "&& .MuiPaper-root": {},
+                }}
+            >
+                <Collapse
+                    orientation="horizontal"
+                    in={showFilters}
+                    collapsedSize={50}
                     sx={{
-                        padding: "1em",
-                        margin: "2.5em auto",
-                        width: "50%",
+                        maxWidth: "30%",
+                        borderRight: "1px solid gray",
+                        "&& .MuiCollapse-wrapperInner": {
+                            width: "100%",
+                        },
                     }}
                 >
-                    <CardContent>
+                    {showFilters && (
+                        <>
+                            <div
+                                style={{
+                                    zIndex: "101",
+                                    position: "relative",
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        padding: 1,
+                                        justifyContent: "center",
+                                        gap: 2,
+                                    }}
+                                >
+                                    <Typography variant="h3">
+                                        {t("Filter_Settings")}
+                                    </Typography>
+                                </Box>
+
+                                <FilterContainerComponent
+                                    selectionConfig={model.selectionConfig}
+                                    searchButtonText={model.searchButtonText}
+                                    handleSearchBtnClick={(
+                                        data: FilterSelection
+                                    ) => {
+                                        handleSearchBtnClick(data);
+                                    }}
+                                />
+                            </div>
+
+                            <div
+                                style={{
+                                    float: "inline-end",
+                                }}
+                            >
+                                <IconButton
+                                    color="primary"
+                                    aria-label="apply filter"
+                                    onClick={handleFilterBtnClick}
+                                    sx={{
+                                        zIndex: "100",
+                                        position: "absolute",
+                                        top: "45%",
+                                        borderRadius: "50%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        fontSize: "22px",
+                                        cursor: "pointer",
+                                        color: `${backgroundColor}`,
+                                        ":hover": {
+                                            backgroundColor: `${primaryColor}`,
+                                        },
+                                        backgroundColor: `${primaryColor}`,
+                                        background: `linear-gradient( 90deg , ${backgroundColor} 50%, ${primaryColor} 50%)`,
+                                        padding: "0",
+                                        height: "48px",
+                                        width: "48px",
+                                        marginLeft: "-24px",
+                                        "&& svg": {
+                                            marginLeft: "10px",
+                                            marginRight: "-10px",
+                                            fontSize: "xxx-large",
+                                        },
+                                    }}
+                                >
+                                    <KeyboardArrowLeftRoundedIcon />
+                                </IconButton>
+                            </div>
+                        </>
+                    )}
+                    {!showFilters && (
                         <div
                             style={{
-                                fontSize: "0.85rem",
-                                lineHeight: "1.6",
-                                textAlign: "justify",
+                                backgroundColor: `${primaryColor}`,
+                                height: "100%",
                             }}
                         >
-                            {model.howto}
+                            <div
+                                style={{
+                                    display: "inline-block",
+                                    transform:
+                                        "rotate(-90deg) translateX(-110%)",
+                                    transformOrigin: "top left",
+                                    width: "max-content",
+                                    zIndex: "100",
+                                    position: "absolute",
+                                    left: "10px",
+                                }}
+                            >
+                                <Typography
+                                    variant="h3"
+                                    sx={{
+                                        color: `${backgroundColor}`,
+                                    }}
+                                >
+                                    {t("Filter_Settings")}
+                                </Typography>
+                            </div>
+
+                            <IconButton
+                                color="primary"
+                                aria-label="apply filter"
+                                onClick={handleFilterBtnClick}
+                                sx={{
+                                    top: "45%",
+                                    left: "25px",
+                                    position: "absolute",
+                                    height: "48px",
+                                    width: "48px",
+                                    backgroundColor: `${primaryColor}`,
+                                    color: "rgb(255, 255, 255)",
+                                    ":hover": {
+                                        backgroundColor: `${primaryColor}`,
+                                    },
+                                    "&& svg": {
+                                        marginRight: "-15px",
+                                        fontSize: "xxx-large",
+                                    },
+                                }}
+                            >
+                                <KeyboardArrowRightRoundedIcon />
+                            </IconButton>
                         </div>
-                    </CardContent>
-                </Card>
-                {/* <Grid container spacing={2}>
+                    )}
+                </Collapse>
+
+                <Item
+                    style={{
+                        width: "100%",
+                        boxShadow: "15px 0 15px -15px inset",
+                    }}
+                >
+                    <Box ref={headerRef}>
+                        <Box>
+                            <MainComponentHeader
+                                heading={model.heading.main}
+                            ></MainComponentHeader>
+                        </Box>
+                        <Card
+                            sx={{
+                                // padding: "1em",
+                                margin: "1.5em auto",
+                                width: "70%",
+                            }}
+                        >
+                            <CardContent>
+                                <div
+                                    style={{
+                                        fontSize: "0.85rem",
+                                        lineHeight: "1.6",
+                                        textAlign: "justify",
+                                    }}
+                                >
+                                    {model.howto}
+                                </div>
+                            </CardContent>
+                        </Card>
+                        {/* <Grid container spacing={2}>
                     <Grid
                         item
                         xs={12}
@@ -184,81 +345,14 @@ export function EvaluationsMainComponent(): JSX.Element {
                         })}
                     </Grid>
                 </Grid> */}
-            </Box>
-
-            <Stack direction="row" spacing={2}>
-                <Collapse
-                    orientation="horizontal"
-                    in={showFilters}
-                    collapsedSize={30}
-                    sx={{
-                        maxWidth: "30%",
-                        "&& .MuiCollapse-wrapperInner": {
-                            width: "100%",
-                        },
-                    }}
-                >
-                    {showFilters && (
-                        <>
-                            <Stack direction="row" spacing={2}>
-                                <div style={{ height: "auto", width: "95%" }}>
-                                    <FilterContainerComponent
-                                        selectionConfig={model.selectionConfig}
-                                        searchButtonText={
-                                            model.searchButtonText
-                                        }
-                                        handleSearchBtnClick={(
-                                            data: FilterSelection
-                                        ) => {
-                                            handleSearchBtnClick(data);
-                                        }}
-                                    />
-                                </div>
-                                <div
-                                    style={{
-                                        height: "auto",
-                                        width: "5%",
-                                        margin: 0,
-                                    }}
-                                >
-                                    <IconButton
-                                        color="primary"
-                                        aria-label="apply filter"
-                                        onClick={handleFilterBtnClick}
-                                        sx={{
-                                            top: "65% !important",
-                                        }}
-                                    >
-                                        <FilterAltIcon />
-                                    </IconButton>
-                                </div>
-                            </Stack>
-                        </>
-                    )}
-                    {!showFilters && (
-                        <IconButton
-                            color="primary"
-                            aria-label="apply filter"
-                            onClick={handleFilterBtnClick}
-                            sx={{
-                                top: "45%",
-                            }}
-                        >
-                            <FilterAltIcon />
-                        </IconButton>
-                    )}
-                </Collapse>
-
-                <Item
-                    style={{
-                        height: `calc(100vh - ${heightFromTop}px)`,
-                        maxHeight: `calc(100vh - ${heightFromTop}px)`,
-                        overflowY: "scroll",
-                        width: "100%",
-                        boxShadow: "15px 0 15px -15px inset",
-                    }}
-                >
-                    <div>
+                    </Box>
+                    <div
+                        style={{
+                            height: `calc(100vh - ${heightFromTop}px)`,
+                            maxHeight: `calc(100vh - ${heightFromTop}px)`,
+                            overflowY: "scroll",
+                        }}
+                    >
                         {!model.loading &&
                             Object.keys(model.evaluationsData)
                                 .filter((value) =>
