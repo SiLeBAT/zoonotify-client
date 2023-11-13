@@ -31,6 +31,7 @@ type EvaluationPageModel = {
     selectedFilters: FilterSelection;
     loading: boolean;
     howto: string;
+    howToHeading: string;
 };
 
 type EvaluationPageOperations = {
@@ -44,6 +45,7 @@ type EvaluationPageTranslations = {
     downloadGraphButtonText: string;
     filterButtonText: string;
     searchButtonText: string;
+    howToHeading: string;
     heading: Record<string, string>;
 };
 
@@ -104,6 +106,7 @@ function getTranslations(t: TFunction): EvaluationPageTranslations {
     const downloadDataButtonText = t("Data_Download");
     const searchButtonText = t("Search");
     const filterButtonText = t("Filter");
+    const howToHeading = t("HOW_TO");
     const heading = {
         main: t("Heading"),
         FUTTERMITTEL: t("FUTTERMITTEL"),
@@ -117,6 +120,7 @@ function getTranslations(t: TFunction): EvaluationPageTranslations {
         heading,
         searchButtonText,
         filterButtonText,
+        howToHeading,
     };
 }
 
@@ -162,6 +166,7 @@ const useEvaluationPageComponent: UseCase<
         heading,
         searchButtonText,
         filterButtonText,
+        howToHeading,
     } = getTranslations(t);
 
     const [selectedFilters, setSelectedFilters] = useState(
@@ -305,6 +310,7 @@ const useEvaluationPageComponent: UseCase<
             selectedFilters,
             loading,
             howto,
+            howToHeading,
         },
         operations: {
             showDivision,
