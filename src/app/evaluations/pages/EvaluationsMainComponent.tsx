@@ -71,7 +71,7 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     const getHeightOffset = (): number => {
         if (headerRef?.current?.clientHeight) {
-            return headerRef?.current?.clientHeight + 100;
+            return headerRef?.current?.clientHeight + 120;
         }
         return 200;
     };
