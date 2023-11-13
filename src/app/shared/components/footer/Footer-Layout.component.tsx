@@ -12,7 +12,7 @@ export function FooterLayoutComponent(props: {
             component="footer"
             sx={{
                 width: "100%",
-                height: `${footerHeight}`,
+                height: `${footerHeight}px`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",

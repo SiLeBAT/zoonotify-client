@@ -24,6 +24,8 @@ import { useTranslation } from "react-i18next";
 import {
     primaryColor,
     backgroundColor,
+    footerHeight,
+    headerHeight,
 } from "../../shared/style/Style-MainTheme";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -67,13 +69,18 @@ export function EvaluationsMainComponent(): JSX.Element {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const headerRef: any = React.createRef();
-    const [heightFromTop, setHeightFromTop] = React.useState(200);
+    const [heightFromTop, setHeightFromTop] = React.useState(230);
 
     const getHeightOffset = (): number => {
         if (headerRef?.current?.clientHeight) {
-            return headerRef?.current?.clientHeight + 120;
+            return (
+                headerRef?.current?.clientHeight +
+                Number(footerHeight) +
+                Number(headerHeight) +
+                40
+            );
         }
-        return 200;
+        return 230;
     };
 
     useEffect(() => {

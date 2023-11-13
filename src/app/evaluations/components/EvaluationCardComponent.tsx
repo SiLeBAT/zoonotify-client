@@ -144,8 +144,8 @@ export function EvaluationsCardComponent(props: {
                     disableScroll={true}
                     backgroundStyle={{
                         backgroundColor: "rgba(0,0,0,0.9)",
-                        maxHeight: `calc(100vh - ${footerHeight} - ${headerHeight})`,
-                        top: `${headerHeight}`,
+                        maxHeight: `calc(100vh - ${footerHeight}px - ${headerHeight}px)`,
+                        top: `${headerHeight}px`,
                     }}
                     closeOnClickOutside={true}
                 />
