@@ -1,7 +1,9 @@
-import { Box, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { Box, Button } from "@mui/material";
 // eslint-disable-next-line import/named
+import Markdown from "markdown-to-jsx";
 import React from "react";
+import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import {
     FilterSelection,
     SelectionFilterConfig,
@@ -12,6 +14,8 @@ import { FilterMultiSelectionComponent } from "./FilterMultiSelectionComponent";
 type FilterContainerComponentProps = {
     selectionConfig: SelectionFilterConfig[];
     searchButtonText: string;
+    howToHeading: string;
+    howToContent: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleSearchBtnClick: (filter: FilterSelection) => any;
 };
@@ -19,6 +23,8 @@ type FilterContainerComponentProps = {
 export function FilterContainerComponent({
     selectionConfig,
     searchButtonText,
+    howToContent,
+    howToHeading,
     handleSearchBtnClick,
 }: FilterContainerComponentProps): JSX.Element {
     const getFilterById = (id: string): string[] => {
@@ -135,6 +141,20 @@ export function FilterContainerComponent({
                 >
                     {searchButtonText}
                 </Button>
+            </Box>
+            <Box
+                sx={{
+                    margin: "2.5em auto",
+                    width: "95%",
+                }}
+            >
+                <ZNAccordion
+                    key="howTo"
+                    title={howToHeading}
+                    content={<Markdown>{howToContent}</Markdown>}
+                    defaultExpanded={false}
+                    centerContent={false}
+                />
             </Box>
         </Box>
     );
