@@ -1,11 +1,13 @@
+import { List, ListSubheader } from "@mui/material";
+import i18next from "i18next";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { List, ListSubheader } from "@mui/material";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { ListContentListItemComponent } from "./ListContent-ListItem.component";
 
 // Import CMSResponse and CMSEntity
-import { CMSResponse, CMSEntity } from "../../shared/model/CMS.model";
+import { EXTERNAL_LINKS } from "../../shared/infrastructure/router/routes";
+import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 
 // Define a type for the category
 type Category =
@@ -39,8 +41,7 @@ export function LinkPageLinkListComponent(): JSX.Element {
 
     useEffect(() => {
         // Updated the API endpoint to include sorting by priority in descending order
-        const apiEndpoint =
-            "http://localhost:1337/api/externallinks?_sort=priority:DESC";
+        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18next.language}&_sort=priority:DESC`;
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
@@ -55,7 +56,7 @@ export function LinkPageLinkListComponent(): JSX.Element {
             .catch((error) => {
                 console.error("Error fetching data: ", error);
             });
-    }, []);
+    }, [i18next.language]);
 
     const groupByCategory = (
         links: ExternalLink[]
