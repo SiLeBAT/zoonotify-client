@@ -1,0 +1,89 @@
+{
+  "Heading": "Data Protection Declaration",
+  "Description": {
+    "DescriptionText1": "The German Federal Institute for Risk Assessment (BfR) attaches great importance to the responsible handling of personal data. We want users to know when which data is collected and used by the BfR.Under the domain ",
+    "DescriptionLink": "zoonotify.bfr.berlin",
+    "DescriptionText2": ", the BfR operates the ZooNotify web application to query a simplified dataset of pathogen detection in the food chain and their properties collected in accordance with Directive 99/2003/EU (Zoonoses Directive) and transmitted to the BfR. We only process personal data to the necessary extent. The basis on which different data is processed depends on the purpose for which the data is required."
+  },
+  "Chapter": {
+    "1": {
+      "Heading": "1. Who is responsible for data processing and who can I contact?",
+      "Text1": "The German Federal Institute for Risk Assessment is responsible for processing your data in line with Art. 4 No. 7 GDPR. You can find our contact details below: ",
+      "MailText": "E-Mail: ",
+      "BfrName": "German Federal Institute for Risk Assessment (BfR)",
+      "Text2": "If you have questions about the processing of your data or about data protection, please contact our Data Protection Officer: "
+    },
+    "2": {
+      "Heading": "2. On which legal basis do we process your personal data?",
+      "Text1": "At the BfR, personal data is processed in accordance with the ",
+      "LinkDSGVO": "European General Data Protection Regulation (GDPR)",
+      "Text2": ", the German Telemedia Act (TMG) and the  ",
+      "LinkBDSG": "German Federal Data Protection Act (BDSG).",
+      "Text3": "Provided the BfR obtains consent from the person concerned to process their personal data, Art. 6 Para. 1 lit. a GDPR serves as the legal basis. Consent can be revoked at any time with future effect. This also applies to revoking consent that was given to us before the GDPR came into effect, i.e. before 25 May 2018.",
+      "Text4": "If personal data required to fulfil a contract is processed where the contract party is the person concerned, Art. 6 Para. 1 lit. b GDPR serves as the legal basis in the individual case. This also applies to processing that is required to perform pre-contractual measures.",
+      "Text5": "If personal data needs to be processed in an individual case in order to fulfil a legal obligation, Art. 6 Para. 1 lit. c GDPR also serves as the legal basis in conjunction with the relevant legislation from which the legal obligation arises.",
+      "Text6": "In the rare case that vital interests of the person concerned or another individual necessitate processing of personal data, Art. 6 Para. 1 lit. d GDPR serves as the legal basis.",
+      "Text7": "The BfR processes personal data during performance of its tasks in the public interest. The public tasks of the BfR include in particular the tasks and activities assigned to it according to the BfR law (BfRG). The legal basis of the processing here is Art. 6 Para. 1 lit. e of the GDPR in conjunction with the relevant provisions of the BfRG, in particular § 2 BfRG.",
+      "Text8": "Where necessary, we also process your data for protection of our own justified interests or those of third parties. Examples may include enforcement of legal claims and defence in legal disputes, guaranteeing IT security and IT operation of the BfR, PR work of the BfR or the prevention of crimes, etc. In such cases, Art. 6 Para. 1 lit. f GDPR serves as the legal basis."
+    },
+    "3": {
+      "Heading": "3. Which personal data is processed in the context of visits to our website? ",
+      "31": {
+        "Heading": "3.1 Data collection",
+        "Text1": "Each time a user accesses our web pages and each time a file is opened, data on this process is temporarily processed in a log file on the web server. The following data in particular is saved on each access operation/file opening:",
+        "Data": {
+          "a": "Browser type and version",
+          "b": "Operating system used",
+          "c": "Website from which you visit our web pages (referrer URL)",
+          "d": "Web page that you visit",
+          "e": "Date and time of access",
+          "f": "Your Internet Protocol (IP) address in anonymised form"
+        },
+        "Text2": "The legal basis for temporary saving of data is Art. 6 Para. 1 lit. e and f GDPR. This data is not combined with the user's other personal data.",
+        "Text3": "When using this information, the BfR does not draw conclusions about the person in question. Rather, this information is required to:",
+        "Reasons": {
+          "a": "Correctly deliver the contents of our web page",
+          "b": "Optimise the contents of our web page",
+          "c": "Guarantee functionality of our IT systems and the technology of our web page"
+        },
+        "Text4": "The log files are deleted after 14 days."
+      },
+      "32": {
+        "Heading": "3.2 Contact by e-mail ",
+        "Text1": "You can contact the ZooNotify team by e-mail via ",
+        "LinkMail": "dominic.toelle@bfr.bund.de",
+        "Text2": ". If you contact the ZooNotify team by e-mail, the data transmitted by you (e.g. first name, surname, address etc.), but at least the e-mail address, as well as the information contained in the e-mail (including any personal data provided by you) will be processed for the purposes of contacting you and handling your issue. We advise you that data processing takes place on the basis of Article 6 Paragraph 1 lit. e GDPR in conjunction with Art. 3 BDSG. It is necessary to process the personal data transmitted by you in order to handle your issue. "
+      }
+    },
+    "4": {
+      "Heading": "4. Is data transferred to a third country or an international organisation? ",
+      "Text": "Transfer of data to countries outside of the EU or the EEA (so-called third states) only takes place if this is contractually required, prescribed by law or in the context of order data processing. If order data processors in a third country are used, these processors are contractually obliged to comply with the data protection regulations of the EU."
+    },
+    "5": {
+      "Heading": "5. What data protection rights do I have? ",
+      "Text1": "The BfR guarantees you the following rights with respect to your personal data: ",
+      "Rights": {
+        "a": "The right to information according to Art. 15 GDPR",
+        "b": "The right to rectification according to Art. 16 GDPR",
+        "c": "The right to erasure according to Art. 17 GDPR",
+        "d": "The right to restriction of processing according to Art. 18 GDPR",
+        "e": "The right to object from Art. 21 GDPR",
+        "f": "The right to data portability from Art. 20 GDPR"
+      },
+      "Text2": "The restrictions according to Arts. 34 and 35 BDSG apply to the rights to information and erasure.",
+      "Text3": "You can revoke consent given to us to process personal data at any time with future effect. This also applies to revoking consent that was given to us before the General Data Protection Regulation came into effect, i.e. before 25 May 2018.",
+      "Text4": "You can assert the rights specified above to the BfR under poststelle@bfr.bund.de or by post to the postal address of the BfR given at the beginning of this data protection declaration.",
+      "Text5": "Furthermore, you have the right to complain to the regulatory authority for data protection (German Federal Commissioner for Data Protection and Freedom of Information), cf. Art. 77 GDPR in conjunction with Art. 19 BDSG.",
+      "Text6": "You can also contact the Data Protection Officer at the BfR (",
+      "Text7": ") with questions or complaints."
+    },
+    "6": {
+      "Heading": "6. Changes to the data protection declaration",
+      "Text": "The BfR reserves the right to modify this data protection declaration so that it always adheres to the current legal requirements. We recommend that you read our data protection declaration regularly in order to stay up to date regarding the protection of the personal data that we collect. "
+    }
+  },
+  "CreationDate": {
+    "Text": "Date of creation: ",
+    "Date": "06/02/2020"
+  }
+}

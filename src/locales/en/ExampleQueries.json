@@ -1,0 +1,111 @@
+{
+  "Content": {
+    "Title": "Pre-defines queries",
+    "Text": "Here you will find a selection of useful queries on zoonotic agents along the food chain from feed to animals to food. You can use these as a start and add to them by setting further filters, especially useful to get familiar with ZooNotify."
+  },
+  "Subtitles": {
+    "animalSample": "Animals",
+    "foodSample": "Food",
+    "feedSample": "Feed"
+  },
+  "Queries": {
+    "animalSample": {
+      "Query0": {
+        "Title": {
+          "Part1": "Escherichia coli",
+          "Part2": " from samples from pigs"
+        },
+        "Text": {
+          "Part1": "Commensal ",
+          "Part2": "Escherichia coli",
+          "Part3": " isolates from animal samples of fattening pigs, Zoonoses-Monitoring, 2011 - 2019."
+        }
+      },
+      "Query1": {
+        "Title": {
+          "Part1": "Salmonella ",
+          "Part2": " spp. from samples from laying hens"
+        },
+        "Text": {
+          "Part1": "Salmonella isolates from samples of laying hen flocks per federal state, Salmonella control programmes in poultry according to Regulation (EC) No 2160/2003, 2011 - 2020.",
+          "Part2": "",
+          "Part3": ""
+        }
+      },
+      "Query2": {
+        "Title": {
+          "Part1": "",
+          "Part2": "MRSA from samples from cattle"
+        },
+        "Text": {
+          "Part1": "MRSA from samples of different matrices of veal calves, beef cattle and dairy cattle of different production types, Zoonoses-Monitoring, 2010 - 2019.",
+          "Part2": "",
+          "Part3": ""
+        }
+      }
+    },
+    "feedSample": {
+      "Query0": {
+        "Title": {
+          "Part1": "Salmonella",
+          "Part2": " spp. from feed samples"
+        },
+        "Text": {
+          "Part1": "Salmonella isolates from samples of different feedstuffs, Zoonoses-Monitoring, 2012 - 2019.",
+          "Part2": "",
+          "Part3": ""
+        }
+      }
+    },
+    "foodSample": {
+      "Query0": {
+        "Title": {
+          "Part1": "",
+          "Part2": "STEC from samples of plant-based foods"
+        },
+        "Text": {
+          "Part1": "STEC isolates from plant-based food samples from different sampling stages, Zoonoses-Monitoring, 2012 - 2020.",
+          "Part2": "",
+          "Part3": ""
+        }
+      },
+      "Query1": {
+        "Title": {
+          "Part1": "L. monocytogenes",
+          "Part2": " from food samples from poultry"
+        },
+        "Text": {
+          "Part1": "Isolates of ",
+          "Part2": "L. monocytogenes",
+          "Part3": " from samples of different matrices of broilers and poultry at retail, Zoonoses-Monitoring, 2012 - 2020."
+        }
+      },
+      "Query2": {
+        "Title": {
+          "Part1": "L. monocytogenes",
+          "Part2": " from seafood samples"
+        },
+        "Text": {
+          "Part1": "Isolates of ",
+          "Part2": "L. monocytogenes",
+          "Part3": " from crustaceans and tilapia/pangasius samples at retail, Zoonoses-Monitoring, 2015 - 2019."
+        }
+      },
+      "Query3": {
+        "Title": {
+          "Part1": "Campylobacter",
+          "Part2": " spp. from food samples from chicken and turkeys"
+        },
+        "Text": {
+          "Part1": "Isolates of ",
+          "Part2": "Campylobacter",
+          "Part3": " spp. from samples of different matrices of laying hens, and broilers and turkeys at different sampling stages, Zoonoses-Monitoring, 2011 - 2020."
+        }
+      }
+    }
+  },
+  "Button": {
+    "Submit": "Submit",
+    "Cancel": "Cancel"
+  }
+}

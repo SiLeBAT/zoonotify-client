@@ -1,0 +1,89 @@
+{
+  "Heading": "Datenschutzerklärung",
+  "Description": {
+    "DescriptionText1": "Für das Bundesinstitut für Risikobewertung (BfR) ist ein verantwortungsbewusster Umgang mit personenbezogenen Daten ein wichtiges Anliegen. Wir möchten, dass Nutzerinnen und Nutzer wissen, wann welche Daten durch das BfR erhoben und verwendet werden. Das BfR betreibt unter der Domain ",
+    "DescriptionLink": "zoonotify.bfr.berlin",
+    "DescriptionText2": " ein Web-Portal zur Abfrage eines vereinfachten Datenbestandes der gemäß RL 99/2003/EU (Zoonosenrichtlinie) gesammelten Erregernachweise in der Lebensmittelkette und derer Eigenschaften, die an das BfR übermittelt werden. Personenbezogene Daten werden von uns nur im notwendigen Umfang verarbeitet. Welche Daten auf welcher Grundlage verarbeitet werden, ist abhängig davon, für welchen Zweck diese benötigt werden. "
+  },
+  "Chapter": {
+    "1": {
+      "Heading": "1. Wer ist für die Datenverarbeitung verantwortlich, und an wen kann ich mich wenden?",
+      "Text1": "Das Bundesinstitut für Risikobewertung ist für die Verarbeitung Ihrer Daten im Sinne des Art. 4 Nr. 7 DS-GVO verantwortlich. Nachfolgend finden Sie unsere Kontaktdaten: ",
+      "MailText": "E-Mail: ",
+      "BfrName": "Bundesinstitut für Risikobewertung (BfR)",
+      "Text2": "Bei Fragen zur Verarbeitung Ihrer Daten und zum Datenschutz wenden Sie sich bitte an unsere behördliche Datenschutzbeauftragte: "
+    },
+    "2": {
+      "Heading": "2. Auf welcher Rechtsgrundlage verarbeiten wir Ihre personenbezogenen Daten?",
+      "Text1": "Die Verarbeitung personenbezogener Daten im BfR erfolgt in Übereinstimmung mit der ",
+      "LinkDSGVO": "Europäischen Datenschutz-Grundverordnung (DS-GVO)",
+      "Text2": ", dem Telemediengesetz (TMG) und dem ",
+      "LinkBDSG": "Bundesdatenschutzgesetz (BDSG).",
+      "Text3": "Soweit das BfR für Verarbeitungsvorgänge personenbezogener Daten eine Einwilligung der betroffenen Person einholt, dient Art. 6 Abs. 1 lit. a DS-GVO als Rechtsgrundlage. Eine erteilte Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden. Dies gilt auch für den Widerruf von Einwilligungserklärungen, die vor der Geltung der DS-GVO, also vor dem 25. Mai 2018, uns gegenüber erteilt worden sind.",
+      "Text4": "Bei der Verarbeitung von personenbezogenen Daten, die zur Erfüllung eines Vertrages, dessen Vertragspartei die betroffene Person ist, erforderlich ist, dient im Einzelfall Art. 6 Abs. 1 lit. b DS-GVO als Rechtsgrundlage. Dies gilt auch für Verarbeitungsvorgänge, die zur Durchführung vorvertraglicher Maßnahmen erforderlich sind.",
+      "Text5": "Soweit eine Verarbeitung personenbezogener Daten im Einzelfall zur Erfüllung einer rechtlichen Verpflichtung erforderlich sein sollte, dient zudem Art. 6 Abs. 1 lit. c DS-GVO in Verbindung mit der entsprechenden Rechtsvorschrift, aus der sich die rechtliche Verpflichtung ergibt, als Rechtsgrundlage.",
+      "Text6": "In dem seltenen Fall, dass lebenswichtige Interessen der betroffenen Person oder einer anderen natürlichen Person eine Verarbeitung personenbezogener Daten erforderlich machen, dient Art. 6 Abs. 1 lit. d DS-GVO als Rechtsgrundlage.",
+      "Text7": "Das BfR verarbeitet bei der Wahrnehmung der ihm obliegenden im öffentlichen Interesse liegenden Aufgaben personenbezogene Daten. Zu den öffentlichen Aufgaben des BfR gehören insbesondere die ihm nach dem BfR-Gesetz (BfRG) übertragenen Aufgaben und Tätigkeiten. Rechtsgrundlage der Verarbeitung ist hier Art. 6 Abs. 1 lit. e der DS-GVO in Verbindung mit den entsprechenden Vorschriften des BfRG, insbesondere § 2 BfRG.",
+      "Text8": "Soweit erforderlich, verarbeiten wir Ihre Daten darüber hinaus zur Wahrung berechtigter Interessen von uns oder Dritten. Beispiele können sein: Die Geltendmachung rechtlicher Ansprüche und Verteidigung bei rechtlichen Streitigkeiten, die Gewährleistung der IT-Sicherheit und des IT-Betriebs des BfR, die Öffentlichkeitsarbeit des BfR oder auch die Verhinderung von Straftaten (u.a.). In solchen Fällen dient als Rechtsgrundlage Art. 6 Abs. 1 lit. f DS-GVO."
+    },
+    "3": {
+      "Heading": "3. Welche personenbezogenen Daten werden im Zusammenhang mit dem Besuch unserer Internetseite verarbeitet? ",
+      "31": {
+        "Heading": "3.1 Datenerfassung",
+        "Text1": "Bei jedem Zugriff eines Nutzers auf unser Internet-Angebot und bei jedem Abruf einer Datei werden Daten über diesen Vorgang vorübergehend in einer Logdatei des Webservers verarbeitet. Im Einzelnen werden über jeden Zugriff/Abruf folgende Daten gespeichert:",
+        "Data": {
+          "a": "Browsertyp und -version",
+          "b": "verwendetes Betriebssystem",
+          "c": "Website, von der aus Sie uns besuchen (Referrer URL)",
+          "d": "Website, die Sie besuchen",
+          "e": "Datum und Uhrzeit Ihres Zugriffs",
+          "f": "Ihre Internet Protokoll (IP)-Adresse in anonymisierter Form"
+        },
+        "Text2": " Rechtsgrundlage für die vorübergehende Speicherung der Daten ist Art. 6 Abs. 1 lit. e bzw. f DS-GVO. Eine Zusammenführung mit anderen personenbezogenen Daten des Nutzers findet nicht statt.",
+        "Text3": "Bei der Nutzung dieser Informationen zieht das BfR keine Rückschlüsse auf die betroffene Person. Diese Informationen werden vielmehr benötigt, um",
+        "Reasons": {
+          "a": "die Inhalte unserer Webseite korrekt auszuliefern",
+          "b": "die Inhalte unserer Webseite zu optimieren,",
+          "c": "die Funktionsfähigkeit unserer IT-Systeme und der Technik unserer Webseite zu gewährleisten"
+        },
+        "Text4": "Die Löschung der Logfiles erfolgt nach 14 Tagen."
+      },
+      "32": {
+        "Heading": "3.2 Kontaktaufnahme per E-Mail ",
+        "Text1": "Die Kontaktaufnahme zum ZooNotify-Team kann per E-Mail über die Funktions-E-Mail-Adresse ",
+        "LinkMail": "dominic.toelle@bfr.bund.de",
+        "Text2": " erfolgen. Soweit Sie diesen Kontaktweg verwenden, werden die von Ihnen übermittelten Daten (z.B.: Name, Vorname, Anschrift o.ä.), zumindest jedoch die E-Mail-Adresse, sowie die in der E-Mail enthaltenen Informationen (inklusive ggf. von Ihnen übermittelter personenbezogener Daten) zum Zwecke der Kontaktaufnahme und Bearbeitung Ihres Anliegens verarbeitet. Wir weisen Sie darauf hin, dass die Verarbeitung der Daten auf Grundlage von Artikel 6 Absatz 1 lit. e DS-GVO in Verbindung mit §3 BDSG erfolgt. Eine Verarbeitung der von Ihnen übermittelten personenbezogenen Daten ist zum Zweck der Bearbeitung Ihres Anliegens erforderlich. "
+      }
+    },
+    "4": {
+      "Heading": "4. Werden Daten in ein Drittland oder an eine internationale Organisation übermittelt? ",
+      "Text": "Eine Datenübermittlung in Länder außerhalb der EU bzw. des EWR (sog. Drittstaaten) findet nur statt, soweit dies vertraglich erforderlich oder gesetzlich vorgeschrieben ist bzw. im Rahmen einer Auftragsdatenverarbeitung. Werden Auftragsdatenverarbeiter in einem Drittstaat eingesetzt, werden diese vertraglich zur Einhaltung der datenschutzrechtlichen Vorgaben der EU verpflichtet."
+    },
+    "5": {
+      "Heading": "5. Welche Datenschutzrechte habe ich? ",
+      "Text1": "Sie haben gegenüber dem BfR folgende Rechte hinsichtlich der Sie betreffenden personenbezogenen Daten: ",
+      "Rights": {
+        "a": "das Recht auf Auskunft nach Art. 15 DS-GVO,",
+        "b": "das Recht auf Berichtigung nach Art. 16 DS-GVO,",
+        "c": "das Recht auf Löschung nach Art. 17 DS-GVO,",
+        "d": "das Recht auf Einschränkung der Verarbeitung nach Art. 18 DS-GVO,",
+        "e": "das Recht auf Widerspruch aus Art. 21 DS-GVO",
+        "f": "sowie das Recht auf Datenübertragbarkeit aus Art. 20 DS-GVO."
+      },
+      "Text2": "Beim Auskunftsrecht und beim Löschungsrecht gelten die Einschränkungen nach §§ 34 und 35 BDSG.",
+      "Text3": "Eine erteilte Einwilligung in die Verarbeitung personenbezogener Daten können Sie jederzeit uns gegenüber mit Wirkung für die Zukunft widerrufen. Dies gilt auch für den Widerruf von Einwilligungserklärungen, die vor der Geltung der Datenschutz-Grundverordnung, also vor dem 25. Mai 2018, uns gegenüber erteilt worden sind. ",
+      "Text4": "Die vorgenannten Rechte können Sie unter poststelle@bfr.bund.de oder postalisch über die zu Beginn dieser Datenschutzerklärung genannte Postadresse des BfR geltend machen. ",
+      "Text5": "Ihnen steht zudem ein Beschwerderecht bei der datenschutzrechtlichen Aufsichtsbehörde, (Bundesbeauftragte für den Datenschutz und die Informationsfreiheit) zu, vgl. Art. 77 DS-GVO i.V.m. § 19 BDSG. ",
+      "Text6": "Sie können sich mit Fragen und Beschwerden auch an die/den Beauftragte/n für den Datenschutz im BfR (",
+      "Text7": ") wenden. "
+    },
+    "6": {
+      "Heading": "6. Änderung der Datenschutzerklärung",
+      "Text": "Das BfR behält sich vor, die Datenschutzerklärung anzupassen, damit sie stets den aktuellen rechtlichen Anforderungen entspricht. Wir empfehlen Ihnen, unsere Datenschutzerklärung regelmäßig zu lesen, um über den Schutz der von uns erfassten personenbezogenen Daten auf dem neusten Stand zu bleiben. "
+    }
+  },
+  "CreationDate": {
+    "Text": "Erstellungsdatum: ",
+    "Date": "22.05.2018"
+  }
+}

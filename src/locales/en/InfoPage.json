@@ -1,0 +1,404 @@
+{
+  "HINTERGRUND": "Background",
+  "METHODEN": "Methods",
+  "GRAPHIKEN": "Graphs",
+  "DATEN": "Data",
+
+  "samplingYear": {
+    "2010": "2010",
+    "2011": "2011",
+    "2012": "2012",
+    "2013": "2013",
+    "2014": "2014",
+    "2015": "2015",
+    "2016": "2016",
+    "2017": "2017",
+    "2018": "2018",
+    "2019": "2019",
+    "2020": "2020"
+  },
+  "Title": "Explanations",
+  "Background": {
+    "Name": "Background",
+    "Paragraph1": {
+      "Description1": "In order to assess trends in zoonoses and zoonotic agents and sources of human diseases, the national ",
+      "Description2": "zoonoses-monitoring",
+      "Description3": " in accordance with the zoonotic sampling plan is carried out uniformly nationwide. This helps to fulfil the requirements of Directive 2003/99/EC. The overarching objective is to be able to conduct a comprehensive assessment of trends in zoonoses and zoonotic agents, including antimicrobial resistance, and sources of human diseases. This also aims to ensure the implementation of key elements of Directive 2003/99/EC and Implementing Decision 2013/652/EU or its successor, 2020/1729/EU. "
+    },
+    "Paragraph2": {
+      "Description1": "The importance of ",
+      "Description2": " and Shiga toxin-forming ",
+      "Description3": " (STEC) stems from the frequency or severity of cases of human disease. They are also agents subject to surveillance in accordance with Annex I. A to Directive 2003/99/EC. To date, cases of human illness with livestock-associated methicillin-resistant ",
+      "Description4": " (MRSA) have been described for Germany, especially for people with contact with these farmed animals. However, a large spread of the pathogen has already been observed in various livestock populations (pigs, calves, turkeys) and in fresh meat thereof in Germany. In addition to the pathogens of the clonal complex CC398 typical of farm animals, ",
+      "Description5": "spa",
+      "Description6": "-types are also detected that are attributable to other clonal complexes. This underlines the need to repeat at regular intervals the studies along the food chain in order to detect changes in distribution at different stages of the food chain, as well as the emergence or spread of clones with newly acquired virulence factors and/or resistance determinants. Commensal ",
+      "Description7": " are regularly investigated to identify trends in known resistance and emerging resistance at an early stage. Implementing Decision 2013/652/EU and its successor document 2020/1729/EU, valid from 2021, made the investigation of ",
+      "Description8": " and commensal ",
+      "Description9": " for antimicrobial resistance mandatory for all member states. These data are important to assess the possible sources and transmission pathways of resistant microorganisms along the food chain to humans. In addition, the investigation of samples for ",
+      "Description10": " was proposed in order to detect increased resistance, particularly against antibiotics of critical importance to human health, among gram positive pathogens. Selective detection of ESBL/AmpC-forming ",
+      "Description11": " is included in zoonoses monitoring programmes to monitor the spread of microorganisms with the ability to form extended spectrum beta-lactalamases and/or AmpC beta-lactalamases. Furthermore, the emergence of new resistance, especially against carbapenems, is to be recognized at an early stage. In order to assess whether carbapenemase-forming ",
+      "Description12": " have spread, targeted selective studies are also carried out to determine the presence of ",
+      "Description13": " with such resistance properties in the national zoonoses-monitoring. Studies on this type of microorganism are carried out in programmes in accordance with the recommendations of Implementing Decision 2013/652/EU and the successor 2020/1729/EU from 2021 onwards."
+    },
+    "Paragraph3": {
+      "Description1": "Directive 2003/99/EC provides that representative data are to be collected at the appropriate stages of the food chain. At the same time, the main food commodities are to be considered. Directive 2003/99/EC also provides that the annual report on trends and sources of zoonoses, zoonotic agents and antimicrobial resistance shall also publish data on the assessment of national ",
+      "Description2": "Salmonella control programmes in poultry",
+      "Description3": "in accordance with Regulation (EC) No 2160/2003."
+    },
+    "Paragraph4": {
+      "Description1": "Isolates obtained in the implementation of zoonoses-monitoring and Salmonella control programmes in poultry are confirmed at the BfR National Reference Laboratories (NRL) and continue to be microbiologically typed. These results since 2010 can be accessed via ",
+      "Description2": "ZooNotify",
+      "Description3": "."
+    }
+  },
+  "Filters": {
+    "Name": "Filters and subfilters",
+    "microorganism": {
+      "Name": "Microorganism",
+      "Description": "You can select different microorganisms obtained from samples typed at National Reference Laboratories. Subfilters help you to refine your search regarding microbiological properties. You can select among:",
+      "microorganism-types": {
+        "microorganism-1": {
+          "Subname": "",
+          "Name": "Salmonella spp.",
+          "Abbreviation": "",
+          "Description": "Via further subfilters you can select \"serovar\" and \"antimicrobial resistance\" to specific agents."
+        },
+        "microorganism-2": {
+          "Subname": "",
+          "Name": "Campylobacter spp.",
+          "Abbreviation": "",
+          "Description": "Via further subfilters you can select \"species\" and \"antimicrobial resistance\" to specific agents."
+        },
+        "microorganism-3": {
+          "Subname": "",
+          "Name": "Listeria monocytogenes",
+          "Abbreviation": "",
+          "Description": "You can select \"serotype\" via the subfilter."
+        },
+        "microorganism-4": {
+          "Subname": "Shiga-Toxin bildende ",
+          "Name": "Escherichia coli",
+          "Abbreviation": " (STEC)",
+          "Description": "Via further subfilters you can select \"O-group\", \"H-group\", the presence of \"stx1 gene\", \"stx2 gene\", \"eae gene\", \"hly gene\" and \"antimicrobial resistance\" to certain agents."
+        },
+        "microorganism-5": {
+          "Subname": "Methicillin-resistente ",
+          "Name": "Stapylococcus aureus",
+          "Abbreviation": " (MRSA)",
+          "Description": "Via further subfilters you can select \"spa-type\" and \"antimicrobial resistance\" to specific agents"
+        },
+        "microorganism-6": {
+          "Subname": "Kommensale ",
+          "Name": "Escherichia coli",
+          "Abbreviation": " (kommensale ",
+          "Description": "Via another subfilter you can select \"antimicrobial resistance\" to specific agents."
+        },
+        "microorganism-7": {
+          "Subname": "ESBL und/oder AmpC-bildende ",
+          "Name": "Escherichia coli",
+          "Abbreviation": " (ESBL/AmpC-",
+          "Description": "Via further subfilters you can select the \"ESBL_AmpC_Carba_Phenotype\" (see Methods) and \"antimicrobial resistance\" to specific agents."
+        },
+        "microorganism-8": {
+          "Subname": "Carbapenemase-bildende ",
+          "Name": "Escherichia coli",
+          "Abbreviation": " (Carba-",
+          "Description": "Via further subfilters you can select the \"ESBL_AmpC_Carba_Phenotype\" (see Methods) and \"antimicrobial resistance\" to certain agents."
+        },
+        "microorganism-9": {
+          "Subname": "",
+          "Name": "Enterococcus spp.",
+          "Abbreviation": "",
+          "Description1": "Via further subfilter \"species\" you can distinguish between the species  ",
+          "Description2": " and ",
+          "Description3": " and select \"antimicrobial resistance\" to certain agents."
+        }
+      }
+    },
+    "samplingYear": {
+      "Name": "Sampling Year",
+      "Description": "Allows you to select the year in which the sampling took place."
+    },
+    "samplingContext": {
+      "Name": "Sampling context",
+      "Description1": "Isolates obtained on the legal basis of the \"AVV Zoonosen Lebensmittelkette\" (national regulation of zoonoses-monitoring) are marked via the selection \"Zoonoses-monitoring\". ",
+      "Description2": "Further Salmonella isolates obtained based on the control programmes in poultry according to Regulation (EC) No. 2160/2003 can be selected via \"Salm control\". Included are isolates from laying hen, broiler and fattening turkey farms, as well as breeding chicken farms without differentiation between laying and fattening line."
+    },
+    "origin": {
+      "Name": "Origin of sample",
+      "Description": "Here you can select the area from which the isolates originate. Zoonoses-monitoring focusses on investigations along food chains from the producer to the consumer (retail). In the Salmonella control programmes, the isolates originate exclusively from poultry production farms.",
+      "origin-types": {
+        "origin-1": {
+          "Name": "Feed",
+          "Description": "\"Feed\" is at the beginning of the food chain, as it can be a source of entry of zoonotic pathogens into production farms. \"Feed\" samples for various farm animals is regularly tested for Salmonella as part of zoonoses-monitoring."
+        },
+        "origin-2": {
+          "Name": "Animal",
+          "Description": "Isolates of \"animal\"-s are from samples taken at production farms and from intestinal (mostly caecal) contents at the slaughterhouse. While sampling at farm also allows a detailed collection of information on farm size, husbandry system and age of the animals and reflects well the German situation, the decisions 2013/652/EU and its successor 2020/1729/EU provide for sampling at the slaughterhouse. Here, the consideration of animals from other countries slaughtered in Germany is explicitly excluded. Since the availability of data on the farm of production at slaughter is usually limited, it therefore does not replace sampling in primary production. Furthermore, sampling at the slaughterhouse best reflects the entry into food processing and takes into account possible colonization or infection up to the time of removal of the animals from the farm and during transport to the slaughterhouse."
+        },
+        "origin-3": {
+          "Name": "Food",
+          "Description": "Isolates of \"food\" are from samples taken from carcasses at the slaughterhouse and from food at retail and import points. \"Food\" at retail may be of animal or plant origin. Sampling of retail food as it enters directly into the household of the end consumer best reflects the entry into the household and thus the exposure of the consumer. In addition to retail in the narrower sense, direct marketers (as a retail type), wholesalers (including wholesale markets), if applicable, and import points or border control points are allowed as sampling points for this purpose. This applies if they produce food for delivery to the end consumer or if the food is already present there in the final packaging for delivery to the consumer's household. However, in accordance with the Implementing Decision 2013/652/EU or its successor regulation 2020/1729/EU, the consideration of samples from wholesale trade is not permitted."
+        }
+      }
+    },
+    "samplingStage": {
+      "Name": "Sampling stage",
+      "Description": "Here you can select the location where the sampling took place and thus narrow down the stage of food production more closely. ",
+      "samplingStage-types": {
+        "samplingStage-1": {
+          "Name": "Central oil mills",
+          "Description": "Feed samples are tested for Salmonella and come from \"compound feed plants\" and \"central oil mills\". "
+        },
+        "samplingStage-2": {
+          "Name": "Mills",
+          "Description": "Isolates from flour before packaging for delivery to the consumer were obtained in \"mills\"."
+        },
+        "samplingStage-3": {
+          "Name": "Farm",
+          "Description": "Isolates are obtained from animals at \"farm\". This mainly involves faecal samples or bulk milk samples. However, samples of skin or sea food and fish at farm level have also been sampled in zoonoses-monitoring. In the case of Salmonella control programmes for poultry, it is faecal/dust samples that are taken in accordance with regulations."
+        },
+        "samplingStage-4": {
+          "Name": "Slaughterhouse",
+          "Description": "Isolates from samples obtained at the \"slaughterhouse\" may be of \"animal\" origin in the case of samples of intestinal contents, or from \"food\" origin in the case of samples of carcasses. Sampling at the slaughterhouse best reflects entry into food processing and thus, takes into account possible colonization or infection up to the time of removal of the animals from the producer's premises and during transport to the slaughterhouse. Samples taken in accordance with Implementing Decision 2013/652/EU or its successor regulation 2020/1729/EU originate from animals fattened and slaughtered in Germany.For data protection reasons, it is not possible to select the federal state of origin for isolates from poultry obtained at the slaughterhouse."
+        },
+        "samplingStage-5": {
+          "Name": "Hunting",
+          "Description": "Animal samples from hunting game are selected with \"hunting\". These are faecal or nasal swab samples. These programmes are predominantly used to reflect the route of entry of resistant microorganisms from the environment."
+        },
+        "samplingStage-6": {
+          "Name": "Border inspection",
+          "Description": "Samples are taken at \"border inspection\" to investigate the presence of contaminants on food from third countries. "
+        },
+        "samplingStage-7": {
+          "Name": "Retail",
+          "Description": "Sampling of a wide variety of foods at \"retail\" as they enter directly into the household of the consumer best reflects the entry into the household and thus the exposure of the consumer. In addition to the retail in the narrower sense, direct marketers (as a retail type), wholesalers (including wholesale markets), if applicable, as well as import points or border control points are permitted as sampling locations for this purpose. This applies under the condition that food is produced for delivery to the end consumer or already in the final packaging for delivery to the consumer's household. However, in accordance with the criteria for the Implementing Decision 2013/652/EU and the successor 2020/1729/EU, the inclusion of samples of broiler meat, pork and beef from wholesale is not permitted. "
+        }
+      }
+    },
+    "category": {
+      "Name": "Animal species/Food category",
+      "Description": "This filter allows you to distinguish between isolates from samples of animal and plant origin.",
+      "category-types": {
+        "category-1": {
+          "Name": "Livestock",
+          "Description": "\"Livestock\" describes isolates from feed for farm animals in general. "
+        },
+        "category-2": {
+          "Name": "Poultry",
+          "Description": "\"Poultry\" describes isolates from matrices where a more precise animal species is unknown."
+        },
+        "category-3": {
+          "Name": "Chicken",
+          "Description1": "\"Chicken\" describes isolates from the species ",
+          "Description2": ". Among them, you can choose different production lines and forms at different stages of food production."
+        },
+        "category-4": {
+          "Name": "Turkey",
+          "Description": "The \"turkey\" filter selects isolates from fattening turkeys from different production forms."
+        },
+        "category-5": {
+          "Name": "Pig",
+          "Description": "The filter \"pig\" allows you to select isolates from different production lines such as fattening and breeding, production forms as well as from animals of different ages."
+        },
+        "category-6": {
+          "Name": "Cattle (bovine animals)",
+          "Description": "\"Cattle (bovine animals)\" describes isolates originating from veal calves (meat production animals under 1 year), dairy cattle un/or cattle without further specification."
+        },
+        "category-7": {
+          "Name": "Small ruminants",
+          "Description": "The filter \"small ruminants\" describes isolates with the origin goat and/or sheep."
+        },
+        "category-8": {
+          "Name": "Wildfowl",
+          "Description": "\"Wildfowl\" describes isolates from wild ducks and geese without further differentiation."
+        },
+        "category-9": {
+          "Name": "Wild boars",
+          "Description": "With the filter \"wild boars\" you can select isolates from hunted wild boar."
+        },
+        "category-10": {
+          "Name": "Wild ruminants",
+          "Description": "\"Wild ruminants\" selects isolates originating from wild ruminants without further differentiation."
+        },
+        "category-11": {
+          "Name": "Roe deer",
+          "Description": "Isolates of \"roe deer\" shot in the wild are available in the corresponding filter."
+        },
+        "category-12": {
+          "Name": "Plant-based foods",
+          "Description": "With the filter \"plant-based foods\" you can select isolates from foods of plant origin, such as herbs or lettuce."
+        },
+        "category-13": {
+          "Name": "Freshwater fish",
+          "Description": "\"Freshwater fish\" allows isolates to be narrowed down to the species tilapia and pangasius."
+        },
+        "category-14": {
+          "Name": "Sea food-Shellfish",
+          "Description": "Isolates from \"sea food-Shellfish\" can be further specified as bivalve molluscs and crustaceans."
+        }
+      }
+    },
+    "productionType": {
+      "Name": "Animal species production type/Food",
+      "Description": "This filter allows a further narrowing of the selection of isolates of animal origin according to their production form according to RL 2002/4 EC as conventional or organic. Isolates of animal origin without further specification are mainly from conventional production, but not exclusively. For isolates of plant origin, you can use this filter to select rough categories, such as \"herbs\" or \"vegetables\". A further differentiation of the isolates can be made with the filter \"matrix\" and the subfilter \"matrix detail\"."
+    },
+    "matrix": {
+      "Name": "Matrix",
+      "Description": "With \"matrix\" you can currently choose from 35 different matrices of animal and plant origin that have been sampled and from which isolates have been obtained within the framework of zoonosis monitoring or the Salmonella control programmes in poultry since 2010. Among them, 2 matrices originate from feed, 24 from food, including 10 of plant origin, and 10 matrices from animals. With the subfilter \"matrix detail\" you can refine your search with regard to different properties of the selected matrix such as treatment and processing status (e.g. \"frozen\" for the matrix \"parsley\") or further specifications for the sample type (e.g. \"compound faeces\" for the matrix \"faeces\")."
+    },
+    "federalState": {
+      "Name": "Federal state",
+      "Description": "The \"federal state\" refers to the German Federal State from which isolates were sent to the BfR. The sampling from which the isolates you selected were obtained took place in these. For reasons of data protection, isolates of poultry obtained at the slaughterhouse are displayed without indication of the federal state from which they were obtained."
+    },
+    "resistance": {
+      "Name": "Antimicrobial resistance",
+      "Description1": "Isolates of ",
+      "Description2": " STEC, MRSA, commensal ",
+      "Description3": ", ESBL and/or AmpC-forming ",
+      "Description4": ", carbapenemase-forming ",
+      "Description5": " and ",
+      "Description6": " were tested for their resistance to antimicrobial substances at the NRL for Antibiotic Resistance at BfR and at the NRL ",
+      "Description7": ". Special panels of active substances are used for this purpose, which differ for the individual microorganisms. You can use this filter to select the active substances that are part of the panel for testing the microorganism you have selected. For details on the methodology, please refer to the section \"Antibiotic resistance testing\" below."
+    }
+  },
+  "Methods": {
+    "Name": "Methods",
+    "Isolates": {
+      "Name": "Isolate collection",
+      "Paragraph1": {
+        "Description1": "Isolates are obtained in the framework of ",
+        "Description2": "zoonoses-monitoring",
+        "Description3": " from programmes based on a representative random sample of the respective defined population, if necessary taking into account defined stratification criteria at the respective defined stage of the food chain. During sampling, independent units are sampled in each case. To ensure representative selection of operations to be sampled, a random selection is made in the respective region based on a registry of operations. Where available, internationally standardized microbiological detection methods are used for primary isolation at accredited regional laboratories. However, other testing methods may also be used as long as it can be ensured that they are equivalent to the proposed methods. In particular, it is also possible to test samples by PCR and to confirm positive results by a cultural ISO procedure. Method recommendations are provided by the respective NRL at BfR as far as the proposed methods deviate from the official collection according to § 64 LFGB or ISO methods."
+      },
+      "Paragraph2": {
+        "Description1": "Isolates obtained within the ",
+        "Description2": "Salmonella control programmes in poultry",
+        "Description3": " according to Regulation (EC) No. 2160/2003 are derived from samples taken in flocks of breeding poultry, laying hens, broilers and fattening turkeys according to the respective regulations."
+      }
+    },
+    "Amrs": {
+      "Name": "Antimicrobial resistance testing",
+      "Paragraph1": {
+        "Description1": "All ",
+        "Description2": " Shiga-Toxin producing ",
+        "Description3": " (STEC), ",
+        "Description4": " and ",
+        "Description5": ", and methicillin-resistant ",
+        "Description6": " (MRSA) isolates displayed in ZooNotify were tested using the designated, internationally accepted, quantitative methods for resistance determination (Bouillon microdilution method according to ISO 20776-1:2006 and CLSI M07, respectively) at the National Reference Laboratory (NRL) for Antibiotic Resistance and according to CLSI VET06 and M45A at the NRL for Campylobacter."
+      },
+      "Paragraph2": {
+        "Description1": "The isolates were subjected to a spectrum of antimicrobial substances established at BfR. For this purpose, ready-made plate formats EUMVS2 (2010-2013) and EUVSEC (2014-2020) (",
+        "Description2": " and ",
+        "Description3": "), EUVENC (2016-2020) (",
+        "Description4": "), EUCAMP (2010-2013) and EUCAMP2 (2014-2020) (",
+        "Description5": ") and EUST (2010-2020) (MRSA) from TREK Diagnostic Systems/Thermo Fisher Scientific were used."
+      },
+      "Paragraph3": {
+        "Description1": "Resistance testing of ",
+        "Description2": " in 2010-2013 was carried out legally based on Decision 2007/407/EC, which lays down uniform testing methods, active substances to be tested and the interpretation criteria in the Decision. Resistance testing of ",
+        "Description3": " in the years 2010-2013 was carried out legally based on Decision 2007/516/EC on a baseline study in broilers in 2008."
+      },
+      "Paragraph4": {
+        "Description1": "The testing of ",
+        "Description2": " and MRSA for resistance in 2010-2013 was based on the recommendations of EFSA (EFSA 2012a and EFSA 2012b, see below)."
+      },
+      "Paragraph5": "From 2014 onwards, resistance testing was carried out in accordance with the Implementing Decision 2013/652/EU, which defines the testing procedure, the active substances to be tested and the interpretive criteria for the majority of pathogens. Insofar as no epidemiological cut-off values were described there, the interpretive was carried out on the basis of the recommendation of the European Food Safety Authority (EFSA) in coordination with the European Reference Laboratory for Antimicrobial Resistance (EURL-AR).",
+      "Paragraph6": {
+        "Description1": "Testing of MRSA and ",
+        "Description2": " for resistance was based on EFSA recommendations (EFSA (2012a): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in methicillin-resistant ",
+        "Description3": " in food-producing animals and food. EFSA Journal 10 (10):2897 und EFSA (2012b): Technical specifications on the harmonised monitoring and reporting of antimicrobial resistance in ",
+        "Description4": " and indicator ",
+        "Description5": " and ",
+        "Description6": " bacteria transmitted through food. EFSA Journal 10(6):2742)."
+      },
+      "Paragraph7": {
+        "Description1": "In ZooNotify, the ",
+        "Description2": "most current interpretation criteria",
+        "Description3": " are applied for all substances per microorganism, so that the number of resistant microorganisms may deviate from published numbers. An overview per microorganism for all tested substances as well as the annually applied and reported interpretation criteria is given in tables 1 to 5."
+      },
+      "Paragraph8": {
+        "Description1": " Resistance testing oF ",
+        "Description2": " (commensal, STEC and resistant). Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out as far as possible in compliance with the specification in Implementing Decision 2013/652/EU. If this was not possible, the recommendations of EFSA were used (EFSA 2020)."
+      },
+      "Table1": {
+        "Paragraph": {
+          "Description1": "The grouping of isolates of ESBL/AmpC-",
+          "Description2": " and carbapenemase-forming ",
+          "Description3": " based on their phenotypic characteristics via the subfilter \"ESBL_AmpC_Carba_Phenotype\" was performed according to the 2017 EFSA and ECDC criteria (The European Union summary report on antimicrobial resistance in zoonotic and indicator bacteria from humans, animals and food in 2015. EFSA Journal 2017;15(2):4694, 212 pp. doi:10.2903/j.efsa.2017 .4694)."
+        },
+        "TableTitle": {
+          "Part1": "Table 1: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table2": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+          "Description2": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. As far as possible, the interpretation was carried out in compliance with the specification in Implementing Decision 2013/652/EU. If this was not possible, the recommendations of EFSA were used (EFSA 2020)."
+        },
+        "TableTitle": {
+          "Part1": "Table 2: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table3a": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+          "Description2": " and ",
+          "Description3": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2010 - 2020. The interpretation was carried out taking into account the specifications in Implementing Decision 2013/652/EU."
+        },
+        "TableTitle": {
+          "Part1": "Table 3a: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table3b": {
+        "Paragraph": "",
+        "TableTitle": {
+          "Part1": "Table 3b: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table4": {
+        "Paragraph": {
+          "Description1": "Resistance testing of methicillin-resistant ",
+          "Description2": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria (epidemiological cut-off values of ",
+          "EucastLink": "EUCAST",
+          "Description3": ") for the years 2010-2020."
+        },
+        "TableTitle": "Table 4: Resistance testing of methicillin-resistant ",
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2010 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table5a": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+          "Description3": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2016 - 2020. The interpretation was carried out taking into account the specifications in the implementing decision 2013/652/EU."
+        },
+        "TableTitle": {
+          "Part1": "Table 5a: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2016 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "Table5b": {
+        "Paragraph": {
+          "Description1": "Resistance testing of ",
+
+          "Description3": ". Overview of the substances used, the concentration ranges tested and the interpretive criteria for the years 2016 - 2020. The interpretation was carried out taking into account the specifications in the implementing decision 2013/652/EU."
+        },
+        "TableTitle": {
+          "Part1": "Table 5b: Resistance testing of "
+        },
+        "TableDescription": "Overview of the substances used, the concentration ranges tested (min - max) and the interpretation criteria (epidemiological cut-offs) for the years 2016 - 2020. The interpretation was carried out in compliance with the specification in the Implementing Decision 2013/652/EU. If no specification was given, the recommendations of EFSA were used (EFSA 2020). The interpretation criteria applied in ZooNotify are highlighted with *."
+      },
+      "TableHeaderShortSub": "Substance abbreviation",
+      "TableHeaderClass": "Substance class",
+      "TableHeaderSubstance": "Substance",
+      "TableHeaderCutOff": "cut-off",
+      "TableHeaderMin": "min",
+      "TableHeaderMax": "max",
+      "CancelButton": "Cancel",
+      "ExportButton": "Export"
+    }
+  }
+}

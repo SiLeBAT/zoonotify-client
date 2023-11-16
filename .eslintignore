@@ -1,0 +1,15 @@
+# dependencies
+node_modules
+
+# output
+public
+
+# coverage
+coverage
+
+# config files
+webpack.config.js
+.eslintrc.js
+jest.config.js
+
+cypress
