@@ -15,6 +15,8 @@ function ErrorPage(): JSX.Element {
 }
 
 export function BodyRouterComponent(): JSX.Element {
+    const showLD = Boolean(process.env.REACT_APP_SHOW_LD);
+
     return (
         <Switch>
             <Route
@@ -38,10 +40,13 @@ export function BodyRouterComponent(): JSX.Element {
                 path={pageRoute.dpdPagePath}
                 component={DataProtectionPageComponent}
             />
-            <Route
-                path={pageRoute.linkedDataPagePath}
-                component={LinkedDataComponent}
-            />
+            {showLD && (
+                <Route
+                    path={pageRoute.linkedDataPagePath}
+                    component={LinkedDataComponent}
+                />
+            )}
+
             <Route component={ErrorPage} />
         </Switch>
     );

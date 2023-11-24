@@ -77,8 +77,9 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
-
+    const showLD = Boolean(process.env.REACT_APP_SHOW_LD);
     const { pathname } = useLocation();
+
     useEffect(() => {
         if (pathname === pageRoute.infoPagePath) {
             setInfoOpen(true);
@@ -125,12 +126,14 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Links")}
                     </NavLink>
-                    <NavLink
-                        to={pageRoute.linkedDataPagePath}
-                        css={navLinkStyle(linkOpen)}
-                    >
-                        {"LD"}
-                    </NavLink>
+                    {showLD && (
+                        <NavLink
+                            to={pageRoute.linkedDataPagePath}
+                            css={navLinkStyle(linkOpen)}
+                        >
+                            {"LD"}
+                        </NavLink>
+                    )}
                 </div>
             </div>
         </header>
