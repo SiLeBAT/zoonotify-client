@@ -8,6 +8,7 @@ import { InfoPageContainerComponent } from "../../../explanation/pages/InfoPage-
 import { LinkPageComponent } from "../../../pages/links/LinkPage.component";
 import { WelcomeMainComponent } from "../../../welcome/pages/WelcomeMainComponent";
 import { pageRoute } from "./routes";
+import { LinkedDataComponent } from "../../../ld/pages/LinkedDataComponent";
 
 function ErrorPage(): JSX.Element {
     return <ErrorPageComponent errorStatus={404} />;
@@ -36,6 +37,10 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 path={pageRoute.dpdPagePath}
                 component={DataProtectionPageComponent}
+            />
+            <Route
+                path={pageRoute.linkedDataPagePath}
+                component={LinkedDataComponent}
             />
             <Route component={ErrorPage} />
         </Switch>

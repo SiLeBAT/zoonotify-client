@@ -125,6 +125,12 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Links")}
                     </NavLink>
+                    <NavLink
+                        to={pageRoute.linkedDataPagePath}
+                        css={navLinkStyle(linkOpen)}
+                    >
+                        {"LD"}
+                    </NavLink>
                 </div>
             </div>
         </header>
