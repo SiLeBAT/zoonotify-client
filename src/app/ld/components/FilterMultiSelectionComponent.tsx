@@ -10,7 +10,7 @@ import {
 import Select from "@mui/material/Select";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { SelectionItem } from "../model/Evaluations.model";
+import { SelectionItem } from "../model/LinkedData.model";
 import { useStyles } from "./../utils/utils";
 
 type FilterMultiSelectionComponentProps = {
@@ -34,7 +34,7 @@ export function FilterMultiSelectionComponent({
     const classes = useStyles();
     const isAllSelected =
         selectionOptions.length > 0 &&
-        selectedItems.length === selectionOptions.length;
+        selectedItems.length == selectionOptions.length;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleChange = (event: { target: { value: any } }): void => {

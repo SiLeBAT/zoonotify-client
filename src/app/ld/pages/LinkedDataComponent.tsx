@@ -2,10 +2,8 @@ import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftR
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import {
     Box,
-    // Button,
-    // Chip,
+    CircularProgress,
     Collapse,
-    // Grid,
     IconButton,
     Paper,
     Stack,
@@ -21,11 +19,10 @@ import {
     headerHeight,
     primaryColor,
 } from "../../shared/style/Style-MainTheme";
-import { EvaluationDivisionContainer } from "../components/EvaluationDivisionContainer";
 import { FilterContainerComponent } from "../components/FilterContainerComponent";
-import { DivisionToken, FilterSelection } from "../model/Evaluations.model";
-import { useEvaluationPageComponent } from "./evaluationsUseCases";
-// import { useTranslation } from "react-i18next";
+import { FilterSelection } from "../model/LinkedData.model";
+import { useLinkedDataPageComponent } from "./LinkedDataUseCases";
+import { JSONViewer } from "../components/JSONViewerComponent";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -35,28 +32,12 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-export function EvaluationsMainComponent(): JSX.Element {
-    const { model, operations } = useEvaluationPageComponent(null);
+export function LinkedDataComponent(): JSX.Element {
+    const { model, operations } = useLinkedDataPageComponent(null);
     const { t } = useTranslation(["ExplanationPage"]);
-    // const handleChipDelete = (label: string, index: number): void => {
-    //     const result = model.selectionConfig.filter((config) => {
-    //         return config.label == label;
-    //     });
-    //     if (result && result.length > 0) {
-    //         if (index > -1) {
-    //             const dataCopy = JSON.parse(
-    //                 JSON.stringify(result[0].selectedItems)
-    //             );
-    //             dataCopy.splice(index, 1);
-    //             result[0].handleChange({
-    //                 target: { value: dataCopy.toString() },
-    //             });
-    //         } else {
-    //             result[0].handleChange({ target: { value: "" } });
-    //         }
-    //     }
-    // };
+
     const [showFilters, setShowFilters] = React.useState(true);
+    const [view, setView] = React.useState("LD");
 
     const handleFilterBtnClick = (): void => {
         setShowFilters((prev) => !prev);
@@ -83,13 +64,18 @@ export function EvaluationsMainComponent(): JSX.Element {
     };
 
     useEffect(() => {
-        operations.fetchData(model.selectedFilters);
+        //operations.fetchData(model.selectedFilters);
         setHeightFromTop(getHeightOffset());
     }, []); // No dependency, will only run once
 
     useEffect(() => {
         setHeightFromTop(getHeightOffset());
     }, [model.selectionConfig]);
+
+    const fetch = (): void => {
+        setView("JSON");
+        operations.fetchData(model.selectedFilters);
+    };
 
     return (
         <>
@@ -137,13 +123,12 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 <FilterContainerComponent
                                     selectionConfig={model.selectionConfig}
                                     searchButtonText={model.searchButtonText}
+                                    loading={model.loading}
                                     handleSearchBtnClick={(
                                         data: FilterSelection
                                     ) => {
                                         handleSearchBtnClick(data);
                                     }}
-                                    howToHeading={model.howToHeading}
-                                    howToContent={model.howto}
                                 />
                             </div>
 
@@ -256,114 +241,34 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 heading={model.heading.main}
                             ></MainComponentHeader>
                         </Box>
-                        {/* <Grid container spacing={2}>
-                    <Grid
-                        item
-                        xs={12}
-                        md={12}
-                        sx={{
-                            display: "inline",
-                            float: "right",
-                            paddingTop: "0 !important",
-                        }}
-                    >
-                        {model.selectionConfig.map((config, index) => {
-                            if (
-                                config &&
-                                config.selectedItems &&
-                                config.selectedItems.length > 0 &&
-                                config.selectionOptions &&
-                                config.selectionOptions.length > 0
-                            ) {
-                                if (
-                                    config.selectedItems.length ==
-                                    config.selectionOptions.length
-                                ) {
-                                    return (
-                                        <Chip
-                                            key={`Chip` + index}
-                                            sx={{ margin: "3px !important" }}
-                                            color="warning"
-                                            variant="filled"
-                                            label={
-                                                config.label + ": " + t("ALLE")
-                                            }
-                                            onDelete={() =>
-                                                handleChipDelete(
-                                                    config.label,
-                                                    -1
-                                                )
-                                            }
-                                        />
-                                    );
-                                }
-                                return config.selectedItems.map(
-                                    (item, itemIndex) => {
-                                        if (item)
-                                            return (
-                                                <Chip
-                                                    key={
-                                                        `Chip` +
-                                                        index +
-                                                        "_" +
-                                                        itemIndex
-                                                    }
-                                                    sx={{
-                                                        margin: "3px !important",
-                                                    }}
-                                                    color="warning"
-                                                    variant="filled"
-                                                    label={
-                                                        config.label +
-                                                        ": " +
-                                                        t(item)
-                                                    }
-                                                    onDelete={() =>
-                                                        handleChipDelete(
-                                                            config.label,
-                                                            itemIndex
-                                                        )
-                                                    }
-                                                />
-                                            );
-                                        else return;
-                                    }
-                                );
-                            }
-                            return;
-                        })}
-                    </Grid>
-                </Grid> */}
                     </Box>
                     <div
                         style={{
                             height: `calc(100vh - ${heightFromTop}px)`,
                             maxHeight: `calc(100vh - ${heightFromTop}px)`,
-                            overflowY: "scroll",
+                            overflowY: "auto",
                         }}
                     >
-                        {!model.loading &&
-                            Object.keys(model.evaluationsData)
-                                .filter((value) =>
-                                    operations.showDivision(value)
-                                )
-                                .map((division) => (
-                                    <EvaluationDivisionContainer
-                                        key={division}
-                                        title={model.heading[division]}
-                                        divisionData={
-                                            model.evaluationsData[
-                                                division as DivisionToken
-                                            ]
-                                        }
-                                        downloadGraphButtonText={
-                                            model.downloadGraphButtonText
-                                        }
-                                        downloadDataButtonText={
-                                            model.downloadDataButtonText
-                                        }
-                                    ></EvaluationDivisionContainer>
-                                ))}
+                        {model.loading ? (
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    position: "relative",
+                                    left: "0",
+                                    top: "50%",
+                                    zIndex: "9999",
+                                }}
+                            >
+                                <CircularProgress />
+                            </Box>
+                        ) : (
+                            <JSONViewer
+                                data={model.data}
+                                fetch={fetch}
+                                view={view}
+                            />
+                        )}
                     </div>
                 </Item>
             </Stack>

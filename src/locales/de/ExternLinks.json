@@ -31,5 +31,9 @@
     "Survstat": "Survstat@RKI 2.0",
     "ArEFSA": "Antibiotikaresistenzen in Europa - EFSA",
     "SurveillanceAtlas": "Surveillance Atlas of Infectious Diseases - ECDC"
-  }
+  },
+  "LEGAL_REGULATION": "Rechtsvorschriften",
+  "REPORTS": "Berichte",
+  "ORGANIZATION_AND_INSTITUTES": "Organisationen und Institute",
+  "ONLINE_TOOLS": "Online Tools"
 }

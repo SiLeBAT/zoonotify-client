@@ -11,12 +11,13 @@ import {
     onSecondaryColor,
     primaryColor,
     secondaryColor,
+    headerHeight,
 } from "../../style/Style-MainTheme";
 import { TranslationButtonsComponent } from "./TranslationButtons.component";
 
 const headerStyle = css`
     width: 100%;
-    height: 100%;
+    height: ${headerHeight}px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -31,7 +32,6 @@ const mainHeaderStyle = (): SerializedStyles => css`
     box-sizing: border-box;
     box-shadow: "0 8px 6px -6px grey";
     background-color: ${primaryColor};
-    border-bottom: ${`24px solid ${secondaryColor}`};
     color: ${onSecondaryColor};
 `;
 const appNameStyle = css`
@@ -77,8 +77,9 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
-
+    const showLD = Boolean(process.env.REACT_APP_SHOW_LD);
     const { pathname } = useLocation();
+
     useEffect(() => {
         if (pathname === pageRoute.infoPagePath) {
             setInfoOpen(true);
@@ -125,6 +126,14 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Links")}
                     </NavLink>
+                    {showLD && (
+                        <NavLink
+                            to={pageRoute.linkedDataPagePath}
+                            css={navLinkStyle(linkOpen)}
+                        >
+                            {"LD"}
+                        </NavLink>
+                    )}
                 </div>
             </div>
         </header>

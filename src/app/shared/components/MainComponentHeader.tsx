@@ -14,8 +14,7 @@ export function MainComponentHeader({
         <Typography
             variant="h1"
             sx={{
-                marginBottom: "1rem",
-                paddingBottom: "0.5em",
+                paddingBottom: "0.2em",
                 fontSize: "3rem",
                 textAlign: "center",
                 fontWeight: "normal",

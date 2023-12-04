@@ -1,11 +1,13 @@
 import {
     CMS_BASE_ENDPOINT,
     EVALUATIONS,
+    EVALUATION_INFO,
 } from "./../../shared/infrastructure/router/routes";
 import {
     DivisionToken,
     Evaluation,
     EvaluationAttributesDTO,
+    EvaluationInformationAttributesDTO,
     FilterSelection,
     SelectionFilterConfig,
     SelectionItem,
@@ -21,17 +23,29 @@ import { UseCase } from "../../shared/model/UseCases";
 type EvaluationPageModel = {
     downloadGraphButtonText: string;
     downloadDataButtonText: string;
+    filterButtonText: string;
+    searchButtonText: string;
     heading: Record<string, string>;
     evaluationsData: Evaluation;
     selectionConfig: SelectionFilterConfig[];
+    selectedFilters: FilterSelection;
+    loading: boolean;
+    howto: string;
+    howToHeading: string;
 };
+
 type EvaluationPageOperations = {
     showDivision: (division: string) => boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fetchData: (filter: FilterSelection) => any;
 };
 
 type EvaluationPageTranslations = {
     downloadDataButtonText: string;
     downloadGraphButtonText: string;
+    filterButtonText: string;
+    searchButtonText: string;
+    howToHeading: string;
     heading: Record<string, string>;
 };
 
@@ -39,7 +53,7 @@ const maxPageSize = 250;
 const microorganism = [
     "E_COLI",
     "CAMPYLOBACTER_SPP",
-    "ESBL_AmpC_E_COLI",
+    "ESBL_AMPC_E_COLI",
     "LISTERIS_MONOCYTOGENES",
     "MRSA",
     "SALMONELLA_SPP",
@@ -55,13 +69,12 @@ const diagramType = [
     "TREND_DIAGRAMM",
 ];
 const productionType = [
-    "HUHN",
     "LEGEHENNEN",
     "MASTHAEHNCHEN",
     "MASTKALB_JUNGRIND",
+    "MASTRIND",
     "MASTPUTEN",
     "MASTSCHWEIN",
-    "PUTE",
     "RIND",
     "ZUCHTHUEHNER_LEGE_UND_MASTLINIE",
     "MILCHRIND",
@@ -91,6 +104,9 @@ const initialFilterSelection: FilterSelection = {
 function getTranslations(t: TFunction): EvaluationPageTranslations {
     const downloadGraphButtonText = t("Export");
     const downloadDataButtonText = t("Data_Download");
+    const searchButtonText = t("Search");
+    const filterButtonText = t("Filter");
+    const howToHeading = t("HOW_TO");
     const heading = {
         main: t("Heading"),
         FUTTERMITTEL: t("FUTTERMITTEL"),
@@ -98,7 +114,14 @@ function getTranslations(t: TFunction): EvaluationPageTranslations {
         LEBENSMITTEL: t("LEBENSMITTEL"),
         MULTIPLE: t("MULTIPLE"),
     };
-    return { downloadGraphButtonText, downloadDataButtonText, heading };
+    return {
+        downloadGraphButtonText,
+        downloadDataButtonText,
+        heading,
+        searchButtonText,
+        filterButtonText,
+        howToHeading,
+    };
 }
 
 function toSelectionItem(stringItems: string[], t: TFunction): SelectionItem[] {
@@ -114,6 +137,8 @@ const useEvaluationPageComponent: UseCase<
     EvaluationPageOperations
 > = () => {
     const { t } = useTranslation(["ExplanationPage"]);
+
+    const [howto, setHowto] = useState("");
 
     const emptyDivisions: Evaluation = {
         FUTTERMITTEL: [],
@@ -135,12 +160,20 @@ const useEvaluationPageComponent: UseCase<
         division: toSelectionItem(division, t),
     };
 
-    const { downloadGraphButtonText, downloadDataButtonText, heading } =
-        getTranslations(t);
+    const {
+        downloadGraphButtonText,
+        downloadDataButtonText,
+        heading,
+        searchButtonText,
+        filterButtonText,
+        howToHeading,
+    } = getTranslations(t);
 
     const [selectedFilters, setSelectedFilters] = useState(
         initialFilterSelection
     );
+
+    const [loading, setLoading] = useState(true);
 
     const createQueryString = (selection: FilterSelection): string => {
         const result = Object.entries(selection)
@@ -155,10 +188,13 @@ const useEvaluationPageComponent: UseCase<
             .join("&");
         return result;
     };
-    useEffect(() => {
-        const qString = createQueryString(selectedFilters);
 
+    const fetchData = (filter: FilterSelection): void => {
+        const qString = createQueryString(filter);
+
+        setLoading(true);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         callApiService<
             CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
         >(
@@ -170,8 +206,15 @@ const useEvaluationPageComponent: UseCase<
                 };
                 if (response.data) {
                     const data = response.data.data;
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    data.forEach(
+                    // Assuming the title is a direct attribute of entry.attributes, adjust if necessary.
+                    // Sorting before processing each entry.
+                    const sortedData = data.sort((a, b) => {
+                        const titleA = a.attributes.title.toUpperCase(); // Assuming 'title' is the attribute
+                        const titleB = b.attributes.title.toUpperCase();
+                        return titleA.localeCompare(titleB);
+                    });
+
+                    sortedData.forEach(
                         (entry: CMSEntity<EvaluationAttributesDTO>) => {
                             const divisionToken: DivisionToken = entry
                                 .attributes.division as DivisionToken;
@@ -194,12 +237,14 @@ const useEvaluationPageComponent: UseCase<
                     );
                 }
                 setEvaluationsData(result);
+                setLoading(false);
                 return result;
             })
             .catch((error) => {
+                setLoading(false);
                 throw error;
             });
-    }, [selectedFilters, i18next.language]);
+    };
 
     const availableFilters = [
         "otherDetail",
@@ -226,6 +271,7 @@ const useEvaluationPageComponent: UseCase<
                     const newFilters = { ...prev };
                     newFilters[filter as keyof FilterSelection] =
                         typeof value === "string" ? value.split(",") : value;
+
                     return newFilters;
                 });
             },
@@ -236,16 +282,39 @@ const useEvaluationPageComponent: UseCase<
         return selectedFilters.division.includes(div);
     };
 
+    useEffect(() => {
+        callApiService<
+            CMSResponse<CMSEntity<EvaluationInformationAttributesDTO>, unknown>
+        >(`${EVALUATION_INFO}?locale=${i18next.language}`)
+            .then((response) => {
+                if (response.data) {
+                    const data = response.data.data;
+                    setHowto(data.attributes.content);
+                }
+                return response;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }, [i18next.language]);
+
     return {
         model: {
             downloadDataButtonText,
             downloadGraphButtonText,
+            searchButtonText,
+            filterButtonText,
             heading,
             evaluationsData,
             selectionConfig,
+            selectedFilters,
+            loading,
+            howto,
+            howToHeading,
         },
         operations: {
             showDivision,
+            fetchData,
         },
     };
 };

@@ -41,14 +41,12 @@ const useWelcomePageComponent: UseCase<
     const [content, setContent] = useState(hardCodedContent);
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         callApiService<CMSResponse<CMSEntity<WelcomeAttributesDTO>, unknown>>(
             `${WELCOME}?locale=${i18next.language}`
         )
             .then((response) => {
                 if (response.data) {
                     const data = response.data.data;
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     setSubtitle(data.attributes.subheading);
                     setContent(data.attributes.content);
                 }
