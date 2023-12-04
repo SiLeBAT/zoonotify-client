@@ -4,9 +4,11 @@ import Markdown from "markdown-to-jsx";
 import React from "react";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import { ExplanationTermComponent } from "../components/ExplanationTermComponent copy";
-import { InfoPageAmrDialogComponent } from "../components/InfoPage-AmrsDialog.component";
+
 import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
 import { useExplanationPageComponent } from "./explanationUseCases";
+import { InfoPageAmrDialogComponent } from "../components/InfoPage-AmrsDialog.component";
+
 export function InfoPageComponent(props: {
     tableData: Record<AmrKey, AmrsTable>;
     onAmrDataExport: (amrKey: AmrKey) => void;
