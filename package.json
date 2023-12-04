@@ -1,6 +1,6 @@
 {
   "name": "zoonotify-client",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "description": "Web-basierte Abfrage von Zoonosen Surveillancedaten",
   "scripts": {
     "prepare": "husky install",
@@ -35,7 +35,7 @@
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.10.0",
     "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.11",
+    "@mui/material": "^5.14.19",
     "@mui/system": "^5.11.11",
     "@types/lodash": "^4.14.159",
     "@types/uuid": "^9.0.4",
@@ -54,6 +54,7 @@
     "react-csv": "^2.0.3",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.14.2",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^5.2.0",
     "react-simple-image-viewer": "^1.2.1",
     "uuid": "^9.0.1"
@@ -65,6 +66,7 @@
     "@types/react": "^17.0.35",
     "@types/react-csv": "^1.1.1",
     "@types/react-dom": "^17.0.11",
+    "@types/react-modal": "^3.16.3",
     "@types/react-router-dom": "^5.1.5",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
