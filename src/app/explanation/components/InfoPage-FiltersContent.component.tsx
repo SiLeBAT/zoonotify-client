@@ -242,6 +242,10 @@ export function InfoPageFiltersContentComponent(props: {
             }
         }
     }
+    console.log(
+        "Translation for Filters.microorganism.Name:",
+        t("Filters.microorganism.Name")
+    );
 
     return <div>{filterAccordionsList}</div>;
 }
