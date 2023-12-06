@@ -36,7 +36,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export function EvaluationsMainComponent(): JSX.Element {
-    const { model, operations } = useEvaluationPageComponent(null);
+    const { model, operations } = useEvaluationPageComponent();
     const { t } = useTranslation(["ExplanationPage"]);
     // const handleChipDelete = (label: string, index: number): void => {
     //     const result = model.selectionConfig.filter((config) => {
@@ -63,7 +63,8 @@ export function EvaluationsMainComponent(): JSX.Element {
     };
 
     const handleSearchBtnClick = (filter: FilterSelection): void => {
-        operations.fetchData(filter);
+        // Update the filters which will trigger the filtering in useEvaluationPageComponent
+        operations.updateFilters(filter);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -137,11 +138,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 <FilterContainerComponent
                                     selectionConfig={model.selectionConfig}
                                     searchButtonText={model.searchButtonText}
-                                    handleSearchBtnClick={(
-                                        data: FilterSelection
-                                    ) => {
-                                        handleSearchBtnClick(data);
-                                    }}
+                                    handleSearchBtnClick={handleSearchBtnClick}
                                     howToHeading={model.howToHeading}
                                     howToContent={model.howto}
                                 />
@@ -253,7 +250,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                     <Box ref={headerRef}>
                         <Box>
                             <MainComponentHeader
-                                heading={model.heading.main}
+                                heading={model.heading}
                             ></MainComponentHeader>
                         </Box>
                         {/* <Grid container spacing={2}>
@@ -350,7 +347,11 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 .map((division) => (
                                     <EvaluationDivisionContainer
                                         key={division}
-                                        title={model.heading[division]}
+                                        title={
+                                            model.heading[
+                                                division as keyof typeof model.heading
+                                            ] as string
+                                        }
                                         divisionData={
                                             model.evaluationsData[
                                                 division as DivisionToken
