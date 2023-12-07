@@ -46,6 +46,7 @@ export function EvaluationsCardComponent(props: {
                     <CardContent
                         sx={{
                             flex: "1 0 auto",
+                            textAlign: "left",
                         }}
                     >
                         <Markdown>{props.description}</Markdown>
@@ -57,6 +58,7 @@ export function EvaluationsCardComponent(props: {
                         flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "center",
+                        textAlign: "left",
                         width: ["100%", "50%"],
                     }}
                 >
@@ -72,7 +74,8 @@ export function EvaluationsCardComponent(props: {
                             display: "flex",
                             flexDirection: ["column", "row"],
                             justifyContent: "center",
-                            alignItems: "center",
+                            alignItems: "left",
+                            textAlign: "left",
                             width: "100%",
                             mt: 2,
                         }}
@@ -82,6 +85,7 @@ export function EvaluationsCardComponent(props: {
                             variant="contained"
                             sx={{
                                 margin: "0.5em",
+                                textAlign: "left",
                                 padding: "0em",
                                 backgroundColor: theme.palette.primary.main,
                                 "@media (max-width: 450px)": {
