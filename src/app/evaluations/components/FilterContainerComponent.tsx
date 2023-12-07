@@ -57,6 +57,7 @@ export function FilterContainerComponent({
                     key={config.id}
                     sx={{
                         display: "flex",
+                        alignItems: "left",
                         flexDirection: "row",
                         padding: 1,
                         justifyContent: "space-between",
