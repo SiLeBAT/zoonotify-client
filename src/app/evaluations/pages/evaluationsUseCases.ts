@@ -266,8 +266,8 @@ const useEvaluationPageComponent = (): {
 
     return {
         model: {
-            downloadDataButtonText: t("Download_Data"),
-            downloadGraphButtonText: t("Download_Graph"),
+            downloadDataButtonText: t("Data_Download"),
+            downloadGraphButtonText: t("Export"),
             searchButtonText: t("Search"),
             filterButtonText: t("Filter"),
             heading: t("Heading"),

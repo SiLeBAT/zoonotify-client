@@ -58,15 +58,6 @@ export function EvaluationsMainComponent(): JSX.Element {
     // };
     const [showFilters, setShowFilters] = React.useState(true);
 
-    const handleFilterBtnClick = (): void => {
-        setShowFilters((prev) => !prev);
-    };
-
-    const handleSearchBtnClick = (filter: FilterSelection): void => {
-        // Update the filters which will trigger the filtering in useEvaluationPageComponent
-        operations.updateFilters(filter);
-    };
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const headerRef: any = React.createRef();
     const [heightFromTop, setHeightFromTop] = React.useState(230);
@@ -92,6 +83,13 @@ export function EvaluationsMainComponent(): JSX.Element {
         setHeightFromTop(getHeightOffset());
     }, [model.selectionConfig]);
 
+    const handleFilterBtnClick = (): void => {
+        setShowFilters((prev) => !prev);
+    };
+
+    const handleSearchBtnClick = (filter: FilterSelection): void => {
+        operations.updateFilters(filter);
+    };
     return (
         <>
             <Stack
@@ -347,11 +345,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 .map((division) => (
                                     <EvaluationDivisionContainer
                                         key={division}
-                                        title={
-                                            model.heading[
-                                                division as keyof typeof model.heading
-                                            ] as string
-                                        }
+                                        title={t(division)} // Updated line
                                         divisionData={
                                             model.evaluationsData[
                                                 division as DivisionToken
@@ -363,7 +357,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                                         downloadDataButtonText={
                                             model.downloadDataButtonText
                                         }
-                                    ></EvaluationDivisionContainer>
+                                    />
                                 ))}
                     </div>
                 </Item>
