@@ -74,7 +74,7 @@ export function EvaluationsCardComponent(props: {
                             flexDirection: ["column", "row"],
                             justifyContent: "center",
                             alignItems: "center",
-                            textAlign: "left",
+
                             width: "100%",
                             mt: 2,
                         }}
