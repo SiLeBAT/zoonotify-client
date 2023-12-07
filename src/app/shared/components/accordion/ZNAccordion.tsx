@@ -47,6 +47,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                         fontWeight: "bold",
                         fontSize: "1rem",
                         textAlign: "left",
+                        margin: 0,
                     }}
                 >
                     {" "}
