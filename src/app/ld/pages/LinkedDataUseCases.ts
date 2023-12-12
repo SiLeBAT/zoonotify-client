@@ -47,7 +47,7 @@ const microorganism = [
     "STEC",
     "Salmonella spp.",
 ];
-const animalSpeciesFoodUpperCategory = [
+const animalSpeciesFoodTopCategory = [
     "Geflügel",
     "Huhn",
     "kleine Wiederkäuer",
@@ -156,7 +156,7 @@ const matrix = [
 const initialFilterSelection: FilterSelection = {
     matrix,
     animalSpeciesProductionDirectionFood,
-    animalSpeciesFoodUpperCategory,
+    animalSpeciesFoodTopCategory,
     microorganism,
 };
 function getTranslations(t: TFunction): LinkedDataPageTranslations {
@@ -194,8 +194,8 @@ const useLinkedDataPageComponent: UseCase<
             animalSpeciesProductionDirectionFood,
             t
         ),
-        animalSpeciesFoodUpperCategory: toSelectionItem(
-            animalSpeciesFoodUpperCategory,
+        animalSpeciesFoodTopCategory: toSelectionItem(
+            animalSpeciesFoodTopCategory,
             t
         ),
         microorganism: toSelectionItem(microorganism, t),
@@ -271,7 +271,7 @@ const useLinkedDataPageComponent: UseCase<
         "otherDetail",
         "matrix",
         "animalSpeciesProductionDirectionFood",
-        "animalSpeciesFoodUpperCategory",
+        "animalSpeciesFoodTopCategory",
         "microorganism",
     ];
 

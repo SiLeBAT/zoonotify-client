@@ -42,8 +42,8 @@ export function FilterContainerComponent({
             animalSpeciesProductionDirectionFood: getFilterById(
                 "animalSpeciesProductionDirectionFood"
             ),
-            animalSpeciesFoodUpperCategory: getFilterById(
-                "animalSpeciesFoodUpperCategory"
+            animalSpeciesFoodTopCategory: getFilterById(
+                "animalSpeciesFoodTopCategory"
             ),
             microorganism: getFilterById("microorganism"),
         };

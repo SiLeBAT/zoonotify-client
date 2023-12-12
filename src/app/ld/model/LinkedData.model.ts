@@ -6,7 +6,7 @@ export interface SelectionItem {
 export type FilterSelection = {
     matrix: string[];
     animalSpeciesProductionDirectionFood: string[];
-    animalSpeciesFoodUpperCategory: string[];
+    animalSpeciesFoodTopCategory: string[];
     microorganism: string[];
 };
 
