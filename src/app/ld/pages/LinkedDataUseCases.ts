@@ -242,7 +242,7 @@ const useLinkedDataPageComponent: UseCase<
                 Accept: "application/json",
                 "Content-Type": "application/ld+json",
                 Authorization:
-                    "Bearer c908e88771e78d3af6fcd792ccfcac9a675fcf7ad8905b6da2b295fd7aa02e2d0b02b50947884c17204670a977664bdb662ece6fac39ad9c70b370e60323838fd3c8799171d8aa66113cbc5af1a62776effd6d31ef1080dbc0d29cfdd76524a17ed53e664fbd8330d14194e22f4b80f3d52a03127e9f3f0658775dd35f43e1c6",
+                    "Bearer 66a30f2a6ae9cf4e9000cb2fe1cf0f310ea0875e15891ff1813acf328b132e4631b1de313cfbceabd7d88a49b4ddf61c49c42f7af641a1d04a4eaf354de84014a34bdd983bd7ff309827307f4dfa24558b04a324a451fcc3cc1f8d5d9ba231bae585dae0b0ce5f90107cab51d2194c5ed8bdf6f2f3285027b54b4d5d425bb05d",
             },
         };
         const qString = createQueryString(filter);
