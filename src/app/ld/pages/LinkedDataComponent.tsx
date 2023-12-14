@@ -44,7 +44,7 @@ export function LinkedDataComponent(): JSX.Element {
     };
 
     const handleSearchBtnClick = (filter: FilterSelection): void => {
-        operations.fetchData(filter);
+        operations.fetchData(filter, view);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,7 +64,6 @@ export function LinkedDataComponent(): JSX.Element {
     };
 
     useEffect(() => {
-        //operations.fetchData(model.selectedFilters);
         setHeightFromTop(getHeightOffset());
     }, []); // No dependency, will only run once
 
@@ -72,9 +71,9 @@ export function LinkedDataComponent(): JSX.Element {
         setHeightFromTop(getHeightOffset());
     }, [model.selectionConfig]);
 
-    const fetch = (): void => {
-        setView("JSON");
-        operations.fetchData(model.selectedFilters);
+    const fetch = (viewName: string): void => {
+        setView(viewName);
+        operations.fetchData(model.selectedFilters, viewName);
     };
 
     return (
