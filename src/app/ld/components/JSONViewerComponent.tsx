@@ -7,7 +7,7 @@ type JSONViewerProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fetch: () => any;
+    fetch: (viewName: string) => any;
     view: string;
 };
 
@@ -92,6 +92,21 @@ export function JSONViewer({
     const [value, setValue] = React.useState(0);
 
     useEffect(() => {
+        switch (view) {
+            case "LD":
+                beautifyJSON();
+                break;
+            case "RDF":
+                toRDF();
+                break;
+            case "JSON":
+                beautifyJSON();
+                break;
+
+            default:
+                beautifyJSON();
+                break;
+        }
         beautifyJSON();
     }, [data]);
 
@@ -117,13 +132,15 @@ export function JSONViewer({
         newValue: number
     ): void => {
         if (newValue == 0) {
+            fetch("LD");
             beautifyJSON();
         }
         if (newValue == 1) {
+            fetch("RDF");
             toRDF();
         }
         if (newValue == 2) {
-            fetch();
+            fetch("JSON");
         }
         setValue(newValue);
     };
