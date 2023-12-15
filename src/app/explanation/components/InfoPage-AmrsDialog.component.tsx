@@ -41,15 +41,17 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
         >
             {row.substanceClass}
         </TableCell>,
+
         <TableCell
             sx={tableTextStyle}
             component="td"
             scope="row"
-            key={`amr-table-cell-${row.amrSubstance}-substance`}
+            key={`amr-table-cell-${row.amrSubstance}-substanceClass`}
         >
-            {row.amrSubstance}
+            {row.wirkstoff}
         </TableCell>
     );
+
     for (const year of Object.keys(row.concentrationList)) {
         const concentrationPerYear = row.concentrationList[year];
         tableCellList.push(
@@ -82,6 +84,7 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             </TableCell>
         );
     }
+
     return tableCellList;
 }
 
@@ -150,7 +153,12 @@ export function InfoPageAmrDialogComponent(props: {
 
     const dialogTableContent = (
         <TableContainer
-            sx={{ height: "inherit", overflowY: "auto" }}
+            sx={{
+                maxWidth: "100%",
+                width: "auto",
+                height: "inherit",
+                overflowY: "auto",
+            }}
             component={Paper}
         >
             <Table size="small" stickyHeader aria-label="amr-table">

@@ -3,6 +3,7 @@ import { CMSAttributeDTO } from "../../shared/model/CMS.model";
 export interface AmrsTableData {
     shortSubstance: string;
     substanceClass: string;
+    wirkstoff: string;
     amrSubstance: string;
     concentrationList: Record<
         string,

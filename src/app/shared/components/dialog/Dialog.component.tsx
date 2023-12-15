@@ -59,6 +59,8 @@ export function DialogComponent(props: {
                             position: "absolute",
                             top: "10%",
                             left: "40%",
+                            marginTop: "-12px", // Adjust this value accordingly
+                            marginLeft: "-12px", // Adjust this value accordingly
                         }}
                     />
                 )}
@@ -67,7 +69,13 @@ export function DialogComponent(props: {
     }
 
     return (
-        <Dialog open onClose={handleClose} aria-labelledby="form-dialog-title">
+        <Dialog
+            open
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title"
+            fullWidth={true}
+            maxWidth="lg" // Set maximum width to large
+        >
             <DialogTitle>{props.dialogTitle}</DialogTitle>
             <DialogContent>
                 <DialogContentText>{props.dialogContentText}</DialogContentText>
