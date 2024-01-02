@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { callApiService } from "../shared/infrastructure/api/callApi.service";
 import { CMSResponse, CMSEntity } from "../shared/model/CMS.model";
 import { AMR_TABLE } from "../shared/infrastructure/router/routes";
+import { useTranslation } from "react-i18next";
 
 interface Concentration {
     cutOff: string;
@@ -17,7 +18,6 @@ interface AmrData {
 interface AmrsTableData {
     amrSubstance: string;
     shortSubstance: string;
-
     substanceClass: string;
     concentrationList: Record<string, Concentration>;
 }
@@ -31,7 +31,12 @@ interface AmrsTable {
     tableSubHeader: Record<string, string[]>;
     tableRows: AmrsTableData[];
 }
-
+interface UseAmrTableDataReturn {
+    amrsTable: AmrsTable | null;
+    loading: boolean;
+    error: string | null;
+    closeError: () => void;
+}
 interface ApiError {
     message: string;
     code: number;
@@ -89,31 +94,32 @@ function transformToAmrsTable(amrDataArray: AmrData[]): AmrsTable {
     };
 }
 
-export const useAmrTableData = (): {
-    amrsTable: AmrsTable | null;
-    loading: boolean;
-    error: string | null;
-} => {
+export const useAmrTableData = (): UseAmrTableDataReturn => {
     const [amrsTable, setAmrsTable] = useState<AmrsTable | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
-    const fetchData = useCallback(async () => {
+    const fetchData = useCallback(async (): Promise<void> => {
         try {
             setLoading(true);
             const fetchedTables = await getAmrTables();
             const transformedTable = transformToAmrsTable(fetchedTables);
             setAmrsTable(transformedTable);
+            setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred.");
+            setError(t("unknownError"));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+    const closeError = (): void => {
+        setError(null);
+    };
 
-    return { amrsTable, loading, error };
+    return { amrsTable, loading, error, closeError };
 };

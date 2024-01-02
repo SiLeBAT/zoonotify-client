@@ -5,6 +5,8 @@ import { InfoPageComponent } from "./ExplanationMainComponent";
 import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
 import Markdown from "markdown-to-jsx";
 
+import { ErrorSnackbar } from "../../shared/components/ErrorSnackbar/ErrorSnackbar";
+
 export interface AntibioticData {
     "cut-off"?: number | string;
     min?: number | string;
@@ -33,6 +35,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
         {} as Record<AmrKey, AmrsTable>
     );
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null); // Error state
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -161,16 +164,26 @@ const InfoPageContainer: React.FC = (): ReactElement => {
 
                 setAmrTableData(transformedData);
                 setLoading(false);
-            } catch (error) {
-                console.error("Error fetching data:", error);
+            } catch (fetchError) {
+                console.error("Error fetching data:", fetchError);
+                setError(
+                    fetchError instanceof Error
+                        ? fetchError.message
+                        : "unknownError"
+                );
+                setLoading(false);
             }
         };
 
         fetchData();
     }, []);
 
+    const handleCloseError = (): void => {
+        setError(null);
+    };
+
     if (loading) {
-        return <p>{t("loading")}</p>;
+        return <p>{t(" ")}</p>;
     }
 
     const handleExportAmrData = (amrKey: AmrKey): void => {
@@ -178,10 +191,15 @@ const InfoPageContainer: React.FC = (): ReactElement => {
     };
 
     return (
-        <InfoPageComponent
-            tableData={amrTableData}
-            onAmrDataExport={handleExportAmrData}
-        />
+        <div>
+            <InfoPageComponent
+                tableData={amrTableData}
+                onAmrDataExport={handleExportAmrData}
+            />
+            {error && (
+                <ErrorSnackbar open={!!error} handleClose={handleCloseError} />
+            )}
+        </div>
     );
 };
 

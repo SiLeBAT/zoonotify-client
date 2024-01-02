@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { ListContentListItemComponent } from "./ListContent-ListItem.component";
-
-// Import CMSResponse and CMSEntity
 import { EXTERNAL_LINKS } from "../../shared/infrastructure/router/routes";
 import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 
