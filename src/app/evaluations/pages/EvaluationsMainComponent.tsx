@@ -38,24 +38,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export function EvaluationsMainComponent(): JSX.Element {
     const { model, operations } = useEvaluationPageComponent();
     const { t } = useTranslation(["ExplanationPage"]);
-    // const handleChipDelete = (label: string, index: number): void => {
-    //     const result = model.selectionConfig.filter((config) => {
-    //         return config.label == label;
-    //     });
-    //     if (result && result.length > 0) {
-    //         if (index > -1) {
-    //             const dataCopy = JSON.parse(
-    //                 JSON.stringify(result[0].selectedItems)
-    //             );
-    //             dataCopy.splice(index, 1);
-    //             result[0].handleChange({
-    //                 target: { value: dataCopy.toString() },
-    //             });
-    //         } else {
-    //             result[0].handleChange({ target: { value: "" } });
-    //         }
-    //     }
-    // };
+
     const [showFilters, setShowFilters] = React.useState(true);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,7 +60,7 @@ export function EvaluationsMainComponent(): JSX.Element {
     useEffect(() => {
         operations.fetchData(model.selectedFilters);
         setHeightFromTop(getHeightOffset());
-    }, []); // No dependency, will only run once
+    }, []);
 
     useEffect(() => {
         setHeightFromTop(getHeightOffset());
@@ -251,84 +234,6 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 heading={model.heading}
                             ></MainComponentHeader>
                         </Box>
-                        {/* <Grid container spacing={2}>
-                    <Grid
-                        item
-                        xs={12}
-                        md={12}
-                        sx={{
-                            display: "inline",
-                            float: "right",
-                            paddingTop: "0 !important",
-                        }}
-                    >
-                        {model.selectionConfig.map((config, index) => {
-                            if (
-                                config &&
-                                config.selectedItems &&
-                                config.selectedItems.length > 0 &&
-                                config.selectionOptions &&
-                                config.selectionOptions.length > 0
-                            ) {
-                                if (
-                                    config.selectedItems.length ==
-                                    config.selectionOptions.length
-                                ) {
-                                    return (
-                                        <Chip
-                                            key={`Chip` + index}
-                                            sx={{ margin: "3px !important" }}
-                                            color="warning"
-                                            variant="filled"
-                                            label={
-                                                config.label + ": " + t("ALLE")
-                                            }
-                                            onDelete={() =>
-                                                handleChipDelete(
-                                                    config.label,
-                                                    -1
-                                                )
-                                            }
-                                        />
-                                    );
-                                }
-                                return config.selectedItems.map(
-                                    (item, itemIndex) => {
-                                        if (item)
-                                            return (
-                                                <Chip
-                                                    key={
-                                                        `Chip` +
-                                                        index +
-                                                        "_" +
-                                                        itemIndex
-                                                    }
-                                                    sx={{
-                                                        margin: "3px !important",
-                                                    }}
-                                                    color="warning"
-                                                    variant="filled"
-                                                    label={
-                                                        config.label +
-                                                        ": " +
-                                                        t(item)
-                                                    }
-                                                    onDelete={() =>
-                                                        handleChipDelete(
-                                                            config.label,
-                                                            itemIndex
-                                                        )
-                                                    }
-                                                />
-                                            );
-                                        else return;
-                                    }
-                                );
-                            }
-                            return;
-                        })}
-                    </Grid>
-                </Grid> */}
                     </Box>
                     <div
                         style={{
