@@ -46,7 +46,7 @@ export const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({
                     maxWidth: "600px",
                 }}
             >
-                {t("unknownError")}
+                {t("UNKNOWN-ERROR")}
             </Alert>
         </Snackbar>
     );
