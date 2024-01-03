@@ -30,7 +30,6 @@ export const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({
     return (
         <Snackbar
             open={open}
-            autoHideDuration={6000}
             onClose={handleClose}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
             sx={{ mt: 2, width: "auto" }}
@@ -45,8 +44,6 @@ export const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({
                     padding: "6px 24px",
                     minWidth: "300px",
                     maxWidth: "600px",
-                    border: "1px solid",
-                    borderColor: "currentColor",
                 }}
             >
                 {t("unknownError")}
