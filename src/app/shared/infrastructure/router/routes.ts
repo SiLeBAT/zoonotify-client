@@ -14,6 +14,6 @@ export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
 export const EXPLANATION = `${CMS_API_ENDPOINT}/explanations`;
 export const EVALUATIONS = `${CMS_API_ENDPOINT}/evaluations`;
 export const EVALUATION_INFO = `${CMS_API_ENDPOINT}/evaluation-information`;
-export const AMR_TABLE = `${CMS_API_ENDPOINT}/resistance-tables?populate[0]=yearly_cut_offs&populate[1]=yearly_cut_offs.AntibioticCutOff&populate[2]=yearly_cut_offs.AntibioticCutOff.antibiotic`;
+export const AMR_TABLE = `${CMS_API_ENDPOINT}/resistance-tables?populate[0]=cut_offs&populate[1]=cut_offs.antibiotic`;
 export const EXTERNAL_LINKS = `${CMS_API_ENDPOINT}/externallinks`;
 export const ISOLATES_LINKS = `${CMS_API_ENDPOINT}/isolates`;
