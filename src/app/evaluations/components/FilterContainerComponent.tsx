@@ -1,5 +1,5 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import Markdown from "markdown-to-jsx";
 import React from "react";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
@@ -53,26 +53,27 @@ export function FilterContainerComponent({
             sx={{ display: "flex", flexDirection: "column" }}
         >
             {selectionConfig.map((config) => (
-                <Box
-                    key={config.id}
-                    sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        padding: 1,
-                        justifyContent: "space-between",
-                        gap: 2,
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        name={config.id}
-                        selectedItems={config.selectedItems}
-                        selectionOptions={config.selectionOptions}
-                        label={t(config.label)}
-                        actions={{
-                            handleChange: config.handleChange,
+                <Tooltip title={t(config.label)} key={config.id}>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            padding: 1,
+                            justifyContent: "space-between",
+                            gap: 2,
                         }}
-                    />
-                </Box>
+                    >
+                        <FilterMultiSelectionComponent
+                            name={config.id}
+                            selectedItems={config.selectedItems}
+                            selectionOptions={config.selectionOptions}
+                            label={t(config.label)}
+                            actions={{
+                                handleChange: config.handleChange,
+                            }}
+                        />
+                    </Box>
+                </Tooltip>
             ))}
 
             <Box
