@@ -50,6 +50,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
 
                 const transformedData = json.data.reduce(
                     (acc: Record<AmrKey, AmrsTable>, item: ApiData) => {
+                        debugger;
                         const {
                             table_id: tableId,
                             description,
