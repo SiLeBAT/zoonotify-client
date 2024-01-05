@@ -2,6 +2,7 @@ import { FormControl, Tab, Tabs } from "@mui/material";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState } from "react";
 import * as jsonld from "jsonld";
+import { ErrorSnackbar } from "../../shared/components/ErrorSnackbar/ErrorSnackbar";
 
 type JSONViewerProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,7 +70,7 @@ export function JSONViewer({
     view,
 }: JSONViewerProps): JSX.Element {
     const [formattedData, setFormattedData] = useState("");
-
+    const [error, setError] = useState<string | null>(null);
     const beautifyJSON = (): void => {
         if (data && data.length > 0) {
             const formatData = JSON.stringify(data, null, 2);
@@ -78,15 +79,24 @@ export function JSONViewer({
     };
 
     const toRDF = async (): Promise<boolean> => {
-        if (data && data.length > 0) {
-            const nquads = await jsonld.toRDF(data, {
-                format: "application/n-quads",
-            });
-            const formatData = JSON.stringify(nquads, null, 2);
-            setFormattedData(formatData);
-            return true;
+        try {
+            if (data && data.length > 0) {
+                const nquads = await jsonld.toRDF(data, {
+                    format: "application/n-quads",
+                });
+                const formatData = JSON.stringify(nquads, null, 2);
+                setFormattedData(formatData);
+                return true;
+            }
+            return false;
+        } catch (err) {
+            setError(
+                err instanceof Error
+                    ? err.message
+                    : "An unknown error occurred."
+            );
+            return false;
         }
-        return false;
     };
 
     const [value, setValue] = React.useState(0);
@@ -102,13 +112,11 @@ export function JSONViewer({
             case "JSON":
                 beautifyJSON();
                 break;
-
             default:
                 beautifyJSON();
                 break;
         }
-        beautifyJSON();
-    }, [data]);
+    }, [data, view]);
 
     useEffect(() => {
         switch (view) {
@@ -121,7 +129,6 @@ export function JSONViewer({
             case "JSON":
                 setValue(2);
                 break;
-
             default:
                 break;
         }
@@ -143,6 +150,10 @@ export function JSONViewer({
             fetch("JSON");
         }
         setValue(newValue);
+    };
+
+    const handleCloseError = (): void => {
+        setError(null);
     };
 
     return (
@@ -176,19 +187,22 @@ export function JSONViewer({
                         value={value}
                         index={0}
                         data={formattedData}
-                    ></CustomTabPanel>
+                    />
                     <CustomTabPanel
                         value={value}
                         index={1}
                         data={formattedData}
-                    ></CustomTabPanel>
+                    />
                     <CustomTabPanel
                         value={value}
                         index={2}
                         data={formattedData}
-                    ></CustomTabPanel>
+                    />
                 </div>
             </Box>
+            {error && (
+                <ErrorSnackbar open={!!error} handleClose={handleCloseError} />
+            )}
         </>
     );
 }
