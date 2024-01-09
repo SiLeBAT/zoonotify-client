@@ -1,14 +1,14 @@
-import SearchIcon from "@mui/icons-material/Search";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Box, Button, Tooltip } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import Markdown from "markdown-to-jsx";
-import React from "react";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import {
     FilterSelection,
     SelectionFilterConfig,
 } from "../model/Evaluations.model";
 import { FilterMultiSelectionComponent } from "./FilterMultiSelectionComponent";
-import { useTranslation } from "react-i18next";
 
 type FilterContainerComponentProps = {
     selectionConfig: SelectionFilterConfig[];
@@ -25,7 +25,11 @@ export function FilterContainerComponent({
     howToHeading,
     handleSearchBtnClick,
 }: FilterContainerComponentProps): JSX.Element {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["ExplanationPage"]);
+    const { i18n } = useTranslation();
+
+    const [tooltipOpen, setTooltipOpen] = useState<string | null>(null);
+
     const initialFilters: FilterSelection = {
         matrix: [],
         productionType: [],
@@ -34,6 +38,7 @@ export function FilterContainerComponent({
         microorganism: [],
         division: [],
     };
+
     const gatherFilters = (): FilterSelection => {
         return selectionConfig.reduce((filters, config) => {
             filters[config.id as keyof FilterSelection] = config.selectedItems;
@@ -45,37 +50,52 @@ export function FilterContainerComponent({
         const updatedFilters = gatherFilters();
         handleSearchBtnClick(updatedFilters);
     };
-    const { i18n } = useTranslation();
 
     return (
         <Box
             key={i18n.language}
             sx={{ display: "flex", flexDirection: "column" }}
         >
-            {selectionConfig.map((config) => (
-                <Tooltip title={t(config.label)} key={config.id}>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            padding: 1,
-                            justifyContent: "space-between",
-                            gap: 2,
-                        }}
-                    >
-                        <FilterMultiSelectionComponent
-                            name={config.id}
-                            selectedItems={config.selectedItems}
-                            selectionOptions={config.selectionOptions}
-                            label={t(config.label)}
-                            actions={{
-                                handleChange: config.handleChange,
-                            }}
-                        />
-                    </Box>
-                </Tooltip>
-            ))}
+            {selectionConfig.map((config) => {
+                const selectedItemsTranslated =
+                    config.selectedItems.map((item) => t(item)).join(", ") ||
+                    t("None");
+                const tooltipTitle = `${t(
+                    config.label
+                )}: ${selectedItemsTranslated}`;
 
+                return (
+                    <Tooltip
+                        title={tooltipTitle}
+                        key={config.id}
+                        open={tooltipOpen === config.id}
+                        onClose={() => setTooltipOpen(null)}
+                        disableHoverListener={tooltipOpen !== null}
+                    >
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                padding: 1,
+                                justifyContent: "space-between",
+                                gap: 2,
+                            }}
+                            onMouseEnter={() => setTooltipOpen(config.id)}
+                            onMouseLeave={() => setTooltipOpen(null)}
+                        >
+                            <FilterMultiSelectionComponent
+                                name={config.id}
+                                selectedItems={config.selectedItems}
+                                selectionOptions={config.selectionOptions}
+                                label={t(config.label)}
+                                actions={{
+                                    handleChange: config.handleChange,
+                                }}
+                            />
+                        </Box>
+                    </Tooltip>
+                );
+            })}
             <Box
                 sx={{
                     display: "flex",
