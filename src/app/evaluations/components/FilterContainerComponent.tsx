@@ -57,6 +57,7 @@ export function FilterContainerComponent({
             key={i18n.language}
             sx={{ display: "flex", flexDirection: "column" }}
         >
+
             {selectionConfig.map((config) => {
                 const selectedItemsTranslated =
                     config.selectedItems.map((item) => t(item)).join(", ") ||
@@ -97,6 +98,7 @@ export function FilterContainerComponent({
                     </Tooltip>
                 );
             })}
+
 
             <Box
                 sx={{
