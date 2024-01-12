@@ -5,6 +5,7 @@ export const pageRoute = {
     evaluationsPagePath: "/evaluations",
     dpdPagePath: "/dataProtectionDeclaration",
     linkedDataPagePath: "/ld",
+    prevalencePagePath: "/prevalence",
 };
 
 export const CMS_BASE_ENDPOINT = process.env.REACT_APP_API_URL;
