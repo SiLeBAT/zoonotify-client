@@ -154,10 +154,10 @@ const matrix = [
 ];
 
 const initialFilterSelection: FilterSelection = {
-    matrix,
-    animalSpeciesProductionDirectionFood,
-    animalSpeciesFoodTopCategory,
-    microorganism,
+    matrix: [],
+    animalSpeciesProductionDirectionFood: [],
+    animalSpeciesFoodTopCategory: [],
+    microorganism: [],
 };
 function getTranslations(t: TFunction): LinkedDataPageTranslations {
     const searchButtonText = t("Search");
@@ -244,9 +244,6 @@ const useLinkedDataPageComponent: UseCase<
                     contentType == "JSON"
                         ? "application/json"
                         : "application/ld+json",
-                Authorization:
-                    "Bearer 66a30f2a6ae9cf4e9000cb2fe1cf0f310ea0875e15891ff1813acf328b132e4631b1de313cfbceabd7d88a49b4ddf61c49c42f7af641a1d04a4eaf354de84014a34bdd983bd7ff309827307f4dfa24558b04a324a451fcc3cc1f8d5d9ba231bae585dae0b0ce5f90107cab51d2194c5ed8bdf6f2f3285027b54b4d5d425bb05d",
-                // "Bearer a5043648632a57307cb788964608274d31a6895a5d8ba9320a680373df3bb00460ffe688a382e00e6e39cfae55425594d39b9d27780d07a761568e9933731a294b878087dbed91b4a67e1f2af020b1c3f5575ea044c9a10f6976d40bbbda3fda43bfdc3b8f69f2d87d0aec23bce6e74c3199b063133d85351a925cc24f98b6a3"
             },
         };
         const qString = createQueryString(filter);

@@ -1,8 +1,9 @@
-import { FormControl, Tab, Tabs } from "@mui/material";
+import { FormControl, Tab, Tabs, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState } from "react";
 import * as jsonld from "jsonld";
 import { ErrorSnackbar } from "../../shared/components/ErrorSnackbar/ErrorSnackbar";
+import { useTranslation } from "react-i18next";
 
 type JSONViewerProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,6 +11,7 @@ type JSONViewerProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetch: (viewName: string) => any;
     view: string;
+    notfound: string;
 };
 
 interface TabPanelProps {
@@ -17,11 +19,12 @@ interface TabPanelProps {
     index: number;
     value: number;
     data: string;
+    notfound: string;
 }
 
 function CustomTabPanel(props: TabPanelProps): JSX.Element {
     const { children, value, index, ...other } = props;
-
+    const { t } = useTranslation(["ExplanationPage"]);
     return (
         <div
             role="tabpanel"
@@ -40,16 +43,25 @@ function CustomTabPanel(props: TabPanelProps): JSX.Element {
                         height: "95%",
                     }}
                 >
-                    <FormControl sx={{ flex: "1 1 0" }}>
-                        <textarea
-                            style={{ height: "-webkit-fill-available" }}
-                            id="jsondata"
-                            placeholder="Result will appear here!"
-                            name="inputJSON"
-                            value={other.data}
-                            readOnly
-                        />
-                    </FormControl>
+                    {other.notfound == "true" && (
+                        <div style={{ height: "100%" }}>
+                            <Typography variant="h3">
+                                {t("No_Records")}
+                            </Typography>
+                        </div>
+                    )}
+                    {other.notfound == "false" && (
+                        <FormControl sx={{ flex: "1 1 0" }}>
+                            <textarea
+                                style={{ height: "-webkit-fill-available" }}
+                                id="jsondata"
+                                placeholder="Result will appear here!"
+                                name="inputJSON"
+                                value={other.data}
+                                readOnly
+                            />
+                        </FormControl>
+                    )}
                 </Box>
             )}
         </div>
@@ -68,6 +80,7 @@ export function JSONViewer({
     data,
     fetch,
     view,
+    notfound,
 }: JSONViewerProps): JSX.Element {
     const [formattedData, setFormattedData] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -187,16 +200,19 @@ export function JSONViewer({
                         value={value}
                         index={0}
                         data={formattedData}
+                        notfound={notfound}
                     />
                     <CustomTabPanel
                         value={value}
                         index={1}
                         data={formattedData}
+                        notfound={notfound}
                     />
                     <CustomTabPanel
                         value={value}
                         index={2}
                         data={formattedData}
+                        notfound={notfound}
                     />
                 </div>
             </Box>

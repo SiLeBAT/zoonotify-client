@@ -37,6 +37,8 @@ export function LinkedDataComponent(): JSX.Element {
     const { t } = useTranslation(["ExplanationPage"]);
 
     const [showFilters, setShowFilters] = React.useState(true);
+    const [dataFetched, setDataFetched] = React.useState(false);
+    const [notFound, setNotFound] = React.useState(false);
     const [view, setView] = React.useState("LD");
 
     const handleFilterBtnClick = (): void => {
@@ -45,6 +47,7 @@ export function LinkedDataComponent(): JSX.Element {
 
     const handleSearchBtnClick = (filter: FilterSelection): void => {
         operations.fetchData(filter, view);
+        setDataFetched(true);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,11 +72,19 @@ export function LinkedDataComponent(): JSX.Element {
 
     useEffect(() => {
         setHeightFromTop(getHeightOffset());
+        if (dataFetched == true) {
+            if (model.data.length == 0) {
+                setNotFound(true);
+            } else {
+                setNotFound(false);
+            }
+        }
     }, [model.selectionConfig]);
 
     const fetch = (viewName: string): void => {
         setView(viewName);
         operations.fetchData(model.selectedFilters, viewName);
+        setDataFetched(true);
     };
 
     return (
@@ -266,6 +277,7 @@ export function LinkedDataComponent(): JSX.Element {
                                 data={model.data}
                                 fetch={fetch}
                                 view={view}
+                                notfound={notFound ? "true" : "false"}
                             />
                         )}
                     </div>
