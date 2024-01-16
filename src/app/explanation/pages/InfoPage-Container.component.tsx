@@ -7,25 +7,39 @@ import Markdown from "markdown-to-jsx";
 
 import { ErrorSnackbar } from "../../shared/components/ErrorSnackbar/ErrorSnackbar";
 
-export interface AntibioticData {
-    "cut-off"?: number | string;
-    min?: number | string;
-    max?: number | string;
-
-    Substanzklasse?: string;
-    Wirkstoff?: string;
+export interface AntibioticAttributes {
+    name: string;
+    shortName: string;
 }
+
+export interface AntibioticDetails {
+    id: number;
+    attributes: AntibioticAttributes;
+}
+
+export interface Antibiotic {
+    data: AntibioticDetails;
+}
+
+export interface YearlyCutOffData {
+    id: number;
+    min: number;
+    max: number;
+    cutOff: number;
+    substanzklasse: string;
+    bacteria: string;
+    year: number;
+    antibiotic: Antibiotic;
+}
+
+export type CutOffList = YearlyCutOffData[];
 
 export interface ApiData {
     id: number;
     attributes: {
         table_id: string;
         description: string;
-        yearly_cut_off: {
-            [year: string]: {
-                [antibiotic: string]: AntibioticData;
-            }[];
-        };
+        cut_offs: CutOffList;
         title: string;
     };
 }
@@ -36,7 +50,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
     );
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null); // Error state
-    const { t } = useTranslation();
+    const { t } = useTranslation(["InfoPage"]);
 
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
@@ -53,41 +67,45 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                         const {
                             table_id: tableId,
                             description,
-                            yearly_cut_off: yearlyCutOff,
                             title,
+                            cut_offs: cutOffs,
                         } = item.attributes;
 
-                        const years = Object.keys(yearlyCutOff)
-                            .filter(
-                                (y) =>
-                                    !["Substanzklasse", "Wirkstoff"].includes(y)
-                            )
-                            .sort((a, b) => b.localeCompare(a)); // Sorting in descending order
-                        const antibiotics = Object.keys(
-                            yearlyCutOff[years[0]][0]
-                        );
+                        const years: string[] = cutOffs
+                            .reduce(function (
+                                yearList: string[],
+                                rec: YearlyCutOffData
+                            ) {
+                                if (
+                                    yearList.findIndex(
+                                        (x) => x == rec.year.toString()
+                                    ) == -1
+                                ) {
+                                    yearList.push(rec.year.toString());
+                                }
+                                return yearList;
+                            },
+                            [])
+                            .sort((a: string, b: string) => b.localeCompare(a)); // Sorting in descending order
 
-                        const SubstanzklasseData =
-                            yearlyCutOff.Substanzklasse &&
-                            yearlyCutOff.Substanzklasse.length > 0
-                                ? Object.fromEntries(
-                                      Object.entries(
-                                          yearlyCutOff.Substanzklasse[0]
-                                      ).map(([key, value]) => [
-                                          key,
-                                          value.toString(),
-                                      ])
-                                  )
-                                : {};
-
-                        const WirkstoffData =
-                            yearlyCutOff.Wirkstoff &&
-                            yearlyCutOff.Wirkstoff.length > 0
-                                ? (yearlyCutOff.Wirkstoff[0] as Record<
-                                      string,
-                                      string
-                                  >)
-                                : {};
+                        const antibiotics: string[] = cutOffs.reduce(function (
+                            microbs: string[],
+                            rec: YearlyCutOffData
+                        ) {
+                            if (
+                                microbs.findIndex(
+                                    (x) =>
+                                        x ==
+                                        rec.antibiotic.data.attributes.shortName
+                                ) == -1
+                            ) {
+                                microbs.push(
+                                    rec.antibiotic.data.attributes.shortName
+                                );
+                            }
+                            return microbs;
+                        },
+                        []);
 
                         const tableTitle = `Table ${tableId}: ${title}`;
                         acc[tableId as AmrKey] = {
@@ -96,9 +114,9 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                             titleString: tableTitle,
                             description: description,
                             tableHeader: [
-                                "Antibiotic",
-                                "Substanzklasse",
-                                "Wirkstoff",
+                                t("Methods.Amrs.TableHeaderShortSub"),
+                                t("Methods.Amrs.TableHeaderClass"),
+                                t("Methods.Amrs.TableHeaderSubstance"),
                                 ...years,
                             ],
                             tableSubHeader: years.reduce(
@@ -109,6 +127,9 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                                 {}
                             ),
                             tableRows: antibiotics.map((antibiotic) => {
+                                let antibioticName = "",
+                                    antibioticShortName = "",
+                                    substanceClass = "";
                                 const concentrationList = years.reduce(
                                     (
                                         listAcc: Record<
@@ -121,37 +142,39 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                                         >,
                                         year
                                     ) => {
-                                        const antibioticData =
-                                            yearlyCutOff[year].find(
-                                                (data) => data[antibiotic]
-                                            )?.[antibiotic] || {};
-                                        listAcc[year] = {
-                                            cutOff: antibioticData["cut-off"]
-                                                ? antibioticData[
-                                                      "cut-off"
-                                                  ].toString()
-                                                : "",
-                                            min: antibioticData.min
-                                                ? antibioticData.min.toString()
-                                                : "",
-                                            max: antibioticData.max
-                                                ? antibioticData.max.toString()
-                                                : "",
-                                        };
+                                        const antibioticData = cutOffs.find(
+                                            (rec) =>
+                                                rec.year.toString() == year &&
+                                                rec.antibiotic.data.attributes
+                                                    .shortName == antibiotic
+                                        );
+
+                                        if (antibioticData) {
+                                            antibioticName =
+                                                antibioticData.antibiotic.data
+                                                    .attributes.name;
+                                            antibioticShortName =
+                                                antibioticData.antibiotic.data
+                                                    .attributes.shortName;
+                                            substanceClass =
+                                                antibioticData.substanzklasse;
+                                            listAcc[year] = {
+                                                cutOff: antibioticData.cutOff.toString(),
+                                                min: antibioticData.min.toString(),
+                                                max: antibioticData.max.toString(),
+                                            };
+                                        }
+
                                         return listAcc;
                                     },
                                     {}
                                 );
 
                                 return {
-                                    amrSubstance: antibiotic,
-                                    substanceClass:
-                                        SubstanzklasseData[antibiotic] ||
-                                        "Unknown",
-                                    wirkstoff:
-                                        WirkstoffData[antibiotic] || "Unknown",
-                                    shortSubstance: antibiotic.substr(0, 3),
-
+                                    amrSubstance: antibioticShortName,
+                                    substanceClass: substanceClass,
+                                    wirkstoff: antibioticName,
+                                    shortSubstance: antibioticShortName,
                                     concentrationList,
                                 };
                             }),
@@ -161,7 +184,6 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                     },
                     {}
                 );
-
                 setAmrTableData(transformedData);
                 setLoading(false);
             } catch (fetchError) {
