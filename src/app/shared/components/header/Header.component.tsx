@@ -74,6 +74,7 @@ const rightHeaderStyle = css`
  */
 export function HeaderComponent(): JSX.Element {
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
+    const [linkedDataOpen, setLinkedDataOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
@@ -95,6 +96,11 @@ export function HeaderComponent(): JSX.Element {
             setEvaluationsOpen(true);
         } else {
             setEvaluationsOpen(false);
+        }
+        if (pathname === pageRoute.linkedDataPagePath) {
+            setLinkedDataOpen(true);
+        } else {
+            setLinkedDataOpen(false);
         }
     });
 
@@ -129,7 +135,7 @@ export function HeaderComponent(): JSX.Element {
                     {showLD && (
                         <NavLink
                             to={pageRoute.linkedDataPagePath}
-                            css={navLinkStyle(linkOpen)}
+                            css={navLinkStyle(linkedDataOpen)}
                         >
                             {"LD"}
                         </NavLink>
