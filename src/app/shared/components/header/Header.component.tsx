@@ -77,6 +77,8 @@ export function HeaderComponent(): JSX.Element {
     const [linkedDataOpen, setLinkedDataOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
+    const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+
     const { t } = useTranslation(["Header"]);
     const showLD = Boolean(process.env.REACT_APP_SHOW_LD);
     const { pathname } = useLocation();
@@ -97,6 +99,13 @@ export function HeaderComponent(): JSX.Element {
         } else {
             setEvaluationsOpen(false);
         }
+
+        if (pathname === pageRoute.prevalencePagePath) {
+            setPrevalenceOpen(true);
+        } else {
+            setPrevalenceOpen(false);
+        }
+
         if (pathname === pageRoute.linkedDataPagePath) {
             setLinkedDataOpen(true);
         } else {
@@ -132,6 +141,13 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Links")}
                     </NavLink>
+                    <NavLink
+                        to={pageRoute.prevalencePagePath}
+                        css={navLinkStyle(prevalenceOpen)}
+                    >
+                        {t("prevalence")}
+                    </NavLink>
+
                     {showLD && (
                         <NavLink
                             to={pageRoute.linkedDataPagePath}
