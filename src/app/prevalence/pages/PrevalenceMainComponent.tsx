@@ -1,68 +1,23 @@
 import React from "react";
-import { Layout } from "./LayoutComponent";
-import { MainContentComponent } from "./MainContentComponent";
-import { FilterContainerComponent } from "../components/FilterContainerComponent";
-import { useEvaluationPageComponent } from "./evaluationsUseCases";
-import { useTranslation } from "react-i18next";
-import { EvaluationDivisionContainer } from "../components/EvaluationDivisionContainer";
-import { DivisionToken } from "../model/Evaluations.model";
-import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
+
+import { Layout } from "../../shared/components/layout/LayoutComponent";
+import { PrevalenceMainContent } from "../components/PrevalenceMainContent";
+import { PrevalenceSideContent } from "../components/PrevalenceSideContent";
+import { usePrevalencePageComponent } from "./prevalenceUseCases";
 
 export function PrevalenceMainComponent(): React.ReactElement {
-    const { model, operations } = useEvaluationPageComponent();
-    const { t } = useTranslation(["ExplanationPage"]);
+    const { model } = usePrevalencePageComponent();
+
 
     return (
         <div>
             <Layout
-                side={
-                    <FilterContainerComponent
-                        selectionConfig={model.selectionConfig}
-                        searchButtonText={model.searchButtonText}
-                        handleSearchBtnClick={operations.updateFilters}
-                        howToHeading={model.howToHeading}
-                        howToContent={model.howto}
-                    />
-                }
-                main={
-                    <>
-                        <MainComponentHeader heading={t("Prevalence")} />
+    }
 
-                        <MainContentComponent
-                            model={model}
-                            operations={operations}
-                        />
+                side={<PrevalenceSideContent />}
+                sidebarTitle={model.sideBarTitle}
+                main={<PrevalenceMainContent heading={model.mainHeading} />}
 
-                        {!model.loading &&
-                            (
-                                Object.keys(
-                                    model.evaluationsData
-                                ) as DivisionToken[]
-                            )
-                                .filter((value) =>
-                                    operations.showDivision(value)
-                                )
-                                .map((divisionToken) => {
-                                    const divisionData =
-                                        model.evaluationsData[divisionToken];
-                                    const title = t(divisionToken);
-
-                                    return (
-                                        <EvaluationDivisionContainer
-                                            key={divisionToken}
-                                            title={title}
-                                            divisionData={divisionData}
-                                            downloadGraphButtonText={
-                                                model.downloadGraphButtonText
-                                            }
-                                            downloadDataButtonText={
-                                                model.downloadDataButtonText
-                                            }
-                                        />
-                                    );
-                                })}
-                    </>
-                }
             />
         </div>
     );
