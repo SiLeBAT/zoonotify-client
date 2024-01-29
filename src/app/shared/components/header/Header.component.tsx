@@ -7,11 +7,11 @@ import { useTranslation } from "react-i18next";
 import { NavLink, useLocation } from "react-router-dom";
 import { pageRoute } from "../../infrastructure/router/routes";
 import {
+    headerHeight,
     onPrimaryColor,
     onSecondaryColor,
     primaryColor,
     secondaryColor,
-    headerHeight,
 } from "../../style/Style-MainTheme";
 import { TranslationButtonsComponent } from "./TranslationButtons.component";
 
@@ -136,16 +136,16 @@ export function HeaderComponent(): JSX.Element {
                         {t("Evaluations")}
                     </NavLink>
                     <NavLink
-                        to={pageRoute.linkPagePath}
-                        css={navLinkStyle(linkOpen)}
-                    >
-                        {t("Links")}
-                    </NavLink>
-                    <NavLink
                         to={pageRoute.prevalencePagePath}
                         css={navLinkStyle(prevalenceOpen)}
                     >
                         {t("prevalence")}
+                    </NavLink>
+                    <NavLink
+                        to={pageRoute.linkPagePath}
+                        css={navLinkStyle(linkOpen)}
+                    >
+                        {t("Links")}
                     </NavLink>
 
                     {showLD && (

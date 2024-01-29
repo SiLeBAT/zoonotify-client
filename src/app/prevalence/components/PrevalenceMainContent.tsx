@@ -2,13 +2,13 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
 import React from "react";
 
-type MainComponentHeaderProps = {
+type PrevalenceMainContentProps = {
     heading: string;
 };
 
-export function MainComponentHeader({
+export function PrevalenceMainContent({
     heading,
-}: MainComponentHeaderProps): JSX.Element {
+}: PrevalenceMainContentProps): JSX.Element {
     const theme = useTheme();
     return (
         <Typography

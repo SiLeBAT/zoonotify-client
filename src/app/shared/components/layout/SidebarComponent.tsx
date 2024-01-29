@@ -1,10 +1,8 @@
-import React from "react";
-import { Box, Collapse, IconButton, Typography, styled } from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
-import { useTranslation } from "react-i18next";
+import { Box, Collapse, IconButton, Typography, styled } from "@mui/material";
+import React from "react";
 import { backgroundColor, primaryColor } from "../../style/Style-MainTheme";
-import { FilterSelection } from "../../../prevalence/model/Evaluations.model";
 
 const StyledBox = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -14,21 +12,15 @@ const StyledBox = styled(Box)(({ theme }) => ({
 interface SidebarComponentProps {
     showFilters: boolean;
     handleFilterBtnClick: () => void;
-    handleSearchBtnClick: (filter: FilterSelection) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    selectionConfig: any;
-    searchButtonText: string;
-    howToHeading: string;
-    howToContent: string;
+    title: string;
 }
 
 export const SidebarComponent: React.FC<SidebarComponentProps> = ({
     showFilters,
     handleFilterBtnClick,
+    title,
     children,
 }) => {
-    const { t } = useTranslation(["ExplanationPage"]);
-
     return (
         <Box
             sx={{
@@ -52,7 +44,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                     }}
                 >
                     <Typography variant="h6" sx={{ alignSelf: "center" }}>
-                        {t("Filter_Settings")}
+                        {title}
                     </Typography>
                     {children}
                 </StyledBox>
@@ -116,7 +108,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                         writingMode: "vertical-rl",
                     }}
                 >
-                    {t("Filter_Settings")}
+                    {title}
                 </Typography>
             )}
         </Box>
