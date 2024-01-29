@@ -3,7 +3,10 @@ import React from "react";
 import { Box, useTheme } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { pageRoute } from "../../infrastructure/router/routes";
+import {
+    pageRoute,
+    API_DOCUMENTATION_URL,
+} from "../../infrastructure/router/routes";
 
 export function FooterLinkListComponent(props: {
     supportMail: string | undefined;
@@ -89,6 +92,8 @@ export function FooterLinkListComponent(props: {
         );
     }
 
+    const apiDocumentationUrl = API_DOCUMENTATION_URL;
+
     // Determine BfR link based on the current language.
     const bfrLink =
         i18n.language === "en"
@@ -115,6 +120,16 @@ export function FooterLinkListComponent(props: {
                     sx={linkStyle}
                 >
                     <Typography>FoodRisk-Labs</Typography>
+                </Link>
+            </ListItem>
+            <ListItem sx={footerElementStyle}>
+                <Link
+                    href={apiDocumentationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={linkStyle}
+                >
+                    <Typography>{t("Content.Api")}</Typography>
                 </Link>
             </ListItem>
             <ListItem sx={footerElementStyle}>

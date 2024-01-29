@@ -10,6 +10,8 @@ export const pageRoute = {
 
 export const CMS_BASE_ENDPOINT = process.env.REACT_APP_API_URL;
 export const CMS_API_ENDPOINT = CMS_BASE_ENDPOINT + `/api`;
+export const API_DOCUMENTATION_URL =
+    CMS_BASE_ENDPOINT + `/documentation/v1.0.0`;
 export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
 export const EXPLANATION = `${CMS_API_ENDPOINT}/explanations`;
