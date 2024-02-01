@@ -56,14 +56,16 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                 onClick={handleFilterBtnClick}
                 sx={{
                     zIndex: 1100,
-                    position: "absolute",
+                    position: "fixed", // Changed from absolute to fixed
                     top: "50%",
-                    right: showFilters ? "-24px" : "-24px",
+                    right: showFilters
+                        ? "calc(100% - 285git compx - 24px)"
+                        : "calc(100% - 50px - 24px)",
                     transform: "translateY(-50%)",
                     borderRadius: "50%",
                     display: "flex",
-                    alignItems: "",
-                    justifyContent: "left",
+                    alignItems: "center",
+                    justifyContent: "center",
                     fontSize: "22px",
                     cursor: "pointer",
                     color: `${backgroundColor}`,
