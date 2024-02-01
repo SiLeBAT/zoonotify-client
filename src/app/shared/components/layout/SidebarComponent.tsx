@@ -59,7 +59,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                     position: "fixed", // Changed from absolute to fixed
                     top: "50%",
                     right: showFilters
-                        ? "calc(100% - 285git compx - 24px)"
+                        ? "calc(100% - 287px - 24px)"
                         : "calc(100% - 50px - 24px)",
                     transform: "translateY(-50%)",
                     borderRadius: "50%",
@@ -87,6 +87,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                     <KeyboardArrowRightRoundedIcon />
                 )}
             </IconButton>
+
             {!showFilters && (
                 <Typography
                     variant="h3"
