@@ -1,4 +1,45 @@
 {
   "PREVALENCE": "Prävalenz",
-  "FILTER_SETTINGS": "Filter Einstellungen"
+  "FILTER_SETTINGS": "Filter Einstellungen",
+  "FILTER": "Filter",
+  "SELECT_ALL": "Selecteer Alles",
+  "DESELECT_ALL": "Deselecteer Alles",
+
+  "microorganismOptions": {
+    "BAYLISASCARIS_PROCYONIS": "Baylisascaris procyonis",
+    "CLOSTRIDIOIDES_DIFFICILE": "Clostridioides difficile",
+    "DUNKER_SCHER_MUSKELEGEL": "Dunkerscher Muskelegel",
+    "HEPATITIS_A_VIRUS": "Hepatitis-A-Virus",
+    "HEPATITIS_E_VIRUS": "Hepatitis-E-Virus",
+    "NOROVIRUS": "Norovirus",
+    "PRÄSUMTIVER_BACILLUS_CEREUS": "Präsumtiver Bacillus cereus",
+    "VIBRIO_SPP": "Vibrio spp.",
+    "YERSINIA_ENTEROCOLITICA": "Yersinia enterocolitica",
+    "CAMPYLOBACTER_SPP": "Campylobacter spp.",
+    "ESBL_AMPC_E_COLI": "ESBL/AmpC E. coli",
+    "LISTERIS_MONOCYTOGENES": "Listeria monocytogenes",
+    "MRSA": "MRSA",
+    "SALMONELLA_SPP": "Salmonella spp.",
+    "STEC": "STEC",
+    "CARBA_E_COLI": "Carbapenemase-bildende E. coli",
+    "ENTEROCOCCUS_SPP": "Enterokokken spp."
+  },
+  "animalSpeciesOptions": {
+    "GEFLUEGEL": "Geflügel",
+    "HUHN": "Huhn",
+    "KLEINEWIEDERKAEUER": "Kleine Wiederkäuer",
+    "MEERESFRUECHTE": "Meeresfrüchte",
+    "NUTZTIERE": "Nutztiere",
+    "PFLANZLICHELEBENSMITTEL": "Pflanzliche Lebensmittel",
+    "PUTE": "Pute",
+    "REHWILD": "Rehwild",
+    "RIND": "Rind",
+    "SCHWEIN": "Schwein",
+    "SCHWEINUNDRIND": "Schwein und Rind",
+    "SUESSWASSERFISCHE": "Süßwasserfische",
+    "WIEDERKAEUER": "Wiederkäuer",
+    "WILDGEFLUEGEL": "Wildgeflügel",
+    "WILDSCHWEIN": "Wildschwein",
+    "WILDWIEDERKAEUER": "Wildwiederkäuer"
+  }
 }
