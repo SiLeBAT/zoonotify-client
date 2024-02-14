@@ -1,4 +1,43 @@
 {
   "PREVALENCE": "Prevalence",
-  "FILTER_SETTINGS": "Filter Settings"
+  "FILTER_SETTINGS": "Filter Settings",
+
+  "FILTER": "Filter",
+  "SELECT_ALL": "Select All",
+  "DESELECT_ALL": "Deselect All",
+  "microorganismOptions": {
+    "BAYLISASCARIS_PROCYONIS": "Baylisascaris Procyonis",
+    "CLOSTRIDIOIDES_DIFFICILE": "Clostridioides Difficile",
+    "DUNKER_SCHER_MUSKELEGEL": "Dunker's Muscle Leech",
+    "HEPATITIS_A_VIRUS": "Hepatitis A Virus",
+    "HEPATITIS_E_VIRUS": "Hepatitis E Virus",
+    "NOROVIRUS": "Norovirus",
+    "PRÄSUMTIVER_BACILLUS_CEREUS": "Presumptive Bacillus Cereus",
+    "VIBRIO_SPP": "Vibrio spp",
+    "YERSINIA_ENTEROCOLITICA": "Yersinia Enterocolitica",
+    "CAMPYLOBACTER_SPP": "Campylobacter spp",
+    "ESBL_AMPC_E_COLI": "ESBL/AmpC E. coli",
+    "LISTERIS_MONOCYTOGENES": "Listeria Monocytogenes",
+    "MRSA": "MRSA",
+    "SALMONELLA_SPP": "Salmonella spp",
+    "STEC": "STEC",
+    "CARBA_E_COLI": "Carbapenemase-producing E. coli",
+    "ENTEROCOCCUS_SPP": "Enterococcus spp"
+  },
+  "animalSpeciesOptions": {
+    "GEFLUEGEL": "Poultry",
+    "HUHN": "Chicken",
+    "KLEINEWIEDERKAEUER": "Small Ruminants",
+    "MEERESFRUECHTE": "Seafood",
+    "NUTZTIERE": "Livestock",
+    "PFLANZLICHELEBENSMITTEL": "Plant-based Foods",
+    "PUTE": "Turkey",
+    "REHWILD": "Deer",
+    "RIND": "Cattle",
+    "SCHWEIN": "Pig",
+    "SCHWEINUNDRIND": "Pig and Cattle",
+    "SUESSWASSERFISCHE": "Freshwater Fish",
+    "WIEDERKAEUER": "Ruminants",
+    "WILDGEFLUEGEL": "Wildgefluegl"
+  }
 }
