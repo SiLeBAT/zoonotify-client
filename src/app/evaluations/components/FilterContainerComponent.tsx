@@ -26,7 +26,6 @@ export function FilterContainerComponent({
     handleSearchBtnClick,
 }: FilterContainerComponentProps): JSX.Element {
     const { t } = useTranslation(["ExplanationPage"]);
-    const { i18n } = useTranslation();
 
     const [tooltipOpen, setTooltipOpen] = useState<string | null>(null);
 
@@ -51,11 +50,13 @@ export function FilterContainerComponent({
         handleSearchBtnClick(updatedFilters);
     };
 
+    // Added touch event handlers
+    const handleTouch = (id: string): void => {
+        setTooltipOpen(tooltipOpen === id ? null : id);
+    };
+
     return (
-        <Box
-            key={i18n.language}
-            sx={{ display: "flex", flexDirection: "column" }}
-        >
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
             {selectionConfig.map((config) => {
                 const selectedItemsTranslated =
                     config.selectedItems.map((item) => t(item)).join(", ") ||
@@ -71,6 +72,8 @@ export function FilterContainerComponent({
                         open={tooltipOpen === config.id}
                         onClose={() => setTooltipOpen(null)}
                         disableHoverListener={tooltipOpen !== null}
+                        // Added onTouchStart to handle touch events
+                        onTouchStart={() => handleTouch(config.id)}
                     >
                         <Box
                             sx={{
