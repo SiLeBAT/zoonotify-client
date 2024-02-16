@@ -6,10 +6,12 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useSelection } from "./SelectionContext"; // Make sure the path to SelectionContext.js is correct
+import Box from "@mui/material/Box";
+import { useSelection } from "./SelectionContext";
 interface PrevalenceMainContentProps {
     heading: string;
 }
+
 export function PrevalenceMainContent({
     heading,
 }: PrevalenceMainContentProps): JSX.Element {
@@ -17,17 +19,15 @@ export function PrevalenceMainContent({
     const { selectedMicroorganisms, selectedAnimalSpecies } = useSelection();
 
     return (
-        <div
-            style={{
+        <Box
+            sx={{
                 padding: theme.spacing(3),
                 display: "flex",
                 justifyContent: "center",
                 width: "100%",
             }}
         >
-            <div style={{ maxWidth: "70%" }}>
-                {" "}
-                {/* Wrapper for content to be centered */}
+            <Box sx={{ maxWidth: "70%" }}>
                 <Typography
                     variant="h1"
                     sx={{
@@ -41,7 +41,6 @@ export function PrevalenceMainContent({
                 >
                     {heading}
                 </Typography>
-                {/* Table Title aligned to the right */}
                 <Typography
                     variant="h6"
                     sx={{
@@ -54,7 +53,6 @@ export function PrevalenceMainContent({
                 >
                     Table
                 </Typography>
-                {/* Table Component */}
                 <Table
                     size="small"
                     sx={{
@@ -74,7 +72,7 @@ export function PrevalenceMainContent({
                         "& tbody tr:hover": {
                             backgroundColor: theme.palette.action.hover,
                         },
-                        tableLayout: "fixed", // Ensures fixed column widths
+                        tableLayout: "fixed",
                     }}
                     aria-label="selections table"
                 >
@@ -97,7 +95,7 @@ export function PrevalenceMainContent({
                         ))}
                     </TableBody>
                 </Table>
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }
