@@ -7,7 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
-import { useSelection } from "./SelectionContext";
+import { usePrevalenceFilters } from "./SelectionContext";
 interface PrevalenceMainContentProps {
     heading: string;
 }
@@ -16,7 +16,8 @@ export function PrevalenceMainContent({
     heading,
 }: PrevalenceMainContentProps): JSX.Element {
     const theme = useTheme();
-    const { selectedMicroorganisms, selectedAnimalSpecies } = useSelection();
+    const { selectedMicroorganisms, selectedAnimalSpecies } =
+        usePrevalenceFilters();
 
     return (
         <Box
