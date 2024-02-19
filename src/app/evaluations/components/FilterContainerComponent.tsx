@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Button, Tooltip } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import Markdown from "markdown-to-jsx";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import {
@@ -108,7 +108,7 @@ export function FilterContainerComponent({
                 <Button
                     variant="outlined"
                     onClick={handleSearch}
-                    startIcon={<SearchIcon />}
+                    startIcon={<FilterListIcon />}
                     sx={{ margin: "8px" }}
                 >
                     {searchButtonText}
