@@ -55,7 +55,7 @@ const App = (): ReactElement => {
             <MainLayoutComponent />
             <Snackbar
                 open={openSnackbar}
-                autoHideDuration={6000}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 onClose={handleCloseSnackbar}
             >
                 <Alert
