@@ -78,7 +78,7 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const { t } = useTranslation(["Header"]);
-    const showLD = Boolean(process.env.REACT_APP_SHOW_LD);
+    const showLD = process.env.REACT_APP_SHOW_LD === "true";
     const { pathname } = useLocation();
 
     useEffect(() => {
