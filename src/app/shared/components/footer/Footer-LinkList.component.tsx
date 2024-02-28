@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import {
     pageRoute,
-    API_DOCUMENTATION_URL,
+    // API_DOCUMENTATION_URL,
 } from "../../infrastructure/router/routes";
 
 export function FooterLinkListComponent(props: {
@@ -92,7 +92,7 @@ export function FooterLinkListComponent(props: {
         );
     }
 
-    const apiDocumentationUrl = API_DOCUMENTATION_URL;
+    // const apiDocumentationUrl = API_DOCUMENTATION_URL;
 
     // Determine BfR link based on the current language.
     const bfrLink =
@@ -122,7 +122,7 @@ export function FooterLinkListComponent(props: {
                     <Typography>FoodRisk-Labs</Typography>
                 </Link>
             </ListItem>
-            <ListItem sx={footerElementStyle}>
+            {/* <ListItem sx={footerElementStyle}>
                 <Link
                     href={apiDocumentationUrl}
                     target="_blank"
@@ -131,7 +131,7 @@ export function FooterLinkListComponent(props: {
                 >
                     <Typography>{t("Content.Api")}</Typography>
                 </Link>
-            </ListItem>
+            </ListItem> */}
             <ListItem sx={footerElementStyle}>
                 <NavLink to={pageRoute.dpdPagePath} style={linkStyle}>
                     <Typography>{t("Content.DataProtection")}</Typography>
