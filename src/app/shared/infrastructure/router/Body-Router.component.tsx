@@ -14,7 +14,7 @@ function ErrorPage(): JSX.Element {
 }
 
 export function BodyRouterComponent(): JSX.Element {
-    const showLD = Boolean(process.env.REACT_APP_SHOW_LD);
+    const showLD = process.env.REACT_APP_SHOW_LD === "true";
 
     return (
         <Switch>
