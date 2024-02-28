@@ -1,53 +1,21 @@
+import i18next from "i18next";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     CMS_BASE_ENDPOINT,
     EVALUATIONS,
     EVALUATION_INFO,
-} from "./../../shared/infrastructure/router/routes";
+} from "../../shared/infrastructure/router/routes";
 import {
-    DivisionToken,
     Evaluation,
     EvaluationAttributesDTO,
     EvaluationInformationAttributesDTO,
     FilterSelection,
     SelectionFilterConfig,
     SelectionItem,
-} from "./../model/Evaluations.model";
-// eslint-disable-next-line import/named
-import i18next, { TFunction } from "i18next";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+} from "../model/Evaluations.model";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
-import { UseCase } from "../../shared/model/UseCases";
-
-type EvaluationPageModel = {
-    downloadGraphButtonText: string;
-    downloadDataButtonText: string;
-    filterButtonText: string;
-    searchButtonText: string;
-    heading: Record<string, string>;
-    evaluationsData: Evaluation;
-    selectionConfig: SelectionFilterConfig[];
-    selectedFilters: FilterSelection;
-    loading: boolean;
-    howto: string;
-    howToHeading: string;
-};
-
-type EvaluationPageOperations = {
-    showDivision: (division: string) => boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fetchData: (filter: FilterSelection) => any;
-};
-
-type EvaluationPageTranslations = {
-    downloadDataButtonText: string;
-    downloadGraphButtonText: string;
-    filterButtonText: string;
-    searchButtonText: string;
-    howToHeading: string;
-    heading: Record<string, string>;
-};
+import { CMSResponse, CMSEntity } from "../../shared/model/CMS.model";
 
 const maxPageSize = 250;
 const microorganism = [
@@ -90,9 +58,7 @@ const matrix = [
     "MILCH",
     "MULTIPLE",
 ];
-
 const division = ["FUTTERMITTEL", "TIERE", "LEBENSMITTEL", "MULTIPLE"];
-
 const initialFilterSelection: FilterSelection = {
     matrix,
     productionType,
@@ -101,55 +67,55 @@ const initialFilterSelection: FilterSelection = {
     microorganism,
     division,
 };
-function getTranslations(t: TFunction): EvaluationPageTranslations {
-    const downloadGraphButtonText = t("Export");
-    const downloadDataButtonText = t("Data_Download");
-    const searchButtonText = t("Search");
-    const filterButtonText = t("Filter");
-    const howToHeading = t("HOW_TO");
-    const heading = {
-        main: t("Heading"),
-        FUTTERMITTEL: t("FUTTERMITTEL"),
-        TIERE: t("TIERE"),
-        LEBENSMITTEL: t("LEBENSMITTEL"),
-        MULTIPLE: t("MULTIPLE"),
-    };
-    return {
-        downloadGraphButtonText,
-        downloadDataButtonText,
-        heading,
-        searchButtonText,
-        filterButtonText,
-        howToHeading,
-    };
-}
 
-function toSelectionItem(stringItems: string[], t: TFunction): SelectionItem[] {
-    return stringItems.map((item: string) => ({
+function toSelectionItem(
+    stringItems: string[],
+    translate: (key: string) => string
+): SelectionItem[] {
+    return stringItems.map((item) => ({
         value: item,
-        displayName: t(item),
+        displayName: translate(item),
     }));
 }
 
-const useEvaluationPageComponent: UseCase<
-    null,
-    EvaluationPageModel,
-    EvaluationPageOperations
-> = () => {
-    const { t } = useTranslation(["ExplanationPage"]);
-
-    const [howto, setHowto] = useState("");
-
-    const emptyDivisions: Evaluation = {
+const useEvaluationPageComponent = (): {
+    model: {
+        downloadDataButtonText: string;
+        downloadGraphButtonText: string;
+        searchButtonText: string;
+        filterButtonText: string;
+        heading: string;
+        evaluationsData: Evaluation;
+        selectionConfig: SelectionFilterConfig[];
+        selectedFilters: FilterSelection;
+        loading: boolean;
+        howto: string;
+        howToHeading: string;
+    };
+    operations: {
+        showDivision: (div: string) => boolean;
+        fetchData: (filter: FilterSelection) => void;
+        updateFilters: (newFilters: FilterSelection) => void;
+    };
+} => {
+    const { t, i18n } = useTranslation(["ExplanationPage"]);
+    const [originalData, setOriginalData] = useState<Evaluation>({
         FUTTERMITTEL: [],
         TIERE: [],
         LEBENSMITTEL: [],
         MULTIPLE: [],
-    };
-
-    const [evaluationsData, setEvaluationsData] = useState({
-        ...emptyDivisions,
     });
+    const [evaluationsData, setEvaluationsData] = useState<Evaluation>({
+        FUTTERMITTEL: [],
+        TIERE: [],
+        LEBENSMITTEL: [],
+        MULTIPLE: [],
+    });
+    const [selectedFilters, setSelectedFilters] = useState<FilterSelection>(
+        initialFilterSelection
+    );
+    const [loading, setLoading] = useState(true);
+    const [howtoContent, setHowtoContent] = useState("");
 
     const availableOptions = {
         matrix: toSelectionItem(matrix, t),
@@ -160,128 +126,122 @@ const useEvaluationPageComponent: UseCase<
         division: toSelectionItem(division, t),
     };
 
-    const {
-        downloadGraphButtonText,
-        downloadDataButtonText,
-        heading,
-        searchButtonText,
-        filterButtonText,
-        howToHeading,
-    } = getTranslations(t);
-
-    const [selectedFilters, setSelectedFilters] = useState(
-        initialFilterSelection
-    );
-
-    const [loading, setLoading] = useState(true);
-
-    const createQueryString = (selection: FilterSelection): string => {
-        const result = Object.entries(selection)
-            .map(([key, value]) => {
-                if (value.length === 0) {
-                    return "filters[" + key + "][$eq]=" + "NULL&";
-                }
-                return value
-                    .map((v) => "filters[" + key + "][$eq]=" + v)
-                    .join("&");
-            })
-            .join("&");
-        return result;
-    };
-
-    const fetchData = (filter: FilterSelection): void => {
-        const qString = createQueryString(filter);
-
+    const fetchDataFromAPI = async (): Promise<void> => {
         setLoading(true);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-        callApiService<
-            CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
-        >(
-            `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&${qString}&pagination[pageSize]=${maxPageSize}`
-        )
-            .then((response) => {
-                const result: Evaluation = {
-                    ...emptyDivisions,
-                };
-                if (response.data) {
-                    const data = response.data.data;
-                    // Assuming the title is a direct attribute of entry.attributes, adjust if necessary.
-                    // Sorting before processing each entry.
-                    const sortedData = data.sort((a, b) => {
-                        const titleA = a.attributes.title.toUpperCase(); // Assuming 'title' is the attribute
-                        const titleB = b.attributes.title.toUpperCase();
-                        return titleA.localeCompare(titleB);
-                    });
-
-                    sortedData.forEach(
-                        (entry: CMSEntity<EvaluationAttributesDTO>) => {
-                            const divisionToken: DivisionToken = entry
-                                .attributes.division as DivisionToken;
-                            if (result[divisionToken]) {
-                                if (entry.attributes.diagram.data !== null) {
-                                    result[divisionToken].push({
-                                        ...entry.attributes,
-                                        chartPath:
-                                            CMS_BASE_ENDPOINT +
-                                            entry.attributes.diagram.data
-                                                .attributes.url,
-                                        dataPath:
-                                            CMS_BASE_ENDPOINT +
-                                            entry.attributes.csv_data.data
-                                                .attributes.url,
-                                    });
-                                }
-                            }
-                        }
-                    );
-                }
-                setEvaluationsData(result);
-                setLoading(false);
-                return result;
-            })
-            .catch((error) => {
-                setLoading(false);
-                throw error;
-            });
+        try {
+            const response = await callApiService<
+                CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
+            >(
+                `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&pagination[pageSize]=${maxPageSize}`
+            );
+            if (response.data) {
+                const processedData = processApiResponse(response.data.data);
+                setOriginalData(processedData);
+                setEvaluationsData(processedData);
+            }
+        } catch (error) {
+            console.error("Fetching data failed", error);
+        }
+        setLoading(false);
     };
 
-    const availableFilters = [
-        "otherDetail",
-        "matrix",
-        "productionType",
-        "diagramType",
-        "category",
-        "microorganism",
-        "division",
-    ];
+    useEffect(() => {
+        fetchDataFromAPI();
+    }, []);
 
-    const selectionConfig: SelectionFilterConfig[] = availableFilters.map(
-        (filter) => ({
-            label: t(filter.toUpperCase()),
-            id: filter,
-            selectedItems: selectedFilters[filter as keyof FilterSelection],
-            selectionOptions: availableOptions[filter as keyof FilterSelection],
-            handleChange: (event: { target: { value: string } }): void => {
-                const {
-                    target: { value },
-                } = event;
+    useEffect(() => {
+        const handleLanguageChange = (): void => {
+            fetchDataFromAPI();
+        };
 
-                setSelectedFilters((prev) => {
-                    const newFilters = { ...prev };
-                    newFilters[filter as keyof FilterSelection] =
-                        typeof value === "string" ? value.split(",") : value;
+        i18n.on("languageChanged", handleLanguageChange);
 
-                    return newFilters;
+        return () => {
+            i18n.off("languageChanged", handleLanguageChange);
+        };
+    }, [i18n]);
+
+    function processApiResponse(
+        apiData: CMSEntity<EvaluationAttributesDTO>[]
+    ): Evaluation {
+        const result: Evaluation = {
+            FUTTERMITTEL: [],
+            TIERE: [],
+            LEBENSMITTEL: [],
+            MULTIPLE: [],
+        };
+        apiData.forEach((entry) => {
+            const divisionToken = entry.attributes.division as keyof Evaluation;
+            if (result[divisionToken]) {
+                result[divisionToken].push({
+                    title: entry.attributes.title,
+                    description: entry.attributes.description,
+                    category: entry.attributes.category,
+                    division: divisionToken,
+                    microorganism: entry.attributes.microorganism,
+                    diagramType: entry.attributes.diagramType,
+                    productionType: entry.attributes.productionType,
+                    matrix: entry.attributes.matrix,
+                    chartPath:
+                        CMS_BASE_ENDPOINT +
+                        entry.attributes.diagram.data.attributes.url,
+                    dataPath:
+                        CMS_BASE_ENDPOINT +
+                        entry.attributes.csv_data.data.attributes.url,
                 });
-            },
-        })
-    );
+            }
+        });
+        return result;
+    }
 
-    const showDivision = (div: string): boolean => {
-        return selectedFilters.division.includes(div);
+    const applyFilters = (filterSelection: FilterSelection): void => {
+        const filteredData: Evaluation = {
+            FUTTERMITTEL: [],
+            TIERE: [],
+            LEBENSMITTEL: [],
+            MULTIPLE: [],
+        };
+        Object.keys(originalData).forEach((divisionKey) => {
+            const divisionValue = divisionKey as keyof Evaluation;
+            filteredData[divisionValue] = originalData[divisionValue].filter(
+                (item) => {
+                    return Object.keys(filterSelection).every((filterKey) => {
+                        const key = filterKey as keyof FilterSelection;
+                        return (
+                            filterSelection[key].length === 0 ||
+                            filterSelection[key].includes(item[key])
+                        );
+                    });
+                }
+            );
+        });
+        setEvaluationsData(filteredData);
     };
+    const handleChange =
+        (key: keyof FilterSelection) =>
+        (value: string | string[]): void => {
+            const newValue = Array.isArray(value) ? value : [value];
+            setSelectedFilters((prev) => ({
+                ...prev,
+                [key]: newValue,
+            }));
+        };
 
+    const selectionConfig: SelectionFilterConfig[] = Object.keys(
+        selectedFilters
+    ).map((key) => {
+        return {
+            label: t(key.toUpperCase()),
+            id: key,
+            selectedItems: selectedFilters[key as keyof FilterSelection],
+            selectionOptions:
+                availableOptions[key as keyof typeof availableOptions],
+            handleChange: (event) => {
+                const value = event.target.value;
+                handleChange(key as keyof FilterSelection)(value);
+            },
+        };
+    });
     useEffect(() => {
         callApiService<
             CMSResponse<CMSEntity<EvaluationInformationAttributesDTO>, unknown>
@@ -289,32 +249,40 @@ const useEvaluationPageComponent: UseCase<
             .then((response) => {
                 if (response.data) {
                     const data = response.data.data;
-                    setHowto(data.attributes.content);
+                    setHowtoContent(data.attributes.content);
                 }
-                return response;
+                return response; // Ensure to return a value
             })
             .catch((error) => {
-                throw error;
+                console.error("Error fetching 'How To' content", error);
+                throw error; // Ensure to throw an error
             });
     }, [i18next.language]);
 
+    const updateFilters = (newFilters: FilterSelection): void => {
+        setSelectedFilters(newFilters);
+        applyFilters(newFilters);
+    };
+
     return {
         model: {
-            downloadDataButtonText,
-            downloadGraphButtonText,
-            searchButtonText,
-            filterButtonText,
-            heading,
+            downloadDataButtonText: t("Data_Download"),
+            downloadGraphButtonText: t("Export"),
+            searchButtonText: t("Filter"),
+            filterButtonText: t("Filter"),
+            heading: t("Heading"),
             evaluationsData,
             selectionConfig,
             selectedFilters,
             loading,
-            howto,
-            howToHeading,
+            howto: howtoContent,
+            howToHeading: t("HOW_TO"),
         },
         operations: {
-            showDivision,
-            fetchData,
+            showDivision: (div: string) =>
+                selectedFilters.division.includes(div),
+            fetchData: applyFilters,
+            updateFilters,
         },
     };
 };

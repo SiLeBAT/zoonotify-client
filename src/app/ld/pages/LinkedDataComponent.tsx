@@ -2,10 +2,8 @@ import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftR
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import {
     Box,
-    // Button,
-    // Chip,
+    CircularProgress,
     Collapse,
-    // Grid,
     IconButton,
     Paper,
     Stack,
@@ -21,11 +19,10 @@ import {
     headerHeight,
     primaryColor,
 } from "../../shared/style/Style-MainTheme";
-import { EvaluationDivisionContainer } from "../components/EvaluationDivisionContainer";
 import { FilterContainerComponent } from "../components/FilterContainerComponent";
-import { DivisionToken, FilterSelection } from "../model/Evaluations.model";
-import { useEvaluationPageComponent } from "./evaluationsUseCases";
-// import { useTranslation } from "react-i18next";
+import { FilterSelection } from "../model/LinkedData.model";
+import { useLinkedDataPageComponent } from "./LinkedDataUseCases";
+import { JSONViewer } from "../components/JSONViewerComponent";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -35,11 +32,23 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-export function EvaluationsMainComponent(): JSX.Element {
-    const { model, operations } = useEvaluationPageComponent();
+export function LinkedDataComponent(): JSX.Element {
+    const { model, operations } = useLinkedDataPageComponent(null);
     const { t } = useTranslation(["ExplanationPage"]);
 
     const [showFilters, setShowFilters] = React.useState(true);
+    const [dataFetched, setDataFetched] = React.useState(false);
+    const [notFound, setNotFound] = React.useState(false);
+    const [view, setView] = React.useState("LD");
+
+    const handleFilterBtnClick = (): void => {
+        setShowFilters((prev) => !prev);
+    };
+
+    const handleSearchBtnClick = (filter: FilterSelection): void => {
+        operations.fetchData(filter, view);
+        setDataFetched(true);
+    };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const headerRef: any = React.createRef();
@@ -58,21 +67,26 @@ export function EvaluationsMainComponent(): JSX.Element {
     };
 
     useEffect(() => {
-        operations.fetchData(model.selectedFilters);
         setHeightFromTop(getHeightOffset());
-    }, []);
+    }, []); // No dependency, will only run once
 
     useEffect(() => {
         setHeightFromTop(getHeightOffset());
+        if (dataFetched == true) {
+            if (model.data.length == 0) {
+                setNotFound(true);
+            } else {
+                setNotFound(false);
+            }
+        }
     }, [model.selectionConfig]);
 
-    const handleFilterBtnClick = (): void => {
-        setShowFilters((prev) => !prev);
+    const fetch = (viewName: string): void => {
+        setView(viewName);
+        operations.fetchData(model.selectedFilters, viewName);
+        setDataFetched(true);
     };
 
-    const handleSearchBtnClick = (filter: FilterSelection): void => {
-        operations.updateFilters(filter);
-    };
     return (
         <>
             <Stack
@@ -119,9 +133,12 @@ export function EvaluationsMainComponent(): JSX.Element {
                                 <FilterContainerComponent
                                     selectionConfig={model.selectionConfig}
                                     searchButtonText={model.searchButtonText}
-                                    handleSearchBtnClick={handleSearchBtnClick}
-                                    howToHeading={model.howToHeading}
-                                    howToContent={model.howto}
+                                    loading={model.loading}
+                                    handleSearchBtnClick={(
+                                        data: FilterSelection
+                                    ) => {
+                                        handleSearchBtnClick(data);
+                                    }}
                                 />
                             </div>
 
@@ -231,7 +248,7 @@ export function EvaluationsMainComponent(): JSX.Element {
                     <Box ref={headerRef}>
                         <Box>
                             <MainComponentHeader
-                                heading={model.heading}
+                                heading={model.heading.main}
                             ></MainComponentHeader>
                         </Box>
                     </Box>
@@ -239,31 +256,30 @@ export function EvaluationsMainComponent(): JSX.Element {
                         style={{
                             height: `calc(100vh - ${heightFromTop}px)`,
                             maxHeight: `calc(100vh - ${heightFromTop}px)`,
-                            overflowY: "scroll",
+                            overflowY: "auto",
                         }}
                     >
-                        {!model.loading &&
-                            Object.keys(model.evaluationsData)
-                                .filter((value) =>
-                                    operations.showDivision(value)
-                                )
-                                .map((division) => (
-                                    <EvaluationDivisionContainer
-                                        key={division}
-                                        title={t(division)} // Updated line
-                                        divisionData={
-                                            model.evaluationsData[
-                                                division as DivisionToken
-                                            ]
-                                        }
-                                        downloadGraphButtonText={
-                                            model.downloadGraphButtonText
-                                        }
-                                        downloadDataButtonText={
-                                            model.downloadDataButtonText
-                                        }
-                                    />
-                                ))}
+                        {model.loading ? (
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    position: "relative",
+                                    left: "0",
+                                    top: "50%",
+                                    zIndex: "9999",
+                                }}
+                            >
+                                <CircularProgress />
+                            </Box>
+                        ) : (
+                            <JSONViewer
+                                data={model.data}
+                                fetch={fetch}
+                                view={view}
+                                notfound={notFound ? "true" : "false"}
+                            />
+                        )}
                     </div>
                 </Item>
             </Stack>

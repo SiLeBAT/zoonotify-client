@@ -1,6 +1,6 @@
 {
   "name": "zoonotify-client",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Web-basierte Abfrage von Zoonosen Surveillancedaten",
   "scripts": {
     "prepare": "husky install",
@@ -46,6 +46,7 @@
     "i18next": "^19.5.1",
     "i18next-browser-languagedetector": "^6.1.2",
     "i18next-http-backend": "^1.3.1",
+    "jsonld": "^8.3.1",
     "jszip": "^3.7.1",
     "lodash": "^4.17.21",
     "markdown-to-jsx": "^7.3.2",
@@ -62,6 +63,7 @@
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
     "@types/jest": "^25.2.1",
+    "@types/jsonld": "^1.5.12",
     "@types/lodash": "^4.14.159",
     "@types/react": "^17.0.35",
     "@types/react-csv": "^1.1.1",

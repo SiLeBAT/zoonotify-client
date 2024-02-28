@@ -42,8 +42,16 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                 id="shared-accordion-header"
             >
                 <Typography
-                    sx={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}
+                    sx={{
+                        flex: 1,
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                        textAlign: "left",
+                        margin: 0,
+                    }}
                 >
+                    {" "}
+                    {/* Adjusted text alignment */}
                     <Markdown>{props.title}</Markdown>
                 </Typography>
             </AccordionSummary>

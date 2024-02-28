@@ -4,16 +4,19 @@ import { EvaluationsMainComponent } from "../../../evaluations/pages/Evaluations
 import { DataProtectionPageComponent } from "../../../pages/data_protection/DataProtectionPage.component";
 import { ErrorPageComponent } from "../../../pages/error/ErrorPage.component";
 
-import { InfoPageContainerComponent } from "../../../explanation/pages/InfoPage-Container.component";
+import { InfoPageContainer } from "../../../explanation/pages/InfoPage-Container.component"; // Updated import
 import { LinkPageComponent } from "../../../pages/links/LinkPage.component";
 import { WelcomeMainComponent } from "../../../welcome/pages/WelcomeMainComponent";
 import { pageRoute } from "./routes";
+import { LinkedDataComponent } from "../../../ld/pages/LinkedDataComponent";
 
 function ErrorPage(): JSX.Element {
     return <ErrorPageComponent errorStatus={404} />;
 }
 
 export function BodyRouterComponent(): JSX.Element {
+    const showLD = Boolean(process.env.REACT_APP_SHOW_LD);
+
     return (
         <Switch>
             <Route
@@ -23,7 +26,7 @@ export function BodyRouterComponent(): JSX.Element {
             />
             <Route
                 path={pageRoute.infoPagePath}
-                component={InfoPageContainerComponent}
+                component={InfoPageContainer}
             />
             <Route
                 path={pageRoute.evaluationsPagePath}
@@ -37,6 +40,13 @@ export function BodyRouterComponent(): JSX.Element {
                 path={pageRoute.dpdPagePath}
                 component={DataProtectionPageComponent}
             />
+            {showLD && (
+                <Route
+                    path={pageRoute.linkedDataPagePath}
+                    component={LinkedDataComponent}
+                />
+            )}
+
             <Route component={ErrorPage} />
         </Switch>
     );
