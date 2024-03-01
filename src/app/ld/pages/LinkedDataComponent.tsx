@@ -1,5 +1,7 @@
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
+import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
+
 import {
     Box,
     CircularProgress,
@@ -12,7 +14,6 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { PrevalenceMainContent } from "../../prevalence/components/PrevalenceMainContent";
 import {
     backgroundColor,
     footerHeight,
@@ -247,9 +248,9 @@ export function LinkedDataComponent(): JSX.Element {
                 >
                     <Box ref={headerRef}>
                         <Box>
-                            <PrevalenceMainContent
+                            <MainComponentHeader
                                 heading={model.heading.main}
-                            ></PrevalenceMainContent>
+                            ></MainComponentHeader>
                         </Box>
                     </Box>
                     <div
