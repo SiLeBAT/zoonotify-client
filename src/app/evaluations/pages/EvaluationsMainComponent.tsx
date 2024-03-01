@@ -15,6 +15,7 @@ import {
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
+
 import {
     backgroundColor,
     footerHeight,
