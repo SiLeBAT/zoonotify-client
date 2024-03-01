@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { PrevalenceMainContent } from "../../prevalence/components/PrevalenceMainContent";
+import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import {
     backgroundColor,
     footerHeight,
@@ -230,9 +230,9 @@ export function EvaluationsMainComponent(): JSX.Element {
                 >
                     <Box ref={headerRef}>
                         <Box>
-                            <PrevalenceMainContent
+                            <MainComponentHeader
                                 heading={model.heading}
-                            ></PrevalenceMainContent>
+                            ></MainComponentHeader>
                         </Box>
                     </Box>
                     <div
