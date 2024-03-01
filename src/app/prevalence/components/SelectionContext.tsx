@@ -10,7 +10,6 @@ interface SelectionContextData {
 export const SelectionContext = createContext<SelectionContextData | undefined>(
     undefined
 );
-console.log("usePrevalenceFilters hook called", new Error().stack);
 
 export const usePrevalenceFilters = (): SelectionContextData => {
     const context = useContext(SelectionContext);
