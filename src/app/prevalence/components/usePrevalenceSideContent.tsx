@@ -59,6 +59,8 @@ export const usePrevalenceSideContent = (): {
     microorganismOptions: string[];
     animalSpeciesOptions: string[];
 } => {
+    console.log("usePrevalenceFilters hook called", new Error().stack);
+
     const context = useContext(SelectionContext);
     if (!context) {
         throw new Error(
