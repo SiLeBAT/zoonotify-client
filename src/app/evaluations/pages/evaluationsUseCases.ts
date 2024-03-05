@@ -60,12 +60,12 @@ const matrix = [
 ];
 const division = ["FUTTERMITTEL", "TIERE", "LEBENSMITTEL", "MULTIPLE"];
 const initialFilterSelection: FilterSelection = {
-    matrix,
-    productionType,
-    diagramType,
-    category,
-    microorganism,
     division,
+    microorganism,
+    productionType,
+    category,
+    matrix,
+    diagramType,
 };
 
 function toSelectionItem(
