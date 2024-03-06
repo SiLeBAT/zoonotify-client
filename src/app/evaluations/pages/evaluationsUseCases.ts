@@ -174,6 +174,7 @@ const useEvaluationPageComponent = (): {
             const divisionToken = entry.attributes.division as keyof Evaluation;
             if (result[divisionToken]) {
                 result[divisionToken].push({
+                    id: entry.id.toString(),
                     title: entry.attributes.title,
                     description: entry.attributes.description,
                     category: entry.attributes.category,
