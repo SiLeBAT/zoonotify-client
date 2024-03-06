@@ -9,6 +9,7 @@ import React, { useCallback, useState } from "react";
 import ImageViewer from "react-simple-image-viewer";
 
 export function EvaluationsCardComponent(props: {
+    id: string; // Add this line to accept the id prop
     title: string;
     description: string;
     chartPath: string;
@@ -29,6 +30,7 @@ export function EvaluationsCardComponent(props: {
     return (
         <>
             <Card
+                data-id={props.id} // Add this line to set the data-id attribute
                 sx={{
                     display: "flex",
                     flexDirection: ["column", "row"],

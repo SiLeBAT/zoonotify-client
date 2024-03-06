@@ -29,6 +29,7 @@ export function EvaluationDivisionDataComponent({
                         content={
                             <EvaluationsCardComponent
                                 title={evaluation.title}
+                                id={evaluation.id}
                                 description={evaluation.description}
                                 chartPath={evaluation.chartPath}
                                 dataPath={evaluation.dataPath}

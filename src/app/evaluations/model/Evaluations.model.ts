@@ -12,6 +12,7 @@ export type DivisionToken =
     | "MULTIPLE";
 
 export type EvaluationEntry = {
+    id: string;
     title: string;
     description: string;
     category: string;
