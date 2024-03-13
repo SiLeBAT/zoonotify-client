@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { SelectionContext } from "./SelectionContext";
 import { useTranslation } from "react-i18next";
+import { DefaultPrevalenceDataContext } from "./PrevalenceDataContext";
 
 const microorganismOptions = [
     "Baylisascaris procyonis",
@@ -59,7 +59,7 @@ export const usePrevalenceSideContent = (): {
     microorganismOptions: string[];
     animalSpeciesOptions: string[];
 } => {
-    const context = useContext(SelectionContext);
+    const context = useContext(DefaultPrevalenceDataContext);
     if (!context) {
         throw new Error(
             "usePrevalenceSideContent must be used within a provider"

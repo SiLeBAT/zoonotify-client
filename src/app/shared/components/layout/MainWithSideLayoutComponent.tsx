@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import React, { useState } from "react";
 import { MainContentComponent } from "./MainContentComponent";
 import { SidebarComponent } from "./SidebarComponent";
@@ -8,27 +9,27 @@ interface LayoutProps {
     main: React.ReactNode;
 }
 
-export const Layout: React.FC<LayoutProps> = ({
+export const MainWithSideLayout: React.FC<LayoutProps> = ({
     side,
     main,
     sidebarTitle,
 }): JSX.Element => {
-    const [showFilters, setShowFilters] = useState(true);
+    const [isOpen, setIsOpen] = useState(true);
 
-    const handleFilterBtnClick = (): void => {
-        setShowFilters(!showFilters);
+    const handleOpenClick = (): void => {
+        setIsOpen(!isOpen);
     };
 
     return (
-        <div style={{ display: "flex" }}>
+        <Box style={{ display: "flex" }}>
             <SidebarComponent
-                showFilters={showFilters}
-                handleFilterBtnClick={handleFilterBtnClick}
+                isOpen={isOpen}
+                handleOpenClick={handleOpenClick}
                 title={sidebarTitle}
             >
                 {side}
             </SidebarComponent>
             <MainContentComponent>{main}</MainContentComponent>
-        </div>
+        </Box>
     );
 };

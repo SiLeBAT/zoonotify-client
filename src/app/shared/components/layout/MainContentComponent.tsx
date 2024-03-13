@@ -17,7 +17,13 @@ export const MainContentComponent: React.FC<MainContentComponentProps> = ({
     children,
 }): JSX.Element => {
     return (
-        <Item sx={{ width: "100%", boxShadow: "15px 0 15px -15px inset" }}>
+        <Item
+            sx={{
+                width: "100%",
+                marginLeft: "20px",
+                boxShadow: "15px 0 15px -15px inset",
+            }}
+        >
             <Box>{children}</Box>
         </Item>
     );

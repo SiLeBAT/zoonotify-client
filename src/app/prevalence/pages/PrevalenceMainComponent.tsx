@@ -1,8 +1,8 @@
 import React from "react";
-import { Layout } from "../../shared/components/layout/LayoutComponent";
+import { MainWithSideLayout } from "../../shared/components/layout/MainWithSideLayoutComponent";
+import { PrevalenceDataProvider } from "../components/PrevalenceDataContext"; // Import the provider
 import { PrevalenceMainContent } from "../components/PrevalenceMainContent";
 import { PrevalenceSideContent } from "../components/PrevalenceSideContent";
-import { SelectionProvider } from "../components/SelectionContext"; // Import the provider
 import { usePrevalencePageComponent } from "./prevalenceUseCases";
 
 export function PrevalenceMainComponent(): React.ReactElement {
@@ -11,14 +11,12 @@ export function PrevalenceMainComponent(): React.ReactElement {
     // The state is now managed in SelectionProvider, so no need for useState here
 
     return (
-        <SelectionProvider>
-            {" "}
-            {/* Wrap the relevant components in the provider */}
-            <Layout
+        <PrevalenceDataProvider>
+            <MainWithSideLayout
                 side={<PrevalenceSideContent />}
                 sidebarTitle={model.sideBarTitle}
                 main={<PrevalenceMainContent heading={model.mainHeading} />}
             />
-        </SelectionProvider>
+        </PrevalenceDataProvider>
     );
 }
