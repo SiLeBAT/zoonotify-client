@@ -1,27 +1,27 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { ReactNode, createContext, useContext, useState } from "react";
 
-interface SelectionContextData {
+interface PrevalenceDataContext {
     selectedMicroorganisms: string[];
     setSelectedMicroorganisms: (microorganisms: string[]) => void;
     selectedAnimalSpecies: string[];
     setSelectedAnimalSpecies: (species: string[]) => void;
 }
 
-export const SelectionContext = createContext<SelectionContextData | undefined>(
-    undefined
-);
+export const DefaultPrevalenceDataContext = createContext<
+    PrevalenceDataContext | undefined
+>(undefined);
 
-export const usePrevalenceFilters = (): SelectionContextData => {
-    const context = useContext(SelectionContext);
+export const usePrevalenceFilters = (): PrevalenceDataContext => {
+    const context = useContext(DefaultPrevalenceDataContext);
     if (context === undefined) {
         throw new Error(
-            "usePrevalenceFilters must be used within a SelectionProvider"
+            "usePrevalenceFilters must be used within a PrevalenceDataProvider"
         );
     }
     return context;
 };
 
-export const SelectionProvider: React.FC<{ children: ReactNode }> = ({
+export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
     const [selectedMicroorganisms, setSelectedMicroorganisms] = useState<
@@ -39,8 +39,8 @@ export const SelectionProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     return (
-        <SelectionContext.Provider value={value}>
+        <DefaultPrevalenceDataContext.Provider value={value}>
             {children}
-        </SelectionContext.Provider>
+        </DefaultPrevalenceDataContext.Provider>
     );
 };

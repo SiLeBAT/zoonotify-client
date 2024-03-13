@@ -1,119 +1,151 @@
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
-import { Box, Collapse, IconButton, Typography, styled } from "@mui/material";
+import { Box, Collapse, IconButton, Typography } from "@mui/material";
 import React from "react";
 import { backgroundColor, primaryColor } from "../../style/Style-MainTheme";
 
-const StyledBox = styled(Box)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    color: theme.palette.text.secondary,
-}));
-
 interface SidebarComponentProps {
-    showFilters: boolean;
-    handleFilterBtnClick: () => void;
+    isOpen: boolean;
+    handleOpenClick: () => void;
     title: string;
 }
 
 export const SidebarComponent: React.FC<SidebarComponentProps> = ({
-    showFilters,
-    handleFilterBtnClick,
+    isOpen,
+    handleOpenClick,
     title,
     children,
 }) => {
     return (
-        <Box
+        <Collapse
+            orientation="horizontal"
+            in={isOpen}
+            collapsedSize={50}
             sx={{
-                position: "relative",
-                width: showFilters ? "350px" : "50px",
-                borderBlockColor: "black",
-                transition: "width 0.3s",
+                maxWidth: "30%",
+                borderRight: "1px solid gray",
+                "&& .MuiCollapse-wrapperInner": {
+                    width: "100%",
+                },
             }}
         >
-            <Collapse
-                in={showFilters}
-                orientation="horizontal"
-                sx={{ width: "30%", height: "100vh" }}
-            >
-                <StyledBox
-                    sx={{
-                        padding: 1,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                    }}
-                >
-                    <Typography variant="h6" sx={{ alignSelf: "center" }}>
-                        {title}
-                    </Typography>
-                    {children}
-                </StyledBox>
-            </Collapse>
+            {isOpen && (
+                <>
+                    <div
+                        style={{
+                            zIndex: "101",
+                            position: "relative",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                padding: 1,
+                                justifyContent: "center",
+                                gap: 2,
+                            }}
+                        >
+                            <Typography variant="h3">{title}</Typography>
+                        </Box>
 
-            <IconButton
-                color="primary"
-                aria-label="toggle filter"
-                onClick={handleFilterBtnClick}
-                sx={{
-                    zIndex: 1100,
-                    position: "fixed", // Changed from absolute to fixed
-                    top: "50%",
-                    right: showFilters
-                        ? "calc(100% - 360px - 24px)"
-                        : "calc(100% - 50px - 24px)",
-                    transform: "translateY(-50%)",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "22px",
-                    cursor: "pointer",
-                    color: `${backgroundColor}`,
-                    ":hover": {
-                        backgroundColor: `${primaryColor}`,
-                    },
-                    backgroundColor: `${primaryColor}`,
-                    padding: "0",
-                    height: "48px",
-                    width: "48px",
-                    "&& svg": {
-                        fontSize: "xxx-large",
-                    },
-                }}
-            >
-                {showFilters ? (
-                    <KeyboardArrowLeftRoundedIcon />
-                ) : (
-                    <KeyboardArrowRightRoundedIcon />
-                )}
-            </IconButton>
+                        {children}
+                    </div>
 
-            {!showFilters && (
-                <Typography
-                    variant="h3"
-                    sx={{
-                        color: backgroundColor,
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        height: "100%",
-                        width: "50px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "top",
-                        backgroundColor: primaryColor,
-                        padding: "50px 0",
-                        fontSize: "0.500rem",
-                        lineHeight: "1",
-                        letterSpacing: "",
-
-                        transform: "rotate(0deg)",
-                        writingMode: "vertical-rl",
-                    }}
-                >
-                    {title}
-                </Typography>
+                    <div
+                        style={{
+                            float: "inline-end",
+                        }}
+                    >
+                        <IconButton
+                            color="primary"
+                            aria-label="apply filter"
+                            onClick={handleOpenClick}
+                            sx={{
+                                zIndex: "100",
+                                position: "absolute",
+                                top: "45%",
+                                borderRadius: "50%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: "22px",
+                                cursor: "pointer",
+                                color: `${backgroundColor}`,
+                                ":hover": {
+                                    backgroundColor: `${primaryColor}`,
+                                },
+                                backgroundColor: `${primaryColor}`,
+                                background: `linear-gradient( 90deg , ${backgroundColor} 50%, ${primaryColor} 50%)`,
+                                padding: "0",
+                                height: "48px",
+                                width: "48px",
+                                marginLeft: "-24px",
+                                "&& svg": {
+                                    marginLeft: "10px",
+                                    marginRight: "-10px",
+                                    fontSize: "xxx-large",
+                                },
+                            }}
+                        >
+                            <KeyboardArrowLeftRoundedIcon />
+                        </IconButton>
+                    </div>
+                </>
             )}
-        </Box>
+            {!isOpen && (
+                <div
+                    style={{
+                        backgroundColor: `${primaryColor}`,
+                        height: "100%",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "inline-block",
+                            transform: "rotate(-90deg) translateX(-110%)",
+                            transformOrigin: "top left",
+                            width: "max-content",
+                            zIndex: "100",
+                            position: "absolute",
+                            left: "10px",
+                        }}
+                    >
+                        <Typography
+                            variant="h3"
+                            sx={{
+                                color: `${backgroundColor}`,
+                            }}
+                        >
+                            {title}
+                        </Typography>
+                    </div>
+
+                    <IconButton
+                        color="primary"
+                        aria-label="apply filter"
+                        onClick={handleOpenClick}
+                        sx={{
+                            top: "45%",
+                            left: "25px",
+                            position: "absolute",
+                            height: "48px",
+                            width: "48px",
+                            backgroundColor: `${primaryColor}`,
+                            color: "rgb(255, 255, 255)",
+                            ":hover": {
+                                backgroundColor: `${primaryColor}`,
+                            },
+                            "&& svg": {
+                                marginRight: "-15px",
+                                fontSize: "xxx-large",
+                            },
+                        }}
+                    >
+                        <KeyboardArrowRightRoundedIcon />
+                    </IconButton>
+                </div>
+            )}
+        </Collapse>
     );
 };

@@ -1,13 +1,13 @@
-import React from "react";
-import Typography from "@mui/material/Typography";
-import { useTheme } from "@mui/system";
+import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Box from "@mui/material/Box";
-import { usePrevalenceFilters } from "./SelectionContext";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/system";
+import React from "react";
+import { usePrevalenceFilters } from "./PrevalenceDataContext";
 interface PrevalenceMainContentProps {
     heading: string;
 }
