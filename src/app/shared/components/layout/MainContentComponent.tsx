@@ -20,6 +20,7 @@ export const MainContentComponent: React.FC<MainContentComponentProps> = ({
         <Item
             sx={{
                 width: "100%",
+                height: "100%",
                 marginLeft: "20px",
                 boxShadow: "15px 0 15px -15px inset",
             }}

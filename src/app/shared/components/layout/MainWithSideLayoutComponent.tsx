@@ -21,7 +21,7 @@ export const MainWithSideLayout: React.FC<LayoutProps> = ({
     };
 
     return (
-        <Box style={{ display: "flex" }}>
+        <Box style={{ display: "flex", width: "100vw", height: "100vh" }}>
             <SidebarComponent
                 isOpen={isOpen}
                 handleOpenClick={handleOpenClick}
