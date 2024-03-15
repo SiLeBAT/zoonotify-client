@@ -14,12 +14,15 @@ interface EvaluationMainContentProps {
 export function EvaluationMainContent({}: EvaluationMainContentProps): JSX.Element {
     const { model, operations } = useEvaluationContentComponent();
     const { t } = useTranslation(["ExplanationPage"]);
+    const headerAndFooterHeight = 64 + 80;
+
     return (
         <>
             <MainComponentHeader heading={model.heading}></MainComponentHeader>
             <Box
-                style={{
-                    overflowY: "scroll",
+                sx={{
+                    maxHeight: `calc(100vh - ${headerAndFooterHeight}px)`,
+                    overflowY: "auto",
                 }}
             >
                 {!model.loading &&
@@ -28,7 +31,7 @@ export function EvaluationMainContent({}: EvaluationMainContentProps): JSX.Eleme
                         .map((division) => (
                             <EvaluationDivisionContainer
                                 key={division}
-                                title={t(division)} // Updated line
+                                title={t(division)}
                                 divisionData={
                                     model.evaluationsData[
                                         division as DivisionToken
