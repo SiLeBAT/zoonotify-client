@@ -31,6 +31,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
         margin: 0,
     },
 }));
+const headerAndFooterHeight = 64 + 80;
 
 export function PrevalenceSideContent(): JSX.Element {
     const {
@@ -48,7 +49,14 @@ export function PrevalenceSideContent(): JSX.Element {
     const { t } = useTranslation(["PrevalencePage"]);
 
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box
+            sx={{
+                padding: 2,
+                height: "100vh",
+                overflowY: "auto",
+                maxHeight: `calc(100vh - ${headerAndFooterHeight}px)`,
+            }}
+        >
             <StyledAccordion>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}

@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
 import React from "react";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
+
 interface PrevalenceMainContentProps {
     heading: string;
 }
@@ -18,42 +19,50 @@ export function PrevalenceMainContent({
     const theme = useTheme();
     const { selectedMicroorganisms, selectedAnimalSpecies } =
         usePrevalenceFilters();
+    const headerAndFooterHeight = 64 + 80;
 
     return (
         <Box
             sx={{
-                padding: theme.spacing(3),
+                pt: theme.spacing(3),
                 display: "flex",
-                justifyContent: "center",
+                flexDirection: "column",
+                overflowY: "auto",
+                maxHeight: `calc(100vh - ${headerAndFooterHeight}px)`,
                 width: "100%",
             }}
         >
-            <Box sx={{ maxWidth: "70%" }}>
-                <Typography
-                    variant="h1"
-                    sx={{
-                        paddingBottom: "0.5em",
-                        fontSize: "3rem",
-                        textAlign: "center",
-                        fontWeight: "normal",
-                        color: theme.palette.primary.main,
-                        borderBottom: `1px solid ${theme.palette.primary.main}`,
-                    }}
-                >
-                    {heading}
-                </Typography>
-                <Typography
-                    variant="h6"
-                    sx={{
-                        textAlign: "left",
-                        margin: theme.spacing(2, 0),
-                        fontWeight: "bold",
-                        fontSize: "2rem",
-                        color: theme.palette.primary.dark,
-                    }}
-                >
-                    Table
-                </Typography>
+            <Typography
+                variant="h1"
+                sx={{
+                    pb: theme.spacing(0.5),
+                    fontSize: "3rem",
+                    textAlign: "center",
+                    fontWeight: "normal",
+                    color: theme.palette.primary.main,
+                    borderBottom: `1px solid ${theme.palette.primary.main}`,
+                }}
+            >
+                {heading}
+            </Typography>
+            <Typography
+                variant="h6"
+                sx={{
+                    textAlign: "center",
+                    my: theme.spacing(2),
+                    fontWeight: "bold",
+                    fontSize: "2rem",
+                    color: theme.palette.primary.dark,
+                }}
+            >
+                Table
+            </Typography>
+            <Box
+                sx={{
+                    maxWidth: "70%",
+                    mx: "auto",
+                }}
+            >
                 <Table
                     size="small"
                     sx={{

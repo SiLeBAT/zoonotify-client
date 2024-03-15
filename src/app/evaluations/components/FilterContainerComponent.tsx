@@ -24,7 +24,7 @@ export function FilterContainerComponent({
     return (
         <Box
             key={i18n.language}
-            sx={{ display: "flex", flexDirection: "column" }}
+            sx={{ display: "flex", flexDirection: "column", overflowY: "auto" }}
         >
             {selectionConfig.map((config) => {
                 const selectedItemsTranslated =

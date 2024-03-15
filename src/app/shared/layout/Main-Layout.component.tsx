@@ -20,7 +20,8 @@ const bodyStyle = css`
     flex: 1 1 0;
     z-index: 0;
     box-sizing: border-box;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
 `;
 
 /**
