@@ -14,14 +14,13 @@ interface EvaluationMainContentProps {
 export function EvaluationMainContent({}: EvaluationMainContentProps): JSX.Element {
     const { model, operations } = useEvaluationContentComponent();
     const { t } = useTranslation(["ExplanationPage"]);
-    const headerAndFooterHeight = 64 + 80;
 
     return (
         <>
             <MainComponentHeader heading={model.heading}></MainComponentHeader>
             <Box
                 sx={{
-                    maxHeight: `calc(100vh - ${headerAndFooterHeight}px)`,
+                    maxHeight: "calc(100vh - 130px)",
                     overflowY: "auto",
                 }}
             >
