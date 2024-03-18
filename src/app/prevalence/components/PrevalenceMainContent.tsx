@@ -19,7 +19,6 @@ export function PrevalenceMainContent({
     const theme = useTheme();
     const { selectedMicroorganisms, selectedAnimalSpecies } =
         usePrevalenceFilters();
-    const headerAndFooterHeight = 64 + 80;
 
     return (
         <Box
@@ -27,8 +26,8 @@ export function PrevalenceMainContent({
                 pt: theme.spacing(3),
                 display: "flex",
                 flexDirection: "column",
-                overflowY: "auto",
-                maxHeight: `calc(100vh - ${headerAndFooterHeight}px)`,
+                overflowY: "auto", // Scrollable area for the main content
+                height: "calc(100vh - 64px)",
                 width: "100%",
             }}
         >
