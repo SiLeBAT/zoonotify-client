@@ -26,7 +26,7 @@ export const MainWithSideLayout: React.FC<LayoutProps> = ({
                 display: "flex",
                 width: "100vw",
                 height: "100vh",
-                maxHeight: "calc(100vh - 130px)",
+                maxHeight: "calc(100vh )",
             }}
         >
             <SidebarComponent
