@@ -1,6 +1,7 @@
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
+import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
 
 import {
     Box,
@@ -89,7 +90,7 @@ export function LinkedDataComponent(): JSX.Element {
     };
 
     return (
-        <>
+        <PageLayoutComponent>
             <Stack
                 direction="row"
                 spacing={2}
@@ -284,6 +285,6 @@ export function LinkedDataComponent(): JSX.Element {
                     </div>
                 </Item>
             </Stack>
-        </>
+        </PageLayoutComponent>
     );
 }

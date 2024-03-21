@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { BrowserRouter } from "react-router-dom";
-import { FooterContainer } from "../components/footer/Footer-Container.component";
-import { HeaderComponent } from "../components/header/Header.component";
+
 import { BodyRouterComponent } from "../infrastructure/router/Body-Router.component";
 
 const wrapperStyle = css`
@@ -13,9 +12,6 @@ const wrapperStyle = css`
     box-sizing: border-box;
 `;
 
-const headerStyle = css`
-    z-index: 1;
-`;
 const bodyStyle = css`
     flex: 1 1 0;
     z-index: 0;
@@ -32,13 +28,9 @@ export function MainLayoutComponent(): JSX.Element {
     return (
         <div css={wrapperStyle}>
             <BrowserRouter>
-                <div css={headerStyle}>
-                    <HeaderComponent />
-                </div>
                 <div css={bodyStyle}>
                     <BodyRouterComponent />
                 </div>
-                <FooterContainer />
             </BrowserRouter>
         </div>
     );
