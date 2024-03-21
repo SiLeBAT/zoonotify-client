@@ -16,14 +16,13 @@ export type EvaluationEntry = {
     title: string;
     description: string;
     category: string;
-
+    division: string;
     microorganism: string;
     diagramType: string;
     productionType: string;
     matrix: string;
     chartPath: string;
     dataPath: string;
-    division: string;
 };
 
 export type DivisionData = EvaluationEntry[];
