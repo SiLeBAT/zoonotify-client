@@ -46,8 +46,8 @@ const division = ["FUTTERMITTEL", "TIERE", "LEBENSMITTEL", "MULTIPLE"];
 const initialFilterSelection: FilterSelection = {
     division,
     microorganism,
-    productionType,
     category,
+    productionType,
     matrix,
     diagramType,
 };
