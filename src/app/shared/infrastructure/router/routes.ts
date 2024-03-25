@@ -20,3 +20,4 @@ export const EVALUATION_INFO = `${CMS_API_ENDPOINT}/evaluation-information`;
 export const AMR_TABLE = `${CMS_API_ENDPOINT}/resistance-tables?populate[0]=cut_offs&populate[1]=cut_offs.antibiotic`;
 export const EXTERNAL_LINKS = `${CMS_API_ENDPOINT}/externallinks`;
 export const ISOLATES_LINKS = `${CMS_API_ENDPOINT}/isolates`;
+export const DATA_PROTECTION = `${CMS_API_ENDPOINT}/data-protection-declaration`;
