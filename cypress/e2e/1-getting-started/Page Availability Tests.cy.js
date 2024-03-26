@@ -18,8 +18,8 @@ describe('Page Availability Tests', () => {
   });
 
   it('Checks if the External Links page is available', () => {
-    cy.visit(Cypress.env('BASE_URL') + '/externallinks');
-    cy.url().should('include', '/externallinks');
+    cy.visit(Cypress.env('BASE_URL') + '/links');
+    cy.url().should('include', '/links');
     cy.get('body').should('contain', 'Externe Links');
   });
 
@@ -28,5 +28,12 @@ describe('Page Availability Tests', () => {
     cy.url().should('include', '/ld');
     cy.get('body').
 should('contain', 'Linked Data Playground');
+});
+
+it('Checks if the Data Protection Declaration page is available', () => {
+  cy.visit(Cypress.env('BASE_URL') + '/dataProtectionDeclaration');
+  cy.url().should('include', '/dataProtectionDeclaration');
+  cy.get('body').
+should('contain', 'Datenschutzerklärung');
 });
 });
