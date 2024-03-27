@@ -1,4 +1,4 @@
-import { Box, Tooltip } from "@mui/material";
+import { Box, Tooltip, Button } from "@mui/material";
 import Markdown from "markdown-to-jsx";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,9 +18,14 @@ export function FilterContainerComponent({
     howToHeading,
 }: FilterContainerComponentProps): JSX.Element {
     const { t, i18n } = useTranslation(["ExplanationPage"]);
-
     const [tooltipOpen, setTooltipOpen] = useState<string | null>(null);
 
+    const handleResetFilters = (): void => {
+        selectionConfig.forEach((config) => {
+            const event = { target: { value: [] } };
+            config.handleChange(event);
+        });
+    };
     return (
         <Box
             key={i18n.language}
@@ -66,7 +71,22 @@ export function FilterContainerComponent({
                     </Tooltip>
                 );
             })}
-
+            <Button
+                onClick={handleResetFilters}
+                variant="contained"
+                sx={{
+                    mb: 2,
+                    width: "200px",
+                    minWidth: "0",
+                    padding: "6px 16px",
+                    fontSize: "0.875rem",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    display: "block",
+                }}
+            >
+                {t("Delete All Filters")}
+            </Button>
             <ZNAccordion
                 key="howTo"
                 title={howToHeading}
