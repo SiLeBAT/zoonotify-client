@@ -7,7 +7,18 @@ import {
 import Markdown from "markdown-to-jsx";
 import React, { useCallback, useState } from "react";
 import ImageViewer from "react-simple-image-viewer";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
+const copyToClipboard = async (text: string): Promise<void> => {
+    try {
+        await navigator.clipboard.writeText(text);
+        console.log("Title copied to clipboard");
+    } catch (err) {
+        console.error("Failed to copy: ", err);
+    }
+};
 export function EvaluationsCardComponent(props: {
     id: string; // Add this line to accept the id prop
     title: string;
@@ -48,9 +59,28 @@ export function EvaluationsCardComponent(props: {
                     <CardContent
                         sx={{
                             flex: "1 0 auto",
+                            display: "flex",
+                            justifyContent: "space-between", // Adjust if necessary
+                            alignItems: "center",
                         }}
                     >
                         <Markdown>{props.description}</Markdown>
+                        {/* IconButton with copy icon */}
+                        <Tooltip title="Copy to clipboard" arrow>
+                            <IconButton
+                                size="small"
+                                onClick={() => copyToClipboard(props.title)}
+                                aria-label="Copy title"
+                                sx={{
+                                    position: "absolute",
+                                    top: "5%",
+                                    left: "0px",
+                                    transform: "translateY(-50%)",
+                                }}
+                            >
+                                <ContentCopyIcon fontSize="inherit" />
+                            </IconButton>
+                        </Tooltip>
                     </CardContent>
                 </Box>
                 <Box
