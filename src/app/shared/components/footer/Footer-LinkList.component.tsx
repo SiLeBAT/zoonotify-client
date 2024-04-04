@@ -1,11 +1,11 @@
 import { Link, List, ListItem, Tooltip, Typography } from "@mui/material";
-import React from "react";
 import { Box, useTheme } from "@mui/system";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import {
+    API_DOCUMENTATION_URL,
     pageRoute,
-    // API_DOCUMENTATION_URL,
 } from "../../infrastructure/router/routes";
 
 export function FooterLinkListComponent(props: {
@@ -92,7 +92,7 @@ export function FooterLinkListComponent(props: {
         );
     }
 
-    // const apiDocumentationUrl = API_DOCUMENTATION_URL;
+    const apiDocumentationUrl = API_DOCUMENTATION_URL;
 
     // Determine BfR link based on the current language.
     const bfrLink =
@@ -122,16 +122,18 @@ export function FooterLinkListComponent(props: {
                     <Typography>FoodRisk-Labs</Typography>
                 </Link>
             </ListItem>
-            {/* <ListItem sx={footerElementStyle}>
-                <Link
-                    href={apiDocumentationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={linkStyle}
-                >
-                    <Typography>{t("Content.Api")}</Typography>
-                </Link>
-            </ListItem> */}
+            {
+                <ListItem sx={footerElementStyle}>
+                    <Link
+                        href={apiDocumentationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={linkStyle}
+                    >
+                        <Typography>{t("Content.Api")}</Typography>
+                    </Link>
+                </ListItem>
+            }
             <ListItem sx={footerElementStyle}>
                 <NavLink to={pageRoute.dpdPagePath} style={linkStyle}>
                     <Typography>{t("Content.DataProtection")}</Typography>
