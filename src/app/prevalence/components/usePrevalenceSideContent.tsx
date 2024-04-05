@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { DefaultPrevalenceDataContext } from "./PrevalenceDataContext";
+import { useContext, useEffect } from "react";
 
 const microorganismOptions = [
     "Baylisascaris procyonis",
@@ -42,86 +42,55 @@ const animalSpeciesOptions = [
     "WILDSCHWEIN",
     "WILDWIEDERKAEUER",
 ];
-
-export const usePrevalenceSideContent = (): {
+interface PrevalenceSideContentReturn {
     selectAllMicroorganisms: (isSelected: boolean) => void;
     selectAllAnimalSpecies: (isSelected: boolean) => void;
-    handleMicroorganismChange: (
-        event: React.ChangeEvent<HTMLInputElement>,
-        option: string
-    ) => void;
-    handleAnimalSpeciesChange: (
-        event: React.ChangeEvent<HTMLInputElement>,
-        option: string
-    ) => void;
+    handleMicroorganismSelectionChange: (value: string[]) => void;
+    handleAnimalSpeciesSelectionChange: (value: string[]) => void;
     selectedMicroorganisms: string[];
     selectedAnimalSpecies: string[];
     microorganismOptions: string[];
     animalSpeciesOptions: string[];
-} => {
+}
+export const usePrevalenceSideContent = (): PrevalenceSideContentReturn => {
     const context = useContext(DefaultPrevalenceDataContext);
     if (!context) {
         throw new Error(
-            "usePrevalenceSideContent must be used within a provider"
+            "usePrevalenceSideContent must be used within a PrevalenceDataProvider",
         );
     }
     const { t } = useTranslation(["PrevalencePage"]);
 
     const selectAllMicroorganisms = (isSelected: boolean): void => {
         context.setSelectedMicroorganisms(
-            isSelected ? microorganismOptions.map((option) => t(option)) : []
+            isSelected ? microorganismOptions : [],
         );
     };
 
     const selectAllAnimalSpecies = (isSelected: boolean): void => {
         context.setSelectedAnimalSpecies(
-            isSelected ? animalSpeciesOptions.map((option) => t(option)) : []
+            isSelected ? animalSpeciesOptions : [],
         );
     };
 
-    const handleMicroorganismChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        option: string
-    ): void => {
-        const translatedOption = t(option);
-        if (event.target.checked) {
-            context.setSelectedMicroorganisms([
-                ...context.selectedMicroorganisms,
-                translatedOption,
-            ]);
-        } else {
-            context.setSelectedMicroorganisms(
-                context.selectedMicroorganisms.filter(
-                    (microorganism) => microorganism !== translatedOption
-                )
-            );
-        }
+    const handleMicroorganismSelectionChange = (value: string[]): void => {
+        context.setSelectedMicroorganisms(value);
     };
 
-    const handleAnimalSpeciesChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        option: string
-    ): void => {
-        const translatedOption = t(option);
-        if (event.target.checked) {
-            context.setSelectedAnimalSpecies([
-                ...context.selectedAnimalSpecies,
-                translatedOption,
-            ]);
-        } else {
-            context.setSelectedAnimalSpecies(
-                context.selectedAnimalSpecies.filter(
-                    (species) => species !== translatedOption
-                )
-            );
-        }
+    const handleAnimalSpeciesSelectionChange = (value: string[]): void => {
+        context.setSelectedAnimalSpecies(value);
     };
+
+    useEffect(() => {
+        context.setSelectedMicroorganisms(microorganismOptions);
+        context.setSelectedAnimalSpecies(animalSpeciesOptions);
+    }, []); // Assuming context and options are stable, otherwise, include them in the dependency array
 
     return {
         selectAllMicroorganisms,
         selectAllAnimalSpecies,
-        handleMicroorganismChange,
-        handleAnimalSpeciesChange,
+        handleMicroorganismSelectionChange,
+        handleAnimalSpeciesSelectionChange,
         selectedMicroorganisms: context.selectedMicroorganisms,
         selectedAnimalSpecies: context.selectedAnimalSpecies,
         microorganismOptions: microorganismOptions.map((option) => t(option)),
