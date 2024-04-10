@@ -26,7 +26,7 @@ export function PrevalenceMainContent({
                 pt: theme.spacing(3),
                 display: "flex",
                 flexDirection: "column",
-                overflowY: "auto", // Scrollable area for the main content
+                overflowY: "auto",
                 height: "calc(100vh - 64px)",
                 width: "100%",
             }}
