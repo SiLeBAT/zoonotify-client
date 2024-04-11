@@ -66,15 +66,15 @@ export function EvaluationsCardComponent(props: {
                     >
                         <Markdown>{props.description}</Markdown>
                         {/* IconButton with copy icon */}
-                        <Tooltip title="Copy to clipboard" arrow>
+                        <Tooltip title="Copy title to clipboard" arrow>
                             <IconButton
                                 size="small"
                                 onClick={() => copyToClipboard(props.title)}
                                 aria-label="Copy title"
                                 sx={{
                                     position: "absolute",
-                                    top: "5%",
-                                    left: "0px",
+                                    top: "15%",
+                                    right: "35px",
                                     transform: "translateY(-50%)",
                                 }}
                             >
