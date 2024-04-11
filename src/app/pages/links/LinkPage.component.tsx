@@ -16,6 +16,8 @@ export function LinkPageComponent(): JSX.Element {
                     padding: "1em",
                     margin: "4rem auto",
                     width: "50%",
+                    maxHeight: "calc(100vh - 140px)",
+                    overflowY: "auto",
                 }}
             >
                 <CardContent>
