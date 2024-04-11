@@ -32,7 +32,8 @@ export function FilterContainerComponent({
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                maxHeight: "100vh",
+                margin: "2em auto",
+                maxHeight: "calc(100vh - 140px)",
                 overflowY: "auto",
             }}
         >
