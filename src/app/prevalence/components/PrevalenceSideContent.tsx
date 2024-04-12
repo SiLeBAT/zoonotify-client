@@ -1,27 +1,9 @@
 import React from "react";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import {
-    Box,
-    Button,
-    styled,
-    Accordion,
-    AccordionDetails,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { usePrevalenceSideContent } from "./usePrevalenceSideContent";
 import { useTranslation } from "react-i18next";
 import { FilterMultiSelectionComponent } from "../../evaluations/components/FilterMultiSelectionComponent";
-
-const StyledAccordion = styled(Accordion)(({ theme }) => ({
-    marginBottom: theme.spacing(1),
-    backgroundColor: "white",
-    boxShadow: "none",
-    "&:before": {
-        display: "none",
-    },
-    "&.Mui-expanded": {
-        margin: 0,
-    },
-}));
 
 export function PrevalenceSideContent(): JSX.Element {
     const { t } = useTranslation(["PrevalencePage"]);
@@ -56,41 +38,33 @@ export function PrevalenceSideContent(): JSX.Element {
                 height: "100vh",
                 overflowY: "auto",
                 width: "100%",
-                minWidth: "300px",
+                maxWidth: "400px",
             }}
         >
-            <StyledAccordion>
-                <AccordionDetails>
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedMicroorganisms}
-                        selectionOptions={microorganismSelectionOptions}
-                        name="microorganisms"
-                        label={t("Microorganism")}
-                        actions={{
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            handleChange: (event: any) =>
-                                handleMicroorganismsChange(event.target.value),
-                        }}
-                    />
-                </AccordionDetails>
-            </StyledAccordion>
+            <FilterMultiSelectionComponent
+                selectedItems={selectedMicroorganisms}
+                selectionOptions={microorganismSelectionOptions}
+                name="microorganisms"
+                label={t("Microorganism")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        handleMicroorganismsChange(event.target.value),
+                }}
+            />
 
-            <StyledAccordion>
-                <AccordionDetails>
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedAnimalSpecies}
-                        selectionOptions={animalSpeciesSelectionOptions}
-                        name="animalSpecies"
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        label={t("Animal Species")}
-                        actions={{
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            handleChange: (event: any) =>
-                                handleAnimalSpeciesChange(event.target.value),
-                        }}
-                    />
-                </AccordionDetails>
-            </StyledAccordion>
+            <FilterMultiSelectionComponent
+                selectedItems={selectedAnimalSpecies}
+                selectionOptions={animalSpeciesSelectionOptions}
+                name="animalSpecies"
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                label={t("Animal Species")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        handleAnimalSpeciesChange(event.target.value),
+                }}
+            />
 
             {/* Filter Button */}
             <Box
