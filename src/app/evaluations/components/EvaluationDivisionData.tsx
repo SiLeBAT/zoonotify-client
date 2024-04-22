@@ -26,6 +26,7 @@ export function EvaluationDivisionDataComponent({
                     <ZNAccordion
                         key={`accordion-${uuidv4()}`}
                         title={evaluation.title}
+                        showCopyIcon={true}
                         content={
                             <EvaluationsCardComponent
                                 title={evaluation.title}
