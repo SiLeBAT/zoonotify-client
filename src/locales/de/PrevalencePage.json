@@ -2,7 +2,9 @@
   "PREVALENCE": "Prävalenz",
   "FILTER_SETTINGS": "Filter Einstellungen",
   "FILTER": "Filter",
-  "SELECT_ALL": "alle auswählen",
+  "SEARCH_SETTINGS": "Suche Einstellungen",
+  "SEARCH": "Suchen",
+  "SELECT_ALL": "Alle auswählen",
   "DESELECT_ALL": " Alle abwählen",
 
   "microorganismOptions": {

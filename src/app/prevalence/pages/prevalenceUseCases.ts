@@ -10,7 +10,7 @@ const usePrevalencePageComponent = (): {
 
     return {
         model: {
-            sideBarTitle: t("FILTER_SETTINGS"),
+            sideBarTitle: t("SEARCH_SETTINGS"),
             mainHeading: t("PREVALENCE"),
         },
     };
