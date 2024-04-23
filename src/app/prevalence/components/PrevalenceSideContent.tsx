@@ -1,9 +1,9 @@
-import React from "react";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import Search from "@mui/icons-material/Search";
 import { Box, Button } from "@mui/material";
-import { usePrevalenceSideContent } from "./usePrevalenceSideContent";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { FilterMultiSelectionComponent } from "../../evaluations/components/FilterMultiSelectionComponent";
+import { usePrevalenceSideContent } from "./usePrevalenceSideContent";
 
 export function PrevalenceSideContent(): JSX.Element {
     const { t } = useTranslation(["PrevalencePage"]);
@@ -70,8 +70,8 @@ export function PrevalenceSideContent(): JSX.Element {
             <Box
                 sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
             >
-                <Button variant="contained" startIcon={<FilterListIcon />}>
-                    {t("Filter")}
+                <Button variant="contained" startIcon={<Search />}>
+                    {t("SEARCH")}
                 </Button>
             </Box>
         </Box>
