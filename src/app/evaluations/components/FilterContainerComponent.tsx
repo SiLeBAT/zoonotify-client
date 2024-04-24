@@ -97,7 +97,7 @@ export function FilterContainerComponent({
                 key="howTo"
                 title={howToHeading}
                 content={<Markdown>{howToContent}</Markdown>}
-                defaultExpanded={false}
+                defaultExpanded={true}
                 centerContent={false}
             />
         </Box>
