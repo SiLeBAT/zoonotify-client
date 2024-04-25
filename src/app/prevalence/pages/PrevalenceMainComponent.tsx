@@ -1,10 +1,10 @@
 import React from "react";
 import { MainWithSideLayout } from "../../shared/components/layout/MainWithSideLayoutComponent";
+import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
 import { PrevalenceDataProvider } from "../components/PrevalenceDataContext"; // Import the provider
-import PrevalenceMainContent  from "../components/PrevalenceMainContent";
+import { PrevalenceMainContent } from "../components/PrevalenceMainContent";
 import { PrevalenceSideContent } from "../components/PrevalenceSideContent";
 import { usePrevalencePageComponent } from "./prevalenceUseCases";
-import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
 
 export function PrevalenceMainComponent(): React.ReactElement {
     const { model } = usePrevalencePageComponent();
