@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
     Box,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
     Typography,
-    Paper,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 
 interface RelationalData {
@@ -28,8 +28,8 @@ interface PrevalenceAttributes {
     ciMin: number;
     ciMax: number;
     matrix?: RelationalData;
-    sampleType?: RelationalData;
     matrixDetail?: RelationalData;
+    matrixGroup?: RelationalData;
     microorganism?: RelationalData;
 }
 
@@ -42,7 +42,7 @@ interface PrevalenceMainContentProps {
     heading: string;
 }
 
-export const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
+const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
     heading,
 }) => {
     const theme = useTheme();
@@ -78,44 +78,50 @@ export const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                         }
                     );
 
-                    const data: PrevalenceDataItem[] = response.data.data; // Cast the response data to the correct type
-                    allData = allData.concat(data);
+                    const incomingData: PrevalenceDataItem[] =
+                        response.data.data; // Cast the response data to the correct type
+                    allData = allData.concat(incomingData);
 
                     // Break the loop if the last page has fewer items than the page size
-                    if (data.length < pageSize) {
+                    if (incomingData.length < pageSize) {
                         break;
                     }
 
                     page++;
                 }
-            } catch (error: any) {
-                console.error("Error fetching data:", error);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (err: any) {
+                console.error("Error fetching data:", err);
                 setError(
-                    error.message || "An error occurred while fetching data."
+                    err.message || "An error occurred while fetching data."
                 );
             }
 
             return allData;
         };
 
-        Promise.all(selectedMicroorganisms.map(fetchData))
+        const aryOfPromises = selectedMicroorganisms.map(fetchData);
+        // eslint-disable-next-line promise/catch-or-return
+        Promise.all(aryOfPromises)
             .then((results) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const aggregatedData = results.flat().map((item: any) => ({
                     id: item.id,
                     attributes: {
                         ...item.attributes,
                         matrix: item.attributes.matrix?.data,
+                        matrixDetail: item.attributes.matrixDetail?.data,
+                        matrixGroup: item.attributes.matrixGroup?.data,
                         microorganism: item.attributes.microorganism?.data,
                         sampleOrigin: item.attributes.sampleOrigin?.data,
-                        sampleType: item.attributes.matrix?.data,
-                        matrixDetail: item.attributes.matrixDetail?.data,
                     },
                 }));
                 setData(aggregatedData);
+                return aggregatedData;
             })
-            .catch((error) => {
-                setError(error.message);
-                console.error("Error setting data:", error);
+            .catch((err) => {
+                setError(err.message);
+                console.error("Error setting data:", err);
             })
             .finally(() => {
                 setLoading(false);
@@ -194,9 +200,8 @@ export const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                             <TableCell align="center">Sampling Year</TableCell>
                             <TableCell align="center">Matrix</TableCell>
                             <TableCell align="center">Matrix Detail</TableCell>
+                            <TableCell align="center">Matrix Group</TableCell>
                             <TableCell align="center">Microorganism</TableCell>
-                      
-                            <TableCell align="center">Sample Type</TableCell>
                             <TableCell align="center">
                                 Number of Samples
                             </TableCell>
@@ -233,18 +238,18 @@ export const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                                         {item.attributes.matrix?.attributes
                                             .name || "N/A"}
                                     </TableCell>
-
                                     <TableCell align="center">
                                         {item.attributes.matrixDetail?.attributes
                                             .name || "N/A"}
                                     </TableCell>
                                     <TableCell align="center">
+                                        {item.attributes.matrixGroup?.attributes
+                                            .name || "N/A"}
+                                    </TableCell>
+
+                                    <TableCell align="center">
                                         {item.attributes.microorganism
                                             ?.attributes.name || "N/A"}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {item.attributes.sampleType?.attributes
-                                            .name || "N/A"}
                                     </TableCell>
                                     <TableCell align="center">
                                         {item.attributes.numberOfSamples}
@@ -273,4 +278,4 @@ export const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
     );
 };
 
-export default PrevalenceMainContent;
+export { PrevalenceMainContent };
