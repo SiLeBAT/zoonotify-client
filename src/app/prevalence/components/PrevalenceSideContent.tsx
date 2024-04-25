@@ -15,18 +15,24 @@ export function PrevalenceSideContent(): JSX.Element {
     } = usePrevalenceSideContent();
 
     // Local state for selections
-    const [localSelectedMicroorganisms, setLocalSelectedMicroorganisms] = useState<string[]>([]);
-    const [localSelectedAnimalSpecies, setLocalSelectedAnimalSpecies] = useState<string[]>([]);
+    const [localSelectedMicroorganisms, setLocalSelectedMicroorganisms] =
+        useState<string[]>([]);
+    const [localSelectedAnimalSpecies, setLocalSelectedAnimalSpecies] =
+        useState<string[]>([]);
 
     // Convert options to expected format for the FilterMultiSelectionComponent
-    const microorganismSelectionOptions = microorganismOptions.map((option) => ({
-        value: option,
-        displayName: option
-    }));
-    const animalSpeciesSelectionOptions = animalSpeciesOptions.map((option) => ({
-        value: option,
-        displayName: option
-    }));
+    const microorganismSelectionOptions = microorganismOptions.map(
+        (option) => ({
+            value: option,
+            displayName: option,
+        })
+    );
+    const animalSpeciesSelectionOptions = animalSpeciesOptions.map(
+        (option) => ({
+            value: option,
+            displayName: option,
+        })
+    );
 
     // Function to update local state when selections change
     const handleLocalMicroorganismsChange = (selected: string[]): void => {
@@ -44,20 +50,24 @@ export function PrevalenceSideContent(): JSX.Element {
     };
 
     return (
-        <Box sx={{
-            padding: 0,
-            height: "100vh",
-            overflowY: "auto",
-            width: "100%",
-            maxWidth: "400px",
-        }}>
+        <Box
+            sx={{
+                padding: 0,
+                height: "100vh",
+                overflowY: "auto",
+                width: "100%",
+                maxWidth: "400px",
+            }}
+        >
             <FilterMultiSelectionComponent
                 selectedItems={localSelectedMicroorganisms}
                 selectionOptions={microorganismSelectionOptions}
                 name="microorganisms"
                 label={t("Microorganism")}
                 actions={{
-                    handleChange: (event: any) => handleLocalMicroorganismsChange(event.target.value),
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        handleLocalMicroorganismsChange(event.target.value),
                 }}
             />
 
@@ -66,13 +76,18 @@ export function PrevalenceSideContent(): JSX.Element {
                 selectionOptions={animalSpeciesSelectionOptions}
                 name="animalSpecies"
                 label={t("Animal Species")}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 actions={{
-                    handleChange: (event: any) => handleLocalAnimalSpeciesChange(event.target.value),
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        handleLocalAnimalSpeciesChange(event.target.value),
                 }}
             />
 
             {/* Filter Button */}
-            <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
+            <Box
+                sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
+            >
                 <Button
                     variant="contained"
                     startIcon={<Search />}
