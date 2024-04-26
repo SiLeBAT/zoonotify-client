@@ -7,7 +7,7 @@ import {
     MenuItem,
 } from "@mui/material";
 // eslint-disable-next-line import/named
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SelectionItem } from "../model/Evaluations.model";
@@ -19,7 +19,7 @@ type FilterMultiSelectionComponentProps = {
     name: string;
     label: string;
     actions: {
-        handleChange: (event: { target: { value: string } }) => void;
+        handleChange: (event: SelectChangeEvent<string[]>) => void;
     };
 };
 
@@ -36,8 +36,7 @@ export function FilterMultiSelectionComponent({
         selectionOptions.length > 0 &&
         selectedItems.length === selectionOptions.length;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleChange = (event: { target: { value: any } }): void => {
+    const handleChange = (event: SelectChangeEvent<string[]>): void => {
         const value = event.target.value;
         const index = value.indexOf("all");
         const selectedItemIndex = selectedItems.indexOf("all");

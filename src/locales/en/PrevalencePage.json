@@ -6,6 +6,8 @@
   "FILTER": "Filter",
   "SELECT_ALL": "Select All",
   "DESELECT_ALL": "Deselect All",
+  "ALL_VALUES": "All values",
+  "MICROORGANISMS": "Microorganisms",
   "microorganismOptions": {
     "BAYLISASCARIS_PROCYONIS": "Baylisascaris procyonis",
     "CARBA_E_COLI": "CARBA-E. coli",
