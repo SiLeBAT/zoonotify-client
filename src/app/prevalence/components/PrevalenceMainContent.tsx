@@ -9,129 +9,84 @@ import {
     Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { usePrevalenceFilters } from "./PrevalenceDataContext";
-
-interface RelationalData {
-    id: number;
-    attributes: {
-        name: string;
-    };
-}
-
-interface PrevalenceAttributes {
-    samplingYear: number;
-    numberOfSamples: number;
-    numberOfPositive: number;
-    percentageOfPositive: number;
-    ciMin: number;
-    ciMax: number;
-    matrix?: RelationalData;
-    matrixDetail?: RelationalData;
-    matrixGroup?: RelationalData;
-    microorganism?: RelationalData;
-}
-
-interface PrevalenceDataItem {
-    id: number;
-    attributes: PrevalenceAttributes;
-}
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
+import {
+    SearchParameters,
+    usePrevalenceFilters,
+} from "./PrevalenceDataContext";
 
 interface PrevalenceMainContentProps {
     heading: string;
 }
 
+type SearchParameterDisplayProps = {
+    searchParameters: SearchParameters;
+};
+
+type SearchParameterEntryProps = {
+    title: string;
+    value: string;
+};
+
+const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
+    title,
+    value,
+}) => {
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+            }}
+        >
+            <span style={{ fontWeight: "bold", paddingRight: "0.5em" }}>
+                {title}:
+            </span>
+            <span>{value}</span>
+        </Box>
+    );
+};
+
+const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
+    searchParameters,
+}) => {
+    const theme = useTheme();
+    const { t } = useTranslation(["PrevalencePage"]);
+    return (
+        <Box
+            sx={{
+                pt: theme.spacing(3),
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+            }}
+        >
+            {searchParameters.microorganism ? (
+                <SearchParameterEntry
+                    title={t("MICROORGANISMS")}
+                    value={searchParameters.microorganism
+                        .map((v) => t(v))
+                        .join(", ")}
+                ></SearchParameterEntry>
+            ) : null}
+        </Box>
+    );
+};
+
 const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
     heading,
 }) => {
     const theme = useTheme();
-    const { selectedMicroorganisms } = usePrevalenceFilters(); // Assumed to be an array of selected microorganism names (strings)
-    const [data, setData] = useState<PrevalenceDataItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        setLoading(true);
-        setError(null);
-
-        const fetchData = async (
-            microorganismName: string
-        ): Promise<PrevalenceDataItem[]> => {
-            let allData: PrevalenceDataItem[] = []; // Define the type of allData
-            const pageSize = 100; // or the maximum allowed by your API
-            let page = 0;
-
-            try {
-                // Keep fetching data until all pages have been fetched
-                while (true) {
-                    const response = await axios.get(
-                        `http://localhost:1337/api/prevalences`,
-                        {
-                            params: {
-                                populate: "*",
-                                "filters[microorganism][name][$eq]":
-                                    microorganismName,
-                                "pagination[start]": page * pageSize,
-                                "pagination[limit]": pageSize,
-                            },
-                        }
-                    );
-
-                    const incomingData: PrevalenceDataItem[] =
-                        response.data.data; // Cast the response data to the correct type
-                    allData = allData.concat(incomingData);
-
-                    // Break the loop if the last page has fewer items than the page size
-                    if (incomingData.length < pageSize) {
-                        break;
-                    }
-
-                    page++;
-                }
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } catch (err: any) {
-                console.error("Error fetching data:", err);
-                setError(
-                    err.message || "An error occurred while fetching data."
-                );
-            }
-
-            return allData;
-        };
-
-        const aryOfPromises = selectedMicroorganisms.map(fetchData);
-        // eslint-disable-next-line promise/catch-or-return
-        Promise.all(aryOfPromises)
-            .then((results) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const aggregatedData = results.flat().map((item: any) => ({
-                    id: item.id,
-                    attributes: {
-                        ...item.attributes,
-                        matrix: item.attributes.matrix?.data,
-                        matrixDetail: item.attributes.matrixDetail?.data,
-                        matrixGroup: item.attributes.matrixGroup?.data,
-                        microorganism: item.attributes.microorganism?.data,
-                        sampleOrigin: item.attributes.sampleOrigin?.data,
-                    },
-                }));
-                setData(aggregatedData);
-                return aggregatedData;
-            })
-            .catch((err) => {
-                setError(err.message);
-                console.error("Error setting data:", err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [selectedMicroorganisms]);
+    const { searchParameters, prevalenceData, error, loading } =
+        usePrevalenceFilters();
 
     const customPaperStyle = {
         margin: theme.spacing(3),
         overflowX: "auto",
-        backgroundColor: theme.palette.background.paper, // use theme paper color
+        backgroundColor: theme.palette.background.paper,
     };
 
     return (
@@ -158,6 +113,32 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
             >
                 {heading}
             </Typography>
+            <Box
+                sx={{
+                    pt: theme.spacing(3),
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <Box
+                    sx={{
+                        width: "80%",
+                    }}
+                >
+                    <ZNAccordion
+                        title="Parameter"
+                        content={
+                            <SearchParameterDisplay
+                                searchParameters={searchParameters}
+                            />
+                        }
+                        defaultExpanded={false}
+                        centerContent={true}
+                    />
+                </Box>
+            </Box>
             <Typography
                 variant="h6"
                 sx={{
@@ -229,7 +210,7 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            data.map((item) => (
+                            prevalenceData.map((item) => (
                                 <TableRow key={item.id}>
                                     <TableCell align="center">
                                         {item.attributes.samplingYear}
@@ -239,8 +220,8 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                                             .name || "N/A"}
                                     </TableCell>
                                     <TableCell align="center">
-                                        {item.attributes.matrixDetail?.attributes
-                                            .name || "N/A"}
+                                        {item.attributes.matrixDetail
+                                            ?.attributes.name || "N/A"}
                                     </TableCell>
                                     <TableCell align="center">
                                         {item.attributes.matrixGroup?.attributes
