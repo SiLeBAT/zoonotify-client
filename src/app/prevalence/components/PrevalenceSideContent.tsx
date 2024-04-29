@@ -36,7 +36,7 @@ export function PrevalenceSideContent(): JSX.Element {
                 selectedItems={selectedMicroorganisms}
                 selectionOptions={microorganismSelectionOptions}
                 name="microorganisms"
-                label={t("Microorganism")}
+                label={t("MICROORGANISMS")}
                 actions={{
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     handleChange: (event: any) =>
