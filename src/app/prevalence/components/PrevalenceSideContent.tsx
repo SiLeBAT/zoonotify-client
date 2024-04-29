@@ -11,7 +11,7 @@ export function PrevalenceSideContent(): JSX.Element {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
         microorganismOptions,
-        callAPI,
+        fetchDataFromAPI,
     } = usePrevalenceFilters();
 
     // Convert options to expected format for the FilterMultiSelectionComponent
@@ -50,7 +50,7 @@ export function PrevalenceSideContent(): JSX.Element {
                 <Button
                     variant="contained"
                     startIcon={<Search />}
-                    onClick={callAPI}
+                    onClick={fetchDataFromAPI}
                 >
                     {t("SEARCH")}
                 </Button>

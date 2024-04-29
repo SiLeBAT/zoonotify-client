@@ -29,22 +29,16 @@
     "VIBRIO_SPP": "Vibrio spp.",
     "YERSINIA_ENTEROCOLITICA": "Yersinia enterocolitica"
   },
-  "animalSpeciesOptions": {
-    "GEFLUEGEL": "Geflügel",
-    "HUHN": "Huhn",
-    "KLEINEWIEDERKAEUER": "Kleine Wiederkäuer",
-    "MEERESFRUECHTE": "Meeresfrüchte",
-    "NUTZTIERE": "Nutztiere",
-    "PFLANZLICHELEBENSMITTEL": "Pflanzliche Lebensmittel",
-    "PUTE": "Pute",
-    "REHWILD": "Rehwild",
-    "RIND": "Rind",
-    "SCHWEIN": "Schwein",
-    "SCHWEINUNDRIND": "Schwein und Rind",
-    "SUESSWASSERFISCHE": "Süßwasserfische",
-    "WIEDERKAEUER": "Wiederkäuer",
-    "WILDGEFLUEGEL": "Wildgeflügel",
-    "WILDSCHWEIN": "Wildschwein",
-    "WILDWIEDERKAEUER": "Wildwiederkäuer"
-  }
+  "SAMPLING_YEAR": "Sampling Year",
+  "NUMBER_OF_SAMPLES": "Number of Samples",
+  "NUMBER_OF_POSITIVE": "Number of Positive",
+  "PERCENTAGE_OF_POSITIVE": "Percentage of Positive",
+  "CIMIN": "CI min",
+  "CIMAX": "CI max",
+  "MATRIX": "Matrix",
+  "MATRIX_DETAIL": "Matrix detail",
+  "MATRIX_GROUP": "Matrix group",
+  "MICROORGANISM": "Microorganism",
+  "PARAMETER": "Parameter",
+  "TABLE_DETAIL": "Parameter"
 }

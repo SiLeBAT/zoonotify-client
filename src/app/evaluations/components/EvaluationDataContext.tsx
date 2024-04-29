@@ -12,13 +12,17 @@ import {
     CMS_BASE_ENDPOINT,
     EVALUATIONS,
 } from "../../shared/infrastructure/router/routes";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
+import {
+    CMSEntity,
+    CMSResponse,
+    MAX_PAGE_SIZE,
+} from "../../shared/model/CMS.model";
 import {
     Evaluation,
     EvaluationAttributesDTO,
     FilterSelection,
 } from "../model/Evaluations.model";
-import { initialFilterSelection, maxPageSize } from "../model/constants";
+import { initialFilterSelection } from "../model/constants";
 
 interface EvaluationDataContext {
     readonly isLoading: boolean;
@@ -80,7 +84,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
             const response = await callApiService<
                 CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
             >(
-                `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&pagination[pageSize]=${maxPageSize}`
+                `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`
             );
             if (response.data) {
                 const processedData = processApiResponse(response.data.data);
