@@ -57,8 +57,8 @@ export type PrevalenceEntry = {
     ciMin: number;
     ciMax: number;
     matrix: string;
-    matrixDetail: string;
-    matrixGroup: string;
+    samplingStage: string;
+    sampleOrigin: string;
     microorganism: string;
 };
 
@@ -115,8 +115,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             ciMin: item.attributes.ciMin,
             ciMax: item.attributes.ciMax,
             matrix: item.attributes.matrix.data.attributes.name,
-            matrixDetail: item.attributes.matrixDetail.data.attributes.name,
-            matrixGroup: item.attributes.matrixGroup.data.attributes.name,
+            samplingStage: item.attributes.samplingStage.data.attributes.name,
             microorganism: item.attributes.microorganism.data.attributes.name,
             sampleOrigin: item.attributes.sampleOrigin.data.attributes.name,
         }));
