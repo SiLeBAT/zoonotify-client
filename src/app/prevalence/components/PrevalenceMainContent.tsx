@@ -83,12 +83,6 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
     const { searchParameters, prevalenceData, error, loading } =
         usePrevalenceFilters();
 
-    const customPaperStyle = {
-        margin: theme.spacing(3),
-        overflowX: "auto",
-        backgroundColor: theme.palette.background.paper,
-    };
-
     return (
         <Box
             sx={{
@@ -152,7 +146,14 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                 Prevalence Table
             </Typography>
 
-            <Paper sx={customPaperStyle}>
+            <Paper
+                sx={{
+                    margin: theme.spacing(3),
+                    overflowX: "auto",
+                    backgroundColor: theme.palette.background.paper,
+                    position: "relative", // Ensure this is here to position context
+                }}
+            >
                 <Table
                     size="small"
                     sx={{
@@ -162,6 +163,9 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                             color: theme.palette.common.white,
                             border: 2,
                             borderColor: theme.palette.divider,
+                            position: "sticky",
+                            top: 0,
+                            zIndex: 1,
                         },
                         "& tbody td": {
                             border: 1,
@@ -172,7 +176,7 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                             backgroundColor: theme.palette.action.hover,
                         },
                         tableLayout: "fixed",
-                        width: "100%", // ensure the table fills the paper container
+                        width: "100%",
                     }}
                     aria-label="selections table"
                 >
