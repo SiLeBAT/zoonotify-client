@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useState } from "react";
 import { FooterContainer } from "../footer/Footer-Container.component";
 import { HeaderComponent } from "../header/Header.component";
+import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
 
 const layoutWrapperStyle = css`
     display: flex;
@@ -35,7 +36,13 @@ interface PageLayoutProps {
 
 export const PageLayoutComponent: React.FC<PageLayoutProps> = ({
     children,
-}) => {
+}): JSX.Element => {
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const handleSnackbarClose = (): void => {
+        setSnackbarOpen(false);
+    };
+
     return (
         <div css={layoutWrapperStyle}>
             <header css={headerStyle}>
@@ -45,6 +52,10 @@ export const PageLayoutComponent: React.FC<PageLayoutProps> = ({
             <footer css={footerStyle}>
                 <FooterContainer />
             </footer>
+            <ErrorSnackbar
+                open={snackbarOpen}
+                handleClose={handleSnackbarClose}
+            />
         </div>
     );
 };
