@@ -17,8 +17,12 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const { t } = useTranslation(["PrevalencePage"]);
 
     const columns: GridColDef[] = [
-        { field: "microorganism", headerName: t("MICROORGANISM") },
         { field: "samplingYear", headerName: t("SAMPLING_YEAR") },
+        { field: "microorganism", headerName: t("MICROORGANISM") },
+        { field: "sampleOrigin", headerName: t("SAMPLE_ORIGIN") },
+        { field: "samplingStage", headerName: t("SAMPLING_STAGE") },
+        { field: "matrix", headerName: t("MATRIX") },
+
         {
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
@@ -46,9 +50,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) => `${value.toFixed(2)}`,
         },
-        { field: "matrix", headerName: t("MATRIX") },
-        { field: "matrixDetail", headerName: t("MATRIX_DETAIL") },
-        { field: "matrixGroup", headerName: t("MATRIX_GROUP") },
     ];
 
     return (
