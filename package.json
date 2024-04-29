@@ -38,6 +38,7 @@
     "@mui/material": "^5.11.11",
     "@mui/styles": "^5.14.15",
     "@mui/system": "^5.11.11",
+    "@mui/x-data-grid": "^7.3.1",
     "@types/lodash": "^4.14.159",
     "@types/uuid": "^9.0.4",
     "apexcharts": "^3.26.2",

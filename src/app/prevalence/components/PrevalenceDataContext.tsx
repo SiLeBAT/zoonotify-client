@@ -1,5 +1,11 @@
-import axios from "axios";
 import React, { ReactNode, createContext, useContext, useState } from "react";
+import { callApiService } from "../../shared/infrastructure/api/callApi.service";
+import { PREVALENCES } from "../../shared/infrastructure/router/routes";
+import {
+    CMSEntity,
+    CMSResponse,
+    MAX_PAGE_SIZE,
+} from "../../shared/model/CMS.model";
 
 const microorganismOptions = [
     "Baylisascaris procyonis",
@@ -30,28 +36,38 @@ interface RelationalData {
         name: string;
     };
 }
-interface PrevalenceAttributes {
+interface PrevalenceAttributesDTO {
     samplingYear: number;
     numberOfSamples: number;
     numberOfPositive: number;
     percentageOfPositive: number;
     ciMin: number;
     ciMax: number;
-    matrix?: RelationalData;
-    matrixDetail?: RelationalData;
-    matrixGroup?: RelationalData;
-    microorganism?: RelationalData;
+    matrix: RelationalData;
+    matrixDetail: RelationalData;
+    matrixGroup: RelationalData;
+    microorganism: RelationalData;
 }
-interface PrevalenceDataItem {
+export type PrevalenceEntry = {
     id: number;
-    attributes: PrevalenceAttributes;
-}
+    samplingYear: number;
+    numberOfSamples: number;
+    numberOfPositive: number;
+    percentageOfPositive: number;
+    ciMin: number;
+    ciMax: number;
+    matrix: string;
+    matrixDetail: string;
+    matrixGroup: string;
+    microorganism: string;
+};
+
 interface PrevalenceDataContext {
     microorganismOptions: string[];
     selectedMicroorganisms: string[];
     setSelectedMicroorganisms: (microorganisms: string[]) => void;
-    callAPI: () => void;
-    prevalenceData: PrevalenceDataItem[];
+    fetchDataFromAPI: () => void;
+    prevalenceData: PrevalenceEntry[];
     error: string | null;
     loading: boolean;
     searchParameters: SearchParameters;
@@ -78,76 +94,50 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         string[]
     >([]);
 
-    const [prevalenceData, setData] = useState<PrevalenceDataItem[]>([]);
+    const [prevalenceData, setData] = useState<PrevalenceEntry[]>([]);
     const [searchParameters, setSearchParameters] = useState<SearchParameters>(
         {}
     );
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const callAPI = (): void => {
+    function processApiResponse(
+        apiData: CMSEntity<PrevalenceAttributesDTO>[]
+    ): PrevalenceEntry[] {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result = apiData.flat().map((item: any) => ({
+            id: item.id,
+            samplingYear: item.attributes.samplingYear,
+            furtherDetails: item.attributes.furtherDetails,
+            numberOfSamples: item.attributes.numberOfSamples,
+            numberOfPositive: item.attributes.numberOfPositive,
+            percentageOfPositive: item.attributes.percentageOfPositive,
+            ciMin: item.attributes.ciMin,
+            ciMax: item.attributes.ciMax,
+            matrix: item.attributes.matrix.data.attributes.name,
+            matrixDetail: item.attributes.matrixDetail.data.attributes.name,
+            matrixGroup: item.attributes.matrixGroup.data.attributes.name,
+            microorganism: item.attributes.microorganism.data.attributes.name,
+            sampleOrigin: item.attributes.sampleOrigin.data.attributes.name,
+        }));
+        return result;
+    }
+
+    const fetchDataFromAPI = async (): Promise<void> => {
         setLoading(true);
-        const fetchData = async (
-            microorganismName: string
-        ): Promise<PrevalenceDataItem[]> => {
-            let allData: PrevalenceDataItem[] = []; // Define the type of allData
-            const pageSize = 100; // or the maximum allowed by your API
-            let page = 0;
-
-            try {
-                // Keep fetching data until all pages have been fetched
-                while (true) {
-                    const response = await axios.get(
-                        `http://localhost:1337/api/prevalences`,
-                        {
-                            params: {
-                                populate: "*",
-                                "filters[microorganism][name][$eq]":
-                                    microorganismName,
-                                "pagination[start]": page * pageSize,
-                                "pagination[limit]": pageSize,
-                            },
-                        }
-                    );
-
-                    const incomingData: PrevalenceDataItem[] =
-                        response.data.data; // Cast the response data to the correct type
-                    allData = allData.concat(incomingData);
-
-                    // Break the loop if the last page has fewer items than the page size
-                    if (incomingData.length < pageSize) {
-                        break;
-                    }
-
-                    page++;
-                }
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } catch (err: any) {
-                console.error("Error fetching data:", err);
-                setError(err.message);
-            }
-
-            return allData;
-        };
-
-        const aryOfPromises = selectedMicroorganisms.map(fetchData);
-        // eslint-disable-next-line promise/catch-or-return
-        Promise.all(aryOfPromises)
-            .then((results) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const aggregatedData = results.flat().map((item: any) => ({
-                    id: item.id,
-                    attributes: {
-                        ...item.attributes,
-                        matrix: item.attributes.matrix?.data,
-                        matrixDetail: item.attributes.matrixDetail?.data,
-                        matrixGroup: item.attributes.matrixGroup?.data,
-                        microorganism: item.attributes.microorganism?.data,
-                        sampleOrigin: item.attributes.sampleOrigin?.data,
-                    },
-                }));
-                setData(aggregatedData);
-                setLoading(false);
+        try {
+            const microSelection = selectedMicroorganisms.map(
+                (micro) => "filters[microorganism][name][$eq]=" + micro
+            );
+            const response = await callApiService<
+                CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
+            >(
+                `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}&` +
+                    microSelection.join("&")
+            );
+            if (response.data) {
+                const result = processApiResponse(response.data.data);
+                setData(result);
                 setSearchParameters({
                     microorganism:
                         selectedMicroorganisms.length ===
@@ -155,19 +145,20 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                             ? ["ALL_VALUES"]
                             : selectedMicroorganisms,
                 });
-                return aggregatedData;
-            })
-            .catch((err) => {
-                console.error("Error setting data:", err);
-                setError(err.message);
-            });
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            console.error("Fetching data failed", err);
+            setError(err.message);
+        }
+        setLoading(false);
     };
 
     const value = {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
         microorganismOptions,
-        callAPI,
+        fetchDataFromAPI,
         prevalenceData,
         error,
         loading,

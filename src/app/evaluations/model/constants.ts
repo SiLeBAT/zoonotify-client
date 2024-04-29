@@ -1,7 +1,5 @@
 import { FilterSelection } from "./Evaluations.model";
 
-const maxPageSize = 250;
-
 const microorganism = [
     "E_COLI",
     "CAMPYLOBACTER_SPP",
@@ -57,7 +55,6 @@ export {
     division,
     initialFilterSelection,
     matrix,
-    maxPageSize,
     microorganism,
     productionType,
 };
