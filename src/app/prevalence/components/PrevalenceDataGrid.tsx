@@ -42,21 +42,15 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "ciMin",
             headerName: t("CIMIN"),
             type: "number",
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            valueGetter: (params: any) => {
-                const ciMin = params.value;
-                return ciMin != null ? ciMin.toFixed(2) : ""; // Handle null
-            },
+            valueGetter: (value: number) =>
+                value != null ? value.toFixed(2) : "N/A",
         },
         {
             field: "ciMax",
             headerName: t("CIMAX"),
             type: "number",
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            valueGetter: (params: any) => {
-                const ciMin = params.value;
-                return ciMin != null ? ciMin.toFixed(2) : ""; // Handle null
-            },
+            valueGetter: (value: number) =>
+                value != null ? value.toFixed(2) : "N/A",
         },
     ];
 
