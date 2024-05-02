@@ -1,7 +1,7 @@
-// eslint-disable-next-line import/named
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import { useTranslation } from "react-i18next";
+// eslint-disable-next-line import/named
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { DataGridControls } from "./DataGridControls";
 import { PrevalenceEntry } from "./PrevalenceDataContext";
 
@@ -42,13 +42,21 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "ciMin",
             headerName: t("CIMIN"),
             type: "number",
-            valueGetter: (value: number) => `${value.toFixed(2)}`,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            valueGetter: (params: any) => {
+                const ciMin = params.value;
+                return ciMin != null ? ciMin.toFixed(2) : ""; // Handle null
+            },
         },
         {
             field: "ciMax",
             headerName: t("CIMAX"),
             type: "number",
-            valueGetter: (value: number) => `${value.toFixed(2)}`,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            valueGetter: (params: any) => {
+                const ciMin = params.value;
+                return ciMin != null ? ciMin.toFixed(2) : ""; // Handle null
+            },
         },
     ];
 

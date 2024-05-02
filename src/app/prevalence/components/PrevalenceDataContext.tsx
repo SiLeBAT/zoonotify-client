@@ -112,8 +112,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             numberOfSamples: item.attributes.numberOfSamples,
             numberOfPositive: item.attributes.numberOfPositive,
             percentageOfPositive: item.attributes.percentageOfPositive,
-            ciMin: item.attributes.ciMin,
-            ciMax: item.attributes.ciMax,
+            ciMin: item.attributes.ciMin != null ? item.attributes.ciMin : 0, // Handle null
+            ciMax: item.attributes.ciMax != null ? item.attributes.ciMax : 0, // Handle null
             matrix: item.attributes.matrix.data.attributes.name,
             samplingStage: item.attributes.samplingStage.data.attributes.name,
             microorganism: item.attributes.microorganism.data.attributes.name,
