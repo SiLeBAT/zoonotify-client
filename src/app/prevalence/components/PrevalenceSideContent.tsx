@@ -28,7 +28,7 @@ export function PrevalenceSideContent(): JSX.Element {
                 padding: 0,
                 height: "100vh",
                 overflowY: "auto",
-                width: "375px",
+                width: "430px",
                 maxWidth: "100%", // Adjusted width here for a percentage of the parent container
             }}
         >
