@@ -58,11 +58,12 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         <DataGrid
             rows={prevalenceData}
             columns={columns}
-            hideFooter={true}
-            autoHeight={true}
-            autosizeOnMount={true}
-            disableColumnFilter={true}
             loading={loading}
+            autoHeight={false}
+            disableColumnFilter={true}
+            hideFooter={true}
+            // Set the height to enable scrolling within the grid
+            style={{ height: 1000, width: "100%", overflowX: "auto" }}
             slots={{
                 toolbar: () => (
                     <DataGridControls
