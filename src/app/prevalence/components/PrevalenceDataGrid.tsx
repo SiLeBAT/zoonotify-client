@@ -21,10 +21,17 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
 
+    // Function to get a formatted timestamp for the filename
+    const getFormattedTimestamp = (): string => {
+        const date = new Date();
+        return date.toISOString().replace(/[:.]/g, "-");
+    };
+
+    // Function to prepare the download
     const prepareDownload = (): void => {
         if (prevalenceData.length === 0) return;
 
-        const csvRows = [];
+        const csvRows: string[] = [];
         const headers = Object.keys(prevalenceData[0]) as Array<
             keyof PrevalenceEntry
         >;
@@ -35,7 +42,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 const value = row[header];
                 const escaped =
                     typeof value === "string"
-                        ? '"' + value.replace(/"/g, '""') + '"'
+                        ? `"${value.replace(/"/g, '""')}"`
                         : value;
                 return `${escaped}`;
             });
@@ -45,7 +52,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         const blob = new Blob([csvString], { type: "text/csv" });
         const url = window.URL.createObjectURL(blob);
         setDownloadUrl(url);
-        setFilename("prevalence_data.csv");
+        setFilename(`prevalence_data_${getFormattedTimestamp()}.csv`);
     };
 
     useEffect(() => {
