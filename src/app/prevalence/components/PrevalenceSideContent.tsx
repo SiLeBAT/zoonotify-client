@@ -11,11 +11,34 @@ export function PrevalenceSideContent(): JSX.Element {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
         microorganismOptions,
+        selectedSampleOrigins,
+        setSelectedSampleOrigins,
+        sampleOriginOptions,
+        selectedMatrices,
+        setSelectedMatrices,
+        matrixOptions,
+        selectedSamplingStages,
+        setSelectedSamplingStages,
+        samplingStageOptions,
         fetchDataFromAPI,
     } = usePrevalenceFilters();
 
     // Convert options to expected format for the FilterMultiSelectionComponent
     const microorganismSelectionOptions = microorganismOptions.map(
+        (option) => ({
+            value: option,
+            displayName: option,
+        })
+    );
+    const sampleOriginSelectionOptions = sampleOriginOptions.map((option) => ({
+        value: option,
+        displayName: option,
+    }));
+    const matrixSelectionOptions = matrixOptions.map((option) => ({
+        value: option,
+        displayName: option,
+    }));
+    const samplingStageSelectionOptions = samplingStageOptions.map(
         (option) => ({
             value: option,
             displayName: option,
@@ -29,7 +52,7 @@ export function PrevalenceSideContent(): JSX.Element {
                 height: "100vh",
                 overflowY: "auto",
                 width: "430px",
-                maxWidth: "100%", // Adjusted width here for a percentage of the parent container
+                maxWidth: "100%",
             }}
         >
             <FilterMultiSelectionComponent
@@ -43,7 +66,40 @@ export function PrevalenceSideContent(): JSX.Element {
                         setSelectedMicroorganisms(event.target.value),
                 }}
             />
+            <FilterMultiSelectionComponent
+                selectedItems={selectedSampleOrigins}
+                selectionOptions={sampleOriginSelectionOptions}
+                name="sampleOrigins"
+                label={t("SAMPLE_ORIGIN")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedSampleOrigins(event.target.value),
+                }}
+            />
+            <FilterMultiSelectionComponent
+                selectedItems={selectedMatrices}
+                selectionOptions={matrixSelectionOptions}
+                name="matrices"
+                label={t("MATRIX")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedMatrices(event.target.value),
+                }}
+            />
 
+            <FilterMultiSelectionComponent
+                selectedItems={selectedSamplingStages}
+                selectionOptions={samplingStageSelectionOptions}
+                name="samplingStages"
+                label={t("SAMPLING_STAGE")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedSamplingStages(event.target.value),
+                }}
+            />
             <Box
                 sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
             >
