@@ -32,10 +32,21 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         if (prevalenceData.length === 0) return;
 
         const csvRows: string[] = [];
-        const headers = Object.keys(prevalenceData[0]) as Array<
-            keyof PrevalenceEntry
-        >;
-        csvRows.push(headers.join(","));
+        const headers: Array<keyof PrevalenceEntry> = [
+            "samplingYear",
+            "microorganism",
+            "sampleOrigin",
+            "samplingStage",
+            "matrix",
+            "numberOfSamples",
+            "numberOfPositive",
+            "percentageOfPositive",
+            "ciMin",
+            "ciMax",
+        ];
+        csvRows.push(
+            headers.map((header) => t(header.toUpperCase())).join(",")
+        );
 
         for (const row of prevalenceData) {
             const values = headers.map((header) => {
