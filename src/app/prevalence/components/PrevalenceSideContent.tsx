@@ -20,6 +20,9 @@ export function PrevalenceSideContent(): JSX.Element {
         selectedSamplingStages,
         setSelectedSamplingStages,
         samplingStageOptions,
+        selectedMatrixGroups,
+        setSelectedMatrixGroups,
+        matrixGroupOptions,
         fetchDataFromAPI,
     } = usePrevalenceFilters();
 
@@ -44,6 +47,10 @@ export function PrevalenceSideContent(): JSX.Element {
             displayName: option,
         })
     );
+    const matrixGroupSelectionOptions = matrixGroupOptions.map((option) => ({
+        value: option,
+        displayName: option,
+    }));
 
     return (
         <Box
@@ -100,6 +107,19 @@ export function PrevalenceSideContent(): JSX.Element {
                         setSelectedSamplingStages(event.target.value),
                 }}
             />
+
+            <FilterMultiSelectionComponent
+                selectedItems={selectedMatrixGroups}
+                selectionOptions={matrixGroupSelectionOptions}
+                name="matrixGroups"
+                label={t("MATRIX_GROUP")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedMatrixGroups(event.target.value),
+                }}
+            />
+
             <Box
                 sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
             >

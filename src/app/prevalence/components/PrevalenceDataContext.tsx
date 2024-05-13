@@ -75,6 +75,32 @@ const sampleOriginOptions = [
     "Zuchtputen",
     "Zuchtsauen",
 ];
+const matrixGroupOptions = [
+    "(Hals)haut und Schlachtkörper (Lebensmittelproben)",
+    "Allein- und Mischfuttermittel",
+    "Eier und Eiprodukte",
+    "Fisch und Erzeugnisse daraus",
+    "Fleisch und Fleischerzeugnisse",
+    "Gemüse und Gemüseerzeugnisse",
+    "Getreide und ähnliche, sowie deren Primärderivate",
+    "Haut (Tierproben)",
+    "Kiemeninhalt (Tierproben)",
+    "Kot und Blinddarminhalt (Tierproben)",
+    "Kot/Staub (Tierproben)",
+    "Kräuter, Gewürze und ähnliche",
+    "Meeresfrüchte (Tierproben)",
+    "Meeresfrüchte und Erzeugnisse daraus",
+    "Milch (Tierproben)",
+    "Milch und Milchprodukte",
+    "Muskulatur (Tierproben)",
+    "Nasentupfer (Tierproben)",
+    "Obst und Obsterzeugnisse",
+    "Pilze",
+    "Staub (Tierproben)",
+    "Vegetarische / Vegane Fleischersatzprodukte",
+    "Ölsaaten und Ölfrüchte",
+];
+
 const matrixOptions = [
     "(Hals)haut",
     "Alleinfuttermittel, Sackware und lose Ware",
@@ -206,6 +232,10 @@ interface PrevalenceDataContext {
     selectedSamplingStages: string[];
     setSelectedSamplingStages: (samplingStages: string[]) => void;
 
+    matrixGroupOptions: string[];
+    selectedMatrixGroups: string[];
+    setSelectedMatrixGroups: (matrixGroups: string[]) => void;
+
     fetchDataFromAPI: () => void;
     prevalenceData: PrevalenceEntry[];
     error: string | null;
@@ -240,6 +270,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [selectedSamplingStages, setSelectedSamplingStages] = useState<
         string[]
     >([]);
+
+    const [selectedMatrixGroups, setSelectedMatrixGroups] = useState<string[]>(
+        []
+    );
     const [prevalenceData, setData] = useState<PrevalenceEntry[]>([]);
     const [searchParameters, setSearchParameters] = useState<SearchParameters>(
         {}
@@ -252,6 +286,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const result = apiData.flat().map((item: any) => ({
             id: item.id,
+            matrix: item.attributes.matrix.data.attributes.name,
+            samplingStage: item.attributes.samplingStage.data.attributes.name,
+            microorganism: item.attributes.microorganism.data.attributes.name,
+            sampleOrigin: item.attributes.sampleOrigin.data.attributes.name,
             samplingYear: item.attributes.samplingYear,
             furtherDetails: item.attributes.furtherDetails,
             numberOfSamples: item.attributes.numberOfSamples,
@@ -259,10 +297,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             percentageOfPositive: item.attributes.percentageOfPositive,
             ciMin: item.attributes.ciMin != null ? item.attributes.ciMin : 0, // Handle null
             ciMax: item.attributes.ciMax != null ? item.attributes.ciMax : 0, // Handle null
-            matrix: item.attributes.matrix.data.attributes.name,
-            samplingStage: item.attributes.samplingStage.data.attributes.name,
-            microorganism: item.attributes.microorganism.data.attributes.name,
-            sampleOrigin: item.attributes.sampleOrigin.data.attributes.name,
         }));
         return result;
     }
@@ -282,12 +316,18 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             const samplingStageSelection = selectedSamplingStages.map(
                 (stage) => `filters[samplingStage][name][$eq]=` + stage
             );
+            const matrixGroupSelection = selectedMatrixGroups.map(
+                (group) => `filters[matrixGroup][name][$eq]=` + group
+            );
 
             const query = `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}&${microSelection.join(
                 "&"
             )}&${originSelection.join("&")}&${matrixSelection.join(
                 "&"
-            )}&${samplingStageSelection.join("&")}`;
+            )}&${samplingStageSelection.join("&")}&${matrixGroupSelection.join(
+                "&"
+            )}`;
+
             const response = await callApiService<
                 CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
             >(query);
@@ -314,6 +354,12 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         samplingStageOptions.length
                             ? ["ALL_VALUES"]
                             : selectedSamplingStages,
+
+                    matrixGroup:
+                        selectedMatrixGroups.length ===
+                        matrixGroupOptions.length
+                            ? ["ALL_VALUES"]
+                            : selectedMatrixGroups,
                 });
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -337,6 +383,9 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         selectedSamplingStages,
         setSelectedSamplingStages,
         samplingStageOptions,
+        matrixGroupOptions,
+        selectedMatrixGroups,
+        setSelectedMatrixGroups,
         fetchDataFromAPI,
         prevalenceData,
         error,
