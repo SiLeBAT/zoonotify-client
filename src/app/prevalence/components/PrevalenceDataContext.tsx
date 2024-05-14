@@ -182,6 +182,25 @@ const samplingStageOptions = [
     "Wildbahn",
     "Zentrale Ölmühlen",
 ];
+const superCategorySampleOriginOptions = [
+    "Futtermittel",
+    "Huhn (Tier-/ Lebensmittelproben)",
+    "Rind (Tier-/ Lebensmittelproben)",
+    "Pute (Tier-/ Lebensmittelproben)",
+    "Schwein (Tier-/ Lebensmittelproben)",
+    "Wildtiere (Tier-/ Lebensmittelproben)",
+    "Ente (Tier-/ Lebensmittelproben)",
+    "Schwein und Rind (Tier-/Lebensmittelproben)",
+    "Geflügel (Lebensmittelproben)",
+    "Wiederkäuer (Tier-/ Lebensmittelproben)",
+    "Fisch/Meeresfrüchte (Tier-/ Lebensmittelproben)",
+    "Lebensmittel nicht-tierischen Ursprungs",
+];
+
+const yearOptions = [
+    2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023,
+];
+
 export type SearchParameters = Record<string, string[]>;
 interface RelationalData {
     id: number;
@@ -236,6 +255,14 @@ interface PrevalenceDataContext {
     selectedMatrixGroups: string[];
     setSelectedMatrixGroups: (matrixGroups: string[]) => void;
 
+    yearOptions: number[];
+    selectedYear: number[];
+    setSelectedYear: (year: number[]) => void;
+
+    superCategorySampleOriginOptions: string[];
+    selectedSuperCategory: string[];
+    setSelectedSuperCategory: (superCategory: string[]) => void;
+
     fetchDataFromAPI: () => void;
     prevalenceData: PrevalenceEntry[];
     error: string | null;
@@ -271,9 +298,15 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         string[]
     >([]);
 
+    const [selectedYear, setSelectedYear] = useState<number[]>([]);
+    const [selectedSuperCategory, setSelectedSuperCategory] = useState<
+        string[]
+    >([]);
+
     const [selectedMatrixGroups, setSelectedMatrixGroups] = useState<string[]>(
         []
     );
+
     const [prevalenceData, setData] = useState<PrevalenceEntry[]>([]);
     const [searchParameters, setSearchParameters] = useState<SearchParameters>(
         {}
@@ -319,14 +352,22 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             const matrixGroupSelection = selectedMatrixGroups.map(
                 (group) => `filters[matrixGroup][name][$eq]=` + group
             );
+            const yearSelection = selectedYear.map(
+                (year) => `filters[samplingYear][$eq]=${year}`
+            );
+            const superCategorySelection = selectedSuperCategory.map(
+                (superCategory) =>
+                    `filters[superCategorySampleOrigin][name][$eq]=${superCategory}`
+            );
 
-            const query = `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}&${microSelection.join(
-                "&"
-            )}&${originSelection.join("&")}&${matrixSelection.join(
-                "&"
-            )}&${samplingStageSelection.join("&")}&${matrixGroupSelection.join(
-                "&"
-            )}`;
+            const query =
+                `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}&` +
+                `${microSelection.join("&")}&${originSelection.join("&")}` +
+                `${matrixSelection.join("&")}&${samplingStageSelection.join(
+                    "&"
+                )}` +
+                `${matrixGroupSelection.join("&")}&${yearSelection.join("&")}` +
+                `${superCategorySelection.join("&")}`;
 
             const response = await callApiService<
                 CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
@@ -354,12 +395,20 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         samplingStageOptions.length
                             ? ["ALL_VALUES"]
                             : selectedSamplingStages,
-
                     matrixGroup:
                         selectedMatrixGroups.length ===
                         matrixGroupOptions.length
                             ? ["ALL_VALUES"]
                             : selectedMatrixGroups,
+                    samplingYear:
+                        selectedYear.length === yearOptions.length
+                            ? ["ALL_VALUES"]
+                            : selectedYear.map(String),
+                    supercategorySampleOrigin:
+                        selectedSuperCategory.length ===
+                        superCategorySampleOriginOptions.length
+                            ? ["ALL_VALUES"]
+                            : selectedSuperCategory,
                 });
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -370,22 +419,28 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         setLoading(false);
     };
 
-    const value = {
+    const value: PrevalenceDataContext = {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
-        microorganismOptions,
+        microorganismOptions, // Add the actual options array here
         selectedSampleOrigins,
         setSelectedSampleOrigins,
-        sampleOriginOptions,
+        sampleOriginOptions, // Add the actual options array here
         selectedMatrices,
         setSelectedMatrices,
-        matrixOptions,
+        matrixOptions, // Add the actual options array here
         selectedSamplingStages,
         setSelectedSamplingStages,
-        samplingStageOptions,
-        matrixGroupOptions,
+        samplingStageOptions, // Add the actual options array here
         selectedMatrixGroups,
         setSelectedMatrixGroups,
+        matrixGroupOptions, // Add the actual options array here
+        selectedYear,
+        setSelectedYear,
+        yearOptions, // Add the actual options array here
+        selectedSuperCategory,
+        setSelectedSuperCategory,
+        superCategorySampleOriginOptions, // Add the actual options array here
         fetchDataFromAPI,
         prevalenceData,
         error,

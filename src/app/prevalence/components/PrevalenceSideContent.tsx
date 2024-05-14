@@ -23,6 +23,12 @@ export function PrevalenceSideContent(): JSX.Element {
         selectedMatrixGroups,
         setSelectedMatrixGroups,
         matrixGroupOptions,
+        selectedYear,
+        setSelectedYear,
+        yearOptions,
+        selectedSuperCategory,
+        setSelectedSuperCategory,
+        superCategorySampleOriginOptions,
         fetchDataFromAPI,
     } = usePrevalenceFilters();
 
@@ -51,7 +57,16 @@ export function PrevalenceSideContent(): JSX.Element {
         value: option,
         displayName: option,
     }));
-
+    const yearSelectionOptions = yearOptions.map((year) => ({
+        value: year.toString(),
+        displayName: year.toString(),
+    }));
+    const superCategorySelectionOptions = superCategorySampleOriginOptions.map(
+        (superCategory) => ({
+            value: superCategory,
+            displayName: superCategory,
+        })
+    );
     return (
         <Box
             sx={{
@@ -96,6 +111,33 @@ export function PrevalenceSideContent(): JSX.Element {
                 }}
             />
 
+            <FilterMultiSelectionComponent
+                selectedItems={selectedYear.map(String)}
+                selectionOptions={yearSelectionOptions}
+                name="years"
+                label={t("SAMPLING_YEAR")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) => {
+                        const valueAsNumbers = event.target.value.map(
+                            (val: string) => parseInt(val, 10)
+                        );
+                        setSelectedYear(valueAsNumbers);
+                    },
+                }}
+            />
+            <FilterMultiSelectionComponent
+                selectedItems={selectedSuperCategory}
+                selectionOptions={superCategorySelectionOptions}
+                name="supercategories"
+                label={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedSuperCategory(event.target.value),
+                }}
+            />
             <FilterMultiSelectionComponent
                 selectedItems={selectedSamplingStages}
                 selectionOptions={samplingStageSelectionOptions}
