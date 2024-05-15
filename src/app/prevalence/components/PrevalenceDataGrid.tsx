@@ -73,26 +73,29 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     }, [prevalenceData]);
 
     const columns: GridColDef[] = [
-        { field: "samplingYear", headerName: t("SAMPLING_YEAR") },
-        { field: "microorganism", headerName: t("MICROORGANISM") },
-        { field: "sampleOrigin", headerName: t("SAMPLE_ORIGIN") },
-        { field: "samplingStage", headerName: t("SAMPLING_STAGE") },
-        { field: "matrix", headerName: t("MATRIX") },
-
+        { field: "samplingYear", headerName: t("SAMPLING_YEAR"), width: 150 },
+        { field: "microorganism", headerName: t("MICROORGANISM"), width: 200 },
+        { field: "sampleOrigin", headerName: t("SAMPLE_ORIGIN"), width: 200 },
+        { field: "samplingStage", headerName: t("SAMPLING_STAGE"), width: 200 },
+        { field: "matrix", headerName: t("MATRIX"), width: 200 },
         {
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
+            width: 180,
         },
         {
             field: "numberOfPositive",
             headerName: t("NUMBER_OF_POSITIVE"),
             type: "number",
+            width: 180,
         },
         {
             field: "percentageOfPositive",
             headerName: t("PERCENTAGE_OF_POSITIVE"),
+            type: "number",
             valueGetter: (value: number) => `${value.toFixed(2)}%`,
+            width: 180,
         },
         {
             field: "ciMin",
@@ -100,6 +103,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
+            width: 150,
         },
         {
             field: "ciMax",
@@ -107,9 +111,9 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
+            width: 150,
         },
     ];
-
     return (
         <DataGrid
             rows={prevalenceData}

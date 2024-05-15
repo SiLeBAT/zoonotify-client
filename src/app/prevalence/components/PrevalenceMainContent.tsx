@@ -30,7 +30,7 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                 {prevalenceData.length > 0 ? (
                     <Box
                         sx={{
-                            width: "80%",
+                            width: "95%",
                         }}
                     >
                         <PrevalenceDataGrid
