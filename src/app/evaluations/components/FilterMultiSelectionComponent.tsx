@@ -59,31 +59,23 @@ export function FilterMultiSelectionComponent({
                 id="select"
                 name={name}
                 multiple
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
                 value={selectedItems}
                 label={label}
-                renderValue={(selection) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    const translated = selection.map((s) => t(s));
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    return translated.join(", ");
-                }}
                 onChange={handleChange}
+                MenuProps={{
+                    PaperProps: {
+                        style: {
+                            maxHeight: 500,
+                            width: "300px",
+                            overflowX: "hidden",
+                        },
+                    },
+                }}
+                renderValue={(selected) => selected.map((s) => t(s)).join(", ")}
             >
-                <MenuItem
-                    value="all"
-                    classes={{
-                        root: isAllSelected ? classes.selectedAll : "",
-                    }}
-                >
+                <MenuItem value="all">
                     <ListItemIcon>
                         <Checkbox
-                            classes={{
-                                indeterminate: classes.indeterminateColor,
-                            }}
                             checked={isAllSelected}
                             indeterminate={
                                 selectedItems.length > 0 &&
@@ -91,17 +83,19 @@ export function FilterMultiSelectionComponent({
                             }
                         />
                     </ListItemIcon>
-                    <ListItemText
-                        classes={{ primary: classes.selectAllText }}
-                        primary={t("Select_All")}
-                    />
+                    <ListItemText primary={t("Select_All")} />
                 </MenuItem>
                 {selectionOptions.map((item) => (
                     <MenuItem key={item.value} value={item.value}>
                         <Checkbox
-                            checked={selectedItems.indexOf(item.value) > -1}
+                            checked={selectedItems.includes(item.value)}
                         />
-                        <ListItemText primary={item.displayName} />
+                        <ListItemText
+                            primary={item.displayName}
+                            primaryTypographyProps={{
+                                style: { whiteSpace: "normal" },
+                            }}
+                        />
                     </MenuItem>
                 ))}
             </Select>
