@@ -198,7 +198,8 @@ const superCategorySampleOriginOptions = [
 ];
 
 const yearOptions = [
-    2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023,
+    2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021,
+    2022,
 ];
 
 export type SearchParameters = Record<string, string[]>;
@@ -357,16 +358,17 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             );
             const superCategorySelection = selectedSuperCategory.map(
                 (superCategory) =>
-                    `filters[superCategorySampleOrigin][name][$eq]=${superCategory}`
+                    `filters[superCategorySampleOrigin][name][$eq]=` +
+                    superCategory
             );
-
             const query =
                 `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}&` +
-                `${microSelection.join("&")}&${originSelection.join("&")}` +
-                `${matrixSelection.join("&")}&${samplingStageSelection.join(
-                    "&"
-                )}` +
-                `${matrixGroupSelection.join("&")}&${yearSelection.join("&")}` +
+                `${microSelection.join("&")}&` +
+                `${originSelection.join("&")}&` +
+                `${matrixSelection.join("&")}&` +
+                `${samplingStageSelection.join("&")}&` +
+                `${matrixGroupSelection.join("&")}&` +
+                `${yearSelection.join("&")}&` +
                 `${superCategorySelection.join("&")}`;
 
             const response = await callApiService<
@@ -404,7 +406,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         selectedYear.length === yearOptions.length
                             ? ["ALL_VALUES"]
                             : selectedYear.map(String),
-                    supercategorySampleOrigin:
+                    superCategorySampleOrigin:
                         selectedSuperCategory.length ===
                         superCategorySampleOriginOptions.length
                             ? ["ALL_VALUES"]
@@ -422,25 +424,25 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const value: PrevalenceDataContext = {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
-        microorganismOptions, // Add the actual options array here
+        microorganismOptions,
         selectedSampleOrigins,
         setSelectedSampleOrigins,
-        sampleOriginOptions, // Add the actual options array here
+        sampleOriginOptions,
         selectedMatrices,
         setSelectedMatrices,
-        matrixOptions, // Add the actual options array here
+        matrixOptions,
         selectedSamplingStages,
         setSelectedSamplingStages,
-        samplingStageOptions, // Add the actual options array here
+        samplingStageOptions,
         selectedMatrixGroups,
         setSelectedMatrixGroups,
-        matrixGroupOptions, // Add the actual options array here
+        matrixGroupOptions,
         selectedYear,
         setSelectedYear,
-        yearOptions, // Add the actual options array here
+        yearOptions,
         selectedSuperCategory,
         setSelectedSuperCategory,
-        superCategorySampleOriginOptions, // Add the actual options array here
+        superCategorySampleOriginOptions,
         fetchDataFromAPI,
         prevalenceData,
         error,
