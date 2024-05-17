@@ -78,40 +78,6 @@ export function PrevalenceSideContent(): JSX.Element {
             }}
         >
             <FilterMultiSelectionComponent
-                selectedItems={selectedMicroorganisms}
-                selectionOptions={microorganismSelectionOptions}
-                name="microorganisms"
-                label={t("MICROORGANISMS")}
-                actions={{
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    handleChange: (event: any) =>
-                        setSelectedMicroorganisms(event.target.value),
-                }}
-            />
-            <FilterMultiSelectionComponent
-                selectedItems={selectedSampleOrigins}
-                selectionOptions={sampleOriginSelectionOptions}
-                name="sampleOrigins"
-                label={t("SAMPLE_ORIGIN")}
-                actions={{
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    handleChange: (event: any) =>
-                        setSelectedSampleOrigins(event.target.value),
-                }}
-            />
-            <FilterMultiSelectionComponent
-                selectedItems={selectedMatrices}
-                selectionOptions={matrixSelectionOptions}
-                name="matrices"
-                label={t("MATRIX")}
-                actions={{
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    handleChange: (event: any) =>
-                        setSelectedMatrices(event.target.value),
-                }}
-            />
-
-            <FilterMultiSelectionComponent
                 selectedItems={selectedYear.map(String)}
                 selectionOptions={yearSelectionOptions}
                 name="years"
@@ -126,6 +92,18 @@ export function PrevalenceSideContent(): JSX.Element {
                     },
                 }}
             />
+
+            <FilterMultiSelectionComponent
+                selectedItems={selectedMicroorganisms}
+                selectionOptions={microorganismSelectionOptions}
+                name="microorganisms"
+                label={t("MICROORGANISMS")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedMicroorganisms(event.target.value),
+                }}
+            />
             <FilterMultiSelectionComponent
                 selectedItems={selectedSuperCategory}
                 selectionOptions={superCategorySelectionOptions}
@@ -138,6 +116,19 @@ export function PrevalenceSideContent(): JSX.Element {
                         setSelectedSuperCategory(event.target.value),
                 }}
             />
+
+            <FilterMultiSelectionComponent
+                selectedItems={selectedSampleOrigins}
+                selectionOptions={sampleOriginSelectionOptions}
+                name="sampleOrigins"
+                label={t("SAMPLE_ORIGIN")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedSampleOrigins(event.target.value),
+                }}
+            />
+
             <FilterMultiSelectionComponent
                 selectedItems={selectedSamplingStages}
                 selectionOptions={samplingStageSelectionOptions}
@@ -159,6 +150,17 @@ export function PrevalenceSideContent(): JSX.Element {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     handleChange: (event: any) =>
                         setSelectedMatrixGroups(event.target.value),
+                }}
+            />
+            <FilterMultiSelectionComponent
+                selectedItems={selectedMatrices}
+                selectionOptions={matrixSelectionOptions}
+                name="matrices"
+                label={t("MATRIX")}
+                actions={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    handleChange: (event: any) =>
+                        setSelectedMatrices(event.target.value),
                 }}
             />
 
