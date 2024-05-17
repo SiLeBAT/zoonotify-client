@@ -114,47 +114,51 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             width: 150,
         },
     ];
+
     return (
-        <DataGrid
-            rows={prevalenceData}
-            columns={columns}
-            loading={loading}
-            autoHeight={false}
-            disableColumnFilter={true}
-            hideFooter={true}
-            style={{ height: 1000, width: "100%", overflowX: "auto" }}
-            slots={{
-                toolbar: () => (
-                    <>
-                        <DataGridControls heading={t("TABLE_DETAIL")} />
-                        {downloadUrl && (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{
-                                    margin: "0.5em",
-                                    padding: "0em",
-                                    backgroundColor: theme.palette.primary.main,
-                                }}
-                            >
-                                <Link
-                                    href={downloadUrl}
-                                    download={filename}
-                                    sx={{
-                                        width: "100%",
-                                        padding: "0.5em 1em",
-                                        color: "inherit",
-                                        textDecoration: "none",
-                                    }}
-                                >
-                                    {t("DOWNLOAD_TABLE")}
-                                </Link>
-                            </Button>
-                        )}
-                    </>
-                ),
+        <div
+            style={{
+                height: 1000,
+                width: "100%",
+                overflowX: "auto",
+                display: "flex",
+                flexDirection: "column",
             }}
-        />
+        >
+            <DataGridControls heading={t("TABLE_DETAIL")} />
+            <DataGrid
+                rows={prevalenceData}
+                columns={columns}
+                loading={loading}
+                disableColumnFilter={false}
+                autoHeight={false}
+                hideFooter={false}
+            />
+            {downloadUrl && (
+                <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                        margin: "0.5em",
+                        padding: "0em",
+                        backgroundColor: theme.palette.primary.main,
+                    }}
+                >
+                    <Link
+                        href={downloadUrl}
+                        download={filename}
+                        style={{
+                            width: "100%",
+                            padding: "0.5em 1em",
+                            color: "inherit",
+                            textDecoration: "none",
+                        }}
+                    >
+                        {t("DOWNLOAD_TABLE")}
+                    </Link>
+                </Button>
+            )}
+        </div>
     );
 };
 

@@ -38,6 +38,9 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
                 borderRadius: 1,
                 mb: 1,
                 backgroundColor: theme.palette.grey[100],
+                width: "100%",
+                minWidth: "1900px",
+                maxWidth: "1900px",
             }}
         >
             <Typography
@@ -46,6 +49,7 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
                     fontWeight: "bold",
                     mr: 1,
                     color: theme.palette.text.primary,
+                    display: "inline",
                 }}
             >
                 {title}:
@@ -54,6 +58,7 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
                 variant="body2"
                 sx={{
                     color: theme.palette.text.primary,
+                    display: "inline",
                 }}
             >
                 {value}
