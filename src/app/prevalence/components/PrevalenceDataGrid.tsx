@@ -44,8 +44,10 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "ciMin",
             "ciMax",
         ];
+        // Adding UTF-8 BOM "\uFEFF" at the start of the file content
         csvRows.push(
-            headers.map((header) => t(header.toUpperCase())).join(",")
+            "\uFEFF" +
+                headers.map((header) => t(header.toUpperCase())).join(",")
         );
 
         for (const row of prevalenceData) {
@@ -60,7 +62,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             csvRows.push(values.join(","));
         }
         const csvString = csvRows.join("\n");
-        const blob = new Blob([csvString], { type: "text/csv" });
+        const blob = new Blob([csvString], { type: "text/csv;charset=utf-8" });
         const url = window.URL.createObjectURL(blob);
         setDownloadUrl(url);
         setFilename(`prevalence_data_${getFormattedTimestamp()}.csv`);
