@@ -76,28 +76,28 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
     const columns: GridColDef[] = [
         { field: "samplingYear", headerName: t("SAMPLING_YEAR"), width: 150 },
-        { field: "microorganism", headerName: t("MICROORGANISM"), width: 200 },
-        { field: "sampleOrigin", headerName: t("SAMPLE_ORIGIN"), width: 200 },
-        { field: "samplingStage", headerName: t("SAMPLING_STAGE"), width: 200 },
-        { field: "matrix", headerName: t("MATRIX"), width: 200 },
+        { field: "microorganism", headerName: t("MICROORGANISM"), width: 150 },
+        { field: "sampleOrigin", headerName: t("SAMPLE_ORIGIN"), width: 150 },
+        { field: "samplingStage", headerName: t("SAMPLING_STAGE"), width: 150 },
+        { field: "matrix", headerName: t("MATRIX"), width: 120 },
         {
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
-            width: 180,
+            width: 150,
         },
         {
             field: "numberOfPositive",
             headerName: t("NUMBER_OF_POSITIVE"),
             type: "number",
-            width: 180,
+            width: 150,
         },
         {
             field: "percentageOfPositive",
             headerName: t("PERCENTAGE_OF_POSITIVE"),
             type: "number",
             valueGetter: (value: number) => `${value.toFixed(2)}%`,
-            width: 180,
+            width: 150,
         },
         {
             field: "ciMin",
@@ -105,7 +105,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
-            width: 150,
+            width: 100,
         },
         {
             field: "ciMax",
@@ -113,14 +113,14 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
-            width: 150,
+            width: 100,
         },
     ];
 
     return (
         <div
             style={{
-                height: 1000,
+                height: 700,
                 width: "100%",
                 overflowX: "auto",
                 display: "flex",

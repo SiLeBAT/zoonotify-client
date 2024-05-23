@@ -21,6 +21,7 @@ type FilterMultiSelectionComponentProps = {
     actions: {
         handleChange: (event: SelectChangeEvent<string[]>) => void;
     };
+    extra?: React.ReactNode; // Optional extra content prop
 };
 
 export function FilterMultiSelectionComponent({
@@ -29,6 +30,7 @@ export function FilterMultiSelectionComponent({
     label,
     name,
     actions,
+    extra, // Include extra in the component function parameters
 }: FilterMultiSelectionComponentProps): JSX.Element {
     const { t } = useTranslation(["ExplanationPage"]);
     const classes = useStyles();
@@ -99,6 +101,7 @@ export function FilterMultiSelectionComponent({
                     </MenuItem>
                 ))}
             </Select>
+            {extra}
         </FormControl>
     );
 }
