@@ -20,7 +20,10 @@ export function DataProtectionPageComponent(): JSX.Element {
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
             try {
-                const response = await fetch(DATA_PROTECTION);
+                // Append the locale parameter to the fetch URL to request localized data
+                const response = await fetch(
+                    `${DATA_PROTECTION}?locale=${i18n.language}`
+                );
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -38,19 +41,17 @@ export function DataProtectionPageComponent(): JSX.Element {
         };
 
         fetchData();
-    }, [i18n.language]);
+    }, [i18n.language]); // Dependency on language ensures re-fetching when the language changes
 
     if (error) {
-        return (
-            <Typography>Error loading data protection information</Typography>
-        );
+        return <Typography>{t("errorLoadingData")}</Typography>; // Updated to use a localized string
     }
 
     if (!dataProtectionInfo) {
-        return <Typography>{t("unknownError")}</Typography>;
+        return <Typography>{t("dataUnavailable")}</Typography>; // Updated to use a localized string
     }
 
-    const title = t("Heading");
+    const title = t("Heading"); // Assuming 'Heading' is a key in your translation files
 
     return (
         <PageLayoutComponent>
