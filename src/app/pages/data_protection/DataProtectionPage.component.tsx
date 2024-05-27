@@ -41,17 +41,17 @@ export function DataProtectionPageComponent(): JSX.Element {
         };
 
         fetchData();
-    }, [i18n.language]); // Dependency on language ensures re-fetching when the language changes
+    }, [i18n.language]);
 
     if (error) {
-        return <Typography>{t("errorLoadingData")}</Typography>; // Updated to use a localized string
+        return <Typography>{t("errorLoadingData")}</Typography>;
     }
 
     if (!dataProtectionInfo) {
-        return <Typography>{t("dataUnavailable")}</Typography>; // Updated to use a localized string
+        return <Typography>{t("unknownError")}</Typography>;
     }
 
-    const title = t("Heading"); // Assuming 'Heading' is a key in your translation files
+    const title = t("Heading");
 
     return (
         <PageLayoutComponent>
