@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 // eslint-disable-next-line import/named
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, Link } from "@mui/material";
+import { useTheme } from "@mui/system";
 import { DataGridControls } from "./DataGridControls";
 import { PrevalenceEntry } from "./PrevalenceDataContext";
-import { useTheme } from "@mui/system";
 
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
@@ -21,13 +21,11 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
 
-    // Function to get a formatted timestamp for the filename
     const getFormattedTimestamp = (): string => {
         const date = new Date();
         return date.toISOString().replace(/[:.]/g, "-");
     };
 
-    // Function to prepare the download
     const prepareDownload = (): void => {
         if (prevalenceData.length === 0) return;
 
@@ -44,7 +42,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "ciMin",
             "ciMax",
         ];
-        // Adding UTF-8 BOM "\uFEFF" at the start of the file content
         csvRows.push(
             "\uFEFF" +
                 headers.map((header) => t(header.toUpperCase())).join(",")
@@ -75,29 +72,57 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     }, [prevalenceData]);
 
     const columns: GridColDef[] = [
-        { field: "samplingYear", headerName: t("SAMPLING_YEAR"), width: 150 },
-        { field: "microorganism", headerName: t("MICROORGANISM"), width: 150 },
-        { field: "sampleOrigin", headerName: t("SAMPLE_ORIGIN"), width: 150 },
-        { field: "samplingStage", headerName: t("SAMPLING_STAGE"), width: 150 },
-        { field: "matrix", headerName: t("MATRIX"), width: 120 },
+        {
+            field: "samplingYear",
+            headerName: t("SAMPLING_YEAR"),
+            width: 150,
+            headerClassName: "header-style",
+        },
+        {
+            field: "microorganism",
+            headerName: t("MICROORGANISM"),
+            width: 150,
+            headerClassName: "header-style",
+        },
+        {
+            field: "sampleOrigin",
+            headerName: t("SAMPLE_ORIGIN"),
+            width: 150,
+            headerClassName: "header-style",
+        },
+        {
+            field: "samplingStage",
+            headerName: t("SAMPLING_STAGE"),
+            width: 150,
+            headerClassName: "header-style",
+        },
+        {
+            field: "matrix",
+            headerName: t("MATRIX"),
+            width: 120,
+            headerClassName: "header-style",
+        },
         {
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
-            width: 150,
+            width: 200,
+            headerClassName: "header-style",
         },
         {
             field: "numberOfPositive",
             headerName: t("NUMBER_OF_POSITIVE"),
             type: "number",
-            width: 150,
+            width: 200,
+            headerClassName: "header-style",
         },
         {
             field: "percentageOfPositive",
             headerName: t("PERCENTAGE_OF_POSITIVE"),
             type: "number",
             valueGetter: (value: number) => `${value.toFixed(2)}%`,
-            width: 150,
+            width: 180,
+            headerClassName: "header-style",
         },
         {
             field: "ciMin",
@@ -106,6 +131,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
             width: 100,
+            headerClassName: "header-style",
         },
         {
             field: "ciMax",
@@ -114,6 +140,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
             width: 100,
+            headerClassName: "header-style",
         },
     ];
 
@@ -132,9 +159,15 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 rows={prevalenceData}
                 columns={columns}
                 loading={loading}
-                disableColumnFilter={false}
+                disableColumnFilter={true}
                 autoHeight={false}
                 hideFooter={false}
+                sx={{
+                    "& .header-style": {
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                    },
+                }}
             />
             {downloadUrl && (
                 <Button
