@@ -26,6 +26,20 @@ export function FilterContainerComponent({
             config.handleChange(event);
         });
     };
+
+    const handleApplyAllFilters = (): void => {
+        selectionConfig.forEach((config) => {
+            const event = {
+                target: {
+                    value: config.selectionOptions.map(
+                        (option) => option.value
+                    ),
+                },
+            };
+            config.handleChange(event);
+        });
+    };
+
     return (
         <Box
             key={i18n.language}
@@ -82,16 +96,33 @@ export function FilterContainerComponent({
                 variant="contained"
                 sx={{
                     mb: 2,
-                    width: "200px",
+                    width: "180px",
                     minWidth: "0",
                     padding: "6px 16px",
-                    fontSize: "0.875rem",
+                    fontSize: "0.700rem",
                     marginLeft: "auto",
                     marginRight: "auto",
                     display: "block",
                 }}
             >
                 {t("Delete All Filters")}
+            </Button>
+            <Button
+                onClick={handleApplyAllFilters}
+                variant="contained"
+                color="primary"
+                sx={{
+                    mb: 2,
+                    width: "180px",
+                    minWidth: "0",
+                    padding: "6px 16px",
+                    fontSize: "0.700rem",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    display: "block",
+                }}
+            >
+                {t("Apply All Filters")}
             </Button>
             <ZNAccordion
                 key="howTo"
