@@ -44,5 +44,6 @@
   "TABLE_DETAIL": "Parameter",
   "SAMPLE_ORIGIN": "Sample origin",
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Super Category Sample Origin",
-  "SAMPLING_STAGE": "Sampling stage"
+  "SAMPLING_STAGE": "Sampling stage",
+  "PREVALENCE_TABLE": "Prevalence Table"
 }

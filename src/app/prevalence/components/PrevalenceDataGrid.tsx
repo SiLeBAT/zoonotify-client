@@ -6,7 +6,7 @@ import { Button, Link } from "@mui/material";
 import { useTheme } from "@mui/system";
 import { DataGridControls } from "./DataGridControls";
 import { PrevalenceEntry } from "./PrevalenceDataContext";
-
+import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
     loading: boolean;
@@ -77,30 +77,35 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             headerName: t("SAMPLING_YEAR"),
             width: 150,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "microorganism",
             headerName: t("MICROORGANISM"),
             width: 150,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "sampleOrigin",
             headerName: t("SAMPLE_ORIGIN"),
             width: 150,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "samplingStage",
             headerName: t("SAMPLING_STAGE"),
             width: 150,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "matrix",
             headerName: t("MATRIX"),
             width: 120,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "numberOfSamples",
@@ -108,6 +113,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             width: 200,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "numberOfPositive",
@@ -115,6 +121,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             width: 200,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "percentageOfPositive",
@@ -123,6 +130,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             valueGetter: (value: number) => `${value.toFixed(2)}%`,
             width: 180,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "ciMin",
@@ -132,6 +140,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 value != null ? value.toFixed(2) : "N/A",
             width: 100,
             headerClassName: "header-style",
+            align: "center",
         },
         {
             field: "ciMax",
@@ -141,59 +150,94 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 value != null ? value.toFixed(2) : "N/A",
             width: 100,
             headerClassName: "header-style",
+            align: "center",
         },
     ];
 
     return (
-        <div
-            style={{
-                height: 700,
-                width: "100%",
-                overflowX: "auto",
-                display: "flex",
-                flexDirection: "column",
-            }}
-        >
-            <DataGridControls heading={t("TABLE_DETAIL")} />
-            <DataGrid
-                rows={prevalenceData}
-                columns={columns}
-                loading={loading}
-                disableColumnFilter={true}
-                autoHeight={false}
-                hideFooter={false}
-                sx={{
-                    "& .header-style": {
-                        fontWeight: "bold",
-                        fontSize: "1rem",
-                    },
-                }}
-            />
-            {downloadUrl && (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    style={{
-                        margin: "0.5em",
-                        padding: "0em",
-                        backgroundColor: theme.palette.primary.main,
-                    }}
-                >
-                    <Link
-                        href={downloadUrl}
-                        download={filename}
+        <>
+            <div style={{ marginBottom: "20px" }}>
+                {" "}
+                {/* Added margin for spacing */}
+                <DataGridControls heading={t("TABLE_DETAIL")} />
+            </div>
+            <ZNAccordion
+                title={t("PREVALENCE_TABLE")}
+                content={
+                    <div
                         style={{
+                            height: 700,
                             width: "100%",
-                            padding: "0.5em 1em",
-                            color: "inherit",
-                            textDecoration: "none",
+                            overflowX: "auto",
+                            display: "flex",
+                            flexDirection: "column",
                         }}
                     >
-                        {t("DOWNLOAD_TABLE")}
-                    </Link>
-                </Button>
-            )}
-        </div>
+                        <DataGrid
+                            rows={prevalenceData}
+                            columns={columns}
+                            loading={loading}
+                            disableColumnFilter={true}
+                            autoHeight={false}
+                            hideFooter={false}
+                            sx={{
+                                border: 2,
+                                borderColor: "primary.main",
+                                "& .header-style": {
+                                    fontWeight: "bold",
+                                    fontSize: "1rem",
+                                    textAlign: "center",
+                                },
+                                "& .MuiDataGrid-root": {
+                                    borderWidth: "1px",
+                                    borderColor: "rgba(224, 224, 224, 1)",
+                                },
+                                "& .MuiDataGrid-cell": {
+                                    border: "1px solid #e0e0e0",
+                                    textAlign: "center",
+                                },
+                                "& .MuiDataGrid-columnHeaders": {
+                                    borderBottom: "1px solid #e0e0e0",
+                                    borderRight: "1px solid #e0e0e0",
+                                },
+                                "& .MuiDataGrid-columnSeparator": {
+                                    visibility: "hidden",
+                                },
+                                "& .MuiDataGrid-row": {
+                                    borderBottom: "1px solid #e0e0e0",
+                                },
+                            }}
+                        />
+                        {downloadUrl && (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{
+                                    margin: "0.5em",
+                                    padding: "0em",
+                                    backgroundColor: theme.palette.primary.main,
+                                }}
+                            >
+                                <Link
+                                    href={downloadUrl}
+                                    download={filename}
+                                    style={{
+                                        width: "100%",
+                                        padding: "0.5em 1em",
+                                        color: "inherit",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    {t("DOWNLOAD_TABLE")}
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
+                }
+                defaultExpanded={true}
+                centerContent={false}
+            />
+        </>
     );
 };
 
