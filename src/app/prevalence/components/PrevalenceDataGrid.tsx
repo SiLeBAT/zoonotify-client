@@ -129,7 +129,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfPositive",
             headerName: t("NUMBER_OF_POSITIVE"),
             type: "number",
-            width: 170,
+            width: 180,
             headerClassName: "header-style",
             align: "center",
         },
