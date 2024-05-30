@@ -5,8 +5,10 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, Link } from "@mui/material";
 import { useTheme } from "@mui/system";
 import { DataGridControls } from "./DataGridControls";
-import { PrevalenceEntry } from "./PrevalenceDataContext";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
+import JSZip from "jszip";
+import { PrevalenceEntry, usePrevalenceFilters } from "./PrevalenceDataContext";
+
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
     loading: boolean;
@@ -20,15 +22,18 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
+    const { searchParameters } = usePrevalenceFilters(); // Correct usage of the hook
 
     const getFormattedTimestamp = (): string => {
         const date = new Date();
         return date.toISOString().replace(/[:.]/g, "-");
     };
 
-    const prepareDownload = (): void => {
+    const prepareDownload = async (): Promise<void> => {
         if (prevalenceData.length === 0) return;
 
+        const zip = new JSZip();
+        const timestamp = getFormattedTimestamp(); // Use a constant timestamp for all files
         const csvRows: string[] = [];
         const headers: Array<keyof PrevalenceEntry> = [
             "samplingYear",
@@ -42,34 +47,39 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "ciMin",
             "ciMax",
         ];
+
         csvRows.push(
             "\uFEFF" +
                 headers.map((header) => t(header.toUpperCase())).join(",")
         );
 
-        for (const row of prevalenceData) {
+        prevalenceData.forEach((row) => {
             const values = headers.map((header) => {
                 const value = row[header];
-                const escaped =
-                    typeof value === "string"
-                        ? `"${value.replace(/"/g, '""')}"`
-                        : value;
-                return `${escaped}`;
+                return typeof value === "string"
+                    ? `"${value.replace(/"/g, '""')}"`
+                    : value;
             });
             csvRows.push(values.join(","));
-        }
+        });
+
         const csvString = csvRows.join("\n");
-        const blob = new Blob([csvString], { type: "text/csv;charset=utf-8" });
+        zip.file(`prevalence_data_${timestamp}.csv`, csvString);
+
+        const searchParamsJson = JSON.stringify(searchParameters, null, 2);
+        zip.file(`search_parameters_${timestamp}.json`, searchParamsJson);
+
+        const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
         setDownloadUrl(url);
-        setFilename(`prevalence_data_${getFormattedTimestamp()}.csv`);
+        setFilename(`data_package_${timestamp}.zip`);
     };
 
     useEffect(() => {
         if (prevalenceData.length > 0) {
             prepareDownload();
         }
-    }, [prevalenceData]);
+    }, [prevalenceData, searchParameters]);
 
     const columns: GridColDef[] = [
         {
@@ -214,7 +224,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 color="primary"
                                 style={{
                                     margin: "0.5em",
-                                    padding: "0em",
                                     backgroundColor: theme.palette.primary.main,
                                 }}
                             >
@@ -228,7 +237,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                         textDecoration: "none",
                                     }}
                                 >
-                                    {t("DOWNLOAD_TABLE")}
+                                    {t("DOWNLOAD_ZIP_FILE")}
                                 </Link>
                             </Button>
                         )}

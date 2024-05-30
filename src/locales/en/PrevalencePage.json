@@ -29,7 +29,7 @@
     "VIBRIO_SPP": "Vibrio spp.",
     "YERSINIA_ENTEROCOLITICA": "Yersinia enterocolitica"
   },
-  "DOWNLOAD_TABLE": "Download Table",
+  "DOWNLOAD_ZIP_FILE": "Data Export",
   "SAMPLING_YEAR": "Sampling Year",
   "NUMBER_OF_SAMPLES": "No. of samples",
   "NUMBER_OF_POSITIVE": "No. of positive samples",
