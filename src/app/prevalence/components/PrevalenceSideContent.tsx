@@ -86,7 +86,7 @@ export function PrevalenceSideContent(): JSX.Element {
         <Box
             sx={{
                 padding: 0,
-                height: "75vh",
+                height: "80vh",
                 overflowY: "auto",
                 width: "410px",
                 maxHeight: "calc(140vh)",
