@@ -112,7 +112,7 @@ export function PrevalenceSideContent(): JSX.Element {
                         },
                     }}
                     extra={
-                        <Tooltip title="More Info on Sampling Year">
+                        <Tooltip title={t("More Info on Sampling Year")}>
                             <IconButton
                                 onClick={() => handleInfoClick("Years")}
                             >
@@ -137,7 +137,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             ),
                     }}
                     extra={
-                        <Tooltip title="More Info on Microorganisms">
+                        <Tooltip title={t("More Info on Microorganisms")}>
                             <IconButton
                                 onClick={() =>
                                     handleInfoClick("microorganisms")
@@ -165,7 +165,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             ),
                     }}
                     extra={
-                        <Tooltip title="More Info on Super Categories">
+                        <Tooltip title={t("More Info on Super Categories")}>
                             <IconButton
                                 onClick={() =>
                                     handleInfoClick("Super Categories")
@@ -192,7 +192,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             ),
                     }}
                     extra={
-                        <Tooltip title="More Info on Sample Origins">
+                        <Tooltip title={t("More Info on Sample Origins")}>
                             <IconButton
                                 onClick={() =>
                                     handleInfoClick("Sample Origins")
@@ -219,7 +219,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             ),
                     }}
                     extra={
-                        <Tooltip title="More Info on Sampling Stages">
+                        <Tooltip title={t("More Info on Sampling Stages")}>
                             <IconButton
                                 onClick={() =>
                                     handleInfoClick("Sampling Stages")
@@ -246,7 +246,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             ),
                     }}
                     extra={
-                        <Tooltip title="More Info on Matrix Groups">
+                        <Tooltip title={t("More Info on Matrix Groups")}>
                             <IconButton
                                 onClick={() => handleInfoClick("Matrix Groups")}
                             >
@@ -268,7 +268,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             setSelectedMatrices(event.target.value as string[]),
                     }}
                     extra={
-                        <Tooltip title="More Info on Matrices">
+                        <Tooltip title={t("More Info on Matrices")}>
                             <IconButton
                                 onClick={() => handleInfoClick("Matrix")}
                             >
