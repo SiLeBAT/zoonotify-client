@@ -116,7 +116,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                 <SearchParameterEntry
                     title={t("SAMPLING_YEAR")}
                     value={searchParameters.samplingYear
-                        .map((v) => v)
+                        .map((v) => t(v))
                         .join(", ")}
                 />
             )}
