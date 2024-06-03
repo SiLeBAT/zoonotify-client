@@ -34,6 +34,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
         const zip = new JSZip();
         const timestamp = getFormattedTimestamp(); // Use a constant timestamp for all files
+
+        // Prepare CSV data
         const csvRows: string[] = [];
         const headers: Array<keyof PrevalenceEntry> = [
             "samplingYear",
@@ -52,7 +54,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "\uFEFF" +
                 headers.map((header) => t(header.toUpperCase())).join(",")
         );
-
         prevalenceData.forEach((row) => {
             const values = headers.map((header) => {
                 const value = row[header];
@@ -62,13 +63,27 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             });
             csvRows.push(values.join(","));
         });
-
         const csvString = csvRows.join("\n");
         zip.file(`prevalence_data_${timestamp}.csv`, csvString);
 
+        // Enhance JSON data formatting
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
-        zip.file(`search_parameters_${timestamp}.json`, searchParamsJson);
+        const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson
+            .split("\n")
+            .map((line) => {
+                if (line.includes("{")) return line;
+                const keyMatch = line.match(/"(.*?)":/);
+                if (keyMatch) {
+                    const key = keyMatch[1];
+                    return `\n--- ${key.toUpperCase()} ---\n${line}`;
+                }
+                return line;
+            })
+            .join("\n")}`;
 
+        zip.file(`search_parameters_${timestamp}.txt`, formattedText);
+
+        // Generate ZIP file
         const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
         setDownloadUrl(url);
@@ -80,7 +95,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             prepareDownload();
         }
     }, [prevalenceData, searchParameters]);
-
     const columns: GridColDef[] = [
         {
             field: "samplingYear",
