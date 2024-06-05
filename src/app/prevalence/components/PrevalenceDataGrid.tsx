@@ -106,7 +106,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         {
             field: "microorganism",
             headerName: t("MICROORGANISM"),
-            width: 140,
+            width: 150,
             headerClassName: "header-style",
             align: "center",
         },
@@ -151,7 +151,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "percentageOfPositive",
             headerName: t("PERCENTAGE_OF_POSITIVE"),
             type: "number",
-            valueGetter: (value: number) => `${value.toFixed(2)}%`,
+            valueGetter: (value: number) => `${value.toFixed(2)}`,
             width: 200,
             headerClassName: "header-style",
             align: "center",
@@ -205,12 +205,17 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             autoHeight={false}
                             hideFooter={false}
                             sx={{
+                                backgroundColor: "white", // Setting the background color to white
                                 border: 2,
                                 borderColor: "primary.main",
                                 "& .header-style": {
                                     fontWeight: "bold",
                                     fontSize: "1rem",
                                     textAlign: "center",
+                                    backgroundColor:
+                                        theme.palette.primary.light, // Header background color
+                                    color: theme.palette.primary.contrastText, // Header text color
+                                    border: "1px solid #e0e0e0", // Border for header cells
                                 },
                                 "& .MuiDataGrid-root": {
                                     borderWidth: "1px",

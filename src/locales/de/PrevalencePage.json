@@ -30,7 +30,7 @@
     "YERSINIA_ENTEROCOLITICA": "Yersinia enterocolitica"
   },
   "DOWNLOAD_ZIP_FILE": "Datenexport",
-  "SAMPLING_YEAR": " Erhebungsjahr",
+  "SAMPLING_YEAR": "Erhebungsjahr",
   "NUMBER_OF_SAMPLES": "Anzahl untersuchter Proben (N)",
   "NUMBER_OF_POSITIVE": " Anzahl positiver Proben (N)",
   "PERCENTAGE_OF_POSITIVE": "Prävalenz (%)",

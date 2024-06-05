@@ -20,6 +20,7 @@ import { callApiService } from "../../shared/infrastructure/api/callApi.service"
 import { CMSResponse, CMSEntity } from "../../shared/model/CMS.model";
 import i18next from "i18next";
 import { INFORMATION } from "../../shared/infrastructure/router/routes";
+import Markdown from "markdown-to-jsx";
 
 interface ContentAttributes {
     content: string;
@@ -57,10 +58,13 @@ export function PrevalenceSideContent(): JSX.Element {
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
 
-    const handleInfoClick = async (category: string): Promise<void> => {
-        console.log(`Fetching data for category: ${category}`);
+    const handleInfoClick = async (categoryKey: string): Promise<void> => {
+        const translatedCategory = t(categoryKey);
+        console.log(`Fetching data for category: ${translatedCategory}`);
         try {
-            const url = `${INFORMATION}?filters[title][$eq]=${category}&locale=${i18next.language}&pagination[pageSize]=1`;
+            const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
+                translatedCategory
+            )}&locale=${i18next.language}&pagination[pageSize]=1`;
             const response = await callApiService<
                 CMSResponse<Array<CMSEntity<ContentAttributes>>, unknown>
             >(url);
@@ -78,6 +82,7 @@ export function PrevalenceSideContent(): JSX.Element {
             console.error("Failed to fetch information:", error);
         }
     };
+
     const handleClose = (): void => {
         setInfoDialogOpen(false);
     };
@@ -114,7 +119,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     extra={
                         <Tooltip title={t("More Info on Sampling Year")}>
                             <IconButton
-                                onClick={() => handleInfoClick("Years")}
+                                onClick={() => handleInfoClick("SAMPLING_YEAR")}
                             >
                                 <InfoIcon />
                             </IconButton>
@@ -129,7 +134,7 @@ export function PrevalenceSideContent(): JSX.Element {
                         displayName: option,
                     }))}
                     name="microorganisms"
-                    label={t("MICROORGANISMS")}
+                    label={t("MICROORGANISM")}
                     actions={{
                         handleChange: (event) =>
                             setSelectedMicroorganisms(
@@ -139,9 +144,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     extra={
                         <Tooltip title={t("More Info on Microorganisms")}>
                             <IconButton
-                                onClick={() =>
-                                    handleInfoClick("microorganisms")
-                                }
+                                onClick={() => handleInfoClick("MICROORGANISM")}
                             >
                                 <InfoIcon />
                             </IconButton>
@@ -168,7 +171,9 @@ export function PrevalenceSideContent(): JSX.Element {
                         <Tooltip title={t("More Info on Super Categories")}>
                             <IconButton
                                 onClick={() =>
-                                    handleInfoClick("Super Categories")
+                                    handleInfoClick(
+                                        "SUPER-CATEGORY-SAMPLE-ORIGIN"
+                                    )
                                 }
                             >
                                 <InfoIcon />
@@ -194,9 +199,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     extra={
                         <Tooltip title={t("More Info on Sample Origins")}>
                             <IconButton
-                                onClick={() =>
-                                    handleInfoClick("Sample Origins")
-                                }
+                                onClick={() => handleInfoClick("SAMPLE_ORIGIN")}
                             >
                                 <InfoIcon />
                             </IconButton>
@@ -222,7 +225,7 @@ export function PrevalenceSideContent(): JSX.Element {
                         <Tooltip title={t("More Info on Sampling Stages")}>
                             <IconButton
                                 onClick={() =>
-                                    handleInfoClick("Sampling Stages")
+                                    handleInfoClick("SAMPLING_STAGE")
                                 }
                             >
                                 <InfoIcon />
@@ -248,7 +251,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     extra={
                         <Tooltip title={t("More Info on Matrix Groups")}>
                             <IconButton
-                                onClick={() => handleInfoClick("Matrix Groups")}
+                                onClick={() => handleInfoClick("MATRIX_GROUP")}
                             >
                                 <InfoIcon />
                             </IconButton>
@@ -270,7 +273,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     extra={
                         <Tooltip title={t("More Info on Matrices")}>
                             <IconButton
-                                onClick={() => handleInfoClick("Matrix")}
+                                onClick={() => handleInfoClick("MATRIX")}
                             >
                                 <InfoIcon />
                             </IconButton>
@@ -281,7 +284,10 @@ export function PrevalenceSideContent(): JSX.Element {
             <Dialog open={infoDialogOpen} onClose={handleClose}>
                 <DialogTitle>{infoDialogTitle}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{infoDialogContent}</DialogContentText>
+                    {/* Render Markdown content */}
+                    <DialogContentText>
+                        <Markdown>{infoDialogContent}</Markdown>
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Close</Button>
