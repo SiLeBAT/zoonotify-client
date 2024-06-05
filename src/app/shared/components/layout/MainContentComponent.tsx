@@ -19,6 +19,7 @@ export const MainContentComponent: React.FC<MainContentComponentProps> = ({
     return (
         <Item
             sx={{
+                overflow: "clip",
                 width: "100%",
                 height: "100%",
                 marginLeft: "20px",
