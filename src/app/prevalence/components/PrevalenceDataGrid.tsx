@@ -175,6 +175,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             width: 250,
             headerClassName: "header-style",
             align: "center",
+            minWidth: 250,
+            flex: 1,
         },
     ];
 
