@@ -57,7 +57,7 @@ module.exports = (env, argv) => {
                 path: `./.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`
             }),
             new webpack.DefinePlugin({
-                webappVersion: env.version ? JSON.stringify(env.version) : JSON.stringify('1.0.0'),
+                webappVersion: env.version ? JSON.stringify(env.version) : JSON.stringify('2.0.0'),
                 lastChange: env.lastChange ? JSON.stringify(env.lastChange): JSON.stringify(new Date().toISOString()),
             })
         ]
