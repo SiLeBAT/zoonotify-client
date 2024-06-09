@@ -90,7 +90,8 @@ export function PrevalenceSideContent(): JSX.Element {
     return (
         <Box
             sx={{
-                padding: 0,
+                padding: "10px", // Add padding inside the sidebar
+
                 height: "80vh",
                 overflowY: "auto",
                 width: "410px",
