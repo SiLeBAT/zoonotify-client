@@ -1,9 +1,9 @@
-import React, { useState, useEffect, ReactElement } from "react";
+import Markdown from "markdown-to-jsx";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AMR_TABLE } from "../../shared/infrastructure/router/routes";
-import { InfoPageComponent } from "./ExplanationMainComponent";
 import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
-import Markdown from "markdown-to-jsx";
+import { InfoPageComponent } from "./ExplanationMainComponent";
 
 import { ErrorSnackbar } from "../../shared/components/ErrorSnackbar/ErrorSnackbar";
 
@@ -205,7 +205,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
     };
 
     if (loading) {
-        return <p>{t(" ")}</p>;
+        return <div>{t(" ")}</div>;
     }
 
     const handleExportAmrData = (amrKey: AmrKey): void => {

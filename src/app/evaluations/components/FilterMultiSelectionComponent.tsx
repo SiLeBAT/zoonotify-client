@@ -7,7 +7,7 @@ import {
     MenuItem,
 } from "@mui/material";
 // eslint-disable-next-line import/named
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SelectionItem } from "../model/Evaluations.model";
@@ -19,8 +19,9 @@ type FilterMultiSelectionComponentProps = {
     name: string;
     label: string;
     actions: {
-        handleChange: (event: { target: { value: string } }) => void;
+        handleChange: (event: SelectChangeEvent<string[]>) => void;
     };
+    extra?: React.ReactNode; // Optional extra content prop
 };
 
 export function FilterMultiSelectionComponent({
@@ -29,6 +30,7 @@ export function FilterMultiSelectionComponent({
     label,
     name,
     actions,
+    extra, // Include extra in the component function parameters
 }: FilterMultiSelectionComponentProps): JSX.Element {
     const { t } = useTranslation(["ExplanationPage"]);
     const classes = useStyles();
@@ -36,8 +38,7 @@ export function FilterMultiSelectionComponent({
         selectionOptions.length > 0 &&
         selectedItems.length === selectionOptions.length;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleChange = (event: { target: { value: any } }): void => {
+    const handleChange = (event: SelectChangeEvent<string[]>): void => {
         const value = event.target.value;
         const index = value.indexOf("all");
         const selectedItemIndex = selectedItems.indexOf("all");
@@ -60,31 +61,23 @@ export function FilterMultiSelectionComponent({
                 id="select"
                 name={name}
                 multiple
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
                 value={selectedItems}
                 label={label}
-                renderValue={(selection) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    const translated = selection.map((s) => t(s));
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    return translated.join(", ");
-                }}
                 onChange={handleChange}
+                MenuProps={{
+                    PaperProps: {
+                        style: {
+                            maxHeight: 500,
+                            width: "300px",
+                            overflowX: "hidden",
+                        },
+                    },
+                }}
+                renderValue={(selected) => selected.map((s) => t(s)).join(", ")}
             >
-                <MenuItem
-                    value="all"
-                    classes={{
-                        root: isAllSelected ? classes.selectedAll : "",
-                    }}
-                >
+                <MenuItem value="all">
                     <ListItemIcon>
                         <Checkbox
-                            classes={{
-                                indeterminate: classes.indeterminateColor,
-                            }}
                             checked={isAllSelected}
                             indeterminate={
                                 selectedItems.length > 0 &&
@@ -92,20 +85,23 @@ export function FilterMultiSelectionComponent({
                             }
                         />
                     </ListItemIcon>
-                    <ListItemText
-                        classes={{ primary: classes.selectAllText }}
-                        primary={t("Select_All")}
-                    />
+                    <ListItemText primary={t("Select_All")} />
                 </MenuItem>
                 {selectionOptions.map((item) => (
                     <MenuItem key={item.value} value={item.value}>
                         <Checkbox
-                            checked={selectedItems.indexOf(item.value) > -1}
+                            checked={selectedItems.includes(item.value)}
                         />
-                        <ListItemText primary={item.displayName} />
+                        <ListItemText
+                            primary={item.displayName}
+                            primaryTypographyProps={{
+                                style: { whiteSpace: "normal" },
+                            }}
+                        />
                     </MenuItem>
                 ))}
             </Select>
+            {extra}
         </FormControl>
     );
 }

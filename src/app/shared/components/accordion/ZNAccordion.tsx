@@ -1,25 +1,28 @@
+import React, { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box, Typography } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import {
+    Box,
+    Typography,
+    IconButton,
+    Tooltip,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+} from "@mui/material";
 import Markdown from "markdown-to-jsx";
-import React from "react";
 
 export interface AccordionProps {
     title: string;
     content: JSX.Element;
     defaultExpanded: boolean;
     centerContent: boolean;
+    showCopyIcon?: boolean; // This is the new boolean flag property
 }
 
-/**
- * @desc Returns an accordion wrapper
- * @param props
- * @returns {JSX.Element} - accordion with title and content
- */
 export function ZNAccordion(props: AccordionProps): JSX.Element {
     let { content } = props;
+    const [tooltipOpen, setTooltipOpen] = useState(false);
 
     if (props.centerContent) {
         content = (
@@ -34,6 +37,21 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
             </Box>
         );
     }
+
+    const copyToClipboard = (text: string): void => {
+        navigator.clipboard
+            .writeText(text)
+            .then(() => {
+                setTooltipOpen(true);
+                setTimeout(() => setTooltipOpen(false), 2000);
+                return null; // Return null to satisfy linting
+            })
+            .catch((err) => {
+                console.error("Failed to copy:", err);
+                throw err; // Throw error to satisfy linting
+            });
+    };
+
     return (
         <Accordion defaultExpanded={props.defaultExpanded}>
             <AccordionSummary
@@ -48,11 +66,30 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                         fontSize: "1rem",
                         textAlign: "left",
                         margin: 0,
+                        display: "flex",
+                        alignItems: "center", // To align the title and the icon properly
                     }}
                 >
-                    {" "}
-                    {/* Adjusted text alignment */}
                     <Markdown>{props.title}</Markdown>
+                    {props.showCopyIcon && (
+                        <Tooltip
+                            title="Copy to Clipboard"
+                            open={tooltipOpen}
+                            disableFocusListener
+                            disableTouchListener
+                            placement="top"
+                        >
+                            <IconButton
+                                onClick={() => copyToClipboard(props.title)}
+                                onMouseEnter={() => setTooltipOpen(true)}
+                                onMouseLeave={() => setTooltipOpen(false)}
+                                size="small"
+                                sx={{ ml: 1 }} // Add some space between the title and the icon
+                            >
+                                <ContentCopyIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                    )}
                 </Typography>
             </AccordionSummary>
             <AccordionDetails

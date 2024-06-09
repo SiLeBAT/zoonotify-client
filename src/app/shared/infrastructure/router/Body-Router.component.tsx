@@ -6,6 +6,7 @@ import { LinkedDataComponent } from "../../../ld/pages/LinkedDataComponent";
 import { DataProtectionPageComponent } from "../../../pages/data_protection/DataProtectionPage.component";
 import { ErrorPageComponent } from "../../../pages/error/ErrorPage.component";
 import { LinkPageComponent } from "../../../pages/links/LinkPage.component";
+import { PrevalenceMainComponent } from "../../../prevalence/pages/PrevalenceMainComponent";
 import { WelcomeMainComponent } from "../../../welcome/pages/WelcomeMainComponent";
 import { pageRoute } from "./routes";
 
@@ -30,6 +31,10 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 path={pageRoute.evaluationsPagePath}
                 component={EvaluationsMainComponent}
+            />
+            <Route
+                path={pageRoute.prevalencePagePath}
+                component={PrevalenceMainComponent}
             />
             <Route
                 path={pageRoute.linkPagePath}

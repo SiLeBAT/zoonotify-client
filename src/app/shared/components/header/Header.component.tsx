@@ -7,11 +7,11 @@ import { useTranslation } from "react-i18next";
 import { NavLink, useLocation } from "react-router-dom";
 import { pageRoute } from "../../infrastructure/router/routes";
 import {
+    headerHeight,
     onPrimaryColor,
     onSecondaryColor,
     primaryColor,
     secondaryColor,
-    headerHeight,
 } from "../../style/Style-MainTheme";
 import { TranslationButtonsComponent } from "./TranslationButtons.component";
 
@@ -77,6 +77,8 @@ export function HeaderComponent(): JSX.Element {
     const [linkedDataOpen, setLinkedDataOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
+    const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+
     const { t } = useTranslation(["Header"]);
     const showLD = process.env.REACT_APP_SHOW_LD === "true";
     const { pathname } = useLocation();
@@ -97,6 +99,13 @@ export function HeaderComponent(): JSX.Element {
         } else {
             setEvaluationsOpen(false);
         }
+
+        if (pathname === pageRoute.prevalencePagePath) {
+            setPrevalenceOpen(true);
+        } else {
+            setPrevalenceOpen(false);
+        }
+
         if (pathname === pageRoute.linkedDataPagePath) {
             setLinkedDataOpen(true);
         } else {
@@ -127,11 +136,18 @@ export function HeaderComponent(): JSX.Element {
                         {t("Evaluations")}
                     </NavLink>
                     <NavLink
+                        to={pageRoute.prevalencePagePath}
+                        css={navLinkStyle(prevalenceOpen)}
+                    >
+                        {t("prevalence")}
+                    </NavLink>
+                    <NavLink
                         to={pageRoute.linkPagePath}
                         css={navLinkStyle(linkOpen)}
                     >
                         {t("Links")}
                     </NavLink>
+
                     {showLD && (
                         <NavLink
                             to={pageRoute.linkedDataPagePath}

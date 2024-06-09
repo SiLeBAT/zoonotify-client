@@ -1,5 +1,8 @@
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
+import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
+import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
+
 import {
     Box,
     CircularProgress,
@@ -12,7 +15,6 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import {
     backgroundColor,
     footerHeight,
@@ -20,9 +22,9 @@ import {
     primaryColor,
 } from "../../shared/style/Style-MainTheme";
 import { FilterContainerComponent } from "../components/FilterContainerComponent";
+import { JSONViewer } from "../components/JSONViewerComponent";
 import { FilterSelection } from "../model/LinkedData.model";
 import { useLinkedDataPageComponent } from "./LinkedDataUseCases";
-import { JSONViewer } from "../components/JSONViewerComponent";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -88,7 +90,7 @@ export function LinkedDataComponent(): JSX.Element {
     };
 
     return (
-        <>
+        <PageLayoutComponent>
             <Stack
                 direction="row"
                 spacing={2}
@@ -283,6 +285,6 @@ export function LinkedDataComponent(): JSX.Element {
                     </div>
                 </Item>
             </Stack>
-        </>
+        </PageLayoutComponent>
     );
 }

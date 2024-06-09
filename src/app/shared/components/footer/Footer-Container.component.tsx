@@ -7,15 +7,15 @@ import {
 } from "../../infrastructure/api/callApi.service";
 import { CONFIGURATION } from "../../infrastructure/router/routes";
 import { ConfigurationAttributesDTO } from "../../model/Api_Info.model";
+import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
 import { FooterLayoutComponent } from "./Footer-Layout.component";
 import { FooterLinkListComponent } from "./Footer-LinkList.component";
 import { LastUpdateComponent } from "./LastUpdate.component";
-import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
 
 export function FooterContainer(): JSX.Element {
     const [supportMail, setSupportMail] = useState<string>();
     const [error, setError] = useState<string | null>(null); // State to manage error
-    const { t } = useTranslation();
+    const { t } = useTranslation(["Footer"]);
 
     const fetchAndSetContact = async (): Promise<void> => {
         try {

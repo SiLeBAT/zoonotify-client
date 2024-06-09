@@ -9,6 +9,7 @@ import React, { useCallback, useState } from "react";
 import ImageViewer from "react-simple-image-viewer";
 
 export function EvaluationsCardComponent(props: {
+    id: string;
     title: string;
     description: string;
     chartPath: string;
@@ -18,6 +19,7 @@ export function EvaluationsCardComponent(props: {
 }): JSX.Element {
     const theme = useTheme();
     const [isViewerOpen, setIsViewerOpen] = useState(false);
+
     const openImageViewer = useCallback(() => {
         setIsViewerOpen(true);
     }, []);
@@ -29,6 +31,7 @@ export function EvaluationsCardComponent(props: {
     return (
         <>
             <Card
+                data-id={props.id}
                 sx={{
                     display: "flex",
                     flexDirection: ["column", "row"],
@@ -46,6 +49,9 @@ export function EvaluationsCardComponent(props: {
                     <CardContent
                         sx={{
                             flex: "1 0 auto",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
                         }}
                     >
                         <Markdown>{props.description}</Markdown>
@@ -65,7 +71,7 @@ export function EvaluationsCardComponent(props: {
                         sx={{ cursor: "pointer" }}
                         image={props.chartPath}
                         alt={props.title}
-                        onClick={() => openImageViewer()}
+                        onClick={openImageViewer}
                     />
                     <Box
                         sx={{

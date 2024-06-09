@@ -12,6 +12,7 @@ export type DivisionToken =
     | "MULTIPLE";
 
 export type EvaluationEntry = {
+    id: string;
     title: string;
     description: string;
     category: string;
@@ -61,7 +62,7 @@ export type SelectionFilterConfig = {
     id: string;
     selectedItems: string[];
     selectionOptions: SelectionItem[];
-    handleChange: (event: { target: { value: string } }) => void;
+    handleChange: (event: { target: { value: string | string[] } }) => void;
 };
 
 export interface EvaluationInformationAttributesDTO extends CMSAttributeDTO {

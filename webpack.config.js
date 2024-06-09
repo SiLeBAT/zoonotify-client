@@ -4,6 +4,9 @@ const contentBase = path.resolve(__dirname, "public");
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 
+// Import package.json to access the version
+const packageJson = require('./package.json'); // Make sure the path to package.json is correct
+
 module.exports = (env, argv) => {
     return {
         mode: "development",
@@ -57,7 +60,7 @@ module.exports = (env, argv) => {
                 path: `./.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`
             }),
             new webpack.DefinePlugin({
-                webappVersion: env.version ? JSON.stringify(env.version) : JSON.stringify('1.0.0'),
+                webappVersion: JSON.stringify(packageJson.version),
                 lastChange: env.lastChange ? JSON.stringify(env.lastChange): JSON.stringify(new Date().toISOString()),
             })
         ]
