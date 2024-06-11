@@ -51,5 +51,6 @@
   "More Info on Sample Origins": "More Info on sample origin",
   "More Info on Sampling Stages": "More Info on Sampling stage",
   "More Info on Matrices": "More Info on Matrix",
-  "More Info on Matrix Groups": "More Info on Matrix Groups"
+  "More Info on Matrix Groups": "More Info on Matrix Groups",
+  "error.notAllDataRetrieved": "An error occured retrieving the data. Not all data was retrieved. Please contact the zoonotify support for further details"
 }
