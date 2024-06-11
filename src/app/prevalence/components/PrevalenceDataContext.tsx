@@ -1,6 +1,7 @@
 import React, { ReactNode, createContext, useContext, useState } from "react";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { PREVALENCES } from "../../shared/infrastructure/router/routes";
+
 import {
     CMSEntity,
     CMSResponse,
@@ -202,8 +203,10 @@ const yearOptions = [
 export type SearchParameters = Record<string, string[]>;
 interface RelationalData {
     id: number;
-    attributes: {
-        name: string;
+    data: {
+        attributes: {
+            name: string;
+        };
     };
 }
 interface PrevalenceAttributesDTO {
@@ -217,6 +220,8 @@ interface PrevalenceAttributesDTO {
     matrixDetail: RelationalData;
     matrixGroup: RelationalData;
     microorganism: RelationalData;
+    samplingStage: RelationalData;
+    sampleOrigin: RelationalData;
 }
 export type PrevalenceEntry = {
     id: number;
@@ -312,26 +317,67 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     function processApiResponse(
-        apiData: CMSEntity<PrevalenceAttributesDTO>[]
+        apiData: CMSEntity<PrevalenceAttributesDTO>[],
+        setApiError: (message: string) => void
     ): PrevalenceEntry[] {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = apiData.flat().map((item: any) => ({
-            id: item.id,
-            matrix: item.attributes.matrix.data.attributes.name,
-            samplingStage: item.attributes.samplingStage.data.attributes.name,
-            microorganism: item.attributes.microorganism.data.attributes.name,
-            sampleOrigin: item.attributes.sampleOrigin.data.attributes.name,
-            samplingYear: item.attributes.samplingYear,
-            furtherDetails: item.attributes.furtherDetails,
-            numberOfSamples: item.attributes.numberOfSamples,
-            numberOfPositive: item.attributes.numberOfPositive,
-            percentageOfPositive: item.attributes.percentageOfPositive,
-            ciMin: item.attributes.ciMin != null ? item.attributes.ciMin : 0, // Handle null
-            ciMax: item.attributes.ciMax != null ? item.attributes.ciMax : 0, // Handle null
-        }));
-        return result;
-    }
+        const validEntries: PrevalenceEntry[] = [];
+        const errors: string[] = [];
 
+        apiData.forEach((item: CMSEntity<PrevalenceAttributesDTO>) => {
+            try {
+                const entry: PrevalenceEntry = {
+                    id: item.id,
+                    matrix: item.attributes.matrix.data.attributes.name,
+                    samplingStage:
+                        item.attributes.samplingStage.data.attributes.name,
+                    microorganism:
+                        item.attributes.microorganism.data.attributes.name,
+                    sampleOrigin:
+                        item.attributes.sampleOrigin.data.attributes.name,
+                    samplingYear: item.attributes.samplingYear,
+                    numberOfSamples: item.attributes.numberOfSamples,
+                    numberOfPositive: item.attributes.numberOfPositive,
+                    percentageOfPositive: item.attributes.percentageOfPositive,
+                    ciMin:
+                        item.attributes.ciMin !== undefined
+                            ? item.attributes.ciMin
+                            : 0,
+                    ciMax:
+                        item.attributes.ciMax !== undefined
+                            ? item.attributes.ciMax
+                            : 0,
+                };
+
+                // Perform validation checks here
+                if (
+                    entry.numberOfSamples > 0 &&
+                    entry.numberOfPositive >= 0 &&
+                    entry.percentageOfPositive >= 0
+                ) {
+                    validEntries.push(entry);
+                } else {
+                    errors.push(
+                        `Entry with ID ${item.id} contains invalid data.`
+                    );
+                }
+            } catch (err) {
+                errors.push(
+                    `Entry with ID ${item.id} could not be processed due to an error.`
+                );
+            }
+        });
+
+        // Display a warning message if there are any errors
+        if (errors.length > 0) {
+            console.warn(
+                "Some prevalence data entries could not be displayed:",
+                errors
+            );
+            setApiError("error.notAllDataRetrieved");
+        }
+
+        return validEntries;
+    }
     const fetchDataFromAPI = async (): Promise<void> => {
         setLoading(true);
         try {
@@ -372,7 +418,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
             >(query);
             if (response.data) {
-                const result = processApiResponse(response.data.data);
+                const result = processApiResponse(response.data.data, setError); // Pass setError here
                 setData(result);
                 setSearchParameters({
                     microorganism:

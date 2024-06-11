@@ -1,10 +1,11 @@
-import { Box } from "@mui/material";
-// eslint-disable-next-line import/named
+import { Box, Alert } from "@mui/material";
 import { useTheme } from "@mui/system";
 import React from "react";
+import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceDataGrid } from "./PrevalenceDataGrid";
+
 interface PrevalenceMainContentProps {
     heading: string;
 }
@@ -12,8 +13,9 @@ interface PrevalenceMainContentProps {
 const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
     heading,
 }) => {
-    const { prevalenceData, loading } = usePrevalenceFilters();
+    const { prevalenceData, loading, error } = usePrevalenceFilters();
     const theme = useTheme();
+    const { t } = useTranslation(["PrevalencePage"]);
 
     return (
         <>
@@ -27,6 +29,12 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                     justifyContent: "center",
                 }}
             >
+                {error && (
+                    <Alert severity="error">
+                        {t("error.notAllDataRetrieved")}{" "}
+                        {/* Use the t function to translate the error message */}
+                    </Alert>
+                )}
                 {prevalenceData.length > 0 ? (
                     <Box
                         sx={{
