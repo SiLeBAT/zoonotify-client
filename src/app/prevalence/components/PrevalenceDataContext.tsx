@@ -373,7 +373,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 "Some prevalence data entries could not be displayed:",
                 errors
             );
-            setApiError("error.notAllDataRetrieved");
+            setApiError("error notAllDataRetrieved");
         }
 
         return validEntries;

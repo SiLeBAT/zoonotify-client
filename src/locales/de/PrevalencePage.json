@@ -53,5 +53,5 @@
   "More Info on Sampling Stages": "Mehr Informationen zu Probenahmestelle",
   "More Info on Matrices": "Mehr Informationen zu matrix",
   "More Info on Matrix Groups": "Mehr Informationen zu matrixgruppe",
-  "error.notAllDataRetrieved": "Beim Abrufen der Daten ist ein Fehler aufgetreten. Es konnten nicht alle Daten abgerufen werden. Bitte kontaktieren Sie den Zoonotify-Support für weitere Details"
+  "error notAllDataRetrieved": "Beim Abrufen der Daten ist ein Fehler aufgetreten. Es konnten nicht alle Daten abgerufen werden. Bitte kontaktieren Sie den Zoonotify-Support für weitere Details"
 }
