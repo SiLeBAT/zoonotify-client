@@ -1,7 +1,7 @@
 import { Box, Alert } from "@mui/material";
 import { useTheme } from "@mui/system";
 import React from "react";
-import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import { useTranslation } from "react-i18next";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceDataGrid } from "./PrevalenceDataGrid";
@@ -31,7 +31,7 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
             >
                 {error && (
                     <Alert severity="error">
-                        {t("error.notAllDataRetrieved")}{" "}
+                        {t("error notAllDataRetrieved")}{" "}
                         {/* Use the t function to translate the error message */}
                     </Alert>
                 )}
