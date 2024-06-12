@@ -19,11 +19,12 @@ export const MainContentComponent: React.FC<MainContentComponentProps> = ({
     return (
         <Item
             sx={{
-                overflow: "clip",
+                overflow: "auto",
                 width: "100%",
                 height: "100%",
                 marginLeft: "20px",
                 boxShadow: "15px 0 15px -15px inset",
+                zIndex: 1,
             }}
         >
             <Box>{children}</Box>

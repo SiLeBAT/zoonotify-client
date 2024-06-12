@@ -1,4 +1,4 @@
-import { Box, Tooltip, Button } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import Markdown from "markdown-to-jsx";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
