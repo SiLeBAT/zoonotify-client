@@ -10,6 +10,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
+    Typography,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Search from "@mui/icons-material/Search";
@@ -86,6 +87,13 @@ export function PrevalenceSideContent(): JSX.Element {
     const handleClose = (): void => {
         setInfoDialogOpen(false);
     };
+    const areRequiredFiltersSelected = (): boolean => {
+        return (
+            selectedYear.length > 0 &&
+            selectedMicroorganisms.length > 0 &&
+            selectedSampleOrigins.length > 0
+        );
+    };
 
     return (
         <Box
@@ -118,13 +126,24 @@ export function PrevalenceSideContent(): JSX.Element {
                         },
                     }}
                     extra={
-                        <Tooltip title={t("More Info on Sampling Year")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("SAMPLING_YEAR")}
+                        <>
+                            <Box
+                                component="span"
+                                sx={{ color: "red", ml: 1, mb: -2 }}
                             >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
+                                *
+                            </Box>
+                            <Tooltip title={t("More Info on Sampling Year")}>
+                                <IconButton
+                                    onClick={() =>
+                                        handleInfoClick("SAMPLING_YEAR")
+                                    }
+                                >
+                                    <InfoIcon />
+                                </IconButton>
+                            </Tooltip>
+                            {/* Add a star to indicate that this field is required */}
+                        </>
                     }
                 />
 
@@ -143,13 +162,25 @@ export function PrevalenceSideContent(): JSX.Element {
                             ),
                     }}
                     extra={
-                        <Tooltip title={t("More Info on Microorganisms")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("MICROORGANISM")}
+                        <>
+                            <Box
+                                component="span"
+                                sx={{ color: "red", ml: 1, mb: -2 }}
                             >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
+                                *
+                            </Box>
+
+                            <Tooltip title={t("More Info on Microorganisms")}>
+                                <IconButton
+                                    onClick={() =>
+                                        handleInfoClick("MICROORGANISM")
+                                    }
+                                >
+                                    <InfoIcon />
+                                </IconButton>
+                            </Tooltip>
+                            {/* Add a star to indicate that this field is required */}
+                        </>
                     }
                 />
                 <FilterMultiSelectionComponent
@@ -198,13 +229,24 @@ export function PrevalenceSideContent(): JSX.Element {
                             ),
                     }}
                     extra={
-                        <Tooltip title={t("More Info on Sample Origins")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("SAMPLE_ORIGIN")}
+                        <>
+                            <Box
+                                component="span"
+                                sx={{ color: "red", ml: 1, mb: -2 }}
                             >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
+                                *
+                            </Box>
+                            <Tooltip title={t("More Info on Sample Origins")}>
+                                <IconButton
+                                    onClick={() =>
+                                        handleInfoClick("SAMPLE_ORIGIN")
+                                    }
+                                >
+                                    <InfoIcon />
+                                </IconButton>
+                            </Tooltip>
+                            {/* Add a star to indicate that this field is required */}
+                        </>
                     }
                 />
 
@@ -302,9 +344,22 @@ export function PrevalenceSideContent(): JSX.Element {
                     variant="contained"
                     startIcon={<Search />}
                     onClick={fetchDataFromAPI}
+                    disabled={!areRequiredFiltersSelected()} // Disable button if required filters are not selected
                 >
                     {t("SEARCH")}
                 </Button>
+            </Box>
+
+            <Box
+                sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}
+            >
+                <Typography variant="caption" color="error">
+                    {/* Include a star and the sentence in the Typography component */}
+                    <Box component="span" sx={{ fontSize: "0.8rem" }}>
+                        *
+                    </Box>{" "}
+                    {t("REQUIRED_FIELD_INDICATOR")}
+                </Typography>
             </Box>
         </Box>
     );
