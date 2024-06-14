@@ -99,28 +99,28 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         {
             field: "samplingYear",
             headerName: t("SAMPLING_YEAR"),
-            width: 140,
+            width: 130,
             headerClassName: "header-style",
             align: "center",
         },
         {
             field: "microorganism",
             headerName: t("MICROORGANISM"),
-            width: 150,
+            width: 130,
             headerClassName: "header-style",
             align: "center",
         },
         {
             field: "sampleOrigin",
             headerName: t("SAMPLE_ORIGIN"),
-            width: 140,
+            width: 130,
             headerClassName: "header-style",
             align: "center",
         },
         {
             field: "samplingStage",
             headerName: t("SAMPLING_STAGE"),
-            width: 180,
+            width: 130,
             headerClassName: "header-style",
             align: "center",
         },
@@ -135,7 +135,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
-            width: 250,
+            width: 120,
             headerClassName: "header-style",
             align: "center",
         },
@@ -143,7 +143,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfPositive",
             headerName: t("NUMBER_OF_POSITIVE"),
             type: "number",
-            width: 250,
+            width: 130,
             headerClassName: "header-style",
             align: "center",
         },
@@ -152,7 +152,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             headerName: t("PERCENTAGE_OF_POSITIVE"),
             type: "number",
             valueGetter: (value: number) => `${value.toFixed(2)}`,
-            width: 200,
+            width: 120,
             headerClassName: "header-style",
             align: "center",
         },
@@ -162,7 +162,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
-            width: 250,
+            width: 160,
             headerClassName: "header-style",
             align: "center",
         },
@@ -172,10 +172,11 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
-            width: 250,
+            width: 160,
             headerClassName: "header-style",
             align: "center",
-            minWidth: 250,
+            minWidth: 160,
+
             flex: 1,
         },
     ];
@@ -212,6 +213,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 borderColor: "primary.main",
                                 "& .header-style": {
                                     fontWeight: "bold",
+                                    whiteSpace: "normal !important", // Ensure text wrapping is enabled
+                                    wordWrap: "break-word !important",
                                     fontSize: "1rem",
                                     textAlign: "center",
                                     backgroundColor:
@@ -236,6 +239,10 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 },
                                 "& .MuiDataGrid-row": {
                                     borderBottom: "1px solid #e0e0e0",
+                                },
+                                "& .MuiDataGrid-columnHeaderTitle": {
+                                    whiteSpace: "normal !important", // Ensure text wrapping is enabled
+                                    overflow: "visible !important",
                                 },
                             }}
                         />
