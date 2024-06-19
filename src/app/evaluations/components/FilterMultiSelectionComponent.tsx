@@ -37,38 +37,43 @@ export function FilterMultiSelectionComponent({
     const italicWords: string[] = [
         "Salmonella",
         "coli",
+        "E.",
         "Bacillus",
         "cereus",
         "monocytogenes",
         "Clostridioides",
         "difficile",
         "Yersinia",
+        "Listeria",
         "enterocolitica",
         "Vibrio",
         "Baylisascaris",
         "procyonis",
         "Echinococcus",
+        "Campylobacter",
     ];
 
     const formatMicroorganismName = (microName: string): JSX.Element => {
         const words = microName
-            .split(/(\s+)/)
+            .split(/(\s+|-)/)
             .filter((part: string) => part.trim().length > 0);
         return words
-            .map((word: string) => {
+            .map((word: string, index: number) => {
                 const italic = italicWords.some((italicWord: string) =>
-                    word.includes(italicWord)
+                    word.toLowerCase().includes(italicWord.toLowerCase())
                 );
                 return italic ? (
-                    <i key={word}>{word}</i>
+                    <i key={index}>{word}</i>
                 ) : (
-                    <span key={word}>{word}</span>
+                    <span key={index}>{word}</span>
                 );
             })
             .reduce(
                 (prev: JSX.Element, curr: JSX.Element) => (
                     <>
-                        {prev} {curr}
+                        {prev}
+                        {prev ? " " : ""}
+                        {curr}
                     </>
                 ),
                 <></>
