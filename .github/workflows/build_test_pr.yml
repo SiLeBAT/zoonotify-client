@@ -1,8 +1,8 @@
-name: Deploy to QA
+name: Build and Test PR
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - develop
 jobs:
@@ -42,24 +42,3 @@ jobs:
         with:
           name: qa-artifacts
           path: ./public
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: qa-artifacts
-          path: ./public
-
-      - name: Upload to QA using Web FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
-        with:
-          server: ${{ secrets.QA_SERVER }}
-          username: ${{ secrets.QA_FTP_USER }}
-          password: ${{ secrets.QA_FTP_PASS }}
-          local-dir: './public/'
-          server-dir: '/'
-          protocol: 'ftps'
