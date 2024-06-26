@@ -1,4 +1,4 @@
-name: Deploy to QA
+name: Continuous Deployment Workflow QA
 
 on:
   workflow_dispatch:
