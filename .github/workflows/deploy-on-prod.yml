@@ -23,15 +23,8 @@ jobs:
           echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S%z')" >> $GITHUB_OUTPUT
         id: version  # this is used on variable path
 
-      - name: "Get short SHA of the commit"
-        uses: bhowell2/github-substring-action@1.0.2
-        id: shortSHA
-        with:
-          value: ${{ github.event.head_commit.id }}
-          length_from_start: 7
-
       - name: Build main.bundle.js
-        run: npm run build:prod -- --env=version=${{ steps.shortSHA.outputs.substring }} --env=lastChange=${{ steps.version.outputs.builddate }}
+        run: npm run build:prod -- --env=lastChange=${{ steps.version.outputs.builddate }}
       - run: npm run cp:all
 
       - name: Archive build artifacts
