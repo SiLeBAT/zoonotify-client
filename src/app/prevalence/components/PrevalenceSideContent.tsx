@@ -150,8 +150,8 @@ export function PrevalenceSideContent(): JSX.Element {
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMicroorganisms}
                     selectionOptions={microorganismOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name, // use name property for value
+                        displayName: option.name, // use name property for display
                     }))}
                     name="microorganisms"
                     label={t("MICROORGANISM")}
@@ -187,8 +187,8 @@ export function PrevalenceSideContent(): JSX.Element {
                     selectedItems={selectedSuperCategory}
                     selectionOptions={superCategorySampleOriginOptions.map(
                         (option) => ({
-                            value: option,
-                            displayName: option,
+                            value: option.name,
+                            displayName: option.name,
                         })
                     )}
                     name="superCategories"
@@ -217,8 +217,8 @@ export function PrevalenceSideContent(): JSX.Element {
                 <FilterMultiSelectionComponent
                     selectedItems={selectedSampleOrigins}
                     selectionOptions={sampleOriginOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name, // Use 'name' property for value
+                        displayName: option.name, // Use 'name' property for display name
                     }))}
                     name="sampleOrigins"
                     label={t("SAMPLE_ORIGIN")}
@@ -253,8 +253,8 @@ export function PrevalenceSideContent(): JSX.Element {
                 <FilterMultiSelectionComponent
                     selectedItems={selectedSamplingStages}
                     selectionOptions={samplingStageOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name, // Using name property for value
+                        displayName: option.name, // Using name property for display
                     }))}
                     name="samplingStages"
                     label={t("SAMPLING_STAGE")}
@@ -280,8 +280,8 @@ export function PrevalenceSideContent(): JSX.Element {
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMatrixGroups}
                     selectionOptions={matrixGroupOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name, // Using name property for value
+                        displayName: option.name, // Using name property for display
                     }))}
                     name="matrixGroups"
                     label={t("MATRIX_GROUP")}
@@ -304,8 +304,8 @@ export function PrevalenceSideContent(): JSX.Element {
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMatrices}
                     selectionOptions={matrixOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name, // Using name property for value
+                        displayName: option.name, // Using name property for display
                     }))}
                     name="matrices"
                     label={t("MATRIX")}
