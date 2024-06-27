@@ -12,6 +12,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useTranslation } from "react-i18next";
 import { SelectionItem } from "../model/Evaluations.model";
 import { useStyles } from "./../utils/utils";
+
 interface FilterMultiSelectionComponentProps {
     selectedItems: string[];
     selectionOptions: SelectionItem[];
@@ -53,7 +54,13 @@ export function FilterMultiSelectionComponent({
         "Campylobacter",
     ];
 
-    const formatMicroorganismName = (microName: string): JSX.Element => {
+    const formatMicroorganismName = (
+        microName: string | null | undefined
+    ): JSX.Element => {
+        if (!microName) {
+            console.warn("Received null or undefined microorganism name");
+            return <></>;
+        }
         const words = microName
             .split(/(\s+|-)/)
             .filter((part: string) => part.trim().length > 0);
@@ -83,22 +90,25 @@ export function FilterMultiSelectionComponent({
     const isAllSelected =
         selectionOptions.length > 0 &&
         selectedItems.length === selectionOptions.length;
+
     const handleChange = (event: SelectChangeEvent<string[]>): void => {
         const value = event.target.value;
+        console.log("Selected items before change:", selectedItems);
+        console.log("Value in event:", value);
 
         const index = value.indexOf("all");
         const selectedItemIndex = selectedItems.indexOf("all");
-        if (index !== -1 && selectedItemIndex == -1) {
-            if (selectedItems.length == 0) {
+        if (index !== -1 && selectedItemIndex === -1) {
+            if (selectedItems.length === 0) {
                 event.target.value = selectionOptions.map((a) => a.value);
-                selectedItems = selectionOptions.map((a) => a.value);
             } else {
                 event.target.value = [];
-                selectedItems = [];
             }
         }
         actions.handleChange(event);
+        console.log("Selected items after change:", selectedItems);
     };
+
     return (
         <FormControl
             className={classes.formControl}
