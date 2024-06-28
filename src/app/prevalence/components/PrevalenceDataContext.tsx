@@ -317,13 +317,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     }, []);
 
     useEffect(() => {
-        if (selectedMicroorganisms.length > 0 || selectedYear.length > 0) {
+        if (selectedMicroorganisms.length > 0) {
             const filteredPrevalenceData = prevalenceData.filter(
                 (entry) =>
-                    (selectedMicroorganisms.length === 0 ||
-                        selectedMicroorganisms.includes(entry.microorganism)) &&
-                    (selectedYear.length === 0 ||
-                        selectedYear.includes(entry.samplingYear))
+                    selectedMicroorganisms.length === 0 ||
+                    selectedMicroorganisms.includes(entry.microorganism)
             );
 
             const uniqueSampleOrigins = Array.from(
@@ -380,7 +378,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             setSuperCategorySampleOriginOptions([]);
             setYearOptions([]);
         }
-    }, [selectedMicroorganisms, selectedYear, prevalenceData]);
+    }, [selectedMicroorganisms, prevalenceData]);
 
     const fetchDataFromAPI = async (): Promise<void> => {
         setLoading(true);
