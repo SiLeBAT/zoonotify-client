@@ -93,8 +93,6 @@ export function FilterMultiSelectionComponent({
 
     const handleChange = (event: SelectChangeEvent<string[]>): void => {
         const value = event.target.value;
-        console.log("Selected items before change:", selectedItems);
-        console.log("Value in event:", value);
 
         const index = value.indexOf("all");
         const selectedItemIndex = selectedItems.indexOf("all");
@@ -106,7 +104,6 @@ export function FilterMultiSelectionComponent({
             }
         }
         actions.handleChange(event);
-        console.log("Selected items after change:", selectedItems);
     };
 
     return (
