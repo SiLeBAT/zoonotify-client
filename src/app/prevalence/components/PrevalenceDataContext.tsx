@@ -300,6 +300,14 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         setError
                     );
                     setPrevalenceData(processedData);
+
+                    // Extract and set unique year options
+                    const uniqueYears = Array.from(
+                        new Set(
+                            processedData.map((entry) => entry.samplingYear)
+                        )
+                    );
+                    setYearOptions(uniqueYears);
                 }
             } catch (err) {
                 setError(
@@ -317,67 +325,75 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     }, []);
 
     useEffect(() => {
-        if (selectedMicroorganisms.length > 0) {
-            const filteredPrevalenceData = prevalenceData.filter(
-                (entry) =>
-                    selectedMicroorganisms.length === 0 ||
+        const updateOptionsBasedOnSelection = (): void => {
+            if (selectedMicroorganisms.length > 0) {
+                const filteredPrevalenceData = prevalenceData.filter((entry) =>
                     selectedMicroorganisms.includes(entry.microorganism)
-            );
+                );
 
-            const uniqueSampleOrigins = Array.from(
-                new Set(
-                    filteredPrevalenceData.map((entry) => entry.sampleOrigin)
-                )
-            ).filter((name) => name !== undefined) as string[];
-            const uniqueMatrices = Array.from(
-                new Set(filteredPrevalenceData.map((entry) => entry.matrix))
-            ).filter((name) => name !== undefined) as string[];
-            const uniqueSamplingStages = Array.from(
-                new Set(
-                    filteredPrevalenceData.map((entry) => entry.samplingStage)
-                )
-            ).filter((name) => name !== undefined) as string[];
-            const uniqueMatrixGroups = Array.from(
-                new Set(
-                    filteredPrevalenceData.map((entry) => entry.matrixGroup)
-                )
-            ).filter((name) => name !== undefined) as string[];
-            const uniqueSuperCategories = Array.from(
-                new Set(
-                    filteredPrevalenceData.map(
-                        (entry) => entry.superCategorySampleOrigin
+                const uniqueSampleOrigins = Array.from(
+                    new Set(
+                        filteredPrevalenceData.map(
+                            (entry) => entry.sampleOrigin
+                        )
                     )
-                )
-            ).filter((name) => name !== undefined) as string[];
+                ).filter((name) => name !== undefined) as string[];
+                const uniqueMatrices = Array.from(
+                    new Set(filteredPrevalenceData.map((entry) => entry.matrix))
+                ).filter((name) => name !== undefined) as string[];
+                const uniqueSamplingStages = Array.from(
+                    new Set(
+                        filteredPrevalenceData.map(
+                            (entry) => entry.samplingStage
+                        )
+                    )
+                ).filter((name) => name !== undefined) as string[];
+                const uniqueMatrixGroups = Array.from(
+                    new Set(
+                        filteredPrevalenceData.map((entry) => entry.matrixGroup)
+                    )
+                ).filter((name) => name !== undefined) as string[];
+                const uniqueSuperCategories = Array.from(
+                    new Set(
+                        filteredPrevalenceData.map(
+                            (entry) => entry.superCategorySampleOrigin
+                        )
+                    )
+                ).filter((name) => name !== undefined) as string[];
+                const uniqueYears = Array.from(
+                    new Set(
+                        filteredPrevalenceData.map(
+                            (entry) => entry.samplingYear
+                        )
+                    )
+                );
 
-            setSampleOriginOptions(
-                uniqueSampleOrigins.map((name) => ({ name }))
-            );
-            setMatrixOptions(uniqueMatrices.map((name) => ({ name })));
-            setSamplingStageOptions(
-                uniqueSamplingStages.map((name) => ({ name }))
-            );
-            setMatrixGroupOptions(uniqueMatrixGroups.map((name) => ({ name })));
-            setSuperCategorySampleOriginOptions(
-                uniqueSuperCategories.map((name) => ({ name }))
-            );
+                setSampleOriginOptions(
+                    uniqueSampleOrigins.map((name) => ({ name }))
+                );
+                setMatrixOptions(uniqueMatrices.map((name) => ({ name })));
+                setSamplingStageOptions(
+                    uniqueSamplingStages.map((name) => ({ name }))
+                );
+                setMatrixGroupOptions(
+                    uniqueMatrixGroups.map((name) => ({ name }))
+                );
+                setSuperCategorySampleOriginOptions(
+                    uniqueSuperCategories.map((name) => ({ name }))
+                );
+                setYearOptions(uniqueYears);
+            } else {
+                // Show all options if no microorganism is selected
+                setSampleOriginOptions((prev) => [...prev]);
+                setMatrixOptions((prev) => [...prev]);
+                setSamplingStageOptions((prev) => [...prev]);
+                setMatrixGroupOptions((prev) => [...prev]);
+                setSuperCategorySampleOriginOptions((prev) => [...prev]);
+                setYearOptions((prev) => [...prev]);
+            }
+        };
 
-            // Set the unique years based on the filtered prevalence data
-            const uniqueYears = Array.from(
-                new Set(
-                    filteredPrevalenceData.map((entry) => entry.samplingYear)
-                )
-            );
-            setYearOptions(uniqueYears);
-        } else {
-            // Reset options to their initial states if no microorganism is selected
-            setSampleOriginOptions([]);
-            setMatrixOptions([]);
-            setSamplingStageOptions([]);
-            setMatrixGroupOptions([]);
-            setSuperCategorySampleOriginOptions([]);
-            setYearOptions([]);
-        }
+        updateOptionsBasedOnSelection();
     }, [selectedMicroorganisms, prevalenceData]);
 
     const fetchDataFromAPI = async (): Promise<void> => {
