@@ -149,6 +149,7 @@ export function FilterMultiSelectionComponent({
                         />
                         <ListItemText
                             primary={formatMicroorganismName(item.displayName)}
+                            sx={{ whiteSpace: "normal" }} // Add this line to enable text wrapping
                         />
                     </MenuItem>
                 ))}
