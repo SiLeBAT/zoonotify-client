@@ -10,7 +10,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
-    Typography,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Search from "@mui/icons-material/Search";
@@ -87,19 +86,11 @@ export function PrevalenceSideContent(): JSX.Element {
     const handleClose = (): void => {
         setInfoDialogOpen(false);
     };
-    const areRequiredFiltersSelected = (): boolean => {
-        return (
-            selectedYear.length > 0 &&
-            selectedMicroorganisms.length > 0 &&
-            selectedSampleOrigins.length > 0
-        );
-    };
 
     return (
         <Box
             sx={{
                 padding: "10px", // Add padding inside the sidebar
-
                 height: "80vh",
                 overflowY: "auto",
                 width: "410px",
@@ -170,7 +161,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     <Tooltip title={t("More Info on Microorganisms")}>
                         <IconButton
                             onClick={() => handleInfoClick("MICROORGANISM")}
-                            sx={{ marginLeft: 0.5 }} // Adjust margin as needed
+                            sx={{ marginLeft: 0.5 }}
                         >
                             <InfoIcon />
                         </IconButton>
@@ -363,22 +354,9 @@ export function PrevalenceSideContent(): JSX.Element {
                     variant="contained"
                     startIcon={<Search />}
                     onClick={fetchDataFromAPI}
-                    disabled={!areRequiredFiltersSelected()} // Disable button if required filters are not selected
                 >
                     {t("SEARCH")}
                 </Button>
-            </Box>
-
-            <Box
-                sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}
-            >
-                <Typography variant="caption" color="error">
-                    {/* Include a star and the sentence in the Typography component */}
-                    <Box component="span" sx={{ fontSize: "0.8rem" }}>
-                        *
-                    </Box>{" "}
-                    {t("REQUIRED_FIELD_INDICATOR")}
-                </Typography>
             </Box>
         </Box>
     );
