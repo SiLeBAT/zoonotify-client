@@ -25,8 +25,12 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                     pt: theme.spacing(3),
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    height: "calc(100vh - 150px)",
+                    overflow: "auto",
+
+                    justifyContent: "flex-start",
+                    padding: theme.spacing(2),
                 }}
             >
                 {error && (
