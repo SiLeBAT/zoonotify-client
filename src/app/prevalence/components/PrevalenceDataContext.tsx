@@ -400,55 +400,26 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         setLoading(true);
         try {
             let query = `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`;
+            const filters: string[] = [];
 
-            const filters = [];
-            if (selectedMicroorganisms.length > 0) {
-                filters.push(
-                    selectedMicroorganisms
-                        .map(
-                            (micro) =>
-                                `filters[microorganism][name][$eq]=${micro}`
-                        )
-                        .join("&")
-                );
-            }
-            if (selectedSampleOrigins.length > 0) {
-                filters.push(
-                    selectedSampleOrigins
-                        .map(
-                            (origin) =>
-                                `filters[sampleOrigin][name][$eq]=${origin}`
-                        )
-                        .join("&")
-                );
-            }
-            if (selectedMatrices.length > 0) {
-                filters.push(
-                    selectedMatrices
-                        .map((matrix) => `filters[matrix][name][$eq]=${matrix}`)
-                        .join("&")
-                );
-            }
-            if (selectedSamplingStages.length > 0) {
-                filters.push(
-                    selectedSamplingStages
-                        .map(
-                            (stage) =>
-                                `filters[samplingStage][name][$eq]=${stage}`
-                        )
-                        .join("&")
-                );
-            }
-            if (selectedMatrixGroups.length > 0) {
-                filters.push(
-                    selectedMatrixGroups
-                        .map(
-                            (group) =>
-                                `filters[matrixGroup][name][$eq]=${group}`
-                        )
-                        .join("&")
-                );
-            }
+            const addFilter = (field: string, values: string[]): void => {
+                if (values.length > 0) {
+                    filters.push(
+                        values
+                            .map(
+                                (value) =>
+                                    `filters[${field}][name][$eq]=${value}`
+                            )
+                            .join("&")
+                    );
+                }
+            };
+
+            addFilter("microorganism", selectedMicroorganisms);
+            addFilter("sampleOrigin", selectedSampleOrigins);
+            addFilter("matrix", selectedMatrices);
+            addFilter("samplingStage", selectedSamplingStages);
+            addFilter("matrixGroup", selectedMatrixGroups);
             if (selectedYear.length > 0) {
                 filters.push(
                     selectedYear
@@ -456,16 +427,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         .join("&")
                 );
             }
-            if (selectedSuperCategory.length > 0) {
-                filters.push(
-                    selectedSuperCategory
-                        .map(
-                            (superCategory) =>
-                                `filters[superCategorySampleOrigin][name][$eq]=${superCategory}`
-                        )
-                        .join("&")
-                );
-            }
+            addFilter("superCategorySampleOrigin", selectedSuperCategory);
 
             if (filters.length > 0) {
                 query += "&" + filters.join("&");
@@ -499,7 +461,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             setLoading(false);
         }
     };
-
     const triggerSearch = (): void => {
         fetchDataFromAPI();
     };
