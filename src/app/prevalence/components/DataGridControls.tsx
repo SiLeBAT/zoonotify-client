@@ -39,7 +39,7 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
                 mb: 1,
                 backgroundColor: theme.palette.grey[100],
                 width: "100%",
-                minWidth: "1200px",
+
                 maxWidth: "1200px",
             }}
         >
