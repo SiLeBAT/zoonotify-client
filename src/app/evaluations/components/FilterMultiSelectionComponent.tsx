@@ -140,7 +140,7 @@ export function FilterMultiSelectionComponent({
                             }
                         />
                     </ListItemIcon>
-                    <ListItemText primary={t("Select All")} />
+                    <ListItemText primary={t("SELECT_ALL")} />
                 </MenuItem>
                 {selectionOptions.map((item, index) => (
                     <MenuItem key={index} value={item.value}>
