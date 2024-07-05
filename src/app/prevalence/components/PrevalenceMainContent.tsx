@@ -13,7 +13,8 @@ interface PrevalenceMainContentProps {
 const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
     heading,
 }) => {
-    const { prevalenceData, loading, error } = usePrevalenceFilters();
+    const { prevalenceData, loading, error, showError } =
+        usePrevalenceFilters();
     const theme = useTheme();
     const { t } = useTranslation(["PrevalencePage"]);
 
@@ -33,10 +34,9 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                     padding: theme.spacing(2),
                 }}
             >
-                {error && (
+                {showError && error && (
                     <Alert severity="error">
-                        {t("error notAllDataRetrieved")}{" "}
-                        {/* Use the t function to translate the error message */}
+                        {t("error notAllDataRetrieved")}
                     </Alert>
                 )}
                 {prevalenceData.length > 0 ? (

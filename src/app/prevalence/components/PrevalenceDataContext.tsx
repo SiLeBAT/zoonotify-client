@@ -15,7 +15,6 @@ import {
     SUPER_CATEGORY_SAMPLE_ORIGINS,
     PREVALENCES,
 } from "../../shared/infrastructure/router/routes";
-
 import {
     CMSEntity,
     CMSResponse,
@@ -97,6 +96,8 @@ interface PrevalenceDataContext {
     error: string | null;
     loading: boolean;
     searchParameters: SearchParameters;
+    showError: boolean; // Add this line
+    setShowError: (showError: boolean) => void; // Add this line
 }
 
 const DefaultPrevalenceDataContext = createContext<
@@ -226,6 +227,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [loading, setLoading] = useState<boolean>(false);
     const [yearOptions, setYearOptions] = useState<number[]>([]);
     const [isSearchTriggered, setIsSearchTriggered] = useState<boolean>(false);
+    const [showError, setShowError] = useState<boolean>(false); // Add this line
 
     useEffect(() => {
         const fetchOptions = async (): Promise<void> => {
@@ -463,6 +465,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     };
     const triggerSearch = (): void => {
         fetchDataFromAPI();
+        setShowError(true); // Add this line
     };
 
     const contextValue: PrevalenceDataContext = {
@@ -493,6 +496,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         error,
         loading,
         searchParameters,
+        showError, // Add this line
+        setShowError, // Add this line
     };
 
     return (
