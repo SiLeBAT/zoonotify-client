@@ -107,7 +107,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         {
             field: "microorganism",
             headerName: t("MICROORGANISM"),
-            minWidth: 100,
+            minWidth: 110,
             flex: 1,
             headerClassName: "header-style",
             align: "center",
@@ -140,7 +140,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
-            minWidth: 100,
+            minWidth: 150,
             flex: 1,
             headerClassName: "header-style",
             align: "center",

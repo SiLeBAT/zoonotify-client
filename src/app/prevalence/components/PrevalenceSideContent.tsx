@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Button,
@@ -57,6 +57,12 @@ export function PrevalenceSideContent(): JSX.Element {
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
+    const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
+
+    useEffect((): void => {
+        // Set initial filter order based on some logic
+        setSelectedOrder([]);
+    }, []);
 
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
@@ -87,6 +93,281 @@ export function PrevalenceSideContent(): JSX.Element {
         setInfoDialogOpen(false);
     };
 
+    const updateFilterOrder = (filter: string): void => {
+        setSelectedOrder((prevOrder) => {
+            if (!prevOrder.includes(filter)) {
+                return [...prevOrder, filter];
+            }
+            return prevOrder;
+        });
+    };
+
+    const filterComponents: { [key: string]: JSX.Element } = {
+        year: (
+            <Box
+                key="year"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <FilterMultiSelectionComponent
+                    selectedItems={selectedYear.map(String)}
+                    selectionOptions={yearOptions.map((option) => ({
+                        value: option.toString(),
+                        displayName: option.toString(),
+                    }))}
+                    name="years"
+                    label={t("SAMPLING_YEAR")}
+                    actions={{
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        handleChange: (event: any): void => {
+                            const valueAsNumbers = event.target.value.map(
+                                (val: string) => parseInt(val, 10)
+                            );
+                            setSelectedYear(valueAsNumbers);
+                            updateFilterOrder("year");
+                        },
+                    }}
+                />
+                <Tooltip title={t("More Info on Sampling Year")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("SAMPLING_YEAR")}
+                        sx={{ marginLeft: 0.2 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        microorganism: (
+            <Box
+                key="microorganism"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <FilterMultiSelectionComponent
+                    selectedItems={selectedMicroorganisms}
+                    selectionOptions={microorganismOptions.map((option) => ({
+                        value: option.name,
+                        displayName: option.name,
+                    }))}
+                    name="microorganisms"
+                    label={t("MICROORGANISM")}
+                    actions={{
+                        handleChange: (event): void => {
+                            setSelectedMicroorganisms(
+                                event.target.value as string[]
+                            );
+                            updateFilterOrder("microorganism");
+                        },
+                    }}
+                />
+                <Tooltip title={t("More Info on Microorganisms")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("MICROORGANISM")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        superCategory: (
+            <Box
+                key="superCategory"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <FilterMultiSelectionComponent
+                    selectedItems={selectedSuperCategory}
+                    selectionOptions={superCategorySampleOriginOptions.map(
+                        (option) => ({
+                            value: option.name,
+                            displayName: option.name,
+                        })
+                    )}
+                    name="superCategories"
+                    label={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
+                    actions={{
+                        handleChange: (event): void => {
+                            setSelectedSuperCategory(
+                                event.target.value as string[]
+                            );
+                            updateFilterOrder("superCategory");
+                        },
+                    }}
+                />
+                <Tooltip title={t("More Info on Super Categories")}>
+                    <IconButton
+                        onClick={() =>
+                            handleInfoClick("SUPER-CATEGORY-SAMPLE-ORIGIN")
+                        }
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        sampleOrigin: (
+            <Box
+                key="sampleOrigin"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <FilterMultiSelectionComponent
+                    selectedItems={selectedSampleOrigins}
+                    selectionOptions={sampleOriginOptions.map((option) => ({
+                        value: option.name,
+                        displayName: option.name,
+                    }))}
+                    name="sampleOrigins"
+                    label={t("SAMPLE_ORIGIN")}
+                    actions={{
+                        handleChange: (event): void => {
+                            setSelectedSampleOrigins(
+                                event.target.value as string[]
+                            );
+                            updateFilterOrder("sampleOrigin");
+                        },
+                    }}
+                />
+                <Tooltip title={t("More Info on Sample Origins")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("SAMPLE_ORIGIN")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        samplingStage: (
+            <Box
+                key="samplingStage"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <FilterMultiSelectionComponent
+                    selectedItems={selectedSamplingStages}
+                    selectionOptions={samplingStageOptions.map((option) => ({
+                        value: option.name,
+                        displayName: option.name,
+                    }))}
+                    name="samplingStages"
+                    label={t("SAMPLING_STAGE")}
+                    actions={{
+                        handleChange: (event): void => {
+                            setSelectedSamplingStages(
+                                event.target.value as string[]
+                            );
+                            updateFilterOrder("samplingStage");
+                        },
+                    }}
+                />
+                <Tooltip title={t("More Info on Sampling Stages")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("SAMPLING_STAGE")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        matrixGroup: (
+            <Box
+                key="matrixGroup"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <FilterMultiSelectionComponent
+                    selectedItems={selectedMatrixGroups}
+                    selectionOptions={matrixGroupOptions.map((option) => ({
+                        value: option.name,
+                        displayName: option.name,
+                    }))}
+                    name="matrixGroups"
+                    label={t("MATRIX_GROUP")}
+                    actions={{
+                        handleChange: (event): void => {
+                            setSelectedMatrixGroups(
+                                event.target.value as string[]
+                            );
+                            updateFilterOrder("matrixGroup");
+                        },
+                    }}
+                />
+                <Tooltip title={t("More Info on Matrix Groups")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("MATRIX_GROUP")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        matrix: (
+            <Box
+                key="matrix"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
+                <FilterMultiSelectionComponent
+                    selectedItems={selectedMatrices}
+                    selectionOptions={matrixOptions.map((option) => ({
+                        value: option.name,
+                        displayName: option.name,
+                    }))}
+                    name="matrices"
+                    label={t("MATRIX")}
+                    actions={{
+                        handleChange: (event): void => {
+                            setSelectedMatrices(event.target.value as string[]);
+                            updateFilterOrder("matrix");
+                        },
+                    }}
+                />
+                <Tooltip title={t("More Info on Matrices")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("MATRIX")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+    };
+
+    const orderedComponents = [
+        ...selectedOrder.map((key) => filterComponents[key]),
+        ...Object.keys(filterComponents)
+            .filter((key) => !selectedOrder.includes(key))
+            .map((key) => filterComponents[key]),
+    ];
+
     return (
         <Box
             sx={{
@@ -99,240 +380,7 @@ export function PrevalenceSideContent(): JSX.Element {
             }}
         >
             <Stack spacing={0.5} alignItems="flex-start">
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedYear.map(String)}
-                        selectionOptions={yearOptions.map((option) => ({
-                            value: option.toString(),
-                            displayName: option.toString(),
-                        }))}
-                        name="years"
-                        label={t("SAMPLING_YEAR")}
-                        actions={{
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            handleChange: (event: any) => {
-                                const valueAsNumbers = event.target.value.map(
-                                    (val: string) => parseInt(val, 10)
-                                );
-                                setSelectedYear(valueAsNumbers);
-                            },
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Sampling Year")}>
-                        <IconButton
-                            onClick={() => handleInfoClick("SAMPLING_YEAR")}
-                            sx={{ marginLeft: 0.2 }}
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedMicroorganisms}
-                        selectionOptions={microorganismOptions.map(
-                            (option) => ({
-                                value: option.name,
-                                displayName: option.name,
-                            })
-                        )}
-                        name="microorganisms"
-                        label={t("MICROORGANISM")}
-                        actions={{
-                            handleChange: (event) =>
-                                setSelectedMicroorganisms(
-                                    event.target.value as string[]
-                                ),
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Microorganisms")}>
-                        <IconButton
-                            onClick={() => handleInfoClick("MICROORGANISM")}
-                            sx={{ marginLeft: 0.5 }}
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedSuperCategory}
-                        selectionOptions={superCategorySampleOriginOptions.map(
-                            (option) => ({
-                                value: option.name,
-                                displayName: option.name,
-                            })
-                        )}
-                        name="superCategories"
-                        label={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
-                        actions={{
-                            handleChange: (event) =>
-                                setSelectedSuperCategory(
-                                    event.target.value as string[]
-                                ),
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Super Categories")}>
-                        <IconButton
-                            onClick={() =>
-                                handleInfoClick("SUPER-CATEGORY-SAMPLE-ORIGIN")
-                            }
-                            sx={{ marginLeft: 0.5 }} // Adjust margin as needed
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedSampleOrigins}
-                        selectionOptions={sampleOriginOptions.map((option) => ({
-                            value: option.name, // Use 'name' property for value
-                            displayName: option.name, // Use 'name' property for display name
-                        }))}
-                        name="sampleOrigins"
-                        label={t("SAMPLE_ORIGIN")}
-                        actions={{
-                            handleChange: (event) =>
-                                setSelectedSampleOrigins(
-                                    event.target.value as string[]
-                                ),
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Sample Origins")}>
-                        <IconButton
-                            onClick={() => handleInfoClick("SAMPLE_ORIGIN")}
-                            sx={{ marginLeft: 0.5 }} // Adjust margin as needed
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedSamplingStages}
-                        selectionOptions={samplingStageOptions.map(
-                            (option) => ({
-                                value: option.name, // Using name property for value
-                                displayName: option.name, // Using name property for display
-                            })
-                        )}
-                        name="samplingStages"
-                        label={t("SAMPLING_STAGE")}
-                        actions={{
-                            handleChange: (event) =>
-                                setSelectedSamplingStages(
-                                    event.target.value as string[]
-                                ),
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Sampling Stages")}>
-                        <IconButton
-                            onClick={() => handleInfoClick("SAMPLING_STAGE")}
-                            sx={{ marginLeft: 0.5 }} // Adjust margin as needed
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedMatrixGroups}
-                        selectionOptions={matrixGroupOptions.map((option) => ({
-                            value: option.name, // Using name property for value
-                            displayName: option.name, // Using name property for display
-                        }))}
-                        name="matrixGroups"
-                        label={t("MATRIX_GROUP")}
-                        actions={{
-                            handleChange: (event) =>
-                                setSelectedMatrixGroups(
-                                    event.target.value as string[]
-                                ),
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Matrix Groups")}>
-                        <IconButton
-                            onClick={() => handleInfoClick("MATRIX_GROUP")}
-                            sx={{ marginLeft: 0.5 }} // Adjust margin as needed
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
-                >
-                    <FilterMultiSelectionComponent
-                        selectedItems={selectedMatrices}
-                        selectionOptions={matrixOptions.map((option) => ({
-                            value: option.name, // Using name property for value
-                            displayName: option.name, // Using name property for display
-                        }))}
-                        name="matrices"
-                        label={t("MATRIX")}
-                        actions={{
-                            handleChange: (event) =>
-                                setSelectedMatrices(
-                                    event.target.value as string[]
-                                ),
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Matrices")}>
-                        <IconButton
-                            onClick={() => handleInfoClick("MATRIX")}
-                            sx={{ marginLeft: 0.5 }} // Adjust margin as needed
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
+                {orderedComponents}
             </Stack>
             <Dialog open={infoDialogOpen} onClose={handleClose}>
                 <DialogTitle>{infoDialogTitle}</DialogTitle>
