@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
     Box,
     Button,
@@ -52,6 +53,7 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedSuperCategory,
         superCategorySampleOriginOptions,
         fetchDataFromAPI,
+        setShowError, // Add this line
     } = usePrevalenceFilters();
 
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -100,6 +102,12 @@ export function PrevalenceSideContent(): JSX.Element {
             }
             return prevOrder;
         });
+    };
+
+    const handleSearch = async (): Promise<void> => {
+        setShowError(false); // Reset the error visibility before starting the search
+        await fetchDataFromAPI(); // Await the API fetch operation
+        setShowError(true); // Set error visibility after the search completes
     };
 
     const filterComponents: { [key: string]: JSX.Element } = {
@@ -401,7 +409,7 @@ export function PrevalenceSideContent(): JSX.Element {
                 <Button
                     variant="contained"
                     startIcon={<Search />}
-                    onClick={fetchDataFromAPI}
+                    onClick={handleSearch} // Update to use handleSearch
                 >
                     {t("SEARCH")}
                 </Button>
