@@ -45,7 +45,7 @@ interface PrevalenceAttributesDTO {
     microorganism: RelationalData;
     samplingStage: RelationalData;
     sampleOrigin: RelationalData;
-    superCategorySampleOrigin?: RelationalData;
+    superCategorySampleOrigin: RelationalData;
 }
 
 export type PrevalenceEntry = {
@@ -61,7 +61,7 @@ export type PrevalenceEntry = {
     samplingStage: string;
     sampleOrigin: string;
     microorganism: string;
-    superCategorySampleOrigin?: string;
+    superCategorySampleOrigin: string;
 };
 
 interface Option {
@@ -184,6 +184,17 @@ function processApiResponse(
     return validEntries;
 }
 
+// Define valid keys for filtering
+type PrevalenceEntryKey = keyof Pick<
+    PrevalenceEntry,
+    | "microorganism"
+    | "sampleOrigin"
+    | "matrix"
+    | "samplingStage"
+    | "matrixGroup"
+    | "superCategorySampleOrigin"
+>;
+
 export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
@@ -229,7 +240,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [isSearchTriggered, setIsSearchTriggered] = useState<boolean>(false);
     const [showError, setShowError] = useState<boolean>(false);
 
-    useEffect(() => {
+    useEffect((): void => {
         const fetchOptions = async (): Promise<void> => {
             setLoading(true);
             try {
@@ -287,7 +298,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         fetchOptions();
     }, []);
 
-    useEffect(() => {
+    useEffect((): void => {
         const fetchPrevalenceData = async (): Promise<void> => {
             setLoading(true);
             try {
@@ -326,77 +337,99 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         fetchPrevalenceData();
     }, []);
 
-    useEffect(() => {
+    function filterData(): PrevalenceEntry[] {
+        return prevalenceData.filter(
+            (entry) =>
+                (selectedMicroorganisms.length === 0 ||
+                    selectedMicroorganisms.includes(entry.microorganism)) &&
+                (selectedSampleOrigins.length === 0 ||
+                    selectedSampleOrigins.includes(entry.sampleOrigin)) &&
+                (selectedMatrices.length === 0 ||
+                    selectedMatrices.includes(entry.matrix)) &&
+                (selectedSamplingStages.length === 0 ||
+                    selectedSamplingStages.includes(entry.samplingStage)) &&
+                (selectedMatrixGroups.length === 0 ||
+                    selectedMatrixGroups.includes(entry.matrixGroup)) &&
+                (selectedSuperCategory.length === 0 ||
+                    selectedSuperCategory.includes(
+                        entry.superCategorySampleOrigin
+                    )) &&
+                (selectedYear.length === 0 ||
+                    selectedYear.includes(entry.samplingYear))
+        );
+    }
+
+    useEffect((): void => {
         const updateOptionsBasedOnSelection = (): void => {
-            if (selectedMicroorganisms.length > 0) {
-                const filteredPrevalenceData = prevalenceData.filter((entry) =>
-                    selectedMicroorganisms.includes(entry.microorganism)
-                );
+            const baseFilteredData = filterData();
 
-                const uniqueSampleOrigins = Array.from(
-                    new Set(
-                        filteredPrevalenceData.map(
-                            (entry) => entry.sampleOrigin
-                        )
-                    )
-                ).filter((name) => name !== undefined) as string[];
-                const uniqueMatrices = Array.from(
-                    new Set(filteredPrevalenceData.map((entry) => entry.matrix))
-                ).filter((name) => name !== undefined) as string[];
-                const uniqueSamplingStages = Array.from(
-                    new Set(
-                        filteredPrevalenceData.map(
-                            (entry) => entry.samplingStage
-                        )
-                    )
-                ).filter((name) => name !== undefined) as string[];
-                const uniqueMatrixGroups = Array.from(
-                    new Set(
-                        filteredPrevalenceData.map((entry) => entry.matrixGroup)
-                    )
-                ).filter((name) => name !== undefined) as string[];
-                const uniqueSuperCategories = Array.from(
-                    new Set(
-                        filteredPrevalenceData.map(
-                            (entry) => entry.superCategorySampleOrigin
-                        )
-                    )
-                ).filter((name) => name !== undefined) as string[];
-                const uniqueYears = Array.from(
-                    new Set(
-                        filteredPrevalenceData.map(
-                            (entry) => entry.samplingYear
-                        )
-                    )
-                );
+            const generateOptionsForCategory = (
+                categoryKey: PrevalenceEntryKey
+            ): Option[] => {
+                return Array.from(
+                    new Set(baseFilteredData.map((entry) => entry[categoryKey]))
+                )
+                    .filter((name) => name)
+                    .map((name) => ({ name: name as string }));
+            };
 
-                setSampleOriginOptions(
-                    uniqueSampleOrigins.map((name) => ({ name }))
-                );
-                setMatrixOptions(uniqueMatrices.map((name) => ({ name })));
-                setSamplingStageOptions(
-                    uniqueSamplingStages.map((name) => ({ name }))
-                );
-                setMatrixGroupOptions(
-                    uniqueMatrixGroups.map((name) => ({ name }))
-                );
-                setSuperCategorySampleOriginOptions(
-                    uniqueSuperCategories.map((name) => ({ name }))
-                );
-                setYearOptions(uniqueYears);
-            } else {
-                // Show all options if no microorganism is selected
-                setSampleOriginOptions((prev) => [...prev]);
-                setMatrixOptions((prev) => [...prev]);
-                setSamplingStageOptions((prev) => [...prev]);
-                setMatrixGroupOptions((prev) => [...prev]);
-                setSuperCategorySampleOriginOptions((prev) => [...prev]);
-                setYearOptions((prev) => [...prev]);
-            }
+            // Only update the options for categories that are not currently being selected
+            setMicroorganismOptions(
+                selectedMicroorganisms.length > 0
+                    ? microorganismOptions
+                    : generateOptionsForCategory("microorganism")
+            );
+            setSampleOriginOptions(
+                selectedSampleOrigins.length > 0
+                    ? sampleOriginOptions
+                    : generateOptionsForCategory("sampleOrigin")
+            );
+            setMatrixOptions(
+                selectedMatrices.length > 0
+                    ? matrixOptions
+                    : generateOptionsForCategory("matrix")
+            );
+            setSamplingStageOptions(
+                selectedSamplingStages.length > 0
+                    ? samplingStageOptions
+                    : generateOptionsForCategory("samplingStage")
+            );
+            setMatrixGroupOptions(
+                selectedMatrixGroups.length > 0
+                    ? matrixGroupOptions
+                    : generateOptionsForCategory("matrixGroup")
+            );
+            setSuperCategorySampleOriginOptions(
+                selectedSuperCategory.length > 0
+                    ? superCategorySampleOriginOptions
+                    : generateOptionsForCategory("superCategorySampleOrigin")
+            );
+
+            // Handle year options specifically since they're numeric
+            setYearOptions(
+                selectedYear.length > 0
+                    ? yearOptions
+                    : Array.from(
+                          new Set(
+                              baseFilteredData.map(
+                                  (entry) => entry.samplingYear
+                              )
+                          )
+                      ).sort((a, b) => a - b)
+            );
         };
 
         updateOptionsBasedOnSelection();
-    }, [selectedMicroorganisms, prevalenceData]);
+    }, [
+        selectedMicroorganisms,
+        selectedSampleOrigins,
+        selectedMatrices,
+        selectedSamplingStages,
+        selectedMatrixGroups,
+        selectedSuperCategory,
+        selectedYear,
+        prevalenceData,
+    ]);
 
     const fetchDataFromAPI = async (): Promise<void> => {
         setLoading(true);
