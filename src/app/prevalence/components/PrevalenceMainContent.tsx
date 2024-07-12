@@ -1,11 +1,12 @@
+// PrevalenceMainContent.tsx
+import React, { useEffect } from "react";
 import { Box, Alert } from "@mui/material";
 import { useTheme } from "@mui/system";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { MainComponentHeader } from "../../shared/components/MainComponentHeader";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceDataGrid } from "./PrevalenceDataGrid";
-
+import { useFetchSupportEmail } from "../../shared/components/footer/Footer-Container.component";
 interface PrevalenceMainContentProps {
     heading: string;
 }
@@ -17,6 +18,15 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
         usePrevalenceFilters();
     const theme = useTheme();
     const { t } = useTranslation(["PrevalencePage"]);
+    const supportMail = useFetchSupportEmail(); // Use the fetched email
+
+    useEffect(() => {
+        if (showError && error && supportMail) {
+            window.location.href = `mailto:${supportMail}?subject=ZooNotify-Error-Report&body=${encodeURIComponent(
+                error
+            )}`;
+        }
+    }, [showError, error, supportMail]);
 
     return (
         <>
@@ -29,7 +39,6 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
                     alignItems: "flex-start",
                     height: "calc(100vh - 150px)",
                     overflow: "auto",
-
                     justifyContent: "flex-start",
                     padding: theme.spacing(2),
                 }}
