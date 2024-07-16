@@ -375,7 +375,15 @@ export function PrevalenceSideContent(): JSX.Element {
             .filter((key) => !selectedOrder.includes(key))
             .map((key) => filterComponents[key]),
     ];
-
+    const resetFilters = (): void => {
+        setSelectedMicroorganisms([]);
+        setSelectedSampleOrigins([]);
+        setSelectedMatrices([]);
+        setSelectedSamplingStages([]);
+        setSelectedMatrixGroups([]);
+        setSelectedYear([]);
+        setSelectedSuperCategory([]);
+    };
     return (
         <Box
             sx={{
@@ -404,14 +412,22 @@ export function PrevalenceSideContent(): JSX.Element {
             </Dialog>
 
             <Box
-                sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: 2,
+                    gap: "16px",
+                }}
             >
                 <Button
                     variant="contained"
                     startIcon={<Search />}
-                    onClick={handleSearch} // Update to use handleSearch
+                    onClick={handleSearch}
                 >
                     {t("SEARCH")}
+                </Button>
+                <Button variant="contained" onClick={resetFilters}>
+                    {t("RESET_FILTERS")}
                 </Button>
             </Box>
         </Box>
