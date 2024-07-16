@@ -27,6 +27,11 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
               )}`
             : "";
 
+    // Extracting the message and explicitly making "zoonotify support" a link
+    const errorMessage = t("error notAllDataRetrieved");
+    const beforeLink = errorMessage.split("zoonotify support")[0];
+    const afterLink = errorMessage.split("zoonotify support")[1];
+
     return (
         <>
             <MainComponentHeader heading={heading}></MainComponentHeader>
@@ -44,9 +49,9 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
             >
                 {showError && error && supportMail && (
                     <Alert severity="error">
-                        <Link href={mailtoLink}>
-                            {t("error notAllDataRetrieved")}
-                        </Link>
+                        {beforeLink}
+                        <Link href={mailtoLink}>zoonotify support</Link>
+                        {afterLink}
                     </Alert>
                 )}
                 {prevalenceData.length > 0 ? (
