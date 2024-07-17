@@ -7,13 +7,7 @@ import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceDataGrid } from "./PrevalenceDataGrid";
 import { useFetchSupportEmail } from "../../shared/components/footer/Footer-Container.component";
 
-interface PrevalenceMainContentProps {
-    heading: string;
-}
-
-const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
-    heading,
-}) => {
+const PrevalenceMainContent: React.FC<{ heading: string }> = ({ heading }) => {
     const { prevalenceData, loading, error, showError } =
         usePrevalenceFilters();
     const theme = useTheme();
@@ -29,7 +23,7 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
 
     return (
         <>
-            <MainComponentHeader heading={heading}></MainComponentHeader>
+            <MainComponentHeader heading={heading} />
             <Box
                 sx={{
                     pt: theme.spacing(3),
@@ -44,23 +38,19 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
             >
                 {showError && error && supportMail && (
                     <Alert severity="error">
-                        <Link href={mailtoLink}>
-                            {t("error notAllDataRetrieved")}
-                        </Link>
+                        {t("errorPrefix")}{" "}
+                        <Link href={mailtoLink}>{t("errorLinkText")}</Link>{" "}
+                        {t("errorSuffix")}
                     </Alert>
                 )}
-                {prevalenceData.length > 0 ? (
-                    <Box
-                        sx={{
-                            width: "95%",
-                        }}
-                    >
+                {prevalenceData.length > 0 && (
+                    <Box sx={{ width: "95%" }}>
                         <PrevalenceDataGrid
                             prevalenceData={prevalenceData}
                             loading={loading}
-                        ></PrevalenceDataGrid>
+                        />
                     </Box>
-                ) : null}
+                )}
             </Box>
         </>
     );
