@@ -53,6 +53,10 @@
   "More Info on Sampling Stages": "Mehr Informationen zu Probenahmestelle",
   "More Info on Matrices": "Mehr Informationen zu matrix",
   "More Info on Matrix Groups": "Mehr Informationen zu matrixgruppe",
-  "error notAllDataRetrieved": "Beim Abrufen der Daten ist ein Fehler aufgetreten. Es konnten nicht alle Daten abgerufen werden. Bitte kontaktieren Sie den zoonotify support für weitere Details",
+
+  "errorPrefix": "Beim Abrufen der Daten ist ein Fehler aufgetreten. Es konnten nicht alle Daten abgerufen werden. Bitte kontaktieren Sie den",
+  "errorLinkText": "zoonotify support",
+  "errorSuffix": "für weitere Details.",
+
   "REQUIRED_FIELD_INDICATOR": "Felder, die mit einem Stern (*) markiert sind, sind erforderlich. Bitte wählen Sie mindestens eine Option in jedem erforderlichen Feld aus, um die Suchschaltfläche zu aktivieren."
 }

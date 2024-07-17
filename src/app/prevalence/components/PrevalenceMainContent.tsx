@@ -7,13 +7,7 @@ import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceDataGrid } from "./PrevalenceDataGrid";
 import { useFetchSupportEmail } from "../../shared/components/footer/Footer-Container.component";
 
-interface PrevalenceMainContentProps {
-    heading: string;
-}
-
-const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
-    heading,
-}) => {
+const PrevalenceMainContent: React.FC<{ heading: string }> = ({ heading }) => {
     const { prevalenceData, loading, error, showError } =
         usePrevalenceFilters();
     const theme = useTheme();
@@ -27,14 +21,9 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
               )}`
             : "";
 
-    // Extracting the message and explicitly making "zoonotify support" a link
-    const errorMessage = t("error notAllDataRetrieved");
-    const beforeLink = errorMessage.split("zoonotify support")[0];
-    const afterLink = errorMessage.split("zoonotify support")[1];
-
     return (
         <>
-            <MainComponentHeader heading={heading}></MainComponentHeader>
+            <MainComponentHeader heading={heading} />
             <Box
                 sx={{
                     pt: theme.spacing(3),
@@ -49,23 +38,19 @@ const PrevalenceMainContent: React.FC<PrevalenceMainContentProps> = ({
             >
                 {showError && error && supportMail && (
                     <Alert severity="error">
-                        {beforeLink}
-                        <Link href={mailtoLink}>zoonotify support</Link>
-                        {afterLink}
+                        {t("errorPrefix")}{" "}
+                        <Link href={mailtoLink}>{t("errorLinkText")}</Link>{" "}
+                        {t("errorSuffix")}
                     </Alert>
                 )}
-                {prevalenceData.length > 0 ? (
-                    <Box
-                        sx={{
-                            width: "95%",
-                        }}
-                    >
+                {prevalenceData.length > 0 && (
+                    <Box sx={{ width: "95%" }}>
                         <PrevalenceDataGrid
                             prevalenceData={prevalenceData}
                             loading={loading}
-                        ></PrevalenceDataGrid>
+                        />
                     </Box>
-                ) : null}
+                )}
             </Box>
         </>
     );
