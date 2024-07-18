@@ -11,7 +11,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
-} from "@mui/material";
+ Grow } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Search from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
@@ -369,12 +369,23 @@ export function PrevalenceSideContent(): JSX.Element {
         ),
     };
 
-    const orderedComponents = [
-        ...selectedOrder.map((key) => filterComponents[key]),
-        ...Object.keys(filterComponents)
-            .filter((key) => !selectedOrder.includes(key))
-            .map((key) => filterComponents[key]),
-    ];
+    const getTransitionIn = (): boolean => {
+        return true;
+    };
+
+    const orderedComponents = selectedOrder.map((key: string) => (
+        <Grow in={getTransitionIn()} timeout={500} key={key}>
+            {filterComponents[key]}
+        </Grow>
+    ));
+
+    const remainingComponents = Object.keys(filterComponents)
+        .filter((key: string) => !selectedOrder.includes(key))
+        .map((key: string) => (
+            <Grow in={getTransitionIn()} timeout={500} key={key}>
+                {filterComponents[key]}
+            </Grow>
+        ));
     const resetFilters = (): void => {
         setSelectedMicroorganisms([]);
         setSelectedSampleOrigins([]);
@@ -397,6 +408,7 @@ export function PrevalenceSideContent(): JSX.Element {
         >
             <Stack spacing={0.5} alignItems="flex-start">
                 {orderedComponents}
+                {remainingComponents}
             </Stack>
             <Dialog open={infoDialogOpen} onClose={handleClose}>
                 <DialogTitle>{infoDialogTitle}</DialogTitle>
