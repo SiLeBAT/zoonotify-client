@@ -22,20 +22,21 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
-    const { searchParameters } = usePrevalenceFilters(); // Correct usage of the hook
+    const { searchParameters } = usePrevalenceFilters();
 
     const getFormattedTimestamp = (): string => {
         const date = new Date();
         return date.toISOString().replace(/[:.]/g, "-");
     };
 
-    const prepareDownload = async (): Promise<void> => {
-        if (prevalenceData.length === 0) return;
+    const formatNumber = (value: number, decimalSeparator: string): string => {
+        return value.toString().replace(".", decimalSeparator);
+    };
 
-        const zip = new JSZip();
-        const timestamp = getFormattedTimestamp(); // Use a constant timestamp for all files
-
-        // Prepare CSV data
+    const createCSVContent = (
+        data: PrevalenceEntry[],
+        decimalSeparator: string
+    ): string => {
         const csvRows: string[] = [];
         const headers: Array<keyof PrevalenceEntry> = [
             "samplingYear",
@@ -52,21 +53,37 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
         csvRows.push(
             "\uFEFF" +
-                headers.map((header) => t(header.toUpperCase())).join(",")
+                headers.map((header) => t(header.toUpperCase())).join(";")
         );
-        prevalenceData.forEach((row) => {
+
+        data.forEach((row) => {
             const values = headers.map((header) => {
                 const value = row[header];
+                if (typeof value === "number") {
+                    return formatNumber(value, decimalSeparator);
+                }
                 return typeof value === "string"
                     ? `"${value.replace(/"/g, '""')}"`
                     : value;
             });
-            csvRows.push(values.join(","));
+            csvRows.push(values.join(";"));
         });
-        const csvString = csvRows.join("\n");
-        zip.file(`prevalence_data_${timestamp}.csv`, csvString);
 
-        // Enhance JSON data formatting
+        return csvRows.join("\n");
+    };
+
+    const prepareDownload = async (): Promise<void> => {
+        if (prevalenceData.length === 0) return;
+
+        const zip = new JSZip();
+        const timestamp = getFormattedTimestamp();
+
+        const csvContentDot = createCSVContent(prevalenceData, ".");
+        const csvContentComma = createCSVContent(prevalenceData, ",");
+
+        zip.file(`prevalence_data_dot_${timestamp}.csv`, csvContentDot);
+        zip.file(`prevalence_data_comma_${timestamp}.csv`, csvContentComma);
+
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
         const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson
             .split("\n")
@@ -83,7 +100,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
         zip.file(`search_parameters_${timestamp}.txt`, formattedText);
 
-        // Generate ZIP file
         const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
         setDownloadUrl(url);
@@ -95,6 +111,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             prepareDownload();
         }
     }, [prevalenceData, searchParameters]);
+
     const columns: GridColDef[] = [
         {
             field: "samplingYear",
@@ -191,8 +208,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     return (
         <>
             <div style={{ marginBottom: "20px" }}>
-                {" "}
-                {/* Added margin for spacing */}
                 <DataGridControls heading={t("TABLE_DETAIL")} />
             </div>
             <ZNAccordion
@@ -215,19 +230,19 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             autoHeight={false}
                             hideFooter={false}
                             sx={{
-                                backgroundColor: "white", // Setting the background color to white
+                                backgroundColor: "white",
                                 border: 2,
                                 borderColor: "primary.main",
                                 "& .header-style": {
                                     fontWeight: "bold",
-                                    whiteSpace: "normal !important", // Ensure text wrapping is enabled
+                                    whiteSpace: "normal !important",
                                     wordWrap: "break-word !important",
                                     fontSize: "1rem",
                                     textAlign: "center",
                                     backgroundColor:
-                                        theme.palette.primary.light, // Header background color
-                                    color: theme.palette.primary.contrastText, // Header text color
-                                    border: "1px solid #e0e0e0", // Border for header cells
+                                        theme.palette.primary.light,
+                                    color: theme.palette.primary.contrastText,
+                                    border: "1px solid #e0e0e0",
                                 },
                                 "& .MuiDataGrid-root": {
                                     borderWidth: "1px",
@@ -248,7 +263,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                     borderBottom: "1px solid #e0e0e0",
                                 },
                                 "& .MuiDataGrid-columnHeaderTitle": {
-                                    whiteSpace: "normal !important", // Ensure text wrapping is enabled
+                                    whiteSpace: "normal !important",
                                     overflow: "visible !important",
                                 },
                             }}
