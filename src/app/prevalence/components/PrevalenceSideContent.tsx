@@ -11,7 +11,8 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
- Grow } from "@mui/material";
+    Grow,
+} from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Search from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
