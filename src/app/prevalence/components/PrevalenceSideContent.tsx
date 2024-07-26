@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import {
     Box,
     Button,
@@ -54,7 +53,9 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedSuperCategory,
         superCategorySampleOriginOptions,
         fetchDataFromAPI,
-        setShowError, // Add this line
+        setShowError,
+        fetchOptions,
+        setIsSearchTriggered,
     } = usePrevalenceFilters();
 
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -387,7 +388,8 @@ export function PrevalenceSideContent(): JSX.Element {
                 {filterComponents[key]}
             </Grow>
         ));
-    const resetFilters = (): void => {
+
+    const resetFilters = async (): Promise<void> => {
         setSelectedMicroorganisms([]);
         setSelectedSampleOrigins([]);
         setSelectedMatrices([]);
@@ -395,7 +397,10 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedMatrixGroups([]);
         setSelectedYear([]);
         setSelectedSuperCategory([]);
+        setIsSearchTriggered(false);
+        await fetchOptions(); // Re-fetch data to reset all options, including years
     };
+
     return (
         <Box
             sx={{
