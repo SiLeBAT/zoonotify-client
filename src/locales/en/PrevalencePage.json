@@ -56,5 +56,7 @@
   "errorPrefix": "An error occurred retrieving the data. Not all data was retrieved. Please contact the",
   "errorLinkText": "zoonotify support",
   "errorSuffix": "for further details.",
+  "PREVALENCE_CHART": "Prevalence Chart",
+
   "REQUIRED_FIELD_INDICATOR": "Fields marked with a star (*) are required. Please select at least one option from each required field to activate the search button."
 }
