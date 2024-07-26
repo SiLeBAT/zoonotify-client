@@ -8,6 +8,7 @@ import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import JSZip from "jszip";
 import { PrevalenceEntry, usePrevalenceFilters } from "./PrevalenceDataContext";
+import { PrevalenceChart } from "./PrevalenceChart";
 
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
@@ -291,6 +292,28 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 </Link>
                             </Button>
                         )}
+                    </div>
+                }
+                defaultExpanded={true}
+                centerContent={false}
+            />
+            <div style={{ height: "20px" }}></div>
+            <ZNAccordion
+                title={t("PREVALENCE_CHART")}
+                content={
+                    <div
+                        style={{
+                            height: 500,
+                            width: "100%",
+                            overflowX: "auto",
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        {/* Add your chart component here */}
+                        <div style={{ height: "100%", width: "100%" }}>
+                            <PrevalenceChart />{" "}
+                        </div>
                     </div>
                 }
                 defaultExpanded={true}

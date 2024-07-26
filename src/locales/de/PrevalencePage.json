@@ -57,5 +57,7 @@
   "errorPrefix": "Beim Abrufen der Daten ist ein Fehler aufgetreten. Es konnten nicht alle Daten abgerufen werden. Bitte kontaktieren Sie den",
   "errorLinkText": "zoonotify support",
   "errorSuffix": "für weitere Details.",
+  "PREVALENCE_CHART": "Prävalenzdiagramm",
+
   "REQUIRED_FIELD_INDICATOR": "Felder, die mit einem Stern (*) markiert sind, sind erforderlich. Bitte wählen Sie mindestens eine Option in jedem erforderlichen Feld aus, um die Suchschaltfläche zu aktivieren."
 }
