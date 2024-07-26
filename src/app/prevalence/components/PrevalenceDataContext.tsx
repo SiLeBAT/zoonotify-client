@@ -92,12 +92,15 @@ interface PrevalenceDataContext {
     setSelectedSuperCategory: (superCategory: string[]) => void;
     triggerSearch: () => void;
     fetchDataFromAPI: () => void;
+    fetchOptions: () => Promise<void>;
+    setIsSearchTriggered: (triggered: boolean) => void;
     prevalenceData: PrevalenceEntry[];
     error: string | null;
     loading: boolean;
     searchParameters: SearchParameters;
     showError: boolean;
     setShowError: (showError: boolean) => void;
+    isSearchTriggered: boolean;
 }
 
 const DefaultPrevalenceDataContext = createContext<
@@ -240,101 +243,96 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [isSearchTriggered, setIsSearchTriggered] = useState<boolean>(false);
     const [showError, setShowError] = useState<boolean>(false);
 
-    useEffect((): void => {
-        const fetchOptions = async (): Promise<void> => {
-            setLoading(true);
-            try {
-                const fetchOption = async (
-                    endpoint: string
-                ): Promise<Option[]> => {
-                    const response = await callApiService<{
-                        data: Array<{
-                            id: number;
-                            attributes: { name: string };
-                        }>;
-                    }>(endpoint);
-                    if (response.data && Array.isArray(response.data.data)) {
-                        return response.data.data.map((item) => ({
-                            name: item.attributes.name,
-                        }));
-                    }
-                    return [];
-                };
-
-                const [
-                    microorganisms,
-                    sampleOrigins,
-                    matrices,
-                    samplingStages,
-                    matrixGroups,
-                    superCategories,
-                ] = await Promise.all([
-                    fetchOption(MICROORGANISMS),
-                    fetchOption(SAMPLE_ORIGINS),
-                    fetchOption(MATRICES),
-                    fetchOption(SAMPLING_STAGES),
-                    fetchOption(MATRIX_GROUPS),
-                    fetchOption(SUPER_CATEGORY_SAMPLE_ORIGINS),
-                ]);
-
-                setMicroorganismOptions(microorganisms);
-                setSampleOriginOptions(sampleOrigins);
-                setMatrixOptions(matrices);
-                setSamplingStageOptions(samplingStages);
-                setMatrixGroupOptions(matrixGroups);
-                setSuperCategorySampleOriginOptions(superCategories);
-            } catch (err) {
-                setError(
-                    `Failed to fetch options: ${
-                        err instanceof Error ? err.message : "Unknown error"
-                    }`
+    const fetchPrevalenceData = async (): Promise<void> => {
+        setLoading(true);
+        try {
+            const response = await callApiService<
+                CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
+            >(
+                `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`
+            );
+            if (response.data && response.data.data) {
+                const processedData = processApiResponse(
+                    response.data.data,
+                    setError
                 );
-                console.error(err);
-            } finally {
-                setLoading(false);
+                setPrevalenceData(processedData);
+
+                // Extract and set unique year options
+                const uniqueYears = Array.from(
+                    new Set(processedData.map((entry) => entry.samplingYear))
+                );
+                setYearOptions(uniqueYears);
             }
-        };
+        } catch (err) {
+            setError(
+                `Failed to fetch prevalence data: ${
+                    err instanceof Error ? err.message : "Unknown error"
+                }`
+            );
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchOptions();
-    }, []);
-
-    useEffect((): void => {
-        const fetchPrevalenceData = async (): Promise<void> => {
-            setLoading(true);
-            try {
-                const response = await callApiService<
-                    CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
-                >(
-                    `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`
-                );
-                if (response.data && response.data.data) {
-                    const processedData = processApiResponse(
-                        response.data.data,
-                        setError
-                    );
-                    setPrevalenceData(processedData);
-
-                    // Extract and set unique year options
-                    const uniqueYears = Array.from(
-                        new Set(
-                            processedData.map((entry) => entry.samplingYear)
-                        )
-                    );
-                    setYearOptions(uniqueYears);
+    const fetchOptions = async (): Promise<void> => {
+        setLoading(true);
+        try {
+            const fetchOption = async (endpoint: string): Promise<Option[]> => {
+                const response = await callApiService<{
+                    data: Array<{
+                        id: number;
+                        attributes: { name: string };
+                    }>;
+                }>(endpoint);
+                if (response.data && Array.isArray(response.data.data)) {
+                    return response.data.data.map((item) => ({
+                        name: item.attributes.name,
+                    }));
                 }
-            } catch (err) {
-                setError(
-                    `Failed to fetch prevalence data: ${
-                        err instanceof Error ? err.message : "Unknown error"
-                    }`
-                );
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+                return [];
+            };
 
-        fetchPrevalenceData();
+            const [
+                microorganisms,
+                sampleOrigins,
+                matrices,
+                samplingStages,
+                matrixGroups,
+                superCategories,
+            ] = await Promise.all([
+                fetchOption(MICROORGANISMS),
+                fetchOption(SAMPLE_ORIGINS),
+                fetchOption(MATRICES),
+                fetchOption(SAMPLING_STAGES),
+                fetchOption(MATRIX_GROUPS),
+                fetchOption(SUPER_CATEGORY_SAMPLE_ORIGINS),
+            ]);
+
+            setMicroorganismOptions(microorganisms);
+            setSampleOriginOptions(sampleOrigins);
+            setMatrixOptions(matrices);
+            setSamplingStageOptions(samplingStages);
+            setMatrixGroupOptions(matrixGroups);
+            setSuperCategorySampleOriginOptions(superCategories);
+
+            // Fetch prevalence data to update the year options
+            await fetchPrevalenceData();
+        } catch (err) {
+            setError(
+                `Failed to fetch options: ${
+                    err instanceof Error ? err.message : "Unknown error"
+                }`
+            );
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect((): void => {
+        fetchOptions();
     }, []);
 
     function filterData(): PrevalenceEntry[] {
@@ -525,12 +523,15 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedSuperCategory,
         triggerSearch,
         fetchDataFromAPI,
+        fetchOptions,
+        setIsSearchTriggered,
         prevalenceData: isSearchTriggered ? prevalenceData : [],
         error,
         loading,
         searchParameters,
         showError,
         setShowError,
+        isSearchTriggered,
     };
 
     return (
