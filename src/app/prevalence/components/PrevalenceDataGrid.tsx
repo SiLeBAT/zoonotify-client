@@ -208,7 +208,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
     return (
         <>
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "10px" }}>
                 <DataGridControls heading={t("TABLE_DETAIL")} />
             </div>
             <ZNAccordion
@@ -297,13 +297,13 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 defaultExpanded={true}
                 centerContent={false}
             />
-            <div style={{ height: "20px" }}></div>
+            <div style={{ height: "10px" }}></div>
             <ZNAccordion
                 title={t("PREVALENCE_CHART")}
                 content={
                     <div
                         style={{
-                            height: 500,
+                            height: 550,
                             width: "100%",
                             overflowX: "auto",
                             display: "flex",
