@@ -9,6 +9,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    useTheme,
 } from "@mui/material";
 import Markdown from "markdown-to-jsx";
 
@@ -18,25 +19,27 @@ export interface AccordionProps {
     defaultExpanded: boolean;
     centerContent: boolean;
     showCopyIcon?: boolean; // This is the new boolean flag property
+    withTopBorder?: boolean; // New prop to control the border appearance
 }
 
 export function ZNAccordion(props: AccordionProps): JSX.Element {
-    let { content } = props;
+    const { withTopBorder = true } = props; // Default to true if not provided
     const [tooltipOpen, setTooltipOpen] = useState(false);
+    const theme = useTheme();
 
-    if (props.centerContent) {
-        content = (
-            <Box
-                sx={{
-                    maxWidth: "fit-content",
-                    margin: "auto",
-                    boxSizing: "inherit",
-                }}
-            >
-                {props.content}
-            </Box>
-        );
-    }
+    const contentBox = props.centerContent ? (
+        <Box
+            sx={{
+                maxWidth: "fit-content",
+                margin: "auto",
+                boxSizing: "inherit",
+            }}
+        >
+            {props.content}
+        </Box>
+    ) : (
+        props.content
+    );
 
     const copyToClipboard = (text: string): void => {
         navigator.clipboard
@@ -53,11 +56,43 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
     };
 
     return (
-        <Accordion defaultExpanded={props.defaultExpanded}>
+        <Accordion
+            defaultExpanded={props.defaultExpanded}
+            sx={{
+                border: "none",
+                boxShadow: "none",
+                "&:before": {
+                    display: "none",
+                },
+                "&.MuiAccordion-root.Mui-expanded": {
+                    margin: "1em 0", // Margin only when expanded
+                },
+                "& .MuiAccordionSummary-root": {
+                    margin: 0,
+                    borderBottom: "none",
+                },
+                "& .MuiAccordionDetails-root": {
+                    padding: "16px 24px", // Default padding for content
+                },
+                ...(withTopBorder && {
+                    "&:before": {
+                        display: "block",
+                        content: '""',
+                        width: "100%",
+                        height: "2px", // Set the border height to 2px to make it thinner
+                        backgroundColor: theme.palette.primary.main,
+                    },
+                }),
+            }}
+        >
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="shared-accordion-content"
                 id="shared-accordion-header"
+                sx={{
+                    borderBottom: "none",
+                    margin: 0,
+                }}
             >
                 <Typography
                     sx={{
@@ -101,7 +136,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                     textAlign: "justify",
                 }}
             >
-                {content}
+                {contentBox}
             </AccordionDetails>
         </Accordion>
     );
