@@ -57,6 +57,8 @@
   "errorLinkText": "zoonotify support",
   "errorSuffix": "for further details.",
   "PREVALENCE_CHART": "Prevalence Chart",
+  "Download_Chart": "Download Chart",
+  "Download_All_Charts": "Download All Charts",
 
   "REQUIRED_FIELD_INDICATOR": "Fields marked with a star (*) are required. Please select at least one option from each required field to activate the search button."
 }

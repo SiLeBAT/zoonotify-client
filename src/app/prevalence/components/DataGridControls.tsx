@@ -34,7 +34,7 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
             sx={{
                 p: 1,
                 border: 1,
-                borderColor: "divider",
+                ///borderColor: "divider",
                 borderRadius: 1,
                 mb: 1,
                 backgroundColor: theme.palette.grey[100],
