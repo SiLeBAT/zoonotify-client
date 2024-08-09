@@ -15,6 +15,51 @@ interface PrevalenceDataGridProps {
     loading: boolean;
 }
 
+const italicWords: string[] = [
+    "Salmonella",
+    "coli",
+    "E.",
+    "Bacillus",
+    "cereus",
+    "monocytogenes",
+    "Clostridioides",
+    "difficile",
+    "Yersinia",
+    "Listeria",
+    "enterocolitica",
+    "Vibrio",
+    "Baylisascaris",
+    "procyonis",
+    "Echinococcus",
+    "Campylobacter",
+];
+
+const formatMicroorganismName = (
+    microName: string | null | undefined
+): JSX.Element => {
+    if (!microName) {
+        console.warn("Received null or undefined microorganism name");
+        return <></>;
+    }
+    const words = microName
+        .split(/(\s+|-)/)
+        .filter((part: string) => part.trim().length > 0);
+    return (
+        <>
+            {words.map((word: string, index: number) => {
+                const italic = italicWords.some((italicWord: string) =>
+                    word.toLowerCase().includes(italicWord.toLowerCase())
+                );
+                return italic ? (
+                    <i key={index}>{word}</i>
+                ) : (
+                    <span key={index}>{word}</span>
+                );
+            })}
+        </>
+    );
+};
+
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
     loading,
@@ -129,6 +174,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             flex: 1,
             headerClassName: "header-style",
             align: "center",
+            renderCell: (params) => formatMicroorganismName(params.value),
         },
         {
             field: "sampleOrigin",
