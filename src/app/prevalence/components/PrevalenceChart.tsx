@@ -38,10 +38,7 @@ const PrevalenceChart: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chartRefs = useRef<{ [key: string]: React.RefObject<any> }>({});
 
-    const yearOptions = Array.from(
-        { length: 14 },
-        (_, i) => 2009 + i
-    ).reverse();
+    const yearOptions = Array.from({ length: 14 }, (_, i) => 2009 + i);
 
     const generateChartData = (): {
         [key: string]: { [key: string]: { [key: number]: ChartDataPoint } };
@@ -172,6 +169,29 @@ const PrevalenceChart: React.FC = () => {
         saveAs(content, `charts-${timestamp}.zip`);
     };
 
+    // Custom plugin to draw the logo
+    const logoPlugin = {
+        id: "logoPlugin",
+        afterDraw: (chart: Chart) => {
+            const ctx = chart.ctx;
+            const img = new Image();
+            img.src = "/assets/bfr_logo.png"; // Ensure this path is correct
+            img.onload = () => {
+                const rightPadding = 0; // Add padding from the right edge
+                const topPadding = 0; // Add padding from the top edge
+                const logoWidth = 90; // Set the logo width
+                const logoHeight = 40;
+                ctx.drawImage(
+                    img,
+                    chart.width - logoWidth - rightPadding, // Adjusted horizontal position
+                    topPadding, // Adjusted vertical position to be closer to the top
+                    logoWidth,
+                    logoHeight
+                );
+            };
+        },
+    };
+
     return (
         <Box sx={{ padding: 2, position: "relative", minHeight: "100vh" }}>
             {loading ? (
@@ -276,19 +296,6 @@ const PrevalenceChart: React.FC = () => {
                                                                                     true,
                                                                                 text: "Year",
                                                                             },
-                                                                            reverse:
-                                                                                false,
-                                                                            ticks: {
-                                                                                callback:
-                                                                                    function (
-                                                                                        _,
-                                                                                        index
-                                                                                    ) {
-                                                                                        return yearOptions[
-                                                                                            index
-                                                                                        ];
-                                                                                    },
-                                                                            },
                                                                         },
                                                                     },
                                                                     plugins: {
@@ -363,6 +370,7 @@ const PrevalenceChart: React.FC = () => {
                                                                                     chart
                                                                                 ),
                                                                     },
+                                                                    logoPlugin, // Include the custom logo plugin here
                                                                 ]}
                                                                 ref={
                                                                     chartRefs
