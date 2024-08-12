@@ -38,8 +38,10 @@ const PrevalenceChart: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chartRefs = useRef<{ [key: string]: React.RefObject<any> }>({});
 
-    const yearOptions = Array.from({ length: 14 }, (_, i) => 2009 + i);
-
+    const yearOptions = Array.from(
+        { length: 14 },
+        (_, i) => 2009 + i
+    ).reverse();
     const generateChartData = (): {
         [key: string]: { [key: string]: { [key: number]: ChartDataPoint } };
     } => {
@@ -295,6 +297,20 @@ const PrevalenceChart: React.FC = () => {
                                                                                 display:
                                                                                     true,
                                                                                 text: "Year",
+                                                                            },
+
+                                                                            reverse:
+                                                                                false,
+                                                                            ticks: {
+                                                                                callback:
+                                                                                    function (
+                                                                                        _,
+                                                                                        index
+                                                                                    ) {
+                                                                                        return yearOptions[
+                                                                                            index
+                                                                                        ];
+                                                                                    },
                                                                             },
                                                                         },
                                                                     },
