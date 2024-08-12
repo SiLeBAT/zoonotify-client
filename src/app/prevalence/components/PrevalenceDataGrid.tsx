@@ -44,22 +44,28 @@ const formatMicroorganismName = (
     const words = microName
         .split(/(\s+|-)/)
         .filter((part: string) => part.trim().length > 0);
-    return (
-        <>
-            {words.map((word: string, index: number) => {
-                const italic = italicWords.some((italicWord: string) =>
-                    word.toLowerCase().includes(italicWord.toLowerCase())
-                );
-                return italic ? (
-                    <i key={index}>{word}</i>
-                ) : (
-                    <span key={index}>{word}</span>
-                );
-            })}
-        </>
-    );
+    return words
+        .map((word: string, index: number) => {
+            const italic = italicWords.some((italicWord: string) =>
+                word.toLowerCase().includes(italicWord.toLowerCase())
+            );
+            return italic ? (
+                <i key={index}>{word}</i>
+            ) : (
+                <span key={index}>{word}</span>
+            );
+        })
+        .reduce(
+            (prev: JSX.Element, curr: JSX.Element) => (
+                <>
+                    {prev}
+                    {prev ? " " : ""}
+                    {curr}
+                </>
+            ),
+            <></>
+        );
 };
-
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
     loading,
