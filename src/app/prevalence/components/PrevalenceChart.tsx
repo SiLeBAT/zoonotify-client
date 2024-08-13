@@ -23,6 +23,11 @@ const getCurrentTimestamp = (): string => {
     return now.toISOString().replace(/[-:.]/g, "");
 };
 
+const getFormattedDate = (): string => {
+    const now = new Date();
+    return now.toLocaleDateString();
+};
+
 interface ChartDataPoint {
     x: number;
     y: number;
@@ -38,10 +43,13 @@ const PrevalenceChart: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chartRefs = useRef<{ [key: string]: React.RefObject<any> }>({});
 
+    const { t } = useTranslation(["PrevalencePage"]);
+
     const yearOptions = Array.from(
         { length: 14 },
         (_, i) => 2009 + i
     ).reverse();
+
     const generateChartData = (): {
         [key: string]: { [key: string]: { [key: number]: ChartDataPoint } };
     } => {
@@ -147,8 +155,6 @@ const PrevalenceChart: React.FC = () => {
         }
     };
 
-    const { t } = useTranslation(["PrevalencePage"]);
-
     const downloadAllCharts = async (): Promise<void> => {
         const zip = new JSZip();
         const timestamp = getCurrentTimestamp();
@@ -171,7 +177,7 @@ const PrevalenceChart: React.FC = () => {
         saveAs(content, `charts-${timestamp}.zip`);
     };
 
-    // Custom plugin to draw the logo
+    // Custom plugin to draw the logo and date
     const logoPlugin = {
         id: "logoPlugin",
         afterDraw: (chart: Chart) => {
@@ -190,6 +196,13 @@ const PrevalenceChart: React.FC = () => {
                     logoWidth,
                     logoHeight
                 );
+
+                // Add the date to the bottom of the chart using translation
+                const dateText = `${t("Generated_on")}: ${getFormattedDate()}`;
+                ctx.font = "12px Arial";
+                ctx.fillStyle = "#000";
+                ctx.textAlign = "right";
+                ctx.fillText(dateText, chart.width - 10, chart.height - 10);
             };
         },
     };
