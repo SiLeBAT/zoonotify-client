@@ -83,13 +83,15 @@ const PrevalenceChart: React.FC = () => {
 
     const chartData = generateChartData();
 
-    const maxCIValue = Math.max(
-        ...Object.values(chartData).flatMap((microData) =>
+    const isBelow25Percent = Object.values(chartData)
+        .flatMap((microData) =>
             Object.values(microData).flatMap((yearData) =>
-                Object.values(yearData).map((data) => data.ciMax)
+                Object.values(yearData).every((data) => data.ciMax <= 25)
             )
         )
-    );
+        .every(Boolean);
+
+    const xAxisMax = isBelow25Percent ? 25 : 100;
 
     const drawErrorBars = (chart: Chart): void => {
         const ctx = chart.ctx;
@@ -120,7 +122,6 @@ const PrevalenceChart: React.FC = () => {
                     ctx.lineTo(xMax, y);
                     ctx.stroke();
 
-                    // Draw caps on the error bars
                     ctx.beginPath();
                     ctx.moveTo(xMin, y - 5);
                     ctx.lineTo(xMin, y + 5);
@@ -136,7 +137,6 @@ const PrevalenceChart: React.FC = () => {
             });
         });
     };
-
     const downloadChart = (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         chartRef: React.RefObject<any>,
@@ -177,27 +177,25 @@ const PrevalenceChart: React.FC = () => {
         saveAs(content, `charts-${timestamp}.zip`);
     };
 
-    // Custom plugin to draw the logo and date
     const logoPlugin = {
         id: "logoPlugin",
         afterDraw: (chart: Chart) => {
             const ctx = chart.ctx;
             const img = new Image();
-            img.src = "/assets/bfr_logo.png"; // Ensure this path is correct
+            img.src = "/assets/bfr_logo.png";
             img.onload = () => {
-                const rightPadding = 0; // Add padding from the right edge
-                const topPadding = 0; // Add padding from the top edge
-                const logoWidth = 90; // Set the logo width
+                const rightPadding = 0;
+                const topPadding = 0;
+                const logoWidth = 90;
                 const logoHeight = 40;
                 ctx.drawImage(
                     img,
-                    chart.width - logoWidth - rightPadding, // Adjusted horizontal position
-                    topPadding, // Adjusted vertical position to be closer to the top
+                    chart.width - logoWidth - rightPadding,
+                    topPadding,
                     logoWidth,
                     logoHeight
                 );
 
-                // Add the date to the bottom of the chart using translation
                 const dateText = `${t("Generated_on")}: ${getFormattedDate()}`;
                 ctx.font = "12px Arial";
                 ctx.fillStyle = "#000";
@@ -303,7 +301,7 @@ const PrevalenceChart: React.FC = () => {
                                                                             },
                                                                             beginAtZero:
                                                                                 true,
-                                                                            max: maxCIValue,
+                                                                            max: xAxisMax,
                                                                         },
                                                                         y: {
                                                                             title: {
@@ -311,7 +309,6 @@ const PrevalenceChart: React.FC = () => {
                                                                                     true,
                                                                                 text: "Year",
                                                                             },
-
                                                                             reverse:
                                                                                 false,
                                                                             ticks: {
@@ -386,7 +383,7 @@ const PrevalenceChart: React.FC = () => {
                                                                             },
                                                                     },
                                                                     animation:
-                                                                        false, // Disable animation to see the error bars immediately
+                                                                        false,
                                                                 }}
                                                                 plugins={[
                                                                     {
@@ -399,7 +396,7 @@ const PrevalenceChart: React.FC = () => {
                                                                                     chart
                                                                                 ),
                                                                     },
-                                                                    logoPlugin, // Include the custom logo plugin here
+                                                                    logoPlugin,
                                                                 ]}
                                                                 ref={
                                                                     chartRefs
