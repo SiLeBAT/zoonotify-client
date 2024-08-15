@@ -236,6 +236,13 @@ const PrevalenceChart: React.FC = () => {
                                                 variant="h6"
                                                 align="center"
                                                 gutterBottom
+                                                sx={{
+                                                    minHeight: "65px",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    whiteSpace: "normal", // Allow text to wrap to multiple lines
+                                                    wordWrap: "break-word", // Prevent long words from overflowing
+                                                }}
                                             >
                                                 {key}
                                             </Typography>
