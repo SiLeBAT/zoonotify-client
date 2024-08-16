@@ -1,6 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
-import { Box, CircularProgress, Typography, Grid, Button } from "@mui/material";
+import {
+    Box,
+    CircularProgress,
+    Typography,
+    Grid,
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+} from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import JSZip from "jszip";
@@ -42,8 +52,11 @@ const PrevalenceChart: React.FC = () => {
         usePrevalenceFilters();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chartRefs = useRef<{ [key: string]: React.RefObject<any> }>({});
-
     const { t } = useTranslation(["PrevalencePage"]);
+
+    const [currentMicroorganism, setCurrentMicroorganism] = useState(
+        selectedMicroorganisms[0] || ""
+    );
 
     const yearOptions = Array.from(
         { length: 14 },
@@ -51,31 +64,29 @@ const PrevalenceChart: React.FC = () => {
     ).reverse();
 
     const generateChartData = (): {
-        [key: string]: { [key: string]: { [key: number]: ChartDataPoint } };
+        [key: string]: { [key: number]: ChartDataPoint };
     } => {
         const chartData: {
-            [key: string]: { [key: string]: { [key: number]: ChartDataPoint } };
+            [key: string]: { [key: number]: ChartDataPoint };
         } = {};
 
         prevalenceData.forEach((entry) => {
-            const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
+            if (entry.microorganism === currentMicroorganism) {
+                const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
 
-            if (!chartData[key]) {
-                chartData[key] = {};
+                if (!chartData[key]) {
+                    chartData[key] = {};
+                }
+
+                chartData[key][entry.samplingYear] = {
+                    x: entry.percentageOfPositive,
+                    y: entry.samplingYear,
+                    ciMin: entry.ciMin,
+                    ciMax: entry.ciMax,
+                    numberOfSamples: entry.numberOfSamples,
+                    numberOfPositive: entry.numberOfPositive,
+                };
             }
-
-            if (!chartData[key][entry.microorganism]) {
-                chartData[key][entry.microorganism] = {};
-            }
-
-            chartData[key][entry.microorganism][entry.samplingYear] = {
-                x: entry.percentageOfPositive,
-                y: entry.samplingYear,
-                ciMin: entry.ciMin,
-                ciMax: entry.ciMax,
-                numberOfSamples: entry.numberOfSamples,
-                numberOfPositive: entry.numberOfPositive,
-            };
         });
 
         return chartData;
@@ -84,10 +95,8 @@ const PrevalenceChart: React.FC = () => {
     const chartData = generateChartData();
 
     const isBelow25Percent = Object.values(chartData)
-        .flatMap((microData) =>
-            Object.values(microData).flatMap((yearData) =>
-                Object.values(yearData).every((data) => data.ciMax <= 25)
-            )
+        .flatMap((yearData) =>
+            Object.values(yearData).every((data) => data.ciMax <= 25)
         )
         .every(Boolean);
 
@@ -137,6 +146,7 @@ const PrevalenceChart: React.FC = () => {
             });
         });
     };
+
     const downloadChart = (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         chartRef: React.RefObject<any>,
@@ -207,13 +217,49 @@ const PrevalenceChart: React.FC = () => {
 
     return (
         <Box sx={{ padding: 2, position: "relative", minHeight: "100vh" }}>
+            <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel id="microorganism-select-label">
+                    Select Microorganism
+                </InputLabel>
+                <Select
+                    labelId="microorganism-select-label"
+                    value={currentMicroorganism}
+                    onChange={(event) =>
+                        setCurrentMicroorganism(event.target.value as string)
+                    }
+                    label="Select Microorganism"
+                    sx={{
+                        backgroundColor: "white",
+                        "& .MuiSelect-select": {
+                            backgroundColor: "white",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                                borderColor: "white",
+                            },
+                            "&:hover fieldset": {
+                                borderColor: "white",
+                            },
+                        },
+                        "& .MuiMenu-paper": {
+                            backgroundColor: "white",
+                        },
+                    }}
+                >
+                    {selectedMicroorganisms.map((microorganism) => (
+                        <MenuItem key={microorganism} value={microorganism}>
+                            {microorganism}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
             {loading ? (
                 <CircularProgress />
             ) : (
                 <>
                     {Object.keys(chartData).length === 0 ? (
                         <Typography variant="h6">
-                            No data available for selected options.
+                            {t("No_data_available")}
                         </Typography>
                     ) : (
                         <>
@@ -246,192 +292,155 @@ const PrevalenceChart: React.FC = () => {
                                             >
                                                 {key}
                                             </Typography>
-                                            {selectedMicroorganisms.map(
-                                                (microorganism) => {
-                                                    const chartKey = `${key}-${microorganism}`;
-                                                    if (
-                                                        !chartRefs.current[
-                                                            chartKey
-                                                        ]
-                                                    ) {
-                                                        chartRefs.current[
-                                                            chartKey
-                                                        ] = React.createRef();
-                                                    }
-                                                    return (
-                                                        <Box
-                                                            key={microorganism}
-                                                            sx={{
-                                                                marginBottom: 4,
-                                                            }}
-                                                        >
-                                                            <Bar
-                                                                data={{
-                                                                    labels: yearOptions,
-                                                                    datasets: [
-                                                                        {
-                                                                            label: microorganism,
-                                                                            data: yearOptions.map(
+                                            <Box sx={{ marginBottom: 4 }}>
+                                                <Bar
+                                                    data={{
+                                                        labels: yearOptions,
+                                                        datasets: [
+                                                            {
+                                                                label: currentMicroorganism,
+                                                                data: yearOptions.map(
+                                                                    (year) => {
+                                                                        const data =
+                                                                            chartData[
+                                                                                key
+                                                                            ]?.[
+                                                                                year
+                                                                            ] || {
+                                                                                x: 0,
+                                                                                y: year,
+                                                                                ciMin: 0,
+                                                                                ciMax: 0,
+                                                                            };
+                                                                        return data;
+                                                                    }
+                                                                ),
+                                                                backgroundColor:
+                                                                    getRandomColor(),
+                                                            },
+                                                        ],
+                                                    }}
+                                                    options={{
+                                                        indexAxis: "y",
+                                                        scales: {
+                                                            x: {
+                                                                title: {
+                                                                    display:
+                                                                        true,
+                                                                    text: "Prevalence (%)",
+                                                                },
+                                                                beginAtZero:
+                                                                    true,
+                                                                max: xAxisMax,
+                                                            },
+                                                            y: {
+                                                                title: {
+                                                                    display:
+                                                                        true,
+                                                                    text: "Year",
+                                                                },
+                                                                reverse: false,
+                                                                ticks: {
+                                                                    callback:
+                                                                        function (
+                                                                            _,
+                                                                            index
+                                                                        ) {
+                                                                            return yearOptions[
+                                                                                index
+                                                                            ];
+                                                                        },
+                                                                },
+                                                            },
+                                                        },
+                                                        plugins: {
+                                                            tooltip: {
+                                                                callbacks: {
+                                                                    label: (
+                                                                        context
+                                                                    ) => {
+                                                                        const year =
+                                                                            parseInt(
+                                                                                context.label,
+                                                                                10
+                                                                            );
+                                                                        const data =
+                                                                            chartData[
+                                                                                key
+                                                                            ]?.[
+                                                                                year
+                                                                            ] ||
+                                                                            {};
+                                                                        return [
+                                                                            `Prevalence: ${
                                                                                 (
-                                                                                    year
-                                                                                ) => {
-                                                                                    const data =
-                                                                                        chartData[
-                                                                                            key
-                                                                                        ][
-                                                                                            microorganism
-                                                                                        ]?.[
-                                                                                            year
-                                                                                        ] || {
-                                                                                            x: 0,
-                                                                                            y: year,
-                                                                                            ciMin: 0,
-                                                                                            ciMax: 0,
-                                                                                        };
-                                                                                    return data;
-                                                                                }
-                                                                            ),
-                                                                            backgroundColor:
-                                                                                getRandomColor(),
-                                                                        },
-                                                                    ],
-                                                                }}
-                                                                options={{
-                                                                    indexAxis:
-                                                                        "y",
-                                                                    scales: {
-                                                                        x: {
-                                                                            title: {
-                                                                                display:
-                                                                                    true,
-                                                                                text: "Prevalence (%)",
-                                                                            },
-                                                                            beginAtZero:
-                                                                                true,
-                                                                            max: xAxisMax,
-                                                                        },
-                                                                        y: {
-                                                                            title: {
-                                                                                display:
-                                                                                    true,
-                                                                                text: "Year",
-                                                                            },
-                                                                            reverse:
-                                                                                false,
-                                                                            ticks: {
-                                                                                callback:
-                                                                                    function (
-                                                                                        _,
-                                                                                        index
-                                                                                    ) {
-                                                                                        return yearOptions[
-                                                                                            index
-                                                                                        ];
-                                                                                    },
-                                                                            },
-                                                                        },
+                                                                                    context.raw as ChartDataPoint
+                                                                                )
+                                                                                    .x
+                                                                            }%`,
+                                                                            `CI Min: ${
+                                                                                (
+                                                                                    data as ChartDataPoint
+                                                                                )
+                                                                                    .ciMin
+                                                                            }`,
+                                                                            `CI Max: ${
+                                                                                (
+                                                                                    data as ChartDataPoint
+                                                                                )
+                                                                                    .ciMax
+                                                                            }`,
+                                                                            `Samples: ${
+                                                                                (
+                                                                                    data as ChartDataPoint
+                                                                                )
+                                                                                    .numberOfSamples
+                                                                            }`,
+                                                                            `Positive: ${
+                                                                                (
+                                                                                    data as ChartDataPoint
+                                                                                )
+                                                                                    .numberOfPositive
+                                                                            }`,
+                                                                        ];
                                                                     },
-                                                                    plugins: {
-                                                                        tooltip:
-                                                                            {
-                                                                                callbacks:
-                                                                                    {
-                                                                                        label: (
-                                                                                            context
-                                                                                        ) => {
-                                                                                            const year =
-                                                                                                parseInt(
-                                                                                                    context.label,
-                                                                                                    10
-                                                                                                );
-                                                                                            const data =
-                                                                                                chartData[
-                                                                                                    key
-                                                                                                ][
-                                                                                                    microorganism
-                                                                                                ]?.[
-                                                                                                    year
-                                                                                                ] ||
-                                                                                                {};
-                                                                                            return [
-                                                                                                `Prevalence: ${
-                                                                                                    (
-                                                                                                        context.raw as ChartDataPoint
-                                                                                                    )
-                                                                                                        .x
-                                                                                                }%`,
-                                                                                                `CI Min: ${
-                                                                                                    (
-                                                                                                        data as ChartDataPoint
-                                                                                                    )
-                                                                                                        .ciMin
-                                                                                                }`,
-                                                                                                `CI Max: ${
-                                                                                                    (
-                                                                                                        data as ChartDataPoint
-                                                                                                    )
-                                                                                                        .ciMax
-                                                                                                }`,
-                                                                                                `Samples: ${
-                                                                                                    (
-                                                                                                        data as ChartDataPoint
-                                                                                                    )
-                                                                                                        .numberOfSamples
-                                                                                                }`,
-                                                                                                `Positive: ${
-                                                                                                    (
-                                                                                                        data as ChartDataPoint
-                                                                                                    )
-                                                                                                        .numberOfPositive
-                                                                                                }`,
-                                                                                            ];
-                                                                                        },
-                                                                                    },
-                                                                            },
-                                                                    },
-                                                                    animation:
-                                                                        false,
-                                                                }}
-                                                                plugins={[
-                                                                    {
-                                                                        id: "customErrorBars",
-                                                                        afterDraw:
-                                                                            (
-                                                                                chart: Chart
-                                                                            ) =>
-                                                                                drawErrorBars(
-                                                                                    chart
-                                                                                ),
-                                                                    },
-                                                                    logoPlugin,
-                                                                ]}
-                                                                ref={
-                                                                    chartRefs
-                                                                        .current[
-                                                                        chartKey
-                                                                    ]
-                                                                }
-                                                            />
-                                                            <Button
-                                                                variant="contained"
-                                                                onClick={() =>
-                                                                    downloadChart(
-                                                                        chartRefs
-                                                                            .current[
-                                                                            chartKey
-                                                                        ],
-                                                                        chartKey
-                                                                    )
-                                                                }
-                                                            >
-                                                                {t(
-                                                                    "Download_Chart"
-                                                                )}
-                                                            </Button>
-                                                        </Box>
-                                                    );
-                                                }
-                                            )}
+                                                                },
+                                                            },
+                                                        },
+                                                        animation: false,
+                                                    }}
+                                                    plugins={[
+                                                        {
+                                                            id: "customErrorBars",
+                                                            afterDraw: (
+                                                                chart: Chart
+                                                            ) =>
+                                                                drawErrorBars(
+                                                                    chart
+                                                                ),
+                                                        },
+                                                        logoPlugin,
+                                                    ]}
+                                                    ref={
+                                                        chartRefs.current[
+                                                            `${key}-${currentMicroorganism}`
+                                                        ]
+                                                    }
+                                                />
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={() =>
+                                                        downloadChart(
+                                                            chartRefs.current[
+                                                                `${key}-${currentMicroorganism}`
+                                                            ],
+                                                            `${key}-${currentMicroorganism}`
+                                                        )
+                                                    }
+                                                >
+                                                    {t("Download_Chart")}
+                                                </Button>
+                                            </Box>
                                         </Box>
                                     </Grid>
                                 ))}
