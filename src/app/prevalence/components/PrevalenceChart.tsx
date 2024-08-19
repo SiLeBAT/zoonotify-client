@@ -286,8 +286,8 @@ const PrevalenceChart: React.FC = () => {
                                                     minHeight: "65px",
                                                     overflow: "hidden",
                                                     textOverflow: "ellipsis",
-                                                    whiteSpace: "normal", // Allow text to wrap to multiple lines
-                                                    wordWrap: "break-word", // Prevent long words from overflowing
+                                                    whiteSpace: "normal",
+                                                    wordWrap: "break-word",
                                                 }}
                                             >
                                                 {key}
@@ -355,6 +355,19 @@ const PrevalenceChart: React.FC = () => {
                                                         },
                                                         plugins: {
                                                             tooltip: {
+                                                                backgroundColor:
+                                                                    "rgba(0, 0, 0, 1)", // Opaque tooltip background
+                                                                titleFont: {
+                                                                    size: 14,
+                                                                },
+                                                                bodyFont: {
+                                                                    size: 12,
+                                                                },
+                                                                displayColors:
+                                                                    false,
+                                                                borderColor:
+                                                                    "#fff",
+                                                                borderWidth: 1,
                                                                 callbacks: {
                                                                     label: (
                                                                         context
