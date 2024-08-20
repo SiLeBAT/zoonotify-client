@@ -19,6 +19,59 @@ import { useTranslation } from "react-i18next";
 
 Chart.register(...registerables);
 
+// Import the formatMicroorganismName function
+const italicWords: string[] = [
+    "Salmonella",
+    "coli",
+    "E.",
+    "Bacillus",
+    "cereus",
+    "monocytogenes",
+    "Clostridioides",
+    "difficile",
+    "Yersinia",
+    "Listeria",
+    "enterocolitica",
+    "Vibrio",
+    "Baylisascaris",
+    "procyonis",
+    "Echinococcus",
+    "Campylobacter",
+];
+
+const formatMicroorganismName = (
+    microName: string | null | undefined
+): JSX.Element => {
+    if (!microName) {
+        console.warn("Received null or undefined microorganism name");
+        return <></>;
+    }
+    const words = microName
+        .split(/(\s+|-)/)
+        .filter((part: string) => part.trim().length > 0);
+    return words
+        .map((word: string, index: number) => {
+            const italic = italicWords.some((italicWord: string) =>
+                word.toLowerCase().includes(italicWord.toLowerCase())
+            );
+            return italic ? (
+                <i key={index}>{word}</i>
+            ) : (
+                <span key={index}>{word}</span>
+            );
+        })
+        .reduce(
+            (prev: JSX.Element, curr: JSX.Element) => (
+                <>
+                    {prev}
+                    {prev ? " " : ""}
+                    {curr}
+                </>
+            ),
+            <></>
+        );
+};
+
 interface ChartDataPoint {
     x: number;
     y: number;
@@ -169,7 +222,6 @@ const PrevalenceChart: React.FC = () => {
         id: "logoPlugin",
         beforeDraw: (chart: Chart) => {
             const ctx = chart.ctx;
-            // Set the background to white before drawing the chart
             ctx.save();
             ctx.globalCompositeOperation = "destination-over";
             ctx.fillStyle = "white";
@@ -223,19 +275,11 @@ const PrevalenceChart: React.FC = () => {
                     label="Select Microorganism"
                     sx={{
                         backgroundColor: "#f5f5f5",
-                        "& .MuiOutlinedInput-root": {
-                            "& fieldset": {
-                                borderColor: "white",
-                            },
-                            "&:hover fieldset": {
-                                borderColor: "white",
-                            },
-                        },
                     }}
                 >
                     {selectedMicroorganisms.map((microorganism) => (
                         <MenuItem key={microorganism} value={microorganism}>
-                            {microorganism}
+                            {formatMicroorganismName(microorganism)}
                         </MenuItem>
                     ))}
                 </Select>
@@ -293,7 +337,10 @@ const PrevalenceChart: React.FC = () => {
                                                         wordWrap: "break-word",
                                                     }}
                                                 >
-                                                    {key}
+                                                    {/* Apply the formatting here */}
+                                                    {formatMicroorganismName(
+                                                        currentMicroorganism
+                                                    )}
                                                 </Typography>
                                                 <Box sx={{ marginBottom: 4 }}>
                                                     <Bar
