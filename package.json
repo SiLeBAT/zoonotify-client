@@ -42,7 +42,7 @@
     "@types/lodash": "^4.14.159",
     "@types/uuid": "^9.0.4",
     "apexcharts": "^3.26.2",
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "chart.js": "^4.4.3",
     "file-saver": "^2.0.5",
     "i18next": "^19.9.2",
