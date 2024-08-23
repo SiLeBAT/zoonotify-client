@@ -1,5 +1,4 @@
-
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
 // jest.setup.js
 HTMLCanvasElement.prototype.getContext = () => ({
@@ -41,10 +40,10 @@ HTMLCanvasElement.prototype.getContext = () => ({
     strokeText: jest.fn(),
     fillText: jest.fn(),
     bezierCurveTo: jest.fn(),
-    canvas: jest.fn()
-  });
-  
-  // If you use the canvas npm package as suggested by the error logs:
-  const { createCanvas } = require('canvas');
-  window.HTMLCanvasElement.prototype.getContext = () => createCanvas(200, 200).getContext('2d');
-  
+    canvas: jest.fn(),
+});
+
+// If you use the canvas npm package as suggested by the error logs:
+const { createCanvas } = require("canvas");
+window.HTMLCanvasElement.prototype.getContext = () =>
+    createCanvas(200, 200).getContext("2d");
