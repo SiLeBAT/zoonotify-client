@@ -63,5 +63,10 @@
   "Generated_on": "Erstellt am",
   "No_data_available": "Keine Daten für die ausgewählten Optionen verfügbar.",
 
+"Prevalence": "Prävalenz",
+  "CI_min": "KI min",
+  "CI_max": "KI max",
+  "Samples": "Proben",
+  "Positive": "Positiv",
   "REQUIRED_FIELD_INDICATOR": "Felder, die mit einem Stern (*) markiert sind, sind erforderlich. Bitte wählen Sie mindestens eine Option in jedem erforderlichen Feld aus, um die Suchschaltfläche zu aktivieren."
 }

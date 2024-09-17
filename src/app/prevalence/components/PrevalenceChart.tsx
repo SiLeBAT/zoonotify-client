@@ -423,11 +423,16 @@ const PrevalenceChart: React.FC = () => {
                                                 const rawData =
                                                     context.raw as ChartDataPoint;
                                                 return [
-                                                    `Prevalence: ${rawData.x}%`,
-                                                    `CI Min: ${data.ciMin}`,
-                                                    `CI Max: ${data.ciMax}`,
-                                                    `Samples: ${data.numberOfSamples}`,
-                                                    `Positive: ${data.numberOfPositive}`,
+                                                   
+
+                                                    `${t("Prevalence")}: ${rawData.x}%`,
+                                                    `${t("CI_min")}: ${data.ciMin}`,
+                                                    `${t("CI_max")}: ${data.ciMax}`,
+                                                    `${t("Samples")}: ${data.numberOfSamples}`,
+                                                    `${t("Positive")}: ${data.numberOfPositive}`,
+
+
+
                                                 ];
                                             },
                                         },
