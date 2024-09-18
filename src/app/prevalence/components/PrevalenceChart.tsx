@@ -370,7 +370,7 @@ const PrevalenceChart: React.FC = () => {
                                     x: {
                                         title: {
                                             display: true,
-                                            text: "Prevalence (%)",
+                                            text: t("Prevalence %"),
                                         },
                                         beginAtZero: true,
                                         max: xAxisMax,
@@ -378,7 +378,7 @@ const PrevalenceChart: React.FC = () => {
                                     y: {
                                         title: {
                                             display: true,
-                                            text: "Year",
+                                            text: t("Year"),
                                         },
                                         reverse: false,
                                         ticks: {
@@ -423,11 +423,16 @@ const PrevalenceChart: React.FC = () => {
                                                 const rawData =
                                                     context.raw as ChartDataPoint;
                                                 return [
-                                                    `Prevalence: ${rawData.x}%`,
-                                                    `CI Min: ${data.ciMin}`,
-                                                    `CI Max: ${data.ciMax}`,
-                                                    `Samples: ${data.numberOfSamples}`,
-                                                    `Positive: ${data.numberOfPositive}`,
+                                                   
+
+                                                    `${t("Prevalence")}: ${rawData.x}%`,
+                                                    `${t("CI_min")}: ${data.ciMin}`,
+                                                    `${t("CI_max")}: ${data.ciMax}`,
+                                                    `${t("Samples")}: ${data.numberOfSamples}`,
+                                                    `${t("Positive")}: ${data.numberOfPositive}`,
+
+
+
                                                 ];
                                             },
                                         },
@@ -445,20 +450,21 @@ const PrevalenceChart: React.FC = () => {
                             ]}
                             ref={chartRefs.current[refKey]}
                         />
-                        <Button
-                            variant="contained"
-                            onClick={() =>
-                                downloadChart(
-                                    chartRefs.current[refKey],
-                                    refKey
-                                )
-                            }
-                        >
-                            {t("Download_Chart")}
-                        </Button>
-                    </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                    <Button
+                        variant="contained"
+                        size="small"  // Make the button smaller
+                        onClick={() =>
+                            downloadChart(chartRefs.current[refKey], refKey)
+                        }
+                        sx={{ textTransform: 'none' }} // Optional: Keep button text from being all uppercase
+                    >
+                        {t("Download_Chart")}
+                    </Button>
                 </Box>
-            </Grid>
+            </Box>
+        </Box>
+    </Grid>
         );
     })}
 </Grid>
