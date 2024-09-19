@@ -62,6 +62,13 @@
   "Download_All_Charts": "Alle Diagramme herunterladen",
   "Generated_on": "Erstellt am",
   "No_data_available": "Keine Daten für die ausgewählten Optionen verfügbar.",
+  "Prevalence": "Prävalenz",
+  "CI_min": "KI min",
+  "CI_max": "KI max",
+  "Samples": "Proben",
+  "Positive": "Positiv",
+  "Year": "Erhebungsjahr",
+  "Prevalence %": "Prävalenz (%)",
 
 "Prevalence": "Prävalenz",
   "CI_min": "KI min",
