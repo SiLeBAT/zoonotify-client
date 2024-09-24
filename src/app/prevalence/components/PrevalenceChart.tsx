@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"; 
+import React, { useRef, useState } from "react";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import {
     Box,
@@ -87,7 +87,7 @@ const PrevalenceChart: React.FC = () => {
         const chartData: { [key: string]: { [key: number]: ChartDataPoint } } = {};
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === currentMicroorganism) {
-                const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
+                const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`; // Move to legend
                 if (!chartData[key]) {
                     chartData[key] = {};
                 }
@@ -266,13 +266,14 @@ const PrevalenceChart: React.FC = () => {
                                     return (
                                         <Grid item xs={12} md={6} lg={4} key={key}>
                                             <Box sx={{ backgroundColor: "white", padding: 2, borderRadius: 1, boxShadow: 1 }}>
+                                                {/* Title updated with Microorganism */}
                                                 <Typography
                                                     variant="h6"
                                                     align="center"
                                                     gutterBottom
                                                     sx={{ minHeight: "65px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal", wordWrap: "break-word" }}
                                                 >
-                                                    {key}
+                                                    {formatMicroorganismName(currentMicroorganism)}
                                                 </Typography>
                                                 <Box sx={{ marginBottom: 4 }}>
                                                     <Bar
@@ -280,7 +281,8 @@ const PrevalenceChart: React.FC = () => {
                                                             labels: yearOptions,
                                                             datasets: [
                                                                 {
-                                                                    label: currentMicroorganism,
+                                                                    // Legend updated with Sample Origin, Matrix, Sampling Stage
+                                                                    label: key, 
                                                                     data: yearOptions.map(
                                                                         (year) => chartData[key]?.[year] || { x: 0, y: year, ciMin: 0, ciMax: 0 }
                                                                     ) as ChartDataPoint[],
