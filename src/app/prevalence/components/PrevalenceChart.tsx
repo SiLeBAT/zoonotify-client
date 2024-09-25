@@ -195,12 +195,12 @@ const PrevalenceChart: React.FC = () => {
             img.onload = () => {
                 const rightPadding = 0;
                 const topPadding = 0;
-                const logoWidth = 90;
-                const logoHeight = 40;
+                const logoWidth = 50;
+                const logoHeight = 20;
                 ctx.drawImage(img, chart.width - logoWidth - rightPadding, topPadding, logoWidth, logoHeight);
 
                 const dateText = `${t("Generated_on")}: ${getFormattedDate()}`;
-                ctx.font = "12px Arial";
+                ctx.font = "10px Arial";
                 ctx.fillStyle = "#000";
                 ctx.textAlign = "right";
                 ctx.fillText(dateText, chart.width - 10, chart.height - 10);
@@ -264,14 +264,14 @@ const PrevalenceChart: React.FC = () => {
                                     }
 
                                     return (
-                                        <Grid item xs={12} md={6} lg={4} key={key}>
+                                        <Grid item xs={12} sm={12} md={6} lg={6}>
                                             <Box sx={{ backgroundColor: "white", padding: 2, borderRadius: 1, boxShadow: 1 }}>
                                                 {/* Title updated with Microorganism */}
                                                 <Typography
                                                     variant="h6"
                                                     align="center"
                                                     gutterBottom
-                                                    sx={{ minHeight: "65px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal", wordWrap: "break-word" }}
+                                                    sx={{ minHeight: "50px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal", wordWrap: "break-word" }}
                                                 >
                                                     {formatMicroorganismName(currentMicroorganism)}
                                                 </Typography>
@@ -357,7 +357,8 @@ const PrevalenceChart: React.FC = () => {
                                 })}
                             </Grid>
 
-                            <Box sx={{ position: "sticky", bottom: 0, color: "inherit", padding: 0, textAlign: "center", zIndex: 1000, boxShadow: "0 0px 0px rgba(0,0,0,0)" }}>
+                            <Box sx={{ position: "sticky", bottom: 0, color: "inherit", textAlign: "center", zIndex: 1000,padding: 1, 
+                backgroundColor: 'rgb(219, 228, 235)',    }}>
                                 <Button variant="contained" onClick={downloadAllCharts} sx={{ width: "100%", height: "50px" }}>
                                     {t("Download_All_Charts")}
                                 </Button>
