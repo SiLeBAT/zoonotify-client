@@ -18,7 +18,45 @@ type SearchParameterDisplayProps = {
 
 type SearchParameterEntryProps = {
     title: string;
-    value: string;
+    value: JSX.Element | string;  // Accept JSX as value for microorganism formatting
+};
+
+const italicWords: string[] = [
+    "Salmonella", "coli", "E.", "Bacillus", "cereus", "monocytogenes", 
+    "Clostridioides", "difficile", "Yersinia", "Listeria", "enterocolitica", 
+    "Vibrio", "Baylisascaris", "procyonis", "Echinococcus", "Campylobacter",
+];
+
+// The function to format microorganism names
+const formatMicroorganismName = (microName: string | null | undefined): JSX.Element => {
+    if (!microName) {
+        console.warn("Received null or undefined microorganism name");
+        return <></>;
+    }
+
+    // Split by space and dash while preserving the separators
+    const words = microName.split(/([-\s])/).filter((part: string) => part.length > 0);
+
+    return (
+        <>
+            {words.map((word: string, index: number) => {
+                // If the word is just a separator (space or dash), return it as is
+                if (word.trim() === '' || word === '-') {
+                    return word;
+                }
+
+                const italic = italicWords.some((italicWord: string) =>
+                    word.toLowerCase().includes(italicWord.toLowerCase())
+                );
+
+                return italic ? (
+                    <i key={index}>{word}</i>
+                ) : (
+                    <span key={index}>{word}</span>
+                );
+            })}
+        </>
+    );
 };
 
 const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
@@ -34,12 +72,10 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
             sx={{
                 p: 1,
                 border: 1,
-                ///borderColor: "divider",
                 borderRadius: 1,
                 mb: 1,
                 backgroundColor: theme.palette.grey[100],
                 width: "100%",
-
                 maxWidth: "1200px",
             }}
         >
@@ -82,14 +118,23 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                 width: "100%",
             }}
         >
+            {/* Microorganism Display with correct formatting */}
             {searchParameters.microorganism && (
                 <SearchParameterEntry
                     title={t("MICROORGANISMS")}
-                    value={searchParameters.microorganism
-                        .map((v) => t(v))
-                        .join(", ")}
+                    value={
+                        <>
+                            {searchParameters.microorganism.map((v, index) => (
+                                <span key={index}>
+                                    {formatMicroorganismName(t(v))}
+                                    {index < searchParameters.microorganism.length - 1 ? ", " : ""}
+                                </span>
+                            ))}
+                        </>
+                    }
                 />
             )}
+            {/* Other entries */}
             {searchParameters.matrix && (
                 <SearchParameterEntry
                     title={t("MATRIX")}
@@ -99,41 +144,31 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
             {searchParameters.sampleOrigin && (
                 <SearchParameterEntry
                     title={t("SAMPLE_ORIGIN")}
-                    value={searchParameters.sampleOrigin
-                        .map((v) => t(v))
-                        .join(", ")}
+                    value={searchParameters.sampleOrigin.map((v) => t(v)).join(", ")}
                 />
             )}
             {searchParameters.matrixGroup && (
                 <SearchParameterEntry
                     title={t("MATRIX_GROUP")}
-                    value={searchParameters.matrixGroup
-                        .map((v) => t(v))
-                        .join(", ")}
+                    value={searchParameters.matrixGroup.map((v) => t(v)).join(", ")}
                 />
             )}
             {searchParameters.samplingYear && (
                 <SearchParameterEntry
                     title={t("SAMPLING_YEAR")}
-                    value={searchParameters.samplingYear
-                        .map((v) => t(v))
-                        .join(", ")}
+                    value={searchParameters.samplingYear.map((v) => t(v)).join(", ")}
                 />
             )}
             {searchParameters.superCategorySampleOrigin && (
                 <SearchParameterEntry
                     title={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
-                    value={searchParameters.superCategorySampleOrigin
-                        .map((v) => t(v))
-                        .join(", ")}
+                    value={searchParameters.superCategorySampleOrigin.map((v) => t(v)).join(", ")}
                 />
             )}
             {searchParameters.samplingStage && (
                 <SearchParameterEntry
                     title={t("SAMPLING_STAGE")}
-                    value={searchParameters.samplingStage
-                        .map((v) => t(v))
-                        .join(", ")}
+                    value={searchParameters.samplingStage.map((v) => t(v)).join(", ")}
                 />
             )}
         </Box>
@@ -145,9 +180,7 @@ const DataGridControls: React.FC<DataGridControlsProps> = ({ heading }) => {
     return (
         <ZNAccordion
             title={heading}
-            content={
-                <SearchParameterDisplay searchParameters={searchParameters} />
-            }
+            content={<SearchParameterDisplay searchParameters={searchParameters} />}
             defaultExpanded={false}
             centerContent={true}
         />
