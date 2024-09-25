@@ -32,7 +32,7 @@
   "DOWNLOAD_ZIP_FILE": "Data download",
   "SAMPLING_YEAR": "Sampling year",
   "NUMBER_OF_SAMPLES": "Total no. of samples (N)",
-  "NUMBER_OF_POSITIVE": "No. of positive samples (N)",
+  "NUMBER_OF_POSITIVE": "No. of positive samples (n)",
   "PERCENTAGE_OF_POSITIVE": "Prevalence (%)",
   "CIMIN": "Min. 95 % confidence interval",
   "CIMAX": " Max. 95 % confidence interval ",

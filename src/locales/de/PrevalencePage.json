@@ -32,7 +32,7 @@
   "DOWNLOAD_ZIP_FILE": "Datenexport",
   "SAMPLING_YEAR": "Erhebungsjahr",
   "NUMBER_OF_SAMPLES": "Anzahl untersuchter Proben (N)",
-  "NUMBER_OF_POSITIVE": " Anzahl positiver Proben (N)",
+  "NUMBER_OF_POSITIVE": " Anzahl positiver Proben (n)",
   "PERCENTAGE_OF_POSITIVE": "Prävalenz (%)",
   "CIMIN": "Min. 95 % Konfidenzintervall",
   "CIMAX": " Max. 95 % Konfidenzintervall ",
