@@ -53,10 +53,7 @@ export function LinkPageLinkListComponent(): JSX.Element {
                         (a, b) => b.priority - a.priority
                     );
                     
-                    // Debugging: Log the sorted links to verify the sorting
-                    console.log("API Response Data: ", response.data);
-                    console.log("Sorted Links: ", sortedLinks);
-                    
+                 
                     setLinkData(sortedLinks);
                 }
                 return null;
