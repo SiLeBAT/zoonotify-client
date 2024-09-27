@@ -38,8 +38,8 @@ export function LinkPageLinkListComponent(): JSX.Element {
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
     useEffect(() => {
-        // Updated the API endpoint to include sorting by priority in descending order
-        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18next.language}&_sort=priority:DESC`;
+        // API endpoint without sorting since we will handle sorting in the frontend
+        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18next.language}`;
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
@@ -47,7 +47,17 @@ export function LinkPageLinkListComponent(): JSX.Element {
                     const extractedLinks = response.data.data.map(
                         (item: CMSEntity<ExternalLink>) => item.attributes
                     );
-                    setLinkData(extractedLinks);
+                    
+                    // Sort the extracted links by priority in descending order
+                    const sortedLinks = extractedLinks.sort(
+                        (a, b) => b.priority - a.priority
+                    );
+                    
+                    // Debugging: Log the sorted links to verify the sorting
+                    console.log("API Response Data: ", response.data);
+                    console.log("Sorted Links: ", sortedLinks);
+                    
+                    setLinkData(sortedLinks);
                 }
                 return null;
             })
