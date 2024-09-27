@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-// eslint-disable-next-line import/named
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button, Link } from "@mui/material";
+import { Button, IconButton, Link } from "@mui/material";
+import { Add, Remove } from "@mui/icons-material"; // Importing Material UI Icons
 import { useTheme } from "@mui/system";
 import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
@@ -66,6 +66,7 @@ const formatMicroorganismName = (
             <></>
         );
 };
+
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
     loading,
@@ -75,6 +76,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
     const { searchParameters } = usePrevalenceFilters();
+    const [accordionHeight, setAccordionHeight] = useState(550); // Default accordion height
 
     const getFormattedTimestamp = (): string => {
         const date = new Date();
@@ -258,6 +260,16 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         },
     ];
 
+    // Function to increase accordion height
+    const increaseHeight = () => {
+        setAccordionHeight((prevHeight) => prevHeight + 100); // Increment by 100px
+    };
+
+    // Function to decrease accordion height
+    const decreaseHeight = () => {
+        setAccordionHeight((prevHeight) => (prevHeight > 200 ? prevHeight - 100 : prevHeight)); // Decrease by 100px, but not below 200px
+    };
+
     return (
         <>
             <div style={{ marginBottom: "10px" }}>
@@ -348,33 +360,67 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 }
                 defaultExpanded={true}
                 centerContent={false}
-                withTopBorder={false} // Disable the top border for this accordion
+                withTopBorder={false}
             />
-            <div style={{ height: "10px" }}></div>
+
+            {/* Icon buttons to increase/decrease chart size with hover effects */}
+            <div style={{ marginBottom: "8px", display: "flex", justifyContent: "flex-start" }}>
+                <IconButton
+                    onClick={increaseHeight}
+                    style={{
+                        marginRight: "8px",
+                        transition: "background-color 0.3s",
+                    }}
+                    sx={{
+                        "&:hover": {
+                            backgroundColor: theme.palette.primary.light,
+                            color: theme.palette.primary.main,
+                        },
+                    }}
+                >
+                    <Add />
+                </IconButton>
+                <IconButton
+                    onClick={decreaseHeight}
+                    style={{
+                        transition: "background-color 0.3s",
+                    }}
+                    sx={{
+                        "&:hover": {
+                            backgroundColor: theme.palette.primary.light,
+                            color: theme.palette.primary.main,
+                        },
+                    }}
+                >
+                    <Remove />
+                </IconButton>
+            </div>
+
             <ZNAccordion
                 title={t("PREVALENCE_CHART")}
                 content={
                     <div
                         style={{
-                            height: 550,
+                            height: accordionHeight,  // Use dynamic height from state
                             width: "100%",
                             overflowX: "auto",
                             display: "flex",
                             flexDirection: "column",
                         }}
                     >
-                        {/* Add your chart component here */}
                         <div style={{ height: "100%", width: "100%" }}>
-                            <PrevalenceChart />{" "}
+                            <PrevalenceChart />
                         </div>
                     </div>
                 }
                 defaultExpanded={true}
                 centerContent={false}
-                withTopBorder={false} // Disable the top border for this accordion
+                withTopBorder={false}
             />
         </>
     );
 };
 
 export { PrevalenceDataGrid };
+
+
