@@ -152,11 +152,75 @@ const PrevalenceChart: React.FC = () => {
         chartKey: string
     ): void => {
         if (chartRef.current) {
+            const chartInstance = chartRef.current;
             const timestamp = getCurrentTimestamp();
-            const link = document.createElement("a");
-            link.href = chartRef.current.toBase64Image();
-            link.download = `${chartKey}-${timestamp}.png`;
-            link.click();
+    
+            // Get chart canvas and context
+            const canvas = chartInstance.canvas;
+            const ctx = canvas.getContext("2d");
+    
+            if (ctx) {
+                // Create a temporary canvas with increased height to fit the title
+                const tempCanvas = document.createElement("canvas");
+                const tempCtx = tempCanvas.getContext("2d");
+    
+                const extraHeight = 40; // Height for the title
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height + extraHeight;
+    
+                if (tempCtx) {
+                    // Fill the background with white
+                    tempCtx.fillStyle = "white";
+                    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+    
+                    // Draw the chart image onto the temporary canvas
+                    tempCtx.drawImage(canvas, 0, extraHeight);
+    
+                    // Format and add the title (Microorganism name) at the top
+                    const words = currentMicroorganism.split(/([-\s])/).filter((part: string) => part.length > 0);
+    
+                    // Calculate the total width of the entire text to center it
+                    let totalWidth = 0;
+                    words.forEach((word) => {
+                        const italic = italicWords.some((italicWord) =>
+                            word.toLowerCase().includes(italicWord.toLowerCase())
+                        );
+                        tempCtx.font = italic ? "italic 20px Arial" : "20px Arial";
+                        totalWidth += tempCtx.measureText(word).width + 2; // Add a small space between words (adjust as needed)
+                    });
+    
+                    // Set initial x position to center the entire title
+                    let xPos = (tempCanvas.width - totalWidth) / 2;
+                    const yPos = 30; // Y position for the title text
+    
+                    // Render each word with appropriate formatting
+                    words.forEach((word) => {
+                        const italic = italicWords.some((italicWord) =>
+                            word.toLowerCase().includes(italicWord.toLowerCase())
+                        );
+    
+                        // Set font for each word
+                        tempCtx.font = italic ? "italic 20px Arial" : "20px Arial";
+                        tempCtx.fillStyle = "black";
+    
+                        // Draw the word
+                        tempCtx.fillText(word, xPos, yPos);
+    
+                        // Move xPos for the next word, adding a smaller space between words
+                        xPos += tempCtx.measureText(word).width + 2; // Reduce spacing here if too large
+                    });
+    
+                    // Convert the temporary canvas to an image and download
+                    const link = document.createElement("a");
+                    link.href = tempCanvas.toDataURL();
+                    link.download = `${chartKey}-${timestamp}.png`;
+                    link.click();
+                } else {
+                    console.error("Temporary canvas context not found");
+                }
+            } else {
+                console.error("Canvas context not found");
+            }
         } else {
             console.error("Chart reference is invalid or toBase64Image method not found");
         }
@@ -372,3 +436,5 @@ const PrevalenceChart: React.FC = () => {
 };
 
 export { PrevalenceChart };
+
+
