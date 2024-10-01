@@ -20,8 +20,8 @@ import { useTranslation } from "react-i18next";
 Chart.register(...registerables);
 
 const italicWords: string[] = [
-    "Salmonella", "coli", "E.", "Bacillus", "cereus", "monocytogenes", 
-    "Clostridioides", "difficile", "Yersinia", "Listeria", "enterocolitica", 
+    "Salmonella", "coli", "E.", "Bacillus", "cereus", "monocytogenes",
+    "Clostridioides", "difficile", "Yersinia", "Listeria", "enterocolitica",
     "Vibrio", "Baylisascaris", "procyonis", "Echinococcus", "Campylobacter",
 ];
 
@@ -31,13 +31,11 @@ const formatMicroorganismName = (microName: string | null | undefined): JSX.Elem
         return <></>;
     }
 
-    // Split by space and dash while preserving the separators
     const words = microName.split(/([-\s])/).filter((part: string) => part.length > 0);
 
     return (
         <>
             {words.map((word: string, index: number) => {
-                // If the word is just a separator (space or dash), return it as is
                 if (word.trim() === '' || word === '-') {
                     return word;
                 }
@@ -87,7 +85,7 @@ const PrevalenceChart: React.FC = () => {
         const chartData: { [key: string]: { [key: number]: ChartDataPoint } } = {};
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === currentMicroorganism) {
-                const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`; // Move to legend
+                const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
                 if (!chartData[key]) {
                     chartData[key] = {};
                 }
@@ -147,6 +145,43 @@ const PrevalenceChart: React.FC = () => {
         });
     };
 
+    const errorBarTooltipPlugin = {
+        id: 'customErrorBarsTooltip',
+        afterEvent: (chart: Chart, args: { event: any }) => {
+            const { event } = args;
+            const tooltip = chart.tooltip;
+            const mouseX = event.x;
+            const mouseY = event.y;
+            let foundErrorBar = false;
+
+            chart.data.datasets.forEach((dataset, i) => {
+                const meta = chart.getDatasetMeta(i);
+                meta.data.forEach((bar, index) => {
+                    const dataPoint = dataset.data[index] as ChartDataPoint;
+                    if (dataPoint && (dataPoint.ciMin || dataPoint.ciMax)) {
+                        const xMin = chart.scales.x.getPixelForValue(dataPoint.ciMin);
+                        const xMax = chart.scales.x.getPixelForValue(dataPoint.ciMax);
+                        const y = bar.y;
+
+                        if (mouseX >= xMin && mouseX <= xMax && Math.abs(mouseY - y) < 5) {
+                            if (tooltip && typeof tooltip.setActiveElements === 'function') {
+                                tooltip.setActiveElements([{
+                                    datasetIndex: i,
+                                    index,
+                                }], { x: mouseX, y: mouseY });
+                            }
+                            foundErrorBar = true;
+                        }
+                    }
+                });
+            });
+
+            if (!foundErrorBar && tooltip && typeof tooltip.setActiveElements === 'function') {
+                tooltip.setActiveElements([], { x: 0, y: 0 });
+            }
+        },
+    };
+
     const downloadChart = (
         chartRef: React.RefObject<Chart<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
@@ -154,75 +189,53 @@ const PrevalenceChart: React.FC = () => {
         if (chartRef.current) {
             const chartInstance = chartRef.current;
             const timestamp = getCurrentTimestamp();
-    
-            // Get chart canvas and context
             const canvas = chartInstance.canvas;
             const ctx = canvas.getContext("2d");
-    
+
             if (ctx) {
-                // Create a temporary canvas with increased height to fit the title
                 const tempCanvas = document.createElement("canvas");
                 const tempCtx = tempCanvas.getContext("2d");
-    
-                const extraHeight = 40; // Height for the title
+
+                const extraHeight = 40;
                 tempCanvas.width = canvas.width;
                 tempCanvas.height = canvas.height + extraHeight;
-    
+
                 if (tempCtx) {
-                    // Fill the background with white
                     tempCtx.fillStyle = "white";
                     tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-    
-                    // Draw the chart image onto the temporary canvas
                     tempCtx.drawImage(canvas, 0, extraHeight);
-    
-                    // Format and add the title (Microorganism name) at the top
+
                     const words = currentMicroorganism.split(/([-\s])/).filter((part: string) => part.length > 0);
-    
-                    // Calculate the total width of the entire text to center it
+
                     let totalWidth = 0;
                     words.forEach((word) => {
                         const italic = italicWords.some((italicWord) =>
                             word.toLowerCase().includes(italicWord.toLowerCase())
                         );
                         tempCtx.font = italic ? "italic 20px Arial" : "20px Arial";
-                        totalWidth += tempCtx.measureText(word).width + 2; // Add a small space between words (adjust as needed)
+                        totalWidth += tempCtx.measureText(word).width + 2;
                     });
-    
-                    // Set initial x position to center the entire title
+
                     let xPos = (tempCanvas.width - totalWidth) / 2;
-                    const yPos = 30; // Y position for the title text
-    
-                    // Render each word with appropriate formatting
+                    const yPos = 30;
+
                     words.forEach((word) => {
                         const italic = italicWords.some((italicWord) =>
                             word.toLowerCase().includes(italicWord.toLowerCase())
                         );
-    
-                        // Set font for each word
+
                         tempCtx.font = italic ? "italic 20px Arial" : "20px Arial";
                         tempCtx.fillStyle = "black";
-    
-                        // Draw the word
                         tempCtx.fillText(word, xPos, yPos);
-    
-                        // Move xPos for the next word, adding a smaller space between words
-                        xPos += tempCtx.measureText(word).width + 2; // Reduce spacing here if too large
+                        xPos += tempCtx.measureText(word).width + 2;
                     });
-    
-                    // Convert the temporary canvas to an image and download
+
                     const link = document.createElement("a");
                     link.href = tempCanvas.toDataURL();
                     link.download = `${chartKey}-${timestamp}.png`;
                     link.click();
-                } else {
-                    console.error("Temporary canvas context not found");
                 }
-            } else {
-                console.error("Canvas context not found");
             }
-        } else {
-            console.error("Chart reference is invalid or toBase64Image method not found");
         }
     };
 
@@ -274,44 +287,42 @@ const PrevalenceChart: React.FC = () => {
 
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
-        {/* Sticky microorganism dropdown */}
-        <Box 
-            sx={{ 
-                position: 'sticky', 
-                top: 0, 
-                zIndex: 1000, 
-                padding: 0.8, 
-                backgroundColor: 'rgb(219, 228, 235)',  
-                
-            }}
-        >
-            <FormControl fullWidth sx={{ mb: 1 }} variant="outlined">
-    <InputLabel id="microorganism-select-label" shrink={true}> 
-        Select Microorganism
-    </InputLabel>
-    <Select
-        labelId="microorganism-select-label"
-        value={currentMicroorganism}
-        onChange={(event) => setCurrentMicroorganism(event.target.value as string)}
-        label="Select Microorganism"
-        sx={{ backgroundColor: "#f5f5f5" }}
-        renderValue={(selected) => (
-            <Typography component="span">
-                {formatMicroorganismName(selected)}
-            </Typography>
-        )}
-    >
-        {selectedMicroorganisms.map((microorganism) => (
-            <MenuItem key={microorganism} value={microorganism}>
-                <Typography component="span">
-                    {formatMicroorganismName(microorganism)}
-                </Typography>
-            </MenuItem>
-        ))}
-    </Select>
-</FormControl>
-        </Box>
-   
+            <Box
+                sx={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1000,
+                    padding: 0.8,
+                    backgroundColor: 'rgb(219, 228, 235)',
+                }}
+            >
+                <FormControl fullWidth sx={{ mb: 1 }} variant="outlined">
+                    <InputLabel id="microorganism-select-label" shrink={true}>
+                        Select Microorganism
+                    </InputLabel>
+                    <Select
+                        labelId="microorganism-select-label"
+                        value={currentMicroorganism}
+                        onChange={(event) => setCurrentMicroorganism(event.target.value as string)}
+                        label="Select Microorganism"
+                        sx={{ backgroundColor: "#f5f5f5" }}
+                        renderValue={(selected) => (
+                            <Typography component="span">
+                                {formatMicroorganismName(selected)}
+                            </Typography>
+                        )}
+                    >
+                        {selectedMicroorganisms.map((microorganism) => (
+                            <MenuItem key={microorganism} value={microorganism}>
+                                <Typography component="span">
+                                    {formatMicroorganismName(microorganism)}
+                                </Typography>
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Box>
+
             {loading ? (
                 <CircularProgress />
             ) : (
@@ -330,7 +341,6 @@ const PrevalenceChart: React.FC = () => {
                                     return (
                                         <Grid item xs={12} sm={12} md={6} lg={6}>
                                             <Box sx={{ backgroundColor: "white", padding: 2, borderRadius: 1, boxShadow: 1 }}>
-                                                {/* Title updated with Microorganism */}
                                                 <Typography
                                                     variant="h6"
                                                     align="center"
@@ -345,8 +355,7 @@ const PrevalenceChart: React.FC = () => {
                                                             labels: yearOptions,
                                                             datasets: [
                                                                 {
-                                                                    // Legend updated with Sample Origin, Matrix, Sampling Stage
-                                                                    label: key, 
+                                                                    label: key,
                                                                     data: yearOptions.map(
                                                                         (year) => chartData[key]?.[year] || { x: 0, y: year, ciMin: 0, ciMax: 0 }
                                                                     ) as ChartDataPoint[],
@@ -377,9 +386,11 @@ const PrevalenceChart: React.FC = () => {
                                                                     backgroundColor: "rgba(0, 0, 0, 1)",
                                                                     titleFont: { size: 14 },
                                                                     bodyFont: { size: 12 },
-                                                                    displayColors: false,
+                                                                    displayColors: true,
                                                                     borderColor: "#fff",
                                                                     borderWidth: 1,
+                                                                    caretPadding: 120, // Add extra space between the tooltip and the bar
+                                                                    yAlign: 'center', // Ensure tooltip doesn't appear at the top or bottom of the bar
                                                                     callbacks: {
                                                                         label: (context) => {
                                                                             const year = parseInt(context.label, 10);
@@ -398,10 +409,7 @@ const PrevalenceChart: React.FC = () => {
                                                             },
                                                             animation: false,
                                                         }}
-                                                        plugins={[
-                                                            { id: "customErrorBars", afterDraw: (chart: Chart) => drawErrorBars(chart) },
-                                                            logoPlugin,
-                                                        ]}
+                                                        plugins={[errorBarTooltipPlugin, { id: "customErrorBars", afterDraw: (chart: Chart) => drawErrorBars(chart) }, logoPlugin]}
                                                         ref={chartRefs.current[refKey]}
                                                     />
                                                     <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
@@ -421,8 +429,7 @@ const PrevalenceChart: React.FC = () => {
                                 })}
                             </Grid>
 
-                            <Box sx={{ position: "sticky", bottom: 0, color: "inherit", textAlign: "center", zIndex: 1000,padding: 1, 
-                backgroundColor: 'rgb(219, 228, 235)',    }}>
+                            <Box sx={{ position: "sticky", bottom: 0, color: "inherit", textAlign: "center", zIndex: 1000, padding: 1, backgroundColor: 'rgb(219, 228, 235)' }}>
                                 <Button variant="contained" onClick={downloadAllCharts} sx={{ width: "100%", height: "50px" }}>
                                     {t("Download_All_Charts")}
                                 </Button>
@@ -436,5 +443,3 @@ const PrevalenceChart: React.FC = () => {
 };
 
 export { PrevalenceChart };
-
-
