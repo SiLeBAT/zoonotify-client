@@ -147,7 +147,9 @@ const PrevalenceChart: React.FC = () => {
 
     const errorBarTooltipPlugin = {
         id: 'customErrorBarsTooltip',
-        afterEvent: (chart: Chart, args: { event: any }) => {
+        
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+afterEvent: (chart: Chart, args: { event: any }) => {
             const { event } = args;
             const tooltip = chart.tooltip;
             const mouseX = event.x;
