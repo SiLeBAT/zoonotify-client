@@ -67,9 +67,8 @@
   "Samples": "Samples",
   "Positive": "Positive",
   "Year": "Year",
- 
-  "Prevalence %": "Prevalence (%)",
 
+  "Prevalence %": "Prevalence (%)",
 
   "REQUIRED_FIELD_INDICATOR": "Fields marked with a star (*) are required. Please select at least one option from each required field to activate the search button."
 }
