@@ -47,13 +47,12 @@ export function LinkPageLinkListComponent(): JSX.Element {
                     const extractedLinks = response.data.data.map(
                         (item: CMSEntity<ExternalLink>) => item.attributes
                     );
-                    
+
                     // Sort the extracted links by priority in descending order
                     const sortedLinks = extractedLinks.sort(
                         (a, b) => b.priority - a.priority
                     );
-                    
-                 
+
                     setLinkData(sortedLinks);
                 }
                 return null;

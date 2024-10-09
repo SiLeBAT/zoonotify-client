@@ -348,7 +348,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 }
                 defaultExpanded={true}
                 centerContent={false}
-                withTopBorder={false} // Disable the top border for this accordion
+                withTopBorder={false}
             />
             <div style={{ height: "10px" }}></div>
             <ZNAccordion
@@ -356,7 +356,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 content={
                     <div
                         style={{
-                            height: 550,
+                            maxHeight: "70vh",
                             width: "100%",
                             overflowX: "auto",
                             display: "flex",
@@ -371,7 +371,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 }
                 defaultExpanded={true}
                 centerContent={false}
-                withTopBorder={false} // Disable the top border for this accordion
+                withTopBorder={false}
             />
         </>
     );

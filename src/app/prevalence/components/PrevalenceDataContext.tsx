@@ -434,7 +434,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         try {
             let query = `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`;
             const filters: string[] = [];
-    
+
             const addFilter = (field: string, values: string[]): void => {
                 if (values.length > 0) {
                     filters.push(
@@ -442,13 +442,15 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                             .map(
                                 (value) =>
                                     // Use encodeURIComponent to handle special characters
-                                    `filters[${field}][name][$eq]=${encodeURIComponent(value)}`
+                                    `filters[${field}][name][$eq]=${encodeURIComponent(
+                                        value
+                                    )}`
                             )
                             .join("&")
                     );
                 }
             };
-    
+
             addFilter("microorganism", selectedMicroorganisms);
             addFilter("sampleOrigin", selectedSampleOrigins);
             addFilter("matrix", selectedMatrices);
@@ -462,11 +464,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 );
             }
             addFilter("superCategorySampleOrigin", selectedSuperCategory);
-    
+
             if (filters.length > 0) {
                 query += "&" + filters.join("&");
             }
-    
+
             const response = await callApiService<
                 CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
             >(query);
