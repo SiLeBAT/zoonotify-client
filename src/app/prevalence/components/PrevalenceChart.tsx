@@ -10,6 +10,7 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
+    Pagination,
 } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
@@ -100,6 +101,8 @@ const PrevalenceChart: React.FC = () => {
     const [currentMicroorganism, setCurrentMicroorganism] = useState(
         selectedMicroorganisms[0] || ""
     );
+    const [currentPage, setCurrentPage] = useState(1); // For pagination
+    const chartsPerPage = 2; // Number of charts to display per page
 
     const yearOptions = Array.from(
         { length: 14 },
@@ -131,6 +134,15 @@ const PrevalenceChart: React.FC = () => {
     };
 
     const chartData = generateChartData();
+    const chartKeys = Object.keys(chartData);
+    const totalCharts = chartKeys.length;
+    const totalPages = Math.ceil(totalCharts / chartsPerPage);
+
+    const displayedCharts = chartKeys.slice(
+        (currentPage - 1) * chartsPerPage,
+        currentPage * chartsPerPage
+    );
+
     const isBelow25Percent = Object.values(chartData)
         .flatMap((yearData) =>
             Object.values(yearData).every((data) => data.ciMax <= 25)
@@ -309,12 +321,73 @@ const PrevalenceChart: React.FC = () => {
             async (key) => {
                 const chartRef = chartRefs.current[key];
                 if (chartRef && chartRef.current) {
-                    const base64Image = chartRef.current
-                        .toBase64Image()
-                        .split(",")[1];
-                    zip.file(`${key}-${timestamp}.png`, base64Image, {
-                        base64: true,
-                    });
+                    const chartInstance = chartRef.current;
+                    const canvas = chartInstance.canvas;
+                    const ctx = canvas.getContext("2d");
+
+                    if (ctx) {
+                        const tempCanvas = document.createElement("canvas");
+                        const tempCtx = tempCanvas.getContext("2d");
+
+                        const extraHeight = 40;
+                        tempCanvas.width = canvas.width;
+                        tempCanvas.height = canvas.height + extraHeight;
+
+                        if (tempCtx) {
+                            tempCtx.fillStyle = "white";
+                            tempCtx.fillRect(
+                                0,
+                                0,
+                                tempCanvas.width,
+                                tempCanvas.height
+                            );
+                            tempCtx.drawImage(canvas, 0, extraHeight);
+
+                            // Draw the title onto tempCtx
+                            const words = currentMicroorganism
+                                .split(/([-\s])/)
+                                .filter((part: string) => part.length > 0);
+
+                            let totalWidth = 0;
+                            words.forEach((word) => {
+                                const italic = italicWords.some((italicWord) =>
+                                    word
+                                        .toLowerCase()
+                                        .includes(italicWord.toLowerCase())
+                                );
+                                tempCtx.font = italic
+                                    ? "italic 20px Arial"
+                                    : "20px Arial";
+                                totalWidth +=
+                                    tempCtx.measureText(word).width + 2;
+                            });
+
+                            let xPos = (tempCanvas.width - totalWidth) / 2;
+                            const yPos = 30;
+
+                            words.forEach((word) => {
+                                const italic = italicWords.some((italicWord) =>
+                                    word
+                                        .toLowerCase()
+                                        .includes(italicWord.toLowerCase())
+                                );
+
+                                tempCtx.font = italic
+                                    ? "italic 20px Arial"
+                                    : "20px Arial";
+                                tempCtx.fillStyle = "black";
+                                tempCtx.fillText(word, xPos, yPos);
+                                xPos += tempCtx.measureText(word).width + 2;
+                            });
+
+                            const base64Image = tempCanvas
+                                .toDataURL()
+                                .split(",")[1];
+                            zip.file(`${key}-${timestamp}.png`, base64Image, {
+                                base64: true,
+                            });
+                        }
+                    }
                 }
             }
         );
@@ -323,6 +396,7 @@ const PrevalenceChart: React.FC = () => {
         const content = await zip.generateAsync({ type: "blob" });
         saveAs(content, `charts-${timestamp}.zip`);
     };
+
     const logoPlugin = {
         id: "logoPlugin",
         beforeDraw: (chart: Chart) => {
@@ -363,7 +437,7 @@ const PrevalenceChart: React.FC = () => {
                     position: "sticky",
                     top: 0,
                     zIndex: 1000,
-                    padding: 2, // Increased padding for better appearance
+                    padding: 2,
                     backgroundColor: "rgb(219, 228, 235)",
                 }}
             >
@@ -409,7 +483,7 @@ const PrevalenceChart: React.FC = () => {
                     ) : (
                         <>
                             <Grid container spacing={4}>
-                                {Object.keys(chartData).map((key) => {
+                                {displayedCharts.map((key) => {
                                     const refKey = `${key}-${currentMicroorganism}`;
                                     if (!chartRefs.current[refKey]) {
                                         chartRefs.current[refKey] =
@@ -429,6 +503,7 @@ const PrevalenceChart: React.FC = () => {
                                             sm={12}
                                             md={6}
                                             lg={6}
+                                            key={refKey}
                                         >
                                             <Box
                                                 sx={{
@@ -439,10 +514,8 @@ const PrevalenceChart: React.FC = () => {
                                                     margin: "0 15px",
                                                 }}
                                             >
-                                                {" "}
-                                                {/* Increased padding, border radius, and shadow for better box size */}
                                                 <Typography
-                                                    variant="h5" // Increased font size for chart title
+                                                    variant="h5"
                                                     align="center"
                                                     gutterBottom
                                                     sx={{
@@ -630,7 +703,7 @@ const PrevalenceChart: React.FC = () => {
                                                     >
                                                         <Button
                                                             variant="contained"
-                                                            size="medium" // Increased button size
+                                                            size="medium"
                                                             onClick={() =>
                                                                 downloadChart(
                                                                     chartRefs
@@ -657,6 +730,17 @@ const PrevalenceChart: React.FC = () => {
                                 })}
                             </Grid>
 
+                            <Pagination
+                                count={totalPages}
+                                page={currentPage}
+                                onChange={(_, value) => setCurrentPage(value)}
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    mt: 4,
+                                }}
+                            />
+
                             <Box
                                 sx={{
                                     position: "sticky",
@@ -668,15 +752,11 @@ const PrevalenceChart: React.FC = () => {
                                     backgroundColor: "rgb(219, 228, 235)",
                                 }}
                             >
-                                {" "}
-                                {/* Increased padding */}
                                 <Button
                                     variant="contained"
                                     onClick={downloadAllCharts}
                                     sx={{ width: "100%", height: "60px" }}
                                 >
-                                    {" "}
-                                    {/* Increased height */}
                                     {t("Download_All_Charts")}
                                 </Button>
                             </Box>
