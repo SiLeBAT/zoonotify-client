@@ -92,18 +92,47 @@ const getFormattedDate = (): string => {
 };
 
 const PrevalenceChart: React.FC = () => {
-    const { selectedMicroorganisms, prevalenceData, loading } =
-        usePrevalenceFilters();
+    const { prevalenceData, loading } = usePrevalenceFilters();
     const chartRefs = useRef<{
         [key: string]: React.RefObject<Chart<"bar", ChartDataPoint[], unknown>>;
     }>({});
     const { t } = useTranslation(["PrevalencePage"]);
-    const [currentMicroorganism, setCurrentMicroorganism] = useState(
-        selectedMicroorganisms[0] || ""
-    );
+    const [currentMicroorganism, setCurrentMicroorganism] = useState<
+        string | null
+    >(null);
+    const [availableMicroorganisms, setAvailableMicroorganisms] = useState<
+        string[]
+    >([]);
+
     const [currentPage, setCurrentPage] = useState(1); // For pagination
     const chartsPerPage = 2; // Number of charts to display per page
+    const updateAvailableMicroorganisms = (): void => {
+        // Extract unique microorganisms from prevalenceData
+        const microorganismsWithData = Array.from(
+            new Set(prevalenceData.map((entry) => entry.microorganism))
+        );
 
+        setAvailableMicroorganisms(microorganismsWithData);
+        if (microorganismsWithData.length > 0 && !currentMicroorganism) {
+            setCurrentMicroorganism(microorganismsWithData[0]);
+        }
+    };
+    // Also reset the currently selected microorganism to one of the available options
+    React.useEffect(() => {
+        if (prevalenceData.length > 0) {
+            updateAvailableMicroorganisms();
+        }
+    }, [prevalenceData]);
+
+    React.useEffect(() => {
+        if (
+            currentMicroorganism &&
+            !availableMicroorganisms.includes(currentMicroorganism)
+        ) {
+            setCurrentMicroorganism(availableMicroorganisms[0]);
+        }
+        setCurrentMicroorganism(availableMicroorganisms[0]);
+    }, [availableMicroorganisms]);
     const yearOptions = Array.from(
         { length: 14 },
         (_, i) => 2009 + i
@@ -270,40 +299,43 @@ const PrevalenceChart: React.FC = () => {
                     tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
                     tempCtx.drawImage(canvas, 0, extraHeight);
 
-                    const words = currentMicroorganism
-                        .split(/([-\s])/)
-                        .filter((part: string) => part.length > 0);
+                    // Ensure currentMicroorganism is not null before splitting
+                    if (currentMicroorganism) {
+                        const words = currentMicroorganism
+                            .split(/([-\s])/)
+                            .filter((part: string) => part.length > 0);
 
-                    let totalWidth = 0;
-                    words.forEach((word) => {
-                        const italic = italicWords.some((italicWord) =>
-                            word
-                                .toLowerCase()
-                                .includes(italicWord.toLowerCase())
-                        );
-                        tempCtx.font = italic
-                            ? "italic 20px Arial"
-                            : "20px Arial";
-                        totalWidth += tempCtx.measureText(word).width + 2;
-                    });
+                        let totalWidth = 0;
+                        words.forEach((word) => {
+                            const italic = italicWords.some((italicWord) =>
+                                word
+                                    .toLowerCase()
+                                    .includes(italicWord.toLowerCase())
+                            );
+                            tempCtx.font = italic
+                                ? "italic 20px Arial"
+                                : "20px Arial";
+                            totalWidth += tempCtx.measureText(word).width + 2;
+                        });
 
-                    let xPos = (tempCanvas.width - totalWidth) / 2;
-                    const yPos = 30;
+                        let xPos = (tempCanvas.width - totalWidth) / 2;
+                        const yPos = 30;
 
-                    words.forEach((word) => {
-                        const italic = italicWords.some((italicWord) =>
-                            word
-                                .toLowerCase()
-                                .includes(italicWord.toLowerCase())
-                        );
+                        words.forEach((word) => {
+                            const italic = italicWords.some((italicWord) =>
+                                word
+                                    .toLowerCase()
+                                    .includes(italicWord.toLowerCase())
+                            );
 
-                        tempCtx.font = italic
-                            ? "italic 20px Arial"
-                            : "20px Arial";
-                        tempCtx.fillStyle = "black";
-                        tempCtx.fillText(word, xPos, yPos);
-                        xPos += tempCtx.measureText(word).width + 2;
-                    });
+                            tempCtx.font = italic
+                                ? "italic 20px Arial"
+                                : "20px Arial";
+                            tempCtx.fillStyle = "black";
+                            tempCtx.fillText(word, xPos, yPos);
+                            xPos += tempCtx.measureText(word).width + 2;
+                        });
+                    }
 
                     const link = document.createElement("a");
                     link.href = tempCanvas.toDataURL();
@@ -343,42 +375,50 @@ const PrevalenceChart: React.FC = () => {
                             );
                             tempCtx.drawImage(canvas, 0, extraHeight);
 
-                            // Draw the title onto tempCtx
-                            const words = currentMicroorganism
-                                .split(/([-\s])/)
-                                .filter((part: string) => part.length > 0);
+                            // Ensure currentMicroorganism is not null before splitting
+                            if (currentMicroorganism) {
+                                const words = currentMicroorganism
+                                    .split(/([-\s])/)
+                                    .filter((part: string) => part.length > 0);
 
-                            let totalWidth = 0;
-                            words.forEach((word) => {
-                                const italic = italicWords.some((italicWord) =>
-                                    word
-                                        .toLowerCase()
-                                        .includes(italicWord.toLowerCase())
-                                );
-                                tempCtx.font = italic
-                                    ? "italic 20px Arial"
-                                    : "20px Arial";
-                                totalWidth +=
-                                    tempCtx.measureText(word).width + 2;
-                            });
+                                let totalWidth = 0;
+                                words.forEach((word) => {
+                                    const italic = italicWords.some(
+                                        (italicWord) =>
+                                            word
+                                                .toLowerCase()
+                                                .includes(
+                                                    italicWord.toLowerCase()
+                                                )
+                                    );
+                                    tempCtx.font = italic
+                                        ? "italic 20px Arial"
+                                        : "20px Arial";
+                                    totalWidth +=
+                                        tempCtx.measureText(word).width + 2;
+                                });
 
-                            let xPos = (tempCanvas.width - totalWidth) / 2;
-                            const yPos = 30;
+                                let xPos = (tempCanvas.width - totalWidth) / 2;
+                                const yPos = 30;
 
-                            words.forEach((word) => {
-                                const italic = italicWords.some((italicWord) =>
-                                    word
-                                        .toLowerCase()
-                                        .includes(italicWord.toLowerCase())
-                                );
+                                words.forEach((word) => {
+                                    const italic = italicWords.some(
+                                        (italicWord) =>
+                                            word
+                                                .toLowerCase()
+                                                .includes(
+                                                    italicWord.toLowerCase()
+                                                )
+                                    );
 
-                                tempCtx.font = italic
-                                    ? "italic 20px Arial"
-                                    : "20px Arial";
-                                tempCtx.fillStyle = "black";
-                                tempCtx.fillText(word, xPos, yPos);
-                                xPos += tempCtx.measureText(word).width + 2;
-                            });
+                                    tempCtx.font = italic
+                                        ? "italic 20px Arial"
+                                        : "20px Arial";
+                                    tempCtx.fillStyle = "black";
+                                    tempCtx.fillText(word, xPos, yPos);
+                                    xPos += tempCtx.measureText(word).width + 2;
+                                });
+                            }
 
                             const base64Image = tempCanvas
                                 .toDataURL()
@@ -447,7 +487,7 @@ const PrevalenceChart: React.FC = () => {
                     </InputLabel>
                     <Select
                         labelId="microorganism-select-label"
-                        value={currentMicroorganism}
+                        value={currentMicroorganism || ""}
                         onChange={(event) =>
                             setCurrentMicroorganism(
                                 event.target.value as string
@@ -461,13 +501,24 @@ const PrevalenceChart: React.FC = () => {
                             </Typography>
                         )}
                     >
-                        {selectedMicroorganisms.map((microorganism) => (
-                            <MenuItem key={microorganism} value={microorganism}>
+                        {availableMicroorganisms.length > 0 ? (
+                            availableMicroorganisms.map((microorganism) => (
+                                <MenuItem
+                                    key={microorganism}
+                                    value={microorganism}
+                                >
+                                    <Typography component="span">
+                                        {formatMicroorganismName(microorganism)}
+                                    </Typography>
+                                </MenuItem>
+                            ))
+                        ) : (
+                            <MenuItem disabled>
                                 <Typography component="span">
-                                    {formatMicroorganismName(microorganism)}
+                                    No Microorganisms Available
                                 </Typography>
                             </MenuItem>
-                        ))}
+                        )}
                     </Select>
                 </FormControl>
             </Box>
