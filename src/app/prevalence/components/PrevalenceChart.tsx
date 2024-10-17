@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import {
     Box,
@@ -13,12 +13,12 @@ import {
     Pagination,
 } from "@mui/material";
 import { Bar } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
+import { Chart as ChartJS, registerables } from "chart.js";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { useTranslation } from "react-i18next";
 
-Chart.register(...registerables);
+ChartJS.register(...registerables);
 
 const italicWords: string[] = [
     "Salmonella",
@@ -39,37 +39,29 @@ const italicWords: string[] = [
     "Campylobacter",
 ];
 
-const formatMicroorganismName = (
+const formatMicroorganismNameArray = (
     microName: string | null | undefined
-): JSX.Element => {
+): { text: string; italic: boolean }[] => {
     if (!microName) {
         console.warn("Received null or undefined microorganism name");
-        return <></>;
+        return [];
     }
 
     const words = microName
         .split(/([-\s])/)
         .filter((part: string) => part.length > 0);
 
-    return (
-        <>
-            {words.map((word: string, index: number) => {
-                if (word.trim() === "" || word === "-") {
-                    return word;
-                }
+    return words.map((word: string) => {
+        if (word.trim() === "" || word === "-") {
+            return { text: word, italic: false };
+        }
 
-                const italic = italicWords.some((italicWord: string) =>
-                    word.toLowerCase().includes(italicWord.toLowerCase())
-                );
+        const italic = italicWords.some((italicWord: string) =>
+            word.toLowerCase().includes(italicWord.toLowerCase())
+        );
 
-                return italic ? (
-                    <i key={index}>{word}</i>
-                ) : (
-                    <span key={index}>{word}</span>
-                );
-            })}
-        </>
-    );
+        return { text: word, italic };
+    });
 };
 
 interface ChartDataPoint {
@@ -91,10 +83,16 @@ const getFormattedDate = (): string => {
     return now.toLocaleDateString();
 };
 
+// Preload the logo image
+const logoImage = new Image();
+logoImage.src = "/assets/bfr_logo.png";
+
 const PrevalenceChart: React.FC = () => {
     const { prevalenceData, loading } = usePrevalenceFilters();
     const chartRefs = useRef<{
-        [key: string]: React.RefObject<Chart<"bar", ChartDataPoint[], unknown>>;
+        [key: string]: React.RefObject<
+            ChartJS<"bar", ChartDataPoint[], unknown>
+        >;
     }>({});
     const { t } = useTranslation(["PrevalencePage"]);
     const [currentMicroorganism, setCurrentMicroorganism] = useState<
@@ -106,6 +104,7 @@ const PrevalenceChart: React.FC = () => {
 
     const [currentPage, setCurrentPage] = useState(1); // For pagination
     const chartsPerPage = 2; // Number of charts to display per page
+
     const updateAvailableMicroorganisms = (): void => {
         // Extract unique microorganisms from prevalenceData
         const microorganismsWithData = Array.from(
@@ -117,22 +116,23 @@ const PrevalenceChart: React.FC = () => {
             setCurrentMicroorganism(microorganismsWithData[0]);
         }
     };
-    // Also reset the currently selected microorganism to one of the available options
-    React.useEffect(() => {
+
+    // Reset the currently selected microorganism if it's not in the available options
+    useEffect(() => {
         if (prevalenceData.length > 0) {
             updateAvailableMicroorganisms();
         }
     }, [prevalenceData]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (
             currentMicroorganism &&
             !availableMicroorganisms.includes(currentMicroorganism)
         ) {
             setCurrentMicroorganism(availableMicroorganisms[0]);
         }
-        setCurrentMicroorganism(availableMicroorganisms[0]);
     }, [availableMicroorganisms]);
+
     const yearOptions = Array.from(
         { length: 14 },
         (_, i) => 2009 + i
@@ -167,9 +167,11 @@ const PrevalenceChart: React.FC = () => {
     const totalCharts = chartKeys.length;
     const totalPages = Math.ceil(totalCharts / chartsPerPage);
 
-    const displayedCharts = chartKeys.slice(
-        (currentPage - 1) * chartsPerPage,
-        currentPage * chartsPerPage
+    const displayedChartsSet = new Set(
+        chartKeys.slice(
+            (currentPage - 1) * chartsPerPage,
+            currentPage * chartsPerPage
+        )
     );
 
     const isBelow25Percent = Object.values(chartData)
@@ -179,7 +181,7 @@ const PrevalenceChart: React.FC = () => {
         .every(Boolean);
     const xAxisMax = isBelow25Percent ? 25 : 100;
 
-    const drawErrorBars = (chart: Chart): void => {
+    const drawErrorBars = (chart: ChartJS): void => {
         const ctx = chart.ctx;
         chart.data.datasets.forEach((dataset, i) => {
             const meta = chart.getDatasetMeta(i);
@@ -192,7 +194,8 @@ const PrevalenceChart: React.FC = () => {
                     const xMax = chart.scales.x.getPixelForValue(
                         dataPoint.ciMax
                     );
-                    const y = bar.y;
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const y = (bar as any).y; // Type assertion to access 'y'
 
                     ctx.save();
                     ctx.strokeStyle = "black";
@@ -221,7 +224,7 @@ const PrevalenceChart: React.FC = () => {
     const errorBarTooltipPlugin = {
         id: "customErrorBarsTooltip",
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        afterEvent: (chart: Chart, args: { event: any }) => {
+        afterEvent: (chart: ChartJS, args: { event: any }) => {
             const { event } = args;
             const tooltip = chart.tooltip;
             const mouseX = event.x;
@@ -239,7 +242,8 @@ const PrevalenceChart: React.FC = () => {
                         const xMax = chart.scales.x.getPixelForValue(
                             dataPoint.ciMax
                         );
-                        const y = bar.y;
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        const y = (bar as any).y; // Type assertion to access 'y'
 
                         if (
                             mouseX >= xMin &&
@@ -276,96 +280,32 @@ const PrevalenceChart: React.FC = () => {
         },
     };
 
-    const downloadChart = (
-        chartRef: React.RefObject<Chart<"bar", ChartDataPoint[], unknown>>,
+    const downloadChart = async (
+        chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
-    ): void => {
-        if (chartRef.current) {
-            const chartInstance = chartRef.current;
-            const timestamp = getCurrentTimestamp();
-            const canvas = chartInstance.canvas;
-            const ctx = canvas.getContext("2d");
+    ): Promise<void> => {
+        const chartInstance = chartRef.current;
 
-            if (ctx) {
-                const tempCanvas = document.createElement("canvas");
-                const tempCtx = tempCanvas.getContext("2d");
+        if (chartInstance) {
+            // Ensure the chart is updated
+            await chartInstance.update();
 
-                const extraHeight = 40;
-                tempCanvas.width = canvas.width;
-                tempCanvas.height = canvas.height + extraHeight;
-
-                if (tempCtx) {
-                    tempCtx.fillStyle = "white";
-                    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-                    tempCtx.drawImage(canvas, 0, extraHeight);
-
-                    // Ensure currentMicroorganism is not null before splitting
-                    if (currentMicroorganism) {
-                        const words = currentMicroorganism
-                            .split(/([-\s])/)
-                            .filter((part: string) => part.length > 0);
-
-                        let totalWidth = 0;
-                        words.forEach((word) => {
-                            const italic = italicWords.some((italicWord) =>
-                                word
-                                    .toLowerCase()
-                                    .includes(italicWord.toLowerCase())
-                            );
-                            tempCtx.font = italic
-                                ? "italic 20px Arial"
-                                : "20px Arial";
-                            totalWidth += tempCtx.measureText(word).width + 2;
-                        });
-
-                        let xPos = (tempCanvas.width - totalWidth) / 2;
-                        const yPos = 30;
-
-                        words.forEach((word) => {
-                            const italic = italicWords.some((italicWord) =>
-                                word
-                                    .toLowerCase()
-                                    .includes(italicWord.toLowerCase())
-                            );
-
-                            tempCtx.font = italic
-                                ? "italic 20px Arial"
-                                : "20px Arial";
-                            tempCtx.fillStyle = "black";
-                            tempCtx.fillText(word, xPos, yPos);
-                            xPos += tempCtx.measureText(word).width + 2;
-                        });
-                    }
-
-                    const link = document.createElement("a");
-                    link.href = tempCanvas.toDataURL();
-                    link.download = `${chartKey}-${timestamp}.png`;
-                    link.click();
-                }
-            }
-        }
-    };
-
-    const downloadAllCharts = async (): Promise<void> => {
-        const zip = new JSZip();
-        const timestamp = getCurrentTimestamp();
-        const chartPromises = Object.keys(chartRefs.current).map(
-            async (key) => {
-                const chartRef = chartRefs.current[key];
-                if (chartRef && chartRef.current) {
-                    const chartInstance = chartRef.current;
+            // Use requestAnimationFrame to wait until the next repaint
+            await new Promise<void>((resolve) => {
+                requestAnimationFrame(() => {
                     const canvas = chartInstance.canvas;
-                    const ctx = canvas.getContext("2d");
 
-                    if (ctx) {
+                    if (canvas && canvas.width > 0 && canvas.height > 0) {
+                        // Create a temporary canvas
                         const tempCanvas = document.createElement("canvas");
                         const tempCtx = tempCanvas.getContext("2d");
 
-                        const extraHeight = 40;
+                        const extraHeight = 60; // Adjust to accommodate the title
                         tempCanvas.width = canvas.width;
                         tempCanvas.height = canvas.height + extraHeight;
 
                         if (tempCtx) {
+                            // Fill background with white
                             tempCtx.fillStyle = "white";
                             tempCtx.fillRect(
                                 0,
@@ -373,61 +313,183 @@ const PrevalenceChart: React.FC = () => {
                                 tempCanvas.width,
                                 tempCanvas.height
                             );
-                            tempCtx.drawImage(canvas, 0, extraHeight);
 
-                            // Ensure currentMicroorganism is not null before splitting
+                            // Draw the title
                             if (currentMicroorganism) {
-                                const words = currentMicroorganism
-                                    .split(/([-\s])/)
-                                    .filter((part: string) => part.length > 0);
-
-                                let totalWidth = 0;
-                                words.forEach((word) => {
-                                    const italic = italicWords.some(
-                                        (italicWord) =>
-                                            word
-                                                .toLowerCase()
-                                                .includes(
-                                                    italicWord.toLowerCase()
-                                                )
+                                const titleWords =
+                                    formatMicroorganismNameArray(
+                                        currentMicroorganism
                                     );
-                                    tempCtx.font = italic
-                                        ? "italic 20px Arial"
-                                        : "20px Arial";
-                                    totalWidth +=
-                                        tempCtx.measureText(word).width + 2;
+
+                                const titleFontSize = 20;
+                                tempCtx.font = `${titleFontSize}px Arial`;
+
+                                // Measure total width
+                                let totalWidth = 0;
+                                titleWords.forEach((wordObj) => {
+                                    tempCtx.font = wordObj.italic
+                                        ? `italic ${titleFontSize}px Arial`
+                                        : `${titleFontSize}px Arial`;
+                                    totalWidth += tempCtx.measureText(
+                                        wordObj.text
+                                    ).width;
                                 });
 
+                                // Center the title
                                 let xPos = (tempCanvas.width - totalWidth) / 2;
-                                const yPos = 30;
+                                const yPos = titleFontSize + 10; // Add some padding
 
-                                words.forEach((word) => {
-                                    const italic = italicWords.some(
-                                        (italicWord) =>
-                                            word
-                                                .toLowerCase()
-                                                .includes(
-                                                    italicWord.toLowerCase()
-                                                )
-                                    );
-
-                                    tempCtx.font = italic
-                                        ? "italic 20px Arial"
-                                        : "20px Arial";
+                                // Draw each word with formatting
+                                titleWords.forEach((wordObj) => {
+                                    tempCtx.font = wordObj.italic
+                                        ? `italic ${titleFontSize}px Arial`
+                                        : `${titleFontSize}px Arial`;
                                     tempCtx.fillStyle = "black";
-                                    tempCtx.fillText(word, xPos, yPos);
-                                    xPos += tempCtx.measureText(word).width + 2;
+                                    tempCtx.fillText(wordObj.text, xPos, yPos);
+                                    xPos += tempCtx.measureText(
+                                        wordObj.text
+                                    ).width;
                                 });
                             }
 
-                            const base64Image = tempCanvas
-                                .toDataURL()
-                                .split(",")[1];
-                            zip.file(`${key}-${timestamp}.png`, base64Image, {
-                                base64: true,
-                            });
+                            // Draw the chart onto the temp canvas
+                            tempCtx.drawImage(canvas, 0, extraHeight);
+
+                            // Save the temp canvas as the image
+                            const link = document.createElement("a");
+                            link.href = tempCanvas.toDataURL("image/png");
+                            link.download = `${chartKey}-${getCurrentTimestamp()}.png`;
+                            link.click();
+                        } else {
+                            console.error("Failed to get temp canvas context");
                         }
+                    } else {
+                        console.error("Canvas has invalid dimensions");
                     }
+                    resolve();
+                });
+            });
+        } else {
+            console.error("Chart instance is undefined");
+        }
+    };
+
+    const downloadAllCharts = async (): Promise<void> => {
+        const zip = new JSZip();
+        const timestamp = getCurrentTimestamp();
+
+        const chartPromises = Object.keys(chartRefs.current).map(
+            async (key) => {
+                const chartRef = chartRefs.current[key];
+                const chartInstance = chartRef.current;
+
+                if (chartInstance) {
+                    // Ensure the chart is updated
+                    await chartInstance.update();
+
+                    // Use requestAnimationFrame to wait until the next repaint
+                    await new Promise<void>((resolve) => {
+                        requestAnimationFrame(() => {
+                            const canvas = chartInstance.canvas;
+
+                            if (
+                                canvas &&
+                                canvas.width > 0 &&
+                                canvas.height > 0
+                            ) {
+                                // Create a temporary canvas
+                                const tempCanvas =
+                                    document.createElement("canvas");
+                                const tempCtx = tempCanvas.getContext("2d");
+
+                                const extraHeight = 60; // Adjust to accommodate the title
+                                tempCanvas.width = canvas.width;
+                                tempCanvas.height = canvas.height + extraHeight;
+
+                                if (tempCtx) {
+                                    // Fill background with white
+                                    tempCtx.fillStyle = "white";
+                                    tempCtx.fillRect(
+                                        0,
+                                        0,
+                                        tempCanvas.width,
+                                        tempCanvas.height
+                                    );
+
+                                    // Draw the title
+                                    if (currentMicroorganism) {
+                                        const titleWords =
+                                            formatMicroorganismNameArray(
+                                                currentMicroorganism
+                                            );
+
+                                        const titleFontSize = 20;
+                                        tempCtx.font = `${titleFontSize}px Arial`;
+
+                                        // Measure total width
+                                        let totalWidth = 0;
+                                        titleWords.forEach((wordObj) => {
+                                            tempCtx.font = wordObj.italic
+                                                ? `italic ${titleFontSize}px Arial`
+                                                : `${titleFontSize}px Arial`;
+                                            totalWidth += tempCtx.measureText(
+                                                wordObj.text
+                                            ).width;
+                                        });
+
+                                        // Center the title
+                                        let xPos =
+                                            (tempCanvas.width - totalWidth) / 2;
+                                        const yPos = titleFontSize + 10; // Add some padding
+
+                                        // Draw each word with formatting
+                                        titleWords.forEach((wordObj) => {
+                                            tempCtx.font = wordObj.italic
+                                                ? `italic ${titleFontSize}px Arial`
+                                                : `${titleFontSize}px Arial`;
+                                            tempCtx.fillStyle = "black";
+                                            tempCtx.fillText(
+                                                wordObj.text,
+                                                xPos,
+                                                yPos
+                                            );
+                                            xPos += tempCtx.measureText(
+                                                wordObj.text
+                                            ).width;
+                                        });
+                                    }
+
+                                    // Draw the chart onto the temp canvas
+                                    tempCtx.drawImage(canvas, 0, extraHeight);
+
+                                    // Save the temp canvas to zip
+                                    const base64Image = tempCanvas
+                                        .toDataURL("image/png")
+                                        .split(",")[1];
+                                    zip.file(
+                                        `${key}-${timestamp}.png`,
+                                        base64Image,
+                                        {
+                                            base64: true,
+                                        }
+                                    );
+                                } else {
+                                    console.error(
+                                        "Failed to get temp canvas context"
+                                    );
+                                }
+                            } else {
+                                console.error(
+                                    `Canvas has invalid dimensions for chart ${key}`
+                                );
+                            }
+                            resolve();
+                        });
+                    });
+                } else {
+                    console.error(
+                        `Chart instance is undefined for chart ${key}`
+                    );
                 }
             }
         );
@@ -439,7 +501,15 @@ const PrevalenceChart: React.FC = () => {
 
     const logoPlugin = {
         id: "logoPlugin",
-        beforeDraw: (chart: Chart) => {
+        beforeInit: (chart: ChartJS) => {
+            // Preload the image if not already loaded
+            if (!logoImage.complete) {
+                logoImage.onload = () => {
+                    chart.update();
+                };
+            }
+        },
+        beforeDraw: (chart: ChartJS) => {
             const ctx = chart.ctx;
             ctx.save();
             ctx.globalCompositeOperation = "destination-over";
@@ -447,11 +517,9 @@ const PrevalenceChart: React.FC = () => {
             ctx.fillRect(0, 0, chart.width, chart.height);
             ctx.restore();
         },
-        afterDraw: (chart: Chart) => {
-            const ctx = chart.ctx;
-            const img = new Image();
-            img.src = "/assets/bfr_logo.png";
-            img.onload = () => {
+        afterDraw: (chart: ChartJS) => {
+            if (logoImage.complete) {
+                const ctx = chart.ctx;
                 const extraPadding = 20;
                 const logoWidth = 60;
                 const logoHeight = 27;
@@ -459,19 +527,20 @@ const PrevalenceChart: React.FC = () => {
                 const logoX = chart.chartArea.left + 20;
                 const logoY = chart.chartArea.bottom + extraPadding;
 
-                ctx.drawImage(img, logoX, logoY, logoWidth, logoHeight);
+                ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
 
                 const dateText = `${t("Generated_on")}: ${getFormattedDate()}`;
                 ctx.font = "10px Arial";
                 ctx.fillStyle = "#000";
                 ctx.textAlign = "right";
                 ctx.fillText(dateText, chart.width - 10, chart.height - 5);
-            };
+            }
         },
     };
 
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
+            {/* Top form control */}
             <Box
                 sx={{
                     position: "sticky",
@@ -483,7 +552,7 @@ const PrevalenceChart: React.FC = () => {
             >
                 <FormControl fullWidth sx={{ mb: 1 }} variant="outlined">
                     <InputLabel id="microorganism-select-label" shrink={true}>
-                        Select Microorganism
+                        {t("Select_Microorganism")}
                     </InputLabel>
                     <Select
                         labelId="microorganism-select-label"
@@ -493,11 +562,21 @@ const PrevalenceChart: React.FC = () => {
                                 event.target.value as string
                             )
                         }
-                        label="Select Microorganism"
+                        label={t("Select_Microorganism")}
                         sx={{ backgroundColor: "#f5f5f5" }}
                         renderValue={(selected) => (
                             <Typography component="span">
-                                {formatMicroorganismName(selected)}
+                                {formatMicroorganismNameArray(selected).map(
+                                    (wordObj, index) => (
+                                        <React.Fragment key={index}>
+                                            {wordObj.italic ? (
+                                                <i>{wordObj.text}</i>
+                                            ) : (
+                                                wordObj.text
+                                            )}
+                                        </React.Fragment>
+                                    )
+                                )}
                             </Typography>
                         )}
                     >
@@ -508,14 +587,24 @@ const PrevalenceChart: React.FC = () => {
                                     value={microorganism}
                                 >
                                     <Typography component="span">
-                                        {formatMicroorganismName(microorganism)}
+                                        {formatMicroorganismNameArray(
+                                            microorganism
+                                        ).map((wordObj, index) => (
+                                            <React.Fragment key={index}>
+                                                {wordObj.italic ? (
+                                                    <i>{wordObj.text}</i>
+                                                ) : (
+                                                    wordObj.text
+                                                )}
+                                            </React.Fragment>
+                                        ))}
                                     </Typography>
                                 </MenuItem>
                             ))
                         ) : (
                             <MenuItem disabled>
                                 <Typography component="span">
-                                    No Microorganisms Available
+                                    {t("No_Microorganisms_Available")}
                                 </Typography>
                             </MenuItem>
                         )}
@@ -534,18 +623,22 @@ const PrevalenceChart: React.FC = () => {
                     ) : (
                         <>
                             <Grid container spacing={4}>
-                                {displayedCharts.map((key) => {
+                                {chartKeys.map((key) => {
                                     const refKey = `${key}-${currentMicroorganism}`;
                                     if (!chartRefs.current[refKey]) {
                                         chartRefs.current[refKey] =
                                             React.createRef<
-                                                Chart<
+                                                ChartJS<
                                                     "bar",
                                                     ChartDataPoint[],
                                                     unknown
                                                 >
                                             >();
                                     }
+
+                                    // Determine if the chart should be displayed or hidden
+                                    const isDisplayed =
+                                        displayedChartsSet.has(key);
 
                                     return (
                                         <Grid
@@ -555,6 +648,15 @@ const PrevalenceChart: React.FC = () => {
                                             md={6}
                                             lg={6}
                                             key={refKey}
+                                            sx={{
+                                                visibility: isDisplayed
+                                                    ? "visible"
+                                                    : "hidden",
+                                                height: isDisplayed
+                                                    ? "auto"
+                                                    : 0,
+                                                overflow: "hidden",
+                                            }}
                                         >
                                             <Box
                                                 sx={{
@@ -578,9 +680,23 @@ const PrevalenceChart: React.FC = () => {
                                                         wordWrap: "break-word",
                                                     }}
                                                 >
-                                                    {formatMicroorganismName(
+                                                    {formatMicroorganismNameArray(
                                                         currentMicroorganism
-                                                    )}
+                                                    ).map((wordObj, index) => (
+                                                        <React.Fragment
+                                                            key={index}
+                                                        >
+                                                            {wordObj.italic ? (
+                                                                <i>
+                                                                    {
+                                                                        wordObj.text
+                                                                    }
+                                                                </i>
+                                                            ) : (
+                                                                wordObj.text
+                                                            )}
+                                                        </React.Fragment>
+                                                    ))}
                                                 </Typography>
                                                 <Box sx={{ marginBottom: 4 }}>
                                                     <Bar
@@ -729,7 +845,7 @@ const PrevalenceChart: React.FC = () => {
                                                             {
                                                                 id: "customErrorBars",
                                                                 afterDraw: (
-                                                                    chart: Chart
+                                                                    chart: ChartJS
                                                                 ) =>
                                                                     drawErrorBars(
                                                                         chart
@@ -781,17 +897,30 @@ const PrevalenceChart: React.FC = () => {
                                 })}
                             </Grid>
 
-                            <Pagination
-                                count={totalPages}
-                                page={currentPage}
-                                onChange={(_, value) => setCurrentPage(value)}
+                            {/* Pagination wrapped in a sticky Box */}
+                            <Box
                                 sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    mt: 4,
+                                    position: "sticky",
+                                    bottom: "80px", // Height of the download button (60px) + padding
+                                    zIndex: 1000,
+                                    padding: 2,
+                                    backgroundColor: "rgb(219, 228, 235)",
                                 }}
-                            />
+                            >
+                                <Pagination
+                                    count={totalPages}
+                                    page={currentPage}
+                                    onChange={(_, value) =>
+                                        setCurrentPage(value)
+                                    }
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                />
+                            </Box>
 
+                            {/* Download All Charts Button */}
                             <Box
                                 sx={{
                                     position: "sticky",
