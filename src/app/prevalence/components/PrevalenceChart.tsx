@@ -14,7 +14,7 @@ import { saveAs } from "file-saver";
 import { useTranslation } from "react-i18next";
 import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
-import { getCurrentTimestamp } from "./utils";
+import { getCurrentTimestamp, formatMicroorganismNameArray } from "./utils"; // Import the formatting function
 import { ChartDataPoint } from "./types";
 
 ChartJS.register(...registerables);
@@ -62,6 +62,11 @@ const PrevalenceChart: React.FC = () => {
             setCurrentMicroorganism(availableMicroorganisms[0]);
         }
     }, [availableMicroorganisms]);
+
+    // Clear chartRefs when currentMicroorganism changes
+    useEffect(() => {
+        chartRefs.current = {};
+    }, [currentMicroorganism]);
 
     const yearOptions = Array.from(
         { length: 14 },
@@ -111,11 +116,17 @@ const PrevalenceChart: React.FC = () => {
         .every(Boolean);
     const xAxisMax = isBelow25Percent ? 25 : 100;
 
+    // Sanitization function
+    const sanitizeKey = (key: string): string => {
+        return key.replace(/[^a-z0-9_\-]/gi, "_");
+    };
+
     const downloadChart = async (
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ): Promise<void> => {
         const chartInstance = chartRef.current;
+        const microorganismName = currentMicroorganism; // Capture the current microorganism name
 
         if (chartInstance) {
             await chartInstance.update();
@@ -141,27 +152,53 @@ const PrevalenceChart: React.FC = () => {
                                 tempCanvas.height
                             );
 
-                            if (currentMicroorganism) {
+                            if (microorganismName) {
                                 const titleFontSize = 20;
-                                tempCtx.font = `${titleFontSize}px Arial`;
 
-                                const title = currentMicroorganism;
+                                // Use the formatting function
+                                const wordsArray =
+                                    formatMicroorganismNameArray(
+                                        microorganismName
+                                    );
 
-                                const textWidth =
-                                    tempCtx.measureText(title).width;
+                                // Measure each word and calculate total width
+                                const wordMeasurements = wordsArray.map(
+                                    (wordObj) => {
+                                        tempCtx.font = `${
+                                            wordObj.italic ? "italic" : "normal"
+                                        } ${titleFontSize}px Arial`;
+                                        const width = tempCtx.measureText(
+                                            wordObj.text
+                                        ).width;
+                                        return { ...wordObj, width };
+                                    }
+                                );
 
-                                const xPos = (tempCanvas.width - textWidth) / 2;
+                                const totalWidth = wordMeasurements.reduce(
+                                    (sum, wordObj) => sum + wordObj.width,
+                                    0
+                                );
+
+                                let xPos = (tempCanvas.width - totalWidth) / 2;
                                 const yPos = titleFontSize + 10;
 
-                                tempCtx.fillStyle = "black";
-                                tempCtx.fillText(title, xPos, yPos);
+                                // Draw each word with appropriate styling
+                                wordMeasurements.forEach((wordObj) => {
+                                    tempCtx.font = `${
+                                        wordObj.italic ? "italic" : "normal"
+                                    } ${titleFontSize}px Arial`;
+                                    tempCtx.fillStyle = "black";
+                                    tempCtx.fillText(wordObj.text, xPos, yPos);
+                                    xPos += wordObj.width;
+                                });
                             }
 
                             tempCtx.drawImage(canvas, 0, extraHeight);
 
                             const link = document.createElement("a");
+                            const sanitizedChartKey = sanitizeKey(chartKey);
                             link.href = tempCanvas.toDataURL("image/png");
-                            link.download = `${chartKey}-${getCurrentTimestamp()}.png`;
+                            link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
                             link.click();
                         } else {
                             console.error("Failed to get temp canvas context");
@@ -180,6 +217,7 @@ const PrevalenceChart: React.FC = () => {
     const downloadAllCharts = async (): Promise<void> => {
         const zip = new JSZip();
         const timestamp = getCurrentTimestamp();
+        const microorganismName = currentMicroorganism; // Capture the current microorganism name
 
         const chartPromises = Object.keys(chartRefs.current).map(
             async (key) => {
@@ -215,21 +253,57 @@ const PrevalenceChart: React.FC = () => {
                                         tempCanvas.height
                                     );
 
-                                    if (currentMicroorganism) {
+                                    if (microorganismName) {
                                         const titleFontSize = 20;
-                                        tempCtx.font = `${titleFontSize}px Arial`;
 
-                                        const title = currentMicroorganism;
+                                        // Use the formatting function
+                                        const wordsArray =
+                                            formatMicroorganismNameArray(
+                                                microorganismName
+                                            );
 
-                                        const textWidth =
-                                            tempCtx.measureText(title).width;
+                                        // Measure each word and calculate total width
+                                        const wordMeasurements = wordsArray.map(
+                                            (wordObj) => {
+                                                tempCtx.font = `${
+                                                    wordObj.italic
+                                                        ? "italic"
+                                                        : "normal"
+                                                } ${titleFontSize}px Arial`;
+                                                const width =
+                                                    tempCtx.measureText(
+                                                        wordObj.text
+                                                    ).width;
+                                                return { ...wordObj, width };
+                                            }
+                                        );
 
-                                        const xPos =
-                                            (tempCanvas.width - textWidth) / 2;
+                                        const totalWidth =
+                                            wordMeasurements.reduce(
+                                                (sum, wordObj) =>
+                                                    sum + wordObj.width,
+                                                0
+                                            );
+
+                                        let xPos =
+                                            (tempCanvas.width - totalWidth) / 2;
                                         const yPos = titleFontSize + 10;
 
-                                        tempCtx.fillStyle = "black";
-                                        tempCtx.fillText(title, xPos, yPos);
+                                        // Draw each word with appropriate styling
+                                        wordMeasurements.forEach((wordObj) => {
+                                            tempCtx.font = `${
+                                                wordObj.italic
+                                                    ? "italic"
+                                                    : "normal"
+                                            } ${titleFontSize}px Arial`;
+                                            tempCtx.fillStyle = "black";
+                                            tempCtx.fillText(
+                                                wordObj.text,
+                                                xPos,
+                                                yPos
+                                            );
+                                            xPos += wordObj.width;
+                                        });
                                     }
 
                                     tempCtx.drawImage(canvas, 0, extraHeight);
@@ -237,8 +311,11 @@ const PrevalenceChart: React.FC = () => {
                                     const base64Image = tempCanvas
                                         .toDataURL("image/png")
                                         .split(",")[1];
+
+                                    const sanitizedKey = sanitizeKey(key);
+
                                     zip.file(
-                                        `${key}-${timestamp}.png`,
+                                        `${sanitizedKey}-${timestamp}.png`,
                                         base64Image,
                                         {
                                             base64: true,
@@ -301,7 +378,9 @@ const PrevalenceChart: React.FC = () => {
                         <>
                             <Grid container spacing={4}>
                                 {chartKeys.map((key) => {
-                                    const refKey = `${key}-${currentMicroorganism}`;
+                                    // Use the sanitized key only for chartRefs and filenames
+                                    const sanitizedKey = sanitizeKey(key);
+                                    const refKey = `${sanitizedKey}-${currentMicroorganism}`;
                                     if (!chartRefs.current[refKey]) {
                                         chartRefs.current[refKey] =
                                             React.createRef<
@@ -335,7 +414,7 @@ const PrevalenceChart: React.FC = () => {
                                             }}
                                         >
                                             <ChartCard
-                                                chartKey={key}
+                                                chartKey={key} // Use the original key for display
                                                 chartData={chartData[key]}
                                                 chartRef={
                                                     chartRefs.current[refKey]
