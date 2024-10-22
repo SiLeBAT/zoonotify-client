@@ -6,86 +6,18 @@ import {
     Typography,
     Grid,
     Button,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
     Pagination,
 } from "@mui/material";
-import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { useTranslation } from "react-i18next";
+import { MicroorganismSelect } from "./MicroorganismSelect";
+import { ChartCard } from "./ChartCard";
+import { getCurrentTimestamp } from "./utils";
+import { ChartDataPoint } from "./types";
 
 ChartJS.register(...registerables);
-
-const italicWords: string[] = [
-    "Salmonella",
-    "coli",
-    "E.",
-    "Bacillus",
-    "cereus",
-    "monocytogenes",
-    "Clostridioides",
-    "difficile",
-    "Yersinia",
-    "Listeria",
-    "enterocolitica",
-    "Vibrio",
-    "Baylisascaris",
-    "procyonis",
-    "Echinococcus",
-    "Campylobacter",
-];
-
-const formatMicroorganismNameArray = (
-    microName: string | null | undefined
-): { text: string; italic: boolean }[] => {
-    if (!microName) {
-        console.warn("Received null or undefined microorganism name");
-        return [];
-    }
-
-    const words = microName
-        .split(/([-\s])/)
-        .filter((part: string) => part.length > 0);
-
-    return words.map((word: string) => {
-        if (word.trim() === "" || word === "-") {
-            return { text: word, italic: false };
-        }
-
-        const italic = italicWords.some((italicWord: string) =>
-            word.toLowerCase().includes(italicWord.toLowerCase())
-        );
-
-        return { text: word, italic };
-    });
-};
-
-interface ChartDataPoint {
-    x: number;
-    y: number;
-    ciMin: number;
-    ciMax: number;
-    numberOfSamples?: number;
-    numberOfPositive?: number;
-}
-
-const getCurrentTimestamp = (): string => {
-    const now = new Date();
-    return now.toISOString().replace(/[-:.]/g, "");
-};
-
-const getFormattedDate = (): string => {
-    const now = new Date();
-    return now.toLocaleDateString();
-};
-
-// Preload the logo image
-const logoImage = new Image();
-logoImage.src = "/assets/bfr_logo.png";
 
 const PrevalenceChart: React.FC = () => {
     const { prevalenceData, loading } = usePrevalenceFilters();
@@ -102,11 +34,10 @@ const PrevalenceChart: React.FC = () => {
         string[]
     >([]);
 
-    const [currentPage, setCurrentPage] = useState(1); // For pagination
-    const chartsPerPage = 2; // Number of charts to display per page
+    const [currentPage, setCurrentPage] = useState(1);
+    const chartsPerPage = 2;
 
     const updateAvailableMicroorganisms = (): void => {
-        // Extract unique microorganisms from prevalenceData
         const microorganismsWithData = Array.from(
             new Set(prevalenceData.map((entry) => entry.microorganism))
         );
@@ -117,7 +48,6 @@ const PrevalenceChart: React.FC = () => {
         }
     };
 
-    // Reset the currently selected microorganism if it's not in the available options
     useEffect(() => {
         if (prevalenceData.length > 0) {
             updateAvailableMicroorganisms();
@@ -181,105 +111,6 @@ const PrevalenceChart: React.FC = () => {
         .every(Boolean);
     const xAxisMax = isBelow25Percent ? 25 : 100;
 
-    const drawErrorBars = (chart: ChartJS): void => {
-        const ctx = chart.ctx;
-        chart.data.datasets.forEach((dataset, i) => {
-            const meta = chart.getDatasetMeta(i);
-            meta.data.forEach((bar, index) => {
-                const dataPoint = dataset.data[index] as ChartDataPoint;
-                if (dataPoint && (dataPoint.ciMin || dataPoint.ciMax)) {
-                    const xMin = chart.scales.x.getPixelForValue(
-                        dataPoint.ciMin
-                    );
-                    const xMax = chart.scales.x.getPixelForValue(
-                        dataPoint.ciMax
-                    );
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const y = (bar as any).y; // Type assertion to access 'y'
-
-                    ctx.save();
-                    ctx.strokeStyle = "black";
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(xMin, y);
-                    ctx.lineTo(xMax, y);
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(xMin, y - 5);
-                    ctx.lineTo(xMin, y + 5);
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(xMax, y - 5);
-                    ctx.lineTo(xMax, y + 5);
-                    ctx.stroke();
-
-                    ctx.restore();
-                }
-            });
-        });
-    };
-
-    const errorBarTooltipPlugin = {
-        id: "customErrorBarsTooltip",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        afterEvent: (chart: ChartJS, args: { event: any }) => {
-            const { event } = args;
-            const tooltip = chart.tooltip;
-            const mouseX = event.x;
-            const mouseY = event.y;
-            let foundErrorBar = false;
-
-            chart.data.datasets.forEach((dataset, i) => {
-                const meta = chart.getDatasetMeta(i);
-                meta.data.forEach((bar, index) => {
-                    const dataPoint = dataset.data[index] as ChartDataPoint;
-                    if (dataPoint && (dataPoint.ciMin || dataPoint.ciMax)) {
-                        const xMin = chart.scales.x.getPixelForValue(
-                            dataPoint.ciMin
-                        );
-                        const xMax = chart.scales.x.getPixelForValue(
-                            dataPoint.ciMax
-                        );
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        const y = (bar as any).y; // Type assertion to access 'y'
-
-                        if (
-                            mouseX >= xMin &&
-                            mouseX <= xMax &&
-                            Math.abs(mouseY - y) < 5
-                        ) {
-                            if (
-                                tooltip &&
-                                typeof tooltip.setActiveElements === "function"
-                            ) {
-                                tooltip.setActiveElements(
-                                    [
-                                        {
-                                            datasetIndex: i,
-                                            index,
-                                        },
-                                    ],
-                                    { x: mouseX, y: mouseY }
-                                );
-                            }
-                            foundErrorBar = true;
-                        }
-                    }
-                });
-            });
-
-            if (
-                !foundErrorBar &&
-                tooltip &&
-                typeof tooltip.setActiveElements === "function"
-            ) {
-                tooltip.setActiveElements([], { x: 0, y: 0 });
-            }
-        },
-    };
-
     const downloadChart = async (
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
@@ -287,25 +118,21 @@ const PrevalenceChart: React.FC = () => {
         const chartInstance = chartRef.current;
 
         if (chartInstance) {
-            // Ensure the chart is updated
             await chartInstance.update();
 
-            // Use requestAnimationFrame to wait until the next repaint
             await new Promise<void>((resolve) => {
                 requestAnimationFrame(() => {
                     const canvas = chartInstance.canvas;
 
                     if (canvas && canvas.width > 0 && canvas.height > 0) {
-                        // Create a temporary canvas
                         const tempCanvas = document.createElement("canvas");
                         const tempCtx = tempCanvas.getContext("2d");
 
-                        const extraHeight = 60; // Adjust to accommodate the title
+                        const extraHeight = 60;
                         tempCanvas.width = canvas.width;
                         tempCanvas.height = canvas.height + extraHeight;
 
                         if (tempCtx) {
-                            // Fill background with white
                             tempCtx.fillStyle = "white";
                             tempCtx.fillRect(
                                 0,
@@ -314,48 +141,24 @@ const PrevalenceChart: React.FC = () => {
                                 tempCanvas.height
                             );
 
-                            // Draw the title
                             if (currentMicroorganism) {
-                                const titleWords =
-                                    formatMicroorganismNameArray(
-                                        currentMicroorganism
-                                    );
-
                                 const titleFontSize = 20;
                                 tempCtx.font = `${titleFontSize}px Arial`;
 
-                                // Measure total width
-                                let totalWidth = 0;
-                                titleWords.forEach((wordObj) => {
-                                    tempCtx.font = wordObj.italic
-                                        ? `italic ${titleFontSize}px Arial`
-                                        : `${titleFontSize}px Arial`;
-                                    totalWidth += tempCtx.measureText(
-                                        wordObj.text
-                                    ).width;
-                                });
+                                const title = currentMicroorganism;
 
-                                // Center the title
-                                let xPos = (tempCanvas.width - totalWidth) / 2;
-                                const yPos = titleFontSize + 10; // Add some padding
+                                const textWidth =
+                                    tempCtx.measureText(title).width;
 
-                                // Draw each word with formatting
-                                titleWords.forEach((wordObj) => {
-                                    tempCtx.font = wordObj.italic
-                                        ? `italic ${titleFontSize}px Arial`
-                                        : `${titleFontSize}px Arial`;
-                                    tempCtx.fillStyle = "black";
-                                    tempCtx.fillText(wordObj.text, xPos, yPos);
-                                    xPos += tempCtx.measureText(
-                                        wordObj.text
-                                    ).width;
-                                });
+                                const xPos = (tempCanvas.width - textWidth) / 2;
+                                const yPos = titleFontSize + 10;
+
+                                tempCtx.fillStyle = "black";
+                                tempCtx.fillText(title, xPos, yPos);
                             }
 
-                            // Draw the chart onto the temp canvas
                             tempCtx.drawImage(canvas, 0, extraHeight);
 
-                            // Save the temp canvas as the image
                             const link = document.createElement("a");
                             link.href = tempCanvas.toDataURL("image/png");
                             link.download = `${chartKey}-${getCurrentTimestamp()}.png`;
@@ -384,10 +187,8 @@ const PrevalenceChart: React.FC = () => {
                 const chartInstance = chartRef.current;
 
                 if (chartInstance) {
-                    // Ensure the chart is updated
                     await chartInstance.update();
 
-                    // Use requestAnimationFrame to wait until the next repaint
                     await new Promise<void>((resolve) => {
                         requestAnimationFrame(() => {
                             const canvas = chartInstance.canvas;
@@ -397,17 +198,15 @@ const PrevalenceChart: React.FC = () => {
                                 canvas.width > 0 &&
                                 canvas.height > 0
                             ) {
-                                // Create a temporary canvas
                                 const tempCanvas =
                                     document.createElement("canvas");
                                 const tempCtx = tempCanvas.getContext("2d");
 
-                                const extraHeight = 60; // Adjust to accommodate the title
+                                const extraHeight = 60;
                                 tempCanvas.width = canvas.width;
                                 tempCanvas.height = canvas.height + extraHeight;
 
                                 if (tempCtx) {
-                                    // Fill background with white
                                     tempCtx.fillStyle = "white";
                                     tempCtx.fillRect(
                                         0,
@@ -416,53 +215,25 @@ const PrevalenceChart: React.FC = () => {
                                         tempCanvas.height
                                     );
 
-                                    // Draw the title
                                     if (currentMicroorganism) {
-                                        const titleWords =
-                                            formatMicroorganismNameArray(
-                                                currentMicroorganism
-                                            );
-
                                         const titleFontSize = 20;
                                         tempCtx.font = `${titleFontSize}px Arial`;
 
-                                        // Measure total width
-                                        let totalWidth = 0;
-                                        titleWords.forEach((wordObj) => {
-                                            tempCtx.font = wordObj.italic
-                                                ? `italic ${titleFontSize}px Arial`
-                                                : `${titleFontSize}px Arial`;
-                                            totalWidth += tempCtx.measureText(
-                                                wordObj.text
-                                            ).width;
-                                        });
+                                        const title = currentMicroorganism;
 
-                                        // Center the title
-                                        let xPos =
-                                            (tempCanvas.width - totalWidth) / 2;
-                                        const yPos = titleFontSize + 10; // Add some padding
+                                        const textWidth =
+                                            tempCtx.measureText(title).width;
 
-                                        // Draw each word with formatting
-                                        titleWords.forEach((wordObj) => {
-                                            tempCtx.font = wordObj.italic
-                                                ? `italic ${titleFontSize}px Arial`
-                                                : `${titleFontSize}px Arial`;
-                                            tempCtx.fillStyle = "black";
-                                            tempCtx.fillText(
-                                                wordObj.text,
-                                                xPos,
-                                                yPos
-                                            );
-                                            xPos += tempCtx.measureText(
-                                                wordObj.text
-                                            ).width;
-                                        });
+                                        const xPos =
+                                            (tempCanvas.width - textWidth) / 2;
+                                        const yPos = titleFontSize + 10;
+
+                                        tempCtx.fillStyle = "black";
+                                        tempCtx.fillText(title, xPos, yPos);
                                     }
 
-                                    // Draw the chart onto the temp canvas
                                     tempCtx.drawImage(canvas, 0, extraHeight);
 
-                                    // Save the temp canvas to zip
                                     const base64Image = tempCanvas
                                         .toDataURL("image/png")
                                         .split(",")[1];
@@ -499,45 +270,6 @@ const PrevalenceChart: React.FC = () => {
         saveAs(content, `charts-${timestamp}.zip`);
     };
 
-    const logoPlugin = {
-        id: "logoPlugin",
-        beforeInit: (chart: ChartJS) => {
-            // Preload the image if not already loaded
-            if (!logoImage.complete) {
-                logoImage.onload = () => {
-                    chart.update();
-                };
-            }
-        },
-        beforeDraw: (chart: ChartJS) => {
-            const ctx = chart.ctx;
-            ctx.save();
-            ctx.globalCompositeOperation = "destination-over";
-            ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, chart.width, chart.height);
-            ctx.restore();
-        },
-        afterDraw: (chart: ChartJS) => {
-            if (logoImage.complete) {
-                const ctx = chart.ctx;
-                const extraPadding = 20;
-                const logoWidth = 60;
-                const logoHeight = 27;
-
-                const logoX = chart.chartArea.left + 20;
-                const logoY = chart.chartArea.bottom + extraPadding;
-
-                ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
-
-                const dateText = `${t("Generated_on")}: ${getFormattedDate()}`;
-                ctx.font = "10px Arial";
-                ctx.fillStyle = "#000";
-                ctx.textAlign = "right";
-                ctx.fillText(dateText, chart.width - 10, chart.height - 5);
-            }
-        },
-    };
-
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
             {/* Top form control */}
@@ -550,66 +282,11 @@ const PrevalenceChart: React.FC = () => {
                     backgroundColor: "rgb(219, 228, 235)",
                 }}
             >
-                <FormControl fullWidth sx={{ mb: 1 }} variant="outlined">
-                    <InputLabel id="microorganism-select-label" shrink={true}>
-                        {t("Select_Microorganism")}
-                    </InputLabel>
-                    <Select
-                        labelId="microorganism-select-label"
-                        value={currentMicroorganism || ""}
-                        onChange={(event) =>
-                            setCurrentMicroorganism(
-                                event.target.value as string
-                            )
-                        }
-                        label={t("Select_Microorganism")}
-                        sx={{ backgroundColor: "#f5f5f5" }}
-                        renderValue={(selected) => (
-                            <Typography component="span">
-                                {formatMicroorganismNameArray(selected).map(
-                                    (wordObj, index) => (
-                                        <React.Fragment key={index}>
-                                            {wordObj.italic ? (
-                                                <i>{wordObj.text}</i>
-                                            ) : (
-                                                wordObj.text
-                                            )}
-                                        </React.Fragment>
-                                    )
-                                )}
-                            </Typography>
-                        )}
-                    >
-                        {availableMicroorganisms.length > 0 ? (
-                            availableMicroorganisms.map((microorganism) => (
-                                <MenuItem
-                                    key={microorganism}
-                                    value={microorganism}
-                                >
-                                    <Typography component="span">
-                                        {formatMicroorganismNameArray(
-                                            microorganism
-                                        ).map((wordObj, index) => (
-                                            <React.Fragment key={index}>
-                                                {wordObj.italic ? (
-                                                    <i>{wordObj.text}</i>
-                                                ) : (
-                                                    wordObj.text
-                                                )}
-                                            </React.Fragment>
-                                        ))}
-                                    </Typography>
-                                </MenuItem>
-                            ))
-                        ) : (
-                            <MenuItem disabled>
-                                <Typography component="span">
-                                    {t("No_Microorganisms_Available")}
-                                </Typography>
-                            </MenuItem>
-                        )}
-                    </Select>
-                </FormControl>
+                <MicroorganismSelect
+                    currentMicroorganism={currentMicroorganism}
+                    availableMicroorganisms={availableMicroorganisms}
+                    setCurrentMicroorganism={setCurrentMicroorganism}
+                />
             </Box>
 
             {loading ? (
@@ -636,7 +313,6 @@ const PrevalenceChart: React.FC = () => {
                                             >();
                                     }
 
-                                    // Determine if the chart should be displayed or hidden
                                     const isDisplayed =
                                         displayedChartsSet.has(key);
 
@@ -658,250 +334,29 @@ const PrevalenceChart: React.FC = () => {
                                                 overflow: "hidden",
                                             }}
                                         >
-                                            <Box
-                                                sx={{
-                                                    backgroundColor: "white",
-                                                    padding: 4,
-                                                    borderRadius: 2,
-                                                    boxShadow: 2,
-                                                    margin: "0 15px",
-                                                }}
-                                            >
-                                                <Typography
-                                                    variant="h5"
-                                                    align="center"
-                                                    gutterBottom
-                                                    sx={{
-                                                        minHeight: "60px",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                        whiteSpace: "normal",
-                                                        wordWrap: "break-word",
-                                                    }}
-                                                >
-                                                    {formatMicroorganismNameArray(
-                                                        currentMicroorganism
-                                                    ).map((wordObj, index) => (
-                                                        <React.Fragment
-                                                            key={index}
-                                                        >
-                                                            {wordObj.italic ? (
-                                                                <i>
-                                                                    {
-                                                                        wordObj.text
-                                                                    }
-                                                                </i>
-                                                            ) : (
-                                                                wordObj.text
-                                                            )}
-                                                        </React.Fragment>
-                                                    ))}
-                                                </Typography>
-                                                <Box sx={{ marginBottom: 4 }}>
-                                                    <Bar
-                                                        data={{
-                                                            labels: yearOptions,
-                                                            datasets: [
-                                                                {
-                                                                    label: key,
-                                                                    data: yearOptions.map(
-                                                                        (
-                                                                            year
-                                                                        ) =>
-                                                                            chartData[
-                                                                                key
-                                                                            ]?.[
-                                                                                year
-                                                                            ] || {
-                                                                                x: 0,
-                                                                                y: year,
-                                                                                ciMin: 0,
-                                                                                ciMax: 0,
-                                                                            }
-                                                                    ) as ChartDataPoint[],
-                                                                    backgroundColor: `#${Math.floor(
-                                                                        Math.random() *
-                                                                            16777215
-                                                                    ).toString(
-                                                                        16
-                                                                    )}`,
-                                                                },
-                                                            ],
-                                                        }}
-                                                        options={{
-                                                            indexAxis: "y",
-                                                            scales: {
-                                                                x: {
-                                                                    title: {
-                                                                        display:
-                                                                            true,
-                                                                        text: t(
-                                                                            "Prevalence %"
-                                                                        ),
-                                                                    },
-                                                                    beginAtZero:
-                                                                        true,
-                                                                    max: xAxisMax,
-                                                                },
-                                                                y: {
-                                                                    title: {
-                                                                        display:
-                                                                            true,
-                                                                        text: t(
-                                                                            "Year"
-                                                                        ),
-                                                                    },
-                                                                    reverse:
-                                                                        false,
-                                                                    ticks: {
-                                                                        callback:
-                                                                            function (
-                                                                                _,
-                                                                                index
-                                                                            ) {
-                                                                                return yearOptions[
-                                                                                    index
-                                                                                ];
-                                                                            },
-                                                                    },
-                                                                },
-                                                            },
-                                                            plugins: {
-                                                                legend: {
-                                                                    labels: {
-                                                                        padding: 5,
-                                                                    },
-                                                                },
-                                                                tooltip: {
-                                                                    backgroundColor:
-                                                                        "rgba(0, 0, 0, 1)",
-                                                                    titleFont: {
-                                                                        size: 14,
-                                                                    },
-                                                                    bodyFont: {
-                                                                        size: 12,
-                                                                    },
-                                                                    displayColors:
-                                                                        true,
-                                                                    borderColor:
-                                                                        "#fff",
-                                                                    borderWidth: 1,
-                                                                    caretPadding: 120,
-                                                                    yAlign: "center",
-                                                                    callbacks: {
-                                                                        label: (
-                                                                            context
-                                                                        ) => {
-                                                                            const year =
-                                                                                parseInt(
-                                                                                    context.label,
-                                                                                    10
-                                                                                );
-                                                                            const data =
-                                                                                chartData[
-                                                                                    key
-                                                                                ]?.[
-                                                                                    year
-                                                                                ] ||
-                                                                                {};
-                                                                            const rawData =
-                                                                                context.raw as ChartDataPoint;
-                                                                            return [
-                                                                                `${t(
-                                                                                    "Prevalence"
-                                                                                )}: ${
-                                                                                    rawData.x
-                                                                                }%`,
-                                                                                `${t(
-                                                                                    "CI_min"
-                                                                                )}: ${
-                                                                                    data.ciMin
-                                                                                }`,
-                                                                                `${t(
-                                                                                    "CI_max"
-                                                                                )}: ${
-                                                                                    data.ciMax
-                                                                                }`,
-                                                                                `${t(
-                                                                                    "Samples"
-                                                                                )}: ${
-                                                                                    data.numberOfSamples
-                                                                                }`,
-                                                                                `${t(
-                                                                                    "Positive"
-                                                                                )}: ${
-                                                                                    data.numberOfPositive
-                                                                                }`,
-                                                                            ];
-                                                                        },
-                                                                    },
-                                                                },
-                                                            },
-                                                            animation: false,
-                                                        }}
-                                                        plugins={[
-                                                            errorBarTooltipPlugin,
-                                                            {
-                                                                id: "customErrorBars",
-                                                                afterDraw: (
-                                                                    chart: ChartJS
-                                                                ) =>
-                                                                    drawErrorBars(
-                                                                        chart
-                                                                    ),
-                                                            },
-                                                            logoPlugin,
-                                                        ]}
-                                                        ref={
-                                                            chartRefs.current[
-                                                                refKey
-                                                            ]
-                                                        }
-                                                    />
-
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            justifyContent:
-                                                                "center",
-                                                            marginTop: 2,
-                                                        }}
-                                                    >
-                                                        <Button
-                                                            variant="contained"
-                                                            size="medium"
-                                                            onClick={() =>
-                                                                downloadChart(
-                                                                    chartRefs
-                                                                        .current[
-                                                                        refKey
-                                                                    ],
-                                                                    refKey
-                                                                )
-                                                            }
-                                                            sx={{
-                                                                textTransform:
-                                                                    "none",
-                                                            }}
-                                                        >
-                                                            {t(
-                                                                "Download_Chart"
-                                                            )}
-                                                        </Button>
-                                                    </Box>
-                                                </Box>
-                                            </Box>
+                                            <ChartCard
+                                                chartKey={key}
+                                                chartData={chartData[key]}
+                                                chartRef={
+                                                    chartRefs.current[refKey]
+                                                }
+                                                currentMicroorganism={
+                                                    currentMicroorganism
+                                                }
+                                                yearOptions={yearOptions}
+                                                xAxisMax={xAxisMax}
+                                                downloadChart={downloadChart}
+                                            />
                                         </Grid>
                                     );
                                 })}
                             </Grid>
 
-                            {/* Pagination wrapped in a sticky Box */}
+                            {/* Pagination */}
                             <Box
                                 sx={{
                                     position: "sticky",
-                                    bottom: "80px", // Height of the download button (60px) + padding
+                                    bottom: "80px",
                                     zIndex: 1000,
                                     padding: 2,
                                     backgroundColor: "rgb(219, 228, 235)",
