@@ -376,7 +376,7 @@ const PrevalenceChart: React.FC = () => {
                         </Typography>
                     ) : (
                         <>
-                            <Grid container spacing={4}>
+                            <Grid container spacing={0}>
                                 {chartKeys.map((key) => {
                                     // Use the sanitized key only for chartRefs and filenames
                                     const sanitizedKey = sanitizeKey(key);
