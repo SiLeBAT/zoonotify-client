@@ -28,8 +28,8 @@ export const logoPlugin = {
             const logoWidth = 60;
             const logoHeight = 27;
 
-            const logoX = chart.chartArea.left + 20;
-            const logoY = chart.chartArea.bottom + extraPadding;
+            const logoX = chart.chartArea.left + 10;
+            const logoY = chart.chartArea.bottom + extraPadding + 10;
 
             ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
 
