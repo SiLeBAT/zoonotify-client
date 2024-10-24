@@ -176,7 +176,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         {
             field: "microorganism",
             headerName: t("MICROORGANISM"),
-            minWidth: 130,
+            minWidth: 140,
             flex: 1,
             headerClassName: "header-style",
             align: "center",
@@ -185,7 +185,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         {
             field: "sampleOrigin",
             headerName: t("SAMPLE_ORIGIN"),
-            minWidth: 130,
+            minWidth: 140,
             flex: 1,
             headerClassName: "header-style",
             align: "center",
@@ -193,7 +193,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         {
             field: "samplingStage",
             headerName: t("SAMPLING_STAGE"),
-            minWidth: 130,
+            minWidth: 150,
             flex: 1,
             headerClassName: "header-style",
             align: "center",
@@ -268,7 +268,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 content={
                     <div
                         style={{
-                            height: 500,
+                            height: 600,
                             width: "100%",
                             overflowX: "auto",
                             display: "flex",
