@@ -126,7 +126,7 @@ const PrevalenceChart: React.FC = () => {
         chartKey: string
     ): Promise<void> => {
         const chartInstance = chartRef.current;
-        const microorganismName = currentMicroorganism; // Capture the current microorganism name
+        const microorganismName = currentMicroorganism;
 
         if (chartInstance) {
             await chartInstance.update();
@@ -136,14 +136,20 @@ const PrevalenceChart: React.FC = () => {
                     const canvas = chartInstance.canvas;
 
                     if (canvas && canvas.width > 0 && canvas.height > 0) {
+                        // Increase resolution with scale factor
+                        const scaleFactor = 2; // Adjust for higher resolution
+
                         const tempCanvas = document.createElement("canvas");
                         const tempCtx = tempCanvas.getContext("2d");
 
-                        const extraHeight = 60;
-                        tempCanvas.width = canvas.width;
-                        tempCanvas.height = canvas.height + extraHeight;
+                        const extraHeight = 60 * scaleFactor;
+                        tempCanvas.width = canvas.width * scaleFactor;
+                        tempCanvas.height =
+                            (canvas.height + extraHeight) * scaleFactor;
 
                         if (tempCtx) {
+                            // Scale up the context for higher resolution
+                            tempCtx.scale(scaleFactor, scaleFactor);
                             tempCtx.fillStyle = "white";
                             tempCtx.fillRect(
                                 0,
@@ -152,16 +158,14 @@ const PrevalenceChart: React.FC = () => {
                                 tempCanvas.height
                             );
 
+                            // Apply black font and larger size
                             if (microorganismName) {
-                                const titleFontSize = 20;
+                                const titleFontSize = 10 * scaleFactor;
 
-                                // Use the formatting function
                                 const wordsArray =
                                     formatMicroorganismNameArray(
                                         microorganismName
                                     );
-
-                                // Measure each word and calculate total width
                                 const wordMeasurements = wordsArray.map(
                                     (wordObj) => {
                                         tempCtx.font = `${
@@ -179,10 +183,12 @@ const PrevalenceChart: React.FC = () => {
                                     0
                                 );
 
-                                let xPos = (tempCanvas.width - totalWidth) / 2;
+                                let xPos =
+                                    (tempCanvas.width / scaleFactor -
+                                        totalWidth) /
+                                    2;
                                 const yPos = titleFontSize + 10;
 
-                                // Draw each word with appropriate styling
                                 wordMeasurements.forEach((wordObj) => {
                                     tempCtx.font = `${
                                         wordObj.italic ? "italic" : "normal"
@@ -193,7 +199,11 @@ const PrevalenceChart: React.FC = () => {
                                 });
                             }
 
-                            tempCtx.drawImage(canvas, 0, extraHeight);
+                            tempCtx.drawImage(
+                                canvas,
+                                0,
+                                extraHeight / scaleFactor
+                            );
 
                             const link = document.createElement("a");
                             const sanitizedChartKey = sanitizeKey(chartKey);
@@ -213,7 +223,6 @@ const PrevalenceChart: React.FC = () => {
             console.error("Chart instance is undefined");
         }
     };
-
     const downloadAllCharts = async (): Promise<void> => {
         const zip = new JSZip();
         const timestamp = getCurrentTimestamp();

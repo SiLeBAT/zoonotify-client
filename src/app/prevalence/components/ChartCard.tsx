@@ -46,7 +46,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
         <Box
             sx={{
                 backgroundColor: "white",
-                padding: 4,
+                padding: 5,
                 borderRadius: 2,
                 boxShadow: 2,
                 margin: "0 15px",
@@ -95,17 +95,29 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 title: {
                                     display: true,
                                     text: t("Prevalence %"),
+                                    color: "black", // Change x-axis label text color to black
+                                    font: {
+                                        size: 14, // Adjust font size if needed
+                                    },
                                 },
                                 beginAtZero: true,
                                 max: xAxisMax,
+                                ticks: {
+                                    color: "black", // Change x-axis ticks color to black
+                                },
                             },
                             y: {
                                 title: {
                                     display: true,
                                     text: t("Year"),
+                                    color: "black", // Change y-axis label text color to black
+                                    font: {
+                                        size: 14, // Adjust font size if needed
+                                    },
                                 },
                                 reverse: false,
                                 ticks: {
+                                    color: "black", // Change y-axis ticks color to black
                                     callback: function (_, index) {
                                         return yearOptions[index];
                                     },
@@ -115,20 +127,21 @@ const ChartCard: React.FC<ChartCardProps> = ({
                         plugins: {
                             legend: {
                                 labels: {
+                                    color: "black", // Change legend text color to black
                                     padding: 5,
                                 },
                             },
                             tooltip: {
                                 backgroundColor: "rgba(0, 0, 0, 1)",
                                 titleFont: {
-                                    size: 14,
+                                    size: 20,
                                 },
                                 bodyFont: {
-                                    size: 12,
+                                    size: 13,
                                 },
                                 displayColors: true,
                                 borderColor: "#fff",
-                                borderWidth: 1,
+                                borderWidth: 2,
                                 caretPadding: 120,
                                 yAlign: "center",
                                 callbacks: {
