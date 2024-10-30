@@ -1,8 +1,7 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { PrevalenceChart } from "./PrevalenceChart";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
-import { useTranslation } from "react-i18next";
 
 // Mock translations
 jest.mock("react-i18next", () => ({
