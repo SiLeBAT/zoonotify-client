@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ChartCard } from "./ChartCard";
-import { useTranslation } from "react-i18next";
 
 // Mock translations
 jest.mock("react-i18next", () => ({
