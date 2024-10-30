@@ -134,7 +134,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                             tooltip: {
                                 backgroundColor: "rgba(0, 0, 0, 1)",
                                 titleFont: {
-                                    size: 20,
+                                    size: 16,
                                 },
                                 bodyFont: {
                                     size: 13,

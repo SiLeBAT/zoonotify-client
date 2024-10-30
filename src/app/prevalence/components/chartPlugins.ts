@@ -50,10 +50,9 @@ export const errorBarTooltipPlugin = {
         const tooltip = chart.tooltip;
         const mouseX = event.x;
         const mouseY = event.y;
-        let foundErrorBar = false;
 
-        chart.data.datasets.forEach((dataset, i) => {
-            const meta = chart.getDatasetMeta(i);
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+            const meta = chart.getDatasetMeta(datasetIndex);
             meta.data.forEach((bar, index) => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const dataPoint = dataset.data[index] as any;
@@ -78,26 +77,20 @@ export const errorBarTooltipPlugin = {
                             tooltip.setActiveElements(
                                 [
                                     {
-                                        datasetIndex: i,
+                                        datasetIndex,
                                         index,
                                     },
                                 ],
                                 { x: mouseX, y: mouseY }
                             );
                         }
-                        foundErrorBar = true;
                     }
                 }
             });
         });
 
-        if (
-            !foundErrorBar &&
-            tooltip &&
-            typeof tooltip.setActiveElements === "function"
-        ) {
-            tooltip.setActiveElements([], { x: 0, y: 0 });
-        }
+        // No need to reset the tooltip's active elements when not over an error bar
+        // This allows the default tooltip behavior to function when hovering over the bars
     },
 };
 
