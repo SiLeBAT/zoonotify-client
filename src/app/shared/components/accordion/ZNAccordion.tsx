@@ -134,6 +134,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                     display: "block",
                     hyphens: "auto",
                     textAlign: "justify",
+                    maxHeight: "1000px",
                 }}
             >
                 {contentBox}
