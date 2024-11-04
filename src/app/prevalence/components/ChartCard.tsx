@@ -53,10 +53,11 @@ const ChartCard: React.FC<ChartCardProps> = ({
             }}
         >
             <Typography
-                variant="h5"
                 align="center"
                 gutterBottom
                 sx={{
+                    fontSize: "3rem", // Increased font size for the title
+                    fontWeight: "bold", // Optional: make the text bold
                     minHeight: "60px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -95,29 +96,35 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 title: {
                                     display: true,
                                     text: t("Prevalence %"),
-                                    color: "black", // Change x-axis label text color to black
+                                    color: "black",
                                     font: {
-                                        size: 14, // Adjust font size if needed
+                                        size: 16,
                                     },
                                 },
                                 beginAtZero: true,
                                 max: xAxisMax,
                                 ticks: {
-                                    color: "black", // Change x-axis ticks color to black
+                                    color: "black",
+                                    font: {
+                                        size: 13,
+                                    },
                                 },
                             },
                             y: {
                                 title: {
                                     display: true,
                                     text: t("Year"),
-                                    color: "black", // Change y-axis label text color to black
+                                    color: "black",
                                     font: {
-                                        size: 14, // Adjust font size if needed
+                                        size: 16,
                                     },
                                 },
                                 reverse: false,
                                 ticks: {
-                                    color: "black", // Change y-axis ticks color to black
+                                    color: "black",
+                                    font: {
+                                        size: 13,
+                                    },
                                     callback: function (_, index) {
                                         return yearOptions[index];
                                     },
@@ -127,17 +134,20 @@ const ChartCard: React.FC<ChartCardProps> = ({
                         plugins: {
                             legend: {
                                 labels: {
-                                    color: "black", // Change legend text color to black
+                                    color: "black",
                                     padding: 5,
+                                    font: {
+                                        size: 14,
+                                    },
                                 },
                             },
                             tooltip: {
                                 backgroundColor: "rgba(0, 0, 0, 1)",
                                 titleFont: {
-                                    size: 16,
+                                    size: 14,
                                 },
                                 bodyFont: {
-                                    size: 13,
+                                    size: 12,
                                 },
                                 displayColors: true,
                                 borderColor: "#fff",
