@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS } from "chart.js";
+// eslint-disable-next-line import/named
+import { Chart as ChartJS, TooltipItem } from "chart.js"; // Import TooltipItem
 import { FormattedMicroorganismName } from "./FormattedMicroorganismName";
 import {
     errorBarTooltipPlugin,
@@ -42,6 +43,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
     downloadChart,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
+
     return (
         <Box
             sx={{
@@ -56,8 +58,8 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 align="center"
                 gutterBottom
                 sx={{
-                    fontSize: "3rem", // Increased font size for the title
-                    fontWeight: "bold", // Optional: make the text bold
+                    fontSize: "3rem",
+                    fontWeight: "bold",
                     minHeight: "60px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -155,9 +157,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 caretPadding: 120,
                                 yAlign: "center",
                                 callbacks: {
-                                    label: (context) => {
+                                    label: (context: TooltipItem<"bar">) => {
                                         const year = parseInt(
-                                            context.label,
+                                            context.label || "",
                                             10
                                         );
                                         const data = chartData[year] || {};
@@ -177,7 +179,11 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                     },
                                 },
                             },
-                        },
+                            customTexts: {
+                                generatedOn: t("Generated on"), // Pass the translated text here
+                            },
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        } as any, // Cast the plugins object to any
                         animation: false,
                     }}
                     plugins={[
