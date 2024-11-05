@@ -33,7 +33,13 @@ export const logoPlugin = {
 
             ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
 
-            const dateText = `Generated on: ${getFormattedDate()}`;
+            // Access the translated text from chart options
+            const generatedOnText =
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ((chart.options.plugins as any)?.customTexts
+                    ?.generatedOn as string) || "Generated on";
+            const dateText = `${generatedOnText}: ${getFormattedDate()}`;
+
             ctx.font = "10px Arial";
             ctx.fillStyle = "#000";
             ctx.textAlign = "right";
