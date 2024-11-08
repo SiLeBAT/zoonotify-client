@@ -213,7 +213,7 @@ const DataGridControls: React.FC<DataGridControlsProps> = ({ heading }) => {
             content={
                 <SearchParameterDisplay searchParameters={searchParameters} />
             }
-            defaultExpanded={false}
+            defaultExpanded={true}
             centerContent={true}
         />
     );
