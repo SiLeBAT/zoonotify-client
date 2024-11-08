@@ -210,7 +210,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
-            minWidth: 150,
+            minWidth: 170,
             flex: 1,
             headerClassName: "header-style",
             align: "center",
@@ -251,7 +251,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
-            minWidth: 130,
+            minWidth: 150,
             flex: 1,
             headerClassName: "header-style",
             align: "center",
