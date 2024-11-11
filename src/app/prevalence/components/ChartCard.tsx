@@ -10,15 +10,7 @@ import {
     logoPlugin,
 } from "./chartPlugins";
 import { useTranslation } from "react-i18next";
-
-interface ChartDataPoint {
-    x: number;
-    y: number;
-    ciMin: number;
-    ciMax: number;
-    numberOfSamples?: number;
-    numberOfPositive?: number;
-}
+import { ChartDataPoint } from "./types";
 
 interface ChartCardProps {
     chartKey: string;
@@ -180,10 +172,10 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 },
                             },
                             customTexts: {
-                                generatedOn: t("Generated on"), // Pass the translated text here
+                                generatedOn: t("Generated on"),
                             },
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        } as any, // Cast the plugins object to any
+                        } as any,
                         animation: false,
                     }}
                     plugins={[

@@ -14,7 +14,7 @@ import { saveAs } from "file-saver";
 import { useTranslation } from "react-i18next";
 import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
-import { getCurrentTimestamp, formatMicroorganismNameArray } from "./utils"; // Import the formatting function
+import { getCurrentTimestamp, formatMicroorganismNameArray } from "./utils";
 import { ChartDataPoint } from "./types";
 
 ChartJS.register(...registerables);
@@ -27,9 +27,8 @@ const PrevalenceChart: React.FC = () => {
         >;
     }>({});
     const { t } = useTranslation(["PrevalencePage"]);
-    const [currentMicroorganism, setCurrentMicroorganism] = useState<
-        string | null
-    >(null);
+    const [currentMicroorganism, setCurrentMicroorganism] =
+        useState<string>("");
     const [availableMicroorganisms, setAvailableMicroorganisms] = useState<
         string[]
     >([]);
@@ -63,10 +62,10 @@ const PrevalenceChart: React.FC = () => {
         }
     }, [availableMicroorganisms]);
 
-    // Clear chartRefs when currentMicroorganism changes
-    useEffect(() => {
-        chartRefs.current = {};
-    }, [currentMicroorganism]);
+    // Remove this effect to prevent resetting chartRefs.current
+    // useEffect(() => {
+    //     chartRefs.current = {};
+    // }, [currentMicroorganism]);
 
     const yearOptions = Array.from(
         { length: 14 },
@@ -125,6 +124,11 @@ const PrevalenceChart: React.FC = () => {
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ): Promise<void> => {
+        if (!chartRef || !chartRef.current) {
+            console.error("Chart reference is undefined");
+            return;
+        }
+
         const chartInstance = chartRef.current;
         const microorganismName = currentMicroorganism;
 
@@ -223,14 +227,21 @@ const PrevalenceChart: React.FC = () => {
             console.error("Chart instance is undefined");
         }
     };
+
     const downloadAllCharts = async (): Promise<void> => {
         const zip = new JSZip();
         const timestamp = getCurrentTimestamp();
-        const microorganismName = currentMicroorganism; // Capture the current microorganism name
+        const microorganismName = currentMicroorganism;
 
         const chartPromises = Object.keys(chartRefs.current).map(
             async (key) => {
                 const chartRef = chartRefs.current[key];
+                if (!chartRef || !chartRef.current) {
+                    console.error(
+                        `Chart reference is undefined for chart ${key}`
+                    );
+                    return;
+                }
                 const chartInstance = chartRef.current;
 
                 if (chartInstance) {
@@ -265,13 +276,11 @@ const PrevalenceChart: React.FC = () => {
                                     if (microorganismName) {
                                         const titleFontSize = 20;
 
-                                        // Use the formatting function
                                         const wordsArray =
                                             formatMicroorganismNameArray(
                                                 microorganismName
                                             );
 
-                                        // Measure each word and calculate total width
                                         const wordMeasurements = wordsArray.map(
                                             (wordObj) => {
                                                 tempCtx.font = `${
@@ -298,7 +307,6 @@ const PrevalenceChart: React.FC = () => {
                                             (tempCanvas.width - totalWidth) / 2;
                                         const yPos = titleFontSize + 10;
 
-                                        // Draw each word with appropriate styling
                                         wordMeasurements.forEach((wordObj) => {
                                             tempCtx.font = `${
                                                 wordObj.italic
@@ -387,7 +395,6 @@ const PrevalenceChart: React.FC = () => {
                         <>
                             <Grid container spacing={0}>
                                 {chartKeys.map((key) => {
-                                    // Use the sanitized key only for chartRefs and filenames
                                     const sanitizedKey = sanitizeKey(key);
                                     const refKey = `${sanitizedKey}-${currentMicroorganism}`;
                                     if (!chartRefs.current[refKey]) {
@@ -423,7 +430,7 @@ const PrevalenceChart: React.FC = () => {
                                             }}
                                         >
                                             <ChartCard
-                                                chartKey={key} // Use the original key for display
+                                                chartKey={key}
                                                 chartData={chartData[key]}
                                                 chartRef={
                                                     chartRefs.current[refKey]
