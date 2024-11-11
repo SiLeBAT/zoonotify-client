@@ -18,7 +18,7 @@ type SearchParameterDisplayProps = {
 
 type SearchParameterEntryProps = {
     title: string;
-    value: JSX.Element | string; // Accept JSX as value for microorganism formatting
+    value: JSX.Element | string;
 };
 
 const italicWords: string[] = [
@@ -40,7 +40,7 @@ const italicWords: string[] = [
     "Campylobacter",
 ];
 
-// The function to format microorganism names
+// Function to format microorganism names
 const formatMicroorganismName = (
     microName: string | null | undefined
 ): JSX.Element => {
@@ -80,7 +80,7 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
     title,
     value,
 }) => {
-    if (!value) return null; // Do not render anything if the value is empty
+    if (!value) return null;
 
     const theme = useTheme();
 
@@ -136,7 +136,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
             }}
         >
             {/* Microorganism Display with correct formatting */}
-            {searchParameters.microorganism && (
+            {searchParameters.microorganism?.length > 0 && (
                 <SearchParameterEntry
                     title={t("MICROORGANISMS")}
                     value={
@@ -154,14 +154,14 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                     }
                 />
             )}
-            {/* Other entries */}
-            {searchParameters.matrix && (
+            {/* Other entries with length checks */}
+            {searchParameters.matrix?.length > 0 && (
                 <SearchParameterEntry
                     title={t("MATRIX")}
                     value={searchParameters.matrix.map((v) => t(v)).join(", ")}
                 />
             )}
-            {searchParameters.sampleOrigin && (
+            {searchParameters.sampleOrigin?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SAMPLE_ORIGIN")}
                     value={searchParameters.sampleOrigin
@@ -169,7 +169,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.matrixGroup && (
+            {searchParameters.matrixGroup?.length > 0 && (
                 <SearchParameterEntry
                     title={t("MATRIX_GROUP")}
                     value={searchParameters.matrixGroup
@@ -177,7 +177,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.samplingYear && (
+            {searchParameters.samplingYear?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SAMPLING_YEAR")}
                     value={searchParameters.samplingYear
@@ -185,7 +185,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.superCategorySampleOrigin && (
+            {searchParameters.superCategorySampleOrigin?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
                     value={searchParameters.superCategorySampleOrigin
@@ -193,7 +193,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.samplingStage && (
+            {searchParameters.samplingStage?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SAMPLING_STAGE")}
                     value={searchParameters.samplingStage
