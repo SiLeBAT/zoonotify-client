@@ -381,9 +381,9 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 content={
                     <div
                         style={{
-                            maxHeight: "1000vh",
+                            maxHeight: "950px",
                             width: "100%",
-                            overflowX: "hidden",
+                            overflow: "hidden",
                             flexDirection: "column",
                         }}
                     >
