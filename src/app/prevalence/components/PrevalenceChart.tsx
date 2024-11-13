@@ -5,12 +5,9 @@ import {
     CircularProgress,
     Typography,
     Grid,
-    Button,
     Pagination,
 } from "@mui/material";
 import { Chart as ChartJS, registerables } from "chart.js";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
 import { useTranslation } from "react-i18next";
 import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
@@ -229,142 +226,6 @@ const PrevalenceChart: React.FC = () => {
         }
     };
 
-    const downloadAllCharts = async (): Promise<void> => {
-        const zip = new JSZip();
-        const timestamp = getCurrentTimestamp();
-        const microorganismName = currentMicroorganism;
-
-        const chartPromises = Object.keys(chartRefs.current).map(
-            async (key) => {
-                const chartRef = chartRefs.current[key];
-                if (!chartRef || !chartRef.current) {
-                    console.error(
-                        `Chart reference is undefined for chart ${key}`
-                    );
-                    return;
-                }
-                const chartInstance = chartRef.current;
-
-                if (chartInstance) {
-                    await chartInstance.update();
-
-                    await new Promise<void>((resolve) => {
-                        requestAnimationFrame(() => {
-                            const canvas = chartInstance.canvas;
-
-                            if (
-                                canvas &&
-                                canvas.width > 0 &&
-                                canvas.height > 0
-                            ) {
-                                const tempCanvas =
-                                    document.createElement("canvas");
-                                const tempCtx = tempCanvas.getContext("2d");
-
-                                const extraHeight = 60;
-                                tempCanvas.width = canvas.width;
-                                tempCanvas.height = canvas.height + extraHeight;
-
-                                if (tempCtx) {
-                                    tempCtx.fillStyle = "white";
-                                    tempCtx.fillRect(
-                                        0,
-                                        0,
-                                        tempCanvas.width,
-                                        tempCanvas.height
-                                    );
-
-                                    if (microorganismName) {
-                                        const titleFontSize = 20;
-
-                                        const wordsArray =
-                                            formatMicroorganismNameArray(
-                                                microorganismName
-                                            );
-
-                                        const wordMeasurements = wordsArray.map(
-                                            (wordObj) => {
-                                                tempCtx.font = `${
-                                                    wordObj.italic
-                                                        ? "italic"
-                                                        : "normal"
-                                                } ${titleFontSize}px Arial`;
-                                                const width =
-                                                    tempCtx.measureText(
-                                                        wordObj.text
-                                                    ).width;
-                                                return { ...wordObj, width };
-                                            }
-                                        );
-
-                                        const totalWidth =
-                                            wordMeasurements.reduce(
-                                                (sum, wordObj) =>
-                                                    sum + wordObj.width,
-                                                0
-                                            );
-
-                                        let xPos =
-                                            (tempCanvas.width - totalWidth) / 2;
-                                        const yPos = titleFontSize + 10;
-
-                                        wordMeasurements.forEach((wordObj) => {
-                                            tempCtx.font = `${
-                                                wordObj.italic
-                                                    ? "italic"
-                                                    : "normal"
-                                            } ${titleFontSize}px Arial`;
-                                            tempCtx.fillStyle = "black";
-                                            tempCtx.fillText(
-                                                wordObj.text,
-                                                xPos,
-                                                yPos
-                                            );
-                                            xPos += wordObj.width;
-                                        });
-                                    }
-
-                                    tempCtx.drawImage(canvas, 0, extraHeight);
-
-                                    const base64Image = tempCanvas
-                                        .toDataURL("image/png")
-                                        .split(",")[1];
-
-                                    const sanitizedKey = sanitizeKey(key);
-
-                                    zip.file(
-                                        `${sanitizedKey}-${timestamp}.png`,
-                                        base64Image,
-                                        {
-                                            base64: true,
-                                        }
-                                    );
-                                } else {
-                                    console.error(
-                                        "Failed to get temp canvas context"
-                                    );
-                                }
-                            } else {
-                                console.error(
-                                    `Canvas has invalid dimensions for chart ${key}`
-                                );
-                            }
-                            resolve();
-                        });
-                    });
-                } else {
-                    console.error(
-                        `Chart instance is undefined for chart ${key}`
-                    );
-                }
-            }
-        );
-
-        await Promise.all(chartPromises);
-        const content = await zip.generateAsync({ type: "blob" });
-        saveAs(content, `charts-${timestamp}.zip`);
-    };
-
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
             {/* Top form control */}
@@ -452,7 +313,7 @@ const PrevalenceChart: React.FC = () => {
                             <Box
                                 sx={{
                                     position: "sticky",
-                                    bottom: "80px",
+                                    bottom: 0,
                                     zIndex: 1000,
                                     padding: 2,
                                     backgroundColor: "rgb(219, 228, 235)",
@@ -469,27 +330,6 @@ const PrevalenceChart: React.FC = () => {
                                         justifyContent: "center",
                                     }}
                                 />
-                            </Box>
-
-                            {/* Download All Charts Button */}
-                            <Box
-                                sx={{
-                                    position: "sticky",
-                                    bottom: 0,
-                                    color: "inherit",
-                                    textAlign: "center",
-                                    zIndex: 1000,
-                                    padding: 2,
-                                    backgroundColor: "rgb(219, 228, 235)",
-                                }}
-                            >
-                                <Button
-                                    variant="contained"
-                                    onClick={downloadAllCharts}
-                                    sx={{ width: "100%", height: "60px" }}
-                                >
-                                    {t("Download_All_Charts")}
-                                </Button>
                             </Box>
                         </>
                     )}
