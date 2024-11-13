@@ -62,10 +62,10 @@ const PrevalenceChart: React.FC = () => {
         }
     }, [availableMicroorganisms]);
 
-    // Remove this effect to prevent resetting chartRefs.current
-    // useEffect(() => {
-    //     chartRefs.current = {};
-    // }, [currentMicroorganism]);
+    // Reset pagination when the microorganism changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [currentMicroorganism]);
 
     const yearOptions = Array.from(
         { length: 14 },
@@ -75,8 +75,9 @@ const PrevalenceChart: React.FC = () => {
     const generateChartData = (): {
         [key: string]: { [key: number]: ChartDataPoint };
     } => {
-        const chartData: { [key: string]: { [key: number]: ChartDataPoint } } =
-            {};
+        const chartData: {
+            [key: string]: { [key: number]: ChartDataPoint };
+        } = {};
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === currentMicroorganism) {
                 const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
