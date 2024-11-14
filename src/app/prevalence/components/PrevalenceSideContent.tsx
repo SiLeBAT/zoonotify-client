@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Button,
@@ -10,6 +10,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
+    Grow,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Search from "@mui/icons-material/Search";
@@ -52,11 +53,20 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedSuperCategory,
         superCategorySampleOriginOptions,
         fetchDataFromAPI,
+        setShowError,
+        fetchOptions,
+        setIsSearchTriggered,
     } = usePrevalenceFilters();
 
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
+    const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
+
+    useEffect((): void => {
+        // Set initial filter order based on some logic
+        setSelectedOrder([]);
+    }, []);
 
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
@@ -87,19 +97,31 @@ export function PrevalenceSideContent(): JSX.Element {
         setInfoDialogOpen(false);
     };
 
-    return (
-        <Box
-            sx={{
-                padding: "10px", // Add padding inside the sidebar
+    const updateFilterOrder = (filter: string): void => {
+        setSelectedOrder((prevOrder) => {
+            if (!prevOrder.includes(filter)) {
+                return [...prevOrder, filter];
+            }
+            return prevOrder;
+        });
+    };
 
-                height: "80vh",
-                overflowY: "auto",
-                width: "410px",
-                maxHeight: "calc(140vh)",
-                maxWidth: "95%",
-            }}
-        >
-            <Stack spacing={0.1} alignItems="flex-start">
+    const handleSearch = async (): Promise<void> => {
+        setShowError(false); // Reset the error visibility before starting the search
+        await fetchDataFromAPI(); // Await the API fetch operation
+        setShowError(true); // Set error visibility after the search completes
+    };
+
+    const filterComponents: { [key: string]: JSX.Element } = {
+        year: (
+            <Box
+                key="year"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedYear.map(String)}
                     selectionOptions={yearOptions.map((option) => ({
@@ -110,177 +132,289 @@ export function PrevalenceSideContent(): JSX.Element {
                     label={t("SAMPLING_YEAR")}
                     actions={{
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        handleChange: (event: any) => {
+                        handleChange: (event: any): void => {
                             const valueAsNumbers = event.target.value.map(
                                 (val: string) => parseInt(val, 10)
                             );
                             setSelectedYear(valueAsNumbers);
+                            updateFilterOrder("year");
                         },
                     }}
-                    extra={
-                        <Tooltip title={t("More Info on Sampling Year")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("SAMPLING_YEAR")}
-                            >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
-                    }
                 />
-
+                <Tooltip title={t("More Info on Sampling Year")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("SAMPLING_YEAR")}
+                        sx={{ marginLeft: 0.2 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        microorganism: (
+            <Box
+                key="microorganism"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMicroorganisms}
                     selectionOptions={microorganismOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name,
+                        displayName: option.name,
                     }))}
                     name="microorganisms"
                     label={t("MICROORGANISM")}
                     actions={{
-                        handleChange: (event) =>
+                        handleChange: (event): void => {
                             setSelectedMicroorganisms(
                                 event.target.value as string[]
-                            ),
+                            );
+                            updateFilterOrder("microorganism");
+                        },
                     }}
-                    extra={
-                        <Tooltip title={t("More Info on Microorganisms")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("MICROORGANISM")}
-                            >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
-                    }
                 />
+                <Tooltip title={t("More Info on Microorganisms")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("MICROORGANISM")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        superCategory: (
+            <Box
+                key="superCategory"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedSuperCategory}
                     selectionOptions={superCategorySampleOriginOptions.map(
                         (option) => ({
-                            value: option,
-                            displayName: option,
+                            value: option.name,
+                            displayName: option.name,
                         })
                     )}
                     name="superCategories"
                     label={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
                     actions={{
-                        handleChange: (event) =>
+                        handleChange: (event): void => {
                             setSelectedSuperCategory(
                                 event.target.value as string[]
-                            ),
+                            );
+                            updateFilterOrder("superCategory");
+                        },
                     }}
-                    extra={
-                        <Tooltip title={t("More Info on Super Categories")}>
-                            <IconButton
-                                onClick={() =>
-                                    handleInfoClick(
-                                        "SUPER-CATEGORY-SAMPLE-ORIGIN"
-                                    )
-                                }
-                            >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
-                    }
                 />
-
+                <Tooltip title={t("More Info on Super Categories")}>
+                    <IconButton
+                        onClick={() =>
+                            handleInfoClick("SUPER-CATEGORY-SAMPLE-ORIGIN")
+                        }
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        sampleOrigin: (
+            <Box
+                key="sampleOrigin"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedSampleOrigins}
                     selectionOptions={sampleOriginOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name,
+                        displayName: option.name,
                     }))}
                     name="sampleOrigins"
                     label={t("SAMPLE_ORIGIN")}
                     actions={{
-                        handleChange: (event) =>
+                        handleChange: (event): void => {
                             setSelectedSampleOrigins(
                                 event.target.value as string[]
-                            ),
+                            );
+                            updateFilterOrder("sampleOrigin");
+                        },
                     }}
-                    extra={
-                        <Tooltip title={t("More Info on Sample Origins")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("SAMPLE_ORIGIN")}
-                            >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
-                    }
                 />
-
+                <Tooltip title={t("More Info on Sample Origins")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("SAMPLE_ORIGIN")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        samplingStage: (
+            <Box
+                key="samplingStage"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedSamplingStages}
                     selectionOptions={samplingStageOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name,
+                        displayName: option.name,
                     }))}
                     name="samplingStages"
                     label={t("SAMPLING_STAGE")}
                     actions={{
-                        handleChange: (event) =>
+                        handleChange: (event): void => {
                             setSelectedSamplingStages(
                                 event.target.value as string[]
-                            ),
+                            );
+                            updateFilterOrder("samplingStage");
+                        },
                     }}
-                    extra={
-                        <Tooltip title={t("More Info on Sampling Stages")}>
-                            <IconButton
-                                onClick={() =>
-                                    handleInfoClick("SAMPLING_STAGE")
-                                }
-                            >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
-                    }
                 />
-
+                <Tooltip title={t("More Info on Sampling Stages")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("SAMPLING_STAGE")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        matrixGroup: (
+            <Box
+                key="matrixGroup"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMatrixGroups}
                     selectionOptions={matrixGroupOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name,
+                        displayName: option.name,
                     }))}
                     name="matrixGroups"
                     label={t("MATRIX_GROUP")}
                     actions={{
-                        handleChange: (event) =>
+                        handleChange: (event): void => {
                             setSelectedMatrixGroups(
                                 event.target.value as string[]
-                            ),
+                            );
+                            updateFilterOrder("matrixGroup");
+                        },
                     }}
-                    extra={
-                        <Tooltip title={t("More Info on Matrix Groups")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("MATRIX_GROUP")}
-                            >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
-                    }
                 />
+                <Tooltip title={t("More Info on Matrix Groups")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("MATRIX_GROUP")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        matrix: (
+            <Box
+                key="matrix"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                }}
+            >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMatrices}
                     selectionOptions={matrixOptions.map((option) => ({
-                        value: option,
-                        displayName: option,
+                        value: option.name,
+                        displayName: option.name,
                     }))}
                     name="matrices"
                     label={t("MATRIX")}
                     actions={{
-                        handleChange: (event) =>
-                            setSelectedMatrices(event.target.value as string[]),
+                        handleChange: (event): void => {
+                            setSelectedMatrices(event.target.value as string[]);
+                            updateFilterOrder("matrix");
+                        },
                     }}
-                    extra={
-                        <Tooltip title={t("More Info on Matrices")}>
-                            <IconButton
-                                onClick={() => handleInfoClick("MATRIX")}
-                            >
-                                <InfoIcon />
-                            </IconButton>
-                        </Tooltip>
-                    }
                 />
+                <Tooltip title={t("More Info on Matrices")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("MATRIX")}
+                        sx={{ marginLeft: 0.5 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+    };
+
+    const getTransitionIn = (): boolean => {
+        return true;
+    };
+
+    const orderedComponents = selectedOrder.map((key: string) => (
+        <Grow in={getTransitionIn()} timeout={500} key={key}>
+            {filterComponents[key]}
+        </Grow>
+    ));
+
+    const remainingComponents = Object.keys(filterComponents)
+        .filter((key: string) => !selectedOrder.includes(key))
+        .map((key: string) => (
+            <Grow in={getTransitionIn()} timeout={500} key={key}>
+                {filterComponents[key]}
+            </Grow>
+        ));
+
+    const resetFilters = async (): Promise<void> => {
+        setSelectedMicroorganisms([]);
+        setSelectedSampleOrigins([]);
+        setSelectedMatrices([]);
+        setSelectedSamplingStages([]);
+        setSelectedMatrixGroups([]);
+        setSelectedYear([]);
+        setSelectedSuperCategory([]);
+        setIsSearchTriggered(false);
+        await fetchOptions(); // Re-fetch data to reset all options, including years
+    };
+
+    return (
+        <Box
+            sx={{
+                padding: "10px", // Add padding inside the sidebar
+                height: "80vh",
+                overflowY: "auto",
+                width: "410px",
+                maxHeight: "calc(140vh)",
+                maxWidth: "95%",
+            }}
+        >
+            <Stack spacing={0.5} alignItems="flex-start">
+                {orderedComponents}
+                {remainingComponents}
             </Stack>
             <Dialog open={infoDialogOpen} onClose={handleClose}>
                 <DialogTitle>{infoDialogTitle}</DialogTitle>
@@ -296,14 +430,22 @@ export function PrevalenceSideContent(): JSX.Element {
             </Dialog>
 
             <Box
-                sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: 2,
+                    gap: "16px",
+                }}
             >
                 <Button
                     variant="contained"
                     startIcon={<Search />}
-                    onClick={fetchDataFromAPI}
+                    onClick={handleSearch}
                 >
                     {t("SEARCH")}
+                </Button>
+                <Button variant="contained" onClick={resetFilters}>
+                    {t("RESET_FILTERS")}
                 </Button>
             </Box>
         </Box>

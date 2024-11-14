@@ -8,11 +8,64 @@ import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import JSZip from "jszip";
 import { PrevalenceEntry, usePrevalenceFilters } from "./PrevalenceDataContext";
+import { PrevalenceChart } from "./PrevalenceChart";
 
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
     loading: boolean;
 }
+
+const italicWords: string[] = [
+    "Salmonella",
+    "coli",
+    "E.",
+    "Bacillus",
+    "cereus",
+    "monocytogenes",
+    "Clostridioides",
+    "difficile",
+    "Yersinia",
+    "Listeria",
+    "enterocolitica",
+    "Vibrio",
+    "Baylisascaris",
+    "procyonis",
+    "Echinococcus",
+    "Campylobacter",
+];
+
+const formatMicroorganismName = (
+    microName: string | null | undefined
+): JSX.Element => {
+    if (!microName) {
+        console.warn("Received null or undefined microorganism name");
+        return <></>;
+    }
+    const words = microName
+        .split(/(\s+|-)/)
+        .filter((part: string) => part.trim().length > 0);
+    return words
+        .map((word: string, index: number) => {
+            const italic = italicWords.some((italicWord: string) =>
+                word.toLowerCase().includes(italicWord.toLowerCase())
+            );
+            return italic ? (
+                <i key={index}>{word}</i>
+            ) : (
+                <span key={index}>{word}</span>
+            );
+        })
+        .reduce(
+            (prev: JSX.Element, curr: JSX.Element) => (
+                <>
+                    {prev}
+                    {prev ? " " : ""}
+                    {curr}
+                </>
+            ),
+            <></>
+        );
+};
 
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
@@ -22,20 +75,21 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
-    const { searchParameters } = usePrevalenceFilters(); // Correct usage of the hook
+    const { searchParameters } = usePrevalenceFilters();
 
     const getFormattedTimestamp = (): string => {
         const date = new Date();
         return date.toISOString().replace(/[:.]/g, "-");
     };
 
-    const prepareDownload = async (): Promise<void> => {
-        if (prevalenceData.length === 0) return;
+    const formatNumber = (value: number, decimalSeparator: string): string => {
+        return value.toString().replace(".", decimalSeparator);
+    };
 
-        const zip = new JSZip();
-        const timestamp = getFormattedTimestamp(); // Use a constant timestamp for all files
-
-        // Prepare CSV data
+    const createCSVContent = (
+        data: PrevalenceEntry[],
+        decimalSeparator: string
+    ): string => {
         const csvRows: string[] = [];
         const headers: Array<keyof PrevalenceEntry> = [
             "samplingYear",
@@ -50,23 +104,63 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "ciMax",
         ];
 
+        // Mapping of header fields to translation keys
+        const headerTranslationKeys: {
+            [key in keyof PrevalenceEntry]: string;
+        } = {
+            id: "ID",
+            samplingYear: "SAMPLING_YEAR",
+            numberOfSamples: "NUMBER_OF_SAMPLES",
+            numberOfPositive: "NUMBER_OF_POSITIVE",
+            percentageOfPositive: "PERCENTAGE_OF_POSITIVE",
+            ciMin: "CIMIN",
+            ciMax: "CIMAX",
+            matrix: "MATRIX",
+            matrixGroup: "MATRIX_GROUP",
+            samplingStage: "SAMPLING_STAGE",
+            sampleOrigin: "SAMPLE_ORIGIN",
+            microorganism: "MICROORGANISM",
+            superCategorySampleOrigin: "SUPER_CATEGORY_SAMPLE_ORIGIN",
+        };
+
         csvRows.push(
             "\uFEFF" +
-                headers.map((header) => t(header.toUpperCase())).join(",")
+                headers
+                    .map((header) =>
+                        t(
+                            headerTranslationKeys[header] ||
+                                "MISSING_TRANSLATION"
+                        )
+                    )
+                    .join(";")
         );
-        prevalenceData.forEach((row) => {
+
+        data.forEach((row) => {
             const values = headers.map((header) => {
                 const value = row[header];
-                return typeof value === "string"
-                    ? `"${value.replace(/"/g, '""')}"`
-                    : value;
+                if (typeof value === "number") {
+                    return formatNumber(value, decimalSeparator);
+                }
+                return `"${value.replace(/"/g, '""')}"`; // Ensure strings are escaped
             });
-            csvRows.push(values.join(","));
+            csvRows.push(values.join(";"));
         });
-        const csvString = csvRows.join("\n");
-        zip.file(`prevalence_data_${timestamp}.csv`, csvString);
 
-        // Enhance JSON data formatting
+        return csvRows.join("\n");
+    };
+
+    const prepareDownload = async (): Promise<void> => {
+        if (prevalenceData.length === 0) return;
+
+        const zip = new JSZip();
+        const timestamp = getFormattedTimestamp();
+
+        const csvContentDot = createCSVContent(prevalenceData, ".");
+        const csvContentComma = createCSVContent(prevalenceData, ",");
+
+        zip.file(`prevalence_data_dot_${timestamp}.csv`, csvContentDot);
+        zip.file(`prevalence_data_comma_${timestamp}.csv`, csvContentComma);
+
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
         const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson
             .split("\n")
@@ -83,7 +177,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
         zip.file(`search_parameters_${timestamp}.txt`, formattedText);
 
-        // Generate ZIP file
         const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
         setDownloadUrl(url);
@@ -95,39 +188,46 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             prepareDownload();
         }
     }, [prevalenceData, searchParameters]);
+
     const columns: GridColDef[] = [
         {
             field: "samplingYear",
             headerName: t("SAMPLING_YEAR"),
-            width: 140,
+            minWidth: 130,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
         {
             field: "microorganism",
             headerName: t("MICROORGANISM"),
-            width: 150,
+            minWidth: 140,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
+            renderCell: (params) => formatMicroorganismName(params.value),
         },
         {
             field: "sampleOrigin",
             headerName: t("SAMPLE_ORIGIN"),
-            width: 140,
+            minWidth: 140,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
         {
             field: "samplingStage",
             headerName: t("SAMPLING_STAGE"),
-            width: 180,
+            minWidth: 150,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
         {
             field: "matrix",
             headerName: t("MATRIX"),
-            width: 100,
+            minWidth: 120,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
@@ -135,7 +235,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
-            width: 250,
+            minWidth: 170,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
@@ -143,7 +244,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfPositive",
             headerName: t("NUMBER_OF_POSITIVE"),
             type: "number",
-            width: 250,
+            minWidth: 150,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
@@ -152,7 +254,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             headerName: t("PERCENTAGE_OF_POSITIVE"),
             type: "number",
             valueGetter: (value: number) => `${value.toFixed(2)}`,
-            width: 200,
+            minWidth: 150,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
@@ -162,7 +265,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
-            width: 250,
+            minWidth: 150,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
         },
@@ -172,19 +276,16 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             type: "number",
             valueGetter: (value: number) =>
                 value != null ? value.toFixed(2) : "N/A",
-            width: 250,
+            minWidth: 130,
+            flex: 1,
             headerClassName: "header-style",
             align: "center",
-            minWidth: 250,
-            flex: 1,
         },
     ];
 
     return (
         <>
-            <div style={{ marginBottom: "20px" }}>
-                {" "}
-                {/* Added margin for spacing */}
+            <div style={{ marginBottom: "10px" }}>
                 <DataGridControls heading={t("TABLE_DETAIL")} />
             </div>
             <ZNAccordion
@@ -192,7 +293,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 content={
                     <div
                         style={{
-                            height: 500,
+                            height: 600,
                             width: "100%",
                             overflowX: "auto",
                             display: "flex",
@@ -207,17 +308,19 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             autoHeight={false}
                             hideFooter={false}
                             sx={{
-                                backgroundColor: "white", // Setting the background color to white
+                                backgroundColor: "white",
                                 border: 2,
                                 borderColor: "primary.main",
                                 "& .header-style": {
                                     fontWeight: "bold",
+                                    whiteSpace: "normal !important",
+                                    wordWrap: "break-word !important",
                                     fontSize: "1rem",
                                     textAlign: "center",
                                     backgroundColor:
-                                        theme.palette.primary.light, // Header background color
-                                    color: theme.palette.primary.contrastText, // Header text color
-                                    border: "1px solid #e0e0e0", // Border for header cells
+                                        theme.palette.primary.light,
+                                    color: theme.palette.primary.contrastText,
+                                    border: "1px solid #e0e0e0",
                                 },
                                 "& .MuiDataGrid-root": {
                                     borderWidth: "1px",
@@ -236,6 +339,10 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 },
                                 "& .MuiDataGrid-row": {
                                     borderBottom: "1px solid #e0e0e0",
+                                },
+                                "& .MuiDataGrid-columnHeaderTitle": {
+                                    whiteSpace: "normal !important",
+                                    overflow: "visible !important",
                                 },
                             }}
                         />
@@ -266,6 +373,29 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 }
                 defaultExpanded={true}
                 centerContent={false}
+                withTopBorder={false}
+            />
+            <div style={{ height: "10px" }}></div>
+            <ZNAccordion
+                title={t("PREVALENCE_CHART")}
+                content={
+                    <div
+                        style={{
+                            maxHeight: "950px",
+                            width: "100%",
+                            overflow: "hidden",
+                            flexDirection: "column",
+                        }}
+                    >
+                        {/* Add your chart component here */}
+                        <div style={{ height: "100%", width: "100%" }}>
+                            <PrevalenceChart />
+                        </div>
+                    </div>
+                }
+                defaultExpanded={true}
+                centerContent={false}
+                withTopBorder={false}
             />
         </>
     );

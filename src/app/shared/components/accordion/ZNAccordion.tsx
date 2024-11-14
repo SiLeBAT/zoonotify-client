@@ -9,6 +9,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    useTheme,
 } from "@mui/material";
 import Markdown from "markdown-to-jsx";
 
@@ -17,26 +18,29 @@ export interface AccordionProps {
     content: JSX.Element;
     defaultExpanded: boolean;
     centerContent: boolean;
-    showCopyIcon?: boolean; // This is the new boolean flag property
+    showCopyIcon?: boolean;
+    withTopBorder?: boolean;
+    maxHeight?: string;
 }
 
 export function ZNAccordion(props: AccordionProps): JSX.Element {
-    let { content } = props;
+    const { withTopBorder = true } = props;
     const [tooltipOpen, setTooltipOpen] = useState(false);
+    const theme = useTheme();
 
-    if (props.centerContent) {
-        content = (
-            <Box
-                sx={{
-                    maxWidth: "fit-content",
-                    margin: "auto",
-                    boxSizing: "inherit",
-                }}
-            >
-                {props.content}
-            </Box>
-        );
-    }
+    const contentBox = props.centerContent ? (
+        <Box
+            sx={{
+                maxWidth: "fit-content",
+                margin: "auto",
+                boxSizing: "inherit",
+            }}
+        >
+            {props.content}
+        </Box>
+    ) : (
+        props.content
+    );
 
     const copyToClipboard = (text: string): void => {
         navigator.clipboard
@@ -44,20 +48,51 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
             .then(() => {
                 setTooltipOpen(true);
                 setTimeout(() => setTooltipOpen(false), 2000);
-                return null; // Return null to satisfy linting
+                return null; // This line is added to satisfy the rule
             })
             .catch((err) => {
                 console.error("Failed to copy:", err);
-                throw err; // Throw error to satisfy linting
             });
     };
 
     return (
-        <Accordion defaultExpanded={props.defaultExpanded}>
+        <Accordion
+            defaultExpanded={props.defaultExpanded}
+            sx={{
+                border: "none",
+                boxShadow: "none",
+                "&:before": {
+                    display: "none",
+                },
+                "&.MuiAccordion-root.Mui-expanded": {
+                    margin: "1em 0",
+                },
+                "& .MuiAccordionSummary-root": {
+                    margin: 0,
+                    borderBottom: "none",
+                },
+                "& .MuiAccordionDetails-root": {
+                    padding: "16px 24px",
+                },
+                ...(withTopBorder && {
+                    "&:before": {
+                        display: "block",
+                        content: '""',
+                        width: "100%",
+                        height: "2px",
+                        backgroundColor: theme.palette.primary.main,
+                    },
+                }),
+            }}
+        >
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="shared-accordion-content"
                 id="shared-accordion-header"
+                sx={{
+                    borderBottom: "none",
+                    margin: 0,
+                }}
             >
                 <Typography
                     sx={{
@@ -67,7 +102,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                         textAlign: "left",
                         margin: 0,
                         display: "flex",
-                        alignItems: "center", // To align the title and the icon properly
+                        alignItems: "center",
                     }}
                 >
                     <Markdown>{props.title}</Markdown>
@@ -84,7 +119,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                                 onMouseEnter={() => setTooltipOpen(true)}
                                 onMouseLeave={() => setTooltipOpen(false)}
                                 size="small"
-                                sx={{ ml: 1 }} // Add some space between the title and the icon
+                                sx={{ ml: 1 }}
                             >
                                 <ContentCopyIcon fontSize="small" />
                             </IconButton>
@@ -99,9 +134,13 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                     display: "block",
                     hyphens: "auto",
                     textAlign: "justify",
+                    ...(props.maxHeight && {
+                        maxHeight: props.maxHeight,
+                        overflow: "auto",
+                    }),
                 }}
             >
-                {content}
+                {contentBox}
             </AccordionDetails>
         </Accordion>
     );

@@ -18,14 +18,69 @@ type SearchParameterDisplayProps = {
 
 type SearchParameterEntryProps = {
     title: string;
-    value: string;
+    value: JSX.Element | string;
+};
+
+const italicWords: string[] = [
+    "Salmonella",
+    "coli",
+    "E.",
+    "Bacillus",
+    "cereus",
+    "monocytogenes",
+    "Clostridioides",
+    "difficile",
+    "Yersinia",
+    "Listeria",
+    "enterocolitica",
+    "Vibrio",
+    "Baylisascaris",
+    "procyonis",
+    "Echinococcus",
+    "Campylobacter",
+];
+
+// Function to format microorganism names
+const formatMicroorganismName = (
+    microName: string | null | undefined
+): JSX.Element => {
+    if (!microName) {
+        console.warn("Received null or undefined microorganism name");
+        return <></>;
+    }
+
+    // Split by space and dash while preserving the separators
+    const words = microName
+        .split(/([-\s])/)
+        .filter((part: string) => part.length > 0);
+
+    return (
+        <>
+            {words.map((word: string, index: number) => {
+                // If the word is just a separator (space or dash), return it as is
+                if (word.trim() === "" || word === "-") {
+                    return word;
+                }
+
+                const italic = italicWords.some((italicWord: string) =>
+                    word.toLowerCase().includes(italicWord.toLowerCase())
+                );
+
+                return italic ? (
+                    <i key={index}>{word}</i>
+                ) : (
+                    <span key={index}>{word}</span>
+                );
+            })}
+        </>
+    );
 };
 
 const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
     title,
     value,
 }) => {
-    if (!value) return null; // Do not render anything if the value is empty
+    if (!value) return null;
 
     const theme = useTheme();
 
@@ -34,12 +89,10 @@ const SearchParameterEntry: React.FC<SearchParameterEntryProps> = ({
             sx={{
                 p: 1,
                 border: 1,
-                borderColor: "divider",
                 borderRadius: 1,
                 mb: 1,
                 backgroundColor: theme.palette.grey[100],
                 width: "100%",
-                minWidth: "1200px",
                 maxWidth: "1200px",
             }}
         >
@@ -82,21 +135,33 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                 width: "100%",
             }}
         >
-            {searchParameters.microorganism && (
+            {/* Microorganism Display with correct formatting */}
+            {searchParameters.microorganism?.length > 0 && (
                 <SearchParameterEntry
                     title={t("MICROORGANISMS")}
-                    value={searchParameters.microorganism
-                        .map((v) => t(v))
-                        .join(", ")}
+                    value={
+                        <>
+                            {searchParameters.microorganism.map((v, index) => (
+                                <span key={index}>
+                                    {formatMicroorganismName(t(v))}
+                                    {index <
+                                    searchParameters.microorganism.length - 1
+                                        ? ", "
+                                        : ""}
+                                </span>
+                            ))}
+                        </>
+                    }
                 />
             )}
-            {searchParameters.matrix && (
+            {/* Other entries with length checks */}
+            {searchParameters.matrix?.length > 0 && (
                 <SearchParameterEntry
                     title={t("MATRIX")}
                     value={searchParameters.matrix.map((v) => t(v)).join(", ")}
                 />
             )}
-            {searchParameters.sampleOrigin && (
+            {searchParameters.sampleOrigin?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SAMPLE_ORIGIN")}
                     value={searchParameters.sampleOrigin
@@ -104,7 +169,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.matrixGroup && (
+            {searchParameters.matrixGroup?.length > 0 && (
                 <SearchParameterEntry
                     title={t("MATRIX_GROUP")}
                     value={searchParameters.matrixGroup
@@ -112,7 +177,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.samplingYear && (
+            {searchParameters.samplingYear?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SAMPLING_YEAR")}
                     value={searchParameters.samplingYear
@@ -120,7 +185,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.superCategorySampleOrigin && (
+            {searchParameters.superCategorySampleOrigin?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
                     value={searchParameters.superCategorySampleOrigin
@@ -128,7 +193,7 @@ const SearchParameterDisplay: React.FC<SearchParameterDisplayProps> = ({
                         .join(", ")}
                 />
             )}
-            {searchParameters.samplingStage && (
+            {searchParameters.samplingStage?.length > 0 && (
                 <SearchParameterEntry
                     title={t("SAMPLING_STAGE")}
                     value={searchParameters.samplingStage
@@ -148,7 +213,7 @@ const DataGridControls: React.FC<DataGridControlsProps> = ({ heading }) => {
             content={
                 <SearchParameterDisplay searchParameters={searchParameters} />
             }
-            defaultExpanded={false}
+            defaultExpanded={true}
             centerContent={true}
         />
     );
