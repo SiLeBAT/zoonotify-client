@@ -18,12 +18,13 @@ export interface AccordionProps {
     content: JSX.Element;
     defaultExpanded: boolean;
     centerContent: boolean;
-    showCopyIcon?: boolean; // This is the new boolean flag property
-    withTopBorder?: boolean; // New prop to control the border appearance
+    showCopyIcon?: boolean;
+    withTopBorder?: boolean;
+    maxHeight?: string;
 }
 
 export function ZNAccordion(props: AccordionProps): JSX.Element {
-    const { withTopBorder = true } = props; // Default to true if not provided
+    const { withTopBorder = true } = props;
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const theme = useTheme();
 
@@ -47,11 +48,10 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
             .then(() => {
                 setTooltipOpen(true);
                 setTimeout(() => setTooltipOpen(false), 2000);
-                return null; // Return null to satisfy linting
+                return null; // This line is added to satisfy the rule
             })
             .catch((err) => {
                 console.error("Failed to copy:", err);
-                throw err; // Throw error to satisfy linting
             });
     };
 
@@ -65,21 +65,21 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                     display: "none",
                 },
                 "&.MuiAccordion-root.Mui-expanded": {
-                    margin: "1em 0", // Margin only when expanded
+                    margin: "1em 0",
                 },
                 "& .MuiAccordionSummary-root": {
                     margin: 0,
                     borderBottom: "none",
                 },
                 "& .MuiAccordionDetails-root": {
-                    padding: "16px 24px", // Default padding for content
+                    padding: "16px 24px",
                 },
                 ...(withTopBorder && {
                     "&:before": {
                         display: "block",
                         content: '""',
                         width: "100%",
-                        height: "2px", // Set the border height to 2px to make it thinner
+                        height: "2px",
                         backgroundColor: theme.palette.primary.main,
                     },
                 }),
@@ -102,7 +102,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                         textAlign: "left",
                         margin: 0,
                         display: "flex",
-                        alignItems: "center", // To align the title and the icon properly
+                        alignItems: "center",
                     }}
                 >
                     <Markdown>{props.title}</Markdown>
@@ -119,7 +119,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                                 onMouseEnter={() => setTooltipOpen(true)}
                                 onMouseLeave={() => setTooltipOpen(false)}
                                 size="small"
-                                sx={{ ml: 1 }} // Add some space between the title and the icon
+                                sx={{ ml: 1 }}
                             >
                                 <ContentCopyIcon fontSize="small" />
                             </IconButton>
@@ -134,7 +134,10 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                     display: "block",
                     hyphens: "auto",
                     textAlign: "justify",
-                    maxHeight: "1000px",
+                    ...(props.maxHeight && {
+                        maxHeight: props.maxHeight,
+                        overflow: "auto",
+                    }),
                 }}
             >
                 {contentBox}

@@ -66,6 +66,7 @@ const formatMicroorganismName = (
             <></>
         );
 };
+
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
     loading,
@@ -103,9 +104,35 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "ciMax",
         ];
 
+        // Mapping of header fields to translation keys
+        const headerTranslationKeys: {
+            [key in keyof PrevalenceEntry]: string;
+        } = {
+            id: "ID",
+            samplingYear: "SAMPLING_YEAR",
+            numberOfSamples: "NUMBER_OF_SAMPLES",
+            numberOfPositive: "NUMBER_OF_POSITIVE",
+            percentageOfPositive: "PERCENTAGE_OF_POSITIVE",
+            ciMin: "CIMIN",
+            ciMax: "CIMAX",
+            matrix: "MATRIX",
+            matrixGroup: "MATRIX_GROUP",
+            samplingStage: "SAMPLING_STAGE",
+            sampleOrigin: "SAMPLE_ORIGIN",
+            microorganism: "MICROORGANISM",
+            superCategorySampleOrigin: "SUPER_CATEGORY_SAMPLE_ORIGIN",
+        };
+
         csvRows.push(
             "\uFEFF" +
-                headers.map((header) => t(header.toUpperCase())).join(";")
+                headers
+                    .map((header) =>
+                        t(
+                            headerTranslationKeys[header] ||
+                                "MISSING_TRANSLATION"
+                        )
+                    )
+                    .join(";")
         );
 
         data.forEach((row) => {
@@ -114,9 +141,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 if (typeof value === "number") {
                     return formatNumber(value, decimalSeparator);
                 }
-                return typeof value === "string"
-                    ? `"${value.replace(/"/g, '""')}"`
-                    : value;
+                return `"${value.replace(/"/g, '""')}"`; // Ensure strings are escaped
             });
             csvRows.push(values.join(";"));
         });
@@ -210,7 +235,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
             type: "number",
-            minWidth: 150,
+            minWidth: 170,
             flex: 1,
             headerClassName: "header-style",
             align: "center",
@@ -356,15 +381,15 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 content={
                     <div
                         style={{
-                            maxHeight: "1000vh",
+                            maxHeight: "950px",
                             width: "100%",
-                            overflowX: "hidden",
+                            overflow: "hidden",
                             flexDirection: "column",
                         }}
                     >
                         {/* Add your chart component here */}
                         <div style={{ height: "100%", width: "100%" }}>
-                            <PrevalenceChart />{" "}
+                            <PrevalenceChart />
                         </div>
                     </div>
                 }
