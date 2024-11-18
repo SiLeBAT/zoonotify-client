@@ -91,7 +91,15 @@ interface PrevalenceDataContext {
     setSelectedYear: (year: number[]) => void;
     setSelectedSuperCategory: (superCategory: string[]) => void;
     triggerSearch: () => void;
-    fetchDataFromAPI: () => void;
+    fetchDataFromAPI: (selectedFilters?: {
+        microorganisms: string[];
+        sampleOrigins: string[];
+        matrices: string[];
+        samplingStages: string[];
+        matrixGroups: string[];
+        years: number[];
+        superCategories: string[];
+    }) => Promise<void>;
     fetchOptions: () => Promise<void>;
     setIsSearchTriggered: (triggered: boolean) => void;
     prevalenceData: PrevalenceEntry[];
@@ -316,9 +324,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             setSamplingStageOptions(samplingStages);
             setMatrixGroupOptions(matrixGroups);
             setSuperCategorySampleOriginOptions(superCategories);
-
-            // Fetch prevalence data to update the year options
-            await fetchPrevalenceData();
         } catch (err) {
             setError(
                 `Failed to fetch options: ${
@@ -331,8 +336,218 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+    // Moved fetchDataFromAPI above its usage
+    const fetchDataFromAPI = async (selectedFilters?: {
+        microorganisms: string[];
+        sampleOrigins: string[];
+        matrices: string[];
+        samplingStages: string[];
+        matrixGroups: string[];
+        years: number[];
+        superCategories: string[];
+    }): Promise<void> => {
+        setLoading(true);
+
+        // Use the selected filters passed in, or fall back to the state
+        const microorganisms =
+            selectedFilters?.microorganisms ?? selectedMicroorganisms;
+        const sampleOrigins =
+            selectedFilters?.sampleOrigins ?? selectedSampleOrigins;
+        const matrices = selectedFilters?.matrices ?? selectedMatrices;
+        const samplingStages =
+            selectedFilters?.samplingStages ?? selectedSamplingStages;
+        const matrixGroups =
+            selectedFilters?.matrixGroups ?? selectedMatrixGroups;
+        const years = selectedFilters?.years ?? selectedYear;
+        const superCategories =
+            selectedFilters?.superCategories ?? selectedSuperCategory;
+
+        // Check if at least one filter is selected
+        const anySelectionMade =
+            microorganisms.length > 0 ||
+            sampleOrigins.length > 0 ||
+            matrices.length > 0 ||
+            samplingStages.length > 0 ||
+            matrixGroups.length > 0 ||
+            superCategories.length > 0 ||
+            years.length > 0;
+
+        if (!anySelectionMade) {
+            // No selections made; set an error message and stop loading
+            setError("Please select at least one filter option.");
+            setShowError(true);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            let query = `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`;
+            const filters: string[] = [];
+
+            const addRelationalFilter = (
+                field: string,
+                values: string[]
+            ): void => {
+                if (values.length > 0) {
+                    filters.push(
+                        values
+                            .map(
+                                (value) =>
+                                    `filters[${field}][name][$eq]=${encodeURIComponent(
+                                        value
+                                    )}`
+                            )
+                            .join("&")
+                    );
+                }
+            };
+
+            const addSimpleFilter = (
+                field: string,
+                values: (string | number)[]
+            ): void => {
+                if (values.length > 0) {
+                    filters.push(
+                        values
+                            .map(
+                                (value) =>
+                                    `filters[${field}][$eq]=${encodeURIComponent(
+                                        value
+                                    )}`
+                            )
+                            .join("&")
+                    );
+                }
+            };
+
+            addRelationalFilter("microorganism", microorganisms);
+            addRelationalFilter("sampleOrigin", sampleOrigins);
+            addRelationalFilter("matrix", matrices);
+            addRelationalFilter("samplingStage", samplingStages);
+            addRelationalFilter("matrixGroup", matrixGroups);
+            addRelationalFilter("superCategorySampleOrigin", superCategories);
+            addSimpleFilter("samplingYear", years);
+
+            if (filters.length > 0) {
+                query += "&" + filters.join("&");
+            }
+
+            const response = await callApiService<
+                CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
+            >(query);
+            if (response.data && response.data.data) {
+                const processedData = processApiResponse(
+                    response.data.data,
+                    setError
+                );
+                setPrevalenceData(processedData);
+                setSearchParameters({
+                    microorganism: microorganisms,
+                    sampleOrigin: sampleOrigins,
+                    matrix: matrices,
+                    samplingStage: samplingStages,
+                    matrixGroup: matrixGroups,
+                    samplingYear: years.map(String),
+                    superCategorySampleOrigin: superCategories,
+                });
+                setIsSearchTriggered(true);
+
+                // Update the URL with query parameters
+                const searchParams = new URLSearchParams();
+                for (const [key, values] of Object.entries({
+                    microorganism: microorganisms,
+                    sampleOrigin: sampleOrigins,
+                    matrix: matrices,
+                    samplingStage: samplingStages,
+                    matrixGroup: matrixGroups,
+                    samplingYear: years.map(String),
+                    superCategorySampleOrigin: superCategories,
+                })) {
+                    values.forEach((value) => searchParams.append(key, value));
+                }
+
+                // Avoid appending empty `?`
+                const searchString = searchParams.toString();
+                if (searchString) {
+                    window.history.replaceState(null, "", `?${searchString}`);
+                } else {
+                    window.history.replaceState(
+                        null,
+                        "",
+                        window.location.pathname
+                    );
+                }
+            }
+        } catch (err) {
+            const fetchError = err as Error;
+            setError(`Failed to fetch data: ${fetchError.message}`);
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect((): void => {
-        fetchOptions();
+        const initializeData = async (): Promise<void> => {
+            await fetchOptions();
+
+            // Extract search parameters from URL when component mounts
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const params: SearchParameters = {};
+
+            urlSearchParams.forEach((value, key) => {
+                if (!params[key]) {
+                    params[key] = [];
+                }
+                params[key].push(value);
+            });
+
+            // Store initial selected values
+            const initialSelectedMicroorganisms = params.microorganism || [];
+            const initialSelectedSampleOrigins = params.sampleOrigin || [];
+            const initialSelectedMatrices = params.matrix || [];
+            const initialSelectedSamplingStages = params.samplingStage || [];
+            const initialSelectedMatrixGroups = params.matrixGroup || [];
+            const initialSelectedYear = params.samplingYear
+                ? params.samplingYear.map(Number)
+                : [];
+            const initialSelectedSuperCategory =
+                params.superCategorySampleOrigin || [];
+
+            // Set selected values based on URL parameters
+            setSelectedMicroorganisms(initialSelectedMicroorganisms);
+            setSelectedSampleOrigins(initialSelectedSampleOrigins);
+            setSelectedMatrices(initialSelectedMatrices);
+            setSelectedSamplingStages(initialSelectedSamplingStages);
+            setSelectedMatrixGroups(initialSelectedMatrixGroups);
+            setSelectedYear(initialSelectedYear);
+            setSelectedSuperCategory(initialSelectedSuperCategory);
+
+            setSearchParameters(params);
+            const anyParamsPresent = Object.values(params).some(
+                (arr) => arr.length > 0
+            );
+
+            if (anyParamsPresent) {
+                setIsSearchTriggered(true);
+
+                // Fetch data after filters are set
+                await fetchDataFromAPI({
+                    microorganisms: initialSelectedMicroorganisms,
+                    sampleOrigins: initialSelectedSampleOrigins,
+                    matrices: initialSelectedMatrices,
+                    samplingStages: initialSelectedSamplingStages,
+                    matrixGroups: initialSelectedMatrixGroups,
+                    years: initialSelectedYear,
+                    superCategories: initialSelectedSuperCategory,
+                });
+            } else {
+                // If no parameters, fetch all data and set year options
+                await fetchPrevalenceData();
+            }
+        };
+
+        initializeData();
     }, []);
 
     function filterData(): PrevalenceEntry[] {
@@ -429,74 +644,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         prevalenceData,
     ]);
 
-    const fetchDataFromAPI = async (): Promise<void> => {
-        setLoading(true);
-        try {
-            let query = `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`;
-            const filters: string[] = [];
-
-            const addFilter = (field: string, values: string[]): void => {
-                if (values.length > 0) {
-                    filters.push(
-                        values
-                            .map(
-                                (value) =>
-                                    // Use encodeURIComponent to handle special characters
-                                    `filters[${field}][name][$eq]=${encodeURIComponent(
-                                        value
-                                    )}`
-                            )
-                            .join("&")
-                    );
-                }
-            };
-
-            addFilter("microorganism", selectedMicroorganisms);
-            addFilter("sampleOrigin", selectedSampleOrigins);
-            addFilter("matrix", selectedMatrices);
-            addFilter("samplingStage", selectedSamplingStages);
-            addFilter("matrixGroup", selectedMatrixGroups);
-            if (selectedYear.length > 0) {
-                filters.push(
-                    selectedYear
-                        .map((year) => `filters[samplingYear][$eq]=${year}`)
-                        .join("&")
-                );
-            }
-            addFilter("superCategorySampleOrigin", selectedSuperCategory);
-
-            if (filters.length > 0) {
-                query += "&" + filters.join("&");
-            }
-
-            const response = await callApiService<
-                CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
-            >(query);
-            if (response.data && response.data.data) {
-                const processedData = processApiResponse(
-                    response.data.data,
-                    setError
-                );
-                setPrevalenceData(processedData);
-                setSearchParameters({
-                    microorganism: selectedMicroorganisms,
-                    sampleOrigin: selectedSampleOrigins,
-                    matrix: selectedMatrices,
-                    samplingStage: selectedSamplingStages,
-                    matrixGroup: selectedMatrixGroups,
-                    samplingYear: selectedYear.map(String),
-                    superCategorySampleOrigin: selectedSuperCategory,
-                });
-                setIsSearchTriggered(true);
-            }
-        } catch (err) {
-            const fetchError = err as Error;
-            setError(`Failed to fetch data: ${fetchError.message}`);
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
     const triggerSearch = (): void => {
         fetchDataFromAPI();
         setShowError(true);
