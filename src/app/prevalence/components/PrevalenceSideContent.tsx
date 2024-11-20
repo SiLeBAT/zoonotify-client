@@ -403,7 +403,7 @@ export function PrevalenceSideContent(): JSX.Element {
         window.history.replaceState(null, "", window.location.pathname);
 
         // Option 1: Fully reload the page to ensure everything is in its initial state
-        window.location.reload();
+        //window.location.reload();
     };
 
     return (
