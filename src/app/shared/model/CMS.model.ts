@@ -1,4 +1,4 @@
-export const MAX_PAGE_SIZE = 600;
+export const MAX_PAGE_SIZE = 700;
 
 export type CMSResponse<T, V> = {
     data: T;

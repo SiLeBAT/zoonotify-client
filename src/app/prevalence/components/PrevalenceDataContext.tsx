@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import React, {
     ReactNode,
     createContext,
@@ -134,64 +135,35 @@ function processApiResponse(
 
     apiData.forEach((item: CMSEntity<PrevalenceAttributesDTO>) => {
         try {
-            const numberOfPositive =
-                item.attributes.numberOfPositive != null
-                    ? item.attributes.numberOfPositive
-                    : 0;
-            const ciMin =
-                item.attributes.ciMin != null ? item.attributes.ciMin : 0;
-            const ciMax =
-                item.attributes.ciMax != null ? item.attributes.ciMax : 0;
-
             const entry: PrevalenceEntry = {
                 id: item.id,
+                samplingYear: item.attributes.samplingYear,
+                numberOfSamples: item.attributes.numberOfSamples,
+                numberOfPositive: item.attributes.numberOfPositive ?? 0,
+                percentageOfPositive: item.attributes.percentageOfPositive ?? 0,
+                ciMin: item.attributes.ciMin ?? 0,
+                ciMax: item.attributes.ciMax ?? 0,
                 matrix: item.attributes.matrix.data.attributes.name,
                 matrixGroup:
                     item.attributes.matrixGroup?.data.attributes.name ?? "",
-                samplingStage:
-                    item.attributes.samplingStage.data.attributes.name,
                 microorganism:
                     item.attributes.microorganism.data.attributes.name,
+                samplingStage:
+                    item.attributes.samplingStage.data.attributes.name,
                 sampleOrigin: item.attributes.sampleOrigin.data.attributes.name,
-                samplingYear: item.attributes.samplingYear,
-                numberOfSamples: item.attributes.numberOfSamples,
-                numberOfPositive: numberOfPositive,
-                percentageOfPositive: item.attributes.percentageOfPositive,
-                ciMin: ciMin,
-                ciMax: ciMax,
                 superCategorySampleOrigin:
                     item.attributes.superCategorySampleOrigin?.data.attributes
                         .name ?? "",
             };
-
-            if (
-                entry.numberOfSamples > 0 &&
-                entry.numberOfPositive >= 0 &&
-                entry.percentageOfPositive >= 0
-            ) {
-                validEntries.push(entry);
-            } else {
-                errors.push(
-                    `Entry with ID ${item.id} contains invalid data. Details: Samples: ${entry.numberOfSamples}, Positives: ${entry.numberOfPositive}, Percentage: ${entry.percentageOfPositive}`
-                );
-            }
+            validEntries.push(entry);
         } catch (err) {
-            if (err instanceof Error) {
-                errors.push(
-                    `Entry with ID ${item.id} could not be processed due to an error: ${err.message}`
-                );
-            } else {
-                errors.push(
-                    `Entry with ID ${item.id} could not be processed due to an unknown error.`
-                );
-            }
+            errors.push(`Error processing entry ID ${item.id}: ${err}`);
         }
     });
 
     if (errors.length > 0) {
-        setApiError("Error processing data: " + errors.join(", "));
+        setApiError(errors.join(", "));
     }
-
     return validEntries;
 }
 
@@ -256,31 +228,40 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     const fetchPrevalenceData = async (): Promise<void> => {
         try {
+            const relationsToPopulate = [
+                "matrix",
+                "microorganism",
+                "samplingStage",
+                "matrixGroup",
+                "sampleOrigin",
+                "superCategorySampleOrigin",
+            ];
+            const populateParams = relationsToPopulate
+                .map(
+                    (relation) =>
+                        `populate[${relation}][locale]=${i18next.language}`
+                )
+                .join("&");
+
+            const url = `${PREVALENCES}?locale=${i18next.language}&${populateParams}&pagination[pageSize]=${MAX_PAGE_SIZE}`;
+
+            console.log("Fetching prevalence data from:", url);
             const response = await callApiService<
                 CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
-            >(
-                `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`
-            );
+            >(url);
+            console.log("Response data:", response.data);
+
             if (response.data && response.data.data) {
                 const processedData = processApiResponse(
                     response.data.data,
                     setError
                 );
+                console.log("Processed Data:", processedData);
                 setFullPrevalenceData(processedData);
-
-                // Extract and set unique year options
-                const uniqueYears = Array.from(
-                    new Set(processedData.map((entry) => entry.samplingYear))
-                ).sort((a, b) => a - b);
-                setYearOptions(uniqueYears);
+                setPrevalenceData(processedData);
             }
         } catch (err) {
-            setError(
-                `Failed to fetch prevalence data: ${
-                    err instanceof Error ? err.message : "Unknown error"
-                }`
-            );
-            console.error(err);
+            console.error("Error fetching prevalence data:", err);
         }
     };
 
@@ -292,13 +273,12 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         id: number;
                         attributes: { name: string };
                     }>;
-                }>(endpoint);
+                }>(`${endpoint}?locale=${i18next.language}`); // Add locale here
+
                 if (response.data && Array.isArray(response.data.data)) {
-                    return response.data.data
-                        .map((item) => ({
-                            name: item.attributes.name,
-                        }))
-                        .sort((a, b) => a.name.localeCompare(b.name));
+                    return response.data.data.map((item) => ({
+                        name: item.attributes.name,
+                    }));
                 }
                 return [];
             };
@@ -379,7 +359,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         }
 
         try {
-            let query = `${PREVALENCES}?populate=*&pagination[pageSize]=${MAX_PAGE_SIZE}`;
+            let query = `${PREVALENCES}?locale=${i18next.language}&pagination[pageSize]=${MAX_PAGE_SIZE}`;
             const filters: string[] = [];
 
             const addRelationalFilter = (
@@ -430,6 +410,23 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 query += "&" + filters.join("&");
             }
 
+            const relationsToPopulate = [
+                "matrix",
+                "microorganism",
+                "samplingStage",
+                "matrixGroup",
+                "sampleOrigin",
+                "superCategorySampleOrigin",
+            ];
+            const populateParams = relationsToPopulate
+                .map(
+                    (relation) =>
+                        `populate[${relation}][locale]=${i18next.language}`
+                )
+                .join("&");
+
+            query += `&${populateParams}`;
+
             const response = await callApiService<
                 CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
             >(query);
@@ -464,7 +461,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     values.forEach((value) => searchParams.append(key, value));
                 }
 
-                // Avoid appending empty `?`
+                // Add the localized query string to the URL
                 const searchString = searchParams.toString();
                 if (searchString) {
                     window.history.replaceState(null, "", `?${searchString}`);
@@ -475,6 +472,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         window.location.pathname
                     );
                 }
+
+                // Avoid appending empty `?`
             }
         } catch (err) {
             const fetchError = err as Error;
@@ -565,7 +564,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         initializeData();
     }, []);
 
-    useEffect((): void => {
+    useEffect(() => {
         const updateOptionsBasedOnSelection = (): void => {
             const computeOptions = (
                 excludeFilter: PrevalenceEntryKey | "samplingYear",
@@ -666,6 +665,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         fetchDataFromAPI();
         setShowError(true);
     };
+
+    useEffect(() => {
+        fetchPrevalenceData();
+        fetchOptions();
+    }, [i18next.language]);
 
     const contextValue: PrevalenceDataContext = {
         microorganismOptions,

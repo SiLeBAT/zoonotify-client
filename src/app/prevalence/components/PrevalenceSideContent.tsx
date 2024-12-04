@@ -29,7 +29,7 @@ interface ContentAttributes {
 }
 
 export function PrevalenceSideContent(): JSX.Element {
-    const { t } = useTranslation(["PrevalencePage"]);
+    const { t, i18n } = useTranslation(["PrevalencePage"]); // Include i18n
     const {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
@@ -67,6 +67,18 @@ export function PrevalenceSideContent(): JSX.Element {
         // Set initial filter order based on some logic
         setSelectedOrder([]);
     }, []);
+
+    // UseEffect to listen for language changes and update options
+    useEffect(() => {
+        const handleLanguageChange = (): void => {
+            fetchOptions();
+        };
+        i18n.on("languageChanged", handleLanguageChange);
+
+        return () => {
+            i18n.off("languageChanged", handleLanguageChange);
+        };
+    }, [i18n, fetchOptions]);
 
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
@@ -402,8 +414,8 @@ export function PrevalenceSideContent(): JSX.Element {
         // Reset the URL to remove query parameters
         window.history.replaceState(null, "", window.location.pathname);
 
-        // Option 1: Fully reload the page to ensure everything is in its initial state
-        //window.location.reload();
+        // Optionally, reload the page to ensure everything is in its initial state
+        // window.location.reload();
     };
 
     return (
