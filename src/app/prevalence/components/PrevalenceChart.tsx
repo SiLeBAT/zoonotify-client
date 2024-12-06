@@ -8,10 +8,11 @@ import {
     Pagination,
 } from "@mui/material";
 import { Chart as ChartJS, registerables } from "chart.js";
+import type { ChartConfiguration } from "chart.js";
 import { useTranslation } from "react-i18next";
 import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
-import { getCurrentTimestamp, formatMicroorganismNameArray } from "./utils";
+import { getCurrentTimestamp } from "./utils"; // Removed unused import
 import { ChartDataPoint } from "./types";
 
 ChartJS.register(...registerables);
@@ -127,103 +128,60 @@ const PrevalenceChart: React.FC = () => {
             return;
         }
 
-        const chartInstance = chartRef.current;
-        const microorganismName = currentMicroorganism;
+        const originalChart = chartRef.current;
 
-        if (chartInstance) {
-            await chartInstance.update();
+        // Create a new canvas
+        const scaleFactor = 1; // Adjust for higher resolution
+        const extraHeight = 100; // Add extra height for spacing
+        const canvasWidth = originalChart.width * scaleFactor;
+        const canvasHeight = (originalChart.height + extraHeight) * scaleFactor;
 
-            await new Promise<void>((resolve) => {
-                requestAnimationFrame(() => {
-                    const canvas = chartInstance.canvas;
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = canvasWidth;
+        tempCanvas.height = canvasHeight;
 
-                    if (canvas && canvas.width > 0 && canvas.height > 0) {
-                        // Increase resolution with scale factor
-                        const scaleFactor = 2; // Adjust for higher resolution
-
-                        const tempCanvas = document.createElement("canvas");
-                        const tempCtx = tempCanvas.getContext("2d");
-
-                        const extraHeight = 60 * scaleFactor;
-                        tempCanvas.width = canvas.width * scaleFactor;
-                        tempCanvas.height =
-                            (canvas.height + extraHeight) * scaleFactor;
-
-                        if (tempCtx) {
-                            // Scale up the context for higher resolution
-                            tempCtx.scale(scaleFactor, scaleFactor);
-                            tempCtx.fillStyle = "white";
-                            tempCtx.fillRect(
-                                0,
-                                0,
-                                tempCanvas.width,
-                                tempCanvas.height
-                            );
-
-                            // Apply black font and larger size
-                            if (microorganismName) {
-                                const titleFontSize = 10 * scaleFactor;
-
-                                const wordsArray =
-                                    formatMicroorganismNameArray(
-                                        microorganismName
-                                    );
-                                const wordMeasurements = wordsArray.map(
-                                    (wordObj) => {
-                                        tempCtx.font = `${
-                                            wordObj.italic ? "italic" : "normal"
-                                        } ${titleFontSize}px Arial`;
-                                        const width = tempCtx.measureText(
-                                            wordObj.text
-                                        ).width;
-                                        return { ...wordObj, width };
-                                    }
-                                );
-
-                                const totalWidth = wordMeasurements.reduce(
-                                    (sum, wordObj) => sum + wordObj.width,
-                                    0
-                                );
-
-                                let xPos =
-                                    (tempCanvas.width / scaleFactor -
-                                        totalWidth) /
-                                    2;
-                                const yPos = titleFontSize + 10;
-
-                                wordMeasurements.forEach((wordObj) => {
-                                    tempCtx.font = `${
-                                        wordObj.italic ? "italic" : "normal"
-                                    } ${titleFontSize}px Arial`;
-                                    tempCtx.fillStyle = "black";
-                                    tempCtx.fillText(wordObj.text, xPos, yPos);
-                                    xPos += wordObj.width;
-                                });
-                            }
-
-                            tempCtx.drawImage(
-                                canvas,
-                                0,
-                                extraHeight / scaleFactor
-                            );
-
-                            const link = document.createElement("a");
-                            const sanitizedChartKey = sanitizeKey(chartKey);
-                            link.href = tempCanvas.toDataURL("image/png");
-                            link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
-                            link.click();
-                        } else {
-                            console.error("Failed to get temp canvas context");
-                        }
-                    } else {
-                        console.error("Canvas has invalid dimensions");
-                    }
-                    resolve();
-                });
-            });
-        } else {
-            console.error("Chart instance is undefined");
+        const tempCtx = tempCanvas.getContext("2d");
+        if (!tempCtx) {
+            console.error("Failed to get temp canvas context");
+            return;
         }
+
+        // Set background to white
+        tempCtx.fillStyle = "white";
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+        // Clone the chart configuration
+        const clonedConfig: ChartConfiguration = {
+            type: "bar",
+            data: originalChart.config.data,
+            options: {
+                ...originalChart.config.options,
+                devicePixelRatio: scaleFactor,
+                responsive: false,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                animation: false as any,
+            },
+            plugins: originalChart.config.plugins,
+        };
+
+        // Render the chart on the new canvas, offset by extraHeight
+        tempCtx.save();
+        tempCtx.translate(0, extraHeight / scaleFactor); // Offset chart rendering
+        const tempChart = new ChartJS(tempCtx, clonedConfig);
+        await tempChart.update();
+        tempCtx.restore();
+
+        // Title drawing code removed as per your request
+
+        // Export the canvas as an image
+        const link = document.createElement("a");
+        const sanitizedChartKey = sanitizeKey(chartKey);
+        link.href = tempCanvas.toDataURL("image/png", 1.0);
+        link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
+        link.click();
+
+        // Destroy the temporary chart to free up resources
+        tempChart.destroy();
     };
 
     return (
