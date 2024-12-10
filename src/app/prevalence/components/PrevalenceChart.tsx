@@ -66,7 +66,7 @@ const PrevalenceChart: React.FC = () => {
     }, [currentMicroorganism]);
 
     const yearOptions = Array.from(
-        { length: 14 },
+        { length: 15 },
         (_, i) => 2009 + i
     ).reverse();
 

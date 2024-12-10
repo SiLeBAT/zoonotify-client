@@ -25,8 +25,8 @@ export const logoPlugin = {
         if (logoImage.complete) {
             const ctx = chart.ctx;
             const extraPadding = 20;
-            const logoWidth = 60;
-            const logoHeight = 27;
+            const logoWidth = 80;
+            const logoHeight = 35;
 
             const logoX = chart.chartArea.left + 10;
             const logoY = chart.chartArea.bottom + extraPadding + 10;
