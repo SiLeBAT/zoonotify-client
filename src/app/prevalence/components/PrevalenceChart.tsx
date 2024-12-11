@@ -12,7 +12,7 @@ import type { ChartConfiguration } from "chart.js";
 import { useTranslation } from "react-i18next";
 import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
-import { getCurrentTimestamp } from "./utils"; // Removed unused import
+import { getCurrentTimestamp } from "./utils";
 import { ChartDataPoint } from "./types";
 
 ChartJS.register(...registerables);
@@ -131,7 +131,7 @@ const PrevalenceChart: React.FC = () => {
         const originalChart = chartRef.current;
 
         // Create a new canvas
-        const scaleFactor = 1; // Adjust for higher resolution
+        const scaleFactor = 1; // Adjust if you want higher resolution
         const extraHeight = 100; // Add extra height for spacing
         const canvasWidth = originalChart.width * scaleFactor;
         const canvasHeight = (originalChart.height + extraHeight) * scaleFactor;
@@ -170,8 +170,6 @@ const PrevalenceChart: React.FC = () => {
         const tempChart = new ChartJS(tempCtx, clonedConfig);
         await tempChart.update();
         tempCtx.restore();
-
-        // Title drawing code removed as per your request
 
         // Export the canvas as an image
         const link = document.createElement("a");
