@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // eslint-disable-next-line import/named
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button, Link } from "@mui/material";
+import { Button, Link, Typography } from "@mui/material";
 import { useTheme } from "@mui/system";
 import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
@@ -75,7 +75,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
-    const { searchParameters } = usePrevalenceFilters();
+    const { searchParameters, prevalenceUpdateDate } = usePrevalenceFilters();
 
     const getFormattedTimestamp = (): string => {
         const date = new Date();
@@ -104,7 +104,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "ciMax",
         ];
 
-        // Mapping of header fields to translation keys
         const headerTranslationKeys: {
             [key in keyof PrevalenceEntry]: string;
         } = {
@@ -141,7 +140,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 if (typeof value === "number") {
                     return formatNumber(value, decimalSeparator);
                 }
-                return `"${value.replace(/"/g, '""')}"`; // Ensure strings are escaped
+                return `"${value.replace(/"/g, '""')}"`;
             });
             csvRows.push(values.join(";"));
         });
@@ -300,6 +299,19 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             flexDirection: "column",
                         }}
                     >
+                        {/* Place the LAST_UPDATE_DATE at the top of the grid section */}
+                        <Typography
+                            variant="subtitle1"
+                            style={{
+                                marginBottom: "10px",
+                                fontSize: "0.875rem", // Adjusted font size
+                                color: theme.palette.text.secondary, // Optional for subtle styling
+                            }}
+                        >
+                            {t("Generated on")}:{" "}
+                            {prevalenceUpdateDate || t("No date available")}
+                        </Typography>
+
                         <DataGrid
                             rows={prevalenceData}
                             columns={columns}
@@ -387,7 +399,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             flexDirection: "column",
                         }}
                     >
-                        {/* Add your chart component here */}
                         <div style={{ height: "100%", width: "100%" }}>
                             <PrevalenceChart />
                         </div>

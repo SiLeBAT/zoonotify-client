@@ -23,7 +23,6 @@ import {
 } from "../../shared/model/CMS.model";
 
 export type SearchParameters = Record<string, string[]>;
-
 interface RelationalData {
     id: number;
     data: {
@@ -47,6 +46,18 @@ interface PrevalenceAttributesDTO {
     samplingStage: RelationalData;
     sampleOrigin: RelationalData;
     superCategorySampleOrigin: RelationalData;
+}
+
+interface PrevalenceUpdateAttributesDTO {
+    date: string;
+}
+
+/** Interface for the single-type API response */
+interface PrevalenceUpdateApiResponse {
+    data: {
+        id: number;
+        attributes: PrevalenceUpdateAttributesDTO;
+    };
 }
 
 export type PrevalenceEntry = {
@@ -110,6 +121,7 @@ interface PrevalenceDataContext {
     showError: boolean;
     setShowError: (showError: boolean) => void;
     isSearchTriggered: boolean;
+    prevalenceUpdateDate: string | null;
 }
 
 const DefaultPrevalenceDataContext = createContext<
@@ -167,7 +179,6 @@ function processApiResponse(
     return validEntries;
 }
 
-// Define valid keys for filtering
 type PrevalenceEntryKey = keyof Pick<
     PrevalenceEntry,
     | "microorganism"
@@ -225,6 +236,9 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [yearOptions, setYearOptions] = useState<number[]>([]);
     const [isSearchTriggered, setIsSearchTriggered] = useState<boolean>(false);
     const [showError, setShowError] = useState<boolean>(false);
+    const [prevalenceUpdateDate, setPrevalenceUpdateDate] = useState<
+        string | null
+    >(null);
 
     const fetchPrevalenceData = async (): Promise<void> => {
         try {
@@ -244,24 +258,42 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 .join("&");
 
             const url = `${PREVALENCES}?locale=${i18next.language}&${populateParams}&pagination[pageSize]=${MAX_PAGE_SIZE}`;
-
-            console.log("Fetching prevalence data from:", url);
             const response = await callApiService<
                 CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
             >(url);
-            console.log("Response data:", response.data);
 
             if (response.data && response.data.data) {
                 const processedData = processApiResponse(
                     response.data.data,
                     setError
                 );
-                console.log("Processed Data:", processedData);
                 setFullPrevalenceData(processedData);
                 setPrevalenceData(processedData);
             }
         } catch (err) {
             console.error("Error fetching prevalence data:", err);
+        }
+    };
+
+    const fetchPrevalenceUpdateDate = async (): Promise<void> => {
+        try {
+            const baseUrl = process.env.REACT_APP_API_URL;
+            const url = `${baseUrl}/api/prevelence-update`;
+            const response = await callApiService<PrevalenceUpdateApiResponse>(
+                url
+            );
+
+            console.log("Prevalence Update API response:", response.data);
+
+            if (response.data?.data?.attributes) {
+                const { date } = response.data.data.attributes;
+                console.log("Extracted date:", date);
+                setPrevalenceUpdateDate(date || null);
+            } else {
+                console.log("Date attributes not found in response.");
+            }
+        } catch (err) {
+            console.error("Error fetching Prevelence-update date:", err);
         }
     };
 
@@ -273,7 +305,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         id: number;
                         attributes: { name: string };
                     }>;
-                }>(`${endpoint}?locale=${i18next.language}`); // Add locale here
+                }>(`${endpoint}?locale=${i18next.language}`);
 
                 if (response.data && Array.isArray(response.data.data)) {
                     return response.data.data.map((item) => ({
@@ -325,8 +357,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         superCategories: string[];
     }): Promise<void> => {
         setLoading(true);
-
-        // Use the selected filters passed in, or fall back to the state
         const microorganisms =
             selectedFilters?.microorganisms ?? selectedMicroorganisms;
         const sampleOrigins =
@@ -340,7 +370,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         const superCategories =
             selectedFilters?.superCategories ?? selectedSuperCategory;
 
-        // Check if at least one filter is selected
         const anySelectionMade =
             microorganisms.length > 0 ||
             sampleOrigins.length > 0 ||
@@ -351,7 +380,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             years.length > 0;
 
         if (!anySelectionMade) {
-            // No selections made; set an error message and stop loading
             setError("Please select at least one filter option.");
             setShowError(true);
             setLoading(false);
@@ -447,7 +475,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 });
                 setIsSearchTriggered(true);
 
-                // Update the URL with query parameters
                 const searchParams = new URLSearchParams();
                 for (const [key, values] of Object.entries({
                     microorganism: microorganisms,
@@ -461,7 +488,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     values.forEach((value) => searchParams.append(key, value));
                 }
 
-                // Add the localized query string to the URL
                 const searchString = searchParams.toString();
                 if (searchString) {
                     window.history.replaceState(null, "", `?${searchString}`);
@@ -472,8 +498,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         window.location.pathname
                     );
                 }
-
-                // Avoid appending empty `?`
             }
         } catch (err) {
             const fetchError = err as Error;
@@ -489,10 +513,12 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             setLoading(true);
 
             try {
-                // Fetch options and prevalence data in parallel
-                await Promise.all([fetchOptions(), fetchPrevalenceData()]);
+                await Promise.all([
+                    fetchOptions(),
+                    fetchPrevalenceData(),
+                    fetchPrevalenceUpdateDate(),
+                ]);
 
-                // Extract search parameters from URL when component mounts
                 const urlSearchParams = new URLSearchParams(
                     window.location.search
                 );
@@ -505,7 +531,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     params[key].push(value);
                 });
 
-                // Store initial selected values
                 const initialSelectedMicroorganisms =
                     params.microorganism || [];
                 const initialSelectedSampleOrigins = params.sampleOrigin || [];
@@ -519,7 +544,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 const initialSelectedSuperCategory =
                     params.superCategorySampleOrigin || [];
 
-                // Set selected values based on URL parameters
                 setSelectedMicroorganisms(initialSelectedMicroorganisms);
                 setSelectedSampleOrigins(initialSelectedSampleOrigins);
                 setSelectedMatrices(initialSelectedMatrices);
@@ -535,8 +559,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
                 if (anyParamsPresent) {
                     setIsSearchTriggered(true);
-
-                    // Fetch data after filters are set
                     await fetchDataFromAPI({
                         microorganisms: initialSelectedMicroorganisms,
                         sampleOrigins: initialSelectedSampleOrigins,
@@ -617,7 +639,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 return names.map((name) => ({ name }));
             };
 
-            // Update options for all categories
             setMicroorganismOptions(
                 computeOptions("microorganism", (entry) => entry.microorganism)
             );
@@ -638,7 +659,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 )
             );
 
-            // Handle year options
             const years = computeOptions(
                 "samplingYear",
                 (entry) => entry.samplingYear
@@ -667,8 +687,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     useEffect(() => {
+        // Re-fetch if language changes
         fetchPrevalenceData();
         fetchOptions();
+        fetchPrevalenceUpdateDate();
     }, [i18next.language]);
 
     const contextValue: PrevalenceDataContext = {
@@ -704,6 +726,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         showError,
         setShowError,
         isSearchTriggered,
+        prevalenceUpdateDate,
     };
 
     return (
