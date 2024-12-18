@@ -18,7 +18,8 @@ import { ChartDataPoint } from "./types";
 ChartJS.register(...registerables);
 
 const PrevalenceChart: React.FC = () => {
-    const { prevalenceData, loading } = usePrevalenceFilters();
+    const { prevalenceData, loading, prevalenceUpdateDate } =
+        usePrevalenceFilters();
     const chartRefs = useRef<{
         [key: string]: React.RefObject<
             ChartJS<"bar", ChartDataPoint[], unknown>
@@ -259,6 +260,9 @@ const PrevalenceChart: React.FC = () => {
                                                 yearOptions={yearOptions}
                                                 xAxisMax={xAxisMax}
                                                 downloadChart={downloadChart}
+                                                prevalenceUpdateDate={
+                                                    prevalenceUpdateDate
+                                                } // Ensure this is passed
                                             />
                                         </Grid>
                                     );

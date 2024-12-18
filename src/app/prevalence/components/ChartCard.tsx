@@ -7,7 +7,7 @@ import { Chart as ChartJS, TooltipItem } from "chart.js";
 import {
     errorBarTooltipPlugin,
     drawErrorBars,
-    logoPlugin,
+    whiteBackgroundAndLogoPlugin,
 } from "./chartPlugins";
 import { useTranslation } from "react-i18next";
 import { ChartDataPoint } from "./types";
@@ -33,6 +33,7 @@ interface ChartCardProps {
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ) => Promise<void>;
+    prevalenceUpdateDate: string | null; // Add this prop
 }
 
 const ChartCard: React.FC<ChartCardProps> = ({
@@ -43,6 +44,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
     yearOptions,
     xAxisMax,
     downloadChart,
+    prevalenceUpdateDate, // Add this line
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
 
@@ -53,10 +55,13 @@ const ChartCard: React.FC<ChartCardProps> = ({
         <Box
             sx={{
                 backgroundColor: "white",
+                height: "620px", // Increased height
                 padding: 5,
+                paddingBottom: 8, // Extra bottom padding for space
                 borderRadius: 2,
                 boxShadow: 2,
                 margin: "0 5px",
+                position: "relative",
             }}
         >
             <Bar
@@ -80,6 +85,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 }}
                 options={{
                     indexAxis: "y",
+                    maintainAspectRatio: false,
+                    backgroundColor: "white", // Force the chart area background to white
+
                     layout: {
                         padding: {
                             top: 10,
@@ -95,7 +103,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 text: t("Prevalence %"),
                                 color: "black",
                                 font: {
-                                    size: 18,
+                                    size: 17,
                                     weight: "bold",
                                 },
                             },
@@ -114,7 +122,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 text: t("Year"),
                                 color: "black",
                                 font: {
-                                    size: 18,
+                                    size: 17,
                                     weight: "bold",
                                 },
                             },
@@ -122,7 +130,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                             ticks: {
                                 color: "black",
                                 font: {
-                                    size: 14,
+                                    size: 13,
                                 },
                                 callback: function (_, index) {
                                     return yearOptions[index];
@@ -136,7 +144,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                             text: currentMicroorganism || "",
                             color: "black",
                             font: {
-                                size: 18,
+                                size: 17,
                                 weight: "bold",
                             },
                             padding: {
@@ -146,7 +154,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
                         legend: {
                             labels: {
                                 color: "black",
-                                padding: 30,
+
+                                paddingBottom: "20px",
+
                                 font: {
                                     size: 14,
                                 },
@@ -202,7 +212,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                         id: "customErrorBars",
                         afterDraw: (chart: ChartJS) => drawErrorBars(chart),
                     },
-                    logoPlugin,
+                    whiteBackgroundAndLogoPlugin(prevalenceUpdateDate),
                 ]}
                 ref={chartRef}
             />
