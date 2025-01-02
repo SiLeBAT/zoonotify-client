@@ -12,14 +12,22 @@ import {
 import { useTranslation } from "react-i18next";
 import { ChartDataPoint } from "./types";
 
-// Utility function to generate a stable random color
+const pushLegendDownPlugin = {
+    id: "pushLegendDownPlugin",
+    beforeLayout(chart: ChartJS) {
+        if (chart.legend) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (chart.legend as any).top += 30;
+        }
+    },
+};
+
 const generateColorFromKey = (key: string): string => {
     let hash = 0;
     for (let i = 0; i < key.length; i++) {
         hash = key.charCodeAt(i) + ((hash << 5) - hash);
     }
-    const color = `hsl(${hash % 360}, 70%, 60%)`;
-    return color;
+    return `hsl(${hash % 360}, 70%, 60%)`;
 };
 
 interface ChartCardProps {
@@ -33,7 +41,7 @@ interface ChartCardProps {
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ) => Promise<void>;
-    prevalenceUpdateDate: string | null; // Add this prop
+    prevalenceUpdateDate: string | null;
 }
 
 const ChartCard: React.FC<ChartCardProps> = ({
@@ -44,20 +52,18 @@ const ChartCard: React.FC<ChartCardProps> = ({
     yearOptions,
     xAxisMax,
     downloadChart,
-    prevalenceUpdateDate, // Add this line
+    prevalenceUpdateDate,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
-
-    // Generate a stable color based on the chartKey
     const chartColor = generateColorFromKey(chartKey);
 
     return (
         <Box
             sx={{
                 backgroundColor: "white",
-                height: "620px", // Increased height
+                height: "600px",
                 padding: 5,
-                paddingBottom: 8, // Extra bottom padding for space
+                paddingBottom: 8,
                 borderRadius: 2,
                 boxShadow: 2,
                 margin: "0 5px",
@@ -86,15 +92,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 options={{
                     indexAxis: "y",
                     maintainAspectRatio: false,
-                    backgroundColor: "white", // Force the chart area background to white
-
                     layout: {
-                        padding: {
-                            top: 10,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                        },
+                        // Keep this small so we don't move the title too far down
+                        padding: { top: 0, bottom: 0, left: 0, right: 0 },
                     },
                     scales: {
                         x: {
@@ -147,30 +147,22 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 size: 17,
                                 weight: "bold",
                             },
-                            padding: {
-                                bottom: 15,
-                            },
+                            // Space between the chart title and the legend
+                            padding: { bottom: 15 },
                         },
                         legend: {
+                            position: "top",
                             labels: {
                                 color: "black",
-
-                                paddingBottom: "20px",
-
-                                font: {
-                                    size: 14,
-                                },
+                                font: { size: 14 },
+                                // Only affects spacing around legend items themselves
+                                padding: 10,
                             },
-                            position: "top",
                         },
                         tooltip: {
                             backgroundColor: "rgba(0, 0, 0, 1)",
-                            titleFont: {
-                                size: 14,
-                            },
-                            bodyFont: {
-                                size: 12,
-                            },
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 },
                             displayColors: true,
                             borderColor: "#fff",
                             borderWidth: 2,
@@ -213,24 +205,19 @@ const ChartCard: React.FC<ChartCardProps> = ({
                         afterDraw: (chart: ChartJS) => drawErrorBars(chart),
                     },
                     whiteBackgroundAndLogoPlugin(prevalenceUpdateDate),
+                    // The plugin that moves the legend further down
+                    pushLegendDownPlugin,
                 ]}
                 ref={chartRef}
             />
-
             <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: 2,
-                }}
+                sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
             >
                 <Button
                     variant="contained"
                     size="medium"
                     onClick={() => downloadChart(chartRef, chartKey)}
-                    sx={{
-                        textTransform: "none",
-                    }}
+                    sx={{ textTransform: "none" }}
                 >
                     {t("Download_Chart")}
                 </Button>
