@@ -86,7 +86,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                                 return yearList;
                             },
                             [])
-                            .sort((a: string, b: string) => a.localeCompare(b)); // Sorting in descending order
+                            .sort((a: string, b: string) => b.localeCompare(a));
 
                         const antibiotics: string[] = cutOffs.reduce(function (
                             microbs: string[],
