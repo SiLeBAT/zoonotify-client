@@ -86,7 +86,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                                 return yearList;
                             },
                             [])
-                            .sort((a: string, b: string) => b.localeCompare(a)); // Sorting in descending order
+                            .sort((a: string, b: string) => a.localeCompare(b)); // Sorting in descending order
 
                         const antibiotics: string[] = cutOffs.reduce(function (
                             microbs: string[],
@@ -122,7 +122,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                             tableSubHeader: years.reduce(
                                 (subAcc, year) => ({
                                     ...subAcc,
-                                    [year]: ["Min", "Max", "Cut-off"],
+                                    [year]: ["max", "Min", "Cut-off"],
                                 }),
                                 {}
                             ),

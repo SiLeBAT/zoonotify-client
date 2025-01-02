@@ -60,10 +60,11 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 component="td"
                 scope="row"
                 align="right"
-                key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
+                key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
             >
-                {concentrationPerYear.cutOff}
+                {concentrationPerYear.max}
             </TableCell>,
+
             <TableCell
                 sx={tableTextStyle}
                 component="td"
@@ -73,14 +74,15 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             >
                 {concentrationPerYear.min}
             </TableCell>,
+
             <TableCell
                 sx={tableTextStyle}
                 component="td"
                 scope="row"
                 align="right"
-                key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
+                key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
             >
-                {concentrationPerYear.max}
+                {concentrationPerYear.cutOff}
             </TableCell>
         );
     }
