@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 // eslint-disable-next-line import/named
-import { Chart as ChartJS, TooltipItem } from "chart.js";
+import { Chart as ChartJS, TooltipItem, Plugin } from "chart.js";
 
 import {
     errorBarTooltipPlugin,
@@ -11,6 +11,7 @@ import {
 } from "./chartPlugins";
 import { useTranslation } from "react-i18next";
 import { ChartDataPoint } from "./types";
+import { formatMicroorganismNameArray, WordObject } from "./utils";
 
 // Utility function to generate a stable random color
 const generateColorFromKey = (key: string): string => {
@@ -21,6 +22,43 @@ const generateColorFromKey = (key: string): string => {
     const color = `hsl(${hash % 360}, 70%, 60%)`;
     return color;
 };
+
+// Custom plugin to render the formatted microorganism name in the chart canvas
+const customTitlePlugin = (microName: string | null): Plugin => ({
+    id: "customTitle",
+    beforeDraw(chart: ChartJS) {
+        const { ctx, chartArea, width } = chart;
+
+        if (!microName) return;
+
+        const formattedWords: WordObject[] =
+            formatMicroorganismNameArray(microName);
+        const titleYPosition = chartArea.top - 60; // Adjust Y position for the title
+
+        ctx.save();
+        ctx.textAlign = "left"; // Render left-to-right to position words precisely
+        ctx.fillStyle = "black";
+
+        let xPosition =
+            (width -
+                formattedWords.reduce((acc, { text, italic }) => {
+                    ctx.font = italic
+                        ? "italic bold 16px Arial"
+                        : "bold 16px Arial";
+                    return acc + ctx.measureText(text).width + 1; // Add minimal spacing
+                }, 0)) /
+            2; // Center-align the whole text block
+
+        // Render each word with the appropriate style
+        formattedWords.forEach(({ text, italic }) => {
+            ctx.font = italic ? "italic bold 16px Arial" : "bold 16px Arial";
+            ctx.fillText(text, xPosition, titleYPosition);
+            xPosition += ctx.measureText(text).width + 1; // Add minimal spacing between words
+        });
+
+        ctx.restore();
+    },
+});
 
 interface ChartCardProps {
     chartKey: string;
@@ -33,7 +71,7 @@ interface ChartCardProps {
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ) => Promise<void>;
-    prevalenceUpdateDate: string | null; // Add this prop
+    prevalenceUpdateDate: string | null;
 }
 
 const ChartCard: React.FC<ChartCardProps> = ({
@@ -44,7 +82,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
     yearOptions,
     xAxisMax,
     downloadChart,
-    prevalenceUpdateDate, // Add this line
+    prevalenceUpdateDate,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
 
@@ -55,9 +93,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
         <Box
             sx={{
                 backgroundColor: "white",
-                height: "620px", // Increased height
+                height: "620px",
                 padding: 5,
-                paddingBottom: 8, // Extra bottom padding for space
+                paddingBottom: 8,
                 borderRadius: 2,
                 boxShadow: 2,
                 margin: "0 5px",
@@ -86,11 +124,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 options={{
                     indexAxis: "y",
                     maintainAspectRatio: false,
-                    backgroundColor: "white", // Force the chart area background to white
-
                     layout: {
                         padding: {
-                            top: 10,
+                            top: 40, // Extra space for the custom title
                             bottom: 0,
                             left: 0,
                             right: 0,
@@ -140,23 +176,11 @@ const ChartCard: React.FC<ChartCardProps> = ({
                     },
                     plugins: {
                         title: {
-                            display: true,
-                            text: currentMicroorganism || "",
-                            color: "black",
-                            font: {
-                                size: 17,
-                                weight: "bold",
-                            },
-                            padding: {
-                                bottom: 15,
-                            },
+                            display: false, // Disable default Chart.js title
                         },
                         legend: {
                             labels: {
                                 color: "black",
-
-                                paddingBottom: "20px",
-
                                 font: {
                                     size: 14,
                                 },
@@ -199,15 +223,12 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 },
                             },
                         },
-                        customTexts: {
-                            generatedOn: t("Generated on"),
-                        },
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    } as any,
+                    },
                     animation: false,
                 }}
                 plugins={[
                     errorBarTooltipPlugin,
+                    customTitlePlugin(currentMicroorganism), // Render title inside the canvas
                     {
                         id: "customErrorBars",
                         afterDraw: (chart: ChartJS) => drawErrorBars(chart),
