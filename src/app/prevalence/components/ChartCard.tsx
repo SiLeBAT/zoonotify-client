@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Box, Button } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 // eslint-disable-next-line import/named
@@ -175,9 +174,10 @@ const ChartCard: React.FC<ChartCardProps> = ({
                             },
                         },
                     },
+
                     plugins: {
                         title: {
-                            display: false, // Disable default Chart.js title
+                            display: false,
                         },
                         legend: {
                             labels: {
@@ -210,6 +210,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                     const data = chartData[year] || {};
                                     const rawData =
                                         context.raw as ChartDataPoint;
+
                                     return [
                                         `${t("Prevalence")}: ${rawData.x}%`,
                                         `${t("CI_min")}: ${data.ciMin}`,
@@ -224,7 +225,12 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 },
                             },
                         },
-                    },
+
+                        customTexts: {
+                            generatedOn: t("Generated on"),
+                        },
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    } as any,
                     animation: false,
                 }}
                 plugins={[
