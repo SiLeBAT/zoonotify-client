@@ -29,8 +29,8 @@ export const whiteBackgroundAndLogoPlugin = (
 
         // Draw the logo if it has finished loading
         if (logoImage.complete) {
-            const logoWidth = 100; // Logo width
-            const logoHeight = 40; // Logo height
+            const logoWidth = 90; // Logo width
+            const logoHeight = 30; // Logo height
 
             // Position for top-right corner of the full canvas
             const logoX = chart.width - logoWidth - padding; // Right edge with padding
@@ -49,9 +49,11 @@ export const whiteBackgroundAndLogoPlugin = (
         // "Generated On" text (bottom-right corner of the full canvas)
         const generatedOnText =
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ((chart.options.plugins as any)?.customTexts
-                ?.generatedOn as string) || "Generated on";
-        const dateText = `${generatedOnText}: ${prevalenceUpdateDate}`;
+            (chart.options.plugins as any)?.customTexts?.generatedOn ||
+            "Generated on";
+
+        // Combine the translation key with the actual date
+        const dateText = `${generatedOnText}: ${prevalenceUpdateDate || ""}`;
 
         ctx.font = "10px Arial";
         ctx.fillStyle = "#000";
@@ -59,6 +61,7 @@ export const whiteBackgroundAndLogoPlugin = (
         ctx.fillText(dateText, chart.width - padding, chart.height - padding);
     },
 });
+
 export const errorBarTooltipPlugin = {
     id: "customErrorBarsTooltip",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
