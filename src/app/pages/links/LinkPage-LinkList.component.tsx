@@ -9,11 +9,10 @@ import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 
 // Define a type for the category
 type Category =
-    | "LEGAL-REGULATION"
+    | "LEGAL_REGULATION"
     | "REPORTS"
-    | "ORGANIZATION-AND-INSTITUTE"
-    | "ONLINE-TOOLS";
-
+    | "ORGANIZATION_AND_INSTITUTES"
+    | "ONLINE_TOOLS";
 interface ExternalLink {
     name: string;
     link: string;
@@ -43,17 +42,13 @@ export function LinkPageLinkListComponent(): JSX.Element {
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
+                console.log("API Response:", response.data);
                 if (response.data && response.data.data) {
                     const extractedLinks = response.data.data.map(
                         (item: CMSEntity<ExternalLink>) => item.attributes
                     );
 
-                    // Sort the extracted links by priority in descending order
-                    const sortedLinks = extractedLinks.sort(
-                        (a, b) => b.priority - a.priority
-                    );
-
-                    setLinkData(sortedLinks);
+                    setLinkData(extractedLinks);
                 }
                 return null;
             })
@@ -65,29 +60,55 @@ export function LinkPageLinkListComponent(): JSX.Element {
     const groupByCategory = (
         links: ExternalLink[]
     ): Record<Category, ExternalLink[]> => {
-        return links.reduce<Record<Category, ExternalLink[]>>((acc, link) => {
-            if (!acc[link.category]) acc[link.category] = [];
-            acc[link.category].push(link);
-            return acc;
-        }, {} as Record<Category, ExternalLink[]>);
+        const grouped = links.reduce<Record<Category, ExternalLink[]>>(
+            (acc, link) => {
+                if (!acc[link.category]) acc[link.category] = [];
+                acc[link.category].push(link);
+                return acc;
+            },
+            {} as Record<Category, ExternalLink[]>
+        );
+
+        return grouped;
     };
 
     const groupedLinks = groupByCategory(linkData);
 
+    const categoryOrder: Category[] = [
+        "ONLINE_TOOLS",
+        "REPORTS",
+        "ORGANIZATION_AND_INSTITUTES",
+        "LEGAL_REGULATION",
+    ];
+
     return (
         <div>
-            {Object.entries(groupedLinks).map(([category, links]) => (
-                <List key={category}>
-                    <ListSubheader>{t(`${category}`, category)}</ListSubheader>
-                    {links.map((link, index) => (
-                        <ListContentListItemComponent
-                            key={`Link${index}`}
-                            link={link.link}
-                            text={link.name}
-                        />
-                    ))}
-                </List>
-            ))}
+            {categoryOrder.map((category) => {
+                const linksForCategory = groupedLinks[category];
+
+                if (!linksForCategory || linksForCategory.length === 0) {
+                    return null;
+                }
+
+                const sortedLinks = linksForCategory
+                    .slice()
+                    .sort((a, b) => b.priority - a.priority);
+
+                return (
+                    <List key={category}>
+                        <ListSubheader>
+                            {t(`${category}`, category)}
+                        </ListSubheader>
+                        {sortedLinks.map((link, index) => (
+                            <ListContentListItemComponent
+                                key={`Link${index}`}
+                                link={link.link}
+                                text={link.name}
+                            />
+                        ))}
+                    </List>
+                );
+            })}
         </div>
     );
 }
