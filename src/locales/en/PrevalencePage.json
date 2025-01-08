@@ -48,7 +48,7 @@
 
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Superordinate sample origin",
   "RESET_FILTERS": "Reset Filters",
-
+  "PREVALENCE_TABLE": "Prevalence Table",
   "More Info on Sampling Year": "More Info on Sampling Year",
   "More Info on Microorganisms": "More Info on Microorganisms",
   "More Info on Super Categories": "More Info on Superordinate Sample Origin",
@@ -62,7 +62,7 @@
   "PREVALENCE_CHART": "Prevalence Chart",
   "Download_Chart": "DOWNOAD CHART",
   "Download_All_Charts": "Download All Charts",
-  "Generated on": "Generated on",
+  "Generated on": "Data status",
   "No_data_available": "No data available for selected options.",
   "Prevalence": "Prevalence",
   "CI_min": "CI Min",
