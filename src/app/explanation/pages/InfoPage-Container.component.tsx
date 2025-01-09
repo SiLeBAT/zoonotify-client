@@ -122,7 +122,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                             tableSubHeader: years.reduce(
                                 (subAcc, year) => ({
                                     ...subAcc,
-                                    [year]: ["max", "Min", "Cut-off"],
+                                    [year]: ["Max", "Min", "Cut-off"],
                                 }),
                                 {}
                             ),
