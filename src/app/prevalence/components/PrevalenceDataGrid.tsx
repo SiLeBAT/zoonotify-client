@@ -13,6 +13,7 @@ import { PrevalenceChart } from "./PrevalenceChart";
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
     loading: boolean;
+    language: "de" | "en";
 }
 
 const italicWords: string[] = [
@@ -33,7 +34,31 @@ const italicWords: string[] = [
     "Echinococcus",
     "Campylobacter",
 ];
+const GERMAN_README = `
+Dieser ZooNotify-Daten-Download enthält diese README-Datei, zwei CSV-Dateien und eine zusätzliche Textdatei. Der Inhalt und die Verwendung dieser Dateien wird im Folgenden erläutert.
 
+prevalence_data_dot.csv: für Software mit deutschen Spracheinstellungen 
+Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit deutschen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Kommas als Dezimaltrennzeichen verwenden. 
+
+prevalence_data_comma.csv: für Software mit englischen Spracheinstellungen 
+Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden. 
+
+search_parameters.txt
+In der Textdatei search_parameters.txt finden Sie Informationen zu den Parametern, die Sie im Suchmenü von ZooNotify ausgewählt haben, bevor Sie die Daten heruntergeladen haben. Die heruntergeladenen CSV-Dateien enthalten nur Daten, die mit den in der Datei search_parameters.txt angegebenen Suchkriterien übereinstimmen.
+`;
+
+const ENGLISH_README = `
+This ZooNotify data download contains this README-file, two CSV-files and one additional text file. The content and use of these files is explained below.
+
+prevalence_data_dot.csv: for software with German language settings
+This file contains dot-separated data, which supports the correct format of numbers in software programmes (like Microsoft Office Excel or LibreOffice Sheets) with German language settings. This file can be opened in software which use commas as decimal separators.
+
+prevalence_data_comma.csv: for software with English language settings
+This file contains comma-separated data, which supports the correct format of numbers in software programmes (like Microsoft Office Excel or LibreOffice Sheets) with English language settings. This file can be opened in software which use dots as decimal separators.
+
+search_parameters.txt
+In the text file search_parameters.txt you will find information about the parameters you have selected in the search menu on ZooNotify before you downloaded the data. The downloaded CSV-files only contain data that matches the search criteria specified in the search_parameters.txt file.
+`;
 const formatMicroorganismName = (
     microName: string | null | undefined
 ): JSX.Element => {
@@ -70,6 +95,7 @@ const formatMicroorganismName = (
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
     loading,
+    language,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -154,12 +180,14 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         const zip = new JSZip();
         const timestamp = getFormattedTimestamp();
 
+        // 1) Generate CSV files
         const csvContentDot = createCSVContent(prevalenceData, ".");
         const csvContentComma = createCSVContent(prevalenceData, ",");
 
         zip.file(`prevalence_data_dot_${timestamp}.csv`, csvContentDot);
         zip.file(`prevalence_data_comma_${timestamp}.csv`, csvContentComma);
 
+        // 2) Add search_parameters.txt
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
         const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson
             .split("\n")
@@ -174,10 +202,16 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             })
             .join("\n")}`;
 
-        zip.file(`search_parameters_${timestamp}.txt`, formattedText);
+        // 3) Pick the correct README text without i18n
+        const readmeContent =
+            language === "de" ? GERMAN_README : ENGLISH_README;
 
+        zip.file(`search_parameters_${timestamp}.txt`, formattedText);
+        zip.file(`README_${timestamp}.txt`, readmeContent);
+        // 4) Generate the blob
         const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
+
         setDownloadUrl(url);
         setFilename(`data_package_${timestamp}.zip`);
     };
