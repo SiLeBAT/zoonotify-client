@@ -48,6 +48,7 @@ const PrevalenceMainContent: React.FC<{ heading: string }> = ({ heading }) => {
                         <PrevalenceDataGrid
                             prevalenceData={prevalenceData}
                             loading={loading}
+                            language="de" // or "en"
                         />
                     </Box>
                 )}
