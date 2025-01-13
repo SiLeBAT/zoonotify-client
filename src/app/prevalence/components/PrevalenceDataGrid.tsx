@@ -396,9 +396,22 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 "& .MuiDataGrid-row": {
                                     borderBottom: "1px solid #e0e0e0",
                                 },
+                                "& .MuiDataGrid-menuIcon": {
+                                    color: "#ffffff", // Ensure menu icon also changes to white
+                                },
                                 "& .MuiDataGrid-columnHeaderTitle": {
                                     whiteSpace: "normal !important",
                                     overflow: "visible !important",
+                                },
+                                "& .MuiDataGrid-iconButtonContainer": {
+                                    color: "#ffffff", // Change the icon color to white
+                                },
+
+                                "& .MuiDataGrid-menuIconButton": {
+                                    color: "#ffffff !important", // Force menu icon button to white
+                                },
+                                "& .MuiSvgIcon-root": {
+                                    color: "#ffffff", // Target all SVG icons in the header
                                 },
                             }}
                         />
