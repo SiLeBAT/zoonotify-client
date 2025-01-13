@@ -229,7 +229,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 130,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left", // Align cell content to the left
+            headerAlign: "left", // Align header text to the left
         },
         {
             field: "microorganism",
@@ -237,7 +238,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 140,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
             renderCell: (params) => formatMicroorganismName(params.value),
         },
         {
@@ -246,7 +248,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 140,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "samplingStage",
@@ -254,7 +257,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 150,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "matrix",
@@ -262,7 +266,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 120,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "numberOfSamples",
@@ -271,7 +276,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 170,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "numberOfPositive",
@@ -280,7 +286,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 150,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "percentageOfPositive",
@@ -290,7 +297,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 150,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "ciMin",
@@ -301,7 +309,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 150,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "ciMax",
@@ -312,7 +321,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 130,
             flex: 1,
             headerClassName: "header-style",
-            align: "center",
+            align: "left",
+            headerAlign: "left",
         },
     ];
 
