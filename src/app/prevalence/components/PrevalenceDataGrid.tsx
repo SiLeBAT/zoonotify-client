@@ -204,7 +204,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
         // 3) Pick the correct README text without i18n
         const readmeContent =
-            language === "de" ? GERMAN_README : ENGLISH_README;
+            language?.toLowerCase() === "de" ? GERMAN_README : ENGLISH_README;
 
         zip.file(`search_parameters_${timestamp}.txt`, formattedText);
         zip.file(`README_${timestamp}.txt`, readmeContent);
