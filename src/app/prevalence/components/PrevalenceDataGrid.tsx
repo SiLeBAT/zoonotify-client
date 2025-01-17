@@ -9,6 +9,7 @@ import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import JSZip from "jszip";
 import { PrevalenceEntry, usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceChart } from "./PrevalenceChart";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
@@ -91,7 +92,23 @@ const formatMicroorganismName = (
             <></>
         );
 };
-
+const localTooltipTheme = createTheme({
+    components: {
+        MuiTooltip: {
+            styleOverrides: {
+                tooltip: {
+                    backgroundColor: "#f0f0f0",
+                    color: "#000000",
+                    fontSize: "0.810rem",
+                    border: "1px solid #000000",
+                },
+                arrow: {
+                    color: "#000000",
+                },
+            },
+        },
+    },
+});
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
     loading,
@@ -356,65 +373,85 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             {prevalenceUpdateDate || t("No date available")}
                         </Typography>
 
-                        <DataGrid
-                            rows={prevalenceData}
-                            columns={columns}
-                            loading={loading}
-                            disableColumnFilter={true}
-                            autoHeight={false}
-                            hideFooter={false}
-                            sx={{
-                                backgroundColor: "white",
-                                border: 2,
-                                borderColor: "primary.main",
-                                "& .header-style": {
-                                    fontWeight: "bold",
-                                    whiteSpace: "normal !important",
-                                    wordWrap: "break-word !important",
-                                    fontSize: "1rem",
-                                    textAlign: "center",
-                                    backgroundColor:
-                                        theme.palette.primary.light,
-                                    color: theme.palette.primary.contrastText,
-                                    border: "1px solid #e0e0e0",
-                                },
-                                "& .MuiDataGrid-root": {
-                                    borderWidth: "1px",
-                                    borderColor: "rgba(224, 224, 224, 1)",
-                                },
-                                "& .MuiDataGrid-cell": {
-                                    border: "1px solid #e0e0e0",
-                                    textAlign: "center",
-                                },
-                                "& .MuiDataGrid-columnHeaders": {
-                                    borderBottom: "1px solid #e0e0e0",
-                                    borderRight: "1px solid #e0e0e0",
-                                },
-                                "& .MuiDataGrid-columnSeparator": {
-                                    visibility: "hidden",
-                                },
-                                "& .MuiDataGrid-row": {
-                                    borderBottom: "1px solid #e0e0e0",
-                                },
-                                "& .MuiDataGrid-menuIcon": {
-                                    color: "#ffffff", // Ensure menu icon also changes to white
-                                },
-                                "& .MuiDataGrid-columnHeaderTitle": {
-                                    whiteSpace: "normal !important",
-                                    overflow: "visible !important",
-                                },
-                                "& .MuiDataGrid-iconButtonContainer": {
-                                    color: "#ffffff", // Change the icon color to white
-                                },
+                        <ThemeProvider theme={localTooltipTheme}>
+                            <DataGrid
+                                rows={prevalenceData}
+                                columns={columns}
+                                loading={loading}
+                                disableColumnFilter={true}
+                                hideFooter={false}
+                                localeText={{
+                                    // This is the key that ensures the sort icon uses a MUI Tooltip
+                                    columnHeaderSortIconLabel: "Sort",
+                                }}
+                                sx={{
+                                    backgroundColor: "white",
+                                    border: 2,
+                                    borderColor: "primary.main",
 
-                                "& .MuiDataGrid-menuIconButton": {
-                                    color: "#ffffff !important", // Force menu icon button to white
-                                },
-                                "& .MuiSvgIcon-root": {
-                                    color: "#ffffff", // Target all SVG icons in the header
-                                },
-                            }}
-                        />
+                                    "& .header-style": {
+                                        fontWeight: "bold",
+                                        whiteSpace: "normal !important",
+                                        wordWrap: "break-word !important",
+                                        fontSize: "1rem",
+                                        textAlign: "center",
+                                        backgroundColor:
+                                            theme.palette.primary.light,
+                                        color: theme.palette.primary
+                                            .contrastText,
+                                        border: "1px solid #e0e0e0",
+                                    },
+                                    "& .MuiDataGrid-root": {
+                                        borderWidth: "1px",
+                                        borderColor: "rgba(224, 224, 224, 1)",
+                                    },
+                                    "& .MuiDataGrid-cell": {
+                                        border: "1px solid #e0e0e0",
+                                        textAlign: "center",
+                                    },
+                                    "& .MuiDataGrid-columnHeaders": {
+                                        borderBottom: "1px solid #e0e0e0",
+                                        borderRight: "1px solid #e0e0e0",
+                                    },
+                                    "& .MuiDataGrid-columnSeparator": {
+                                        visibility: "hidden",
+                                    },
+                                    "& .MuiDataGrid-row": {
+                                        borderBottom: "1px solid #e0e0e0",
+                                    },
+
+                                    // --- ICON & HOVER STYLES YOU WANT TO OVERRIDE ---
+                                    "& .MuiDataGrid-iconButtonContainer:hover":
+                                        {
+                                            backgroundColor:
+                                                "rgba(0, 0, 0, 0.3)", // or 'transparent' to remove hover
+                                        },
+                                    "& .MuiDataGrid-menuIconButton:hover": {
+                                        backgroundColor: "rgba(0, 0, 0, 0.3)", // unify with the same style
+                                    },
+                                    // Optionally target the sort icon directly
+                                    "& .MuiDataGrid-sortIcon:hover": {
+                                        backgroundColor: "rgba(0, 0, 0, 0.3)",
+                                    },
+
+                                    // Change the icon colors (for the default state) if needed
+                                    "& .MuiDataGrid-iconButtonContainer": {
+                                        color: "#ffffff",
+                                    },
+                                    "& .MuiDataGrid-menuIconButton": {
+                                        color: "#ffffff !important",
+                                    },
+                                    "& .MuiSvgIcon-root": {
+                                        color: "#ffffff",
+                                    },
+                                    "& .MuiTooltip-tooltip": {
+                                        backgroundColor: "#f0f0f0", // light gray
+                                        color: "#000000", // black text
+                                        fontSize: "1rem",
+                                    },
+                                }}
+                            />
+                        </ThemeProvider>
                         {downloadUrl && (
                             <Button
                                 variant="contained"
