@@ -239,6 +239,17 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         }
     }, [prevalenceData, searchParameters]);
 
+    const localeText = {
+        noRowsLabel: t("dataGrid.noRowsLabel"),
+        noResultsOverlayLabel: t("dataGridnoResultsOverlayLabel"),
+        columnHeaderSortIconLabel: t("dataGridcolumnHeaderSortIconLabel"),
+        columnMenuSortAsc: t("dataGridcolumnMenuSortAsc"),
+        columnMenuSortDesc: t("dataGridcolumnMenuSortDesc"),
+        columnMenuUnsort: t("dataGrid.columnMenuUnsort"),
+        columnMenuHideColumn: t("dataGridcolumnMenuHideColumn"),
+        columnMenuManageColumns: t("dataGridcolumnMenuManageColumns"),
+    };
+
     const columns: GridColDef[] = [
         {
             field: "samplingYear",
@@ -380,10 +391,12 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 loading={loading}
                                 disableColumnFilter={true}
                                 hideFooter={false}
-                                localeText={{
-                                    // This is the key that ensures the sort icon uses a MUI Tooltip
-                                    columnHeaderSortIconLabel: "Sort",
-                                }}
+                                localeText={localeText}
+                                // localeText={{
+
+                                // This is the key that ensures the sort icon uses a MUI Tooltip
+                                //     columnHeaderSortIconLabel: "Sort",
+                                // }}
                                 sx={{
                                     backgroundColor: "white",
                                     border: 2,

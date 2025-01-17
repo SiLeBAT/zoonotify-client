@@ -74,5 +74,13 @@
   "Prevalence %": "Prevalence (%)",
 
   "Select_Microorganism": "Select Microorganism",
+  "dataGrid.noRowsLabel": "No rows",
+  "dataGrid.noResultsOverlayLabel": "No results found",
+  "dataGridcolumnHeaderSortIconLabel": "Sort",
+  "dataGridcolumnMenuSortAsc": "Sort by ASC",
+  "dataGridcolumnMenuSortDesc": "Sort by DESC",
+  "dataGridcolumnMenuUnsort": "Unsort",
+  "dataGridcolumnMenuHideColumn": "Hide column",
+  "dataGridcolumnMenuManageColumns": "Manage columns",
   "REQUIRED_FIELD_INDICATOR": "Fields marked with a star (*) are required. Please select at least one option from each required field to activate the search button."
 }
