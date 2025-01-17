@@ -245,7 +245,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         columnHeaderSortIconLabel: t("dataGridcolumnHeaderSortIconLabel"),
         columnMenuSortAsc: t("dataGridcolumnMenuSortAsc"),
         columnMenuSortDesc: t("dataGridcolumnMenuSortDesc"),
-        columnMenuUnsort: t("dataGrid.columnMenuUnsort"),
+        columnMenuUnsort: t("dataGridcolumnMenuUnsort"),
         columnMenuHideColumn: t("dataGridcolumnMenuHideColumn"),
         columnMenuManageColumns: t("dataGridcolumnMenuManageColumns"),
     };
