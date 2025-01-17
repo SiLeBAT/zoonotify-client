@@ -72,6 +72,14 @@
   "Year": "Erhebungsjahr",
   "Prevalence %": "Prävalenz (%)",
   "Select_Microorganism": "Auswahl Mikroorganismus",
+  "dataGridnoRowsLabel": "Keine Daten vorhanden",
+  "dataGridnoResultsOverlayLabel": "Keine Ergebnisse gefunden",
+  "dataGridcolumnHeaderSortIconLabel": "Sortierung",
+  "dataGridcolumnMenuSortAsc": "Aufsteigend sortieren",
+  "dataGridcolumnMenuSortDesc": "Absteigend sortieren",
+  "dataGridcolumnMenuUnsort": "Sortierung aufheben",
+  "dataGridcolumnMenuHideColumn": "Spalte ausblenden",
+  "dataGridcolumnMenuManageColumns": "Spalten verwalten",
 
   "REQUIRED_FIELD_INDICATOR": "Felder, die mit einem Stern (*) markiert sind, sind erforderlich. Bitte wählen Sie mindestens eine Option in jedem erforderlichen Feld aus, um die Suchschaltfläche zu aktivieren."
 }
