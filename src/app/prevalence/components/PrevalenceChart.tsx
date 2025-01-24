@@ -124,18 +124,16 @@ const PrevalenceChart: React.FC = () => {
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ): Promise<void> => {
-        if (!chartRef || !chartRef.current) {
+        if (!chartRef.current) {
             console.error("Chart reference is undefined");
             return;
         }
 
         const originalChart = chartRef.current;
 
-        // Create a new canvas
-        const scaleFactor = 1; // Adjust if you want higher resolution
-        const extraHeight = 100; // Add extra height for spacing
-        const canvasWidth = originalChart.width * scaleFactor;
-        const canvasHeight = (originalChart.height + extraHeight) * scaleFactor;
+        // Fixed rectangle dimension
+        const canvasWidth = 1380;
+        const canvasHeight = 1000;
 
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = canvasWidth;
@@ -147,42 +145,106 @@ const PrevalenceChart: React.FC = () => {
             return;
         }
 
-        // Set background to white
+        // Fill background with white
         tempCtx.fillStyle = "white";
-        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        // Clone the chart configuration
-        const clonedConfig: ChartConfiguration = {
+        // Clone the existing config
+        const originalConfig = originalChart.config;
+        const clonedConfig: ChartConfiguration<
+            "bar",
+            ChartDataPoint[],
+            unknown
+        > = {
             type: "bar",
-            data: originalChart.config.data,
+            data: {
+                ...originalConfig.data,
+            },
             options: {
-                ...originalChart.config.options,
-                devicePixelRatio: scaleFactor,
+                ...originalConfig.options,
                 responsive: false,
+                devicePixelRatio: 1,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 animation: false as any,
+                layout: {
+                    padding: {
+                        top: 60,
+                        bottom: 40,
+                        left: 60,
+                        right: 80,
+                    },
+                },
+                // Override axis label/tick sizes (from previous snippet)
+                scales: {
+                    x: {
+                        ...originalConfig.options?.scales?.x,
+                        ticks: {
+                            ...originalConfig.options?.scales?.x?.ticks,
+                            font: { size: 20 }, // Larger X ticks
+                            color: "black",
+                        },
+                        title: {
+                            ...originalConfig.options?.scales?.x?.title,
+                            display: true,
+                            text: "Prevalence (%)",
+                            color: "black",
+                            font: { size: 22, weight: "bold" },
+                        },
+                    },
+                    y: {
+                        ...originalConfig.options?.scales?.y,
+                        ticks: {
+                            ...originalConfig.options?.scales?.y?.ticks,
+                            font: { size: 22 }, // Larger Y ticks
+                            color: "black",
+                        },
+                        title: {
+                            ...originalConfig.options?.scales?.y?.title,
+                            display: true,
+                            text: "Year",
+                            color: "black",
+                            font: { size: 24, weight: "bold" },
+                        },
+                    },
+                },
+
+                // Now override the built-in title + legend fonts
+                plugins: {
+                    ...originalConfig.options?.plugins,
+                    // 1) Chart.js built-in title plugin
+
+                    // 2) Legend labels
+                    legend: {
+                        ...originalConfig.options?.plugins?.legend,
+                        labels: {
+                            ...originalConfig.options?.plugins?.legend?.labels,
+                            color: "black",
+                            font: {
+                                size: 20, // <-- Increase legend text size
+                            },
+                        },
+                    },
+                },
             },
-            plugins: originalChart.config.plugins,
+            plugins: originalConfig.plugins,
         };
 
-        // Render the chart on the new canvas, offset by extraHeight
+        // Render on the temp canvas
         tempCtx.save();
-        tempCtx.translate(0, extraHeight / scaleFactor); // Offset chart rendering
         const tempChart = new ChartJS(tempCtx, clonedConfig);
         await tempChart.update();
         tempCtx.restore();
 
-        // Export the canvas as an image
+        // Export as PNG
         const link = document.createElement("a");
         const sanitizedChartKey = sanitizeKey(chartKey);
         link.href = tempCanvas.toDataURL("image/png", 1.0);
         link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
         link.click();
 
-        // Destroy the temporary chart to free up resources
+        // Cleanup
         tempChart.destroy();
     };
-
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
             {/* Top form control */}
