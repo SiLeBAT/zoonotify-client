@@ -12,9 +12,9 @@ export function WelcomeMainComponent(): JSX.Element {
             {/* Add a scrollable container */}
             <div
                 style={{
-                    maxHeight: "95vh", // Adjust the height as needed
+                    maxHeight: "95vh",
                     overflowY: "auto",
-                    padding: "1rem", // Optional: Add padding for better spacing
+                    padding: "1rem",
                 }}
             >
                 <LogoCardComponent
