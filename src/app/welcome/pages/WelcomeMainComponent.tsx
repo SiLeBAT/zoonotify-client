@@ -9,12 +9,20 @@ export function WelcomeMainComponent(): JSX.Element {
 
     return (
         <PageLayoutComponent>
-            <LogoCardComponent
-                title="ZooNotify"
-                subtitle={model.subtitle}
-                // Render Markdown content using the Markdown component
-                text={<Markdown>{model.content}</Markdown>}
-            />
+            {/* Add a scrollable container */}
+            <div
+                style={{
+                    maxHeight: "95vh", // Adjust the height as needed
+                    overflowY: "auto",
+                    padding: "1rem", // Optional: Add padding for better spacing
+                }}
+            >
+                <LogoCardComponent
+                    title="ZooNotify"
+                    subtitle={model.subtitle}
+                    text={<Markdown>{model.content}</Markdown>}
+                />
+            </div>
         </PageLayoutComponent>
     );
 }
