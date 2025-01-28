@@ -1,23 +1,21 @@
-import { List, ListSubheader } from "@mui/material";
-import i18next from "i18next";
 import React, { useEffect, useState } from "react";
+import { List, ListItem, ListSubheader } from "@mui/material";
+import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+import Markdown from "markdown-to-jsx";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { ListContentListItemComponent } from "./ListContent-ListItem.component";
 import { EXTERNAL_LINKS } from "../../shared/infrastructure/router/routes";
 import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 
-// Define a type for the category
 type Category =
     | "LEGAL_REGULATION"
     | "REPORTS"
     | "ORGANIZATION_AND_INSTITUTES"
     | "ONLINE_TOOLS";
+
 interface ExternalLink {
-    name: string;
-    link: string;
     category: Category;
-    priority: number;
+    content: string; // Markdown content directly
 }
 
 type ExternalLinkResponse = CMSResponse<
@@ -37,42 +35,51 @@ export function LinkPageLinkListComponent(): JSX.Element {
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
     useEffect(() => {
-        // API endpoint without sorting since we will handle sorting in the frontend
         const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18next.language}`;
+        console.log("[LinkPageLinkList] Fetching from:", apiEndpoint);
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
-                console.log("API Response:", response.data);
-                if (response.data && response.data.data) {
+                console.log("[LinkPageLinkList] Raw response:", response);
+
+                if (response?.data?.data) {
                     const extractedLinks = response.data.data.map(
                         (item: CMSEntity<ExternalLink>) => item.attributes
                     );
-
+                    console.log(
+                        "[LinkPageLinkList] extractedLinks:",
+                        extractedLinks
+                    );
                     setLinkData(extractedLinks);
+                } else {
+                    console.warn("[LinkPageLinkList] No data in response");
                 }
-                return null;
+
+                // Return something to satisfy `promise/always-return`
+                return response;
             })
-            .catch((error) => {
-                console.error("Error fetching data: ", error);
+            .catch((err) => {
+                console.error("[LinkPageLinkList] Error fetching data:", err);
+                // You can choose to re-throw the error if you want
+                throw err;
             });
     }, [i18next.language]);
 
-    const groupByCategory = (
+    // Explicitly specify the return type here
+    function groupByCategory(
         links: ExternalLink[]
-    ): Record<Category, ExternalLink[]> => {
-        const grouped = links.reduce<Record<Category, ExternalLink[]>>(
-            (acc, link) => {
-                if (!acc[link.category]) acc[link.category] = [];
-                acc[link.category].push(link);
-                return acc;
-            },
-            {} as Record<Category, ExternalLink[]>
-        );
-
-        return grouped;
-    };
+    ): Record<Category, ExternalLink[]> {
+        return links.reduce<Record<Category, ExternalLink[]>>((acc, link) => {
+            if (!acc[link.category]) {
+                acc[link.category] = [];
+            }
+            acc[link.category].push(link);
+            return acc;
+        }, {} as Record<Category, ExternalLink[]>);
+    }
 
     const groupedLinks = groupByCategory(linkData);
+    console.log("[LinkPageLinkList] groupedLinks:", groupedLinks);
 
     const categoryOrder: Category[] = [
         "ONLINE_TOOLS",
@@ -84,28 +91,37 @@ export function LinkPageLinkListComponent(): JSX.Element {
     return (
         <div>
             {categoryOrder.map((category) => {
-                const linksForCategory = groupedLinks[category];
-
-                if (!linksForCategory || linksForCategory.length === 0) {
+                const itemsForCategory = groupedLinks[category];
+                if (!itemsForCategory || itemsForCategory.length === 0) {
+                    console.log(
+                        `[LinkPageLinkList] No items for category: "${category}"`
+                    );
                     return null;
                 }
 
-                const sortedLinks = linksForCategory
-                    .slice()
-                    .sort((a, b) => b.priority - a.priority);
+                const categoryLabel = t(category, { defaultValue: category });
+                console.log(
+                    `[LinkPageLinkList] t(${category}):`,
+                    categoryLabel
+                );
 
                 return (
                     <List key={category}>
-                        <ListSubheader>
-                            {t(`${category}`, category)}
-                        </ListSubheader>
-                        {sortedLinks.map((link, index) => (
-                            <ListContentListItemComponent
-                                key={`Link${index}`}
-                                link={link.link}
-                                text={link.name}
-                            />
-                        ))}
+                        <ListSubheader>{categoryLabel}</ListSubheader>
+
+                        {itemsForCategory.map((item, idx) => {
+                            console.log(
+                                `[LinkPageLinkList] Rendering item #${idx}`,
+                                item
+                            );
+
+                            return (
+                                <ListItem key={idx}>
+                                    {/* Render content using the Markdown component */}
+                                    <Markdown>{item.content}</Markdown>
+                                </ListItem>
+                            );
+                        })}
                     </List>
                 );
             })}
