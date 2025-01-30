@@ -1,7 +1,8 @@
-import { Link, List, ListItem, Tooltip, Typography } from "@mui/material";
-import { Box, useTheme } from "@mui/system";
 import React from "react";
+import { Link, List, ListItem, Tooltip, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles"; // IMPORTANT: use @mui/material/styles
 import { useTranslation } from "react-i18next";
+import { Box } from "@mui/system"; // Box is fine from @mui/system
 import { NavLink } from "react-router-dom";
 import {
     API_DOCUMENTATION_URL,
@@ -12,7 +13,7 @@ export function FooterLinkListComponent(props: {
     supportMail: string | undefined;
 }): JSX.Element {
     const { t, i18n } = useTranslation(["Footer"]);
-    const theme = useTheme();
+    const theme = useTheme(); // Must come from @mui/material/styles for breakpoints to work
 
     const linkStyle = {
         width: "100%",
@@ -49,18 +50,34 @@ export function FooterLinkListComponent(props: {
         boxSizing: "inherit",
     };
 
+    // Keep your row layout for desktop; only stack on small screens.
     const footerContentStyle = {
         margin: 0,
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "row", // desktop: row layout (unchanged)
         flexWrap: "wrap",
         justifyContent: "space-between",
         flexGrow: 1,
         textDecoration: "none",
         boxSizing: "inherit",
-        padding: "0",
+        padding: 0,
+
+        [theme.breakpoints.down("sm")]: {
+            // mobile: single-column layout
+            flexDirection: "column",
+            alignItems: "center",
+            flexWrap: "nowrap",
+
+            // Force each link onto its own line so they don’t overlap
+            "& .MuiListItem-root": {
+                width: "100%",
+                justifyContent: "center",
+                textAlign: "center",
+            },
+        },
     };
 
+    // Build the “Submit a Problem” link (or tooltip if supportMail undefined)
     let submitProblemLink: JSX.Element = (
         <Link
             href={`mailto:${
@@ -72,7 +89,7 @@ export function FooterLinkListComponent(props: {
         </Link>
     );
 
-    if (props.supportMail === undefined) {
+    if (!props.supportMail) {
         const supportMailErrorText = t("Content.SupportError");
         submitProblemLink = (
             <Tooltip
@@ -92,13 +109,14 @@ export function FooterLinkListComponent(props: {
         );
     }
 
-    const apiDocumentationUrl = API_DOCUMENTATION_URL;
-
-    // Determine BfR link based on the current language.
+    // If user’s language is EN, link to the BfR English site; otherwise the German site.
     const bfrLink =
         i18n.language === "en"
             ? "https://www.bfr.bund.de/en/home.html"
             : "https://www.bfr.bund.de/de/start.html";
+
+    // Additional link for your API docs
+    const apiDocumentationUrl = API_DOCUMENTATION_URL;
 
     return (
         <List sx={footerContentStyle}>
@@ -122,18 +140,16 @@ export function FooterLinkListComponent(props: {
                     <Typography>FoodRisk-Labs</Typography>
                 </Link>
             </ListItem>
-            {
-                <ListItem sx={footerElementStyle}>
-                    <Link
-                        href={apiDocumentationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={linkStyle}
-                    >
-                        <Typography>{t("Content.Api")}</Typography>
-                    </Link>
-                </ListItem>
-            }
+            <ListItem sx={footerElementStyle}>
+                <Link
+                    href={apiDocumentationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={linkStyle}
+                >
+                    <Typography>{t("Content.Api")}</Typography>
+                </Link>
+            </ListItem>
             <ListItem sx={footerElementStyle}>
                 <NavLink to={pageRoute.dpdPagePath} style={linkStyle}>
                     <Typography>{t("Content.DataProtection")}</Typography>
