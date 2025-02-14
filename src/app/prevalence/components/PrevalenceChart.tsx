@@ -108,12 +108,14 @@ const PrevalenceChart: React.FC = () => {
         )
     );
 
-    const isBelow25Percent = Object.values(chartData)
-        .flatMap((yearData) =>
-            Object.values(yearData).every((data) => data.ciMax <= 25)
-        )
-        .every(Boolean);
-    const xAxisMax = isBelow25Percent ? 25 : 100;
+    // Gather all ciMax values from all chart data points
+    const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
+        Object.values(yearData).map((data) => data.ciMax)
+    );
+    // Get the highest ciMax value
+    const maxCiPlus = Math.max(...allCiMaxValues);
+    // If the highest CI+ value is greater than 25, set x-axis max to 100, otherwise 25
+    const xAxisMax = maxCiPlus > 25 ? 100 : 25;
 
     // Sanitization function
     const sanitizeKey = (key: string): string => {
