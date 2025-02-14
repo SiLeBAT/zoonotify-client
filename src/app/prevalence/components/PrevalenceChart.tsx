@@ -112,6 +112,7 @@ const PrevalenceChart: React.FC = () => {
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
         Object.values(yearData).map((data) => data.ciMax)
     );
+
     // Get the highest ciMax value
     const maxCiPlus = Math.max(...allCiMaxValues);
     // If the highest CI+ value is greater than 25, set x-axis max to 100, otherwise 25
