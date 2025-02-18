@@ -29,7 +29,7 @@ interface ContentAttributes {
 }
 
 export function PrevalenceSideContent(): JSX.Element {
-    const { t } = useTranslation(["PrevalencePage"]);
+    const { t, i18n } = useTranslation(["PrevalencePage"]); // Include i18n
     const {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
@@ -68,9 +68,20 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedOrder([]);
     }, []);
 
+    // UseEffect to listen for language changes and update options
+    useEffect(() => {
+        const handleLanguageChange = (): void => {
+            fetchOptions();
+        };
+        i18n.on("languageChanged", handleLanguageChange);
+
+        return () => {
+            i18n.off("languageChanged", handleLanguageChange);
+        };
+    }, [i18n, fetchOptions]);
+
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
-        console.log(`Fetching data for category: ${translatedCategory}`);
         try {
             const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
                 translatedCategory
@@ -80,13 +91,9 @@ export function PrevalenceSideContent(): JSX.Element {
             >(url);
             if (response.data && response.data.data.length > 0) {
                 const attributes = response.data.data[0].attributes;
-                console.log(`Data fetched: ${attributes.content}`);
                 setInfoDialogTitle(attributes.title);
                 setInfoDialogContent(attributes.content);
                 setInfoDialogOpen(true);
-                console.log(`Dialog should now be open.`);
-            } else {
-                console.log("No data received.");
             }
         } catch (error) {
             console.error("Failed to fetch information:", error);
@@ -390,6 +397,7 @@ export function PrevalenceSideContent(): JSX.Element {
         ));
 
     const resetFilters = async (): Promise<void> => {
+        // Resetting the local states
         setSelectedMicroorganisms([]);
         setSelectedSampleOrigins([]);
         setSelectedMatrices([]);
@@ -397,8 +405,17 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedMatrixGroups([]);
         setSelectedYear([]);
         setSelectedSuperCategory([]);
+        setSelectedOrder([]); // Reset the order of the filters
         setIsSearchTriggered(false);
+        setShowError(false);
+
         await fetchOptions(); // Re-fetch data to reset all options, including years
+
+        // Reset the URL to remove query parameters
+        window.history.replaceState(null, "", window.location.pathname);
+
+        // Optionally, reload the page to ensure everything is in its initial state
+        // window.location.reload();
     };
 
     return (

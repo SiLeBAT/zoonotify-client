@@ -1,6 +1,6 @@
 {
   "PREVALENCE": "Prevalence",
-  "SEARCH_SETTINGS": "search options",
+  "SEARCH_SETTINGS": "Search options",
   "SEARCH": "Search",
   "FILTER_SETTINGS": "Filter Settings",
   "FILTER": "Filter",
@@ -48,7 +48,7 @@
 
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Superordinate sample origin",
   "RESET_FILTERS": "Reset Filters",
-
+  "PREVALENCE_TABLE": "Prevalence Table",
   "More Info on Sampling Year": "More Info on Sampling Year",
   "More Info on Microorganisms": "More Info on Microorganisms",
   "More Info on Super Categories": "More Info on Superordinate Sample Origin",
@@ -62,7 +62,7 @@
   "PREVALENCE_CHART": "Prevalence Chart",
   "Download_Chart": "DOWNOAD CHART",
   "Download_All_Charts": "Download All Charts",
-  "Generated on": "Generated on",
+  "Generated on": "Data status",
   "No_data_available": "No data available for selected options.",
   "Prevalence": "Prevalence",
   "CI_min": "CI Min",
@@ -72,6 +72,14 @@
   "Year": "Year",
 
   "Prevalence %": "Prevalence (%)",
+  "dataGrid.noRowsLabel": "No rows",
+  "dataGrid.noResultsOverlayLabel": "No results found",
+  "dataGridcolumnHeaderSortIconLabel": "Sort",
+  "dataGridcolumnMenuSortAsc": "Sort by ASC",
+  "dataGridcolumnMenuSortDesc": "Sort by DESC",
+  "dataGridcolumnMenuUnsort": "Unsort",
+  "dataGridcolumnMenuHideColumn": "Hide column",
+  "dataGridcolumnMenuManageColumns": "Manage columns",
 
   "Select_Microorganism": "Select Microorganism",
   "REQUIRED_FIELD_INDICATOR": "Fields marked with a star (*) are required. Please select at least one option from each required field to activate the search button."

@@ -8,16 +8,18 @@ import {
     Pagination,
 } from "@mui/material";
 import { Chart as ChartJS, registerables } from "chart.js";
+import type { ChartConfiguration } from "chart.js";
 import { useTranslation } from "react-i18next";
 import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
-import { getCurrentTimestamp, formatMicroorganismNameArray } from "./utils";
+import { getCurrentTimestamp } from "./utils";
 import { ChartDataPoint } from "./types";
 
 ChartJS.register(...registerables);
 
 const PrevalenceChart: React.FC = () => {
-    const { prevalenceData, loading } = usePrevalenceFilters();
+    const { prevalenceData, loading, prevalenceUpdateDate } =
+        usePrevalenceFilters();
     const chartRefs = useRef<{
         [key: string]: React.RefObject<
             ChartJS<"bar", ChartDataPoint[], unknown>
@@ -65,7 +67,7 @@ const PrevalenceChart: React.FC = () => {
     }, [currentMicroorganism]);
 
     const yearOptions = Array.from(
-        { length: 14 },
+        { length: 15 },
         (_, i) => 2009 + i
     ).reverse();
 
@@ -106,12 +108,15 @@ const PrevalenceChart: React.FC = () => {
         )
     );
 
-    const isBelow25Percent = Object.values(chartData)
-        .flatMap((yearData) =>
-            Object.values(yearData).every((data) => data.ciMax <= 25)
-        )
-        .every(Boolean);
-    const xAxisMax = isBelow25Percent ? 25 : 100;
+    // Gather all ciMax values from all chart data points
+    const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
+        Object.values(yearData).map((data) => data.ciMax)
+    );
+
+    // Get the highest ciMax value
+    const maxCiPlus = Math.max(...allCiMaxValues);
+    // If the highest CI+ value is greater than 25, set x-axis max to 100, otherwise 25
+    const xAxisMax = maxCiPlus > 25 ? 100 : 25;
 
     // Sanitization function
     const sanitizeKey = (key: string): string => {
@@ -122,110 +127,127 @@ const PrevalenceChart: React.FC = () => {
         chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ): Promise<void> => {
-        if (!chartRef || !chartRef.current) {
+        if (!chartRef.current) {
             console.error("Chart reference is undefined");
             return;
         }
 
-        const chartInstance = chartRef.current;
-        const microorganismName = currentMicroorganism;
+        const originalChart = chartRef.current;
 
-        if (chartInstance) {
-            await chartInstance.update();
+        // Fixed rectangle dimension
+        const canvasWidth = 1380;
+        const canvasHeight = 1000;
 
-            await new Promise<void>((resolve) => {
-                requestAnimationFrame(() => {
-                    const canvas = chartInstance.canvas;
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = canvasWidth;
+        tempCanvas.height = canvasHeight;
 
-                    if (canvas && canvas.width > 0 && canvas.height > 0) {
-                        // Increase resolution with scale factor
-                        const scaleFactor = 2; // Adjust for higher resolution
-
-                        const tempCanvas = document.createElement("canvas");
-                        const tempCtx = tempCanvas.getContext("2d");
-
-                        const extraHeight = 60 * scaleFactor;
-                        tempCanvas.width = canvas.width * scaleFactor;
-                        tempCanvas.height =
-                            (canvas.height + extraHeight) * scaleFactor;
-
-                        if (tempCtx) {
-                            // Scale up the context for higher resolution
-                            tempCtx.scale(scaleFactor, scaleFactor);
-                            tempCtx.fillStyle = "white";
-                            tempCtx.fillRect(
-                                0,
-                                0,
-                                tempCanvas.width,
-                                tempCanvas.height
-                            );
-
-                            // Apply black font and larger size
-                            if (microorganismName) {
-                                const titleFontSize = 10 * scaleFactor;
-
-                                const wordsArray =
-                                    formatMicroorganismNameArray(
-                                        microorganismName
-                                    );
-                                const wordMeasurements = wordsArray.map(
-                                    (wordObj) => {
-                                        tempCtx.font = `${
-                                            wordObj.italic ? "italic" : "normal"
-                                        } ${titleFontSize}px Arial`;
-                                        const width = tempCtx.measureText(
-                                            wordObj.text
-                                        ).width;
-                                        return { ...wordObj, width };
-                                    }
-                                );
-
-                                const totalWidth = wordMeasurements.reduce(
-                                    (sum, wordObj) => sum + wordObj.width,
-                                    0
-                                );
-
-                                let xPos =
-                                    (tempCanvas.width / scaleFactor -
-                                        totalWidth) /
-                                    2;
-                                const yPos = titleFontSize + 10;
-
-                                wordMeasurements.forEach((wordObj) => {
-                                    tempCtx.font = `${
-                                        wordObj.italic ? "italic" : "normal"
-                                    } ${titleFontSize}px Arial`;
-                                    tempCtx.fillStyle = "black";
-                                    tempCtx.fillText(wordObj.text, xPos, yPos);
-                                    xPos += wordObj.width;
-                                });
-                            }
-
-                            tempCtx.drawImage(
-                                canvas,
-                                0,
-                                extraHeight / scaleFactor
-                            );
-
-                            const link = document.createElement("a");
-                            const sanitizedChartKey = sanitizeKey(chartKey);
-                            link.href = tempCanvas.toDataURL("image/png");
-                            link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
-                            link.click();
-                        } else {
-                            console.error("Failed to get temp canvas context");
-                        }
-                    } else {
-                        console.error("Canvas has invalid dimensions");
-                    }
-                    resolve();
-                });
-            });
-        } else {
-            console.error("Chart instance is undefined");
+        const tempCtx = tempCanvas.getContext("2d");
+        if (!tempCtx) {
+            console.error("Failed to get temp canvas context");
+            return;
         }
-    };
 
+        // Fill background with white
+        tempCtx.fillStyle = "white";
+        tempCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        // Clone the existing config
+        const originalConfig = originalChart.config;
+        const clonedConfig: ChartConfiguration<
+            "bar",
+            ChartDataPoint[],
+            unknown
+        > = {
+            type: "bar",
+            data: {
+                ...originalConfig.data,
+            },
+            options: {
+                ...originalConfig.options,
+                responsive: false,
+                devicePixelRatio: 1,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                animation: false as any,
+                layout: {
+                    padding: {
+                        top: 60,
+                        bottom: 40,
+                        left: 60,
+                        right: 80,
+                    },
+                },
+                // Override axis label/tick sizes (from previous snippet)
+                scales: {
+                    x: {
+                        ...originalConfig.options?.scales?.x,
+                        ticks: {
+                            ...originalConfig.options?.scales?.x?.ticks,
+                            font: { size: 20 }, // Larger X ticks
+                            color: "black",
+                        },
+                        title: {
+                            ...originalConfig.options?.scales?.x?.title,
+                            display: true,
+                            text: "Prevalence (%)",
+                            color: "black",
+                            font: { size: 22, weight: "bold" },
+                        },
+                    },
+                    y: {
+                        ...originalConfig.options?.scales?.y,
+                        ticks: {
+                            ...originalConfig.options?.scales?.y?.ticks,
+                            font: { size: 22 }, // Larger Y ticks
+                            color: "black",
+                        },
+                        title: {
+                            ...originalConfig.options?.scales?.y?.title,
+                            display: true,
+                            text: "Year",
+                            color: "black",
+                            font: { size: 24, weight: "bold" },
+                        },
+                    },
+                },
+
+                // Now override the built-in title + legend fonts
+                plugins: {
+                    ...originalConfig.options?.plugins,
+                    // 1) Chart.js built-in title plugin
+
+                    // 2) Legend labels
+                    legend: {
+                        ...originalConfig.options?.plugins?.legend,
+                        labels: {
+                            ...originalConfig.options?.plugins?.legend?.labels,
+                            color: "black",
+                            font: {
+                                size: 20, // <-- Increase legend text size
+                            },
+                        },
+                    },
+                },
+            },
+            plugins: originalConfig.plugins,
+        };
+
+        // Render on the temp canvas
+        tempCtx.save();
+        const tempChart = new ChartJS(tempCtx, clonedConfig);
+        await tempChart.update();
+        tempCtx.restore();
+
+        // Export as PNG
+        const link = document.createElement("a");
+        const sanitizedChartKey = sanitizeKey(chartKey);
+        link.href = tempCanvas.toDataURL("image/png", 1.0);
+        link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
+        link.click();
+
+        // Cleanup
+        tempChart.destroy();
+    };
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
             {/* Top form control */}
@@ -303,6 +325,9 @@ const PrevalenceChart: React.FC = () => {
                                                 yearOptions={yearOptions}
                                                 xAxisMax={xAxisMax}
                                                 downloadChart={downloadChart}
+                                                prevalenceUpdateDate={
+                                                    prevalenceUpdateDate
+                                                } // Ensure this is passed
                                             />
                                         </Grid>
                                     );

@@ -11,7 +11,7 @@ const PrevalenceMainContent: React.FC<{ heading: string }> = ({ heading }) => {
     const { prevalenceData, loading, error, showError } =
         usePrevalenceFilters();
     const theme = useTheme();
-    const { t } = useTranslation(["PrevalencePage"]);
+    const { t, i18n } = useTranslation(["PrevalencePage"]); // <-- include i18n
     const supportMail = useFetchSupportEmail();
 
     const mailtoLink =
@@ -48,6 +48,9 @@ const PrevalenceMainContent: React.FC<{ heading: string }> = ({ heading }) => {
                         <PrevalenceDataGrid
                             prevalenceData={prevalenceData}
                             loading={loading}
+                            language={
+                                i18n.language.startsWith("de") ? "de" : "en"
+                            }
                         />
                     </Box>
                 )}

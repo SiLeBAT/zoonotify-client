@@ -24,6 +24,11 @@ const mainStyle = css`
     overflow-x: hidden;
     overflow-y: hidden;
     box-sizing: border-box;
+
+    @media (max-width: 1000px) {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 `;
 
 const footerStyle = css`

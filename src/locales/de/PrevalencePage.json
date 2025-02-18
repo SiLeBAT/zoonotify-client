@@ -40,8 +40,8 @@
   "MATRIX_DETAIL": "Matrix detail",
   "MATRIX_GROUP": "Matrixgruppe",
   "MICROORGANISM": "Mikroorganismen",
-  "SAMPLE_ORIGIN": "Probenherkunft",
-  "SAMPLING_STAGE": "Probenahmestufe",
+  "SAMPLE_ORIGIN": "Probenursprung",
+  "SAMPLING_STAGE": "Probenahmestelle",
   "PARAMETER": "Parameter",
   "TABLE_DETAIL": "Parameter",
 
@@ -62,7 +62,7 @@
   "PREVALENCE_CHART": "Prävalenzdiagramm",
   "Download_Chart": "DIAGRAMM HERUNTERLADEN",
   "Download_All_Charts": "Alle Diagramme herunterladen",
-  "Generated on": "Erstellt am",
+  "Generated on": "Datenstand",
   "No_data_available": "Keine Daten für die ausgewählten Optionen verfügbar.",
   "Prevalence": "Prävalenz",
   "CI_min": "KI min",
@@ -72,6 +72,14 @@
   "Year": "Erhebungsjahr",
   "Prevalence %": "Prävalenz (%)",
   "Select_Microorganism": "Auswahl Mikroorganismus",
+  "dataGridnoRowsLabel": "Keine Daten vorhanden",
+  "dataGridnoResultsOverlayLabel": "Keine Ergebnisse gefunden",
+  "dataGridcolumnHeaderSortIconLabel": "Sortierung",
+  "dataGridcolumnMenuSortAsc": "Aufsteigend sortieren",
+  "dataGridcolumnMenuSortDesc": "Absteigend sortieren",
+  "dataGridcolumnMenuUnsort": "Sortierung aufheben",
+  "dataGridcolumnMenuHideColumn": "Spalte ausblenden",
+  "dataGridcolumnMenuManageColumns": "Spalten verwalten",
 
   "REQUIRED_FIELD_INDICATOR": "Felder, die mit einem Stern (*) markiert sind, sind erforderlich. Bitte wählen Sie mindestens eine Option in jedem erforderlichen Feld aus, um die Suchschaltfläche zu aktivieren."
 }

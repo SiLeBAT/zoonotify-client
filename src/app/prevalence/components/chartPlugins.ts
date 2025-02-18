@@ -1,20 +1,20 @@
 import { Chart as ChartJS } from "chart.js";
-import { getFormattedDate } from "./utils";
 
 const logoImage = new Image();
-logoImage.src = "/assets/bfr_logo.png";
+logoImage.src = "/assets/bfrr_logo.png";
 
-export const logoPlugin = {
-    id: "logoPlugin",
-    beforeInit: (chart: ChartJS) => {
-        if (!logoImage.complete) {
-            logoImage.onload = () => {
-                chart.update();
-            };
-        }
-    },
-    beforeDraw: (chart: ChartJS) => {
+export const whiteBackgroundAndLogoPlugin = (
+    prevalenceUpdateDate: string | null
+): {
+    id: string;
+    beforeDraw: (chart: ChartJS) => void;
+    afterDraw: (chart: ChartJS) => void;
+} => ({
+    id: "whiteBackgroundAndLogoPlugin",
+    beforeDraw: (chart: ChartJS): void => {
         const ctx = chart.ctx;
+
+        // Ensure the entire canvas has a white background
         ctx.save();
         ctx.globalCompositeOperation = "destination-over";
         ctx.fillStyle = "white";
@@ -22,31 +22,45 @@ export const logoPlugin = {
         ctx.restore();
     },
     afterDraw: (chart: ChartJS) => {
+        const ctx = chart.ctx;
+
+        // Define padding for logo and text
+        const padding = 20;
+
+        // Draw the logo if it has finished loading
         if (logoImage.complete) {
-            const ctx = chart.ctx;
-            const extraPadding = 20;
-            const logoWidth = 60;
-            const logoHeight = 27;
+            const logoWidth = 90; // Logo width
+            const logoHeight = 30; // Logo height
 
-            const logoX = chart.chartArea.left + 10;
-            const logoY = chart.chartArea.bottom + extraPadding + 10;
+            // Position for top-right corner of the full canvas
+            const logoX = chart.width - logoWidth - padding; // Right edge with padding
+            const logoY = padding; // Top edge with padding
 
+            // White rectangle behind the logo for visibility
+            ctx.save();
+            ctx.fillStyle = "white";
+            ctx.fillRect(logoX, logoY, logoWidth, logoHeight);
+
+            // Draw the logo
             ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
-
-            // Access the translated text from chart options
-            const generatedOnText =
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ((chart.options.plugins as any)?.customTexts
-                    ?.generatedOn as string) || "Generated on";
-            const dateText = `${generatedOnText}: ${getFormattedDate()}`;
-
-            ctx.font = "10px Arial";
-            ctx.fillStyle = "#000";
-            ctx.textAlign = "right";
-            ctx.fillText(dateText, chart.width - 10, chart.height - 5);
+            ctx.restore();
         }
+
+        // "Generated On" text (bottom-right corner of the full canvas)
+        const generatedOnText =
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (chart.options.plugins as any)?.customTexts?.generatedOn ||
+            "Generated on";
+
+        // Combine the translation key with the actual date
+        const dateText = `${generatedOnText}: ${prevalenceUpdateDate || ""}`;
+
+        ctx.font = "10px Arial";
+        ctx.fillStyle = "#000";
+        ctx.textAlign = "right";
+        ctx.fillText(dateText, chart.width - padding, chart.height - padding);
     },
-};
+});
 
 export const errorBarTooltipPlugin = {
     id: "customErrorBarsTooltip",
@@ -96,7 +110,6 @@ export const errorBarTooltipPlugin = {
         });
 
         // No need to reset the tooltip's active elements when not over an error bar
-        // This allows the default tooltip behavior to function when hovering over the bars
     },
 };
 

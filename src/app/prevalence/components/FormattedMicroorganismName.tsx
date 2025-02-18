@@ -15,6 +15,7 @@ const FormattedMicroorganismName: React.FC<FormattedMicroorganismNameProps> = ({
             {words.map((wordObj: WordObject, index: number) => (
                 <React.Fragment key={index}>
                     {wordObj.italic ? <i>{wordObj.text}</i> : wordObj.text}
+                    {/* You might add a space after each word if needed */}{" "}
                 </React.Fragment>
             ))}
         </Typography>
