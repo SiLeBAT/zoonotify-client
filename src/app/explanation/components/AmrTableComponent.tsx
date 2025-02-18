@@ -55,8 +55,9 @@ const AmrTableComponent: React.FC<AmrTableComponentProps> = ({ tableData }) => {
     const { title, yearlyData, Substanzklasse, Wirkstoff, description } =
         tableData;
 
-    const years = Object.keys(yearlyData).sort((a, b) => b.localeCompare(a));
-
+    const years = Object.keys(yearlyData).sort(
+        (a, b) => parseInt(b) - parseInt(a)
+    );
     const antibiotics = Object.keys(yearlyData[years[0]] || {});
 
     const headerCellStyle = { fontWeight: "bold", backgroundColor: "#f0f0f0" };
