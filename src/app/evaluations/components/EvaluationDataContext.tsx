@@ -74,7 +74,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         Object.keys(filters).forEach((key) => {
             const param = queryParams.get(key);
             if (param) {
-                // Split e.g. "dog,cat" => ["dog","cat"]
+                // Split e.g. "dog,cat" => ["dog", "cat"]
                 filters[key as keyof FilterSelection] = param.split(",");
             }
         });
@@ -91,6 +91,29 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         return params.toString();
     }
 
+    /**
+     * Helper function to determine if an entry is complete.
+     * Adjust the required fields as needed.
+     */
+    function isCompleteEntry(entry: {
+        title: string;
+        description: string;
+        category: string;
+        chartPath: string;
+        dataPath: string;
+    }): boolean {
+        return (
+            Boolean(entry.title && entry.title.trim()) &&
+            Boolean(entry.description && entry.description.trim()) &&
+            Boolean(entry.category && entry.category.trim()) &&
+            Boolean(entry.chartPath && entry.chartPath.trim()) &&
+            Boolean(entry.dataPath && entry.dataPath.trim())
+        );
+    }
+
+    /**
+     * Filtering function. (You can still adjust this as needed for your filtering logic)
+     */
     function applyFiltersStrict(
         filterSelection: FilterSelection,
         data: Evaluation
@@ -104,17 +127,19 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
 
         (Object.keys(data) as (keyof Evaluation)[]).forEach((divisionKey) => {
             filteredData[divisionKey] = data[divisionKey].filter((item) => {
-                // Must pass *all* filters
                 return (
                     Object.keys(filterSelection) as (keyof FilterSelection)[]
                 ).every((filterKey) => {
                     const selectedVals = filterSelection[filterKey];
-
-                    // If the array is empty => strictly exclude items
-                    if (!selectedVals.length) {
+                    // If no filter is applied for this key, ignore it.
+                    if (selectedVals.length === 0) {
+                        return true;
+                    }
+                    // If the item is missing this property, filter it out.
+                    if (item[filterKey] == null) {
                         return false;
                     }
-                    // Item must match at least one of the filter's values
+                    // Otherwise, the item must match one of the selected values.
                     return selectedVals.includes(item[filterKey]);
                 });
             });
@@ -123,6 +148,11 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         return filteredData;
     }
 
+    /**
+     * UPDATED PROCESS API RESPONSE:
+     * We safely access nested properties.
+     * In addition, only entries that are "complete" are added.
+     */
     function processApiResponse(
         apiData: CMSEntity<EvaluationAttributesDTO>[]
     ): Evaluation {
@@ -136,7 +166,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         apiData.forEach((entry) => {
             const divisionToken = entry.attributes.division as keyof Evaluation;
             if (result[divisionToken]) {
-                result[divisionToken].push({
+                const newEntry = {
                     id: entry.id.toString(),
                     title: entry.attributes.title,
                     description: entry.attributes.description,
@@ -146,13 +176,20 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
                     diagramType: entry.attributes.diagramType,
                     productionType: entry.attributes.productionType,
                     matrix: entry.attributes.matrix,
-                    chartPath:
-                        CMS_BASE_ENDPOINT +
-                        entry.attributes.diagram.data.attributes.url,
-                    dataPath:
-                        CMS_BASE_ENDPOINT +
-                        entry.attributes.csv_data.data.attributes.url,
-                });
+                    chartPath: entry.attributes.diagram?.data?.attributes?.url
+                        ? CMS_BASE_ENDPOINT +
+                          entry.attributes.diagram.data.attributes.url
+                        : "",
+                    dataPath: entry.attributes.csv_data?.data?.attributes?.url
+                        ? CMS_BASE_ENDPOINT +
+                          entry.attributes.csv_data.data.attributes.url
+                        : "",
+                };
+
+                // Only include complete entries.
+                if (isCompleteEntry(newEntry)) {
+                    result[divisionToken].push(newEntry);
+                }
             }
         });
 
@@ -247,7 +284,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
             return;
         }
 
-        // Apply strict filters
+        // Apply updated filters
         const newData = applyFiltersStrict(selectedFilters, originalData);
         setEvaluationsData(newData);
 

@@ -8,22 +8,23 @@ import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
 import { WelcomeAttributesDTO } from "../model/Welcome.model";
 
-type WelcomePageModel = {
+export type WelcomePageModel = {
     title: string;
     subtitle: string;
     content: string;
 };
 
-type WelcomePageOperations = Record<string, never>;
+export type WelcomePageOperations = Record<string, never>;
 
-type WelcomePageTranslations = {
+export type WelcomePageTranslations = {
     hardCodedSubtitle: string;
     hardCodedContent: string;
 };
 
 function getTranslations(t: TFunction): WelcomePageTranslations {
-    const hardCodedSubtitle = t("Subtitle");
-    const hardCodedContent = t("MainText");
+    // Use defaults if the translation keys are missing.
+    const hardCodedSubtitle = t("Subtitle") || "Default Subtitle";
+    const hardCodedContent = t("MainText") || "Default Main Text";
     return { hardCodedSubtitle, hardCodedContent };
 }
 
@@ -33,29 +34,42 @@ const useWelcomePageComponent: UseCase<
     WelcomePageOperations
 > = () => {
     const { t } = useTranslation(["HomePage"]);
-
     const { hardCodedSubtitle, hardCodedContent } = getTranslations(t);
 
-    const [subtitle, setSubtitle] = useState(hardCodedSubtitle);
-
-    const [content, setContent] = useState(hardCodedContent);
+    const [subtitle, setSubtitle] = useState<string>(hardCodedSubtitle);
+    const [content, setContent] = useState<string>(hardCodedContent);
 
     useEffect(() => {
+        const url = `${WELCOME}?locale=${i18next.language}`;
+        console.log("Fetching welcome page data from:", url);
+
         callApiService<CMSResponse<CMSEntity<WelcomeAttributesDTO>, unknown>>(
-            `${WELCOME}?locale=${i18next.language}`
+            url
         )
             .then((response) => {
-                if (response.data) {
-                    const data = response.data.data;
-                    setSubtitle(data.attributes.subheading);
-                    setContent(data.attributes.content);
+                console.log("Received API response:", response);
+                if (
+                    response.data &&
+                    response.data.data &&
+                    response.data.data.attributes
+                ) {
+                    const { subheading, content: apiContent } =
+                        response.data.data.attributes;
+                    // Update state using API data or fall back to hard-coded defaults.
+                    setSubtitle(subheading || hardCodedSubtitle);
+                    setContent(apiContent || hardCodedContent);
+                } else {
+                    console.warn(
+                        "API response data is missing expected attributes."
+                    );
                 }
                 return response;
             })
             .catch((error) => {
-                throw error;
+                console.error("Error fetching welcome page data:", error);
+                // Optionally, you can update state to display an error message.
             });
-    }, [i18next.language]);
+    }, [i18next.language, hardCodedSubtitle, hardCodedContent]);
 
     const title = "ZooNotify";
 
