@@ -4,10 +4,24 @@ import i18next, { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
-import { WelcomeAttributesDTO } from "../model/Welcome.model";
 
+interface WelcomeDTO {
+    id: number;
+    subheading: string;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    locale: string;
+}
+
+interface WelcomeResponse {
+    data: WelcomeDTO;
+    meta: unknown; // Or more specific if you want
+}
+
+// Types for your local usage
 export type WelcomePageModel = {
     title: string;
     subtitle: string;
@@ -22,12 +36,13 @@ export type WelcomePageTranslations = {
 };
 
 function getTranslations(t: TFunction): WelcomePageTranslations {
-    // Use defaults if the translation keys are missing.
+    // Provide default fallback if translations are missing
     const hardCodedSubtitle = t("Subtitle") || "Default Subtitle";
     const hardCodedContent = t("MainText") || "Default Main Text";
     return { hardCodedSubtitle, hardCodedContent };
 }
 
+// 2) Implement the hook with the new interface
 const useWelcomePageComponent: UseCase<
     null,
     WelcomePageModel,
@@ -43,33 +58,28 @@ const useWelcomePageComponent: UseCase<
         const url = `${WELCOME}?locale=${i18next.language}`;
         console.log("Fetching welcome page data from:", url);
 
-        callApiService<CMSResponse<CMSEntity<WelcomeAttributesDTO>, unknown>>(
-            url
-        )
+        // 3) Use the new interface in the API call
+        callApiService<WelcomeResponse>(url)
             .then((response) => {
                 console.log("Received API response:", response);
-                if (
-                    response.data &&
-                    response.data.data &&
-                    response.data.data.attributes
-                ) {
+                if (response.data && response.data.data) {
                     const { subheading, content: apiContent } =
-                        response.data.data.attributes;
-                    // Update state using API data or fall back to hard-coded defaults.
+                        response.data.data;
+                    // Update state using API data or fall back to hard-coded defaults
                     setSubtitle(subheading || hardCodedSubtitle);
                     setContent(apiContent || hardCodedContent);
                 } else {
                     console.warn(
-                        "API response data is missing expected attributes."
+                        "API response data is missing expected fields."
                     );
                 }
-                return response;
+                return response; // Return the response to satisfy the promise/always-return rule.
             })
             .catch((error) => {
                 console.error("Error fetching welcome page data:", error);
-                // Optionally, you can update state to display an error message.
+                // Optionally, display an error message in the UI
             });
-    }, [i18next.language, hardCodedSubtitle, hardCodedContent]);
+    }, [hardCodedContent, hardCodedSubtitle, t]);
 
     const title = "ZooNotify";
 
