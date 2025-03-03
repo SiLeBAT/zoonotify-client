@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // eslint-disable-next-line import/named
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button, Link, Typography } from "@mui/material";
-import { useTheme } from "@mui/system";
+import { Button, Link, Typography, useMediaQuery } from "@mui/material";
+import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import JSZip from "jszip";
 import { PrevalenceEntry, usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceChart } from "./PrevalenceChart";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
@@ -47,7 +46,6 @@ Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Soft
 search_parameters.txt
 In der Textdatei search_parameters.txt finden Sie Informationen zu den Parametern, die Sie im Suchmenü von ZooNotify ausgewählt haben, bevor Sie die Daten heruntergeladen haben. Die heruntergeladenen CSV-Dateien enthalten nur Daten, die mit den in der Datei search_parameters.txt angegebenen Suchkriterien übereinstimmen.
 `;
-
 const ENGLISH_README = `
 This ZooNotify data download contains this README-file, two CSV-files and one additional text file. The content and use of these files is explained below.
 
@@ -60,6 +58,7 @@ This file contains comma-separated data, which supports the correct format of nu
 search_parameters.txt
 In the text file search_parameters.txt you will find information about the parameters you have selected in the search menu on ZooNotify before you downloaded the data. The downloaded CSV-files only contain data that matches the search criteria specified in the search_parameters.txt file.
 `;
+
 const formatMicroorganismName = (
     microName: string | null | undefined
 ): JSX.Element => {
@@ -109,6 +108,7 @@ const localTooltipTheme = createTheme({
         },
     },
 });
+
 const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     prevalenceData,
     loading,
@@ -118,6 +118,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
     const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
+    // Use media query to detect small screens (below 1600px width)
+    const isSmallScreen = useMediaQuery("(max-width:1600px)");
     const { searchParameters, prevalenceUpdateDate } = usePrevalenceFilters();
 
     const getFormattedTimestamp = (): string => {
@@ -257,8 +259,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             minWidth: 130,
             flex: 1,
             headerClassName: "header-style",
-            align: "left", // Align cell content to the left
-            headerAlign: "left", // Align header text to the left
+            align: "left",
+            headerAlign: "left",
         },
         {
             field: "microorganism",
@@ -371,19 +373,17 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             flexDirection: "column",
                         }}
                     >
-                        {/* Place the LAST_UPDATE_DATE at the top of the grid section */}
                         <Typography
                             variant="subtitle1"
                             style={{
                                 marginBottom: "10px",
-                                fontSize: "0.875rem", // Adjusted font size
-                                color: theme.palette.text.secondary, // Optional for subtle styling
+                                fontSize: "0.875rem",
+                                color: theme.palette.text.secondary,
                             }}
                         >
                             {t("Generated on")}:{" "}
                             {prevalenceUpdateDate || t("No date available")}
                         </Typography>
-
                         <ThemeProvider theme={localTooltipTheme}>
                             <DataGrid
                                 rows={prevalenceData}
@@ -392,16 +392,10 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 disableColumnFilter={true}
                                 hideFooter={false}
                                 localeText={localeText}
-                                // localeText={{
-
-                                // This is the key that ensures the sort icon uses a MUI Tooltip
-                                //     columnHeaderSortIconLabel: "Sort",
-                                // }}
                                 sx={{
                                     backgroundColor: "white",
                                     border: 2,
                                     borderColor: "primary.main",
-
                                     "& .header-style": {
                                         fontWeight: "bold",
                                         whiteSpace: "normal !important",
@@ -432,22 +426,17 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                     "& .MuiDataGrid-row": {
                                         borderBottom: "1px solid #e0e0e0",
                                     },
-
-                                    // --- ICON & HOVER STYLES YOU WANT TO OVERRIDE ---
                                     "& .MuiDataGrid-iconButtonContainer:hover":
                                         {
                                             backgroundColor:
-                                                "rgba(0, 0, 0, 0.3)", // or 'transparent' to remove hover
+                                                "rgba(0, 0, 0, 0.3)",
                                         },
                                     "& .MuiDataGrid-menuIconButton:hover": {
-                                        backgroundColor: "rgba(0, 0, 0, 0.3)", // unify with the same style
+                                        backgroundColor: "rgba(0, 0, 0, 0.3)",
                                     },
-                                    // Optionally target the sort icon directly
                                     "& .MuiDataGrid-sortIcon:hover": {
                                         backgroundColor: "rgba(0, 0, 0, 0.3)",
                                     },
-
-                                    // Change the icon colors (for the default state) if needed
                                     "& .MuiDataGrid-iconButtonContainer": {
                                         color: "#ffffff",
                                     },
@@ -458,8 +447,8 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                         color: "#ffffff",
                                     },
                                     "& .MuiTooltip-tooltip": {
-                                        backgroundColor: "#f0f0f0", // light gray
-                                        color: "#000000", // black text
+                                        backgroundColor: "#f0f0f0",
+                                        color: "#000000",
                                         fontSize: "1rem",
                                     },
                                 }}
@@ -500,10 +489,11 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 content={
                     <div
                         style={{
-                            maxHeight: "950px",
+                            // On small screens, allow a larger maxHeight so the full chart is visible,
+                            // and enable vertical scrolling if needed.
+                            maxHeight: isSmallScreen ? "1650px" : "950px",
                             width: "100%",
-                            overflow: "hidden",
-                            flexDirection: "column",
+                            overflowY: "hidden",
                         }}
                     >
                         <div style={{ height: "100%", width: "100%" }}>

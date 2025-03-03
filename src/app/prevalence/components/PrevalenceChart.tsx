@@ -6,7 +6,9 @@ import {
     Typography,
     Grid,
     Pagination,
+    useMediaQuery,
 } from "@mui/material";
+//import { useTheme } from "@mui/material/styles";
 import { Chart as ChartJS, registerables } from "chart.js";
 import type { ChartConfiguration } from "chart.js";
 import { useTranslation } from "react-i18next";
@@ -35,11 +37,14 @@ const PrevalenceChart: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const chartsPerPage = 2;
 
+    // Use a media query to detect small screens (e.g. less than 1400px wide)
+    //const theme = useTheme();
+    const isSmallScreen = useMediaQuery("(max-width:1600px)");
+
     const updateAvailableMicroorganisms = (): void => {
         const microorganismsWithData = Array.from(
             new Set(prevalenceData.map((entry) => entry.microorganism))
         );
-
         setAvailableMicroorganisms(microorganismsWithData);
         if (microorganismsWithData.length > 0 && !currentMicroorganism) {
             setCurrentMicroorganism(microorganismsWithData[0]);
@@ -74,9 +79,8 @@ const PrevalenceChart: React.FC = () => {
     const generateChartData = (): {
         [key: string]: { [key: number]: ChartDataPoint };
     } => {
-        const chartData: {
-            [key: string]: { [key: number]: ChartDataPoint };
-        } = {};
+        const chartData: { [key: string]: { [key: number]: ChartDataPoint } } =
+            {};
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === currentMicroorganism) {
                 const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
@@ -131,28 +135,19 @@ const PrevalenceChart: React.FC = () => {
             console.error("Chart reference is undefined");
             return;
         }
-
         const originalChart = chartRef.current;
-
-        // Fixed rectangle dimension
         const canvasWidth = 1380;
         const canvasHeight = 1000;
-
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = canvasWidth;
         tempCanvas.height = canvasHeight;
-
         const tempCtx = tempCanvas.getContext("2d");
         if (!tempCtx) {
             console.error("Failed to get temp canvas context");
             return;
         }
-
-        // Fill background with white
         tempCtx.fillStyle = "white";
         tempCtx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-        // Clone the existing config
         const originalConfig = originalChart.config;
         const clonedConfig: ChartConfiguration<
             "bar",
@@ -177,13 +172,12 @@ const PrevalenceChart: React.FC = () => {
                         right: 80,
                     },
                 },
-                // Override axis label/tick sizes (from previous snippet)
                 scales: {
                     x: {
                         ...originalConfig.options?.scales?.x,
                         ticks: {
                             ...originalConfig.options?.scales?.x?.ticks,
-                            font: { size: 20 }, // Larger X ticks
+                            font: { size: 20 },
                             color: "black",
                         },
                         title: {
@@ -198,7 +192,7 @@ const PrevalenceChart: React.FC = () => {
                         ...originalConfig.options?.scales?.y,
                         ticks: {
                             ...originalConfig.options?.scales?.y?.ticks,
-                            font: { size: 22 }, // Larger Y ticks
+                            font: { size: 22 },
                             color: "black",
                         },
                         title: {
@@ -210,44 +204,32 @@ const PrevalenceChart: React.FC = () => {
                         },
                     },
                 },
-
-                // Now override the built-in title + legend fonts
                 plugins: {
                     ...originalConfig.options?.plugins,
-                    // 1) Chart.js built-in title plugin
-
-                    // 2) Legend labels
                     legend: {
                         ...originalConfig.options?.plugins?.legend,
                         labels: {
                             ...originalConfig.options?.plugins?.legend?.labels,
                             color: "black",
-                            font: {
-                                size: 20, // <-- Increase legend text size
-                            },
+                            font: { size: 20 },
                         },
                     },
                 },
             },
             plugins: originalConfig.plugins,
         };
-
-        // Render on the temp canvas
         tempCtx.save();
         const tempChart = new ChartJS(tempCtx, clonedConfig);
         await tempChart.update();
         tempCtx.restore();
-
-        // Export as PNG
         const link = document.createElement("a");
         const sanitizedChartKey = sanitizeKey(chartKey);
         link.href = tempCanvas.toDataURL("image/png", 1.0);
         link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
         link.click();
-
-        // Cleanup
         tempChart.destroy();
     };
+
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
             {/* Top form control */}
@@ -277,7 +259,7 @@ const PrevalenceChart: React.FC = () => {
                         </Typography>
                     ) : (
                         <>
-                            <Grid container spacing={0}>
+                            <Grid container spacing={2}>
                                 {chartKeys.map((key) => {
                                     const sanitizedKey = sanitizeKey(key);
                                     const refKey = `${sanitizedKey}-${currentMicroorganism}`;
@@ -291,17 +273,16 @@ const PrevalenceChart: React.FC = () => {
                                                 >
                                             >();
                                     }
-
                                     const isDisplayed =
                                         displayedChartsSet.has(key);
-
                                     return (
                                         <Grid
                                             item
                                             xs={12}
                                             sm={12}
-                                            md={6}
-                                            lg={6}
+                                            // On small screens we use full width (12 columns), otherwise half (6 columns)
+                                            md={isSmallScreen ? 12 : 6}
+                                            lg={isSmallScreen ? 12 : 6}
                                             key={refKey}
                                             sx={{
                                                 visibility: isDisplayed
@@ -327,7 +308,7 @@ const PrevalenceChart: React.FC = () => {
                                                 downloadChart={downloadChart}
                                                 prevalenceUpdateDate={
                                                     prevalenceUpdateDate
-                                                } // Ensure this is passed
+                                                }
                                             />
                                         </Grid>
                                     );

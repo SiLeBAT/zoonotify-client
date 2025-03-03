@@ -1,3 +1,4 @@
+// useExplanationPageComponent.ts
 // eslint-disable-next-line import/named
 import i18next, { TFunction } from "i18next";
 import * as lodash from "lodash";
@@ -5,13 +6,15 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { EXPLANATION } from "../../shared/infrastructure/router/routes";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
+
+// Import the new "flat" interfaces from the same file
 import {
-    AMRTablesDTO,
-    ExplanationAttributesDTO,
+    ExplanationAPIResponse,
+    ExplanationItem,
     ExplanationCollection,
     ExplanationDTO,
+    AMRTablesDTO,
 } from "../model/ExplanationPage.model";
 
 type ExplanationPageModel = {
@@ -24,7 +27,7 @@ type ExplanationPageModel = {
 };
 
 type ExplanationPageOperations = {
-    handleOpen: (e: string) => void;
+    handleOpen: (id: string) => void;
     handleClose: () => void;
 };
 
@@ -33,7 +36,7 @@ type ExplanationPageTranslations = {
 };
 
 function getTranslations(t: TFunction): ExplanationPageTranslations {
-    const title = t("Title");
+    const title = t("Title") || "Default Title";
     return { title };
 }
 
@@ -52,7 +55,6 @@ const useExplanationPageComponent: UseCase<
     const [currentAMRID, setCurrentAMRID] = useState<string>("");
     const [openAmrDialog, setOpenAmrDialog] = useState<boolean>(false);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleOpen = (id: string): void => {
         setCurrentAMRID(id);
         setOpenAmrDialog(true);
@@ -63,52 +65,53 @@ const useExplanationPageComponent: UseCase<
     };
 
     useEffect(() => {
-        callApiService<
-            CMSResponse<CMSEntity<ExplanationAttributesDTO>[], unknown>
-        >(`${EXPLANATION}?locale=${i18next.language}`)
+        callApiService<ExplanationAPIResponse>(
+            `${EXPLANATION}?locale=${i18next.language}`
+        )
             .then((response) => {
                 if (response.data) {
-                    const data = response.data.data;
-                    const cmsData = data.map((entry) => ({
-                        title: entry.attributes.title,
-                        description: entry.attributes.description,
-                        // Directly use the untranslated section for sorting purposes
-                        section: entry.attributes.section,
-                        // Include translatedSection for display purposes
-                        translatedSection: t(entry.attributes.section),
+                    // "response.data.data" is an array of ExplanationItem
+                    const data: ExplanationItem[] = response.data.data;
+
+                    // Convert each ExplanationItem into your ExplanationDTO
+                    const cmsData: ExplanationDTO[] = data.map((entry) => ({
+                        title: entry.title,
+                        description: entry.description,
+                        section: entry.section,
                     }));
 
-                    // Define the order of the sections as they appear in the enum
+                    // If you want to sort them by your own logic:
                     const orderedSections = [
                         "HINTERGRUND",
                         "METHODEN",
                         "GRAPHIKEN",
                         "DATEN",
+                        "MAIN",
                     ];
-
-                    // Order the cmsData based on the index of each item's section in the orderedSections
                     const orderedCmsData = cmsData.sort((a, b) => {
                         const aIndex = orderedSections.indexOf(a.section);
                         const bIndex = orderedSections.indexOf(b.section);
                         return aIndex - bIndex;
                     });
 
-                    // Group the ordered data by section
+                    // Group by the original "section" or by "translatedSection"
                     const sectionKeyedData = lodash.groupBy(
                         orderedCmsData,
-                        "translatedSection"
+                        "section"
                     );
 
                     setExplanationCollection(sectionKeyedData);
 
+                    // If you have a special section named "MAIN", handle it here:
                     setMainSection(sectionKeyedData.MAIN || []);
                 }
+                // Return the response to satisfy the promise/always-return rule.
                 return response;
             })
             .catch((error) => {
-                throw error;
+                console.error("Error fetching explanation data:", error);
             });
-    }, [i18next.language, t]);
+    }, [t]);
 
     return {
         model: {

@@ -1,3 +1,5 @@
+// src/app/prevalence/components/PrevalenceDataProvider.tsx
+
 import i18next from "i18next";
 import React, {
     ReactNode,
@@ -16,50 +18,39 @@ import {
     SUPER_CATEGORY_SAMPLE_ORIGINS,
     PREVALENCES,
 } from "../../shared/infrastructure/router/routes";
-import {
-    CMSEntity,
-    CMSResponse,
-    MAX_PAGE_SIZE,
-} from "../../shared/model/CMS.model";
+import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
 
-export type SearchParameters = Record<string, string[]>;
-interface RelationalData {
+/** 1) A simple "Matrix"-style interface for each relation */
+interface Matrix {
     id: number;
-    data: {
-        attributes: {
-            name: string;
-        };
-    };
+    name: string;
 }
 
-interface PrevalenceAttributesDTO {
+/** 2) A single "flat" Prevalence item from Strapi v5 */
+interface PrevalenceItem {
+    id: number;
     samplingYear: number;
     numberOfSamples: number;
     numberOfPositive: number;
     percentageOfPositive: number;
     ciMin: number;
     ciMax: number;
-    matrix: RelationalData;
-    matrixDetail: RelationalData;
-    matrixGroup: RelationalData;
-    microorganism: RelationalData;
-    samplingStage: RelationalData;
-    sampleOrigin: RelationalData;
-    superCategorySampleOrigin: RelationalData;
+    matrix?: Matrix;
+    matrixDetail?: Matrix;
+    matrixGroup?: Matrix;
+    microorganism?: Matrix;
+    samplingStage?: Matrix;
+    sampleOrigin?: Matrix;
+    superCategorySampleOrigin?: Matrix;
 }
 
-interface PrevalenceUpdateAttributesDTO {
-    date: string;
+/** 3) Entire Strapi response for "Prevalences" */
+interface PrevalenceAPIResponse {
+    data: PrevalenceItem[];
+    meta: unknown;
 }
 
-/** Interface for the single-type API response */
-interface PrevalenceUpdateApiResponse {
-    data: {
-        id: number;
-        attributes: PrevalenceUpdateAttributesDTO;
-    };
-}
-
+/** 4) The final object your front end uses */
 export type PrevalenceEntry = {
     id: number;
     samplingYear: number;
@@ -76,10 +67,13 @@ export type PrevalenceEntry = {
     superCategorySampleOrigin: string;
 };
 
+export type SearchParameters = Record<string, string[]>;
+
 interface Option {
     name: string;
 }
 
+/** 5) The shape of your React context */
 interface PrevalenceDataContext {
     microorganismOptions: Option[];
     sampleOriginOptions: Option[];
@@ -124,6 +118,7 @@ interface PrevalenceDataContext {
     prevalenceUpdateDate: string | null;
 }
 
+/** The React context */
 const DefaultPrevalenceDataContext = createContext<
     PrevalenceDataContext | undefined
 >(undefined);
@@ -138,38 +133,35 @@ export const usePrevalenceFilters = (): PrevalenceDataContext => {
     return context;
 };
 
+/** 6) Convert the "flat" Prevalence items into your PrevalenceEntry shape */
 function processApiResponse(
-    apiData: CMSEntity<PrevalenceAttributesDTO>[],
+    apiData: PrevalenceItem[],
     setApiError: (message: string) => void
 ): PrevalenceEntry[] {
     const validEntries: PrevalenceEntry[] = [];
     const errors: string[] = [];
 
-    apiData.forEach((item: CMSEntity<PrevalenceAttributesDTO>) => {
+    apiData.forEach((item) => {
         try {
             const entry: PrevalenceEntry = {
                 id: item.id,
-                samplingYear: item.attributes.samplingYear,
-                numberOfSamples: item.attributes.numberOfSamples,
-                numberOfPositive: item.attributes.numberOfPositive ?? 0,
-                percentageOfPositive: item.attributes.percentageOfPositive ?? 0,
-                ciMin: item.attributes.ciMin ?? 0,
-                ciMax: item.attributes.ciMax ?? 0,
-                matrix: item.attributes.matrix.data.attributes.name,
-                matrixGroup:
-                    item.attributes.matrixGroup?.data.attributes.name ?? "",
-                microorganism:
-                    item.attributes.microorganism.data.attributes.name,
-                samplingStage:
-                    item.attributes.samplingStage.data.attributes.name,
-                sampleOrigin: item.attributes.sampleOrigin.data.attributes.name,
+                samplingYear: item.samplingYear ?? 0,
+                numberOfSamples: item.numberOfSamples ?? 0,
+                numberOfPositive: item.numberOfPositive ?? 0,
+                percentageOfPositive: item.percentageOfPositive ?? 0,
+                ciMin: item.ciMin ?? 0,
+                ciMax: item.ciMax ?? 0,
+                matrix: item.matrix?.name ?? "",
+                matrixGroup: item.matrixGroup?.name ?? "",
+                microorganism: item.microorganism?.name ?? "",
+                samplingStage: item.samplingStage?.name ?? "",
+                sampleOrigin: item.sampleOrigin?.name ?? "",
                 superCategorySampleOrigin:
-                    item.attributes.superCategorySampleOrigin?.data.attributes
-                        .name ?? "",
+                    item.superCategorySampleOrigin?.name ?? "",
             };
             validEntries.push(entry);
         } catch (err) {
-            errors.push(`Error processing entry ID ${item.id}: ${err}`);
+            errors.push(`Error processing item ID ${item.id}: ${err}`);
         }
     });
 
@@ -179,19 +171,11 @@ function processApiResponse(
     return validEntries;
 }
 
-type PrevalenceEntryKey = keyof Pick<
-    PrevalenceEntry,
-    | "microorganism"
-    | "sampleOrigin"
-    | "matrix"
-    | "samplingStage"
-    | "matrixGroup"
-    | "superCategorySampleOrigin"
->;
-
+/** 7) The main PrevalenceDataProvider */
 export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
+    // -------------- State --------------
     const [selectedMicroorganisms, setSelectedMicroorganisms] = useState<
         string[]
     >([]);
@@ -240,8 +224,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         string | null
     >(null);
 
+    // -------------- 1) fetchPrevalenceData --------------
     const fetchPrevalenceData = async (): Promise<void> => {
         try {
+            // Populate all required relations
             const relationsToPopulate = [
                 "matrix",
                 "microorganism",
@@ -251,16 +237,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 "superCategorySampleOrigin",
             ];
             const populateParams = relationsToPopulate
-                .map(
-                    (relation) =>
-                        `populate[${relation}][locale]=${i18next.language}`
-                )
+                .map((relation) => `populate=${relation}`)
                 .join("&");
 
             const url = `${PREVALENCES}?locale=${i18next.language}&${populateParams}&pagination[pageSize]=${MAX_PAGE_SIZE}`;
-            const response = await callApiService<
-                CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
-            >(url);
+            const response = await callApiService<PrevalenceAPIResponse>(url);
 
             if (response.data && response.data.data) {
                 const processedData = processApiResponse(
@@ -275,41 +256,50 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+    // -------------- 2) fetchPrevalenceUpdateDate --------------
+    interface PrevalenceUpdateFlatResponse {
+        data: {
+            id: number;
+            date: string;
+        };
+        meta: unknown;
+    }
+
     const fetchPrevalenceUpdateDate = async (): Promise<void> => {
         try {
             const baseUrl = process.env.REACT_APP_API_URL;
             const url = `${baseUrl}/api/prevelence-update`;
-            const response = await callApiService<PrevalenceUpdateApiResponse>(
+            const response = await callApiService<PrevalenceUpdateFlatResponse>(
                 url
             );
 
-            console.log("Prevalence Update API response:", response.data);
-
-            if (response.data?.data?.attributes) {
-                const { date } = response.data.data.attributes;
-                console.log("Extracted date:", date);
-                setPrevalenceUpdateDate(date || null);
+            if (response.data?.data?.date) {
+                setPrevalenceUpdateDate(response.data.data.date || null);
             } else {
-                console.log("Date attributes not found in response.");
+                console.log("Date not found in response data.");
             }
         } catch (err) {
-            console.error("Error fetching Prevelence-update date:", err);
+            console.error("Error fetching Prevalence-update date:", err);
         }
     };
 
+    // -------------- 3) fetchOptions --------------
+    // (This function is kept for now, but the displayed options will be recomputed
+    // based on the actual prevalence data so that only options present are shown.)
     const fetchOptions = async (): Promise<void> => {
         try {
             const fetchOption = async (endpoint: string): Promise<Option[]> => {
                 const response = await callApiService<{
                     data: Array<{
                         id: number;
-                        attributes: { name: string };
+                        name?: string;
+                        attributes?: { name: string };
                     }>;
                 }>(`${endpoint}?locale=${i18next.language}`);
 
                 if (response.data && Array.isArray(response.data.data)) {
                     return response.data.data.map((item) => ({
-                        name: item.attributes.name,
+                        name: item.name ?? item.attributes?.name ?? "",
                     }));
                 }
                 return [];
@@ -347,6 +337,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
+    // -------------- 4) fetchDataFromAPI (with filters) --------------
     const fetchDataFromAPI = async (selectedFilters?: {
         microorganisms: string[];
         sampleOrigins: string[];
@@ -357,6 +348,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         superCategories: string[];
     }): Promise<void> => {
         setLoading(true);
+
         const microorganisms =
             selectedFilters?.microorganisms ?? selectedMicroorganisms;
         const sampleOrigins =
@@ -390,6 +382,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             let query = `${PREVALENCES}?locale=${i18next.language}&pagination[pageSize]=${MAX_PAGE_SIZE}`;
             const filters: string[] = [];
 
+            // For relational fields
             const addRelationalFilter = (
                 field: string,
                 values: string[]
@@ -408,6 +401,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 }
             };
 
+            // For numeric fields (e.g., samplingYear)
             const addSimpleFilter = (
                 field: string,
                 values: (string | number)[]
@@ -447,17 +441,12 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 "superCategorySampleOrigin",
             ];
             const populateParams = relationsToPopulate
-                .map(
-                    (relation) =>
-                        `populate[${relation}][locale]=${i18next.language}`
-                )
+                .map((relation) => `populate=${relation}`)
                 .join("&");
 
             query += `&${populateParams}`;
 
-            const response = await callApiService<
-                CMSResponse<CMSEntity<PrevalenceAttributesDTO>[], unknown>
-            >(query);
+            const response = await callApiService<PrevalenceAPIResponse>(query);
             if (response.data && response.data.data) {
                 const processedData = processApiResponse(
                     response.data.data,
@@ -508,12 +497,14 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         }
     };
 
-    useEffect((): void => {
+    // -------------- 5) Initialization --------------
+    useEffect(() => {
         const initializeData = async (): Promise<void> => {
             setLoading(true);
-
             try {
                 await Promise.all([
+                    // Note: Although fetchOptions() is still called,
+                    // the displayed options will be computed from prevalence data.
                     fetchOptions(),
                     fetchPrevalenceData(),
                     fetchPrevalenceUpdateDate(),
@@ -523,7 +514,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     window.location.search
                 );
                 const params: SearchParameters = {};
-
                 urlSearchParams.forEach((value, key) => {
                     if (!params[key]) {
                         params[key] = [];
@@ -556,7 +546,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 const anyParamsPresent = Object.values(params).some(
                     (arr) => arr.length > 0
                 );
-
                 if (anyParamsPresent) {
                     setIsSearchTriggered(true);
                     await fetchDataFromAPI({
@@ -582,17 +571,33 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 setLoading(false);
             }
         };
-
-        initializeData();
+        void initializeData();
     }, []);
+
+    // -------------- 6) Recompute Options Based on Selection --------------
+    // The key change: choose the source data based on whether a search is active.
+    // This ensures that if a search is triggered, options are computed only from the results,
+    // otherwise they come from the complete (full) prevalence data.
+    type PrevalenceEntryKey =
+        | "microorganism"
+        | "sampleOrigin"
+        | "matrix"
+        | "samplingStage"
+        | "matrixGroup"
+        | "superCategorySampleOrigin";
 
     useEffect(() => {
         const updateOptionsBasedOnSelection = (): void => {
+            // Use the filtered data if a search is active; otherwise use the full dataset.
+            const dataToCompute = isSearchTriggered
+                ? prevalenceData
+                : fullPrevalenceData;
+
             const computeOptions = (
                 excludeFilter: PrevalenceEntryKey | "samplingYear",
                 getOptionValue: (entry: PrevalenceEntry) => string | number
             ): Option[] => {
-                const filtered = fullPrevalenceData.filter((entry) => {
+                const filtered = dataToCompute.filter((entry) => {
                     const conditions = [
                         excludeFilter !== "microorganism"
                             ? selectedMicroorganisms.length === 0 ||
@@ -679,20 +684,24 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         selectedSuperCategory,
         selectedYear,
         fullPrevalenceData,
+        prevalenceData,
+        isSearchTriggered,
     ]);
 
+    // -------------- 7) Trigger Search --------------
     const triggerSearch = (): void => {
         fetchDataFromAPI();
         setShowError(true);
     };
 
+    // -------------- 8) Re-fetch if language changes --------------
     useEffect(() => {
-        // Re-fetch if language changes
         fetchPrevalenceData();
         fetchOptions();
         fetchPrevalenceUpdateDate();
     }, [i18next.language]);
 
+    // -------------- 9) Final context value --------------
     const contextValue: PrevalenceDataContext = {
         microorganismOptions,
         sampleOriginOptions,
