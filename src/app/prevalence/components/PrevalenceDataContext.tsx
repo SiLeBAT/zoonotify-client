@@ -1,5 +1,3 @@
-// src/app/prevalence/components/PrevalenceDataProvider.tsx
-
 import i18next from "i18next";
 import React, {
     ReactNode,
@@ -696,9 +694,23 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     // -------------- 8) Re-fetch if language changes --------------
     useEffect(() => {
-        fetchPrevalenceData();
-        fetchOptions();
-        fetchPrevalenceUpdateDate();
+        if (isSearchTriggered) {
+            // Re-run search using current filters when language changes
+            fetchDataFromAPI({
+                microorganisms: selectedMicroorganisms,
+                sampleOrigins: selectedSampleOrigins,
+                matrices: selectedMatrices,
+                samplingStages: selectedSamplingStages,
+                matrixGroups: selectedMatrixGroups,
+                years: selectedYear,
+                superCategories: selectedSuperCategory,
+            });
+        } else {
+            // If no search is active, just fetch the raw data and options
+            fetchPrevalenceData();
+            fetchOptions();
+            fetchPrevalenceUpdateDate();
+        }
     }, [i18next.language]);
 
     // -------------- 9) Final context value --------------
