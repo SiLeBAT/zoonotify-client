@@ -54,20 +54,23 @@ const useWelcomePageComponent: UseCase<
     const [subtitle, setSubtitle] = useState<string>(hardCodedSubtitle);
     const [content, setContent] = useState<string>(hardCodedContent);
 
-    // Effect to ensure the URL always includes the locale query parameter
+    // Effect 1: Update i18next if the URL has a different locale
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const localeParam = params.get("locale");
-
-        // If no locale is present, set it based on the current i18next language
-        if (!localeParam) {
-            params.set("locale", i18next.language);
-            history.replace({ search: params.toString() });
-        } else if (localeParam !== i18next.language) {
-            // If the URL locale differs from i18next's current language, update it
+        if (localeParam && localeParam !== i18next.language) {
             i18next.changeLanguage(localeParam);
         }
-    }, [location.search, history]);
+    }, [location.search]);
+
+    // Effect 2: Update the URL when i18next language changes
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get("locale") !== i18next.language) {
+            params.set("locale", i18next.language);
+            history.replace({ search: params.toString() });
+        }
+    }, [i18next.language, location.search, history]);
 
     useEffect(() => {
         // Build the API URL using the current i18next language
