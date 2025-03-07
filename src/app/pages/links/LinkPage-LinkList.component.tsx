@@ -105,7 +105,20 @@ export function LinkPageLinkListComponent(): JSX.Element {
                             );
                             return (
                                 <ListItem key={item.id}>
-                                    <Markdown>{item.content ?? ""}</Markdown>
+                                    <Markdown
+                                        options={{
+                                            overrides: {
+                                                a: {
+                                                    props: {
+                                                        target: "_blank",
+                                                        rel: "noopener noreferrer",
+                                                    },
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        {item.content ?? ""}
+                                    </Markdown>
                                 </ListItem>
                             );
                         })}
