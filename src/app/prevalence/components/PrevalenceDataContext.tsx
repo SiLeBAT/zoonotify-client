@@ -173,6 +173,16 @@ function processApiResponse(
 export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
+    // -------------- Language Setup --------------
+    // Check if a language is specified in the URL as ?lang=en and update i18next if necessary.
+    useEffect(() => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const langParam = urlSearchParams.get("lang");
+        if (langParam && langParam !== i18next.language) {
+            i18next.changeLanguage(langParam);
+        }
+    }, []);
+
     // -------------- State --------------
     const [selectedMicroorganisms, setSelectedMicroorganisms] = useState<
         string[]
@@ -282,8 +292,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     // -------------- 3) fetchOptions --------------
-    // (This function is kept for now, but the displayed options will be recomputed
-    // based on the actual prevalence data so that only options present are shown.)
     const fetchOptions = async (): Promise<void> => {
         try {
             const fetchOption = async (endpoint: string): Promise<Option[]> => {
@@ -475,6 +483,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     values.forEach((value) => searchParams.append(key, value));
                 }
 
+                // Also persist the language setting in the URL
+                if (!searchParams.has("lang")) {
+                    searchParams.append("lang", i18next.language);
+                }
+
                 const searchString = searchParams.toString();
                 if (searchString) {
                     window.history.replaceState(null, "", `?${searchString}`);
@@ -573,9 +586,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     }, []);
 
     // -------------- 6) Recompute Options Based on Selection --------------
-    // The key change: choose the source data based on whether a search is active.
-    // This ensures that if a search is triggered, options are computed only from the results,
-    // otherwise they come from the complete (full) prevalence data.
     type PrevalenceEntryKey =
         | "microorganism"
         | "sampleOrigin"
