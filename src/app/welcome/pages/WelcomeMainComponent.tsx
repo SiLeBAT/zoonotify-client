@@ -20,7 +20,22 @@ export function WelcomeMainComponent(): JSX.Element {
                 <LogoCardComponent
                     title="ZooNotify"
                     subtitle={model.subtitle}
-                    text={<Markdown>{model.content}</Markdown>}
+                    text={
+                        <Markdown
+                            options={{
+                                overrides: {
+                                    a: {
+                                        props: {
+                                            target: "_blank",
+                                            rel: "noopener noreferrer",
+                                        },
+                                    },
+                                },
+                            }}
+                        >
+                            {model.content}
+                        </Markdown>
+                    }
                 />
             </div>
         </PageLayoutComponent>
