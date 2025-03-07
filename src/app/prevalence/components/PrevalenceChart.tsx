@@ -8,7 +8,6 @@ import {
     Pagination,
     useMediaQuery,
 } from "@mui/material";
-//import { useTheme } from "@mui/material/styles";
 import { Chart as ChartJS, registerables } from "chart.js";
 import type { ChartConfiguration } from "chart.js";
 import { useTranslation } from "react-i18next";
@@ -37,8 +36,6 @@ const PrevalenceChart: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const chartsPerPage = 2;
 
-    // Use a media query to detect small screens (e.g. less than 1400px wide)
-    //const theme = useTheme();
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
 
     const updateAvailableMicroorganisms = (): void => {
@@ -116,10 +113,8 @@ const PrevalenceChart: React.FC = () => {
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
         Object.values(yearData).map((data) => data.ciMax)
     );
-
-    // Get the highest ciMax value
     const maxCiPlus = Math.max(...allCiMaxValues);
-    // If the highest CI+ value is greater than 25, set x-axis max to 100, otherwise 25
+    // Set x-axis max to 100 if max ciMax is greater than 25, otherwise 25
     const xAxisMax = maxCiPlus > 25 ? 100 : 25;
 
     // Sanitization function
@@ -183,7 +178,8 @@ const PrevalenceChart: React.FC = () => {
                         title: {
                             ...originalConfig.options?.scales?.x?.title,
                             display: true,
-                            text: "Prevalence (%)",
+                            // Use the translation function for the x-axis label
+                            text: t("Prevalence %"),
                             color: "black",
                             font: { size: 22, weight: "bold" },
                         },
@@ -198,7 +194,8 @@ const PrevalenceChart: React.FC = () => {
                         title: {
                             ...originalConfig.options?.scales?.y?.title,
                             display: true,
-                            text: "Year",
+                            // Use the translation function for the y-axis label
+                            text: t("Year"),
                             color: "black",
                             font: { size: 24, weight: "bold" },
                         },
@@ -280,7 +277,6 @@ const PrevalenceChart: React.FC = () => {
                                             item
                                             xs={12}
                                             sm={12}
-                                            // On small screens we use full width (12 columns), otherwise half (6 columns)
                                             md={isSmallScreen ? 12 : 6}
                                             lg={isSmallScreen ? 12 : 6}
                                             key={refKey}
