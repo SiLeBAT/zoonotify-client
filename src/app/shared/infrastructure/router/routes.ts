@@ -6,6 +6,7 @@ export const pageRoute = {
     dpdPagePath: "/dataProtectionDeclaration",
     linkedDataPagePath: "/ld",
     prevalencePagePath: "/prevalence",
+    antibioticResistancePagePath: "/antibiotic-resistance",
 };
 
 const env = process.env.REACT_APP_ENV;

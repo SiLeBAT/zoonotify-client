@@ -142,6 +142,8 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+    const [antibioticResistanceOpen, setAntibioticResistanceOpen] =
+        useState<boolean>(false);
 
     const { t } = useTranslation(["Header"]);
     const showLD = process.env.REACT_APP_SHOW_LD === "true";
@@ -154,6 +156,9 @@ export function HeaderComponent(): JSX.Element {
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
         setLinkedDataOpen(pathname === pageRoute.linkedDataPagePath);
 
+        setAntibioticResistanceOpen(
+            pathname === pageRoute.antibioticResistancePagePath
+        );
         setIsMenuOpen(false); // Close mobile menu on navigation change
     }, [pathname]);
 
@@ -187,6 +192,13 @@ export function HeaderComponent(): JSX.Element {
                         css={navLinkStyle(prevalenceOpen)}
                     >
                         {t("Prevalence")}
+                    </NavLink>
+
+                    <NavLink
+                        to={pageRoute.antibioticResistancePagePath}
+                        css={navLinkStyle(antibioticResistanceOpen)}
+                    >
+                        {t("AntibioticResistance")}
                     </NavLink>
                     <NavLink
                         to={pageRoute.linkPagePath}
@@ -233,6 +245,12 @@ export function HeaderComponent(): JSX.Element {
                     css={mobileNavLinkStyle(prevalenceOpen)}
                 >
                     {t("Prevalence")}
+                </NavLink>
+                <NavLink
+                    to={pageRoute.antibioticResistancePagePath}
+                    css={mobileNavLinkStyle(antibioticResistanceOpen)}
+                >
+                    {t("AntibioticResistance")}
                 </NavLink>
                 <NavLink
                     to={pageRoute.linkPagePath}
