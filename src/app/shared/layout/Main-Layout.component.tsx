@@ -17,7 +17,7 @@ const bodyStyle = css`
     z-index: 0;
     box-sizing: border-box;
     overflow-x: hidden;
-    overflow-y: hidden;
+    //overflow-y: hidden;
 `;
 
 /**

@@ -1,43 +1,49 @@
 import React from "react";
-import { Box } from "@mui/system";
-import { useTheme } from "@mui/material/styles"; // Important for MUI breakpoints
-import { footerHeight } from "./../../../shared/style/Style-MainTheme";
+import { Box, useTheme } from "@mui/material";
+import { footerHeight } from "../../../shared/style/Style-MainTheme";
 
-export function FooterLayoutComponent(props: {
+interface FooterLayoutProps {
     lastUpdateComponent: JSX.Element;
     linkListComponent: JSX.Element;
-}): JSX.Element {
+}
+
+export function FooterLayoutComponent({
+    lastUpdateComponent,
+    linkListComponent,
+}: FooterLayoutProps): JSX.Element {
     const theme = useTheme();
 
     return (
         <Box
             component="footer"
             sx={{
+                // On mobile (xs, sm), let it scroll with the page:
+                position: "static",
                 width: "100%",
-                // Keep your original fixed height for desktop
-                height: `${footerHeight}px`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                boxSizing: "border-box",
                 backgroundColor: theme.palette.background.paper,
                 borderTop: `2px solid ${theme.palette.primary.main}`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: theme.spacing(1),
+                boxSizing: "border-box",
 
-                // On small screens, switch to column so nothing overlaps
-                [theme.breakpoints.down("sm")]: {
-                    flexDirection: "column",
-                    height: "auto", // let it expand for stacked items
-                    alignItems: "center", // center them horizontally
-                    padding: theme.spacing(1), // optional: some breathing space
+                // On md+ (≥900px by default), fix it at the bottom:
+                [theme.breakpoints.up("md")]: {
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: `${footerHeight}px`,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: theme.spacing(0, 2),
                 },
             }}
         >
-            {/* 
-        IMPORTANT: If you want the lastUpdateComponent
-        to appear BELOW the links on mobile, swap the order here
-      */}
-            {props.lastUpdateComponent}
-            {props.linkListComponent}
+            {lastUpdateComponent}
+            {linkListComponent}
         </Box>
     );
 }
