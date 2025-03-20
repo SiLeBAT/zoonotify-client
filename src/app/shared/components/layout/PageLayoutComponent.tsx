@@ -10,6 +10,7 @@ const layoutWrapperStyle = css`
     //display: flex;
     flex-direction: column;
     box-sizing: border-box;
+
     overflow-y: hidden;
 `;
 
