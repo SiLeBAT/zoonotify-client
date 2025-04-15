@@ -166,11 +166,9 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
     };
 
     apiData.forEach((item) => {
-        // item.division might be "FUTTERMITTEL" | "TIERE" etc.
-        // Make sure it's uppercase if needed:
+        // Ensure division is uppercase so it matches our keys
         const divisionKey = item.division.toUpperCase() as keyof Evaluation;
         if (!result[divisionKey]) {
-            // If it's an unknown division, skip or treat as MULTIPLE
             return;
         }
 
@@ -195,7 +193,7 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
             dataPath,
         };
 
-        // Only push if it's "complete"
+        // Only push if the entry is complete
         if (isCompleteEntry(newEntry)) {
             result[divisionKey].push(newEntry);
         }
@@ -249,7 +247,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
                         new URLSearchParams(window.location.search)
                     );
 
-                    // If there's at least one non-empty filter array in URL, apply them
+                    // If there are filters provided in the URL, apply them; otherwise, use full data.
                     if (
                         Object.values(urlFilters).some((arr) => arr.length > 0)
                     ) {
@@ -258,7 +256,6 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
                             applyFiltersStrict(urlFilters, processedData)
                         );
                     } else {
-                        // No URL filters => show all
                         setEvaluationsData(processedData);
                     }
                 }
@@ -271,7 +268,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         void fetchDataFromAPI();
     }, [i18n.language]);
 
-    // 2) Whenever selectedFilters changes, re-apply & update URL
+    // 2) Whenever selectedFilters or language changes, re-apply filters and update URL deep link
     useEffect(() => {
         // Only apply filters if data is loaded
         if (
@@ -286,16 +283,20 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         const newData = applyFiltersStrict(selectedFilters, originalData);
         setEvaluationsData(newData);
 
-        // Update URL
-        const params = buildQueryString(selectedFilters);
-        const newUrl = `${window.location.pathname}${
-            params ? `?${params}` : ""
-        }`;
+        // Build query string from filters
+        const filterQuery = buildQueryString(selectedFilters);
+        const searchParams = new URLSearchParams(filterQuery);
+
+        // Ensure the language parameter is included in the URL
+        searchParams.set("lang", i18n.language);
+
+        // Build the new URL using the current pathname and search parameters
+        const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
 
         if (newUrl !== window.location.href) {
             window.history.replaceState({}, "", newUrl);
         }
-    }, [selectedFilters, originalData]);
+    }, [selectedFilters, originalData, i18n.language]);
 
     // 3) Public API
     const updateFilters = (newFilters: FilterSelection): void => {
@@ -303,12 +304,11 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     const showDivision = (div: string): boolean => {
-        // If the division filter is empty, show all
+        // If the division filter is empty, show all divisions
         if (selectedFilters.division.length === 0) return true;
         return selectedFilters.division.includes(div);
     };
 
-    // Final context
     const value: EvaluationDataContext = {
         isLoading,
         evaluationsData,
