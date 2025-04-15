@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { List, ListItem, ListSubheader } from "@mui/material";
-import i18next from "i18next";
+//import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import Markdown from "markdown-to-jsx";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
@@ -31,11 +31,21 @@ interface ExternalLinkResponse {
 }
 
 export function LinkPageLinkListComponent(): JSX.Element {
-    const { t } = useTranslation(["ExternLinks"]);
+    const { t, i18n } = useTranslation(["ExternLinks"]);
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
+    // Update the browser URL to always include the current language as a query parameter.
     useEffect(() => {
-        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18next.language}`;
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("lang") !== i18n.language) {
+            params.set("lang", i18n.language);
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.replaceState({}, "", newUrl);
+        }
+    }, [i18n.language]);
+
+    useEffect(() => {
+        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18n.language}`;
         console.log("[LinkPageLinkList] Fetching from:", apiEndpoint);
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
@@ -46,13 +56,12 @@ export function LinkPageLinkListComponent(): JSX.Element {
                 } else {
                     console.warn("[LinkPageLinkList] No data in response");
                 }
-                // Return the response to satisfy the ESLint rule.
                 return response;
             })
             .catch((err) => {
                 console.error("[LinkPageLinkList] Error fetching data:", err);
             });
-    }, [i18next.language]);
+    }, [i18n.language]);
 
     // Group links by category
     function groupByCategory(
