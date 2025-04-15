@@ -11,7 +11,7 @@ export function FooterLinkListComponent(props: {
     const { t } = useTranslation(["Footer"]);
     const theme = useTheme();
 
-    // Link styles
+    // Reduced font size & line-height to make text more compact
     const linkStyle = {
         width: "100%",
         textDecoration: "none",
@@ -21,6 +21,8 @@ export function FooterLinkListComponent(props: {
         "&:focus": {
             outline: "none",
         },
+        fontSize: "0.85rem", // <--- Decrease as needed
+        lineHeight: 1.2, // <--- Decrease as needed
     };
 
     const disableLinkStyle = {
@@ -29,11 +31,14 @@ export function FooterLinkListComponent(props: {
         display: "flex",
         justifyContent: "center",
         color: "gray",
+        fontSize: "0.85rem",
+        lineHeight: 1.2,
     };
 
+    // Reduced padding so each list item is more compact
     const footerElementStyle = {
         width: "fit-content",
-        padding: "0.5em",
+        padding: "0.3em", // <--- Decrease top/bottom padding
         flex: "1 1 auto",
         listStyleType: "none",
         cursor: "pointer",
@@ -61,17 +66,21 @@ export function FooterLinkListComponent(props: {
                 width: "100%",
                 justifyContent: "center",
                 textAlign: "center",
+                paddingTop: 0, // Remove extra ListItem padding on mobile
+                paddingBottom: 0, // Remove extra ListItem padding on mobile
             },
         },
     };
 
-    // Build the “Submit a Problem” link
+    // Build the "Submit a Problem" link
     let submitProblemLink: JSX.Element = (
         <Link
             href={`mailto:${props.supportMail}?subject=ZooNotify-Problem`}
             sx={linkStyle}
         >
-            <Typography>{t("Content.Mail")}</Typography>
+            <Typography sx={{ fontSize: "inherit", lineHeight: "inherit" }}>
+                {t("Content.Mail")}
+            </Typography>
         </Link>
     );
 
@@ -87,20 +96,28 @@ export function FooterLinkListComponent(props: {
                 }}
             >
                 <Box sx={disableLinkStyle}>
-                    <Typography>{t("Content.Mail")}</Typography>
+                    <Typography
+                        sx={{ fontSize: "inherit", lineHeight: "inherit" }}
+                    >
+                        {t("Content.Mail")}
+                    </Typography>
                 </Box>
             </Tooltip>
         );
     }
 
     return (
-        <List sx={footerContentStyle}>
+        <List sx={footerContentStyle} disablePadding>
             <ListItem sx={footerElementStyle}>
                 <Link
                     href="https://www.bfr.bund.de/en/home.html"
                     sx={linkStyle}
                 >
-                    <Typography>{t("Content.Bfr")}</Typography>
+                    <Typography
+                        sx={{ fontSize: "inherit", lineHeight: "inherit" }}
+                    >
+                        {t("Content.Bfr")}
+                    </Typography>
                 </Link>
             </ListItem>
             <ListItem sx={footerElementStyle}>
@@ -108,12 +125,20 @@ export function FooterLinkListComponent(props: {
                     href="https://foodrisklabs.bfr.bund.de/foodrisk-labs/"
                     sx={linkStyle}
                 >
-                    <Typography>FoodRisk-Labs</Typography>
+                    <Typography
+                        sx={{ fontSize: "inherit", lineHeight: "inherit" }}
+                    >
+                        FoodRisk-Labs
+                    </Typography>
                 </Link>
             </ListItem>
             <ListItem sx={footerElementStyle}>
                 <NavLink to="/dpd" style={linkStyle}>
-                    <Typography>{t("Content.DataProtection")}</Typography>
+                    <Typography
+                        sx={{ fontSize: "inherit", lineHeight: "inherit" }}
+                    >
+                        {t("Content.DataProtection")}
+                    </Typography>
                 </NavLink>
             </ListItem>
             <ListItem sx={footerElementStyle}>{submitProblemLink}</ListItem>
