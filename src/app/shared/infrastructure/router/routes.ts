@@ -6,6 +6,7 @@ export const pageRoute = {
     dpdPagePath: "/dataProtectionDeclaration",
     linkedDataPagePath: "/ld",
     prevalencePagePath: "/prevalence",
+    antimicrobialPagePath: "/antimicrobial",
     antibioticResistancePagePath: "/antibiotic-resistance",
 };
 
@@ -17,6 +18,7 @@ export const CMS_API_ENDPOINT = `${CMS_BASE_ENDPOINT}/api`;
 export const API_DOCUMENTATION_URL = `${CMS_BASE_ENDPOINT}${cms}/documentation/v2.2.0`;
 export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
+export const ANTIMICROBIALS = `${CMS_API_ENDPOINT}/antimicrobials`;
 export const EXPLANATION = `${CMS_API_ENDPOINT}/explanations`;
 export const EVALUATIONS = `${CMS_API_ENDPOINT}/evaluations`;
 export const PREVALENCES = `${CMS_API_ENDPOINT}/prevalences`;

@@ -10,6 +10,7 @@ import { PrevalenceMainComponent } from "../../../prevalence/pages/PrevalenceMai
 import { WelcomeMainComponent } from "../../../welcome/pages/WelcomeMainComponent";
 // 1) Import your new AntibioticResistance page:
 import { AntibioticResistancePageComponent } from "../../../antibiotic_resistance/pages/AntibioticResistancePage.component";
+import { AntimicrobialPageComponent } from "../../../antimicrobial/pages/AntimicrobialPage.component";
 
 import { pageRoute } from "./routes";
 
@@ -44,6 +45,11 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 path={pageRoute.antibioticResistancePagePath}
                 component={AntibioticResistancePageComponent}
+            />
+
+            <Route
+                path={pageRoute.antimicrobialPagePath}
+                component={AntimicrobialPageComponent}
             />
 
             <Route
