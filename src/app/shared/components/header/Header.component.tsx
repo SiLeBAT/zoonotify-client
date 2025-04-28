@@ -142,6 +142,7 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+    const [antimicrobialOpen, setAntimicrobialOpen] = useState<boolean>(false);
     const [antibioticResistanceOpen, setAntibioticResistanceOpen] =
         useState<boolean>(false);
 
@@ -154,6 +155,7 @@ export function HeaderComponent(): JSX.Element {
         setLinkOpen(pathname === pageRoute.linkPagePath);
         setEvaluationsOpen(pathname === pageRoute.evaluationsPagePath);
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
+        setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
         setLinkedDataOpen(pathname === pageRoute.linkedDataPagePath);
 
         setAntibioticResistanceOpen(
@@ -200,6 +202,14 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("AntibioticResistance")}
                     </NavLink>
+
+                    <NavLink
+                        to={pageRoute.antimicrobialPagePath}
+                        css={navLinkStyle(antimicrobialOpen)}
+                    >
+                        {t("antimicrobial")}
+                    </NavLink>
+
                     <NavLink
                         to={pageRoute.linkPagePath}
                         css={navLinkStyle(linkOpen)}
@@ -252,6 +262,14 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("AntibioticResistance")}
                 </NavLink>
+
+                <NavLink
+                    to={pageRoute.antimicrobialPagePath}
+                    css={mobileNavLinkStyle(antimicrobialOpen)}
+                >
+                    {t("antimicrobial")}
+                </NavLink>
+
                 <NavLink
                     to={pageRoute.linkPagePath}
                     css={mobileNavLinkStyle(linkOpen)}
