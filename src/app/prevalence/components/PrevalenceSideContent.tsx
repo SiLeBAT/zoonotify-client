@@ -20,8 +20,12 @@ import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse, CMSEntity } from "../../shared/model/CMS.model";
 import i18next from "i18next";
-import { INFORMATION } from "../../shared/infrastructure/router/routes";
+import {
+    INFORMATION,
+    PEREVALENCE_INFO,
+} from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
+import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 
 interface ContentAttributes {
     content: string;
@@ -29,7 +33,7 @@ interface ContentAttributes {
 }
 
 export function PrevalenceSideContent(): JSX.Element {
-    const { t, i18n } = useTranslation(["PrevalencePage"]); // Include i18n
+    const { t, i18n } = useTranslation(["PrevalencePage"]);
     const {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
@@ -62,13 +66,12 @@ export function PrevalenceSideContent(): JSX.Element {
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
     const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
+    const [prevalenceInfo, setPrevalenceInfo] = useState<string>("");
 
     useEffect((): void => {
-        // Set initial filter order based on some logic
         setSelectedOrder([]);
     }, []);
 
-    // UseEffect to listen for language changes and update options
     useEffect(() => {
         const handleLanguageChange = (): void => {
             fetchOptions();
@@ -79,6 +82,107 @@ export function PrevalenceSideContent(): JSX.Element {
             i18n.off("languageChanged", handleLanguageChange);
         };
     }, [i18n, fetchOptions]);
+
+    // Fetch Prevalence Information
+    useEffect(() => {
+        const fetchPrevalenceInfo = async (): Promise<void> => {
+            try {
+                const url = `${PEREVALENCE_INFO}?locale=${i18next.language}&publicationState=live`;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const response = await callApiService<any>(url);
+
+                // 1) grab your data object (flattened Strapi returns “.content” directly)
+                const entity = response.data?.data;
+                if (!entity) {
+                    setPrevalenceInfo("No prevalence information available.");
+                    return;
+                }
+
+                // 2) default to [] if it’s undefined
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const blocks: any[] =
+                    entity.attributes?.content ?? entity.content ?? [];
+
+                if (blocks.length === 0) {
+                    setPrevalenceInfo("No content blocks found.");
+                    return;
+                }
+
+                // 3) map → markdown
+                const markdownContent = blocks
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    .map((block: any) => {
+                        // always a real array now
+                        const children = block.children ?? [];
+
+                        switch (block.type) {
+                            case "paragraph": {
+                                const text = children
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    .map((c: any) => c.text ?? "")
+                                    .join("");
+                                return text;
+                            }
+
+                            case "heading": {
+                                const level = block.level ?? 1;
+                                const text = children
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    .map((c: any) => c.text ?? "")
+                                    .join("");
+                                return `${"#".repeat(level)} ${text}`;
+                            }
+
+                            case "list": {
+                                // for lists, each `item` has its own children
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                const items: any[] = block.children ?? [];
+                                return (
+                                    items
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                        .map((item: any, idx: number) => {
+                                            const itemText = (
+                                                item.children ?? []
+                                            )
+                                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                .map((c: any) => c.text ?? "")
+                                                .join("");
+                                            return block.format === "ordered"
+                                                ? `${idx + 1}. ${itemText}`
+                                                : `- ${itemText}`;
+                                        })
+                                        .join("\n")
+                                );
+                            }
+
+                            case "link": {
+                                const text = children
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    .map((c: any) => c.text ?? "")
+                                    .join("");
+                                return block.url && text
+                                    ? `[${text}](${block.url})`
+                                    : "";
+                            }
+
+                            default:
+                                return "";
+                        }
+                    })
+                    // strip out any empty strings & join
+                    .filter((line: string) => line.trim().length > 0)
+                    .join("\n\n");
+
+                setPrevalenceInfo(markdownContent);
+            } catch (error) {
+                console.error("Failed to fetch prevalence info:", error);
+                setPrevalenceInfo("Error loading prevalence information.");
+            }
+        };
+
+        fetchPrevalenceInfo();
+    }, [i18next.language]);
 
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
@@ -114,9 +218,9 @@ export function PrevalenceSideContent(): JSX.Element {
     };
 
     const handleSearch = async (): Promise<void> => {
-        setShowError(false); // Reset the error visibility before starting the search
-        await fetchDataFromAPI(); // Await the API fetch operation
-        setShowError(true); // Set error visibility after the search completes
+        setShowError(false);
+        await fetchDataFromAPI();
+        setShowError(true);
     };
 
     const filterComponents: { [key: string]: JSX.Element } = {
@@ -397,7 +501,6 @@ export function PrevalenceSideContent(): JSX.Element {
         ));
 
     const resetFilters = async (): Promise<void> => {
-        // Resetting the local states
         setSelectedMicroorganisms([]);
         setSelectedSampleOrigins([]);
         setSelectedMatrices([]);
@@ -405,26 +508,21 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedMatrixGroups([]);
         setSelectedYear([]);
         setSelectedSuperCategory([]);
-        setSelectedOrder([]); // Reset the order of the filters
+        setSelectedOrder([]);
         setIsSearchTriggered(false);
         setShowError(false);
-
-        await fetchOptions(); // Re-fetch data to reset all options, including years
-
-        // Reset the URL to remove query parameters
+        await fetchOptions();
         window.history.replaceState(null, "", window.location.pathname);
-
-        // Optionally, reload the page to ensure everything is in its initial state
-        // window.location.reload();
     };
 
     return (
         <Box
             sx={{
-                padding: "10px", // Add padding inside the sidebar
+                padding: "10px",
                 height: "80vh",
+                p: 2,
                 overflowY: "auto",
-                width: "410px",
+                width: "470px",
                 maxHeight: "calc(140vh)",
                 maxWidth: "95%",
             }}
@@ -436,7 +534,6 @@ export function PrevalenceSideContent(): JSX.Element {
             <Dialog open={infoDialogOpen} onClose={handleClose}>
                 <DialogTitle>{infoDialogTitle}</DialogTitle>
                 <DialogContent>
-                    {/* Render Markdown content */}
                     <DialogContentText>
                         <Markdown>{infoDialogContent}</Markdown>
                     </DialogContentText>
@@ -445,7 +542,6 @@ export function PrevalenceSideContent(): JSX.Element {
                     <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
             </Dialog>
-
             <Box
                 sx={{
                     display: "flex",
@@ -464,6 +560,29 @@ export function PrevalenceSideContent(): JSX.Element {
                 <Button variant="contained" onClick={resetFilters}>
                     {t("RESET_FILTERS")}
                 </Button>
+            </Box>
+            <Box sx={{ marginTop: 2 }}>
+                <ZNAccordion
+                    title={t("PREVALENCE_INFORMATION")}
+                    content={
+                        <Markdown
+                            options={{
+                                overrides: {
+                                    a: {
+                                        props: {
+                                            target: "_blank",
+                                            rel: "noopener noreferrer",
+                                        },
+                                    },
+                                },
+                            }}
+                        >
+                            {prevalenceInfo}
+                        </Markdown>
+                    }
+                    defaultExpanded={false}
+                    centerContent={false}
+                />
             </Box>
         </Box>
     );
