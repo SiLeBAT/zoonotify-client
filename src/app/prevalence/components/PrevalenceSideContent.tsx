@@ -580,7 +580,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             {prevalenceInfo}
                         </Markdown>
                     }
-                    defaultExpanded={false}
+                    defaultExpanded={true}
                     centerContent={false}
                 />
             </Box>
