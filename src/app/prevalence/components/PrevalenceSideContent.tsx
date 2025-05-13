@@ -522,7 +522,7 @@ export function PrevalenceSideContent(): JSX.Element {
                 height: "80vh",
                 p: 2,
                 overflowY: "auto",
-                width: "470px",
+                width: "430px",
                 maxHeight: "calc(140vh)",
                 maxWidth: "95%",
             }}
