@@ -181,6 +181,15 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         if (langParam && langParam !== i18next.language) {
             i18next.changeLanguage(langParam);
         }
+        // Ensure the URL always has the lang parameter
+        if (!langParam) {
+            urlSearchParams.set("lang", i18next.language);
+            window.history.replaceState(
+                null,
+                "",
+                `?${urlSearchParams.toString()}`
+            );
+        }
     }, []);
 
     // -------------- State --------------
@@ -514,8 +523,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             setLoading(true);
             try {
                 await Promise.all([
-                    // Note: Although fetchOptions() is still called,
-                    // the displayed options will be computed from prevalence data.
                     fetchOptions(),
                     fetchPrevalenceData(),
                     fetchPrevalenceUpdateDate(),
@@ -555,7 +562,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
                 setSearchParameters(params);
                 const anyParamsPresent = Object.values(params).some(
-                    (arr) => arr.length > 0
+                    (arr) => arr.length > 0 && arr[0] !== params.lang?.[0]
                 );
                 if (anyParamsPresent) {
                     setIsSearchTriggered(true);
@@ -721,6 +728,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             fetchOptions();
             fetchPrevalenceUpdateDate();
         }
+        // Update URL to reflect the current language
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        urlSearchParams.set("lang", i18next.language);
+        window.history.replaceState(null, "", `?${urlSearchParams.toString()}`);
     }, [i18next.language]);
 
     // -------------- 9) Final context value --------------
