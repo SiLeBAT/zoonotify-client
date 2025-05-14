@@ -32,6 +32,26 @@ interface ContentAttributes {
     title: string;
 }
 
+interface Child {
+    type?: "text" | "link";
+    text?: string;
+    bold?: boolean;
+    italic?: boolean;
+    underline?: boolean;
+    strikethrough?: boolean;
+    code?: boolean;
+    url?: string;
+    children?: Child[];
+}
+
+interface Block {
+    type: string;
+    level?: number; // For headings
+    format?: "ordered" | "unordered"; // For lists
+    url?: string; // For link blocks
+    children: Child[];
+}
+
 export function PrevalenceSideContent(): JSX.Element {
     const { t, i18n } = useTranslation(["PrevalencePage"]);
     const {
@@ -89,19 +109,15 @@ export function PrevalenceSideContent(): JSX.Element {
             try {
                 const url = `${PEREVALENCE_INFO}?locale=${i18next.language}&publicationState=live`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response = await callApiService<any>(url);
 
-                // 1) grab your data object (flattened Strapi returns “.content” directly)
                 const entity = response.data?.data;
                 if (!entity) {
                     setPrevalenceInfo("No prevalence information available.");
                     return;
                 }
 
-                // 2) default to [] if it’s undefined
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const blocks: any[] =
+                const blocks: Block[] =
                     entity.attributes?.content ?? entity.content ?? [];
 
                 if (blocks.length === 0) {
@@ -109,68 +125,74 @@ export function PrevalenceSideContent(): JSX.Element {
                     return;
                 }
 
-                // 3) map → markdown
                 const markdownContent = blocks
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    .map((block: any) => {
-                        // always a real array now
-                        const children = block.children ?? [];
+                    .map((block: Block) => {
+                        const processChild = (child: Child): string => {
+                            if (child.type === "link" && child.url) {
+                                const text =
+                                    child.children
+                                        ?.map(processChild)
+                                        .join("") ||
+                                    child.text ||
+                                    "";
+                                return `[${text}](${child.url})`;
+                            }
+
+                            let txt = child.text || "";
+                            if (child.code) txt = `\`${txt}\``;
+                            if (child.bold) txt = `**${txt}**`;
+                            if (child.italic) txt = `_${txt}_`;
+                            if (child.strikethrough) txt = `~~${txt}~~`;
+                            if (child.underline) txt = `<u>${txt}</u>`;
+                            return txt;
+                        };
 
                         switch (block.type) {
                             case "paragraph": {
-                                const text = children
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                    .map((c: any) => c.text ?? "")
+                                return block.children
+                                    .map(processChild)
                                     .join("");
-                                return text;
                             }
 
                             case "heading": {
                                 const level = block.level ?? 1;
-                                const text = children
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                    .map((c: any) => c.text ?? "")
+                                const text = block.children
+                                    .map(processChild)
                                     .join("");
                                 return `${"#".repeat(level)} ${text}`;
                             }
 
                             case "list": {
-                                // for lists, each `item` has its own children
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                const items: any[] = block.children ?? [];
-                                return (
-                                    items
-                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                        .map((item: any, idx: number) => {
-                                            const itemText = (
-                                                item.children ?? []
-                                            )
-                                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                                .map((c: any) => c.text ?? "")
-                                                .join("");
-                                            return block.format === "ordered"
-                                                ? `${idx + 1}. ${itemText}`
-                                                : `- ${itemText}`;
-                                        })
-                                        .join("\n")
-                                );
+                                const format = block.format ?? "unordered";
+                                return block.children
+                                    .map((item: Child, idx: number) => {
+                                        const itemText =
+                                            item.children
+                                                ?.map(processChild)
+                                                .join("") ||
+                                            item.text ||
+                                            "";
+                                        return format === "ordered"
+                                            ? `${idx + 1}. ${itemText}`
+                                            : `- ${itemText}`;
+                                    })
+                                    .join("\n");
                             }
 
                             case "link": {
-                                const text = children
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                    .map((c: any) => c.text ?? "")
-                                    .join("");
+                                const text =
+                                    block.children
+                                        ?.map(processChild)
+                                        .join("") || "";
                                 return block.url && text
                                     ? `[${text}](${block.url})`
-                                    : "";
+                                    : text;
                             }
 
                             default:
                                 return "";
                         }
                     })
-                    // strip out any empty strings & join
                     .filter((line: string) => line.trim().length > 0)
                     .join("\n\n");
 
@@ -437,10 +459,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     }}
                 />
                 <Tooltip title={t("More Info on Matrix Groups")}>
-                    <IconButton
-                        onClick={() => handleInfoClick("MATRIX_GROUP")}
-                        sx={{ marginLeft: 0.5 }}
-                    >
+                    <IconButton onClick={() => handleInfoClick("MATRIX_GROUP")}>
                         <InfoIcon />
                     </IconButton>
                 </Tooltip>
