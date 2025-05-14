@@ -39,6 +39,7 @@ export function FooterLayoutComponent({
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: theme.spacing(0, 2),
+                    zIndex: 1000, // Added z-index to ensure footer stays above other content
                 },
             }}
         >
