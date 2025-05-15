@@ -593,6 +593,15 @@ export function PrevalenceSideContent(): JSX.Element {
                                             rel: "noopener noreferrer",
                                         },
                                     },
+                                    p: {
+                                        component: "p",
+                                        props: {
+                                            style: {
+                                                marginTop: -1,
+                                                marginBottom: 0,
+                                            },
+                                        },
+                                    },
                                 },
                             }}
                         >
