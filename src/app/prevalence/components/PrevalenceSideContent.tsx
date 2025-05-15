@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 import { FilterMultiSelectionComponent } from "../../evaluations/components/FilterMultiSelectionComponent";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { CMSResponse, CMSEntity } from "../../shared/model/CMS.model";
+import { CMSResponse } from "../../shared/model/CMS.model";
 import i18next from "i18next";
 import {
     INFORMATION,
@@ -27,9 +27,10 @@ import {
 import Markdown from "markdown-to-jsx";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 
-interface ContentAttributes {
-    content: string;
+interface Content {
+    id: number;
     title: string;
+    content: string;
 }
 
 interface Child {
@@ -117,8 +118,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     return;
                 }
 
-                const blocks: Block[] =
-                    entity.attributes?.content ?? entity.content ?? [];
+                const blocks: Block[] = entity.content ?? [];
 
                 if (blocks.length === 0) {
                     setPrevalenceInfo("No content blocks found.");
@@ -213,12 +213,12 @@ export function PrevalenceSideContent(): JSX.Element {
                 translatedCategory
             )}&locale=${i18next.language}&pagination[pageSize]=1`;
             const response = await callApiService<
-                CMSResponse<Array<CMSEntity<ContentAttributes>>, unknown>
+                CMSResponse<Array<Content>, unknown>
             >(url);
             if (response.data && response.data.data.length > 0) {
-                const attributes = response.data.data[0].attributes;
-                setInfoDialogTitle(attributes.title);
-                setInfoDialogContent(attributes.content);
+                const entity = response.data.data[0];
+                setInfoDialogTitle(entity.title);
+                setInfoDialogContent(entity.content);
                 setInfoDialogOpen(true);
             }
         } catch (error) {
