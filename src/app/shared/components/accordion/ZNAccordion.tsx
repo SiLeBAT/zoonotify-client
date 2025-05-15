@@ -21,10 +21,15 @@ export interface AccordionProps {
     showCopyIcon?: boolean;
     withTopBorder?: boolean;
     maxHeight?: string;
+    /** gap in px between the title (summary) and the first line of content */
+    contentGap?: number;
 }
 
 export function ZNAccordion(props: AccordionProps): JSX.Element {
-    const { withTopBorder = true } = props;
+    const {
+        withTopBorder = true,
+        contentGap = 0, // default: no gap
+    } = props;
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const theme = useTheme();
 
@@ -48,11 +53,9 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
             .then(() => {
                 setTooltipOpen(true);
                 setTimeout(() => setTooltipOpen(false), 2000);
-                return null; // This line is added to satisfy the rule
+                return null;
             })
-            .catch((err) => {
-                console.error("Failed to copy:", err);
-            });
+            .catch((err) => console.error("Failed to copy:", err));
     };
 
     return (
@@ -61,19 +64,8 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
             sx={{
                 border: "none",
                 boxShadow: "none",
-                "&:before": {
-                    display: "none",
-                },
-                "&.MuiAccordion-root.Mui-expanded": {
-                    margin: "1em 0",
-                },
-                "& .MuiAccordionSummary-root": {
-                    margin: 0,
-                    borderBottom: "none",
-                },
-                "& .MuiAccordionDetails-root": {
-                    padding: "16px 24px",
-                },
+                "&:before": { display: "none" },
+                "&.Mui-expanded": { margin: "1em 0" },
                 ...(withTopBorder && {
                     "&:before": {
                         display: "block",
@@ -87,11 +79,16 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
         >
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="shared-accordion-content"
-                id="shared-accordion-header"
+                aria-controls="zn-accordion-content"
+                id="zn-accordion-header"
                 sx={{
-                    borderBottom: "none",
-                    margin: 0,
+                    px: 3, // 24px horizontal padding (default)
+                    py: 0, // collapse vertical padding
+                    minHeight: 0,
+                    "& .MuiAccordionSummary-content": {
+                        margin: 0,
+                        "&.Mui-expanded": { margin: 0 },
+                    },
                 }}
             >
                 <Typography
@@ -99,10 +96,9 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                         flex: 1,
                         fontWeight: "bold",
                         fontSize: "1rem",
-                        textAlign: "left",
-                        margin: 0,
                         display: "flex",
                         alignItems: "center",
+                        margin: 0,
                     }}
                 >
                     <Markdown>{props.title}</Markdown>
@@ -127,10 +123,13 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                     )}
                 </Typography>
             </AccordionSummary>
+
             <AccordionDetails
                 sx={{
-                    marginLeft: "2em",
-                    marginRight: "2em",
+                    // configurable gap here:
+                    paddingTop: `${contentGap}px`,
+                    // strip any auto paragraph margin on the first element
+                    "& > :first-of-type": { marginTop: 0 },
                     display: "block",
                     hyphens: "auto",
                     textAlign: "justify",
