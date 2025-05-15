@@ -33,26 +33,6 @@ interface Content {
     content: string;
 }
 
-interface Child {
-    type?: "text" | "link";
-    text?: string;
-    bold?: boolean;
-    italic?: boolean;
-    underline?: boolean;
-    strikethrough?: boolean;
-    code?: boolean;
-    url?: string;
-    children?: Child[];
-}
-
-interface Block {
-    type: string;
-    level?: number; // For headings
-    format?: "ordered" | "unordered"; // For lists
-    url?: string; // For link blocks
-    children: Child[];
-}
-
 export function PrevalenceSideContent(): JSX.Element {
     const { t, i18n } = useTranslation(["PrevalencePage"]);
     const {
@@ -113,90 +93,13 @@ export function PrevalenceSideContent(): JSX.Element {
                 const response = await callApiService<any>(url);
 
                 const entity = response.data?.data;
-                if (!entity) {
+                if (!entity || !entity.content) {
                     setPrevalenceInfo("No prevalence information available.");
                     return;
                 }
 
-                const blocks: Block[] = entity.content ?? [];
-
-                if (blocks.length === 0) {
-                    setPrevalenceInfo("No content blocks found.");
-                    return;
-                }
-
-                const markdownContent = blocks
-                    .map((block: Block) => {
-                        const processChild = (child: Child): string => {
-                            if (child.type === "link" && child.url) {
-                                const text =
-                                    child.children
-                                        ?.map(processChild)
-                                        .join("") ||
-                                    child.text ||
-                                    "";
-                                return `[${text}](${child.url})`;
-                            }
-
-                            let txt = child.text || "";
-                            if (child.code) txt = `\`${txt}\``;
-                            if (child.bold) txt = `**${txt}**`;
-                            if (child.italic) txt = `_${txt}_`;
-                            if (child.strikethrough) txt = `~~${txt}~~`;
-                            if (child.underline) txt = `<u>${txt}</u>`;
-                            return txt;
-                        };
-
-                        switch (block.type) {
-                            case "paragraph": {
-                                return block.children
-                                    .map(processChild)
-                                    .join("");
-                            }
-
-                            case "heading": {
-                                const level = block.level ?? 1;
-                                const text = block.children
-                                    .map(processChild)
-                                    .join("");
-                                return `${"#".repeat(level)} ${text}`;
-                            }
-
-                            case "list": {
-                                const format = block.format ?? "unordered";
-                                return block.children
-                                    .map((item: Child, idx: number) => {
-                                        const itemText =
-                                            item.children
-                                                ?.map(processChild)
-                                                .join("") ||
-                                            item.text ||
-                                            "";
-                                        return format === "ordered"
-                                            ? `${idx + 1}. ${itemText}`
-                                            : `- ${itemText}`;
-                                    })
-                                    .join("\n");
-                            }
-
-                            case "link": {
-                                const text =
-                                    block.children
-                                        ?.map(processChild)
-                                        .join("") || "";
-                                return block.url && text
-                                    ? `[${text}](${block.url})`
-                                    : text;
-                            }
-
-                            default:
-                                return "";
-                        }
-                    })
-                    .filter((line: string) => line.trim().length > 0)
-                    .join("\n\n");
-
-                setPrevalenceInfo(markdownContent);
+                // Directly set the Markdown content from the API
+                setPrevalenceInfo(entity.content);
             } catch (error) {
                 console.error("Failed to fetch prevalence info:", error);
                 setPrevalenceInfo("Error loading prevalence information.");
