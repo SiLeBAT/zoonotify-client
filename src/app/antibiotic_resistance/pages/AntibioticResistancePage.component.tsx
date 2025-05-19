@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
+import { Typography } from "@mui/material";
 
 const ORGANISMS = [
     "E. coli",
@@ -11,8 +12,87 @@ const ORGANISMS = [
     "Enterococcus",
 ];
 
+// Utils for microorganism name formatting
+const italicWords: string[] = [
+    "Salmonella",
+    "coli",
+    "E.",
+    "Bacillus",
+    "cereus",
+    "monocytogenes",
+    "Clostridioides",
+    "difficile",
+    "Yersinia",
+    "Listeria",
+    "enterocolitica",
+    "Vibrio",
+    "Baylisascaris",
+    "procyonis",
+    "Echinococcus",
+    "Campylobacter",
+];
+
+interface WordObject {
+    text: string;
+    italic: boolean;
+}
+
+const formatMicroorganismNameArray = (
+    microName: string | null | undefined
+): WordObject[] => {
+    if (!microName) {
+        console.warn("Received null or undefined microorganism name");
+        return [];
+    }
+
+    const words = microName
+        .split(/([-\s])/)
+        .filter((part: string) => part.length > 0);
+
+    return words.map((word: string) => {
+        if (word.trim() === "" || word === "-") {
+            return { text: word, italic: false };
+        }
+
+        const italic = italicWords.some((italicWord: string) =>
+            word.toLowerCase().includes(italicWord.toLowerCase())
+        );
+
+        return { text: word, italic };
+    });
+};
+
+// FormattedMicroorganismName component
+interface FormattedMicroorganismNameProps {
+    microName: string | null | undefined;
+    isBreadcrumb?: boolean; // Optional prop to differentiate breadcrumb styling
+}
+
+const FormattedMicroorganismName: React.FC<FormattedMicroorganismNameProps> = ({
+    microName,
+    isBreadcrumb = false,
+}) => {
+    const words = formatMicroorganismNameArray(microName);
+    return (
+        <Typography
+            component="span"
+            style={{
+                fontWeight: "bold",
+                fontSize: isBreadcrumb ? "2rem" : "1.5rem",
+            }}
+        >
+            {words.map((wordObj: WordObject, index: number) => (
+                <React.Fragment key={index}>
+                    {wordObj.italic ? <i>{wordObj.text}</i> : wordObj.text}{" "}
+                </React.Fragment>
+            ))}
+        </Typography>
+    );
+};
+
+// AntibioticResistancePageComponent
 export function AntibioticResistancePageComponent(): JSX.Element {
-    const { t } = useTranslation(["Header"]); // ← pull in your Header namespace
+    const { t } = useTranslation(["Header"]);
     const [selectedOrg, setSelectedOrg] = useState(ORGANISMS[0]);
 
     return (
@@ -20,11 +100,11 @@ export function AntibioticResistancePageComponent(): JSX.Element {
             <style>{`
         .abx-page {
           display: flex;
-          min-height: 100vh;
+          min-height: 120vh;
         }
 
         .abx-sidebar {
-          width: 360px;
+          width: 450px;
           padding: 2rem;
           background: #fff;
           box-sizing: border-box;
@@ -39,11 +119,11 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         .abx-nav-item {
           position: relative;
           clip-path: polygon(
-            0    0,
+            0 0,
             calc(100% - 40px) 0,
             100% 50%,
             calc(100% - 40px) 100%,
-            0    100%
+            0 100%
           );
           background: #003663;
           color: #fff;
@@ -70,10 +150,6 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           color: #003663;
           margin-bottom: 2rem;
         }
-        .abx-breadcrumb em {
-          font-style: italic;
-          font-weight: normal;
-        }
       `}</style>
 
             <PageLayoutComponent>
@@ -88,7 +164,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     }`}
                                     onClick={() => setSelectedOrg(org)}
                                 >
-                                    {org}
+                                    <FormattedMicroorganismName
+                                        microName={org}
+                                    />
                                 </li>
                             ))}
                         </ul>
@@ -96,10 +174,13 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
                     <section className="abx-content">
                         <div className="abx-breadcrumb">
-                            {t("AntibioticResistance")} &gt;{" "}
-                            <em>{selectedOrg}</em>
+                            {t("AntibioticResistance")} /{" "}
+                            <FormattedMicroorganismName
+                                microName={selectedOrg}
+                                isBreadcrumb={true}
+                            />
                         </div>
-                        {/* Here you can render your organism‐specific graphs/tables */}
+                        {/* Here you can render your organism-specific graphs/tables */}
                     </section>
                 </div>
             </PageLayoutComponent>
