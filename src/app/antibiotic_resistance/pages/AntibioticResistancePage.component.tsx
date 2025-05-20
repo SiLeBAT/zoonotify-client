@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
 import { Typography } from "@mui/material";
+import { TrendDetails } from "./TrendDetails";
 
 const ORGANISMS = [
     "E. coli",
@@ -13,24 +14,7 @@ const ORGANISMS = [
 ];
 
 // Utils for microorganism name formatting
-const italicWords: string[] = [
-    "Salmonella",
-    "coli",
-    "E.",
-    "Bacillus",
-    "cereus",
-    "monocytogenes",
-    "Clostridioides",
-    "difficile",
-    "Yersinia",
-    "Listeria",
-    "enterocolitica",
-    "Vibrio",
-    "Baylisascaris",
-    "procyonis",
-    "Echinococcus",
-    "Campylobacter",
-];
+const italicWords: string[] = ["Salmonella", "coli", "E.", "Campylobacter"];
 
 interface WordObject {
     text: string;
@@ -62,16 +46,15 @@ const formatMicroorganismNameArray = (
     });
 };
 
-// FormattedMicroorganismName component
-interface FormattedMicroorganismNameProps {
+// FormattedMicroorganismName component (now exported)
+export interface FormattedMicroorganismNameProps {
     microName: string | null | undefined;
-    isBreadcrumb?: boolean; // Optional prop to differentiate breadcrumb styling
+    isBreadcrumb?: boolean;
 }
 
-const FormattedMicroorganismName: React.FC<FormattedMicroorganismNameProps> = ({
-    microName,
-    isBreadcrumb = false,
-}) => {
+export const FormattedMicroorganismName: React.FC<
+    FormattedMicroorganismNameProps
+> = ({ microName, isBreadcrumb = false }) => {
     const words = formatMicroorganismNameArray(microName);
     return (
         <Typography
@@ -92,8 +75,19 @@ const FormattedMicroorganismName: React.FC<FormattedMicroorganismNameProps> = ({
 
 // AntibioticResistancePageComponent
 export function AntibioticResistancePageComponent(): JSX.Element {
-    const { t } = useTranslation(["Header"]);
+    const { t } = useTranslation(["Antibiotic"]);
     const [selectedOrg, setSelectedOrg] = useState(ORGANISMS[0]);
+    const [showTrendDetails, setShowTrendDetails] = useState(false);
+
+    // now explicitly returning void
+    const handleTrendClick = (): void => {
+        setShowTrendDetails(true);
+    };
+
+    // now explicitly returning void
+    const handleBack = (): void => {
+        setShowTrendDetails(false);
+    };
 
     return (
         <>
@@ -150,39 +144,102 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           color: #003663;
           margin-bottom: 2rem;
         }
+
+        .image-box {
+          border: 4px solid #003663;
+          padding: 1rem;
+          display: inline-block;
+          margin-right: 1rem;
+          margin-bottom: 1rem;
+          box-sizing: border-box;
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+
+        .image-box:hover {
+          transform: scale(1.05);
+        }
+
+        .image-box.bottom {
+          display: block;
+          margin-top: 2rem;
+          width: 100%;
+          max-width: 490px;
+        }
+
+        .image-box img {
+          width: 450px;
+          height: 400px;
+          object-fit: contain;
+          display: block;
+        }
+
+        .image-label {
+          font-size: 1.2rem;
+          color: #003663;
+          margin-bottom: 0.5rem;
+        }
       `}</style>
 
             <PageLayoutComponent>
-                <div className="abx-page">
-                    <aside className="abx-sidebar">
-                        <ul className="abx-nav">
-                            {ORGANISMS.map((org) => (
-                                <li
-                                    key={org}
-                                    className={`abx-nav-item${
-                                        org === selectedOrg ? " abx-active" : ""
-                                    }`}
-                                    onClick={() => setSelectedOrg(org)}
-                                >
-                                    <FormattedMicroorganismName
-                                        microName={org}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    </aside>
+                {showTrendDetails ? (
+                    <TrendDetails
+                        microorganism={selectedOrg}
+                        onBack={handleBack}
+                    />
+                ) : (
+                    <div className="abx-page">
+                        <aside className="abx-sidebar">
+                            <ul className="abx-nav">
+                                {ORGANISMS.map((org) => (
+                                    <li
+                                        key={org}
+                                        className={`abx-nav-item${
+                                            org === selectedOrg
+                                                ? " abx-active"
+                                                : ""
+                                        }`}
+                                        onClick={() => setSelectedOrg(org)}
+                                    >
+                                        <FormattedMicroorganismName
+                                            microName={org}
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        </aside>
 
-                    <section className="abx-content">
-                        <div className="abx-breadcrumb">
-                            {t("AntibioticResistance")} /{" "}
-                            <FormattedMicroorganismName
-                                microName={selectedOrg}
-                                isBreadcrumb={true}
-                            />
-                        </div>
-                        {/* Here you can render your organism-specific graphs/tables */}
-                    </section>
-                </div>
+                        <section className="abx-content">
+                            <div className="abx-breadcrumb">
+                                {t("AntibioticResistance")} /{" "}
+                                <FormattedMicroorganismName
+                                    microName={selectedOrg}
+                                    isBreadcrumb={true}
+                                />
+                            </div>
+                            <div
+                                className="image-box"
+                                onClick={handleTrendClick}
+                            >
+                                <div className="image-label">{t("Trend")}</div>
+                                <img src="/assets/trend.png" alt="Trend" />
+                            </div>
+                            <div className="image-box">
+                                <div className="image-label">
+                                    {t("Substans")}
+                                </div>
+                                <img
+                                    src="/assets/substans.png"
+                                    alt="Substans"
+                                />
+                            </div>
+                            <div className="image-box bottom">
+                                <div className="image-label">{t("Multi")}</div>
+                                <img src="/assets/multi.png" alt="Multi" />
+                            </div>
+                        </section>
+                    </div>
+                )}
             </PageLayoutComponent>
         </>
     );

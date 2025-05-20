@@ -35,3 +35,6 @@ export const MATRICES = `${CMS_API_ENDPOINT}/matrices`;
 export const MATRIX_GROUPS = `${CMS_API_ENDPOINT}/matrix-groups`;
 export const SAMPLING_STAGES = `${CMS_API_ENDPOINT}/sampling-stages`;
 export const MICROORGANISMS = `${CMS_API_ENDPOINT}/microorganisms`;
+export const RESISTANCES = `${CMS_API_ENDPOINT}/resistances`;
+export const SPECIES = `${CMS_API_ENDPOINT}/species`;
+export const ANTIMICROBIAL_SUBSTANCES = `${CMS_API_ENDPOINT}/antimicrobial-substances`;
