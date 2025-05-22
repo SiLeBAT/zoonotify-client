@@ -10,7 +10,7 @@ const ORGANISMS = [
     "Salmonella spp.",
     "MRSA",
     "STEC",
-    "Enterococcus",
+    "Enterococcus spp.",
 ];
 
 // Utils for microorganism name formatting
