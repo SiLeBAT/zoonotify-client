@@ -121,7 +121,14 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
             setLoading(true);
             setFetchError(null);
             try {
-                const url = `${RESISTANCES}?locale=${i18next.language}&populate=*&pagination[pageSize]=500`;
+                // Only fetch resistances for the selected microorganism
+                const url =
+                    `${RESISTANCES}?locale=${i18next.language}` +
+                    `&filters[microorganism][name][$eq]=${encodeURIComponent(
+                        microorganism
+                    )}` +
+                    `&populate=*&pagination[pageSize]=500`;
+
                 const res = await callApiService<ResistanceApiResponse>(url);
                 const data = res.data?.data || [];
 
@@ -214,8 +221,11 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                 setLoading(false);
             }
         }
-        fetchResistanceOptions();
-    }, [i18next.language]);
+        if (microorganism) {
+            fetchResistanceOptions();
+        }
+        // Depend on microorganism and language
+    }, [i18next.language, microorganism]);
 
     // --- Reset all filters ---
     const resetFilters = (): void => {
