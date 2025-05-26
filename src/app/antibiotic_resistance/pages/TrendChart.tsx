@@ -96,7 +96,12 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
                         value !== null ? value.toFixed(1) + "%" : "-"
                     }
                 />
-                <Legend layout="vertical" verticalAlign="middle" align="left" />
+                <Legend
+                    layout="vertical"
+                    verticalAlign="middle"
+                    wrapperStyle={{ margin: -20 }}
+                    align="right"
+                />
                 {substances.map((substance, idx) => (
                     <Line
                         key={substance}
