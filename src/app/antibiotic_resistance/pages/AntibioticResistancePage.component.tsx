@@ -14,7 +14,13 @@ const ORGANISMS = [
 ];
 
 // Utils for microorganism name formatting
-const italicWords: string[] = ["Salmonella", "coli", "E.", "Campylobacter"];
+const italicWords: string[] = [
+    "Salmonella",
+    "coli",
+    "E.",
+    "Enterococcus",
+    "Campylobacter",
+];
 
 interface WordObject {
     text: string;
