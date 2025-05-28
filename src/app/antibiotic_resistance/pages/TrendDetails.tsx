@@ -66,7 +66,6 @@ interface ResistanceApiResponse {
     meta: unknown;
 }
 
-// CSS for wrapping long menu item text
 const menuItemTextStyle = `
 .menu-item-text-wrap {
   white-space: normal !important;
@@ -76,67 +75,67 @@ const menuItemTextStyle = `
 }
 `;
 
+type FilterKey =
+    | "samplingYear"
+    | "antimicrobialSubstance"
+    | "specie"
+    | "superCategorySampleOrigin"
+    | "sampleOrigin"
+    | "samplingStage"
+    | "matrixGroup"
+    | "matrix";
+
 export const TrendDetails: React.FC<TrendDetailsProps> = ({
     microorganism,
     onBack,
 }) => {
     const { t } = useTranslation(["Antibiotic"]);
 
-    // --- Dropdown Option States (dynamically loaded) ---
-    const [sampleYearOptions, setSampleYearOptions] = useState<number[]>([]);
-    const [antibioticSubstanceOptions, setAntibioticSubstanceOptions] =
-        useState<string[]>([]);
-    const [speciesOptions, setSpeciesOptions] = useState<string[]>([]);
-    const [superCategoryOptions, setSuperCategoryOptions] = useState<string[]>(
-        []
-    );
-    const [sampleOriginOptions, setSampleOriginOptions] = useState<string[]>(
-        []
-    );
-    const [samplingStageOptions, setSamplingStageOptions] = useState<string[]>(
-        []
-    );
-    const [matrixGroupOptions, setMatrixGroupOptions] = useState<string[]>([]);
-    const [matrixOptions, setMatrixOptions] = useState<string[]>([]);
-
-    // --- Filter Selections ---
-    const [selectedYear, setSelectedYear] = useState<number[]>([]);
-    const [selectedAntibioticSubstances, setSelectedAntibioticSubstances] =
-        useState<string[]>([]);
-    const [selectedSpecies, setSelectedSpecies] = useState<string[]>([]);
-    const [selectedSuperCategories, setSelectedSuperCategories] = useState<
-        string[]
-    >([]);
-    const [selectedSampleOrigins, setSelectedSampleOrigins] = useState<
-        string[]
-    >([]);
-    const [selectedSamplingStages, setSelectedSamplingStages] = useState<
-        string[]
-    >([]);
-    const [selectedMatrixGroups, setSelectedMatrixGroups] = useState<string[]>(
-        []
-    );
-    const [selectedMatrices, setSelectedMatrices] = useState<string[]>([]);
-
-    // --- Loading and Error States ---
-    const [loading, setLoading] = useState<boolean>(false);
-    const [fetchError, setFetchError] = useState<string | null>(null);
-
-    // --- Dialog States for Info ---
-    const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
-    const [infoDialogTitle, setInfoDialogTitle] = useState<string>("");
-    const [infoDialogContent, setInfoDialogContent] = useState<string>("");
-
-    // --- Data for chart ---
+    // --- Raw data ---
     const [resistanceRawData, setResistanceRawData] = useState<
         ResistanceApiItem[]
     >([]);
+
+    // --- All possible options for each filter (updated dynamically) ---
+    const [filterOptions, setFilterOptions] = useState<
+        Record<FilterKey, string[]>
+    >({
+        samplingYear: [],
+        antimicrobialSubstance: [],
+        specie: [],
+        superCategorySampleOrigin: [],
+        sampleOrigin: [],
+        samplingStage: [],
+        matrixGroup: [],
+        matrix: [],
+    });
+
+    // --- Selected filters ---
+    const [selected, setSelected] = useState<Record<FilterKey, string[]>>({
+        samplingYear: [],
+        antimicrobialSubstance: [],
+        specie: [],
+        superCategorySampleOrigin: [],
+        sampleOrigin: [],
+        samplingStage: [],
+        matrixGroup: [],
+        matrix: [],
+    });
+
+    // --- Chart state ---
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filteredData, setFilteredData] = useState<any[]>([]);
     const [showChart, setShowChart] = useState(false);
 
-    // --- Fetch dynamic filter options from /resistances ---
-    useEffect((): void => {
+    // --- UI/UX states ---
+    const [loading, setLoading] = useState(false);
+    const [fetchError, setFetchError] = useState<string | null>(null);
+    const [infoDialogOpen, setInfoDialogOpen] = useState(false);
+    const [infoDialogTitle, setInfoDialogTitle] = useState("");
+    const [infoDialogContent, setInfoDialogContent] = useState("");
+
+    // Fetch all resistance data for the microorganism once
+    useEffect(() => {
         async function fetchResistanceOptions(): Promise<void> {
             setLoading(true);
             setFetchError(null);
@@ -149,94 +148,11 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                     `&populate=*&pagination[pageSize]=500`;
 
                 const res = await callApiService<ResistanceApiResponse>(url);
-                const data = res.data?.data || [];
-
-                setResistanceRawData(data);
-
-                setSampleYearOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map((item) => item.samplingYear)
-                                .filter(
-                                    (v): v is number => typeof v === "number"
-                                )
-                        )
-                    ).sort((a, b) => a - b)
-                );
-                setSuperCategoryOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map(
-                                    (item) =>
-                                        item.superCategorySampleOrigin?.name
-                                )
-                                .filter((v): v is string => !!v)
-                        )
-                    )
-                );
-                setSampleOriginOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map((item) => item.sampleOrigin?.name)
-                                .filter((v): v is string => !!v)
-                        )
-                    )
-                );
-                setSamplingStageOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map((item) => item.samplingStage?.name)
-                                .filter((v): v is string => !!v)
-                        )
-                    )
-                );
-                setMatrixGroupOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map((item) => item.matrixGroup?.name)
-                                .filter((v): v is string => !!v)
-                        )
-                    )
-                );
-                setMatrixOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map((item) => item.matrix?.name)
-                                .filter((v): v is string => !!v)
-                        )
-                    )
-                );
-                setAntibioticSubstanceOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map(
-                                    (item) => item.antimicrobialSubstance?.name
-                                )
-                                .filter((v): v is string => !!v)
-                        )
-                    )
-                );
-                setSpeciesOptions(
-                    Array.from(
-                        new Set(
-                            data
-                                .map((item) => item.specie?.name)
-                                .filter((v): v is string => !!v)
-                        )
-                    )
-                );
+                setResistanceRawData(res.data?.data || []);
             } catch (err) {
                 setFetchError(
                     "Failed to fetch filter options. Please try again."
                 );
-                // eslint-disable-next-line no-console
                 console.error("Failed to fetch resistance options", err);
             } finally {
                 setLoading(false);
@@ -244,24 +160,265 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
         }
         if (microorganism) {
             fetchResistanceOptions();
-            setShowChart(false); // Hide chart on microorganism change
+            setShowChart(false);
+            setSelected({
+                samplingYear: [],
+                antimicrobialSubstance: [],
+                specie: [],
+                superCategorySampleOrigin: [],
+                sampleOrigin: [],
+                samplingStage: [],
+                matrixGroup: [],
+                matrix: [],
+            });
         }
     }, [i18next.language, microorganism]);
 
+    // This is the core: recompute the available options for each filter depending on other selections
+    useEffect(() => {
+        function computeAvailableOptions(
+            raw: ResistanceApiItem[],
+            currentSelected: typeof selected
+        ): Record<FilterKey, string[]> {
+            // Helper: for each filter, exclude its own selection when filtering others
+            function filterData(exclude: FilterKey): ResistanceApiItem[] {
+                return raw.filter((item) => {
+                    // For each filter except the excluded one, make sure the value is among currentSelected[filter], if any is selected
+                    return (
+                        (exclude === "samplingYear" ||
+                            !currentSelected.samplingYear.length ||
+                            currentSelected.samplingYear.includes(
+                                String(item.samplingYear)
+                            )) &&
+                        (exclude === "antimicrobialSubstance" ||
+                            !currentSelected.antimicrobialSubstance.length ||
+                            (item.antimicrobialSubstance &&
+                                currentSelected.antimicrobialSubstance.includes(
+                                    item.antimicrobialSubstance.name
+                                ))) &&
+                        (exclude === "specie" ||
+                            !currentSelected.specie.length ||
+                            (item.specie &&
+                                currentSelected.specie.includes(
+                                    item.specie.name
+                                ))) &&
+                        (exclude === "superCategorySampleOrigin" ||
+                            !currentSelected.superCategorySampleOrigin.length ||
+                            (item.superCategorySampleOrigin &&
+                                currentSelected.superCategorySampleOrigin.includes(
+                                    item.superCategorySampleOrigin.name
+                                ))) &&
+                        (exclude === "sampleOrigin" ||
+                            !currentSelected.sampleOrigin.length ||
+                            (item.sampleOrigin &&
+                                currentSelected.sampleOrigin.includes(
+                                    item.sampleOrigin.name
+                                ))) &&
+                        (exclude === "samplingStage" ||
+                            !currentSelected.samplingStage.length ||
+                            (item.samplingStage &&
+                                currentSelected.samplingStage.includes(
+                                    item.samplingStage.name
+                                ))) &&
+                        (exclude === "matrixGroup" ||
+                            !currentSelected.matrixGroup.length ||
+                            (item.matrixGroup &&
+                                currentSelected.matrixGroup.includes(
+                                    item.matrixGroup.name
+                                ))) &&
+                        (exclude === "matrix" ||
+                            !currentSelected.matrix.length ||
+                            (item.matrix &&
+                                currentSelected.matrix.includes(
+                                    item.matrix.name
+                                )))
+                    );
+                });
+            }
+
+            const result: Record<FilterKey, string[]> = {
+                samplingYear: [],
+                antimicrobialSubstance: [],
+                specie: [],
+                superCategorySampleOrigin: [],
+                sampleOrigin: [],
+                samplingStage: [],
+                matrixGroup: [],
+                matrix: [],
+            };
+
+            // For each filter, compute the available options
+            for (const key of Object.keys(result) as FilterKey[]) {
+                const filtered = filterData(key);
+                let values: string[] = [];
+                switch (key) {
+                    case "samplingYear":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map((i) => i.samplingYear)
+                                    .filter(Boolean)
+                                    .map(String)
+                            )
+                        ).sort();
+                        break;
+                    case "antimicrobialSubstance":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map((i) => i.antimicrobialSubstance?.name)
+                                    .filter((x): x is string => !!x)
+                            )
+                        ).sort();
+
+                        break;
+                    case "specie":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map((i) => i.specie?.name)
+                                    .filter((x): x is string => !!x)
+                            )
+                        ).sort();
+                        break;
+                    case "superCategorySampleOrigin":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map(
+                                        (i) => i.superCategorySampleOrigin?.name
+                                    )
+                                    .filter((x): x is string => !!x)
+                            )
+                        ).sort();
+                        break;
+                    case "sampleOrigin":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map((i) => i.sampleOrigin?.name)
+                                    .filter((x): x is string => !!x)
+                            )
+                        ).sort();
+                        break;
+                    case "samplingStage":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map((i) => i.samplingStage?.name)
+                                    .filter((x): x is string => !!x)
+                            )
+                        ).sort();
+                        break;
+                    case "matrixGroup":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map((i) => i.matrixGroup?.name)
+                                    .filter((x): x is string => !!x)
+                            )
+                        ).sort();
+                        break;
+                    case "matrix":
+                        values = Array.from(
+                            new Set(
+                                filtered
+                                    .map((i) => i.matrix?.name)
+                                    .filter((x): x is string => !!x)
+                            )
+                        ).sort();
+                        break;
+                    default:
+                        values = [];
+                }
+                result[key] = values;
+            }
+            return result;
+        }
+
+        // Update options any time raw data or selected filters change
+        setFilterOptions(computeAvailableOptions(resistanceRawData, selected));
+    }, [resistanceRawData, selected]);
+
+    // --- Search ---
+    const handleSearch = (): void => {
+        let result = resistanceRawData;
+
+        if (selected.samplingYear.length)
+            result = result.filter((r) =>
+                selected.samplingYear.includes(String(r.samplingYear))
+            );
+        if (selected.antimicrobialSubstance.length)
+            result = result.filter(
+                (r) =>
+                    r.antimicrobialSubstance &&
+                    selected.antimicrobialSubstance.includes(
+                        r.antimicrobialSubstance.name
+                    )
+            );
+        if (selected.specie.length)
+            result = result.filter(
+                (r) => r.specie && selected.specie.includes(r.specie.name)
+            );
+        if (selected.superCategorySampleOrigin.length)
+            result = result.filter(
+                (r) =>
+                    r.superCategorySampleOrigin &&
+                    selected.superCategorySampleOrigin.includes(
+                        r.superCategorySampleOrigin.name
+                    )
+            );
+        if (selected.sampleOrigin.length)
+            result = result.filter(
+                (r) =>
+                    r.sampleOrigin &&
+                    selected.sampleOrigin.includes(r.sampleOrigin.name)
+            );
+        if (selected.samplingStage.length)
+            result = result.filter(
+                (r) =>
+                    r.samplingStage &&
+                    selected.samplingStage.includes(r.samplingStage.name)
+            );
+        if (selected.matrixGroup.length)
+            result = result.filter(
+                (r) =>
+                    r.matrixGroup &&
+                    selected.matrixGroup.includes(r.matrixGroup.name)
+            );
+        if (selected.matrix.length)
+            result = result.filter(
+                (r) => r.matrix && selected.matrix.includes(r.matrix.name)
+            );
+
+        const chartData = result
+            .map((r) => ({
+                samplingYear: r.samplingYear,
+                resistenzrate: r.resistenzrate,
+                antimicrobialSubstance: r.antimicrobialSubstance?.name ?? "",
+            }))
+            .filter((d) => !!d.antimicrobialSubstance);
+
+        setFilteredData(chartData);
+        setShowChart(true);
+    };
+
     // --- Reset all filters ---
     const resetFilters = (): void => {
-        setSelectedYear([]);
-        setSelectedAntibioticSubstances([]);
-        setSelectedSpecies([]);
-        setSelectedSuperCategories([]);
-        setSelectedSampleOrigins([]);
-        setSelectedSamplingStages([]);
-        setSelectedMatrixGroups([]);
-        setSelectedMatrices([]);
+        setSelected({
+            samplingYear: [],
+            antimicrobialSubstance: [],
+            specie: [],
+            superCategorySampleOrigin: [],
+            sampleOrigin: [],
+            samplingStage: [],
+            matrixGroup: [],
+            matrix: [],
+        });
         setShowChart(false);
     };
 
-    // --- Fetch info for dialog ---
+    // --- Info Dialog ---
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
@@ -278,99 +435,34 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                 setInfoDialogOpen(true);
             }
         } catch (err) {
-            // eslint-disable-next-line no-console
             console.error("Failed to fetch information:", err);
         }
     };
+    const handleClose = (): void => setInfoDialogOpen(false);
 
-    const handleClose = (): void => {
-        setInfoDialogOpen(false);
-    };
-
-    // --- Search and filter data for the chart ---
-    const handleSearch = (): void => {
-        let result = resistanceRawData;
-
-        if (selectedYear.length)
-            result = result.filter((r) =>
-                selectedYear.includes(r.samplingYear)
-            );
-        if (selectedAntibioticSubstances.length)
-            result = result.filter(
-                (r) =>
-                    r.antimicrobialSubstance &&
-                    selectedAntibioticSubstances.includes(
-                        r.antimicrobialSubstance.name
-                    )
-            );
-        if (selectedSpecies.length)
-            result = result.filter(
-                (r) => r.specie && selectedSpecies.includes(r.specie.name)
-            );
-        if (selectedSuperCategories.length)
-            result = result.filter(
-                (r) =>
-                    r.superCategorySampleOrigin &&
-                    selectedSuperCategories.includes(
-                        r.superCategorySampleOrigin.name
-                    )
-            );
-        if (selectedSampleOrigins.length)
-            result = result.filter(
-                (r) =>
-                    r.sampleOrigin &&
-                    selectedSampleOrigins.includes(r.sampleOrigin.name)
-            );
-        if (selectedSamplingStages.length)
-            result = result.filter(
-                (r) =>
-                    r.samplingStage &&
-                    selectedSamplingStages.includes(r.samplingStage.name)
-            );
-        if (selectedMatrixGroups.length)
-            result = result.filter(
-                (r) =>
-                    r.matrixGroup &&
-                    selectedMatrixGroups.includes(r.matrixGroup.name)
-            );
-        if (selectedMatrices.length)
-            result = result.filter(
-                (r) => r.matrix && selectedMatrices.includes(r.matrix.name)
-            );
-
-        const chartData = result
-            .map((r) => ({
-                samplingYear: r.samplingYear,
-                resistenzrate: r.resistenzrate,
-                antimicrobialSubstance: r.antimicrobialSubstance?.name ?? "",
-            }))
-            .filter((d) => !!d.antimicrobialSubstance);
-
-        setFilteredData(chartData);
-        setShowChart(true);
-    };
-
-    // --- Select All/Deselect All helper (WITH TEXT WRAP + MAX HEIGHT) ---
-    function renderSelectWithSelectAll<T extends string | number>(
+    // --- Render MUI Select ---
+    function renderSelectWithSelectAll(
+        key: FilterKey,
         label: string,
-        selectValue: T[],
-        setSelectValue: (items: T[]) => void,
-        options: T[],
         infoKey: string,
         categoryKey: string
     ): JSX.Element {
-        const allSelected =
-            options.length > 0 && selectValue.length === options.length;
-        const someSelected = selectValue.length > 0 && !allSelected;
+        const options = filterOptions[key];
+        const value = selected[key];
 
+        const allSelected =
+            options.length > 0 && value.length === options.length;
+        const someSelected = value.length > 0 && !allSelected;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const handleChange = (event: any): void => {
-            const value = event.target.value as T[];
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (value.includes("all" as any)) {
-                setSelectValue(allSelected ? [] : [...options]);
+            const v = event.target.value as string[];
+            if (v.includes("all")) {
+                setSelected((prev) => ({
+                    ...prev,
+                    [key]: allSelected ? [] : [...options],
+                }));
             } else {
-                setSelectValue(value);
+                setSelected((prev) => ({ ...prev, [key]: v }));
             }
         };
 
@@ -380,7 +472,7 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                     <InputLabel>{label}</InputLabel>
                     <Select
                         multiple
-                        value={selectValue}
+                        value={value}
                         onChange={handleChange}
                         label={label}
                         renderValue={(selectedItems) =>
@@ -426,7 +518,7 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                             options.map((item) => (
                                 <MenuItem key={item} value={item}>
                                     <Checkbox
-                                        checked={selectValue.indexOf(item) > -1}
+                                        checked={value.indexOf(item) > -1}
                                     />
                                     <ListItemText
                                         className="menu-item-text-wrap"
@@ -498,66 +590,50 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
 
                     <Stack spacing={2} sx={{ opacity: loading ? 0.5 : 1 }}>
                         {renderSelectWithSelectAll(
+                            "samplingYear",
                             t("SAMPLING_YEAR"),
-                            selectedYear,
-                            setSelectedYear,
-                            sampleYearOptions,
                             "More Info on Sampling Year",
                             "SAMPLING_YEAR"
                         )}
                         {renderSelectWithSelectAll(
+                            "antimicrobialSubstance",
                             t("ANTIBIOTIC_SUBSTANCE"),
-                            selectedAntibioticSubstances,
-                            setSelectedAntibioticSubstances,
-                            antibioticSubstanceOptions,
                             "More Info on Antibiotic Substances",
                             "ANTIBIOTIC_SUBSTANCE"
                         )}
                         {renderSelectWithSelectAll(
+                            "specie",
                             t("SPECIES"),
-                            selectedSpecies,
-                            setSelectedSpecies,
-                            speciesOptions,
                             "More Info on Species",
                             "SPECIES"
                         )}
                         {renderSelectWithSelectAll(
+                            "superCategorySampleOrigin",
                             t("SUPER-CATEGORY-SAMPLE-ORIGIN"),
-                            selectedSuperCategories,
-                            setSelectedSuperCategories,
-                            superCategoryOptions,
                             "More Info on Super Categories",
                             "SUPER-CATEGORY-SAMPLE-ORIGIN"
                         )}
                         {renderSelectWithSelectAll(
+                            "sampleOrigin",
                             t("SAMPLE_ORIGIN"),
-                            selectedSampleOrigins,
-                            setSelectedSampleOrigins,
-                            sampleOriginOptions,
                             "More Info on Sample Origins",
                             "SAMPLE_ORIGIN"
                         )}
                         {renderSelectWithSelectAll(
+                            "samplingStage",
                             t("SAMPLING_STAGE"),
-                            selectedSamplingStages,
-                            setSelectedSamplingStages,
-                            samplingStageOptions,
                             "More Info on Sampling Stages",
                             "SAMPLING_STAGE"
                         )}
                         {renderSelectWithSelectAll(
+                            "matrixGroup",
                             t("MATRIX_GROUP"),
-                            selectedMatrixGroups,
-                            setSelectedMatrixGroups,
-                            matrixGroupOptions,
                             "More Info on Matrix Groups",
                             "MATRIX_GROUP"
                         )}
                         {renderSelectWithSelectAll(
+                            "matrix",
                             t("MATRIX"),
-                            selectedMatrices,
-                            setSelectedMatrices,
-                            matrixOptions,
                             "More Info on Matrices",
                             "MATRIX"
                         )}
