@@ -76,7 +76,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
     });
 
     return (
-        <ResponsiveContainer width="100%" height={420}>
+        <ResponsiveContainer width="100%" height={520}>
             <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="samplingYear">
@@ -105,7 +105,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
                 {substances.map((substance, idx) => (
                     <Line
                         key={substance}
-                        type="monotone"
+                        type="linear"
                         dataKey={substance}
                         name={substance}
                         stroke={COLORS[idx % COLORS.length]}
