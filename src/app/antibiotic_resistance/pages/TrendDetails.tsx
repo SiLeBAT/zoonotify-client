@@ -58,6 +58,10 @@ interface ResistanceApiItem {
     antimicrobialSubstance?: { id: number; name: string } | null;
     specie?: { id: number; name: string } | null;
     resistenzrate: number;
+    anzahlGetesteterIsolate: number; // <-- Add this line!
+    anzahlResistenterIsolate: number; // Optional: also from your model
+    minKonfidenzintervall: number; // Optional
+    maxKonfidenzintervall: number;
     // ...any other fields
 }
 
@@ -396,6 +400,7 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                 samplingYear: r.samplingYear,
                 resistenzrate: r.resistenzrate,
                 antimicrobialSubstance: r.antimicrobialSubstance?.name ?? "",
+                anzahlGetesteterIsolate: r.anzahlGetesteterIsolate,
             }))
             .filter((d) => !!d.antimicrobialSubstance);
 
