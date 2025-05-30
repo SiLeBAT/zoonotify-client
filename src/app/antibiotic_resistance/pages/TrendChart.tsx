@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import html2canvas from "html2canvas";
 import {
     LineChart,
     Line,
@@ -10,8 +11,8 @@ import {
     CartesianGrid,
     Label,
 } from "recharts";
-import { Typography } from "@mui/material";
-//import { useTranslation } from "react-i18next"; // <-- ADD THIS LINE
+import { Typography, Button, Box, Stack } from "@mui/material";
+import { useTranslation } from "react-i18next"; // <-- ADD THIS LINE
 
 // Extended props to include anzahlGetesteterIsolate (optional for safety)
 export interface TrendChartProps {
@@ -90,7 +91,9 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
 };
 
 export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
-    //const { t } = useTranslation(["Antibiotic"]);  // <-- ADD THIS LINE
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+
+    const { t } = useTranslation(["Antibiotic"]); // <-- ADD THIS LINE
 
     // Find all years and substances present in the data
     const years = Array.from(new Set(data.map((d) => d.samplingYear))).sort(
@@ -121,62 +124,93 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
                 : null;
         return entry;
     });
-
+    const handleDownload = async (): Promise<void> => {
+        if (chartContainerRef.current) {
+            // Use html2canvas to capture the chart area
+            const canvas = await html2canvas(chartContainerRef.current, {
+                backgroundColor: "#fff", // white background
+                useCORS: true, // fixes for images, if any
+                scale: 2, // for higher quality image
+            });
+            const link = document.createElement("a");
+            link.download = `trend_chart_${Date.now()}.png`;
+            link.href = canvas.toDataURL("image/png", 1.0);
+            link.click();
+        }
+    };
     return (
-        <div>
-            <ResponsiveContainer width="100%" height={520}>
-                <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                        dataKey="samplingYear"
-                        height={52}
-                        tick={renderCustomXAxisTick(chartData)}
-                    >
-                        <Label
-                            value="Year"
-                            offset={-5}
-                            position="insideBottom"
+        <Box>
+            <div
+                ref={chartContainerRef}
+                style={{
+                    padding: "40px",
+                    background: "#fff",
+                    borderRadius: "16px",
+                }}
+            >
+                <ResponsiveContainer width="100%" height={520}>
+                    <LineChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            dataKey="samplingYear"
+                            height={52}
+                            tick={renderCustomXAxisTick(chartData)}
+                        >
+                            <Label
+                                value="Year"
+                                offset={-5}
+                                position="insideBottom"
+                            />
+                        </XAxis>
+                        <YAxis
+                            domain={[0, 100]}
+                            tickFormatter={(v: number) => `${v}%`}
+                        >
+                            <Label
+                                angle={-90}
+                                position="insideLeft"
+                                value="Resistenzrate (%)"
+                                style={{ textAnchor: "middle" }}
+                            />
+                        </YAxis>
+                        <Tooltip
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            formatter={(value: any) =>
+                                value !== null && value !== undefined
+                                    ? value.toFixed(1) + "%"
+                                    : "-"
+                            }
                         />
-                    </XAxis>
-                    <YAxis
-                        domain={[0, 100]}
-                        tickFormatter={(v: number) => `${v}%`}
-                    >
-                        <Label
-                            angle={-90}
-                            position="insideLeft"
-                            value="Resistenzrate (%)"
-                            style={{ textAnchor: "middle" }}
+                        <Legend
+                            layout="vertical"
+                            verticalAlign="middle"
+                            wrapperStyle={{ margin: -20 }}
+                            align="right"
                         />
-                    </YAxis>
-                    <Tooltip
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        formatter={(value: any) =>
-                            value !== null && value !== undefined
-                                ? value.toFixed(1) + "%"
-                                : "-"
-                        }
-                    />
-                    <Legend
-                        layout="vertical"
-                        verticalAlign="middle"
-                        wrapperStyle={{ margin: -20 }}
-                        align="right"
-                    />
-                    {substances.map((substance, idx) => (
-                        <Line
-                            key={substance}
-                            type="linear"
-                            dataKey={substance}
-                            name={substance}
-                            stroke={COLORS[idx % COLORS.length]}
-                            strokeWidth={2}
-                            dot={{ r: 3 }}
-                            connectNulls
-                        />
-                    ))}
-                </LineChart>
-            </ResponsiveContainer>
+                        {substances.map((substance, idx) => (
+                            <Line
+                                key={substance}
+                                type="linear"
+                                dataKey={substance}
+                                name={substance}
+                                stroke={COLORS[idx % COLORS.length]}
+                                strokeWidth={2}
+                                dot={{ r: 3 }}
+                                connectNulls
+                            />
+                        ))}
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+            <Stack direction="row" justifyContent="center" mt={2} mb={1}>
+                <Button
+                    onClick={handleDownload}
+                    variant="contained"
+                    sx={{ background: "#003663", color: "#fff" }}
+                >
+                    {t("Download_Chart")}
+                </Button>
+            </Stack>
             <Typography
                 variant="caption"
                 color="textSecondary"
@@ -186,6 +220,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
             >
                 <span style={{ color: "#888" }}></span>
             </Typography>
-        </div>
+        </Box>
     );
 };
