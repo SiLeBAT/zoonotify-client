@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import html2canvas from "html2canvas";
+import JSZip from "jszip";
 import {
     LineChart,
     Line,
@@ -12,9 +13,9 @@ import {
     Label,
 } from "recharts";
 import { Typography, Button, Box, Stack } from "@mui/material";
-import { useTranslation } from "react-i18next"; // <-- ADD THIS LINE
+import { useTranslation } from "react-i18next";
+import { ResistanceApiItem } from "./TrendDetails"; // Adjust path if needed
 
-// Extended props to include anzahlGetesteterIsolate (optional for safety)
 export interface TrendChartProps {
     data: {
         samplingYear: number;
@@ -22,6 +23,7 @@ export interface TrendChartProps {
         antimicrobialSubstance: string;
         anzahlGetesteterIsolate?: number;
     }[];
+    fullData: ResistanceApiItem[];
 }
 
 const COLORS = [
@@ -64,7 +66,6 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     const entry = chartData.find((e) => e.samplingYear === payload.value);
     return (
         <g>
-            {/* Year label */}
             <text
                 x={x}
                 y={y + 10}
@@ -74,11 +75,10 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
             >
                 {payload.value}
             </text>
-            {/* Number of tested isolates */}
             {entry && entry.anzahlGetesteterIsolate !== undefined && (
                 <text
                     x={x}
-                    y={y + 28} // lower than year label
+                    y={y + 28}
                     textAnchor="middle"
                     fill="#888"
                     fontSize={12}
@@ -90,12 +90,10 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     );
 };
 
-export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
+export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
+    const { t } = useTranslation(["Antibiotic"]);
 
-    const { t } = useTranslation(["Antibiotic"]); // <-- ADD THIS LINE
-
-    // Find all years and substances present in the data
     const years = Array.from(new Set(data.map((d) => d.samplingYear))).sort(
         (a, b) => a - b
     );
@@ -103,9 +101,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
         new Set(data.map((d) => d.antimicrobialSubstance))
     );
 
-    // Prepare chartData: for each year, get value for each substance, and anzahlGetesteterIsolate for the year
     const chartData = years.map((year) => {
-        // Each substance is a separate line
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const entry: any = { samplingYear: year };
         substances.forEach((substance) => {
@@ -116,7 +112,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
             );
             entry[substance] = found ? found.resistenzrate : null;
         });
-        // Take the first anzahlGetesteterIsolate value for this year (assuming all same per year)
         const isolatesForYear = data.filter((d) => d.samplingYear === year);
         entry.anzahlGetesteterIsolate =
             isolatesForYear.length > 0
@@ -124,13 +119,13 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
                 : null;
         return entry;
     });
+
     const handleDownload = async (): Promise<void> => {
         if (chartContainerRef.current) {
-            // Use html2canvas to capture the chart area
             const canvas = await html2canvas(chartContainerRef.current, {
-                backgroundColor: "#fff", // white background
-                useCORS: true, // fixes for images, if any
-                scale: 2, // for higher quality image
+                backgroundColor: "#fff",
+                useCORS: true,
+                scale: 2,
             });
             const link = document.createElement("a");
             link.download = `trend_chart_${Date.now()}.png`;
@@ -138,6 +133,98 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
             link.click();
         }
     };
+
+    function getFormattedTimestamp(): string {
+        const d = new Date();
+        return d
+            .toISOString()
+            .replace(/:/g, "-")
+            .replace(/\..+/, "")
+            .replace("T", "_");
+    }
+
+    // --------- Fix variable shadowing below! ---------
+    function generateCSV(
+        rows: ResistanceApiItem[],
+        sep: "," | ";",
+        decimalSep: "." | ","
+    ): string {
+        if (!rows || !rows.length) return "";
+
+        const headers = [
+            "samplingYear",
+            "superCategorySampleOrigin",
+            "sampleOrigin",
+            "samplingStage",
+            "matrixGroup",
+            "matrix",
+            "antimicrobialSubstance",
+            "specie",
+            "resistenzrate",
+            "anzahlGetesteterIsolate",
+            "anzahlResistenterIsolate",
+            "minKonfidenzintervall",
+            "maxKonfidenzintervall",
+        ] as const;
+
+        function valueForCSV(
+            row: ResistanceApiItem,
+            h: typeof headers[number]
+        ): string {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            let v = (row as any)[h];
+            if (v && typeof v === "object") {
+                if ("name" in v) v = v.name;
+                else v = JSON.stringify(v);
+            }
+            if (v === null || v === undefined) return "";
+            if (typeof v === "number") {
+                let valStr = v.toString();
+                if (decimalSep === ",") valStr = valStr.replace(".", ",");
+                return valStr;
+            }
+            let vStr = String(v);
+            if (
+                vStr.includes(sep) ||
+                vStr.includes('"') ||
+                vStr.includes("\n")
+            ) {
+                vStr = `"${vStr.replace(/"/g, '""')}"`;
+            }
+            return vStr;
+        }
+
+        const csvRows = [
+            headers.join(sep),
+            ...rows.map((row) =>
+                headers.map((h) => valueForCSV(row, h)).join(sep)
+            ),
+        ];
+        return csvRows.join("\n");
+    }
+
+    // --------- Give explicit return type and fix shadowing ---------
+    async function downloadZipWithCSVs(
+        rows: ResistanceApiItem[]
+    ): Promise<void> {
+        const timestamp = getFormattedTimestamp();
+        const zip = new JSZip();
+
+        const csvComma = generateCSV(rows, ",", ".");
+        const csvDot = generateCSV(rows, ";", ",");
+
+        zip.file(`trend_comma_${timestamp}.csv`, csvComma);
+        zip.file(`trend_dot_${timestamp}.csv`, csvDot);
+
+        const blob = await zip.generateAsync({ type: "blob" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `trend_data_${timestamp}.zip`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
     return (
         <Box>
             <div
@@ -202,13 +289,26 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data }) => {
                     </LineChart>
                 </ResponsiveContainer>
             </div>
-            <Stack direction="row" justifyContent="center" mt={2} mb={1}>
+            <Stack
+                direction="row"
+                justifyContent="center"
+                mt={2}
+                mb={1}
+                spacing={2}
+            >
                 <Button
                     onClick={handleDownload}
                     variant="contained"
                     sx={{ background: "#003663", color: "#fff" }}
                 >
                     {t("Download_Chart")}
+                </Button>
+                <Button
+                    onClick={() => downloadZipWithCSVs(fullData)}
+                    variant="contained"
+                    sx={{ background: "#003663", color: "#fff" }}
+                >
+                    {t("DOWNLOAD_ZIP_FILE")}
                 </Button>
             </Stack>
             <Typography
