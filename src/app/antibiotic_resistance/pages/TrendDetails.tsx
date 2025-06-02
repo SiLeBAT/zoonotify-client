@@ -47,7 +47,7 @@ interface Content {
 }
 
 // ---- FLAT STRAPI v5 DATA ----
-interface ResistanceApiItem {
+export interface ResistanceApiItem {
     id: number;
     samplingYear: number;
     superCategorySampleOrigin?: { id: number; name: string } | null;
@@ -58,11 +58,11 @@ interface ResistanceApiItem {
     antimicrobialSubstance?: { id: number; name: string } | null;
     specie?: { id: number; name: string } | null;
     resistenzrate: number;
-    anzahlGetesteterIsolate: number; // <-- Add this line!
-    anzahlResistenterIsolate: number; // Optional: also from your model
-    minKonfidenzintervall: number; // Optional
+    anzahlGetesteterIsolate: number;
+    anzahlResistenterIsolate: number;
+    minKonfidenzintervall: number;
     maxKonfidenzintervall: number;
-    // ...any other fields
+    // ...any other fields you have
 }
 
 interface ResistanceApiResponse {
@@ -129,6 +129,10 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
     // --- Chart state ---
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filteredData, setFilteredData] = useState<any[]>([]);
+    const [filteredFullData, setFilteredFullData] = useState<
+        ResistanceApiItem[]
+    >([]);
+
     const [showChart, setShowChart] = useState(false);
 
     // --- UI/UX states ---
@@ -394,7 +398,7 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
             result = result.filter(
                 (r) => r.matrix && selected.matrix.includes(r.matrix.name)
             );
-
+        setFilteredFullData(result); // <-- NEW: store all fields for CSV!
         const chartData = result
             .map((r) => ({
                 samplingYear: r.samplingYear,
@@ -697,7 +701,10 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                     {/* Trend Chart */}
                     {showChart && (
                         <Box mt={2} mb={2}>
-                            <TrendChart data={filteredData} />
+                            <TrendChart
+                                data={filteredData}
+                                fullData={filteredFullData}
+                            />
                         </Box>
                     )}
                 </Box>
