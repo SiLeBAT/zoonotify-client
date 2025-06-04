@@ -34,6 +34,7 @@ import {
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
 import { TrendChart } from "./TrendChart";
+import type { SelectChangeEvent } from "@mui/material/Select";
 
 interface TrendDetailsProps {
     microorganism: string;
@@ -46,7 +47,6 @@ interface Content {
     content: string;
 }
 
-// ---- FLAT STRAPI v5 DATA ----
 export interface ResistanceApiItem {
     id: number;
     samplingYear: number;
@@ -62,7 +62,6 @@ export interface ResistanceApiItem {
     anzahlResistenterIsolate: number;
     minKonfidenzintervall: number;
     maxKonfidenzintervall: number;
-    // ...any other fields you have
 }
 
 interface ResistanceApiResponse {
@@ -89,6 +88,62 @@ type FilterKey =
     | "matrixGroup"
     | "matrix";
 
+const emptyFilterState: Record<FilterKey, string[]> = {
+    samplingYear: [],
+    antimicrobialSubstance: [],
+    specie: [],
+    superCategorySampleOrigin: [],
+    sampleOrigin: [],
+    samplingStage: [],
+    matrixGroup: [],
+    matrix: [],
+};
+
+// ---- URL Sync Helpers ----
+function updateUrlWithFilters(
+    selected: Record<FilterKey, string[]>,
+    microorganism: string
+): void {
+    const params = new URLSearchParams(window.location.search);
+    [
+        "samplingYear",
+        "antimicrobialSubstance",
+        "specie",
+        "superCategorySampleOrigin",
+        "sampleOrigin",
+        "samplingStage",
+        "matrixGroup",
+        "matrix",
+    ].forEach((key) => params.delete(key));
+    Object.entries(selected).forEach(([key, arr]) => {
+        arr.forEach((val) => params.append(key, val));
+    });
+    if (!params.has("microorganism"))
+        params.set("microorganism", microorganism);
+    params.set("view", "trend");
+    params.set("lang", i18next.language);
+    window.history.replaceState(null, "", `?${params.toString()}`);
+}
+
+function readFiltersFromUrl(): Record<FilterKey, string[]> {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    return {
+        samplingYear: urlSearchParams.getAll("samplingYear"),
+        antimicrobialSubstance: urlSearchParams.getAll(
+            "antimicrobialSubstance"
+        ),
+        specie: urlSearchParams.getAll("specie"),
+        superCategorySampleOrigin: urlSearchParams.getAll(
+            "superCategorySampleOrigin"
+        ),
+        sampleOrigin: urlSearchParams.getAll("sampleOrigin"),
+        samplingStage: urlSearchParams.getAll("samplingStage"),
+        matrixGroup: urlSearchParams.getAll("matrixGroup"),
+        matrix: urlSearchParams.getAll("matrix"),
+    };
+}
+
+// ---- Main Component ----
 export const TrendDetails: React.FC<TrendDetailsProps> = ({
     microorganism,
     onBack,
@@ -99,40 +154,17 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
     const [resistanceRawData, setResistanceRawData] = useState<
         ResistanceApiItem[]
     >([]);
-
-    // --- All possible options for each filter (updated dynamically) ---
     const [filterOptions, setFilterOptions] = useState<
         Record<FilterKey, string[]>
-    >({
-        samplingYear: [],
-        antimicrobialSubstance: [],
-        specie: [],
-        superCategorySampleOrigin: [],
-        sampleOrigin: [],
-        samplingStage: [],
-        matrixGroup: [],
-        matrix: [],
-    });
-
-    // --- Selected filters ---
+    >({ ...emptyFilterState });
     const [selected, setSelected] = useState<Record<FilterKey, string[]>>({
-        samplingYear: [],
-        antimicrobialSubstance: [],
-        specie: [],
-        superCategorySampleOrigin: [],
-        sampleOrigin: [],
-        samplingStage: [],
-        matrixGroup: [],
-        matrix: [],
+        ...emptyFilterState,
     });
-
-    // --- Chart state ---
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filteredData, setFilteredData] = useState<any[]>([]);
     const [filteredFullData, setFilteredFullData] = useState<
         ResistanceApiItem[]
     >([]);
-
     const [showChart, setShowChart] = useState(false);
 
     // --- UI/UX states ---
@@ -142,7 +174,83 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
 
-    // Fetch all resistance data for the microorganism once
+    // --- Search ---
+    const handleSearch = (): void => {
+        let result = resistanceRawData;
+        if (selected.samplingYear.length)
+            result = result.filter((r) =>
+                selected.samplingYear.includes(String(r.samplingYear))
+            );
+        if (selected.antimicrobialSubstance.length)
+            result = result.filter(
+                (r) =>
+                    r.antimicrobialSubstance &&
+                    selected.antimicrobialSubstance.includes(
+                        r.antimicrobialSubstance.name
+                    )
+            );
+        if (selected.specie.length)
+            result = result.filter(
+                (r) => r.specie && selected.specie.includes(r.specie.name)
+            );
+        if (selected.superCategorySampleOrigin.length)
+            result = result.filter(
+                (r) =>
+                    r.superCategorySampleOrigin &&
+                    selected.superCategorySampleOrigin.includes(
+                        r.superCategorySampleOrigin.name
+                    )
+            );
+        if (selected.sampleOrigin.length)
+            result = result.filter(
+                (r) =>
+                    r.sampleOrigin &&
+                    selected.sampleOrigin.includes(r.sampleOrigin.name)
+            );
+        if (selected.samplingStage.length)
+            result = result.filter(
+                (r) =>
+                    r.samplingStage &&
+                    selected.samplingStage.includes(r.samplingStage.name)
+            );
+        if (selected.matrixGroup.length)
+            result = result.filter(
+                (r) =>
+                    r.matrixGroup &&
+                    selected.matrixGroup.includes(r.matrixGroup.name)
+            );
+        if (selected.matrix.length)
+            result = result.filter(
+                (r) => r.matrix && selected.matrix.includes(r.matrix.name)
+            );
+        setFilteredFullData(result);
+        const chartData = result
+            .map((r) => ({
+                samplingYear: r.samplingYear,
+                resistenzrate: r.resistenzrate,
+                antimicrobialSubstance: r.antimicrobialSubstance?.name ?? "",
+                anzahlGetesteterIsolate: r.anzahlGetesteterIsolate,
+            }))
+            .filter((d) => !!d.antimicrobialSubstance);
+
+        setFilteredData(chartData);
+        setShowChart(true);
+    };
+
+    // --------- Data fetching & initialization with deep linking -----------
+    // 1. On mount, read filters from URL and set them
+    useEffect(() => {
+        const initialSelected = readFiltersFromUrl();
+        setSelected(initialSelected);
+        const anySelected = Object.values(initialSelected).some(
+            (arr) => arr.length > 0
+        );
+        if (anySelected) {
+            setShowChart(false); // Will set to true on search
+        }
+    }, []);
+
+    // 2. Fetch all resistance data for the microorganism whenever microorganism or lang changes
     useEffect(() => {
         async function fetchResistanceOptions(): Promise<void> {
             setLoading(true);
@@ -169,29 +277,17 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
         if (microorganism) {
             fetchResistanceOptions();
             setShowChart(false);
-            setSelected({
-                samplingYear: [],
-                antimicrobialSubstance: [],
-                specie: [],
-                superCategorySampleOrigin: [],
-                sampleOrigin: [],
-                samplingStage: [],
-                matrixGroup: [],
-                matrix: [],
-            });
         }
     }, [i18next.language, microorganism]);
 
-    // This is the core: recompute the available options for each filter depending on other selections
+    // 3. Recompute filter options as in your logic
     useEffect(() => {
         function computeAvailableOptions(
             raw: ResistanceApiItem[],
             currentSelected: typeof selected
         ): Record<FilterKey, string[]> {
-            // Helper: for each filter, exclude its own selection when filtering others
             function filterData(exclude: FilterKey): ResistanceApiItem[] {
                 return raw.filter((item) => {
-                    // For each filter except the excluded one, make sure the value is among currentSelected[filter], if any is selected
                     return (
                         (exclude === "samplingYear" ||
                             !currentSelected.samplingYear.length ||
@@ -255,7 +351,6 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                 matrix: [],
             };
 
-            // For each filter, compute the available options
             for (const key of Object.keys(result) as FilterKey[]) {
                 const filtered = filterData(key);
                 let values: string[] = [];
@@ -278,7 +373,6 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                                     .filter((x): x is string => !!x)
                             )
                         ).sort();
-
                         break;
                     case "specie":
                         values = Array.from(
@@ -344,86 +438,31 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
             return result;
         }
 
-        // Update options any time raw data or selected filters change
         setFilterOptions(computeAvailableOptions(resistanceRawData, selected));
     }, [resistanceRawData, selected]);
 
-    // --- Search ---
-    const handleSearch = (): void => {
-        let result = resistanceRawData;
+    // 4. Deep linking: Update URL every time filters change
+    useEffect(() => {
+        updateUrlWithFilters(selected, microorganism);
+    }, [selected, microorganism]);
 
-        if (selected.samplingYear.length)
-            result = result.filter((r) =>
-                selected.samplingYear.includes(String(r.samplingYear))
-            );
-        if (selected.antimicrobialSubstance.length)
-            result = result.filter(
-                (r) =>
-                    r.antimicrobialSubstance &&
-                    selected.antimicrobialSubstance.includes(
-                        r.antimicrobialSubstance.name
-                    )
-            );
-        if (selected.specie.length)
-            result = result.filter(
-                (r) => r.specie && selected.specie.includes(r.specie.name)
-            );
-        if (selected.superCategorySampleOrigin.length)
-            result = result.filter(
-                (r) =>
-                    r.superCategorySampleOrigin &&
-                    selected.superCategorySampleOrigin.includes(
-                        r.superCategorySampleOrigin.name
-                    )
-            );
-        if (selected.sampleOrigin.length)
-            result = result.filter(
-                (r) =>
-                    r.sampleOrigin &&
-                    selected.sampleOrigin.includes(r.sampleOrigin.name)
-            );
-        if (selected.samplingStage.length)
-            result = result.filter(
-                (r) =>
-                    r.samplingStage &&
-                    selected.samplingStage.includes(r.samplingStage.name)
-            );
-        if (selected.matrixGroup.length)
-            result = result.filter(
-                (r) =>
-                    r.matrixGroup &&
-                    selected.matrixGroup.includes(r.matrixGroup.name)
-            );
-        if (selected.matrix.length)
-            result = result.filter(
-                (r) => r.matrix && selected.matrix.includes(r.matrix.name)
-            );
-        setFilteredFullData(result); // <-- NEW: store all fields for CSV!
-        const chartData = result
-            .map((r) => ({
-                samplingYear: r.samplingYear,
-                resistenzrate: r.resistenzrate,
-                antimicrobialSubstance: r.antimicrobialSubstance?.name ?? "",
-                anzahlGetesteterIsolate: r.anzahlGetesteterIsolate,
-            }))
-            .filter((d) => !!d.antimicrobialSubstance);
+    // 5. Deep linking: update lang param in URL if language changes
+    useEffect(() => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        urlSearchParams.set("lang", i18next.language);
+        window.history.replaceState(null, "", `?${urlSearchParams.toString()}`);
+    }, [i18next.language]);
 
-        setFilteredData(chartData);
-        setShowChart(true);
-    };
+    useEffect(() => {
+        const anyFilter = Object.values(selected).some((arr) => arr.length > 0);
+        if (anyFilter && !showChart && resistanceRawData.length > 0) {
+            handleSearch();
+        }
+    }, [selected, showChart, resistanceRawData]);
 
     // --- Reset all filters ---
     const resetFilters = (): void => {
-        setSelected({
-            samplingYear: [],
-            antimicrobialSubstance: [],
-            specie: [],
-            superCategorySampleOrigin: [],
-            sampleOrigin: [],
-            samplingStage: [],
-            matrixGroup: [],
-            matrix: [],
-        });
+        setSelected({ ...emptyFilterState });
         setShowChart(false);
     };
 
@@ -462,8 +501,8 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
         const allSelected =
             options.length > 0 && value.length === options.length;
         const someSelected = value.length > 0 && !allSelected;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const handleChange = (event: any): void => {
+
+        const handleChange = (event: SelectChangeEvent<string[]>): void => {
             const v = event.target.value as string[];
             if (v.includes("all")) {
                 setSelected((prev) => ({
