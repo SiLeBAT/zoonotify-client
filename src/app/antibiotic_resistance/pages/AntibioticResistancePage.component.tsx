@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
 import { Typography } from "@mui/material";
 import { TrendDetails } from "./TrendDetails";
+import i18next from "i18next";
 
+// --- These constants stay the same ---
 const ORGANISMS = [
     "E. coli",
     "Campylobacter spp.",
@@ -13,7 +15,6 @@ const ORGANISMS = [
     "Enterococcus spp.",
 ];
 
-// Utils for microorganism name formatting
 const italicWords: string[] = [
     "Salmonella",
     "coli",
@@ -34,7 +35,6 @@ const formatMicroorganismNameArray = (
         console.warn("Received null or undefined microorganism name");
         return [];
     }
-
     const words = microName
         .split(/([-\s])/)
         .filter((part: string) => part.length > 0);
@@ -43,16 +43,13 @@ const formatMicroorganismNameArray = (
         if (word.trim() === "" || word === "-") {
             return { text: word, italic: false };
         }
-
         const italic = italicWords.some((italicWord: string) =>
             word.toLowerCase().includes(italicWord.toLowerCase())
         );
-
         return { text: word, italic };
     });
 };
 
-// FormattedMicroorganismName component (now exported)
 export interface FormattedMicroorganismNameProps {
     microName: string | null | undefined;
     isBreadcrumb?: boolean;
@@ -79,20 +76,69 @@ export const FormattedMicroorganismName: React.FC<
     );
 };
 
-// AntibioticResistancePageComponent
+// --- URL Deep Linking helpers ---
+function updateUrl(selectedOrg: string, showTrendDetails: boolean): void {
+    const params = new URLSearchParams(window.location.search);
+    params.set("microorganism", selectedOrg);
+    params.set("view", showTrendDetails ? "trend" : "main");
+    // Always sync lang!
+    params.set("lang", i18next.language); // Always set, even if present
+    window.history.replaceState(null, "", `?${params.toString()}`);
+}
+
+function readStateFromUrl(): {
+    selectedOrg: string;
+    showTrendDetails: boolean;
+} {
+    const params = new URLSearchParams(window.location.search);
+    const orgParam = params.get("microorganism");
+    // Type-safe, no non-null assertion
+    const selectedOrg =
+        typeof orgParam === "string" && ORGANISMS.includes(orgParam)
+            ? orgParam
+            : ORGANISMS[0];
+    const showTrendDetails = params.get("view") === "trend";
+    return { selectedOrg, showTrendDetails };
+}
+
+// --- Main component ---
 export function AntibioticResistancePageComponent(): JSX.Element {
     const { t } = useTranslation(["Antibiotic"]);
-    const [selectedOrg, setSelectedOrg] = useState(ORGANISMS[0]);
-    const [showTrendDetails, setShowTrendDetails] = useState(false);
+    const [state, setState] = useState<{
+        selectedOrg: string;
+        showTrendDetails: boolean;
+    }>(() => readStateFromUrl());
+    const { selectedOrg, showTrendDetails } = state;
 
-    // now explicitly returning void
-    const handleTrendClick = (): void => {
-        setShowTrendDetails(true);
+    // On mount: sync state from URL (deep link support)
+    useEffect((): void => {
+        const parsed = readStateFromUrl();
+        setState(parsed);
+    }, []);
+
+    // Whenever selectedOrg or showTrendDetails change, update URL
+    useEffect((): void => {
+        updateUrl(selectedOrg, showTrendDetails);
+    }, [selectedOrg, showTrendDetails]);
+
+    // Whenever language changes, update URL as well!
+    useEffect((): void => {
+        updateUrl(selectedOrg, showTrendDetails);
+    }, [selectedOrg, showTrendDetails, i18next.language]);
+
+    // Handle org selection from sidebar
+    const handleOrgSelect = (org: string): void => {
+        setState({ selectedOrg: org, showTrendDetails: false });
     };
 
-    // now explicitly returning void
+    // Go to trend view
+    const handleTrendClick = (): void => {
+        setState((prev) => ({ ...prev, showTrendDetails: true }));
+    };
+
+    // Go back to organism selection view
     const handleBack = (): void => {
-        setShowTrendDetails(false);
+        setState((prev) => ({ ...prev, showTrendDetails: false }));
     };
 
     return (
@@ -205,7 +251,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                                 ? " abx-active"
                                                 : ""
                                         }`}
-                                        onClick={() => setSelectedOrg(org)}
+                                        onClick={() => handleOrgSelect(org)}
                                     >
                                         <FormattedMicroorganismName
                                             microName={org}
