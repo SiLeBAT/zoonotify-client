@@ -261,7 +261,7 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                     `&filters[microorganism][name][$eq]=${encodeURIComponent(
                         microorganism
                     )}` +
-                    `&populate=*&pagination[pageSize]=500`;
+                    `&populate=*&pagination[pageSize]=8000`;
 
                 const res = await callApiService<ResistanceApiResponse>(url);
                 setResistanceRawData(res.data?.data || []);
