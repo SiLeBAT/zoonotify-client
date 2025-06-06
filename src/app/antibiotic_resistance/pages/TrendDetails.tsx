@@ -148,12 +148,14 @@ function getGroupKey(r: ResistanceApiItem): string {
     }`;
 }
 
-function getGroupLabel(key: string): string {
+function getGroupLabel(key: string, t: (key: string) => string): string {
     const [specie, matrix, sampleOrigin] = key.split("|||");
     if (specie) {
-        return `Species: ${specie}, Matrix: ${matrix}, Sample Origin: ${sampleOrigin}`;
+        return `${t("SPECIES")}: ${specie}, ${t("MATRIX")}: ${matrix}, ${t(
+            "SAMPLE_ORIGIN"
+        )}: ${sampleOrigin}`;
     }
-    return `Matrix: ${matrix}, Sample Origin: ${sampleOrigin}`;
+    return `${t("MATRIX")}: ${matrix}, ${t("SAMPLE_ORIGIN")}: ${sampleOrigin}`;
 }
 // ----------------------------------------- //
 
@@ -651,12 +653,6 @@ export const TrendDetails: React.FC<{
 
                     <Stack spacing={2} sx={{ opacity: loading ? 0.5 : 1 }}>
                         {renderSelectWithSelectAll(
-                            "samplingYear",
-                            t("SAMPLING_YEAR"),
-                            "More Info on Sampling Year",
-                            "SAMPLING_YEAR"
-                        )}
-                        {renderSelectWithSelectAll(
                             "antimicrobialSubstance",
                             t("ANTIBIOTIC_SUBSTANCE"),
                             "More Info on Antibiotic Substances",
@@ -788,7 +784,8 @@ export const TrendDetails: React.FC<{
                                                         }}
                                                     >
                                                         {getGroupLabel(
-                                                            groupKey
+                                                            groupKey,
+                                                            t
                                                         )}
                                                     </Typography>
                                                     <TrendChart
