@@ -18,9 +18,12 @@ import {
     DialogActions,
     CircularProgress,
     Alert,
+    Grid,
     Checkbox,
     ListItemText,
+    Pagination,
 } from "@mui/material";
+
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
@@ -35,17 +38,6 @@ import {
 import Markdown from "markdown-to-jsx";
 import { TrendChart } from "./TrendChart";
 import type { SelectChangeEvent } from "@mui/material/Select";
-
-interface TrendDetailsProps {
-    microorganism: string;
-    onBack: () => void;
-}
-
-interface Content {
-    id: number;
-    title: string;
-    content: string;
-}
 
 export interface ResistanceApiItem {
     id: number;
@@ -99,7 +91,6 @@ const emptyFilterState: Record<FilterKey, string[]> = {
     matrix: [],
 };
 
-// ---- URL Sync Helpers ----
 function updateUrlWithFilters(
     selected: Record<FilterKey, string[]>,
     microorganism: string
@@ -143,14 +134,37 @@ function readFiltersFromUrl(): Record<FilterKey, string[]> {
     };
 }
 
-// ---- Main Component ----
-export const TrendDetails: React.FC<TrendDetailsProps> = ({
-    microorganism,
-    onBack,
-}) => {
+// ----------- GROUP KEY & LABEL ----------- //
+function getGroupKey(r: ResistanceApiItem): string {
+    // If specie is present, use specie, matrix, and sampleOrigin
+    if (r.specie && r.specie.name) {
+        return `${r.specie.name}|||${r.matrix?.name || "No matrix"}|||${
+            r.sampleOrigin?.name || "No sample origin"
+        }`;
+    }
+    // Else, use just matrix and sampleOrigin
+    return `|||${r.matrix?.name || "No matrix"}|||${
+        r.sampleOrigin?.name || "No sample origin"
+    }`;
+}
+
+function getGroupLabel(key: string): string {
+    const [specie, matrix, sampleOrigin] = key.split("|||");
+    if (specie) {
+        return `Species: ${specie}, Matrix: ${matrix}, Sample Origin: ${sampleOrigin}`;
+    }
+    return `Matrix: ${matrix}, Sample Origin: ${sampleOrigin}`;
+}
+// ----------------------------------------- //
+
+const CHARTS_PER_PAGE = 2; // <--- How many charts per page
+
+export const TrendDetails: React.FC<{
+    microorganism: string;
+    onBack: () => void;
+}> = ({ microorganism, onBack }) => {
     const { t } = useTranslation(["Antibiotic"]);
 
-    // --- Raw data ---
     const [resistanceRawData, setResistanceRawData] = useState<
         ResistanceApiItem[]
     >([]);
@@ -160,12 +174,13 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
     const [selected, setSelected] = useState<Record<FilterKey, string[]>>({
         ...emptyFilterState,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [filteredData, setFilteredData] = useState<any[]>([]);
     const [filteredFullData, setFilteredFullData] = useState<
         ResistanceApiItem[]
     >([]);
     const [showChart, setShowChart] = useState(false);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
 
     // --- UI/UX states ---
     const [loading, setLoading] = useState(false);
@@ -224,21 +239,11 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                 (r) => r.matrix && selected.matrix.includes(r.matrix.name)
             );
         setFilteredFullData(result);
-        const chartData = result
-            .map((r) => ({
-                samplingYear: r.samplingYear,
-                resistenzrate: r.resistenzrate,
-                antimicrobialSubstance: r.antimicrobialSubstance?.name ?? "",
-                anzahlGetesteterIsolate: r.anzahlGetesteterIsolate,
-            }))
-            .filter((d) => !!d.antimicrobialSubstance);
-
-        setFilteredData(chartData);
         setShowChart(true);
+        setCurrentPage(1); // Reset to first page after a new search
     };
 
-    // --------- Data fetching & initialization with deep linking -----------
-    // 1. On mount, read filters from URL and set them
+    // Data fetching, filters, etc (no changes)
     useEffect(() => {
         const initialSelected = readFiltersFromUrl();
         setSelected(initialSelected);
@@ -246,11 +251,10 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
             (arr) => arr.length > 0
         );
         if (anySelected) {
-            setShowChart(false); // Will set to true on search
+            setShowChart(false);
         }
     }, []);
 
-    // 2. Fetch all resistance data for the microorganism whenever microorganism or lang changes
     useEffect(() => {
         async function fetchResistanceOptions(): Promise<void> {
             setLoading(true);
@@ -280,7 +284,6 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
         }
     }, [i18next.language, microorganism]);
 
-    // 3. Recompute filter options as in your logic
     useEffect(() => {
         function computeAvailableOptions(
             raw: ResistanceApiItem[],
@@ -441,26 +444,17 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
         setFilterOptions(computeAvailableOptions(resistanceRawData, selected));
     }, [resistanceRawData, selected]);
 
-    // 4. Deep linking: Update URL every time filters change
     useEffect(() => {
         updateUrlWithFilters(selected, microorganism);
     }, [selected, microorganism]);
 
-    // 5. Deep linking: update lang param in URL if language changes
     useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.search);
         urlSearchParams.set("lang", i18next.language);
         window.history.replaceState(null, "", `?${urlSearchParams.toString()}`);
     }, [i18next.language]);
 
-    useEffect(() => {
-        const anyFilter = Object.values(selected).some((arr) => arr.length > 0);
-        if (anyFilter && !showChart && resistanceRawData.length > 0) {
-            handleSearch();
-        }
-    }, [selected, showChart, resistanceRawData]);
-
-    // --- Reset all filters ---
+    // Reset all filters
     const resetFilters = (): void => {
         setSelected({ ...emptyFilterState });
         setShowChart(false);
@@ -474,7 +468,8 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                 translatedCategory
             )}&locale=${i18next.language}&pagination[pageSize]=1`;
             const response = await callApiService<
-                CMSResponse<Array<Content>, unknown>
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                CMSResponse<Array<any>, unknown>
             >(url);
             if (response.data && response.data.data.length > 0) {
                 const entity = response.data.data[0];
@@ -488,7 +483,6 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
     };
     const handleClose = (): void => setInfoDialogOpen(false);
 
-    // --- Render MUI Select ---
     function renderSelectWithSelectAll(
         key: FilterKey,
         label: string,
@@ -596,6 +590,25 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
             </Stack>
         );
     }
+
+    // -------- GROUPING DATA for rendering charts -------- //
+    const grouped = filteredFullData.reduce((acc, item) => {
+        const key = getGroupKey(item);
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+        return acc;
+    }, {} as Record<string, ResistanceApiItem[]>);
+
+    // -------- PAGINATION LOGIC FOR GROUPED CHARTS ------- //
+    const groupEntries = Object.entries(grouped);
+    const totalCharts = groupEntries.length;
+    const totalPages = Math.ceil(totalCharts / CHARTS_PER_PAGE);
+
+    // Charts to display for current page:
+    const paginatedGroups = groupEntries.slice(
+        (currentPage - 1) * CHARTS_PER_PAGE,
+        currentPage * CHARTS_PER_PAGE
+    );
 
     return (
         <>
@@ -737,13 +750,74 @@ export const TrendDetails: React.FC<TrendDetailsProps> = ({
                     >
                         {t("Back")}
                     </Button>
-                    {/* Trend Chart */}
+                    {/* ----------- PAGINATED GROUPED CHARTS ----------- */}
                     {showChart && (
                         <Box mt={2} mb={2}>
-                            <TrendChart
-                                data={filteredData}
-                                fullData={filteredFullData}
-                            />
+                            <Grid container spacing={4}>
+                                {paginatedGroups.map(
+                                    ([groupKey, groupItems]) => {
+                                        const chartData = groupItems
+                                            .map((r) => ({
+                                                samplingYear: r.samplingYear,
+                                                resistenzrate: r.resistenzrate,
+                                                antimicrobialSubstance:
+                                                    r.antimicrobialSubstance
+                                                        ?.name ?? "",
+                                                anzahlGetesteterIsolate:
+                                                    r.anzahlGetesteterIsolate,
+                                            }))
+                                            .filter(
+                                                (d) =>
+                                                    !!d.antimicrobialSubstance
+                                            );
+
+                                        return (
+                                            <Grid
+                                                item
+                                                xs={12}
+                                                md={6}
+                                                key={groupKey}
+                                            >
+                                                <Box mb={5}>
+                                                    <Typography
+                                                        variant="h6"
+                                                        mb={1}
+                                                        sx={{
+                                                            color: "#003663",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >
+                                                        {getGroupLabel(
+                                                            groupKey
+                                                        )}
+                                                    </Typography>
+                                                    <TrendChart
+                                                        data={chartData}
+                                                        fullData={groupItems}
+                                                    />
+                                                </Box>
+                                            </Grid>
+                                        );
+                                    }
+                                )}
+                            </Grid>
+                            {totalPages > 1 && (
+                                <Box
+                                    mt={4}
+                                    display="flex"
+                                    justifyContent="center"
+                                >
+                                    <Pagination
+                                        count={totalPages}
+                                        page={currentPage}
+                                        onChange={(_, value) =>
+                                            setCurrentPage(value)
+                                        }
+                                        color="primary"
+                                        size="large"
+                                    />
+                                </Box>
+                            )}
                         </Box>
                     )}
                 </Box>

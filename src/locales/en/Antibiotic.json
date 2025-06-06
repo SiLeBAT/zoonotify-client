@@ -27,5 +27,7 @@
   "RESET_FILTERS": "Reset Filters",
   "Download_Chart": "DOWNLOAD CHART",
   "DOWNLOAD_ZIP_FILE": "Data download",
+  "Year": "Year",
+  "Resistenzrate (%)": "Resistance rate (%)",
   "Multi": " Multiple resistance Graph"
 }
