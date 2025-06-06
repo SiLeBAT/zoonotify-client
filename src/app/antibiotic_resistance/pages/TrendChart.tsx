@@ -14,8 +14,7 @@ import {
 } from "recharts";
 import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { ResistanceApiItem } from "./TrendDetails"; // Adjust path if needed
-
+import { ResistanceApiItem } from "./TrendDetails";
 export interface TrendChartProps {
     data: {
         samplingYear: number;
@@ -143,7 +142,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
             .replace("T", "_");
     }
 
-    // --------- Fix variable shadowing below! ---------
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
@@ -203,7 +201,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
         return csvRows.join("\n");
     }
 
-    // --------- Give explicit return type and fix shadowing ---------
     async function downloadZipWithCSVs(
         rows: ResistanceApiItem[]
     ): Promise<void> {
@@ -235,7 +232,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
                     borderRadius: "16px",
                 }}
             >
-                <ResponsiveContainer width="100%" height={520}>
+                <ResponsiveContainer width="100%" height={450}>
                     <LineChart data={chartData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
@@ -244,7 +241,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
                             tick={renderCustomXAxisTick(chartData)}
                         >
                             <Label
-                                value="Year"
+                                value={t("Year")}
                                 offset={-5}
                                 position="insideBottom"
                             />
@@ -256,7 +253,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
                             <Label
                                 angle={-90}
                                 position="insideLeft"
-                                value="Resistenzrate (%)"
+                                value={t("Resistenzrate (%)")}
                                 style={{ textAnchor: "middle" }}
                             />
                         </YAxis>
