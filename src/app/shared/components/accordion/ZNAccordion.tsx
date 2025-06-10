@@ -82,8 +82,8 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                 aria-controls="zn-accordion-content"
                 id="zn-accordion-header"
                 sx={{
-                    px: 3, // 24px horizontal padding (default)
-                    py: 0, // collapse vertical padding
+                    px: 5, //  horizontal padding (default)
+                    py: 1, // collapse vertical padding
                     minHeight: 0,
                     "& .MuiAccordionSummary-content": {
                         margin: 0,
@@ -97,7 +97,6 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                         fontWeight: "bold",
                         fontSize: "1rem",
                         display: "flex",
-                        alignItems: "center",
                         margin: 0,
                     }}
                 >
