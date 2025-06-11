@@ -90,7 +90,13 @@ const emptyFilterState: Record<FilterKey, string[]> = {
     matrixGroup: [],
     matrix: [],
 };
-
+function shouldShowSpeciesFilter(microorganism: string): boolean {
+    // Must match the names in your ORGANISMS list exactly!
+    return (
+        microorganism === "Campylobacter spp." ||
+        microorganism === "Enterococcus spp."
+    );
+}
 function updateUrlWithFilters(
     selected: Record<FilterKey, string[]>,
     microorganism: string
@@ -658,12 +664,13 @@ export const TrendDetails: React.FC<{
                             "More Info on Antibiotic Substances",
                             "ANTIBIOTIC_SUBSTANCE"
                         )}
-                        {renderSelectWithSelectAll(
-                            "specie",
-                            t("SPECIES"),
-                            "More Info on Species",
-                            "SPECIES"
-                        )}
+                        {shouldShowSpeciesFilter(microorganism) &&
+                            renderSelectWithSelectAll(
+                                "specie",
+                                t("SPECIES"),
+                                "More Info on Species",
+                                "SPECIES"
+                            )}
                         {renderSelectWithSelectAll(
                             "superCategorySampleOrigin",
                             t("SUPER-CATEGORY-SAMPLE-ORIGIN"),
