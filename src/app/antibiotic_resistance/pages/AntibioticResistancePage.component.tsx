@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
-import { Typography } from "@mui/material";
+import {
+    Typography,
+    Dialog,
+    DialogTitle,
+    DialogActions,
+    Button,
+} from "@mui/material";
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
 
@@ -110,6 +116,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
     }>(() => readStateFromUrl());
     const { selectedOrg, showTrendDetails } = state;
 
+    // State for "Coming soon" modal
+    const [comingSoonOpen, setComingSoonOpen] = useState(false);
+
     // On mount: sync state from URL (deep link support)
     useEffect((): void => {
         const parsed = readStateFromUrl();
@@ -139,6 +148,16 @@ export function AntibioticResistancePageComponent(): JSX.Element {
     // Go back to organism selection view
     const handleBack = (): void => {
         setState((prev) => ({ ...prev, showTrendDetails: false }));
+    };
+
+    // Handle coming soon click
+    const handleComingSoon = (): void => {
+        setComingSoonOpen(true);
+    };
+
+    // Handle closing the modal
+    const handleCloseComingSoon = (): void => {
+        setComingSoonOpen(false);
     };
 
     return (
@@ -232,7 +251,6 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-bottom: 0.5rem;
         }
       `}</style>
-
             <PageLayoutComponent>
                 {showTrendDetails ? (
                     <TrendDetails
@@ -260,7 +278,6 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 ))}
                             </ul>
                         </aside>
-
                         <section className="abx-content">
                             <div className="abx-breadcrumb">
                                 {t("AntibioticResistance")} /{" "}
@@ -276,7 +293,10 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 <div className="image-label">{t("Trend")}</div>
                                 <img src="/assets/trend.png" alt="Trend" />
                             </div>
-                            <div className="image-box">
+                            <div
+                                className="image-box"
+                                onClick={handleComingSoon}
+                            >
                                 <div className="image-label">
                                     {t("Substans")}
                                 </div>
@@ -285,13 +305,24 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     alt="Substans"
                                 />
                             </div>
-                            <div className="image-box bottom">
+                            <div
+                                className="image-box bottom"
+                                onClick={handleComingSoon}
+                            >
                                 <div className="image-label">{t("Multi")}</div>
                                 <img src="/assets/multi.png" alt="Multi" />
                             </div>
                         </section>
                     </div>
                 )}
+                <Dialog open={comingSoonOpen} onClose={handleCloseComingSoon}>
+                    <DialogTitle>{t("ComingSoon")}</DialogTitle>
+                    <DialogActions>
+                        <Button onClick={handleCloseComingSoon} autoFocus>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </PageLayoutComponent>
         </>
     );

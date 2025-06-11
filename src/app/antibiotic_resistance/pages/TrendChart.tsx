@@ -63,6 +63,15 @@ const COLORS = [
 const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     const { x, y, payload } = props;
     const entry = chartData.find((e) => e.samplingYear === payload.value);
+    let nValue = "-";
+    if (
+        entry &&
+        entry.anzahlGetesteterIsolate !== undefined &&
+        entry.anzahlGetesteterIsolate !== null &&
+        entry.anzahlGetesteterIsolate !== ""
+    ) {
+        nValue = entry.anzahlGetesteterIsolate;
+    }
     return (
         <g>
             <text
@@ -74,17 +83,15 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
             >
                 {payload.value}
             </text>
-            {entry && entry.anzahlGetesteterIsolate !== undefined && (
-                <text
-                    x={x}
-                    y={y + 28}
-                    textAnchor="middle"
-                    fill="#888"
-                    fontSize={12}
-                >
-                    N = {entry.anzahlGetesteterIsolate}
-                </text>
-            )}
+            <text
+                x={x}
+                y={y + 28}
+                textAnchor="middle"
+                fill="#888"
+                fontSize={12}
+            >
+                N = {nValue}
+            </text>
         </g>
     );
 };
@@ -93,8 +100,11 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation(["Antibiotic"]);
 
-    const years = Array.from(new Set(data.map((d) => d.samplingYear))).sort(
-        (a, b) => a - b
+    const startYear = 2012;
+    const endYear = 2023;
+    const years = Array.from(
+        { length: endYear - startYear + 1 },
+        (_, i) => startYear + i
     );
     const substances = Array.from(
         new Set(data.map((d) => d.antimicrobialSubstance))
@@ -237,12 +247,12 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
                             dataKey="samplingYear"
-                            height={52}
+                            height={60}
                             tick={renderCustomXAxisTick(chartData)}
                         >
                             <Label
                                 value={t("Year")}
-                                offset={-5}
+                                offset={-2}
                                 position="insideBottom"
                             />
                         </XAxis>
