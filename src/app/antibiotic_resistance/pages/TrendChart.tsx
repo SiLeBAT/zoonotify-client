@@ -15,6 +15,7 @@ import {
 import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
+
 export interface TrendChartProps {
     data: {
         samplingYear: number;
@@ -110,22 +111,36 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
         new Set(data.map((d) => d.antimicrobialSubstance))
     );
 
+    // --- MAIN LOGIC: Only show points where N >= 10 ---
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chartData = years.map((year) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const entry: any = { samplingYear: year };
+        // Get isolates for the year (to show N under X axis)
+        const isolatesForYear = data.filter((d) => d.samplingYear === year);
+        entry.anzahlGetesteterIsolate =
+            isolatesForYear.length > 0
+                ? isolatesForYear[0].anzahlGetesteterIsolate
+                : null;
+
         substances.forEach((substance) => {
             const found = data.find(
                 (d) =>
                     d.samplingYear === year &&
                     d.antimicrobialSubstance === substance
             );
-            entry[substance] = found ? found.resistenzrate : null;
+            // Only set value if N >= 10
+            if (
+                found &&
+                found.anzahlGetesteterIsolate !== undefined &&
+                found.anzahlGetesteterIsolate !== null &&
+                found.anzahlGetesteterIsolate >= 10
+            ) {
+                entry[substance] = found.resistenzrate;
+            } else {
+                entry[substance] = null;
+            }
         });
-        const isolatesForYear = data.filter((d) => d.samplingYear === year);
-        entry.anzahlGetesteterIsolate =
-            isolatesForYear.length > 0
-                ? isolatesForYear[0].anzahlGetesteterIsolate
-                : null;
         return entry;
     });
 
