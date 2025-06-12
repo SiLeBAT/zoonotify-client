@@ -317,7 +317,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                 )}
                 <Dialog open={comingSoonOpen} onClose={handleCloseComingSoon}>
                     <DialogTitle>{t("ComingSoon")}</DialogTitle>
-                    <DialogActions>
+                    <DialogActions sx={{ justifyContent: "center" }}>
                         <Button onClick={handleCloseComingSoon} autoFocus>
                             OK
                         </Button>
