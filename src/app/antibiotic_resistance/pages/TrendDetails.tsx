@@ -32,6 +32,7 @@ import { CMSResponse } from "../../shared/model/CMS.model";
 import i18next from "i18next";
 import {
     INFORMATION,
+    TREND_INFORMATION,
     RESISTANCES,
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
@@ -136,6 +137,12 @@ export const TrendDetails: React.FC<{
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
+    const [trendInfo, setTrendInfo] = useState<{
+        title: string;
+        description: string;
+    } | null>(null);
+    const [trendInfoLoading, setTrendInfoLoading] = useState(false);
+    const [trendInfoError, setTrendInfoError] = useState<string | null>(null);
 
     const menuItemTextStyle = `
 .menu-item-text-wrap {
@@ -145,7 +152,32 @@ export const TrendDetails: React.FC<{
   display: block;
 }
 `;
-
+    useEffect(() => {
+        async function fetchTrendInfo(): Promise<void> {
+            setTrendInfoLoading(true);
+            setTrendInfoError(null);
+            try {
+                const url = `${TREND_INFORMATION}?locale=${i18next.language}`;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const response = await callApiService<any>(url);
+                // For Strapi v5, singleType is at data directly
+                if (response?.data?.data) {
+                    setTrendInfo({
+                        title: response.data.data.title,
+                        description: response.data.data.description,
+                    });
+                } else {
+                    setTrendInfo(null);
+                }
+            } catch (err) {
+                setTrendInfoError("Failed to load trend information.");
+                setTrendInfo(null);
+            } finally {
+                setTrendInfoLoading(false);
+            }
+        }
+        fetchTrendInfo();
+    }, [i18next.language]);
     // DATA FETCHING
     useEffect(() => {
         async function fetchResistanceOptions(): Promise<void> {
@@ -843,6 +875,52 @@ export const TrendDetails: React.FC<{
                                         color="primary"
                                         size="large"
                                     />
+                                </Box>
+                            )}
+
+                            {trendInfoLoading && (
+                                <Box
+                                    mt={3}
+                                    display="flex"
+                                    justifyContent="center"
+                                >
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                    >
+                                        Loading trend information...
+                                    </Typography>
+                                </Box>
+                            )}
+                            {trendInfoError && (
+                                <Box
+                                    mt={3}
+                                    display="flex"
+                                    justifyContent="center"
+                                >
+                                    <Typography variant="body2" color="error">
+                                        {trendInfoError}
+                                    </Typography>
+                                </Box>
+                            )}
+                            {trendInfo && (
+                                <Box
+                                    mt={3}
+                                    mb={3}
+                                    p={3}
+                                    bgcolor="#f6f7fa"
+                                    borderRadius={2}
+                                >
+                                    <Typography
+                                        variant="h6"
+                                        gutterBottom
+                                        sx={{ color: "#003663" }}
+                                    >
+                                        {trendInfo.title}
+                                    </Typography>
+                                    <Markdown options={{ forceBlock: true }}>
+                                        {trendInfo.description}
+                                    </Markdown>
                                 </Box>
                             )}
                         </Box>
