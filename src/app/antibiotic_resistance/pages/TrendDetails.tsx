@@ -686,89 +686,106 @@ export const TrendDetails: React.FC<{
                         position: "fixed",
                         left: 0,
                         top: 56,
-                        width: 330,
-                        height: "calc(100vh - 56px)",
+                        width: 380,
+                        height: "calc(100vh - 75px)",
                         bgcolor: "#fff",
                         borderRight: "1px solid #e0e0e0",
-                        p: 3,
-                        overflowY: "auto",
+                        p: 0,
+                        overflow: "hidden",
                         zIndex: 1000,
+                        display: "flex",
+                        flexDirection: "column",
                     }}
                 >
-                    <Typography variant="h5" align="center" mb={2}>
-                        {t("Search options")}
-                    </Typography>
-                    {loading && (
-                        <Stack alignItems="center" my={3}>
-                            <CircularProgress />
-                            <Typography variant="body2" mt={1}>
-                                {t("Loading filter options...")}
-                            </Typography>
-                        </Stack>
-                    )}
-                    {fetchError && (
-                        <Alert severity="error" sx={{ mb: 2 }}>
-                            {fetchError}
-                        </Alert>
-                    )}
-                    <Stack spacing={2} sx={{ opacity: loading ? 0.5 : 1 }}>
-                        {/* antimicrobialSubstance removed! */}
-                        {shouldShowSpeciesFilter(microorganism) &&
-                            renderSelectWithSelectAll(
-                                "specie",
-                                t("SPECIES"),
-                                "More Info on Species",
-                                "SPECIES"
+                    <Box
+                        sx={{
+                            flex: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                            overflowY: "auto",
+                            p: 3,
+                        }}
+                    >
+                        <Typography variant="h5" align="center" mb={2}>
+                            {t("Search options")}
+                        </Typography>
+                        {loading && (
+                            <Stack alignItems="center" my={3}>
+                                <CircularProgress />
+                                <Typography variant="body2" mt={1}>
+                                    {t("Loading filter options...")}
+                                </Typography>
+                            </Stack>
+                        )}
+                        {fetchError && (
+                            <Alert severity="error" sx={{ mb: 2 }}>
+                                {fetchError}
+                            </Alert>
+                        )}
+                        <Stack spacing={2} sx={{ opacity: loading ? 0.5 : 1 }}>
+                            {/* Your filter options here */}
+                            {shouldShowSpeciesFilter(microorganism) &&
+                                renderSelectWithSelectAll(
+                                    "specie",
+                                    t("SPECIES"),
+                                    "More Info on Species",
+                                    "SPECIES"
+                                )}
+                            {renderSelectWithSelectAll(
+                                "superCategorySampleOrigin",
+                                t("SUPER-CATEGORY-SAMPLE-ORIGIN"),
+                                "More Info on Super Categories",
+                                "SUPER-CATEGORY-SAMPLE-ORIGIN"
                             )}
-                        {renderSelectWithSelectAll(
-                            "superCategorySampleOrigin",
-                            t("SUPER-CATEGORY-SAMPLE-ORIGIN"),
-                            "More Info on Super Categories",
-                            "SUPER-CATEGORY-SAMPLE-ORIGIN"
-                        )}
-                        {renderSelectWithSelectAll(
-                            "sampleOrigin",
-                            t("SAMPLE_ORIGIN"),
-                            "More Info on Sample Origins",
-                            "SAMPLE_ORIGIN"
-                        )}
-                        {renderSelectWithSelectAll(
-                            "samplingStage",
-                            t("SAMPLING_STAGE"),
-                            "More Info on Sampling Stages",
-                            "SAMPLING_STAGE"
-                        )}
-                        {renderSelectWithSelectAll(
-                            "matrixGroup",
-                            t("MATRIX_GROUP"),
-                            "More Info on Matrix Groups",
-                            "MATRIX_GROUP"
-                        )}
-                        {renderSelectWithSelectAll(
-                            "matrix",
-                            t("MATRIX"),
-                            "More Info on Matrices",
-                            "MATRIX"
-                        )}
-                    </Stack>
-                    <Box mt={4} display="flex" justifyContent="center" gap={2}>
-                        <Button
-                            variant="contained"
-                            startIcon={<SearchIcon />}
-                            sx={{ minWidth: 120, background: "#003663" }}
-                            onClick={handleSearch}
-                            disabled={loading}
+                            {renderSelectWithSelectAll(
+                                "sampleOrigin",
+                                t("SAMPLE_ORIGIN"),
+                                "More Info on Sample Origins",
+                                "SAMPLE_ORIGIN"
+                            )}
+                            {renderSelectWithSelectAll(
+                                "samplingStage",
+                                t("SAMPLING_STAGE"),
+                                "More Info on Sampling Stages",
+                                "SAMPLING_STAGE"
+                            )}
+                            {renderSelectWithSelectAll(
+                                "matrixGroup",
+                                t("MATRIX_GROUP"),
+                                "More Info on Matrix Groups",
+                                "MATRIX_GROUP"
+                            )}
+                            {renderSelectWithSelectAll(
+                                "matrix",
+                                t("MATRIX"),
+                                "More Info on Matrices",
+                                "MATRIX"
+                            )}
+                        </Stack>
+                        <Box
+                            mt={4}
+                            display="flex"
+                            justifyContent="center"
+                            gap={2}
                         >
-                            {t("SEARCH")}
-                        </Button>
-                        <Button
-                            variant="contained"
-                            sx={{ minWidth: 120, background: "#003663" }}
-                            onClick={resetFilters}
-                            disabled={loading}
-                        >
-                            {t("RESET FILTERS")}
-                        </Button>
+                            <Button
+                                variant="contained"
+                                startIcon={<SearchIcon />}
+                                sx={{ minWidth: 120, background: "#003663" }}
+                                onClick={handleSearch}
+                                disabled={loading}
+                            >
+                                {t("SEARCH")}
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{ minWidth: 120, background: "#003663" }}
+                                onClick={resetFilters}
+                                disabled={loading}
+                            >
+                                {t("RESET FILTERS")}
+                            </Button>
+                        </Box>
                     </Box>
                 </Paper>
                 {/* MAIN CONTENT */}
