@@ -37,4 +37,5 @@ export const SAMPLING_STAGES = `${CMS_API_ENDPOINT}/sampling-stages`;
 export const MICROORGANISMS = `${CMS_API_ENDPOINT}/microorganisms`;
 export const RESISTANCES = `${CMS_API_ENDPOINT}/resistances`;
 export const SPECIES = `${CMS_API_ENDPOINT}/species`;
+export const TREND_INFORMATION = `${CMS_API_ENDPOINT}/trend-information`;
 export const ANTIMICROBIAL_SUBSTANCES = `${CMS_API_ENDPOINT}/antimicrobial-substances`;
