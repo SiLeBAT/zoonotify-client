@@ -26,10 +26,7 @@ export interface AccordionProps {
 }
 
 export function ZNAccordion(props: AccordionProps): JSX.Element {
-    const {
-        withTopBorder = true,
-        contentGap = 0, // default: no gap
-    } = props;
+    const { withTopBorder = true } = props;
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const theme = useTheme();
 
@@ -71,6 +68,8 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                         display: "block",
                         content: '""',
                         width: "100%",
+                        textAlign: "left",
+                        alignItems: "center",
                         height: "2px",
                         backgroundColor: theme.palette.primary.main,
                     },
@@ -82,25 +81,42 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                 aria-controls="zn-accordion-content"
                 id="zn-accordion-header"
                 sx={{
-                    px: 5, //  horizontal padding (default)
-                    py: 1, // collapse vertical padding
+                    px: 5,
+                    py: 1,
                     minHeight: 0,
                     "& .MuiAccordionSummary-content": {
                         margin: 0,
                         "&.Mui-expanded": { margin: 0 },
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
                     },
                 }}
             >
-                <Typography
+                <Box
                     sx={{
-                        flex: 1,
-                        fontWeight: "bold",
-                        fontSize: "1rem",
                         display: "flex",
-                        margin: 0,
+                        alignItems: "center",
+                        width: "100%",
                     }}
                 >
-                    <Markdown>{props.title}</Markdown>
+                    {/* Title text, can wrap */}
+                    <Typography
+                        sx={{
+                            fontWeight: "bold",
+                            fontSize: "1rem",
+                            textAlign: "left",
+                            flex: 1,
+                            margin: 0,
+                            pr: 1,
+                            wordBreak: "break-word",
+                        }}
+                        component="span"
+                    >
+                        <Markdown>{props.title}</Markdown>
+                    </Typography>
+                    {/* Copy icon always at the end */}
                     {props.showCopyIcon && (
                         <Tooltip
                             title="Copy to Clipboard"
@@ -114,28 +130,22 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                                 onMouseEnter={() => setTooltipOpen(true)}
                                 onMouseLeave={() => setTooltipOpen(false)}
                                 size="small"
-                                sx={{ ml: 1 }}
                             >
                                 <ContentCopyIcon fontSize="small" />
                             </IconButton>
                         </Tooltip>
                     )}
-                </Typography>
+                </Box>
             </AccordionSummary>
 
             <AccordionDetails
                 sx={{
                     // configurable gap here:
-                    paddingTop: `${contentGap}px`,
-                    // strip any auto paragraph margin on the first element
-                    "& > :first-of-type": { marginTop: 0 },
+                    marginLeft: "2em",
+                    marginRight: "2em",
                     display: "block",
                     hyphens: "auto",
                     textAlign: "justify",
-                    ...(props.maxHeight && {
-                        maxHeight: props.maxHeight,
-                        overflow: "auto",
-                    }),
                 }}
             >
                 {contentBox}
