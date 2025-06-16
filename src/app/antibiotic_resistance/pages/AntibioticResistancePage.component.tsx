@@ -69,8 +69,8 @@ export const FormattedMicroorganismName: React.FC<
         <Typography
             component="span"
             style={{
-                fontWeight: "bold",
-                fontSize: isBreadcrumb ? "2rem" : "1.5rem",
+                fontWeight: isBreadcrumb ? "normal" : "bold",
+                fontSize: "1.4rem",
             }}
         >
             {words.map((wordObj: WordObject, index: number) => (
@@ -105,6 +105,49 @@ function readStateFromUrl(): {
             : ORGANISMS[0];
     const showTrendDetails = params.get("view") === "trend";
     return { selectedOrg, showTrendDetails };
+}
+
+// --- Breadcrumb component ---
+function Breadcrumb({
+    t,
+    selectedOrg,
+    showTrendDetails,
+    handleShowMain,
+}: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    t: any;
+    selectedOrg: string;
+    showTrendDetails: boolean;
+    handleShowMain: () => void;
+}): JSX.Element {
+    return (
+        <div className="abx-breadcrumb">
+            {t("AntibioticResistance")} /{" "}
+            {showTrendDetails ? (
+                <>
+                    <span
+                        style={{
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                        }}
+                        onClick={handleShowMain}
+                    >
+                        <FormattedMicroorganismName
+                            microName={selectedOrg}
+                            isBreadcrumb={true}
+                        />
+                    </span>
+                    {" / "}
+                    {t("Trend")}
+                </>
+            ) : (
+                <FormattedMicroorganismName
+                    microName={selectedOrg}
+                    isBreadcrumb={true}
+                />
+            )}
+        </div>
+    );
 }
 
 // --- Main component ---
@@ -145,8 +188,8 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         setState((prev) => ({ ...prev, showTrendDetails: true }));
     };
 
-    // Go back to organism selection view
-    const handleBack = (): void => {
+    // Go back to organism selection view (now from breadcrumb only)
+    const handleShowMain = (): void => {
         setState((prev) => ({ ...prev, showTrendDetails: false }));
     };
 
@@ -211,9 +254,11 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         }
 
         .abx-breadcrumb {
-          font-size: 1.75rem;
+          font-size: 1.4rem;
           color: #003663;
-          margin-bottom: 2rem;
+          text-align: center;   
+                     margin-top: 1.5rem; 
+          margin-bottom: 0.5 rem;
         }
 
         .image-box {
@@ -252,11 +297,14 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         }
       `}</style>
             <PageLayoutComponent>
+                <Breadcrumb
+                    t={t}
+                    selectedOrg={selectedOrg}
+                    showTrendDetails={showTrendDetails}
+                    handleShowMain={handleShowMain}
+                />
                 {showTrendDetails ? (
-                    <TrendDetails
-                        microorganism={selectedOrg}
-                        onBack={handleBack}
-                    />
+                    <TrendDetails microorganism={selectedOrg} />
                 ) : (
                     <div className="abx-page">
                         <aside className="abx-sidebar">
@@ -279,13 +327,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             </ul>
                         </aside>
                         <section className="abx-content">
-                            <div className="abx-breadcrumb">
-                                {t("AntibioticResistance")} /{" "}
-                                <FormattedMicroorganismName
-                                    microName={selectedOrg}
-                                    isBreadcrumb={true}
-                                />
-                            </div>
+                            {/* Breadcrumb is now at the top of content, see above */}
                             <div
                                 className="image-box"
                                 onClick={handleTrendClick}
