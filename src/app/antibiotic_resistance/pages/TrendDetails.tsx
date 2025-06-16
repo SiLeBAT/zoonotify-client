@@ -26,7 +26,7 @@ import {
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
-import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
+//import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
 import i18next from "i18next";
@@ -108,8 +108,7 @@ const CHARTS_PER_PAGE = 2;
 
 export const TrendDetails: React.FC<{
     microorganism: string;
-    onBack: () => void;
-}> = ({ microorganism, onBack }) => {
+}> = ({ microorganism }) => {
     const { t } = useTranslation(["Antibiotic"]);
 
     const [resistanceRawData, setResistanceRawData] = useState<
@@ -751,12 +750,6 @@ export const TrendDetails: React.FC<{
                             "More Info on Matrices",
                             "MATRIX"
                         )}
-                        {renderSelectWithSelectAll(
-                            "samplingYear",
-                            t("SAMPLING_YEAR"),
-                            "More Info on Years",
-                            "SAMPLING_YEAR"
-                        )}
                     </Stack>
                     <Box mt={4} display="flex" justifyContent="center" gap={2}>
                         <Button
@@ -780,33 +773,6 @@ export const TrendDetails: React.FC<{
                 </Paper>
                 {/* MAIN CONTENT */}
                 <Box flex={1} ml="370px" px={4} py={3}>
-                    <div style={{ marginBottom: "2rem" }}>
-                        <Typography
-                            component="span"
-                            sx={{
-                                fontSize: "1.75rem",
-                                color: "#003663",
-                            }}
-                        >
-                            {t("Antibiotic resistance")} /{" "}
-                            <FormattedMicroorganismName
-                                microName={microorganism}
-                                isBreadcrumb={true}
-                            />{" "}
-                            / {t("Trend graph")}
-                        </Typography>
-                    </div>
-                    <Button
-                        onClick={onBack}
-                        variant="contained"
-                        sx={{
-                            marginBottom: "2rem",
-                            backgroundColor: "#003663",
-                            color: "#fff",
-                        }}
-                    >
-                        {t("Back")}
-                    </Button>
                     {/* Substance Filter at Top */}
                     {renderSubstanceFilter()}
                     {/* CHARTS */}
