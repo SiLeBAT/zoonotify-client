@@ -59,7 +59,7 @@ const COLORS = [
     "#008080",
 ];
 
-// Custom tick renderer for XAxis: show year and, underneath, tested isolates
+// Custom tick renderer for XAxis
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     const { x, y, payload } = props;
@@ -111,12 +111,10 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
         new Set(data.map((d) => d.antimicrobialSubstance))
     );
 
-    // --- MAIN LOGIC: Only show points where N >= 10 ---
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // Only show points where N >= 10
     const chartData = years.map((year) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const entry: any = { samplingYear: year };
-        // Get isolates for the year (to show N under X axis)
         const isolatesForYear = data.filter((d) => d.samplingYear === year);
         entry.anzahlGetesteterIsolate =
             isolatesForYear.length > 0
@@ -129,7 +127,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
                     d.samplingYear === year &&
                     d.antimicrobialSubstance === substance
             );
-            // Only set value if N >= 10
             if (
                 found &&
                 found.anzahlGetesteterIsolate !== undefined &&
@@ -167,10 +164,28 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
             .replace("T", "_");
     }
 
+    // Header translations
+    const headerFieldToTKey: Record<string, string> = {
+        samplingYear: "SAMPLING_YEAR",
+        superCategorySampleOrigin: "SUPER-CATEGORY-SAMPLE-ORIGIN",
+        sampleOrigin: "SAMPLE_ORIGIN",
+        samplingStage: "SAMPLING_STAGE",
+        matrixGroup: "MATRIX_GROUP",
+        matrix: "MATRIX",
+        antimicrobialSubstance: "ANTIBIOTIC_SUBSTANCE",
+        specie: "SPECIES",
+        resistenzrate: "Resistenzrate (%)",
+        anzahlGetesteterIsolate: "anzahlGetesteterIsolate",
+        anzahlResistenterIsolate: "anzahlResistenterIsolate",
+        minKonfidenzintervall: "minKonfidenzintervall",
+        maxKonfidenzintervall: "maxKonfidenzintervall",
+    };
+
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
-        decimalSep: "." | ","
+        decimalSep: "." | ",",
+        translate: (key: string) => string
     ): string {
         if (!rows || !rows.length) return "";
 
@@ -217,8 +232,13 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
             return vStr;
         }
 
+        // Build the header row using t
+        const headerRow = headers
+            .map((h) => translate(headerFieldToTKey[h] || h))
+            .join(sep);
+
         const csvRows = [
-            headers.join(sep),
+            headerRow,
             ...rows.map((row) =>
                 headers.map((h) => valueForCSV(row, h)).join(sep)
             ),
@@ -232,8 +252,9 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        const csvComma = generateCSV(rows, ",", ".");
-        const csvDot = generateCSV(rows, ";", ",");
+        // Pass t for translation
+        const csvComma = generateCSV(rows, ",", ".", t);
+        const csvDot = generateCSV(rows, ";", ",", t);
 
         zip.file(`trend_comma_${timestamp}.csv`, csvComma);
         zip.file(`trend_dot_${timestamp}.csv`, csvDot);

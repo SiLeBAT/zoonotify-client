@@ -30,5 +30,10 @@
   "DOWNLOAD_ZIP_FILE": "Data download",
   "Year": "Year",
   "Resistenzrate (%)": "Resistance rate (%)",
+
+  "anzahlResistenterIsolate": "number of resistant isolates",
+  "minKonfidenzintervall": "minimum confidence interval",
+  "maxKonfidenzintervall": "maximum confidence interval",
+
   "Multi": " Multiple resistance Graph"
 }

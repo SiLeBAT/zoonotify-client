@@ -29,5 +29,9 @@
   "SELECT_ALL": "Alle auswählen",
   "DESELECT_ALL": " Alle abwählen",
   "ALL_VALUES": "Alle Werte",
+  "anzahlResistenterIsolate": "anzahlResistenterIsolate",
+  "minKonfidenzintervall": "minKonfidenzintervall",
+  "maxKonfidenzintervall": "maxKonfidenzintervall",
+
   "SEARCH": "Suche"
 }
