@@ -26,7 +26,7 @@ import {
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
-//import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
+// import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
 import i18next from "i18next";
@@ -94,6 +94,7 @@ function getGroupKey(r: ResistanceApiItem): string {
         r.sampleOrigin?.name || "No sample origin"
     }`;
 }
+
 function getGroupLabel(key: string, t: (key: string) => string): string {
     const [specie, matrix, sampleOrigin] = key.split("|||");
     if (specie) {
@@ -143,14 +144,13 @@ export const TrendDetails: React.FC<{
     const [trendInfoLoading, setTrendInfoLoading] = useState(false);
     const [trendInfoError, setTrendInfoError] = useState<string | null>(null);
 
-    const menuItemTextStyle = `
-.menu-item-text-wrap {
-  white-space: normal !important;
-  word-break: break-word !important;
-  max-width: 260px;
-  display: block;
-}
-`;
+    const menuItemTextStyle = `.menu-item-text-wrap {
+            white-space: normal !important;
+            word-break: break-word !important;
+            max-width: 260px;
+            display: block;
+        }`;
+
     useEffect(() => {
         async function fetchTrendInfo(): Promise<void> {
             setTrendInfoLoading(true);
@@ -159,7 +159,6 @@ export const TrendDetails: React.FC<{
                 const url = `${TREND_INFORMATION}?locale=${i18next.language}`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response = await callApiService<any>(url);
-                // For Strapi v5, singleType is at data directly
                 if (response?.data?.data) {
                     setTrendInfo({
                         title: response.data.data.title,
@@ -177,6 +176,7 @@ export const TrendDetails: React.FC<{
         }
         fetchTrendInfo();
     }, [i18next.language]);
+
     // DATA FETCHING
     useEffect(() => {
         async function fetchResistanceOptions(): Promise<void> {
@@ -262,7 +262,7 @@ export const TrendDetails: React.FC<{
             }
             const result: Record<FilterKey, string[]> = {
                 samplingYear: [],
-                antimicrobialSubstance: [], // not used anymore
+                antimicrobialSubstance: [],
                 specie: [],
                 superCategorySampleOrigin: [],
                 sampleOrigin: [],
@@ -360,7 +360,6 @@ export const TrendDetails: React.FC<{
             )
         ).sort();
         setAllSubstances(substances);
-        // On first load, select all substances by default
         setSubstanceFilter(substances);
     }, [resistanceRawData]);
 
@@ -423,7 +422,6 @@ export const TrendDetails: React.FC<{
 
     // If you want chart to also update after clicking "Search" for other filters:
     const handleSearch = (): void => {
-        // Run the same as above
         let result = resistanceRawData;
         if (selected.samplingYear.length)
             result = result.filter((r) =>
@@ -569,6 +567,8 @@ export const TrendDetails: React.FC<{
     }
 
     // RENDER
+
+    // 1. Group by "specie|||matrix|||sampleOrigin"
     const grouped = filteredFullData.reduce((acc, item) => {
         const key = getGroupKey(item);
         if (!acc[key]) acc[key] = [];
@@ -576,10 +576,30 @@ export const TrendDetails: React.FC<{
         return acc;
     }, {} as Record<string, ResistanceApiItem[]>);
 
+    // 2. Helper to check for at least 2 years in a group
+    function hasAtLeastTwoYears(groupItems: ResistanceApiItem[]): boolean {
+        // Count only years where there is at least one "plottable" entry (N >= 10)
+        const yearsWithData = new Set(
+            groupItems
+                .filter(
+                    (i) =>
+                        i.anzahlGetesteterIsolate !== undefined &&
+                        i.anzahlGetesteterIsolate !== null &&
+                        i.anzahlGetesteterIsolate >= 10
+                )
+                .map((i) => i.samplingYear)
+        );
+        return yearsWithData.size >= 2;
+    }
+
+    // 3. Filter groups
     const groupEntries = Object.entries(grouped);
-    const totalCharts = groupEntries.length;
+    const validGroupEntries = groupEntries.filter(([, groupItems]) =>
+        hasAtLeastTwoYears(groupItems)
+    );
+    const totalCharts = validGroupEntries.length;
     const totalPages = Math.ceil(totalCharts / CHARTS_PER_PAGE);
-    const paginatedGroups = groupEntries.slice(
+    const paginatedGroups = validGroupEntries.slice(
         (currentPage - 1) * CHARTS_PER_PAGE,
         currentPage * CHARTS_PER_PAGE
     );
@@ -590,7 +610,6 @@ export const TrendDetails: React.FC<{
         infoKey: string,
         categoryKey: string
     ): JSX.Element {
-        // antimicrobialSubstance filter REMOVED from sidebar!
         if (key === "antimicrobialSubstance") return <></>;
         const options = filterOptions[key];
         const value = selected[key];
@@ -723,7 +742,6 @@ export const TrendDetails: React.FC<{
                             </Alert>
                         )}
                         <Stack spacing={2} sx={{ opacity: loading ? 0.5 : 1 }}>
-                            {/* Your filter options here */}
                             {shouldShowSpeciesFilter(microorganism) &&
                                 renderSelectWithSelectAll(
                                     "specie",
@@ -790,10 +808,8 @@ export const TrendDetails: React.FC<{
                 </Paper>
                 {/* MAIN CONTENT */}
                 <Box flex={1} ml="370px" px={4} py={3}>
-                    {/* Substance Filter at Top */}
                     {renderSubstanceFilter()}
-                    {/* CHARTS */}
-                    {showChart && (
+                    {showChart && paginatedGroups.length > 0 && (
                         <Box mt={2} mb={2}>
                             <Grid container spacing={4}>
                                 {paginatedGroups.map(

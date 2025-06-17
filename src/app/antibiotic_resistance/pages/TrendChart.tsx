@@ -101,7 +101,11 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation(["Antibiotic"]);
 
-    const startYear = 2012;
+    // Defensive: Only plot if >=2 unique years in data
+    const uniqueYears = Array.from(new Set(data.map((d) => d.samplingYear)));
+    if (uniqueYears.length < 2) return null;
+
+    const startYear = 2010;
     const endYear = 2023;
     const years = Array.from(
         { length: endYear - startYear + 1 },
@@ -164,7 +168,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
             .replace("T", "_");
     }
 
-    // Header translations
     const headerFieldToTKey: Record<string, string> = {
         samplingYear: "SAMPLING_YEAR",
         superCategorySampleOrigin: "SUPER-CATEGORY-SAMPLE-ORIGIN",
@@ -180,7 +183,18 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
         minKonfidenzintervall: "minKonfidenzintervall",
         maxKonfidenzintervall: "maxKonfidenzintervall",
     };
-
+    const yearsWithData = Array.from(
+        new Set(
+            data
+                .filter(
+                    (d) =>
+                        d.anzahlGetesteterIsolate !== undefined &&
+                        d.anzahlGetesteterIsolate >= 10
+                )
+                .map((d) => d.samplingYear)
+        )
+    );
+    if (yearsWithData.length < 2) return null;
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
@@ -252,7 +266,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        // Pass t for translation
         const csvComma = generateCSV(rows, ",", ".", t);
         const csvDot = generateCSV(rows, ";", ",", t);
 
