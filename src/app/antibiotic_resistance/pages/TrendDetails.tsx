@@ -30,6 +30,8 @@ import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
 import i18next from "i18next";
+import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
+
 import {
     INFORMATION,
     TREND_INFORMATION,
@@ -77,6 +79,12 @@ const emptyFilterState: Record<FilterKey, string[]> = {
     matrix: [],
 };
 
+export interface FormattedMicroorganismNameProps {
+    microName: string | null | undefined;
+    isBreadcrumb?: boolean;
+    fontWeight?: "normal" | "bold" | number;
+}
+
 function shouldShowSpeciesFilter(microorganism: string): boolean {
     return (
         microorganism === "Campylobacter spp." ||
@@ -95,14 +103,23 @@ function getGroupKey(r: ResistanceApiItem): string {
     }`;
 }
 
-function getGroupLabel(key: string, t: (key: string) => string): string {
+function renderGroupLabel(
+    key: string,
+    t: (key: string) => string
+): React.ReactNode {
     const [specie, matrix, sampleOrigin] = key.split("|||");
-    if (specie) {
-        return `${t("SPECIES")}: ${specie}, ${t("MATRIX")}: ${matrix}, ${t(
-            "SAMPLE_ORIGIN"
-        )}: ${sampleOrigin}`;
-    }
-    return `${t("MATRIX")}: ${matrix}, ${t("SAMPLE_ORIGIN")}: ${sampleOrigin}`;
+    return (
+        <>
+            {specie && (
+                <>
+                    {t("SPECIES")}:{" "}
+                    <FormattedMicroorganismName microName={specie} />
+                    {", "}
+                </>
+            )}
+            {t("MATRIX")}:{matrix}, {t("SAMPLE_ORIGIN")}: {sampleOrigin}
+        </>
+    );
 }
 
 const CHARTS_PER_PAGE = 2;
@@ -675,7 +692,21 @@ export const TrendDetails: React.FC<{
                                     />
                                     <ListItemText
                                         className="menu-item-text-wrap"
-                                        primary={item}
+                                        primary={
+                                            key === "specie" ? (
+                                                <span
+                                                    style={{
+                                                        fontStyle: "italic",
+                                                        fontWeight: 400,
+                                                        fontSize: "1rem",
+                                                    }}
+                                                >
+                                                    {item}
+                                                </span>
+                                            ) : (
+                                                item
+                                            )
+                                        }
                                     />
                                 </MenuItem>
                             ))
@@ -842,9 +873,17 @@ export const TrendDetails: React.FC<{
                                                         sx={{
                                                             color: "#003663",
                                                             fontWeight: "bold",
+                                                            whiteSpace:
+                                                                "normal", // allow wrapping!
+                                                            wordBreak:
+                                                                "break-word", // break long words
+                                                            maxWidth: "100%", // or a custom px, like "350px"
+                                                            textAlign: "center", // center it
+                                                            lineHeight: 1.25,
+                                                            minHeight: "40px", // optional: keeps charts lined up
                                                         }}
                                                     >
-                                                        {getGroupLabel(
+                                                        {renderGroupLabel(
                                                             groupKey,
                                                             t
                                                         )}

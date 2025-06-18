@@ -16,6 +16,11 @@ import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
 
+// ======= CHANGE THIS if you import logo via Webpack/Vite ========
+// import bfrLogo from "../../assets/bfr_logo.png";
+// then use src={bfrLogo} instead of src="/assets/bfr_logo.png"
+// ================================================================
+
 export interface TrendChartProps {
     data: {
         samplingYear: number;
@@ -59,6 +64,7 @@ const COLORS = [
     "#008080",
 ];
 
+// Custom tick renderer for XAxis
 // Custom tick renderer for XAxis
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
@@ -195,6 +201,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
         )
     );
     if (yearsWithData.length < 2) return null;
+
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
@@ -246,7 +253,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
             return vStr;
         }
 
-        // Build the header row using t
         const headerRow = headers
             .map((h) => translate(headerFieldToTKey[h] || h))
             .join(sep);
@@ -286,11 +292,29 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
             <div
                 ref={chartContainerRef}
                 style={{
-                    padding: "40px",
+                    padding: "35px",
                     background: "#fff",
                     borderRadius: "16px",
+                    position: "relative", // Needed for absolute positioning logo
+                    overflow: "visible",
                 }}
             >
+                {/* === BfR Logo in Top-Right === */}
+                <img
+                    src="/assets/bfr_logo.png"
+                    // If importing: src={bfrLogo}
+                    alt="BfR Logo"
+                    style={{
+                        position: "absolute",
+                        top: 5,
+                        right: 24,
+                        width: 90, // Adjust size as needed
+                        height: "auto",
+                        zIndex: 10,
+                        opacity: 0.93,
+                    }}
+                />
+
                 <ResponsiveContainer width="100%" height={450}>
                     <LineChart data={chartData}>
                         <CartesianGrid strokeDasharray="3 3" />

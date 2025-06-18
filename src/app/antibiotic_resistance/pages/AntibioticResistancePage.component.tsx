@@ -24,7 +24,12 @@ const ORGANISMS = [
 const italicWords: string[] = [
     "Salmonella",
     "coli",
+    "jejuni",
+    "faecalis",
+    "faecium",
+    "coli",
     "E.",
+    "C.",
     "Enterococcus",
     "Campylobacter",
 ];
@@ -59,17 +64,18 @@ const formatMicroorganismNameArray = (
 export interface FormattedMicroorganismNameProps {
     microName: string | null | undefined;
     isBreadcrumb?: boolean;
+    fontWeight?: "normal" | "bold" | number; // add this
 }
 
 export const FormattedMicroorganismName: React.FC<
     FormattedMicroorganismNameProps
-> = ({ microName, isBreadcrumb = false }) => {
+> = ({ microName, isBreadcrumb = false, fontWeight }) => {
     const words = formatMicroorganismNameArray(microName);
     return (
         <Typography
             component="span"
             style={{
-                fontWeight: isBreadcrumb ? "normal" : "bold",
+                fontWeight: fontWeight ?? (isBreadcrumb ? "normal" : "bold"),
                 fontSize: "1.4rem",
             }}
         >
