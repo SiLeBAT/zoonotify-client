@@ -96,18 +96,18 @@ function getGroupKey(r: ResistanceApiItem): string {
     if (r.specie && r.specie.name) {
         return `${r.specie.name}|||${r.matrix?.name || "No matrix"}|||${
             r.sampleOrigin?.name || "No sample origin"
-        }`;
+        }|||${r.samplingStage?.name || "No sampling stage"}`;
     }
     return `|||${r.matrix?.name || "No matrix"}|||${
         r.sampleOrigin?.name || "No sample origin"
-    }`;
+    }|||${r.samplingStage?.name || "No sampling stage"}`;
 }
 
 function renderGroupLabel(
     key: string,
     t: (key: string) => string
 ): React.ReactNode {
-    const [specie, matrix, sampleOrigin] = key.split("|||");
+    const [specie, matrix, sampleOrigin, samplingStage] = key.split("|||");
     return (
         <>
             {specie && (
@@ -117,7 +117,8 @@ function renderGroupLabel(
                     {", "}
                 </>
             )}
-            {t("MATRIX")}:{matrix}, {t("SAMPLE_ORIGIN")}: {sampleOrigin}
+            {t("MATRIX")}: {matrix}, {t("SAMPLE_ORIGIN")}: {sampleOrigin},{" "}
+            {t("SAMPLING_STAGE")}: {samplingStage}
         </>
     );
 }
