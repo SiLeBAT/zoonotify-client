@@ -198,10 +198,15 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMicroorganisms}
-                    selectionOptions={microorganismOptions.map((option) => ({
-                        value: option.name,
-                        displayName: option.name,
-                    }))}
+                    selectionOptions={microorganismOptions
+                        .filter(
+                            (option) =>
+                                !!option.name && option.name.trim() !== ""
+                        )
+                        .map((option) => ({
+                            value: option.name,
+                            displayName: option.name,
+                        }))}
                     name="microorganisms"
                     label={t("MICROORGANISM")}
                     actions={{
