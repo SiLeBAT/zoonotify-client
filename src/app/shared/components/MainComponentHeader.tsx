@@ -14,10 +14,10 @@ export function MainComponentHeader({
         <Typography
             variant="h1"
             sx={{
-                paddingBottom: "0.2em",
                 fontSize: "3rem",
                 textAlign: "center",
                 fontWeight: "normal",
+                overflowY: "auto",
                 color: theme.palette.primary.main,
                 borderBottom: `1px solid ${theme.palette.primary.main}`,
             }}

@@ -17,10 +17,13 @@ import { TranslationButtonsComponent } from "./TranslationButtons.component";
 
 const headerStyle = css`
     width: 100%;
-    height: ${headerHeight}px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 `;
 
 const mainHeaderStyle = (): SerializedStyles => css`
