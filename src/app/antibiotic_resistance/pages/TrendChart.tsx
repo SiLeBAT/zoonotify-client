@@ -29,6 +29,7 @@ export interface TrendChartProps {
         anzahlGetesteterIsolate?: number;
     }[];
     fullData: ResistanceApiItem[];
+    groupLabel?: React.ReactNode;
 }
 
 const COLORS = [
@@ -103,7 +104,11 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     );
 };
 
-export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
+export const TrendChart: React.FC<TrendChartProps> = ({
+    data,
+    fullData,
+    groupLabel,
+}) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation(["Antibiotic"]);
 
@@ -299,21 +304,40 @@ export const TrendChart: React.FC<TrendChartProps> = ({ data, fullData }) => {
                     overflow: "visible",
                 }}
             >
-                {/* === BfR Logo in Top-Right === */}
-                <img
-                    src="/assets/bfr_logo.png"
-                    // If importing: src={bfrLogo}
-                    alt="BfR Logo"
-                    style={{
-                        position: "absolute",
-                        top: 5,
-                        right: 24,
-                        width: 90, // Adjust size as needed
-                        height: "auto",
-                        zIndex: 10,
-                        opacity: 0.93,
-                    }}
-                />
+                {/* --- THIS IS NEW: group label --- */}
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mb={2}
+                    width="100%"
+                >
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            color: "#003663",
+                            fontWeight: "bold",
+                            whiteSpace: "normal",
+                            wordBreak: "break-word",
+                            maxWidth: "100%",
+                            textAlign: "left",
+                            lineHeight: 1.25,
+                            minHeight: "40px",
+                        }}
+                    >
+                        {groupLabel}
+                    </Typography>
+                    <img
+                        src="/assets/bfr_logo.png"
+                        alt="BfR Logo"
+                        style={{
+                            width: 90,
+                            height: "auto",
+                            opacity: 0.93,
+                            marginLeft: 12,
+                        }}
+                    />
+                </Box>
 
                 <ResponsiveContainer width="100%" height={450}>
                     <LineChart data={chartData}>
