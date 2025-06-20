@@ -868,30 +868,13 @@ export const TrendDetails: React.FC<{
                                                 key={groupKey}
                                             >
                                                 <Box mb={5}>
-                                                    <Typography
-                                                        variant="h6"
-                                                        mb={1}
-                                                        sx={{
-                                                            color: "#003663",
-                                                            fontWeight: "bold",
-                                                            whiteSpace:
-                                                                "normal", // allow wrapping!
-                                                            wordBreak:
-                                                                "break-word", // break long words
-                                                            maxWidth: "100%", // or a custom px, like "350px"
-                                                            textAlign: "center", // center it
-                                                            lineHeight: 1.25,
-                                                            minHeight: "40px", // optional: keeps charts lined up
-                                                        }}
-                                                    >
-                                                        {renderGroupLabel(
-                                                            groupKey,
-                                                            t
-                                                        )}
-                                                    </Typography>
                                                     <TrendChart
                                                         data={chartData}
                                                         fullData={groupItems}
+                                                        groupLabel={renderGroupLabel(
+                                                            groupKey,
+                                                            t
+                                                        )}
                                                     />
                                                 </Box>
                                             </Grid>
