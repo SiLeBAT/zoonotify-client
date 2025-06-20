@@ -535,52 +535,70 @@ export const TrendDetails: React.FC<{
                 setSubstanceFilter(v);
             }
         };
+
         return (
-            <FormControl sx={{ minWidth: 350, marginBottom: 3 }}>
-                <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
-                <Select
-                    multiple
-                    value={substanceFilter}
-                    onChange={handleChange}
-                    label={t("ANTIBIOTIC_SUBSTANCE")}
-                    renderValue={(selectedItems) =>
-                        Array.isArray(selectedItems)
-                            ? selectedItems.join(", ")
-                            : ""
-                    }
-                    MenuProps={{
-                        PaperProps: { style: { maxHeight: 400 } },
-                    }}
-                >
-                    <MenuItem value="all">
-                        <Checkbox
-                            checked={allSelected}
-                            indeterminate={someSelected}
-                        />
-                        <ListItemText
-                            primary={
-                                allSelected
-                                    ? t("DESELECT_ALL") || "Deselect All"
-                                    : t("SELECT_ALL") || "Select All"
-                            }
-                        />
-                    </MenuItem>
-                    {substances.length === 0 ? (
-                        <MenuItem disabled value="">
-                            {t("No options")}
+            <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 3 }}
+            >
+                <FormControl sx={{ minWidth: 350 }}>
+                    <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
+                    <Select
+                        multiple
+                        value={substanceFilter}
+                        onChange={handleChange}
+                        label={t("ANTIBIOTIC_SUBSTANCE")}
+                        renderValue={(selectedItems) =>
+                            Array.isArray(selectedItems)
+                                ? selectedItems.join(", ")
+                                : ""
+                        }
+                        MenuProps={{
+                            PaperProps: { style: { maxHeight: 400 } },
+                        }}
+                    >
+                        <MenuItem value="all">
+                            <Checkbox
+                                checked={allSelected}
+                                indeterminate={someSelected}
+                            />
+                            <ListItemText
+                                primary={
+                                    allSelected
+                                        ? t("DESELECT_ALL") || "Deselect All"
+                                        : t("SELECT_ALL") || "Select All"
+                                }
+                            />
                         </MenuItem>
-                    ) : (
-                        substances.map((item) => (
-                            <MenuItem key={item} value={item}>
-                                <Checkbox
-                                    checked={substanceFilter.indexOf(item) > -1}
-                                />
-                                <ListItemText primary={item} />
+                        {substances.length === 0 ? (
+                            <MenuItem disabled value="">
+                                {t("No options")}
                             </MenuItem>
-                        ))
-                    )}
-                </Select>
-            </FormControl>
+                        ) : (
+                            substances.map((item) => (
+                                <MenuItem key={item} value={item}>
+                                    <Checkbox
+                                        checked={
+                                            substanceFilter.indexOf(item) > -1
+                                        }
+                                    />
+                                    <ListItemText primary={item} />
+                                </MenuItem>
+                            ))
+                        )}
+                    </Select>
+                </FormControl>
+                <Tooltip title={t("More Info on Antibiotic Substances")}>
+                    <IconButton
+                        size="small"
+                        onClick={() => handleInfoClick("ANTIBIOTIC_SUBSTANCE")}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+            </Stack>
         );
     }
 
@@ -612,6 +630,10 @@ export const TrendDetails: React.FC<{
 
     // 3. Filter groups
     const groupEntries = Object.entries(grouped);
+
+    // Sort group entries alphabetically by group key (or a custom sort if you prefer)
+    groupEntries.sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
+
     const validGroupEntries = groupEntries.filter(([, groupItems]) =>
         hasAtLeastTwoYears(groupItems)
     );
@@ -645,6 +667,12 @@ export const TrendDetails: React.FC<{
                 setSelected((prev) => ({ ...prev, [key]: v }));
             }
         };
+
+        useEffect(() => {
+            if (currentPage > totalPages) {
+                setCurrentPage(1);
+            }
+        }, [totalPages, currentPage]);
         return (
             <Stack direction="row" spacing={1} alignItems="center">
                 <FormControl fullWidth>
