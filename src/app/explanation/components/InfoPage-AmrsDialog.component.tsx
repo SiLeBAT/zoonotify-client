@@ -105,9 +105,9 @@ export function InfoPageAmrDialogComponent(props: {
         props.onClose();
     };
 
-    const handleSubmit = (): void => {
-        props.onAmrDataExport();
-    };
+    //const handleSubmit = (): void => {
+    // props.onAmrDataExport();
+    //};
 
     const tableSubHeader: JSX.Element[] = [];
 
@@ -205,10 +205,6 @@ export function InfoPageAmrDialogComponent(props: {
         content: t("Methods.Amrs.CancelButton"),
         onClick: handleClose,
     };
-    const amrTableSubmitButton: DialogButton = {
-        content: t("Methods.Amrs.ExportButton"),
-        onClick: handleSubmit,
-    };
 
     return DialogComponent({
         loading: false,
@@ -216,6 +212,6 @@ export function InfoPageAmrDialogComponent(props: {
         dialogContentText: props.resistancesTableData.description,
         dialogContent: dialogTableContent,
         cancelButton: amrTableCancelButton,
-        submitButton: amrTableSubmitButton,
+        //submitButton: amrTableSubmitButton,
     });
 }
