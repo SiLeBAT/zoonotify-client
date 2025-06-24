@@ -7,17 +7,18 @@ import { BodyRouterComponent } from "../infrastructure/router/Body-Router.compon
 const wrapperStyle = css`
     height: 100%;
     display: flex;
-    z-index: 0;
+    z-index: 100;
     flex-direction: column;
     box-sizing: border-box;
 `;
 
 const bodyStyle = css`
     flex: 1 1 0;
+    margin-top: 42px;
     z-index: 0;
     box-sizing: border-box;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
 `;
 
 /**

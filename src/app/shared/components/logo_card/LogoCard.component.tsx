@@ -11,20 +11,28 @@ export interface CardProps {
 export function LogoCardComponent(props: CardProps): JSX.Element {
     return (
         <Card
+            // Keep a shadow on desktop by default (e.g., elevation 3)
+            elevation={3}
             sx={{
-                // Desktop: Use the extracted blue color
+                // Desktop styles:
+                // (The Card will use the default MUI shadow for elevation={3})
                 backgroundColor: "#dbe4eb",
-                color: "#000", // Text color for contrast
+                color: "#000",
                 padding: "1em",
                 margin: "2.5em auto",
                 width: "50%",
 
-                // Mobile: White background with black text
-                "@media (max-width: 768px)": {
+                // Mobile overrides (max-width: 768px):
+                "@media (max-width: 800px)": {
+                    // Adjust layout for mobile
                     width: "90%",
                     margin: "1em auto",
                     backgroundColor: "#fff",
                     color: "#000",
+
+                    // Remove the shadow/border on mobile
+                    boxShadow: "none !important",
+                    border: "none !important",
                 },
             }}
         >
@@ -36,7 +44,7 @@ export function LogoCardComponent(props: CardProps): JSX.Element {
                         fontSize: "3rem",
                         textAlign: "center",
                         fontWeight: "normal",
-                        color: "#000", // Black text for better readability
+                        color: "#000",
                     }}
                 >
                     {props.title}

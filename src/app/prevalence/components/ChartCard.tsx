@@ -43,15 +43,15 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
             (width -
                 formattedWords.reduce((acc, { text, italic }) => {
                     ctx.font = italic
-                        ? "italic bold 16px Arial"
-                        : "bold 16px Arial";
+                        ? "italic bold 21px Arial"
+                        : "bold 21px Arial";
                     return acc + ctx.measureText(text).width + 1; // Add minimal spacing
                 }, 0)) /
             2; // Center-align the whole text block
 
         // Render each word with the appropriate style
         formattedWords.forEach(({ text, italic }) => {
-            ctx.font = italic ? "italic bold 16px Arial" : "bold 16px Arial";
+            ctx.font = italic ? "italic bold 21px Arial" : "bold 21px Arial";
             ctx.fillText(text, xPosition, titleYPosition);
             xPosition += ctx.measureText(text).width + 1; // Add minimal spacing between words
         });

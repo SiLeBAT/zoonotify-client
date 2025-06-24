@@ -12,75 +12,67 @@ import { FooterLinkListComponent } from "./Footer-LinkList.component";
 import { LastUpdateComponent } from "./LastUpdate.component";
 import { ConfigurationAttributesDTO } from "../../model/Api_Info.model";
 
-// Custom hook to fetch and return the support email with explicit return type
-export const useFetchSupportEmail = (): string | undefined => {
-    const [supportMail, setSupportMail] = useState<string | undefined>();
+/**
+ * Custom hook to fetch the support email from the API (mx srAPI version 5).
+ * It returns the support email, any error message, and a function to clear errors.
+ */
+export const useFetchSupportEmail = (): {
+    supportEmail: string | undefined;
+    error: string | null;
+    clearError: () => void;
+} => {
+    const [supportEmail, setSupportEmail] = useState<string | undefined>();
+    const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation(["Footer"]);
 
     useEffect(() => {
         const fetchAndSetContact = async (): Promise<void> => {
-            // Explicitly declared return type as void
             try {
                 const infoResponse: ApiResponse<
-                    CMSResponse<CMSEntity<{ supportEmail: string }>, unknown>
+                    CMSResponse<CMSEntity<ConfigurationAttributesDTO>, unknown>
                 > = await callApiService(CONFIGURATION);
+                // Ensure the nested structure matches the API version 5 response.
                 if (
                     infoResponse.data &&
+                    infoResponse.data.data &&
+                    infoResponse.data.data.attributes &&
                     infoResponse.data.data.attributes.supportEmail
                 ) {
-                    setSupportMail(
+                    setSupportEmail(
                         infoResponse.data.data.attributes.supportEmail
                     );
                 }
             } catch (err) {
                 console.error("Error fetching contact info: ", err);
+                setError(t("unknownError"));
             }
         };
 
         fetchAndSetContact();
-    }, []);
+    }, [t]);
 
-    return supportMail;
+    const clearError = (): void => setError(null);
+
+    return { supportEmail, error, clearError };
 };
 
+/**
+ * FooterContainer component that uses the custom hook to fetch the support email.
+ * It renders the footer layout along with the last update and link list components,
+ * and displays an error snackbar if any error occurs.
+ */
 export function FooterContainer(): JSX.Element {
-    const [supportMail, setSupportMail] = useState<string>();
-    const { t } = useTranslation(["Footer"]);
-    const [error, setError] = useState<string | null>(null);
-
-    const fetchAndSetContact = async (): Promise<void> => {
-        try {
-            const infoResponse: ApiResponse<
-                CMSResponse<CMSEntity<ConfigurationAttributesDTO>, unknown>
-            > = await callApiService(CONFIGURATION);
-
-            if (infoResponse.data !== undefined) {
-                setSupportMail(infoResponse.data.data.attributes.supportEmail);
-            }
-        } catch (err) {
-            setError(t("unknownError"));
-            console.error("Error fetching contact info: ", err);
-        }
-    };
-
-    useEffect(() => {
-        fetchAndSetContact();
-    }, []);
-
-    const handleCloseError = (): void => {
-        setError(null);
-    };
+    const { supportEmail, error, clearError } = useFetchSupportEmail();
 
     return (
         <>
             <FooterLayoutComponent
                 lastUpdateComponent={<LastUpdateComponent />}
                 linkListComponent={
-                    <FooterLinkListComponent supportMail={supportMail} />
+                    <FooterLinkListComponent supportMail={supportEmail} />
                 }
             />
-            {error && (
-                <ErrorSnackbar open={!!error} handleClose={handleCloseError} />
-            )}
+            {error && <ErrorSnackbar open={true} handleClose={clearError} />}
         </>
     );
 }

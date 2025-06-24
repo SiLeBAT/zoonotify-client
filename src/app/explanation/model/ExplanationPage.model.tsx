@@ -1,5 +1,10 @@
+// ExplanationPage.model.ts
+
 import { CMSAttributeDTO } from "../../shared/model/CMS.model";
 
+// -------------------------------------
+// Existing definitions (unchanged)
+// -------------------------------------
 export interface AmrsTableData {
     shortSubstance: string;
     substanceClass: string;
@@ -32,13 +37,14 @@ export interface MicroorgaNamePart {
     letter?: string;
     subname?: string;
 }
-
 export type MicroorgaName = MicroorgaNamePart;
 
 export interface ExplanationDTO {
     title: string;
     description: string;
     section: string;
+    // If you want a separate field for the translation:
+    translatedSection?: string;
 }
 
 export interface ExplanationAttributesDTO
@@ -57,3 +63,28 @@ export interface AMRTablesDTO {
 }
 
 export interface AMRTableAttributesDTO extends CMSAttributeDTO, AMRTablesDTO {}
+
+export interface ExplanationItem {
+    id: number;
+    title: string;
+    description: string;
+    section: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    locale: string;
+    // Add more fields if your Strapi entries have them
+}
+
+export interface ExplanationAPIResponse {
+    data: ExplanationItem[];
+    meta: {
+        // If you have pagination, define it here
+        pagination?: {
+            page: number;
+            pageSize: number;
+            pageCount: number;
+            total: number;
+        };
+    };
+}

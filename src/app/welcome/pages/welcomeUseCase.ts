@@ -3,27 +3,41 @@ import { WELCOME } from "./../../shared/infrastructure/router/routes";
 import i18next, { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation, useHistory } from "react-router-dom";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import { UseCase } from "../../shared/model/UseCases";
-import { WelcomeAttributesDTO } from "../model/Welcome.model";
 
-type WelcomePageModel = {
+interface WelcomeDTO {
+    id: number;
+    subheading: string;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    locale: string;
+}
+
+interface WelcomeResponse {
+    data: WelcomeDTO;
+    meta: unknown;
+}
+
+export type WelcomePageModel = {
     title: string;
     subtitle: string;
     content: string;
 };
 
-type WelcomePageOperations = Record<string, never>;
+export type WelcomePageOperations = Record<string, never>;
 
-type WelcomePageTranslations = {
+export type WelcomePageTranslations = {
     hardCodedSubtitle: string;
     hardCodedContent: string;
 };
 
 function getTranslations(t: TFunction): WelcomePageTranslations {
-    const hardCodedSubtitle = t("Subtitle");
-    const hardCodedContent = t("MainText");
+    const hardCodedSubtitle = t("Subtitle") || "Default Subtitle";
+    const hardCodedContent = t("MainText") || "Default Main Text";
     return { hardCodedSubtitle, hardCodedContent };
 }
 
@@ -33,29 +47,55 @@ const useWelcomePageComponent: UseCase<
     WelcomePageOperations
 > = () => {
     const { t } = useTranslation(["HomePage"]);
-
     const { hardCodedSubtitle, hardCodedContent } = getTranslations(t);
+    const location = useLocation();
+    const history = useHistory();
 
-    const [subtitle, setSubtitle] = useState(hardCodedSubtitle);
+    const [subtitle, setSubtitle] = useState<string>(hardCodedSubtitle);
+    const [content, setContent] = useState<string>(hardCodedContent);
 
-    const [content, setContent] = useState(hardCodedContent);
+    // Effect 1: Update i18next if the URL has a different locale
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const localeParam = params.get("locale");
+        if (localeParam && localeParam !== i18next.language) {
+            i18next.changeLanguage(localeParam);
+        }
+    }, [location.search]);
+
+    // Effect 2: Update the URL when i18next language changes
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get("locale") !== i18next.language) {
+            params.set("locale", i18next.language);
+            history.replace({ search: params.toString() });
+        }
+    }, [i18next.language, location.search, history]);
 
     useEffect(() => {
-        callApiService<CMSResponse<CMSEntity<WelcomeAttributesDTO>, unknown>>(
-            `${WELCOME}?locale=${i18next.language}`
-        )
+        // Build the API URL using the current i18next language
+        const url = `${WELCOME}?locale=${i18next.language}`;
+        console.log("Fetching welcome page data from:", url);
+
+        callApiService<WelcomeResponse>(url)
             .then((response) => {
-                if (response.data) {
-                    const data = response.data.data;
-                    setSubtitle(data.attributes.subheading);
-                    setContent(data.attributes.content);
+                console.log("Received API response:", response);
+                if (response.data && response.data.data) {
+                    const { subheading, content: apiContent } =
+                        response.data.data;
+                    setSubtitle(subheading || hardCodedSubtitle);
+                    setContent(apiContent || hardCodedContent);
+                } else {
+                    console.warn(
+                        "API response data is missing expected fields."
+                    );
                 }
                 return response;
             })
             .catch((error) => {
-                throw error;
+                console.error("Error fetching welcome page data:", error);
             });
-    }, [i18next.language]);
+    }, [hardCodedContent, hardCodedSubtitle, t, i18next.language]);
 
     const title = "ZooNotify";
 

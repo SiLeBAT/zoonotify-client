@@ -5,30 +5,29 @@ import { FooterContainer } from "../footer/Footer-Container.component";
 import { HeaderComponent } from "../header/Header.component";
 import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
 
+// Wrapper: no fixed height or forced 100vh
 const layoutWrapperStyle = css`
-    display: flex;
+    //display: flex;
     flex-direction: column;
-    height: 100%;
-    z-index: 0;
-    min-height: 100vh;
     box-sizing: border-box;
+
+    overflow-y: hidden;
 `;
 
+// Keep the header above other elements
 const headerStyle = css`
     z-index: 1;
 `;
 
+// Main content can scroll freely
 const mainStyle = css`
     flex: 1;
     z-index: 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
     box-sizing: border-box;
 
-    @media (max-width: 1000px) {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+    /* Let the browser handle scrolling */
+    overflow-x: hidden;
+    overflow-y: hidden;
 `;
 
 const footerStyle = css`
@@ -53,10 +52,13 @@ export const PageLayoutComponent: React.FC<PageLayoutProps> = ({
             <header css={headerStyle}>
                 <HeaderComponent />
             </header>
+
             <main css={mainStyle}>{children}</main>
+
             <footer css={footerStyle}>
                 <FooterContainer />
             </footer>
+
             <ErrorSnackbar
                 open={snackbarOpen}
                 handleClose={handleSnackbarClose}

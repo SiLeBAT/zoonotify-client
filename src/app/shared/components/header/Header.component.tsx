@@ -17,10 +17,13 @@ import { TranslationButtonsComponent } from "./TranslationButtons.component";
 
 const headerStyle = css`
     width: 100%;
-    height: ${headerHeight}px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 `;
 
 const mainHeaderStyle = (): SerializedStyles => css`
@@ -142,6 +145,9 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+    const [antimicrobialOpen, setAntimicrobialOpen] = useState<boolean>(false);
+    const [antibioticResistanceOpen, setAntibioticResistanceOpen] =
+        useState<boolean>(false);
 
     const { t } = useTranslation(["Header"]);
     const showLD = process.env.REACT_APP_SHOW_LD === "true";
@@ -152,8 +158,12 @@ export function HeaderComponent(): JSX.Element {
         setLinkOpen(pathname === pageRoute.linkPagePath);
         setEvaluationsOpen(pathname === pageRoute.evaluationsPagePath);
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
+        setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
         setLinkedDataOpen(pathname === pageRoute.linkedDataPagePath);
 
+        setAntibioticResistanceOpen(
+            pathname === pageRoute.antibioticResistancePagePath
+        );
         setIsMenuOpen(false); // Close mobile menu on navigation change
     }, [pathname]);
 
@@ -188,6 +198,21 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Prevalence")}
                     </NavLink>
+
+                    <NavLink
+                        to={pageRoute.antibioticResistancePagePath}
+                        css={navLinkStyle(antibioticResistanceOpen)}
+                    >
+                        {t("AntibioticResistance")}
+                    </NavLink>
+
+                    <NavLink
+                        to={pageRoute.antimicrobialPagePath}
+                        css={navLinkStyle(antimicrobialOpen)}
+                    >
+                        {t("antimicrobial")}
+                    </NavLink>
+
                     <NavLink
                         to={pageRoute.linkPagePath}
                         css={navLinkStyle(linkOpen)}
@@ -234,6 +259,20 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("Prevalence")}
                 </NavLink>
+                <NavLink
+                    to={pageRoute.antibioticResistancePagePath}
+                    css={mobileNavLinkStyle(antibioticResistanceOpen)}
+                >
+                    {t("AntibioticResistance")}
+                </NavLink>
+
+                <NavLink
+                    to={pageRoute.antimicrobialPagePath}
+                    css={mobileNavLinkStyle(antimicrobialOpen)}
+                >
+                    {t("antimicrobial")}
+                </NavLink>
+
                 <NavLink
                     to={pageRoute.linkPagePath}
                     css={mobileNavLinkStyle(linkOpen)}

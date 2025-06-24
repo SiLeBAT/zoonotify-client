@@ -18,18 +18,23 @@ import { useTranslation } from "react-i18next";
 import { FilterMultiSelectionComponent } from "../../evaluations/components/FilterMultiSelectionComponent";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { CMSResponse, CMSEntity } from "../../shared/model/CMS.model";
+import { CMSResponse } from "../../shared/model/CMS.model";
 import i18next from "i18next";
-import { INFORMATION } from "../../shared/infrastructure/router/routes";
+import {
+    INFORMATION,
+    PEREVALENCE_INFO,
+} from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
+import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 
-interface ContentAttributes {
-    content: string;
+interface Content {
+    id: number;
     title: string;
+    content: string;
 }
 
 export function PrevalenceSideContent(): JSX.Element {
-    const { t, i18n } = useTranslation(["PrevalencePage"]); // Include i18n
+    const { t, i18n } = useTranslation(["PrevalencePage"]);
     const {
         selectedMicroorganisms,
         setSelectedMicroorganisms,
@@ -62,13 +67,12 @@ export function PrevalenceSideContent(): JSX.Element {
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
     const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
+    const [prevalenceInfo, setPrevalenceInfo] = useState<string>("");
 
     useEffect((): void => {
-        // Set initial filter order based on some logic
         setSelectedOrder([]);
     }, []);
 
-    // UseEffect to listen for language changes and update options
     useEffect(() => {
         const handleLanguageChange = (): void => {
             fetchOptions();
@@ -80,6 +84,31 @@ export function PrevalenceSideContent(): JSX.Element {
         };
     }, [i18n, fetchOptions]);
 
+    // Fetch Prevalence Information
+    useEffect(() => {
+        const fetchPrevalenceInfo = async (): Promise<void> => {
+            try {
+                const url = `${PEREVALENCE_INFO}?locale=${i18next.language}&publicationState=live`;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const response = await callApiService<any>(url);
+
+                const entity = response.data?.data;
+                if (!entity || !entity.content) {
+                    setPrevalenceInfo("No prevalence information available.");
+                    return;
+                }
+
+                // Directly set the Markdown content from the API
+                setPrevalenceInfo(entity.content);
+            } catch (error) {
+                console.error("Failed to fetch prevalence info:", error);
+                setPrevalenceInfo("Error loading prevalence information.");
+            }
+        };
+
+        fetchPrevalenceInfo();
+    }, [i18next.language]);
+
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
@@ -87,12 +116,12 @@ export function PrevalenceSideContent(): JSX.Element {
                 translatedCategory
             )}&locale=${i18next.language}&pagination[pageSize]=1`;
             const response = await callApiService<
-                CMSResponse<Array<CMSEntity<ContentAttributes>>, unknown>
+                CMSResponse<Array<Content>, unknown>
             >(url);
             if (response.data && response.data.data.length > 0) {
-                const attributes = response.data.data[0].attributes;
-                setInfoDialogTitle(attributes.title);
-                setInfoDialogContent(attributes.content);
+                const entity = response.data.data[0];
+                setInfoDialogTitle(entity.title);
+                setInfoDialogContent(entity.content);
                 setInfoDialogOpen(true);
             }
         } catch (error) {
@@ -114,9 +143,9 @@ export function PrevalenceSideContent(): JSX.Element {
     };
 
     const handleSearch = async (): Promise<void> => {
-        setShowError(false); // Reset the error visibility before starting the search
-        await fetchDataFromAPI(); // Await the API fetch operation
-        setShowError(true); // Set error visibility after the search completes
+        setShowError(false);
+        await fetchDataFromAPI();
+        setShowError(true);
     };
 
     const filterComponents: { [key: string]: JSX.Element } = {
@@ -169,10 +198,15 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <FilterMultiSelectionComponent
                     selectedItems={selectedMicroorganisms}
-                    selectionOptions={microorganismOptions.map((option) => ({
-                        value: option.name,
-                        displayName: option.name,
-                    }))}
+                    selectionOptions={microorganismOptions
+                        .filter(
+                            (option) =>
+                                !!option.name && option.name.trim() !== ""
+                        )
+                        .map((option) => ({
+                            value: option.name,
+                            displayName: option.name,
+                        }))}
                     name="microorganisms"
                     label={t("MICROORGANISM")}
                     actions={{
@@ -333,10 +367,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     }}
                 />
                 <Tooltip title={t("More Info on Matrix Groups")}>
-                    <IconButton
-                        onClick={() => handleInfoClick("MATRIX_GROUP")}
-                        sx={{ marginLeft: 0.5 }}
-                    >
+                    <IconButton onClick={() => handleInfoClick("MATRIX_GROUP")}>
                         <InfoIcon />
                     </IconButton>
                 </Tooltip>
@@ -397,7 +428,6 @@ export function PrevalenceSideContent(): JSX.Element {
         ));
 
     const resetFilters = async (): Promise<void> => {
-        // Resetting the local states
         setSelectedMicroorganisms([]);
         setSelectedSampleOrigins([]);
         setSelectedMatrices([]);
@@ -405,26 +435,21 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedMatrixGroups([]);
         setSelectedYear([]);
         setSelectedSuperCategory([]);
-        setSelectedOrder([]); // Reset the order of the filters
+        setSelectedOrder([]);
         setIsSearchTriggered(false);
         setShowError(false);
-
-        await fetchOptions(); // Re-fetch data to reset all options, including years
-
-        // Reset the URL to remove query parameters
+        await fetchOptions();
         window.history.replaceState(null, "", window.location.pathname);
-
-        // Optionally, reload the page to ensure everything is in its initial state
-        // window.location.reload();
     };
 
     return (
         <Box
             sx={{
-                padding: "10px", // Add padding inside the sidebar
-                height: "80vh",
+                padding: "10px",
+                height: "88vh",
+                p: 2,
                 overflowY: "auto",
-                width: "410px",
+                width: "430px",
                 maxHeight: "calc(140vh)",
                 maxWidth: "95%",
             }}
@@ -436,7 +461,6 @@ export function PrevalenceSideContent(): JSX.Element {
             <Dialog open={infoDialogOpen} onClose={handleClose}>
                 <DialogTitle>{infoDialogTitle}</DialogTitle>
                 <DialogContent>
-                    {/* Render Markdown content */}
                     <DialogContentText>
                         <Markdown>{infoDialogContent}</Markdown>
                     </DialogContentText>
@@ -445,7 +469,6 @@ export function PrevalenceSideContent(): JSX.Element {
                     <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
             </Dialog>
-
             <Box
                 sx={{
                     display: "flex",
@@ -464,6 +487,38 @@ export function PrevalenceSideContent(): JSX.Element {
                 <Button variant="contained" onClick={resetFilters}>
                     {t("RESET_FILTERS")}
                 </Button>
+            </Box>
+            <Box sx={{ marginTop: 2 }}>
+                <ZNAccordion
+                    title={t("PREVALENCE_INFORMATION")}
+                    content={
+                        <Markdown
+                            options={{
+                                overrides: {
+                                    a: {
+                                        props: {
+                                            target: "_blank",
+                                            rel: "noopener noreferrer",
+                                        },
+                                    },
+                                    p: {
+                                        component: "p",
+                                        props: {
+                                            style: {
+                                                marginTop: -1,
+                                                marginBottom: 0,
+                                            },
+                                        },
+                                    },
+                                },
+                            }}
+                        >
+                            {prevalenceInfo}
+                        </Markdown>
+                    }
+                    defaultExpanded={true}
+                    centerContent={false}
+                />
             </Box>
         </Box>
     );

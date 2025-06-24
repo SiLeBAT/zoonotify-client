@@ -24,6 +24,7 @@ const tableTextStyle = {
 
 function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
+
     tableCellList.push(
         <TableCell
             sx={tableTextStyle}
@@ -41,18 +42,23 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
         >
             {row.substanceClass}
         </TableCell>,
-
         <TableCell
             sx={tableTextStyle}
             component="td"
             scope="row"
-            key={`amr-table-cell-${row.amrSubstance}-substanceClass`}
+            key={`amr-table-cell-${row.amrSubstance}-wirkstoff`}
         >
             {row.wirkstoff}
         </TableCell>
     );
 
-    for (const year of Object.keys(row.concentrationList)) {
+    // **Sort the years descending before rendering**
+    const sortedYears = Object.keys(row.concentrationList).sort(
+        (a, b) => parseInt(b) - parseInt(a)
+    );
+
+    // Render the data for each year in descending order
+    for (const year of sortedYears) {
         const concentrationPerYear = row.concentrationList[year];
         tableCellList.push(
             <TableCell
@@ -64,7 +70,6 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             >
                 {concentrationPerYear.max}
             </TableCell>,
-
             <TableCell
                 sx={tableTextStyle}
                 component="td"
@@ -74,7 +79,6 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
             >
                 {concentrationPerYear.min}
             </TableCell>,
-
             <TableCell
                 sx={tableTextStyle}
                 component="td"
@@ -101,9 +105,9 @@ export function InfoPageAmrDialogComponent(props: {
         props.onClose();
     };
 
-    const handleSubmit = (): void => {
-        props.onAmrDataExport();
-    };
+    //const handleSubmit = (): void => {
+    // props.onAmrDataExport();
+    //};
 
     const tableSubHeader: JSX.Element[] = [];
 
@@ -201,10 +205,6 @@ export function InfoPageAmrDialogComponent(props: {
         content: t("Methods.Amrs.CancelButton"),
         onClick: handleClose,
     };
-    const amrTableSubmitButton: DialogButton = {
-        content: t("Methods.Amrs.ExportButton"),
-        onClick: handleSubmit,
-    };
 
     return DialogComponent({
         loading: false,
@@ -212,6 +212,6 @@ export function InfoPageAmrDialogComponent(props: {
         dialogContentText: props.resistancesTableData.description,
         dialogContent: dialogTableContent,
         cancelButton: amrTableCancelButton,
-        submitButton: amrTableSubmitButton,
+        //submitButton: amrTableSubmitButton,
     });
 }

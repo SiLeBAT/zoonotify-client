@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { List, ListItem, ListSubheader } from "@mui/material";
-import i18next from "i18next";
+//import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import Markdown from "markdown-to-jsx";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { EXTERNAL_LINKS } from "../../shared/infrastructure/router/routes";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 
 type Category =
     | "LEGAL_REGULATION"
@@ -14,62 +13,61 @@ type Category =
     | "ONLINE_TOOLS";
 
 interface ExternalLink {
+    id: number;
     category: Category;
-    content: string; // Markdown content directly
+    content: string | null;
 }
 
-type ExternalLinkResponse = CMSResponse<
-    CMSEntity<ExternalLink>[],
-    {
+interface ExternalLinkResponse {
+    data: ExternalLink[];
+    meta: {
         pagination: {
             page: number;
             pageSize: number;
             pageCount: number;
             total: number;
         };
-    }
->;
+    };
+}
 
 export function LinkPageLinkListComponent(): JSX.Element {
-    const { t } = useTranslation(["ExternLinks"]);
+    const { t, i18n } = useTranslation(["ExternLinks"]);
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
+    // Update the browser URL to always include the current language as a query parameter.
     useEffect(() => {
-        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18next.language}`;
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("lang") !== i18n.language) {
+            params.set("lang", i18n.language);
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.replaceState({}, "", newUrl);
+        }
+    }, [i18n.language]);
+
+    useEffect(() => {
+        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18n.language}`;
         console.log("[LinkPageLinkList] Fetching from:", apiEndpoint);
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
                 console.log("[LinkPageLinkList] Raw response:", response);
-
                 if (response?.data?.data) {
-                    const extractedLinks = response.data.data.map(
-                        (item: CMSEntity<ExternalLink>) => item.attributes
-                    );
-                    console.log(
-                        "[LinkPageLinkList] extractedLinks:",
-                        extractedLinks
-                    );
-                    setLinkData(extractedLinks);
+                    setLinkData(response.data.data);
                 } else {
                     console.warn("[LinkPageLinkList] No data in response");
                 }
-
-                // Return something to satisfy `promise/always-return`
                 return response;
             })
             .catch((err) => {
                 console.error("[LinkPageLinkList] Error fetching data:", err);
-                // You can choose to re-throw the error if you want
-                throw err;
             });
-    }, [i18next.language]);
+    }, [i18n.language]);
 
-    // Explicitly specify the return type here
+    // Group links by category
     function groupByCategory(
         links: ExternalLink[]
     ): Record<Category, ExternalLink[]> {
-        return links.reduce<Record<Category, ExternalLink[]>>((acc, link) => {
+        return links.reduce((acc, link) => {
             if (!acc[link.category]) {
                 acc[link.category] = [];
             }
@@ -79,8 +77,8 @@ export function LinkPageLinkListComponent(): JSX.Element {
     }
 
     const groupedLinks = groupByCategory(linkData);
-    console.log("[LinkPageLinkList] groupedLinks:", groupedLinks);
 
+    // Specify category order
     const categoryOrder: Category[] = [
         "ONLINE_TOOLS",
         "REPORTS",
@@ -91,34 +89,45 @@ export function LinkPageLinkListComponent(): JSX.Element {
     return (
         <div>
             {categoryOrder.map((category) => {
-                const itemsForCategory = groupedLinks[category];
-                if (!itemsForCategory || itemsForCategory.length === 0) {
-                    console.log(
-                        `[LinkPageLinkList] No items for category: "${category}"`
-                    );
+                // Filter out items that don't have non-empty content.
+                const itemsForCategory = (groupedLinks[category] || []).filter(
+                    (item) => item.content && item.content.trim() !== ""
+                );
+
+                // Only render the category if there is at least one valid item.
+                if (itemsForCategory.length === 0) {
                     return null;
                 }
 
                 const categoryLabel = t(category, { defaultValue: category });
                 console.log(
-                    `[LinkPageLinkList] t(${category}):`,
-                    categoryLabel
+                    `[LinkPageLinkList] Rendering category: "${categoryLabel}"`
                 );
 
                 return (
                     <List key={category}>
                         <ListSubheader>{categoryLabel}</ListSubheader>
-
-                        {itemsForCategory.map((item, idx) => {
+                        {itemsForCategory.map((item) => {
                             console.log(
-                                `[LinkPageLinkList] Rendering item #${idx}`,
+                                "[LinkPageLinkList] Rendering item:",
                                 item
                             );
-
                             return (
-                                <ListItem key={idx}>
-                                    {/* Render content using the Markdown component */}
-                                    <Markdown>{item.content}</Markdown>
+                                <ListItem key={item.id}>
+                                    <Markdown
+                                        options={{
+                                            overrides: {
+                                                a: {
+                                                    props: {
+                                                        target: "_blank",
+                                                        rel: "noopener noreferrer",
+                                                    },
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        {item.content ?? ""}
+                                    </Markdown>
                                 </ListItem>
                             );
                         })}
