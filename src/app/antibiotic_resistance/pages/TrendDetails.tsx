@@ -869,6 +869,8 @@ export const TrendDetails: React.FC<{
                 {/* MAIN CONTENT */}
                 <Box flex={1} ml="370px" px={4} py={3}>
                     {renderSubstanceFilter()}
+
+                    {/* Show charts if available */}
                     {showChart && paginatedGroups.length > 0 && (
                         <Box mt={2} mb={2}>
                             <Grid container spacing={4}>
@@ -927,55 +929,46 @@ export const TrendDetails: React.FC<{
                                     />
                                 </Box>
                             )}
+                        </Box>
+                    )}
 
-                            {trendInfoLoading && (
-                                <Box
-                                    mt={3}
-                                    display="flex"
-                                    justifyContent="center"
-                                >
-                                    <Typography
-                                        variant="body2"
-                                        color="textSecondary"
-                                    >
-                                        Loading trend information...
-                                    </Typography>
-                                </Box>
-                            )}
-                            {trendInfoError && (
-                                <Box
-                                    mt={3}
-                                    display="flex"
-                                    justifyContent="center"
-                                >
-                                    <Typography variant="body2" color="error">
-                                        {trendInfoError}
-                                    </Typography>
-                                </Box>
-                            )}
-                            {trendInfo && (
-                                <Box
-                                    mt={3}
-                                    mb={3}
-                                    p={3}
-                                    bgcolor="#f6f7fa"
-                                    borderRadius={2}
-                                >
-                                    <Typography
-                                        variant="h6"
-                                        gutterBottom
-                                        sx={{ color: "#003663" }}
-                                    >
-                                        {trendInfo.title}
-                                    </Typography>
-                                    <Markdown options={{ forceBlock: true }}>
-                                        {trendInfo.description}
-                                    </Markdown>
-                                </Box>
-                            )}
+                    {/* ----------- ALWAYS SHOW TREND INFO BELOW ----------- */}
+                    {trendInfoLoading && (
+                        <Box mt={3} display="flex" justifyContent="center">
+                            <Typography variant="body2" color="textSecondary">
+                                Loading trend information...
+                            </Typography>
+                        </Box>
+                    )}
+                    {trendInfoError && (
+                        <Box mt={3} display="flex" justifyContent="center">
+                            <Typography variant="body2" color="error">
+                                {trendInfoError}
+                            </Typography>
+                        </Box>
+                    )}
+                    {trendInfo && (
+                        <Box
+                            mt={3}
+                            mb={3}
+                            p={3}
+                            bgcolor="#f6f7fa"
+                            borderRadius={2}
+                        >
+                            <Typography
+                                variant="h6"
+                                gutterBottom
+                                sx={{ color: "#003663" }}
+                            >
+                                {trendInfo.title}
+                            </Typography>
+                            <Markdown options={{ forceBlock: true }}>
+                                {trendInfo.description}
+                            </Markdown>
                         </Box>
                     )}
                 </Box>
+
                 <Dialog open={infoDialogOpen} onClose={handleClose}>
                     <DialogTitle>{infoDialogTitle}</DialogTitle>
                     <DialogContent>
