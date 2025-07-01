@@ -25,10 +25,6 @@ export function InfoPageComponent(props: {
         margin: "1em 0",
     } as const;
 
-    const handleExportAmrData = (amrKey: AmrKey): void => {
-        props.onAmrDataExport(amrKey);
-    };
-
     return (
         <PageLayoutComponent>
             <Box
@@ -121,11 +117,6 @@ export function InfoPageComponent(props: {
                                 props.tableData[model.currentAMRID as AmrKey]
                             }
                             onClose={operations.handleClose}
-                            onAmrDataExport={() =>
-                                handleExportAmrData(
-                                    model.currentAMRID as AmrKey
-                                )
-                            }
                         />
                     ) : null}
                 </div>

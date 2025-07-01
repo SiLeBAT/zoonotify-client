@@ -49,6 +49,7 @@
   "HALS_HAUT": "(Neck)skin",
   "DIVERSE": "Diverse",
   "MULTIPLE": "Multiple",
+  "DOWNLOAD_ZIP_FILE": "Data download",
   "MILCH": "Milk",
   "MILCHRIND": "Dairy cattle",
   "Select_All": "Select All",
@@ -56,5 +57,14 @@
   "Apply All Filters": "Apply All Filters",
   "No_Records": "No records found",
   "SELECT_ALL": "Select All",
+  "Short Substance": "Short Substance",
+  "Substance Class": "Substance Class",
+  "Wirkstoff": "Active Substance",
+  "Max": "Max",
+  "Min": "Min",
+  "CutOff": "CutOff",
+
+  "Methods.Amrs.CancelButton": "Close",
+
   "HOW_TO": "Instructions"
 }
