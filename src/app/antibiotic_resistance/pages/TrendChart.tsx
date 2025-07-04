@@ -31,7 +31,40 @@ export interface TrendChartProps {
     fullData: ResistanceApiItem[];
     groupLabel?: React.ReactNode;
 }
-
+const ALL_SUBSTANCES = [
+    "AK",
+    "AMP",
+    "AZI",
+    "CHL",
+    "CIP",
+    "CLI",
+    "COL",
+    "DAP",
+    "ERY",
+    "ETP",
+    "FFN",
+    "FOT",
+    "FOX",
+    "FUS",
+    "GEN",
+    "KAN",
+    "LZD",
+    "MERO",
+    "MUP",
+    "NAL",
+    "PEN",
+    "RIF",
+    "SMX",
+    "STR",
+    "SYN",
+    "TAZ",
+    "TEC",
+    "TET",
+    "TGC",
+    "TIA",
+    "TMP",
+    "VAN",
+];
 const COLORS = [
     "#F08080",
     "#B8860B",
@@ -64,7 +97,10 @@ const COLORS = [
     "#CD5C5C",
     "#008080",
 ];
-
+const SUBSTANCE_COLORS: { [substance: string]: string } = {};
+ALL_SUBSTANCES.forEach((substance, idx) => {
+    SUBSTANCE_COLORS[substance] = COLORS[idx % COLORS.length];
+});
 // Custom tick renderer for XAxis
 // Custom tick renderer for XAxis
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,7 +146,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     groupLabel,
 }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
-    const { t } = useTranslation(["Antibiotic"]);
+    const { t, i18n } = useTranslation(["Antibiotic"]);
 
     // Defensive: Only plot if >=2 unique years in data
     const uniqueYears = Array.from(new Set(data.map((d) => d.samplingYear)));
@@ -280,8 +316,38 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         const csvComma = generateCSV(rows, ",", ".", t);
         const csvDot = generateCSV(rows, ";", ",", t);
 
+        const readmeContentDe = `
+       
+        
+        
+Dieser ZooNotify-Daten-Download enthält diese README-Datei und zwei CSV-Dateien. Die Verwendung der CSV-Dateien wird im Folgenden erläutert.
+
+Die data_dot.csv Datei: Ist für die Nutzung von Software mit deutschen Spracheinstellungen 
+Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit deutschen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Kommas als Dezimaltrennzeichen verwenden. 
+
+Die data_comma.csv Datei:  Ist für die Nutzung von Software mit englischen Spracheinstellungen 
+Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden. 
+
+`;
+        const readmeContentEn = `   
+        This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
+
+The data_dot.csv: Is for use in software with German language settings
+This file contains dot-separated data, which supports the correct format of numbers in software programmes (like Microsoft Office Excel or LibreOffice Sheets) with German language settings. This file can be opened in software which use commas as decimal separators.
+
+The data_comma.csv: Is for use in software with English language settings
+This file contains comma-separated data, which supports the correct format of numbers in software programmes (like Microsoft Office Excel or LibreOffice Sheets) with English language settings. This file can be opened in software which use dots as decimal separators.
+
+
+        `;
+
+        const readmeContent = i18n.language.startsWith("de")
+            ? readmeContentDe
+            : readmeContentEn;
+
         zip.file(`trend_comma_${timestamp}.csv`, csvComma);
         zip.file(`trend_dot_${timestamp}.csv`, csvDot);
+        zip.file("README.txt", readmeContent);
 
         const blob = await zip.generateAsync({ type: "blob" });
         const url = URL.createObjectURL(blob);
@@ -378,13 +444,13 @@ export const TrendChart: React.FC<TrendChartProps> = ({
                             wrapperStyle={{ margin: -20 }}
                             align="right"
                         />
-                        {substances.map((substance, idx) => (
+                        {substances.map((substance) => (
                             <Line
                                 key={substance}
                                 type="linear"
                                 dataKey={substance}
                                 name={substance}
-                                stroke={COLORS[idx % COLORS.length]}
+                                stroke={SUBSTANCE_COLORS[substance] || "#888"} // fallback color if not found
                                 strokeWidth={2}
                                 dot={{ r: 3 }}
                                 connectNulls
