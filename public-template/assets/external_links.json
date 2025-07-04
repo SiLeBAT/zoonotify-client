@@ -1,0 +1,92 @@
+{
+  "LinkComponent": [
+    {
+      "Title": "Guidelines",
+      "Links": [
+        {
+          "Text": "AVV",
+          "Link": "http://www.verwaltungsvorschriften-im-internet.de/bsvwvbund_10022012_3289026230009.htm"
+        },
+        {
+          "Text": "RL",
+          "Link": "http://data.europa.eu/eli/dir/2003/99/2013-07-01"
+        },
+        {
+          "Text": "EG",
+          "Link": "http://data.europa.eu/eli/reg/2003/2160/oj"
+        },
+        {
+          "Text": "EU13",
+          "Link": "https://eur-lex.europa.eu/eli/dec_impl/2013/652/oj"
+        },
+        {
+          "Text": "EU20",
+          "Link": "http://data.europa.eu/eli/dec_impl/2020/1729/oj"
+        }
+      ]
+    },
+    {
+      "Title": "Reports",
+      "Links": [
+        {
+          "Text": "ZoonosenBfR",
+          "Link": "https://www.bfr.bund.de/de/zoonosen.html "
+        },
+        {
+          "Text": "ZoonosenMonitoring",
+          "Link": "https://www.bvl.bund.de/DE/Arbeitsbereiche/01_Lebensmittel/01_Aufgaben/02_AmtlicheLebensmittelueberwachung/06_ZoonosenMonitoring/lm_zoonosen_monitoring_node.html"
+        },
+        {
+          "Text": "AR",
+          "Link": "https://www.bmel.de/DE/themen/tiere/tierarzneimittel/lagebild-antibiotikaeinsatz-bei-tieren.html"
+        },
+        {
+          "Text": "AMK",
+          "Link": "https://www.bmel.de/DE/themen/tiere/tierarzneimittel/kurzfassung16-amg-novelle.html"
+        }
+      ]
+    },
+    {
+      "Title": "Institutes",
+      "Links": [
+        {
+          "Text": "RKI",
+          "Link": "https://www.rki.de/DE/Home/homepage_node.html"
+        },
+        {
+          "Text": "BVL",
+          "Link": "https://www.bvl.bund.de/DE/Home/home_node.html"
+        },
+        {
+          "Text": "EFSA",
+          "Link": "https://www.efsa.europa.eu/de"
+        },
+        {
+          "Text": "ECDC",
+          "Link": "https://www.ecdc.europa.eu/en"
+        },
+        {
+          "Text": "BMEL",
+          "Link": "https://www.bmel.de/DE/Home/home_node.html"
+        }
+      ]
+    },
+    {
+      "Title": "Platforms",
+      "Links": [
+        {
+          "Text": "Survstat",
+          "Link": "https://survstat.rki.de/Content/Query/Main.aspx"
+        },
+        {
+          "Text": "ArEFSA",
+          "Link": "https://www.efsa.europa.eu/en/interactive-pages/AMR-Report-2018"
+        },
+        {
+          "Text": "SurveillanceAtlas",
+          "Link": "https://atlas.ecdc.europa.eu/public/index.aspx"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "Content": {
+    "Bfr": "BfR - Bundesinstitut für Risikobewertung",
+    "Faq": "FAQ",
+    "Api": "API-docs",
+    "DataProtection": "Datenschutzerklärung",
+    "SupportError": "Fehler: Support im Moment nicht erreichbar",
+    "Mail": "Problem melden",
+    "MailText": "Bitte schildern Sie uns Ihr Problem. Handelt es sich um ein Problem mit der Darstellung bei ZooNotify, kann auch ein Screenshot hilfreich sein."
+  },
+  "Date": {
+    "Text": "Letzte Änderung: ",
+    "Layout": "de"
+  }
+}

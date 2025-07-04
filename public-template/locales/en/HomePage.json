@@ -1,0 +1,8 @@
+{
+  "Subtitle": "Web-based query of surveillance data according to RL 99/2003/EU (Zoonoses Guideline)",
+  "MainText": "ZooNotify offers the possibility to query a simplified dataset of the pathogen detections in the food chain collected according to RL 99/2003/EU (Zoonoses Directive) and their properties submitted to the Federal Institute for Risk Assessment (BfR).",
+  "SelectorIntro": "Please click on the topics below to expand the list of the interactive database:",
+  "SelectorLable": "Data sets: ",
+  "SelectorText": "Please, select a data set",
+  "Initative": "A BfR initative:"
+}

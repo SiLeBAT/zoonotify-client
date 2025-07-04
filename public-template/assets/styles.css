@@ -1,0 +1,39 @@
+html {
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "Roboto", sans-serif;
+    src: url("/fonts/Roboto/Roboto-Black.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-BlackItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Bold.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-BoldItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Italic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Light.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-LightItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Medium.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-MediumItalic.ttf") format("truetype");
+    src: url("/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+}
+
+html,
+body {
+    font-family: "Roboto", sans-serif;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+#application {
+    width: 100%;
+    height: 100%;
+}
+
+span.react-simple-image-viewer__close {
+    top: 80px;
+}
+
+button em {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}

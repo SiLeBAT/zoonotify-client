@@ -1,0 +1,1308 @@
+{
+  "Content": {
+    "Title": "Query results",
+    "DataStatus": "Validated laboratory results according to RL 99/2003/EU - Data status {{date}}",
+    "MainText": {
+      "Part1": "ZooNotify allows to query a selection of typing results of isolates sent to the National Reference Laboratories at BfR. These are zoonotic agents and commensals obtained in the framework of the national zoonoses monitoring according to regulation AVV Zoonoses Food Chain and the Salmonella control programmes in poultry according to Regulation (EC) No. 2160/2003. You can create your own queries using the filter function on the left or retrieve and edit ",
+      "Part2": "pre-defines queries",
+      "Part3": ". ZooNotify generates downloadable tables and graphs for you. The queries can be reproduced and shared via the URL."
+    }
+  },
+  "Results": {
+    "Parameter": "Selected Filters",
+    "NrIsolatesText": "Number of isolates",
+    "NrIsolatesTextRelative": "Isolates",
+    "Table": "Table",
+    "Unit": "in %",
+    "per": "per",
+    "subfilters": "Selected Subfilters"
+  },
+  "Buttons": {
+    "Delete": "Delete all"
+  },
+  "Drawer": {
+    "Title": "Settings",
+    "Subtitles": {
+      "Filter": "Filters",
+      "Graph": "Displayed features"
+    },
+    "Selector": "--no options--",
+    "Graphs": {
+      "Row": "rows / x-axis",
+      "Column": "columns / y-axis"
+    }
+  },
+  "FilterDialog": {
+    "ButtonText": "select filter",
+    "SelectAll": "Select all",
+    "DeselectAll": "Deselect all",
+    "Cancel": "Cancel",
+    "Submit": "Submit",
+    "TextContentBeforeLink": "Please select your desired filters. The selected filters will be displayed after clicking the submit button. More information about the filters can be found on the ",
+    "TextContentAfterLink": " page.",
+    "LinkText": "Explanations",
+    "DialogTitle": "Select filter"
+  },
+  "Filters": {
+    "All": "All values",
+    "microorganism": "Microorganism",
+    "matrix": "Matrix",
+    "samplingContext": "Sampling context",
+    "federalState": "Federal state",
+    "samplingStage": "Sampling stage",
+    "origin": "Origin of sample",
+    "category": "Animal species / food category",
+    "productionType": "Animal species production type / food",
+    "resistance": "Antimicrobial resistance",
+    "samplingYear": "Sampling year"
+  },
+  "FilterValues": {
+    "microorganism": {
+      "Campylobacter spp": "Campylobacter spp.",
+      "E coli": "E. coli",
+      "ESBL/AmpC-E coli": "ESBL/AmpC-E. coli",
+      "Listeria monocytogenes": "L. monocytogenes",
+      "MRSA": "MRSA",
+      "Salmonella spp": "Salmonella spp.",
+      "STEC": "STEC",
+      "CARBA-E coli": "Carba-E. coli",
+      "Enterococcus spp": "Enterococcus spp."
+    },
+    "formattedMicroorganisms": {
+      "Campylobacter spp": {
+        "prefix": "",
+        "name": "",
+        "italicName": "Campylobacter",
+        "suffix": " spp."
+      },
+      "E coli": {
+        "prefix": "",
+        "name": "",
+        "italicName": "E. coli",
+        "suffix": ""
+      },
+      "ESBL/AmpC-E coli": {
+        "prefix": "ESBL/AmpC-",
+        "name": "",
+        "italicName": "E. coli",
+        "suffix": ""
+      },
+      "Listeria monocytogenes": {
+        "prefix": "",
+        "name": "",
+        "italicName": "L. monocytogenes",
+        "suffix": ""
+      },
+      "MRSA": {
+        "prefix": "",
+        "name": "MRSA",
+        "italicName": "",
+        "suffix": ""
+      },
+      "Salmonella spp": {
+        "prefix": "",
+        "name": "",
+        "italicName": "Salmonella",
+        "suffix": " spp."
+      },
+      "STEC": {
+        "prefix": "",
+        "name": "STEC",
+        "italicName": "",
+        "suffix": ""
+      },
+      "CARBA-E coli": {
+        "prefix": "Carba-",
+        "name": "",
+        "italicName": "E. coli",
+        "suffix": ""
+      },
+      "Enterococcus spp": {
+        "prefix": "",
+        "name": "",
+        "italicName": "Enterococcus",
+        "suffix": " spp."
+      }
+    },
+    "matrix": {
+      "(Konsum)eier, unsortiert": "Table eggs",
+      "Blatt- und Kopfsalate": "Non pre-cut leafy salads and lettuce",
+      "Getrocknete Blatt- und Grasprodukte": "Dried leave and grass products",
+      "Erdbeeren": "Strawberries",
+      "Fleischerzeugnisse": "Meat preparations",
+      "Kiemeninhalt": "Gills contents",
+      "Nasenschleimhaut": "Nasal mucosa",
+      "Weizenmehl": "Wheat flour/meal",
+      "Frisches Fleisch": "Fresh meat",
+      "Blinddarminhalt": "Caecum",
+      "Sammelmilch": "Raw milk for manufacture",
+      "Konsumeier, sortiert": "Eggs",
+      "Frische Kräuter": "Fresh herbs",
+      "Kot / Staub": "Faeces / dust",
+      "Rohmilchkäse": "Cheeses made from raw or low heat-treated milk",
+      "Staub": "Dust",
+      "(Hals)haut": "(Neck)skin",
+      "Blattsalate": "Leaf salad",
+      "Kot": "Faeces",
+      "Garnelen": "Shrimps",
+      "Schlachtkörper": "Carcase",
+      "Ölsaaten / Ölfruchte und Extraktionsschrote": "Feed material of oil seed or fruit origin",
+      "Muscheln": "Mussels",
+      "Sprossen": "Seeds, sprouted",
+      "Tomaten": "Tomatoes",
+      "Haut": "Skin",
+      "Streichfähige Rohwürste": "Meat products - spreadable fermented sausages",
+      "Hackfleisch": "Minced meat",
+      "Tatar / Schabefleisch": "Minced meat",
+      "Nasentupfer": "Nasal swab",
+      "Muskel": "Muscle",
+      "Petersilie": "Parsley",
+      "Alleinfuttermittel": "Complete feedingstuffs",
+      "Babyspinat": "Baby spinach"
+    },
+    "samplingContext": {
+      "Zoonosen-Monitoring": "Zoonoses-Monitoring",
+      "Salm-Bekämpfung": "Salm-control programs"
+    },
+    "federalState": {
+      "keine Anzeige": "No indication",
+      "Baden-Wuerttemberg": "Baden-Wuerttemberg",
+      "Bayern": "Bavaria",
+      "Berlin": "Berlin",
+      "Brandenburg": "Brandenburg",
+      "Bremen": "Bremen",
+      "Hessen": "Hesse",
+      "Nordrhein-Westfalen": "Northrhine-Westphalia",
+      "Niedersachsen": "Lower Saxony",
+      "Saarland": "Saarland",
+      "Hamburg": "Hamburg",
+      "Schleswig-Holstein": "Schleswig-Holstein",
+      "Sachsen": "Saxony",
+      "Mecklenburg-Vorpommern": "Mecklenburg Western Pomerania",
+      "Rheinland-Pfalz": "Rhineland Palatinate",
+      "Sachsen-Anhalt": "Saxony-Anhalt",
+      "Thueringen": "Thuringia"
+    },
+    "samplingStage": {
+      "Dezentrale Ölmühlen": "Decentralized oil mills",
+      "Mühlen": "Mills",
+      "Grenzkontrollstelle": "Border inspection",
+      "Packstellen": "Egg packing stations",
+      "Verarbeitungsbetrieb": "Processing plant",
+      "Einzelhandel": "Retail",
+      "Schlachthof": "Slaughterhouse",
+      "Erzeugerbetrieb": "Farm",
+      "Zentrale Ölmühlen": "Central oil mills",
+      "Wildbahn": "Hunting",
+      "Einfuhrstelle": "Border inspection",
+      "Mischfutterwerk": "Compound feed plant"
+    },
+    "origin": {
+      "Lebensmittel": "Food sample",
+      "Tier": "Animal sample",
+      "Futtermittel": "Feed sample"
+    },
+    "category": {
+      "Schwein und Rind": "Pigs and cattle",
+      "Wiederkäuer": "Ruminants",
+      "Pute": "Turkeys",
+      "Huhn": "Gallus gallus (fowl)",
+      "Rind": "Cattle (bovine animals)",
+      "Pflanzliche Lebensmittel": "Plant-based foods",
+      "Schwein": "Pigs",
+      "Meeresfrüchte": "Sea food-shellfish",
+      "kleine Wiederkäuer": "Small ruminants",
+      "Nutztiere": "Livestock",
+      "Wildschwein": "Wild boars",
+      "Wildwiederkäuer": "Wild ruminants",
+      "Rehwild": "Roe deer",
+      "Geflügel": "Poultry",
+      "Wildgeflügel": "Wildfowl",
+      "Süßwasserfische": "Freshwater fish"
+    },
+    "productionType": {
+      "Cypriniden (Karpfenartige)": "Ciprinids (carp)",
+      "Getreide": "Cereals",
+      "Lamm": "Sheep, lamb",
+      "Zuchthühner, Mastlinie": "Gallus gallus (fowl) - breeding flocks for broiler production line",
+      "Zuchtputen": "Turkeys - breeding flocks, unspecified",
+      "Wiederkäuer für Milchproduktion": "Ruminants for dairy production",
+      "Lebensmittel aus Blättern und Gräsern": "Foods from leaves and grass",
+      "Obst": "Fruits",
+      "Legehennen, konventionell": "Laying hens, conventional production",
+      "Mastrind": "Beef cattle",
+      "Mastschwein / Rind": "Fattening pigs/cattle ",
+      "Mastputen": "Meat production turkeys",
+      "Masthähnchen": "Broilers",
+      "Milchrind, ökologisch": "Dairy cows, organic producktion",
+      "Milchrind, konventionell": "Dairy cows, conventional production",
+      "Legehennen": "Laying hens",
+      "Kräuter": "Herbs",
+      "Zuchthühner, Legelinie": "Breeding flocks for egg production line",
+      "Milchrind": "Dairy cows",
+      "Mastschwein": "Fattening pigs",
+      "Mastkalb / Jungrind": "Calves (under or around 1 year)",
+      "Blattgemüse": "Vegetables - leaves",
+      "Zuchtsauen": "Breeding animals - sows",
+      "Läufer bis 30 kg": "Weaners to growers up to 30 kg",
+      "Krebstiere": "Crustaceans",
+      "Rind": "Cattle (bovine animals)",
+      "Schaf und Ziege für Milchproduktion": "Milk sheep and goats",
+      "Nutztiere": "Livestock",
+      "Masthähnchen, konventionell": "Broilers, conventional production",
+      "Wildschwein": "Wild boars",
+      "Masthähnchen, ökologisch": "Broilers, organic production",
+      "Zweischalige Weichtiere": "Live bivalve molluscs",
+      "Gemüse": "Vegetables",
+      "Zuchthühner, Lege- und Mastlinie": "Breeding flocks for egg and broiler production lines",
+      "Mastschwein bis 50 kg": "Fattening pigs up to 50 kg",
+      "Wildwiederkäuer": "Wild ruminants",
+      "Rehwild": "Roe deer",
+      "Mastputen, ökologisch": "Meat production turkeys, organic production",
+      "Mastputen, konventionell": "Meat production turkeys, conventional production",
+      "Mastgeflügel": "Meat production poultry",
+      "Mastschwein, konventionell": "Fattening pigs, conventional production",
+      "Enten und Gänse": "Ducks and geese",
+      "Mastschwein, ökologisch": "Fattening pigs, organic production",
+      "Tilapia und Pangasius": "Tilapia and pangasius"
+    },
+    "samplingYear": {
+      "2010": "2010",
+      "2011": "2011",
+      "2012": "2012",
+      "2013": "2013",
+      "2014": "2014",
+      "2015": "2015",
+      "2016": "2016",
+      "2017": "2017",
+      "2018": "2018",
+      "2019": "2019",
+      "2020": "2020"
+    }
+  },
+  "Subfilters": {
+    "serovar": {
+      "name": "Serovar",
+      "trigger": "Salmonella spp.",
+      "values": {
+        "S-4,12d-": "S.4,12:d:-",
+        "S-4,\\[5],12i-": "S.4,\\[5],12:i:-",
+        "S-Abony": "S. Abony",
+        "S-Abortusovis": "S. Abortusovis",
+        "S-Adelaide": "S. Adelaide",
+        "S-Agona": "S. Agona",
+        "S-Ajiobo": "S. Ajiobo",
+        "S-Albany": "S. Albany",
+        "S-Amsterdam": "S. Amsterdam",
+        "S-Anatum": "S. Anatum",
+        "S-Bareilly": "S. Bareilly",
+        "S-Berta": "S. Berta",
+        "S-Blockley": "S. Blockley",
+        "S-Bovismorbificans": "S. Bovismorbificans",
+        "S-Braenderup": "S. Braenderup",
+        "S-Brandenburg": "S. Brandenburg",
+        "S-Bredeney": "S. Bredeney",
+        "S-Cerro": "S. Cerro",
+        "S-Chester": "S. Chester",
+        "S-Choleraesuis": "S. Choleraesuis",
+        "S-Coeln": "S. Coeln",
+        "S-Corvallis": "S. Corvallis",
+        "S-Cotham": "S. Cotham",
+        "S-Cremieu": "S. Cremieu",
+        "S-Cubana": "S. Cubana",
+        "S-Derby": "S. Derby",
+        "S-Dublin": "S. Dublin",
+        "S-Durham": "S. Durham",
+        "S-Eboko": "S. Eboko",
+        "S-Enteritidis": "S. Enteritidis",
+        "S-Gallinarum": "S. Gallinarum",
+        "S-Gaminara": "S. Gaminara",
+        "S-Give": "S. Give",
+        "S-Goldcoast": "S. Goldcoast",
+        "S-Hadar": "S. Hadar",
+        "S-Hartford": "S. Hartford",
+        "S-Havana": "S. Havana",
+        "S-Heidelberg": "S. Heidelberg",
+        "S-Hessarek": "S. Hessarek",
+        "S-Hvittingfoss": "S. Hvittingfoss",
+        "S-Idikan": "S. Idikan",
+        "S-Indiana": "S. Indiana",
+        "S-Infantis": "S. Infantis",
+        "S-Isangi": "S. Isangi",
+        "S-Johannesburg": "S. Johannesburg",
+        "S-Kedougou": "S. Kedougou",
+        "S-Kentucky": "S. Kentucky",
+        "S-Kiambu": "S. Kiambu",
+        "S-Kottbus": "S. Kottbus",
+        "S-Leeuwarden": "S. Leeuwarden",
+        "S-Limete": "S. Limete",
+        "S-Litchfield": "S. Litchfield",
+        "S-Liverpool": "S. Liverpool",
+        "S-Livingstone": "S. Livingstone",
+        "S-Llandoff": "S. Llandoff",
+        "S-London": "S. London",
+        "S-Manhattan": "S. Manhattan",
+        "S-Martonos": "S. Martonos",
+        "S-Mbandaka": "S. Mbandaka",
+        "S-Miami": "S. Miami",
+        "S-Minnesota": "S. Minnesota",
+        "S-Montevideo": "S. Montevideo",
+        "S-Muenster": "S. Muenster",
+        "S-Newport": "S. Newport",
+        "S-Nyborg": "S. Nyborg",
+        "S-Ohio": "S. Ohio",
+        "S-Oranienburg": "S. Oranienburg",
+        "S-Ordonez": "S. Ordonez",
+        "S-Orion": "S. Orion",
+        "S-Paratyphi B": "S. Paratyphi B",
+        "S-Paratyphi B (dT+)": "S. Paratyphi B (dT+)",
+        "S-Potsdam": "S. Potsdam",
+        "S-Putten": "S. Putten",
+        "S-Rauform": "S. Rauform",
+        "S-Reading": "S. Reading",
+        "S-Rissen": "S. Rissen",
+        "S-Rubislaw": "S. Rubislaw",
+        "S-Saintpaul": "S. Saintpaul",
+        "S-Schleissheim": "S. Schleissheim",
+        "S-Schwarzengrund": "S. Schwarzengrund",
+        "S-Senftenberg": "S. Senftenberg",
+        "S-Stanley": "S. Stanley",
+        "S-Stanleyville": "S. Stanleyville",
+        "S-Stourbridge": "S. Stourbridge",
+        "S-Subspec- I Rauform": "S. Subspec. I Rauform",
+        "S-Subspez I monophasisch": "S. Subspez I monophasisch",
+        "S-Subspez- I": "S. Subspez. I",
+        "S-Subspez- I monophasisch": "S .Subspez. I monophasisch",
+        "S-Subspez- II": "S. Subspez. II",
+        "S-Subspez- IIIa": "S. Subspez. IIIa",
+        "S-Subspez- IIIb": "S. Subspez. IIIb",
+        "S-Subspez- IIIb monophasisch": "S. Subspez. IIIb monophasisch",
+        "S-Subspez- IV": "S. Subspez. IV",
+        "S-Takoradi": "S. Takoradi",
+        "S-Tennessee": "S. Tennessee",
+        "S-Thompson": "S. Thompson",
+        "S-Typhimurium": "S. Typhimurium",
+        "S-Typhimurium monophasisch": "S. Typhimurium monophasisch",
+        "S-Urbana": "S. Urbana",
+        "S-Virchow": "S. Virchow",
+        "S-Wagenia": "S. Wagenia",
+        "S-Worthington": "S. Worthington",
+        "S-der Gruppe B": "S. of group B",
+        "S-der Gruppe C1": "S. of group C1",
+        "Salm- der Gruppe E": "Salm. of group E",
+        "Subspez- I": "Subspez. I",
+        "keine Salmonelle": "No Salmonella"
+      }
+    },
+    "carba_ampc_carba_phenotype": {
+      "name": "CARBA Phenotype",
+      "trigger": "Carba-E. coli",
+      "values": {
+        "Carbapenemase-verdächtig": "Carbapenemase suspected"
+      }
+    },
+    "esbl_ampc_carba_phenotype": {
+      "name": "ESBL CARBA Phenotype",
+      "trigger": "ESBL/AmpC-E. coli",
+      "values": {
+        "AmpC-verdächtig": "AmpC-suspected",
+        "Carbapenemase-verdächtig": "Carbapenemase-suspected",
+        "ESBL+AmpC-verdächtig": "ESBL+AmpC-suspected",
+        "ESBL-verdächtig": "ESBL-suspected",
+        "Phänotyp nicht ermittelt": "Phenotype not determined",
+        "Phänotyp ungewöhnlich": "Phenotype uncommon"
+      }
+    },
+    "campy_spez": {
+      "name": "Campy Spezies",
+      "trigger": "Campylobacter spp.",
+      "values": {
+        "C- coli": "C. coli",
+        "C- fetus": "C. fetus",
+        "C- hyointestinalis": "C. hyointestinalis",
+        "C- jejuni": "C. jejuni",
+        "C- lari": "C. lari"
+      }
+    },
+    "entero_spez": {
+      "name": "Entero Spezies",
+      "trigger": "Enterococcus spp.",
+      "values": {
+        "Enterococcus faecalis": "Enterococcus faecalis",
+        "Enterococcus faecium": "Enterococcus faecium"
+      }
+    },
+    "spa_type": {
+      "name": "SPA-type",
+      "trigger": "MRSA",
+      "values": {
+        "-offen-": "-open-",
+        "n-t-": "n.t.",
+        "t001": "t001",
+        "t002": "t002",
+        "t003": "t003",
+        "t007": "t007",
+        "t008": "t008",
+        "t009": "t009",
+        "t010": "t010",
+        "t011": "t011",
+        "t015": "t015",
+        "t026": "t026",
+        "t032": "t032",
+        "t034": "t034",
+        "t037": "t037",
+        "t10204": "t10204",
+        "t108": "t108",
+        "t10890": "t10890",
+        "t11212": "t11212",
+        "t11475": "t11475",
+        "t1154": "t1154",
+        "t11614": "t11614",
+        "t1170": "t1170",
+        "t1184": "t1184",
+        "t11866": "t11866",
+        "t11887": "t11887",
+        "t1197": "t1197",
+        "t1250": "t1250",
+        "t1255": "t1255",
+        "t1265": "t1265",
+        "t127": "t127",
+        "t12774": "t12774",
+        "t12887": "t12887",
+        "t13108": "t13108",
+        "t13176": "t13176",
+        "t13177": "t13177",
+        "t13310": "t13310",
+        "t1344": "t1344",
+        "t13493": "t13493",
+        "t1379": "t1379",
+        "t1403": "t1403",
+        "t1419": "t1419",
+        "t1422": "t1422",
+        "t14222": "t14222",
+        "t1430": "t1430",
+        "t1451": "t1451",
+        "t1456": "t1456",
+        "t15010": "t15010",
+        "t15199": "t15199",
+        "t15742": "t15742",
+        "t1580": "t1580",
+        "t1606": "t1606",
+        "t16955": "t16955",
+        "t17181": "t17181",
+        "t1793": "t1793",
+        "t18086": "t18086",
+        "t18107": "t18107",
+        "t189": "t189",
+        "t1919": "t1919",
+        "t1928": "t1928",
+        "t1939": "t1939",
+        "t1951": "t1951",
+        "t19979": "t19979",
+        "t2011": "t2011",
+        "t2112": "t2112",
+        "t2123": "t2123",
+        "t2174": "t2174",
+        "t223": "t223",
+        "t2247": "t2247",
+        "t2346": "t2346",
+        "t2370": "t2370",
+        "t2383": "t2383",
+        "t2510": "t2510",
+        "t2576": "t2576",
+        "t2582": "t2582",
+        "t2642": "t2642",
+        "t267": "t267",
+        "t283": "t283",
+        "t2876": "t2876",
+        "t2883": "t2883",
+        "t2970": "t2970",
+        "t304": "t304",
+        "t3041": "t3041",
+        "t324": "t324",
+        "t3276": "t3276",
+        "t337": "t337",
+        "t3380": "t3380",
+        "t3423": "t3423",
+        "t3934": "t3934",
+        "t4132": "t4132",
+        "t4208": "t4208",
+        "t437": "t437",
+        "t4474": "t4474",
+        "t4571": "t4571",
+        "t4652": "t4652",
+        "t4677": "t4677",
+        "t5123": "t5123",
+        "t5210": "t5210",
+        "t5229": "t5229",
+        "t5452": "t5452",
+        "t559": "t559",
+        "t5675": "t5675",
+        "t5706": "t5706",
+        "t571": "t571",
+        "t579": "t579",
+        "t588": "t588",
+        "t6320": "t6320",
+        "t6325": "t6325",
+        "t6367": "t6367",
+        "t6408": "t6408",
+        "t6867": "t6867",
+        "t6903": "t6903",
+        "t742": "t742",
+        "t779": "t779",
+        "t790": "t790",
+        "t8100": "t8100",
+        "t8275": "t8275",
+        "t843": "t843",
+        "t852": "t852",
+        "t8588": "t8588",
+        "t8620": "t8620",
+        "t898": "t898",
+        "t899": "t899",
+        "t917": "t917",
+        "t9296": "t9296",
+        "t9433": "t9433",
+        "t9538": "t9538"
+      }
+    },
+    "serotype": {
+      "name": "Serotype",
+      "trigger": "Listeria monocytogenes",
+      "values": {
+        "IIa": "IIa",
+        "IIb": "IIb",
+        "IIc": "IIc",
+        "IVb": "IVb",
+        "IVbvariant": "IVbvariant"
+      }
+    },
+    "clonal_group": {
+      "name": "Clonal group",
+      "trigger": "MRSA",
+      "values": {
+        "andere CC398": "Other CC398",
+        "non CC398": "Non CC398",
+        "t011": "t011",
+        "t034": "t034"
+      }
+    },
+    "o_group": {
+      "name": "O-group",
+      "trigger": "STEC",
+      "values": {
+        "(55)": "(55)",
+        "1": "1",
+        "100": "100",
+        "101": "101",
+        "102": "102",
+        "103": "103",
+        "104": "104",
+        "106": "106",
+        "108": "108",
+        "108/130": "108/130",
+        "109": "109",
+        "11": "11",
+        "110": "110",
+        "111": "111",
+        "113": "113",
+        "114": "114",
+        "115": "115",
+        "115 / 152": "115 / 152",
+        "116": "116",
+        "117": "117",
+        "118": "118",
+        "119": "119",
+        "12": "12",
+        "123": "123",
+        "125": "125",
+        "125ac": "125ac",
+        "127": "127",
+        "128": "128",
+        "128ac": "128ac",
+        "129": "129",
+        "129/150": "129/150",
+        "130": "130",
+        "134": "134",
+        "135": "135",
+        "136": "136",
+        "140": "140",
+        "141": "141",
+        "142": "142",
+        "143": "143",
+        "145": "145",
+        "146": "146",
+        "147": "147",
+        "148": "148",
+        "149": "149",
+        "15": "15",
+        "150": "150",
+        "152": "152",
+        "153": "153",
+        "154": "154",
+        "156": "156",
+        "157": "157",
+        "163": "163",
+        "166": "166",
+        "171": "171",
+        "172": "172",
+        "174": "174",
+        "175": "175",
+        "176": "176",
+        "177": "177",
+        "178": "178",
+        "179": "179",
+        "181": "181",
+        "182": "182",
+        "183": "183",
+        "184": "184",
+        "185": "185",
+        "186": "186",
+        "187": "187",
+        "2": "2",
+        "2/74": "2/74",
+        "21": "21",
+        "22": "22",
+        "23": "23",
+        "24": "24",
+        "25": "25",
+        "26": "26",
+        "27": "27",
+        "28": "28",
+        "28ab": "28ab",
+        "28ac": "28ac",
+        "3": "3",
+        "36": "36",
+        "37": "37",
+        "38": "38",
+        "39": "39",
+        "4": "4",
+        "40": "40",
+        "43": "43",
+        "45": "45",
+        "49": "49",
+        "51": "51",
+        "55": "55",
+        "59": "59",
+        "6": "6",
+        "61": "61",
+        "63": "63",
+        "69/150": "69/150",
+        "7": "7",
+        "70": "70",
+        "70 / 71": "70 / 71",
+        "70/71": "70/71",
+        "73": "73",
+        "73 / 77": "73 / 77",
+        "74": "74",
+        "75": "75",
+        "76": "76",
+        "77": "77",
+        "78": "78",
+        "79": "79",
+        "8": "8",
+        "82": "82",
+        "84": "84",
+        "85": "85",
+        "86": "86",
+        "87": "87",
+        "88": "88",
+        "91": "91",
+        "93": "93",
+        "98": "98",
+        "BT": "BT",
+        "NT": "NT",
+        "ONT:H21": "ONT:H21",
+        "nt": "nt",
+        "r": "r",
+        "rauh": "rauh"
+      }
+    },
+    "h_group": {
+      "name": "H-group",
+      "trigger": "STEC",
+      "values": {
+        "(2)": "(2)",
+        "(25)": "(25)",
+        "(46)": "(46)",
+        "(9)": "(9)",
+        "11": "11",
+        "12": "12",
+        "16": "16",
+        "18": "18",
+        "19": "19",
+        "2": "2",
+        "20": "20",
+        "21": "21",
+        "25": "25",
+        "25 / 56": "25 / 56",
+        "26": "26",
+        "28": "28",
+        "29": "29",
+        "30": "30",
+        "31": "31",
+        "38": "38",
+        "4": "4",
+        "40": "40",
+        "41": "41",
+        "43": "43",
+        "45": "45",
+        "46": "46",
+        "48": "48",
+        "49": "49",
+        "5": "5",
+        "56": "56",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "H10": "H10",
+        "H12": "H12",
+        "H16": "H16",
+        "H19": "H19",
+        "H2": "H2",
+        "H21": "H21",
+        "H25": "H25",
+        "H25 \\[slash] 56": "H25 \\[slash] 56",
+        "H27": "H27",
+        "H28": "H28",
+        "H30": "H30",
+        "H4": "H4",
+        "H45": "H45",
+        "H48": "H48",
+        "H49": "H49",
+        "H7": "H7",
+        "H8": "H8",
+        "HNM": "HNM",
+        "HNT": "HNT",
+        "Hr": "Hr",
+        "NM": "NM",
+        "NT": "NT",
+        "\\[H10]": "\\[H10]",
+        "\\[H11]": "\\[H11]",
+        "\\[H12]": "\\[H12]",
+        "\\[H14]": "\\[H14]",
+        "\\[H15]": "\\[H15]",
+        "\\[H16]": "\\[H16]",
+        "\\[H18]": "\\[H18]",
+        "\\[H19]": "\\[H19]",
+        "\\[H1]": "\\[H1]",
+        "\\[H20]": "\\[H20]",
+        "\\[H21]": "\\[H21]",
+        "\\[H23]": "\\[H23]",
+        "\\[H25]": "\\[H25]",
+        "\\[H26]": "\\[H26]",
+        "\\[H27]": "\\[H27]",
+        "\\[H28]": "\\[H28]",
+        "\\[H29]": "\\[H29]",
+        "\\[H2]": "\\[H2]",
+        "\\[H30]": "\\[H30]",
+        "\\[H31]": "\\[H31]",
+        "\\[H32]": "\\[H32]",
+        "\\[H33]": "\\[H33]",
+        "\\[H34]": "\\[H34]",
+        "\\[H35]": "\\[H35]",
+        "\\[H40]": "\\[H40]",
+        "\\[H43]": "\\[H43]",
+        "\\[H45]": "\\[H45]",
+        "\\[H48]": "\\[H48]",
+        "\\[H49]": "\\[H49]",
+        "\\[H4]": "\\[H4]",
+        "\\[H52]": "\\[H52]",
+        "\\[H5]": "\\[H5]",
+        "\\[H6]": "\\[H6]",
+        "\\[H7]": "\\[H7]",
+        "\\[H8]": "\\[H8]",
+        "\\[H9]": "\\[H9]",
+        "\\[H]": "\\[H]",
+        "r": "r",
+        "rauh": "rauh"
+      }
+    },
+    "matrixDetail": {
+      "name": "Matrixdetail",
+      "values": {
+        "Einzel(tier)probe": "Single (animal) sample",
+        "Eierschalenpools": "Pools of shells",
+        "Sackware und lose Ware": "Loose or packaged in sacks",
+        "frisch": "Fresh",
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "Esp. lamb's lettuce, arugula, spinach, iceberg",
+        "vorgeschnitten, verpackt": "Pre-cut, packaged",
+        "Poolprobe": "Pooled sample",
+        "wärmebehandelt": "heat-treated",
+        "lose oder verpackt; geschnitten oder Topfware": "Loose or packaged; pre-cut or in pots",
+        "gekühlt": "Chilled",
+        "gekühlt oder tiefgefroren": "Chilled or frozen",
+        "gekühlt oder tiefgekühlt": "Chilled or frozen",
+        "gekühlt, mit Haut": "Chilled, skinned",
+        "gekühlt, ohne Haut": "Chilled, ohne Haut",
+        "roh": "Raw",
+        "Pulver- oder Blattform": "Powder or leaves",
+        "Hauttupfer": "Skin swabs",
+        "Tupfer": "Swabs",
+        "Kiementupfer": "Gill swabs",
+        "Kloaken- oder Kottupfer": "Cloacal or faecal swabs",
+        "Sammelkot": "Composite faecal sample",
+        "Sockentupfer": "Boot swabs",
+        "Stiefelüberzieher / Sockentupfer": "Boot swabs / socks",
+        "lebend, frisch": "Live, fresh",
+        "importiert, aus Aquakultur": "Imported, aquaculture production",
+        "Nasentupfer": "Nasal swab",
+        "Einzeltierprobe": "Single animal sample",
+        "tiefgekühlt": "Frozen",
+        "Schnittkäse": "Hard cheese",
+        "Weichkäse": "Soft cheeses",
+        "außer Hartkäse": "except hard cheeses",
+        "lose oder verpackt": "Loose or packaged",
+        "Staubtupfer": "Dust swabs",
+        "überwiegend aus Hähnchen- und Putenfleisch": "Mainly from chicken and turkey meat",
+        "überwiegend aus Schweinefleisch": "Mainly from pork",
+        "kleine Sorten": "Small varieties",
+        "vor der Verpackung in der Mühle": "Before packing in the mill",
+        "Raps": "Rapeseed",
+        "hauptsächlich Soja": "Mainly soy"
+      }
+    },
+    "matrixDetail__(Hals)haut": {
+      "name": "Matrix detail",
+      "trigger": "(Neck)skin",
+      "values": {
+        "Einzel(tier)probe": "Single (animal) sample"
+      }
+    },
+    "matrixDetail__(Konsum)eier, unsortiert": {
+      "name": "Matrix detail",
+      "trigger": "(Konsum)eier, unsortiert",
+      "values": {
+        "Eierschalenpools": "Pools of shells"
+      }
+    },
+    "matrixDetail__Alleinfuttermittel": {
+      "name": "Matrix detail",
+      "trigger": "Complete feedingstuffs",
+      "values": {
+        "Sackware und lose Ware": "Loose or packaged in sacks"
+      }
+    },
+    "matrixDetail__Babyspinat": {
+      "name": "Matrix detail",
+      "trigger": "Baby spinach",
+      "values": {
+        "frisch": "Fresh"
+      }
+    },
+    "matrixDetail__Blatt- und Kopfsalate": {
+      "name": "Matrix detail",
+      "trigger": "Non pre-cut leafy salads and lettuce",
+      "values": {
+        "insb. Feldsalat, Rucola, Spinat, Eisberg": "Esp. lamb's lettuce, arugula, spinach, iceberg"
+      }
+    },
+    "matrixDetail__Blattsalate": {
+      "name": "Matrix detail",
+      "trigger": "Leaf salads",
+      "values": {
+        "vorgeschnitten, verpackt": "Pre-cut, packaged"
+      }
+    },
+    "matrixDetail__Blinddarminhalt": {
+      "name": "Matrix detail",
+      "trigger": "Caecum",
+      "values": {
+        "Einzeltierprobe": "Single animal sample",
+        "Poolprobe": "Pooled sample"
+      }
+    },
+    "matrixDetail__Erdbeeren": {
+      "name": "Matrix detail",
+      "trigger": "Strawberries",
+      "values": {
+        "frisch": "Fresh"
+      }
+    },
+    "matrixDetail__Fleischerzeugnisse": {
+      "name": "Matrix detail",
+      "trigger": "Meat preparations",
+      "values": {
+        "wärmebehandelt": "heat-treated"
+      }
+    },
+    "matrixDetail__Frische Kräuter": {
+      "name": "Matrix detail",
+      "trigger": "Fresh herbs",
+      "values": {
+        "lose oder verpackt; geschnitten oder Topfware": "Loose or packaged; pre-cut or in pots"
+      }
+    },
+    "matrixDetail__Frisches Fleisch": {
+      "name": "Matrix detail",
+      "trigger": "Fresh meat",
+      "values": {
+        "gekühlt": "Chilled",
+        "gekühlt oder tiefgefroren": "Chilled or frozen",
+        "gekühlt oder tiefgekühlt": "Chilled or frozen",
+        "gekühlt, mit Haut": "Chilled, skinned",
+        "gekühlt, ohne Haut": "Chilled, ohne Haut"
+      }
+    },
+    "matrixDetail__Garnelen": {
+      "name": "Matrix detail",
+      "trigger": "Shrimps",
+      "values": {
+        "roh": "Raw"
+      }
+    },
+    "matrixDetail__Getrocknete Blatt- und Grasprodukte": {
+      "name": "Matrix detail",
+      "trigger": "Dried leave and grass products",
+      "values": {
+        "Pulver- oder Blattform": "Powder or leaves"
+      }
+    },
+    "matrixDetail__Hackfleisch": {
+      "name": "Matrix detail",
+      "trigger": "Minced meat",
+      "values": {
+        "gekühlt": "Chilled"
+      }
+    },
+    "matrixDetail__Haut": {
+      "name": "Matrix detail",
+      "trigger": "Skin",
+      "values": {
+        "Hauttupfer": "Skin swabs",
+        "Tupfer": "Swabs"
+      }
+    },
+    "matrixDetail__Kiemeninhalt": {
+      "name": "Matrix detail",
+      "trigger": "Gills contents",
+      "values": {
+        "Kiementupfer": "Gill swabs"
+      }
+    },
+    "matrixDetail__Konsumeier, sortiert": {
+      "name": "Matrix detail",
+      "trigger": "Eggs",
+      "values": {
+        "Eierschalenpools": "Pools of shells"
+      }
+    },
+    "matrixDetail__Kot": {
+      "name": "Matrix detail",
+      "trigger": "Faeces",
+      "values": {
+        "Einzeltierprobe": "Single animal sample",
+        "Kloaken- oder Kottupfer": "Cloacal or faecal swabs",
+        "Sammelkot": "Composite faecal sample"
+      }
+    },
+    "matrixDetail__Kot / Staub": {
+      "name": "Matrix detail",
+      "trigger": "Faeces / dust",
+      "values": {
+        "Sockentupfer": "Boot swabs",
+        "Stiefelüberzieher / Sockentupfer": "Boot swabs / socks"
+      }
+    },
+    "matrixDetail__Muscheln": {
+      "name": "Matrix detail",
+      "trigger": "Mussels",
+      "values": {
+        "lebend, frisch": "Live, fresh"
+      }
+    },
+    "matrixDetail__Muskel": {
+      "name": "Matrix detail",
+      "trigger": "Muscle",
+      "values": {
+        "importiert, aus Aquakultur": "Imported, aquaculture production"
+      }
+    },
+    "matrixDetail__Nasenschleimhaut": {
+      "name": "Matrix detail",
+      "trigger": "Nasal mucosa",
+      "values": {
+        "Nasentupfer": "Nasal swab"
+      }
+    },
+    "matrixDetail__Nasentupfer": {
+      "name": "Matrix detail",
+      "trigger": "Nasal swab",
+      "values": {
+        "Einzeltierprobe": "Single animal sample"
+      }
+    },
+    "matrixDetail__Petersilie": {
+      "name": "Matrix detail",
+      "trigger": "Parsley",
+      "values": {
+        "tiefgekühlt": "Frozen"
+      }
+    },
+    "matrixDetail__Rohmilchkäse": {
+      "name": "Matrix detail",
+      "trigger": "Cheeses made from raw or low heat-treated milk",
+      "values": {
+        "Schnittkäse": "Hard cheese",
+        "Weichkäse": "Soft cheeses",
+        "außer Hartkäse": "except hard cheeses"
+      }
+    },
+    "matrixDetail__Sammelmilch": {
+      "name": "Matrix detail",
+      "trigger": "Raw milk for manufacture",
+      "values": {
+        "gekühlt": "Chilled"
+      }
+    },
+    "matrixDetail__Schlachtkörper": {
+      "name": "Matrix detail",
+      "trigger": "Carcase",
+      "values": {
+        "Einzel(tier)probe": "Single (animal) sample"
+      }
+    },
+    "matrixDetail__Sprossen": {
+      "name": "Matrix detail",
+      "trigger": "Seeds, sprouted",
+      "values": {
+        "lose oder verpackt": "Loose or packaged"
+      }
+    },
+    "matrixDetail__Staub": {
+      "name": "Matrix detail",
+      "trigger": "Dust",
+      "values": {
+        "Staubtupfer": "Dust swabs"
+      }
+    },
+    "matrixDetail__Streichfähige Rohwürste": {
+      "name": "Matrix detail",
+      "trigger": "Meat products - spreadable fermented sausages",
+      "values": {
+        "überwiegend aus Hähnchen- und Putenfleisch": "Mainly from chicken and turkey meat",
+        "überwiegend aus Schweinefleisch": "Mainly from pork"
+      }
+    },
+    "matrixDetail__Tatar / Schabefleisch": {
+      "name": "Matrix detail",
+      "trigger": "Minced meat",
+      "values": {
+        "gekühlt": "Chilled"
+      }
+    },
+    "matrixDetail__Tomaten": {
+      "name": "Matrix detail",
+      "trigger": "Tomatoes",
+      "values": {
+        "kleine Sorten": "Small varieties"
+      }
+    },
+    "matrixDetail__Weizenmehl": {
+      "name": "Matrix detail",
+      "trigger": "Wheat flour/meal",
+      "values": {
+        "vor der Verpackung in der Mühle": "Before packing in the mill"
+      }
+    },
+    "matrixDetail__Ölsaaten / Ölfruchte und Extraktionsschrote": {
+      "name": "Matrix detail",
+      "trigger": "Feed material of oil seed or fruit origin",
+      "values": {
+        "Raps": "Rapeseed",
+        "hauptsächlich Soja": "Mainly soy"
+      }
+    },
+    "resistance__CARBA-E coli": {
+      "name": "Antimicrobial resistance",
+      "trigger": "Carba-E. coli",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__Campylobacter spp": {
+      "name": "Antimicrobial resistance",
+      "trigger": "Campylobacter spp.",
+      "values": {
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "ERY": "Erythromycin",
+        "GEN": "Gentamicin",
+        "NAL": "Nalidixinsäure",
+        "STR": "Streptomycin",
+        "TET": "Tetrazyklin"
+      }
+    },
+    "resistance__E coli": {
+      "name": "Antimicrobial resistance",
+      "trigger": "E. coli",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__ESBL/AmpC-E coli": {
+      "name": "Antimicrobial resistance",
+      "trigger": "ESBL/AmpC-E. coli",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__Enterococcus spp": {
+      "name": "Antimicrobial resistance",
+      "trigger": "Enterococcus spp.",
+      "values": {
+        "AMP": "Ampicillin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "DAP": "Daptomycin",
+        "ERY": "Erythromycin",
+        "GEN": "Gentamicin",
+        "LZD": "Linezolid",
+        "TEC": "Teicoplanin",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "VAN": "Vancomycin"
+      }
+    },
+    "resistance__MRSA": {
+      "name": "Antimicrobial resistance",
+      "trigger": "MRSA",
+      "values": {
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "CLI": "Clindamycin",
+        "ERY": "Erythromycin",
+        "FOX": "Cefoxitin",
+        "FUS": "Fusidinsäure",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "LZD": "Linezolid",
+        "MUP": "Mupirocin",
+        "PEN": "Penicillin G",
+        "RIF": "Rifampicin",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "SYN": "Quinupristin/Dalfopristin",
+        "TET": "Tetrazyklin",
+        "TIA": "Tiamulin",
+        "TMP": "Trimethoprim",
+        "VAN": "Vancomycin"
+      }
+    },
+    "resistance__STEC": {
+      "name": "Antimicrobial resistance",
+      "trigger": "STEC",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "resistance__Salmonella spp": {
+      "name": "Antimicrobial resistance",
+      "trigger": "Salmonella spp.",
+      "values": {
+        "AMP": "Ampicillin",
+        "AZI": "Azithromycin",
+        "CHL": "Chloramphenicol",
+        "CIP": "Ciprofloxacin",
+        "COL": "Colistin",
+        "FOT": "Cefotaxim",
+        "GEN": "Gentamicin",
+        "KAN": "Kanamycin",
+        "MERO": "Meropenem",
+        "NAL": "Nalidixinsäure",
+        "SMX": "Sulfamethoxazol",
+        "STR": "Streptomycin",
+        "TAZ": "Ceftazidim",
+        "TET": "Tetrazyklin",
+        "TGC": "Tigecyclin",
+        "TMP": "Trimethoprim"
+      }
+    },
+    "genes": {
+      "name": "Genes",
+      "trigger": "STEC",
+      "values": {
+        "stx1": "stx1 gen",
+        "stx2": "stx2 gen",
+        "eae": "eae gen",
+        "e_hly": "e hly gen"
+      }
+    }
+  },
+  "NrOfIsolates": {
+    "Title": "Number of isolates",
+    "Total": "Total:",
+    "Selected": "Selected:",
+    "InfoText": "This display does not differentiate between negative and non-tested isolates. This information can be found in the export of the selected data set."
+  },
+  "Explanation": "- Please select a row/column to display a statistic table -",
+  "OptionBar": {
+    "Title": "Display options",
+    "Absolute": "Absolute numbers",
+    "Percent": "Percentage"
+  },
+  "Sums": {
+    "RowSum": "Row sum",
+    "ColSum": "Column sum"
+  },
+  "Chart": {
+    "Title": "Chart",
+    "Explanation": "- Please select a x-axis/y-axis to display a chart -"
+  }
+}
