@@ -16,10 +16,8 @@ import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
 
-// ======= CHANGE THIS if you import logo via Webpack/Vite ========
-// import bfrLogo from "../../assets/bfr_logo.png";
-// then use src={bfrLogo} instead of src="/assets/bfr_logo.png"
-// ================================================================
+// --- Logo import, change if using import method ---
+// import bfrLogo from "../../assets/bfr_logo.png"; // <-- Uncomment if needed
 
 export interface TrendChartProps {
     data: {
@@ -31,6 +29,7 @@ export interface TrendChartProps {
     fullData: ResistanceApiItem[];
     groupLabel?: React.ReactNode;
 }
+
 const ALL_SUBSTANCES = [
     "AK",
     "AMP",
@@ -101,8 +100,7 @@ const SUBSTANCE_COLORS: { [substance: string]: string } = {};
 ALL_SUBSTANCES.forEach((substance, idx) => {
     SUBSTANCE_COLORS[substance] = COLORS[idx % COLORS.length];
 });
-// Custom tick renderer for XAxis
-// Custom tick renderer for XAxis
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     const { x, y, payload } = props;
@@ -110,8 +108,7 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     let nValue = "-";
     if (
         entry &&
-        entry.anzahlGetesteterIsolate !== undefined &&
-        entry.anzahlGetesteterIsolate !== null &&
+        entry.anzahlGetesteterIsolate != null &&
         entry.anzahlGetesteterIsolate !== ""
     ) {
         nValue = entry.anzahlGetesteterIsolate;
@@ -148,12 +145,9 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const { t, i18n } = useTranslation(["Antibiotic"]);
 
-    // Defensive: Only plot if >=2 unique years in data
-    const uniqueYears = Array.from(new Set(data.map((d) => d.samplingYear)));
-    if (uniqueYears.length < 2) return null;
-
-    const startYear = 2010;
-    const endYear = 2023;
+    // -- Chart data preparation
+    const startYear = 2010,
+        endYear = 2023;
     const years = Array.from(
         { length: endYear - startYear + 1 },
         (_, i) => startYear + i
@@ -161,8 +155,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     const substances = Array.from(
         new Set(data.map((d) => d.antimicrobialSubstance))
     );
-
-    // Only show points where N >= 10
     const chartData = years.map((year) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const entry: any = { samplingYear: year };
@@ -171,7 +163,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({
             isolatesForYear.length > 0
                 ? isolatesForYear[0].anzahlGetesteterIsolate
                 : null;
-
         substances.forEach((substance) => {
             const found = data.find(
                 (d) =>
@@ -180,8 +171,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
             );
             if (
                 found &&
-                found.anzahlGetesteterIsolate !== undefined &&
-                found.anzahlGetesteterIsolate !== null &&
+                found.anzahlGetesteterIsolate != null &&
                 found.anzahlGetesteterIsolate >= 10
             ) {
                 entry[substance] = found.resistenzrate;
@@ -192,6 +182,21 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         return entry;
     });
 
+    // ---- ENOUGH DATA CHECK (show chart if >=2 years with N >= 10)
+    const yearsWithEnoughN = Array.from(
+        new Set(
+            data
+                .filter(
+                    (d) =>
+                        d.anzahlGetesteterIsolate != null &&
+                        d.anzahlGetesteterIsolate >= 10
+                )
+                .map((d) => d.samplingYear)
+        )
+    );
+    const enoughData = yearsWithEnoughN.length >= 2;
+
+    // --- Handlers
     const handleDownload = async (): Promise<void> => {
         if (chartContainerRef.current) {
             const canvas = await html2canvas(chartContainerRef.current, {
@@ -230,19 +235,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         minKonfidenzintervall: "minKonfidenzintervall",
         maxKonfidenzintervall: "maxKonfidenzintervall",
     };
-    const yearsWithData = Array.from(
-        new Set(
-            data
-                .filter(
-                    (d) =>
-                        d.anzahlGetesteterIsolate !== undefined &&
-                        d.anzahlGetesteterIsolate >= 10
-                )
-                .map((d) => d.samplingYear)
-        )
-    );
-    if (yearsWithData.length < 2) return null;
-
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
@@ -250,7 +242,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         translate: (key: string) => string
     ): string {
         if (!rows || !rows.length) return "";
-
         const headers = [
             "samplingYear",
             "superCategorySampleOrigin",
@@ -277,7 +268,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
                 if ("name" in v) v = v.name;
                 else v = JSON.stringify(v);
             }
-            if (v === null || v === undefined) return "";
+            if (v == null) return "";
             if (typeof v === "number") {
                 let valStr = v.toString();
                 if (decimalSep === ",") valStr = valStr.replace(".", ",");
@@ -297,7 +288,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         const headerRow = headers
             .map((h) => translate(headerFieldToTKey[h] || h))
             .join(sep);
-
         const csvRows = [
             headerRow,
             ...rows.map((row) =>
@@ -317,9 +307,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         const csvDot = generateCSV(rows, ";", ",", t);
 
         const readmeContentDe = `
-       
-        
-        
+
 Dieser ZooNotify-Daten-Download enthält diese README-Datei und zwei CSV-Dateien. Die Verwendung der CSV-Dateien wird im Folgenden erläutert.
 
 Die data_dot.csv Datei: Ist für die Nutzung von Software mit deutschen Spracheinstellungen 
@@ -330,15 +318,13 @@ Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Soft
 
 `;
         const readmeContentEn = `   
-        This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
+This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
 
 The data_dot.csv: Is for use in software with German language settings
 This file contains dot-separated data, which supports the correct format of numbers in software programmes (like Microsoft Office Excel or LibreOffice Sheets) with German language settings. This file can be opened in software which use commas as decimal separators.
 
 The data_comma.csv: Is for use in software with English language settings
 This file contains comma-separated data, which supports the correct format of numbers in software programmes (like Microsoft Office Excel or LibreOffice Sheets) with English language settings. This file can be opened in software which use dots as decimal separators.
-
-
         `;
 
         const readmeContent = i18n.language.startsWith("de")
@@ -358,6 +344,7 @@ This file contains comma-separated data, which supports the correct format of nu
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
+    // --- UI ---
     return (
         <Box>
             <div
@@ -366,11 +353,12 @@ This file contains comma-separated data, which supports the correct format of nu
                     padding: "35px",
                     background: "#fff",
                     borderRadius: "16px",
-                    position: "relative", // Needed for absolute positioning logo
+                    position: "relative",
                     overflow: "visible",
+                    minHeight: "160px",
                 }}
             >
-                {/* --- THIS IS NEW: group label --- */}
+                {/* ---- ALWAYS SHOW GROUP LABEL & LOGO ---- */}
                 <Box
                     display="flex"
                     alignItems="center"
@@ -395,6 +383,7 @@ This file contains comma-separated data, which supports the correct format of nu
                     </Typography>
                     <img
                         src="/assets/bfr_logo.png"
+                        // src={bfrLogo} // Use this if imported
                         alt="BfR Logo"
                         style={{
                             width: 90,
@@ -405,60 +394,86 @@ This file contains comma-separated data, which supports the correct format of nu
                     />
                 </Box>
 
-                <ResponsiveContainer width="100%" height={450}>
-                    <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                            dataKey="samplingYear"
-                            height={60}
-                            tick={renderCustomXAxisTick(chartData)}
+                {/* ---- CHART OR "NOT ENOUGH DATA" MESSAGE ---- */}
+                {enoughData ? (
+                    <div ref={chartContainerRef}>
+                        <ResponsiveContainer width="100%" height={450}>
+                            <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis
+                                    dataKey="samplingYear"
+                                    height={60}
+                                    tick={renderCustomXAxisTick(chartData)}
+                                >
+                                    <Label
+                                        value={t("Year")}
+                                        offset={-2}
+                                        position="insideBottom"
+                                    />
+                                </XAxis>
+                                <YAxis
+                                    domain={[0, 100]}
+                                    tickFormatter={(v: number) => `${v}%`}
+                                >
+                                    <Label
+                                        angle={-90}
+                                        position="insideLeft"
+                                        value={t("Resistenzrate (%)")}
+                                        style={{ textAnchor: "middle" }}
+                                    />
+                                </YAxis>
+                                <Tooltip
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    formatter={(value: any) =>
+                                        value !== null && value !== undefined
+                                            ? value.toFixed(1) + "%"
+                                            : "-"
+                                    }
+                                />
+                                <Legend
+                                    layout="vertical"
+                                    verticalAlign="middle"
+                                    wrapperStyle={{ margin: -20 }}
+                                    align="right"
+                                />
+                                {substances.map((substance) => (
+                                    <Line
+                                        key={substance}
+                                        type="linear"
+                                        dataKey={substance}
+                                        name={substance}
+                                        stroke={
+                                            SUBSTANCE_COLORS[substance] ||
+                                            "#888"
+                                        }
+                                        strokeWidth={2}
+                                        dot={{ r: 3 }}
+                                        connectNulls
+                                    />
+                                ))}
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                ) : (
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        minHeight={300}
+                    >
+                        <Typography
+                            variant="body1"
+                            color="textSecondary"
+                            align="center"
+                            sx={{ fontStyle: "italic", fontSize: "1.15rem" }}
                         >
-                            <Label
-                                value={t("Year")}
-                                offset={-2}
-                                position="insideBottom"
-                            />
-                        </XAxis>
-                        <YAxis
-                            domain={[0, 100]}
-                            tickFormatter={(v: number) => `${v}%`}
-                        >
-                            <Label
-                                angle={-90}
-                                position="insideLeft"
-                                value={t("Resistenzrate (%)")}
-                                style={{ textAnchor: "middle" }}
-                            />
-                        </YAxis>
-                        <Tooltip
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            formatter={(value: any) =>
-                                value !== null && value !== undefined
-                                    ? value.toFixed(1) + "%"
-                                    : "-"
-                            }
-                        />
-                        <Legend
-                            layout="vertical"
-                            verticalAlign="middle"
-                            wrapperStyle={{ margin: -20 }}
-                            align="right"
-                        />
-                        {substances.map((substance) => (
-                            <Line
-                                key={substance}
-                                type="linear"
-                                dataKey={substance}
-                                name={substance}
-                                stroke={SUBSTANCE_COLORS[substance] || "#888"} // fallback color if not found
-                                strokeWidth={2}
-                                dot={{ r: 3 }}
-                                connectNulls
-                            />
-                        ))}
-                    </LineChart>
-                </ResponsiveContainer>
+                            {t("Not enough data to display the chart.")}
+                        </Typography>
+                    </Box>
+                )}
             </div>
+
+            {/* ---- DOWNLOAD BUTTONS ---- */}
             <Stack
                 direction="row"
                 justifyContent="center"
@@ -466,13 +481,15 @@ This file contains comma-separated data, which supports the correct format of nu
                 mb={1}
                 spacing={2}
             >
-                <Button
-                    onClick={handleDownload}
-                    variant="contained"
-                    sx={{ background: "#003663", color: "#fff" }}
-                >
-                    {t("Download_Chart")}
-                </Button>
+                {enoughData && (
+                    <Button
+                        onClick={handleDownload}
+                        variant="contained"
+                        sx={{ background: "#003663", color: "#fff" }}
+                    >
+                        {t("Download_Chart")}
+                    </Button>
+                )}
                 <Button
                     onClick={() => downloadZipWithCSVs(fullData)}
                     variant="contained"
@@ -481,15 +498,6 @@ This file contains comma-separated data, which supports the correct format of nu
                     {t("DOWNLOAD_ZIP_FILE")}
                 </Button>
             </Stack>
-            <Typography
-                variant="caption"
-                color="textSecondary"
-                align="center"
-                display="block"
-                sx={{ mt: 1 }}
-            >
-                <span style={{ color: "#888" }}></span>
-            </Typography>
         </Box>
     );
 };

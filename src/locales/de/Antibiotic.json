@@ -32,6 +32,6 @@
   "anzahlResistenterIsolate": "anzahlResistenterIsolate",
   "minKonfidenzintervall": "minKonfidenzintervall",
   "maxKonfidenzintervall": "maxKonfidenzintervall",
-
+  "Not enough data to display the chart.": "There was not enough data to generate a plot. Please download the data for more details.",
   "SEARCH": "Suche"
 }
