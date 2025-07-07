@@ -612,34 +612,15 @@ export const TrendDetails: React.FC<{
         return acc;
     }, {} as Record<string, ResistanceApiItem[]>);
 
-    // 2. Helper to check for at least 2 years in a group
-    function hasAtLeastTwoYears(groupItems: ResistanceApiItem[]): boolean {
-        // Count only years where there is at least one "plottable" entry (N >= 10)
-        const yearsWithData = new Set(
-            groupItems
-                .filter(
-                    (i) =>
-                        i.anzahlGetesteterIsolate !== undefined &&
-                        i.anzahlGetesteterIsolate !== null &&
-                        i.anzahlGetesteterIsolate >= 10
-                )
-                .map((i) => i.samplingYear)
-        );
-        return yearsWithData.size >= 2;
-    }
-
     // 3. Filter groups
     const groupEntries = Object.entries(grouped);
 
     // Sort group entries alphabetically by group key (or a custom sort if you prefer)
     groupEntries.sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
 
-    const validGroupEntries = groupEntries.filter(([, groupItems]) =>
-        hasAtLeastTwoYears(groupItems)
-    );
-    const totalCharts = validGroupEntries.length;
+    const totalCharts = groupEntries.length;
     const totalPages = Math.ceil(totalCharts / CHARTS_PER_PAGE);
-    const paginatedGroups = validGroupEntries.slice(
+    const paginatedGroups = groupEntries.slice(
         (currentPage - 1) * CHARTS_PER_PAGE,
         currentPage * CHARTS_PER_PAGE
     );
