@@ -120,7 +120,7 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
                 y={y + 10}
                 textAnchor="middle"
                 fill="#888"
-                fontSize={14}
+                fontSize={12}
             >
                 {payload.value}
             </text>
@@ -129,7 +129,7 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
                 y={y + 28}
                 textAnchor="middle"
                 fill="#888"
-                fontSize={12}
+                fontSize={10}
             >
                 N = {nValue}
             </text>
@@ -404,6 +404,7 @@ This file contains comma-separated data, which supports the correct format of nu
                                     dataKey="samplingYear"
                                     height={60}
                                     tick={renderCustomXAxisTick(chartData)}
+                                    interval={0} // <= THIS LINE ensures all years/ticks are shown!
                                 >
                                     <Label
                                         value={t("Year")}
