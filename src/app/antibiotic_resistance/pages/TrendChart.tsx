@@ -143,6 +143,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     groupLabel,
 }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
+    const fixedSizeChartRef = useRef<HTMLDivElement>(null);
     const { t, i18n } = useTranslation(["Antibiotic"]);
 
     // -- Chart data preparation
@@ -198,11 +199,13 @@ export const TrendChart: React.FC<TrendChartProps> = ({
 
     // --- Handlers
     const handleDownload = async (): Promise<void> => {
-        if (chartContainerRef.current) {
-            const canvas = await html2canvas(chartContainerRef.current, {
+        if (fixedSizeChartRef.current) {
+            const canvas = await html2canvas(fixedSizeChartRef.current, {
                 backgroundColor: "#fff",
                 useCORS: true,
-                scale: 2,
+                scale: 1,
+                width: 1200,
+                height: 600,
             });
             const link = document.createElement("a");
             link.download = `trend_chart_${Date.now()}.png`;
@@ -472,6 +475,109 @@ This file contains comma-separated data, which supports the correct format of nu
                         </Typography>
                     </Box>
                 )}
+            </div>
+
+            {/* Hidden fixed-size chart for download (off-screen, not visible) */}
+            <div
+                ref={fixedSizeChartRef}
+                style={{
+                    width: "1200px",
+                    height: "600px",
+                    position: "absolute",
+                    left: "-9999px",
+                    top: 0,
+                    pointerEvents: "none",
+                    background: "#fff",
+                    zIndex: -1,
+                }}
+            >
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mb={2}
+                    width="100%"
+                >
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            color: "#003663",
+                            fontWeight: "bold",
+                            whiteSpace: "normal",
+                            wordBreak: "break-word",
+                            maxWidth: "100%",
+                            textAlign: "left",
+                            lineHeight: 1.25,
+                            minHeight: "40px",
+                        }}
+                    >
+                        {groupLabel}
+                    </Typography>
+                    <img
+                        src="/assets/bfr_logo.png"
+                        alt="BfR Logo"
+                        style={{
+                            width: 90,
+                            height: "auto",
+                            opacity: 0.93,
+                            marginLeft: 12,
+                        }}
+                    />
+                </Box>
+                {enoughData ? (
+                    <LineChart width={1200} height={500} data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            dataKey="samplingYear"
+                            height={60}
+                            tick={renderCustomXAxisTick(chartData)}
+                            interval={0}
+                        >
+                            <Label
+                                value={t("Year")}
+                                offset={-2}
+                                position="insideBottom"
+                            />
+                        </XAxis>
+                        <YAxis
+                            domain={[0, 100]}
+                            tickFormatter={(v: number) => `${v}%`}
+                        >
+                            <Label
+                                angle={-90}
+                                position="insideLeft"
+                                value={t("Resistenzrate (%)")}
+                                style={{ textAnchor: "middle" }}
+                            />
+                        </YAxis>
+                        <Tooltip
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            formatter={(value: any) =>
+                                value !== null && value !== undefined
+                                    ? value.toFixed(1) + "%"
+                                    : "-"
+                            }
+                        />
+                        <Legend
+                            layout="vertical"
+                            verticalAlign="middle"
+                            wrapperStyle={{ margin: -20 }}
+                            align="right"
+                        />
+                        {substances.map((substance) => (
+                            <Line
+                                key={substance}
+                                type="linear"
+                                dataKey={substance}
+                                name={substance}
+                                stroke={SUBSTANCE_COLORS[substance] || "#888"}
+                                strokeWidth={2}
+                                dot={{ r: 3 }}
+                                connectNulls
+                            />
+                        ))}
+                    </LineChart>
+                ) : null}
             </div>
 
             {/* ---- DOWNLOAD BUTTONS ---- */}
