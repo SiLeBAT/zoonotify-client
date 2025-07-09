@@ -40,24 +40,6 @@ import {
 import Markdown from "markdown-to-jsx";
 import { TrendChart } from "./TrendChart";
 import type { SelectChangeEvent } from "@mui/material/Select";
-
-export interface ResistanceApiItem {
-    id: number;
-    samplingYear: number;
-    superCategorySampleOrigin?: { id: number; name: string } | null;
-    sampleOrigin?: { id: number; name: string } | null;
-    samplingStage?: { id: number; name: string } | null;
-    matrixGroup?: { id: number; name: string } | null;
-    matrix?: { id: number; name: string } | null;
-    antimicrobialSubstance?: { id: number; name: string } | null;
-    specie?: { id: number; name: string } | null;
-    resistenzrate: number;
-    anzahlGetesteterIsolate: number;
-    anzahlResistenterIsolate: number;
-    minKonfidenzintervall: number;
-    maxKonfidenzintervall: number;
-}
-
 type FilterKey =
     | "samplingYear"
     | "antimicrobialSubstance"
@@ -78,6 +60,63 @@ const emptyFilterState: Record<FilterKey, string[]> = {
     matrixGroup: [],
     matrix: [],
 };
+function updateTrendFilterUrl(
+    microorganism: string,
+    selected: Record<FilterKey, string[]>,
+    substanceFilter: string[]
+): void {
+    const params = new URLSearchParams(window.location.search);
+    params.set("microorganism", microorganism);
+
+    Object.entries(selected).forEach(([key, arr]) => {
+        if (arr.length) params.set(key, arr.join(","));
+        else params.delete(key);
+    });
+    if (substanceFilter.length)
+        params.set("antimicrobialSubstance", substanceFilter.join(","));
+    else params.delete("antimicrobialSubstance");
+
+    params.set("view", "trend");
+    params.set("lang", i18next.language);
+
+    window.history.replaceState(null, "", `?${params.toString()}`);
+}
+
+// Utility to read filter state from URL
+function readTrendFilterStateFromUrl(allSubstances: string[]): {
+    selected: Record<FilterKey, string[]>;
+    substanceFilter: string[];
+} {
+    const params = new URLSearchParams(window.location.search);
+    const result: Record<FilterKey, string[]> = { ...emptyFilterState };
+    (Object.keys(emptyFilterState) as FilterKey[]).forEach((key) => {
+        const val = params.get(key);
+        result[key] = val ? val.split(",").filter((v) => v) : [];
+    });
+    const substanceParam = params.get("antimicrobialSubstance");
+    let substanceFilter = substanceParam
+        ? substanceParam.split(",").filter((v) => v)
+        : [];
+    if (substanceParam === null) substanceFilter = allSubstances; // default all
+    return { selected: result, substanceFilter };
+}
+
+export interface ResistanceApiItem {
+    id: number;
+    samplingYear: number;
+    superCategorySampleOrigin?: { id: number; name: string } | null;
+    sampleOrigin?: { id: number; name: string } | null;
+    samplingStage?: { id: number; name: string } | null;
+    matrixGroup?: { id: number; name: string } | null;
+    matrix?: { id: number; name: string } | null;
+    antimicrobialSubstance?: { id: number; name: string } | null;
+    specie?: { id: number; name: string } | null;
+    resistenzrate: number;
+    anzahlGetesteterIsolate: number;
+    anzahlResistenterIsolate: number;
+    minKonfidenzintervall: number;
+    maxKonfidenzintervall: number;
+}
 
 export interface FormattedMicroorganismNameProps {
     microName: string | null | undefined;
@@ -381,6 +420,17 @@ export const TrendDetails: React.FC<{
         setSubstanceFilter(substances);
     }, [resistanceRawData]);
 
+    useEffect(() => {
+        if (allSubstances.length > 0) {
+            const {
+                selected: urlSelected,
+                substanceFilter: urlSubstanceFilter,
+            } = readTrendFilterStateFromUrl(allSubstances);
+            setSelected(urlSelected);
+            setSubstanceFilter(urlSubstanceFilter);
+        }
+    }, [microorganism, allSubstances]);
+
     // Update chart data when substanceFilter changes (immediate update!)
     useEffect(() => {
         if (resistanceRawData.length === 0) {
@@ -488,6 +538,7 @@ export const TrendDetails: React.FC<{
         setFilteredFullData(result);
         setShowChart(true);
         setCurrentPage(1);
+        updateTrendFilterUrl(microorganism, selected, substanceFilter);
     };
 
     // RESET
@@ -495,6 +546,11 @@ export const TrendDetails: React.FC<{
         setSelected({ ...emptyFilterState });
         setShowChart(false);
         setSubstanceFilter(allSubstances); // reset substance to all
+        updateTrendFilterUrl(
+            microorganism,
+            { ...emptyFilterState },
+            allSubstances
+        );
     };
 
     // Info dialog logic unchanged
@@ -529,13 +585,17 @@ export const TrendDetails: React.FC<{
         const someSelected = substanceFilter.length > 0 && !allSelected;
         const handleChange = (event: SelectChangeEvent<string[]>): void => {
             const v = event.target.value as string[];
+            let newSubstanceFilter: string[];
             if (v.includes("all")) {
-                setSubstanceFilter(allSelected ? [] : [...substances]);
+                newSubstanceFilter = allSelected ? [] : [...substances];
             } else {
-                setSubstanceFilter(v);
+                newSubstanceFilter = v;
             }
-        };
+            setSubstanceFilter(newSubstanceFilter);
 
+            // ADD THIS LINE:
+            updateTrendFilterUrl(microorganism, selected, newSubstanceFilter);
+        };
         return (
             <Stack
                 direction="row"

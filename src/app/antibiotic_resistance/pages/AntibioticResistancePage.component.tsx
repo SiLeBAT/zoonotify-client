@@ -183,9 +183,16 @@ export function AntibioticResistancePageComponent(): JSX.Element {
     useEffect((): void => {
         updateUrl(selectedOrg, showTrendDetails);
     }, [selectedOrg, showTrendDetails, i18next.language]);
-
+    function clearTrendFiltersFromUrl(org: string): void {
+        const params = new URLSearchParams();
+        params.set("microorganism", org);
+        params.set("view", "trend");
+        params.set("lang", i18next.language);
+        window.history.replaceState(null, "", `?${params.toString()}`);
+    }
     // Handle org selection from sidebar
     const handleOrgSelect = (org: string): void => {
+        clearTrendFiltersFromUrl(org); // <- Add this line!
         setState({ selectedOrg: org, showTrendDetails: false });
     };
 
