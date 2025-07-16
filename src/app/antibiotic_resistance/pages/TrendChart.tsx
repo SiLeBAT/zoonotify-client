@@ -98,6 +98,10 @@ ALL_SUBSTANCES.forEach((substance, idx) => {
     SUBSTANCE_COLORS[substance] = COLORS[idx % COLORS.length];
 });
 
+// OVERRIDE colors for CIP, GEN, NAL to be more different
+SUBSTANCE_COLORS.CIP = "#e41a1c"; // bright red
+SUBSTANCE_COLORS.GEN = "#377eb8"; // strong blue
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     const { x, y, payload } = props;
