@@ -425,7 +425,7 @@ export const TrendDetails: React.FC<{
     useEffect(() => {
         setFilteredFullData(filterDataWithSelected());
         setShowChart(true);
-        setCurrentPage(1);
+        //setCurrentPage(1);
     }, [substanceFilter]);
 
     // RESET
