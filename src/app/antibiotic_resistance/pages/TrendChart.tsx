@@ -16,9 +16,6 @@ import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
 
-// --- Logo import, change if using import method ---
-// import bfrLogo from "../../assets/bfr_logo.png"; // <-- Uncomment if needed
-
 export interface TrendChartProps {
     data: {
         samplingYear: number;
@@ -153,9 +150,11 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         { length: endYear - startYear + 1 },
         (_, i) => startYear + i
     );
-    const substances = Array.from(
-        new Set(data.map((d) => d.antimicrobialSubstance))
+    // *** FIXED: Use ALL_SUBSTANCES order for legend/plot! ***
+    const substances = ALL_SUBSTANCES.filter((substance) =>
+        data.some((d) => d.antimicrobialSubstance === substance)
     );
+
     const chartData = years.map((year) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const entry: any = { samplingYear: year };
@@ -310,7 +309,6 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         const csvDot = generateCSV(rows, ";", ",", t);
 
         const readmeContentDe = `
-
 Dieser ZooNotify-Daten-Download enthält diese README-Datei und zwei CSV-Dateien. Die Verwendung der CSV-Dateien wird im Folgenden erläutert.
 
 Die data_dot.csv Datei: Ist für die Nutzung von Software mit deutschen Spracheinstellungen 
@@ -318,7 +316,6 @@ Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Soft
 
 Die data_comma.csv Datei:  Ist für die Nutzung von Software mit englischen Spracheinstellungen 
 Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden. 
-
 `;
         const readmeContentEn = `   
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
@@ -386,7 +383,6 @@ This file contains comma-separated data, which supports the correct format of nu
                     </Typography>
                     <img
                         src="/assets/bfr_logo.png"
-                        // src={bfrLogo} // Use this if imported
                         alt="BfR Logo"
                         style={{
                             width: 90,
@@ -407,7 +403,7 @@ This file contains comma-separated data, which supports the correct format of nu
                                     dataKey="samplingYear"
                                     height={60}
                                     tick={renderCustomXAxisTick(chartData)}
-                                    interval={0} // <= THIS LINE ensures all years/ticks are shown!
+                                    interval={0}
                                 >
                                     <Label
                                         value={t("Year")}
