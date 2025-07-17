@@ -2,6 +2,7 @@
   "GRAPHIKEN": "Graphiken",
   "METHODEN": "Methoden",
   "DATEN": "Daten",
+  "DOWNLOAD_ZIP_FILE": "Datenexport",
   "HINTERGRUND": "Hintergrund",
   "samplingYear": {
     "2010": "2010",
@@ -397,6 +398,7 @@
       "TableHeaderMin": "min",
       "TableHeaderMax": "max",
       "CancelButton": "Abbrechen",
+
       "ExportButton": "Exportieren"
     }
   }

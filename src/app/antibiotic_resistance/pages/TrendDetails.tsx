@@ -776,12 +776,6 @@ export const TrendDetails: React.FC<{
                                 "More Info on Matrices",
                                 "MATRIX"
                             )}
-                            {renderSelectWithSelectAll(
-                                "samplingYear",
-                                t("SAMPLING_YEAR"),
-                                "More Info on Sampling Year",
-                                "SAMPLING_YEAR"
-                            )}
                         </Stack>
                         <Box
                             mt={4}
@@ -837,7 +831,10 @@ export const TrendDetails: React.FC<{
                                             <Grid
                                                 item
                                                 xs={12}
-                                                md={6}
+                                                sm={12}
+                                                md={12}
+                                                lg={12}
+                                                xl={6}
                                                 key={groupKey}
                                             >
                                                 <Box mb={5}>

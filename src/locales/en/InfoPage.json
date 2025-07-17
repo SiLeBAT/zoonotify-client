@@ -1,6 +1,7 @@
 {
   "HINTERGRUND": "Background",
   "METHODEN": "Methods",
+  "DOWNLOAD_ZIP_FILE": "Data download",
   "GRAPHIKEN": "Graphs",
   "DATEN": "Data",
 
@@ -398,6 +399,7 @@
       "TableHeaderMin": "min",
       "TableHeaderMax": "max",
       "CancelButton": "Cancel",
+
       "ExportButton": "Export"
     }
   }

@@ -274,40 +274,52 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-bottom: 0.5 rem;
         }
 
-        .image-box {
-          border: 4px solid #003663;
-          padding: 1rem;
-          display: inline-block;
-          margin-right: 1rem;
-          margin-bottom: 1rem;
-          box-sizing: border-box;
-          cursor: pointer;
-          transition: transform 0.2s;
-        }
+      .image-box {
+  /* No border */
+  box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
+  padding: 0.4rem;
+  display: inline-block;
+  margin-right: 1.2rem;
+  margin-bottom: 1.2rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 20px; /* <--- Strong curvature like your sample */
+  background: #fff;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
 
-        .image-box:hover {
-          transform: scale(1.05);
-        }
+.image-box:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 75px rgba(48,56,96,0.32), 0 8px 30px rgba(40,40,60,0.19);
+}
 
-        .image-box.bottom {
-          display: block;
-          margin-top: 2rem;
-          width: 100%;
-          max-width: 490px;
-        }
+.image-box img {
+  width: 350px;   /* Make the images small */
+  height: 250px;
+  object-fit: contain;
+  display: block;
+  border-radius: 25px; /* Match the box */
+  margin: 0 auto;
+}
 
-        .image-box img {
-          width: 450px;
-          height: 400px;
-          object-fit: contain;
-          display: block;
-        }
+.image-box.bottom {
+  display: block;
+  margin-top: 2rem;
+  width: 365px;
+  max-width: 90vw;
+  margin-right: 0;
+  margin-left: 0;
+}
 
         .image-label {
-          font-size: 1.2rem;
-          color: #003663;
-          margin-bottom: 0.5rem;
-        }
+  font-size: 1.2rem;
+  color: #003663;
+  margin-top: 0.6rem;
+  margin-bottom: 0.2rem;
+  text-align: center;  /* <-- this centers the label */
+  width: 100%;         /* ensures label stretches under image */
+  display: block;
+}
       `}</style>
             <PageLayoutComponent>
                 <Breadcrumb
