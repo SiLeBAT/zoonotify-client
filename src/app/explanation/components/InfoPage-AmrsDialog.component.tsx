@@ -192,6 +192,8 @@ export function InfoPageAmrDialogComponent(props: {
     onClose: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
+    //console.log("DOWNLOAD_ZIP_FILE", t("DOWNLOAD_ZIP_FILE"));
+    //console.log("InfoPageAmrDialogComponent file loaded");
 
     const handleClose = (): void => {
         props.onClose();
@@ -314,7 +316,7 @@ export function InfoPageAmrDialogComponent(props: {
         content: t("DOWNLOAD_ZIP_FILE"),
         onClick: handleExport,
     };
-
+    console.log(t("DOWNLOAD_ZIP_FILE"));
     const amrTableCancelButton: DialogButton = {
         content: t("Methods.Amrs.CancelButton") || "Close",
         onClick: handleClose,
