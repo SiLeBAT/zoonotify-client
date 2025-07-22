@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
+import { SubstanceDetail } from "./SubstanceDetail";
 
 // --- These constants stay the same ---
 const ORGANISMS = [
@@ -64,7 +65,7 @@ const formatMicroorganismNameArray = (
 export interface FormattedMicroorganismNameProps {
     microName: string | null | undefined;
     isBreadcrumb?: boolean;
-    fontWeight?: "normal" | "bold" | number; // add this
+    fontWeight?: "normal" | "bold" | number;
 }
 
 export const FormattedMicroorganismName: React.FC<
@@ -89,69 +90,63 @@ export const FormattedMicroorganismName: React.FC<
 };
 
 // --- URL Deep Linking helpers ---
-function updateUrl(selectedOrg: string, showTrendDetails: boolean): void {
+
+function updateUrl(
+    selectedOrg: string,
+    view: "main" | "trend" | "substance"
+): void {
     const params = new URLSearchParams(window.location.search);
     params.set("microorganism", selectedOrg);
-    params.set("view", showTrendDetails ? "trend" : "main");
-    // Always sync lang!
-    params.set("lang", i18next.language); // Always set, even if present
+    params.set("view", view);
+    params.set("lang", i18next.language);
     window.history.replaceState(null, "", `?${params.toString()}`);
 }
 
 function readStateFromUrl(): {
     selectedOrg: string;
-    showTrendDetails: boolean;
+    view: "main" | "trend" | "substance";
 } {
     const params = new URLSearchParams(window.location.search);
     const orgParam = params.get("microorganism");
-    // Type-safe, no non-null assertion
     const selectedOrg =
         typeof orgParam === "string" && ORGANISMS.includes(orgParam)
             ? orgParam
             : ORGANISMS[0];
-    const showTrendDetails = params.get("view") === "trend";
-    return { selectedOrg, showTrendDetails };
+    const view =
+        (params.get("view") as "main" | "trend" | "substance") || "main";
+    return { selectedOrg, view };
 }
 
 // --- Breadcrumb component ---
 function Breadcrumb({
     t,
     selectedOrg,
-    showTrendDetails,
+    view,
     handleShowMain,
 }: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: any;
     selectedOrg: string;
-    showTrendDetails: boolean;
+    view: "main" | "trend" | "substance";
     handleShowMain: () => void;
 }): JSX.Element {
     return (
         <div className="abx-breadcrumb">
             {t("AntibioticResistance")} /{" "}
-            {showTrendDetails ? (
-                <>
-                    <span
-                        style={{
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                        }}
-                        onClick={handleShowMain}
-                    >
-                        <FormattedMicroorganismName
-                            microName={selectedOrg}
-                            isBreadcrumb={true}
-                        />
-                    </span>
-                    {" / "}
-                    {t("Trend")}
-                </>
-            ) : (
+            <span
+                style={{
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                }}
+                onClick={handleShowMain}
+            >
                 <FormattedMicroorganismName
                     microName={selectedOrg}
                     isBreadcrumb={true}
                 />
-            )}
+            </span>
+            {view === "trend" && <> / {t("Trend")}</>}
+            {view === "substance" && <> / {t("Substans")}</>}
         </div>
     );
 }
@@ -161,9 +156,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
     const { t } = useTranslation(["Antibiotic"]);
     const [state, setState] = useState<{
         selectedOrg: string;
-        showTrendDetails: boolean;
+        view: "main" | "trend" | "substance";
     }>(() => readStateFromUrl());
-    const { selectedOrg, showTrendDetails } = state;
+    const { selectedOrg, view } = state;
 
     // State for "Coming soon" modal
     const [comingSoonOpen, setComingSoonOpen] = useState(false);
@@ -174,36 +169,43 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         setState(parsed);
     }, []);
 
-    // Whenever selectedOrg or showTrendDetails change, update URL
+    // Whenever selectedOrg or view changes, update URL
     useEffect((): void => {
-        updateUrl(selectedOrg, showTrendDetails);
-    }, [selectedOrg, showTrendDetails]);
+        updateUrl(selectedOrg, view);
+    }, [selectedOrg, view]);
 
     // Whenever language changes, update URL as well!
     useEffect((): void => {
-        updateUrl(selectedOrg, showTrendDetails);
-    }, [selectedOrg, showTrendDetails, i18next.language]);
-    function clearTrendFiltersFromUrl(org: string): void {
-        const params = new URLSearchParams();
-        params.set("microorganism", org);
-        params.set("view", "trend");
-        params.set("lang", i18next.language);
-        window.history.replaceState(null, "", `?${params.toString()}`);
-    }
+        updateUrl(selectedOrg, view);
+    }, [selectedOrg, view, i18next.language]);
+
     // Handle org selection from sidebar
     const handleOrgSelect = (org: string): void => {
-        clearTrendFiltersFromUrl(org); // <- Add this line!
-        setState({ selectedOrg: org, showTrendDetails: false });
+        setState({ selectedOrg: org, view: "main" });
     };
 
     // Go to trend view
     const handleTrendClick = (): void => {
-        setState((prev) => ({ ...prev, showTrendDetails: true }));
+        setState((prev) => ({
+            ...prev,
+            view: "trend",
+        }));
     };
 
-    // Go back to organism selection view (now from breadcrumb only)
+    // Go to substance detail view
+    const handleSubstanceClick = (): void => {
+        setState((prev) => ({
+            ...prev,
+            view: "substance",
+        }));
+    };
+
+    // Go back to organism selection view (breadcrumb)
     const handleShowMain = (): void => {
-        setState((prev) => ({ ...prev, showTrendDetails: false }));
+        setState((prev) => ({
+            ...prev,
+            view: "main",
+        }));
     };
 
     // Handle coming soon click
@@ -269,67 +271,71 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         .abx-breadcrumb {
           font-size: 1.4rem;
           color: #003663;
-          text-align: center;   
-                     margin-top: 1.5rem; 
-          margin-bottom: 0.5 rem;
+          text-align: center;
+          margin-top: 1.5rem;
+          margin-bottom: 0.5rem;
         }
 
       .image-box {
-  /* No border */
-  box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
-  padding: 0.4rem;
-  display: inline-block;
-  margin-right: 1.2rem;
-  margin-bottom: 1.2rem;
-  box-sizing: border-box;
-  cursor: pointer;
-  border-radius: 20px; /* <--- Strong curvature like your sample */
-  background: #fff;
-  transition: transform 0.18s, box-shadow 0.18s;
-}
+        box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
+        padding: 0.4rem;
+        display: inline-block;
+        margin-right: 1.2rem;
+        margin-bottom: 1.2rem;
+        box-sizing: border-box;
+        cursor: pointer;
+        border-radius: 20px;
+        background: #fff;
+        transition: transform 0.18s, box-shadow 0.18s;
+      }
 
-.image-box:hover {
-  transform: scale(1.04);
-  box-shadow: 0 10px 75px rgba(48,56,96,0.32), 0 8px 30px rgba(40,40,60,0.19);
-}
+      .image-box:hover {
+        transform: scale(1.04);
+        box-shadow: 0 10px 75px rgba(48,56,96,0.32), 0 8px 30px rgba(40,40,60,0.19);
+      }
 
-.image-box img {
-  width: 350px;   /* Make the images small */
-  height: 250px;
-  object-fit: contain;
-  display: block;
-  border-radius: 25px; /* Match the box */
-  margin: 0 auto;
-}
+      .image-box img {
+        width: 350px;
+        height: 250px;
+        object-fit: contain;
+        display: block;
+        border-radius: 25px;
+        margin: 0 auto;
+      }
 
-.image-box.bottom {
-  display: block;
-  margin-top: 2rem;
-  width: 365px;
-  max-width: 90vw;
-  margin-right: 0;
-  margin-left: 0;
-}
+      .image-box.bottom {
+        display: block;
+        margin-top: 2rem;
+        width: 365px;
+        max-width: 90vw;
+        margin-right: 0;
+        margin-left: 0;
+      }
 
-        .image-label {
-  font-size: 1.2rem;
-  color: #003663;
-  margin-top: 0.6rem;
-  margin-bottom: 0.2rem;
-  text-align: center;  /* <-- this centers the label */
-  width: 100%;         /* ensures label stretches under image */
-  display: block;
-}
+      .image-label {
+        font-size: 1.2rem;
+        color: #003663;
+        margin-top: 0.6rem;
+        margin-bottom: 0.2rem;
+        text-align: center;
+        width: 100%;
+        display: block;
+      }
       `}</style>
             <PageLayoutComponent>
                 <Breadcrumb
                     t={t}
                     selectedOrg={selectedOrg}
-                    showTrendDetails={showTrendDetails}
+                    view={view}
                     handleShowMain={handleShowMain}
                 />
-                {showTrendDetails ? (
+                {view === "trend" ? (
                     <TrendDetails microorganism={selectedOrg} />
+                ) : view === "substance" ? (
+                    <SubstanceDetail
+                        microorganism={selectedOrg}
+                        onShowMain={handleShowMain}
+                    />
                 ) : (
                     <div className="abx-page">
                         <aside className="abx-sidebar">
@@ -352,7 +358,6 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             </ul>
                         </aside>
                         <section className="abx-content">
-                            {/* Breadcrumb is now at the top of content, see above */}
                             <div
                                 className="image-box"
                                 onClick={handleTrendClick}
@@ -362,7 +367,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             </div>
                             <div
                                 className="image-box"
-                                onClick={handleComingSoon}
+                                onClick={handleSubstanceClick}
                             >
                                 <div className="image-label">
                                     {t("Substans")}
