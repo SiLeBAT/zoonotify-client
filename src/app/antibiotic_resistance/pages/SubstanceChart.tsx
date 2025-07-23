@@ -76,7 +76,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
 }) => {
     const { t } = useTranslation(["Antibiotic"]);
     const chartRef = useRef<HTMLDivElement>(null);
-    const fixedSizeChartRef = useRef<HTMLDivElement>(null);
 
     // Prepare data
     const filtered = data.filter(
@@ -109,7 +108,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     // --- For each groupKey, get the first available N for the groupKey ---
     const nPerGroup: { [key: string]: number | undefined } = {};
     groupKeys.forEach((groupKey) => {
-        // Find first filtered row for this groupKey and get its N
         const row = filtered.find(
             (d) => getGroupKey(d, microorganism) === groupKey
         );
@@ -142,15 +140,14 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         return row;
     });
 
-    // Download handlers and CSV as before...
+    // Download chart from visible chartRef!
     const handleDownloadChart = async (): Promise<void> => {
-        if (fixedSizeChartRef.current) {
-            const canvas = await html2canvas(fixedSizeChartRef.current, {
+        if (chartRef.current) {
+            // You can optionally adjust scale for higher-res PNG
+            const canvas = await html2canvas(chartRef.current, {
                 backgroundColor: "#fff",
                 useCORS: true,
-                scale: 1,
-                width: 1200,
-                height: 600,
+                scale: 2, // High-res export!
             });
             const link = document.createElement("a");
             link.download = `substance_chart_${Date.now()}.png`;
@@ -411,108 +408,6 @@ This file contains comma-separated data, which supports the correct format of nu
                         </Typography>
                     </Box>
                 )}
-            </div>
-
-            {/* Off-screen for export */}
-            <div
-                ref={fixedSizeChartRef}
-                style={{
-                    width: "1200px",
-                    height: "600px",
-                    position: "absolute",
-                    left: "-9999px",
-                    top: 0,
-                    pointerEvents: "none",
-                    background: "#fff",
-                    zIndex: -1,
-                }}
-            >
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    mb={2}
-                    width="100%"
-                >
-                    <Typography
-                        variant="h6"
-                        sx={{
-                            color: "#003663",
-                            fontWeight: "bold",
-                            whiteSpace: "normal",
-                            wordBreak: "break-word",
-                            maxWidth: "100%",
-                            textAlign: "left",
-                            lineHeight: 1.25,
-                            minHeight: "40px",
-                        }}
-                    >
-                        {/* 👇 Chart title with beautiful microorganism name! */}
-                        {groupLabel || (
-                            <>
-                                {year},{" "}
-                                <FormattedMicroorganismName
-                                    microName={microorganism}
-                                />
-                            </>
-                        )}
-                    </Typography>
-                    <img
-                        src="/assets/bfr_logo.png"
-                        alt="BfR Logo"
-                        style={{
-                            width: 90,
-                            height: "auto",
-                            opacity: 0.93,
-                            marginLeft: 12,
-                        }}
-                    />
-                </Box>
-                {chartData.length > 0 ? (
-                    <BarChart
-                        layout="vertical"
-                        width={1200}
-                        height={500}
-                        data={chartData}
-                        margin={{ top: 10, right: 60, left: 20, bottom: 40 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                            type="number"
-                            domain={[0, 100]}
-                            tickFormatter={(v: number) => `${v}%`}
-                            label={{
-                                value: t(
-                                    "Percentage of resistant isolates (%)"
-                                ),
-                                position: "bottom",
-                                offset: 10,
-                            }}
-                        />
-                        <YAxis
-                            dataKey="substance"
-                            type="category"
-                            width={90}
-                            label={{
-                                value: t("Substances tested"),
-                                angle: -90,
-                                position: "insideLeft",
-                            }}
-                        />
-                        <Tooltip formatter={tooltipFormatter} />
-                        <Legend formatter={legendFormatter} />
-                        {groupKeys.map((groupKey) => (
-                            <Bar
-                                key={groupKey}
-                                dataKey={groupKey}
-                                name={legendLabels[groupKey]}
-                                fill={groupColors[groupKey]}
-                                barSize={22}
-                                isAnimationActive={false}
-                            />
-                        ))}
-                    </BarChart>
-                ) : null}
             </div>
 
             {/* DOWNLOAD BUTTONS */}
