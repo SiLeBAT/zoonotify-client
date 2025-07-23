@@ -166,7 +166,6 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
     };
 
     apiData.forEach((item) => {
-        // Ensure division is uppercase so it matches our keys
         const divisionKey = item.division.toUpperCase() as keyof Evaluation;
         if (!result[divisionKey]) {
             return;
@@ -193,7 +192,6 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
             dataPath,
         };
 
-        // Only push if the entry is complete
         if (isCompleteEntry(newEntry)) {
             result[divisionKey].push(newEntry);
         }
@@ -230,7 +228,6 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         const fetchDataFromAPI = async (): Promise<void> => {
             setLoading(true);
             try {
-                // Multiple populate
                 const url = `${EVALUATIONS}?locale=${i18n.language}&populate=diagram&populate=csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`;
                 const response = await callApiService<EvaluationAPIResponse>(
                     url
@@ -247,7 +244,6 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
                         new URLSearchParams(window.location.search)
                     );
 
-                    // If there are filters provided in the URL, apply them; otherwise, use full data.
                     if (
                         Object.values(urlFilters).some((arr) => arr.length > 0)
                     ) {
@@ -270,7 +266,6 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
 
     // 2) Whenever selectedFilters or language changes, re-apply filters and update URL deep link
     useEffect(() => {
-        // Only apply filters if data is loaded
         if (
             !originalData.FUTTERMITTEL.length &&
             !originalData.TIERE.length &&
@@ -287,24 +282,25 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         const filterQuery = buildQueryString(selectedFilters);
         const searchParams = new URLSearchParams(filterQuery);
 
-        // Ensure the language parameter is included in the URL
+        // Always set the language
         searchParams.set("lang", i18n.language);
 
-        // Build the new URL using the current pathname and search parameters
+        // Build new URL (page path + query)
         const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
 
-        if (newUrl !== window.location.href) {
+        // Only update if needed
+        if (window.location.search !== `?${searchParams.toString()}`) {
             window.history.replaceState({}, "", newUrl);
         }
     }, [selectedFilters, originalData, i18n.language]);
 
-    // 3) Public API
+    // Public API
     const updateFilters = (newFilters: FilterSelection): void => {
         setSelectedFilters(newFilters);
+        // Deep linking is handled in useEffect above!
     };
 
     const showDivision = (div: string): boolean => {
-        // If the division filter is empty, show all divisions
         if (selectedFilters.division.length === 0) return true;
         return selectedFilters.division.includes(div);
     };
