@@ -117,9 +117,44 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     });
 
     // --- Legend label formatter with correct N (unique for group) ---
-    const legendFormatter = (value: string): string => {
+    const legendFormatter = (value: string): React.ReactNode => {
         const N = nPerGroup[value];
-        return `${value} (N=${N !== undefined && N !== null ? N : "?"})`;
+        if (
+            microorganism === "Campylobacter spp." ||
+            microorganism === "Enterococcus spp."
+        ) {
+            const parts = value.split(" | ");
+            const species = parts[0];
+            const rest = parts.slice(1).join(" | ");
+            return (
+                <span>
+                    <FormattedMicroorganismName
+                        microName={species}
+                        fontWeight="normal"
+                        fontSize="inherit"
+                    />
+                    {rest && (
+                        <>
+                            {" | "}
+                            {rest}
+                        </>
+                    )}
+                    <span style={{ color: "#888", fontWeight: 400 }}>
+                        {" "}
+                        (N={N !== undefined && N !== null ? N : "?"})
+                    </span>
+                </span>
+            );
+        }
+        return (
+            <span>
+                {value}
+                <span style={{ color: "#888", fontWeight: 400 }}>
+                    {" "}
+                    (N={N !== undefined && N !== null ? N : "?"})
+                </span>
+            </span>
+        );
     };
 
     const chartData = substances.map((substance) => {
