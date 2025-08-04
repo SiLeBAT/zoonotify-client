@@ -341,7 +341,16 @@ This file contains comma-separated data, which supports the correct format of nu
                 {/* --- BAR CHART --- */}
                 {chartData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={500}>
-                        <BarChart layout="vertical" data={chartData}>
+                        <BarChart
+                            layout="vertical"
+                            data={chartData}
+                            margin={{
+                                top: 10,
+                                right: 25,
+                                left: 20,
+                                bottom: 40,
+                            }}
+                        >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis
                                 type="number"
