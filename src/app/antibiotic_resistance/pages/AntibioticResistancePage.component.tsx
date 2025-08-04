@@ -65,19 +65,25 @@ const formatMicroorganismNameArray = (
 export interface FormattedMicroorganismNameProps {
     microName: string | null | undefined;
     isBreadcrumb?: boolean;
+    fontSize?: string | number;
     fontWeight?: "normal" | "bold" | number;
 }
 
 export const FormattedMicroorganismName: React.FC<
     FormattedMicroorganismNameProps
-> = ({ microName, isBreadcrumb = false, fontWeight }) => {
+> = ({
+    microName,
+    isBreadcrumb = false,
+    fontWeight,
+    fontSize, // <--- accept prop
+}) => {
     const words = formatMicroorganismNameArray(microName);
     return (
         <Typography
             component="span"
             style={{
                 fontWeight: fontWeight ?? (isBreadcrumb ? "normal" : "bold"),
-                fontSize: "1.4rem",
+                fontSize: fontSize ?? (isBreadcrumb ? "1.4rem" : undefined),
             }}
         >
             {words.map((wordObj: WordObject, index: number) => (
@@ -142,6 +148,7 @@ function Breadcrumb({
             >
                 <FormattedMicroorganismName
                     microName={selectedOrg}
+                    //fontWeight="bold"
                     isBreadcrumb={true}
                 />
             </span>
@@ -352,6 +359,8 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     >
                                         <FormattedMicroorganismName
                                             microName={org}
+                                            fontWeight="bold"
+                                            fontSize="1.3rem"
                                         />
                                     </li>
                                 ))}

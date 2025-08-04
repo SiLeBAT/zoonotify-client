@@ -716,12 +716,6 @@ export const SubstanceDetail: React.FC<{
                             </Alert>
                         )}
                         <Stack spacing={2} sx={{ opacity: loading ? 0.5 : 1 }}>
-                            {renderSelectWithSelectAll(
-                                "samplingYear",
-                                t("SAMPLING_YEAR"),
-                                "More Info on Sampling Year",
-                                "SAMPLING_YEAR"
-                            )}
                             {shouldShowSpeciesFilter(microorganism) &&
                                 renderSelectWithSelectAll(
                                     "specie",
