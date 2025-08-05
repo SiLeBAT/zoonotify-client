@@ -206,8 +206,8 @@ export const TrendChart: React.FC<TrendChartProps> = ({
             const canvas = await html2canvas(fixedSizeChartRef.current, {
                 backgroundColor: "#fff",
                 useCORS: true,
-                scale: 1,
-                width: 1200,
+                scale: 2,
+                width: 1300,
                 height: 600,
             });
             const link = document.createElement("a");
