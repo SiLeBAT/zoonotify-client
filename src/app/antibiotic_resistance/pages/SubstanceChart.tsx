@@ -392,9 +392,7 @@ This file contains comma-separated data, which supports the correct format of nu
                                 domain={[0, 100]}
                                 tickFormatter={(v: number) => `${v}%`}
                                 label={{
-                                    value: t(
-                                        "Percentage of resistant isolates (%)"
-                                    ),
+                                    value: t("PROPORTION_RESISTANT_ISOLATES"),
                                     position: "bottom",
                                     offset: 10,
                                 }}
@@ -404,7 +402,7 @@ This file contains comma-separated data, which supports the correct format of nu
                                 type="category"
                                 width={90}
                                 label={{
-                                    value: t("Substances tested"),
+                                    value: t("TESTED_SUBSTANCES"),
                                     angle: -90,
                                     position: "insideLeft",
                                 }}

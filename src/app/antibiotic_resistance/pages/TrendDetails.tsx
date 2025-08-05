@@ -162,7 +162,11 @@ function renderGroupLabel(
             {specie && (
                 <>
                     {t("SPECIES")}:{" "}
-                    <FormattedMicroorganismName microName={specie} />
+                    <FormattedMicroorganismName
+                        microName={specie}
+                        fontWeight="bold"
+                        fontSize="1.3rem"
+                    />
                     {", "}
                 </>
             )}

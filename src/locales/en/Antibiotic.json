@@ -36,5 +36,7 @@
   "maxKonfidenzintervall": "maximum confidence interval",
   "Not enough data to display the chart.": "Es waren nicht genügend Daten vorhanden, um ein Diagramm zu erstellen. Bitte laden Sie die Daten herunter, um weitere Details zu erhalten.",
 
+  "TESTED_SUBSTANCES": "Tested substances",
+  "PROPORTION_RESISTANT_ISOLATES": "Proportion of resistant isolates (%)",
   "Multi": " Multiple resistance Graph"
 }
