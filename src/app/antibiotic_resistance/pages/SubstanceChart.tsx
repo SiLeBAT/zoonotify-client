@@ -542,7 +542,22 @@ This file contains comma-separated data, which supports the correct format of nu
                             }}
                         />
                         <Tooltip formatter={tooltipFormatter} />
-                        <Legend formatter={legendFormatter} />
+                        <Legend
+                            verticalAlign="middle"
+                            align="right"
+                            layout="vertical"
+                            wrapperStyle={{
+                                paddingLeft: 10,
+                                width: 400,
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                background: "transparent",
+                                borderRadius: 0,
+                                boxShadow: "none",
+                            }}
+                            formatter={legendFormatter}
+                        />{" "}
                         {groupKeys.map((groupKey) => (
                             <Bar
                                 key={groupKey}
