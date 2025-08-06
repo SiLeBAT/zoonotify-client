@@ -35,5 +35,8 @@
   "Not enough data to display the chart.": "There was not enough data to generate a plot. Please download the data for more details.",
   "TESTED_SUBSTANCES": "Getestete Substanzen",
   "PROPORTION_RESISTANT_ISOLATES": "Anteil resistenter Isolate (%)",
+
+  "Share_Link": "Link teilen",
+  "Link copied to clipboard!": "Link wurde in die Zwischenablage kopiert!",
   "SEARCH": "Suche"
 }
