@@ -15,6 +15,7 @@ import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const BAR_COLORS = [
     "#F08080",
@@ -105,6 +106,17 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     groupKeys.forEach((key) => {
         legendLabels[key] = key;
     });
+    const [copied, setCopied] = React.useState(false);
+
+    const handleShareLink = async (): Promise<void> => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1800);
+        } catch (err) {
+            console.error("Failed to copy link:", err);
+        }
+    };
 
     // --- For each groupKey, get the first available N for the groupKey ---
     const nPerGroup: { [key: string]: number | undefined } = {};
@@ -596,7 +608,28 @@ This file contains comma-separated data, which supports the correct format of nu
                 >
                     {t("DOWNLOAD_ZIP_FILE")}
                 </Button>
+                {/* <<< SHARE LINK BUTTON */}
+                <Button
+                    onClick={handleShareLink}
+                    variant="contained"
+                    sx={{ background: "#003663", color: "#fff" }}
+                    startIcon={<ContentCopyIcon />}
+                >
+                    {t("Share_Link") || "Share Link"}
+                </Button>
             </Stack>
+
+            {copied && (
+                <Typography
+                    color="success.main"
+                    textAlign="center"
+                    mt={1}
+                    fontWeight="bold"
+                >
+                    {t("Link copied to clipboard!") ||
+                        "Link copied to clipboard!"}
+                </Typography>
+            )}
         </Box>
     );
 };
