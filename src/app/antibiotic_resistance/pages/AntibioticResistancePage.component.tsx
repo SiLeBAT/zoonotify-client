@@ -138,7 +138,16 @@ function Breadcrumb({
 }): JSX.Element {
     return (
         <div className="abx-breadcrumb">
-            {t("AntibioticResistance")} /{" "}
+            <span
+                style={{
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                }}
+                onClick={handleShowMain}
+            >
+                {t("AntibioticResistance")}
+            </span>
+            {" / "}
             <span
                 style={{
                     textDecoration: "underline",
@@ -148,7 +157,6 @@ function Breadcrumb({
             >
                 <FormattedMicroorganismName
                     microName={selectedOrg}
-                    //fontWeight="bold"
                     isBreadcrumb={true}
                 />
             </span>
