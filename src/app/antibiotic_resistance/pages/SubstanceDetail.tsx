@@ -645,20 +645,36 @@ export const SubstanceDetail: React.FC<{
     function renderChartYearDropdown(): JSX.Element | null {
         if (!availableYears.length) return null;
         return (
-            <FormControl sx={{ minWidth: 180, mb: 2 }}>
-                <InputLabel>{t("SAMPLING_YEAR")}</InputLabel>
-                <Select
-                    value={chartYear ?? ""}
-                    label={t("SAMPLING_YEAR")}
-                    onChange={(e) => setChartYear(Number(e.target.value))}
-                >
-                    {availableYears.map((y) => (
-                        <MenuItem key={y} value={y}>
-                            {y}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+            <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                sx={{ mb: 2 }}
+            >
+                <FormControl sx={{ minWidth: 180 }}>
+                    <InputLabel>{t("SAMPLING_YEAR")}</InputLabel>
+                    <Select
+                        value={chartYear ?? ""}
+                        label={t("SAMPLING_YEAR")}
+                        onChange={(e) => setChartYear(Number(e.target.value))}
+                    >
+                        {availableYears.map((y) => (
+                            <MenuItem key={y} value={y}>
+                                {y}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <Tooltip title={t("More Info on Sampling Year")}>
+                    <IconButton
+                        size="small"
+                        onClick={() => handleInfoClick("SAMPLING_YEAR")}
+                        sx={{ ml: 0.5 }}
+                    >
+                        <InfoIcon fontSize="small" />
+                    </IconButton>
+                </Tooltip>
+            </Stack>
         );
     }
 
