@@ -4,11 +4,11 @@
   "More Info on Antibiotic Substances": "More Info on Antibiotic Substances",
   "More Info on Species": "More Info on Species",
   "More Info on Super Categories": "More Info on Super Categories",
-  "More Info on Sample Origins": "More Info on Sample Origins",
+  "": "More Info on Sample Origins",
   "More Info on Sampling Stages": "More Info on Sampling Stages",
   "More Info on Matrix Groups": "More Info on Matrix Groups",
   "More Info on Matrices": "More Info on Matrices",
-  "SAMPLING_YEAR": "Sampling Year",
+
   "ANTIBIOTIC_SUBSTANCE": "Antimicrobial substance",
   "SPECIES": "Species",
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Superordinate Sample Origin",
@@ -38,5 +38,6 @@
   "PROPORTION_RESISTANT_ISOLATES": "Proportion of resistant isolates (%)",
   "Share_Link": "Share Link",
   "Link copied to clipboard!": "Link copied to clipboard!",
-  "Multi": " Multiple resistance Graph"
+  "Multi": " Multiple resistance Graph",
+  "SAMPLING_YEAR": "Sampling year"
 }
