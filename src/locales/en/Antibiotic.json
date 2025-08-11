@@ -39,8 +39,10 @@
   "Share_Link": "Share Link",
   "Link copied to clipboard!": "Link copied to clipboard!",
   "Multi": " Multiple resistance Graph",
-  "combinations": "Kombinationen",
+  "combinations": "Combinations",
   "combination_limit_title": "Combination Limit",
   "combination_limit_message": "You can choose a maximum of 4 combinations to be displayed in the graph.",
+  "More Info on Combinations": "More information about combination",
+
   "SAMPLING_YEAR": "Sampling year"
 }

@@ -15,7 +15,7 @@ import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
 
 const BAR_COLORS = [
     "#F08080",
@@ -619,7 +619,7 @@ This file contains comma-separated data, which supports the correct format of nu
                     onClick={handleShareLink}
                     variant="contained"
                     sx={{ background: "#003663", color: "#fff" }}
-                    startIcon={<ContentCopyIcon />}
+                    startIcon={<InsertLinkIcon />}
                 >
                     {t("Share_Link") || "Share Link"}
                 </Button>
