@@ -40,7 +40,10 @@ const BAR_COLORS = [
     "#FF6347",
 ];
 
-function getGroupKey(r: ResistanceApiItem, microorganism: string): string {
+export function getGroupKey(
+    r: ResistanceApiItem,
+    microorganism: string
+): string {
     let key = "";
     if (
         microorganism === "Campylobacter spp." ||
@@ -66,6 +69,7 @@ interface SubstanceChartProps {
     data: ResistanceApiItem[];
     year: number;
     microorganism: string;
+    selectedCombinations: string[];
     groupLabel?: React.ReactNode;
 }
 
@@ -73,6 +77,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     data,
     year,
     microorganism,
+    selectedCombinations, // <--- ADD THIS!
     groupLabel,
 }) => {
     const { t } = useTranslation(["Antibiotic"]);
@@ -95,7 +100,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
 
     const groupKeys = Array.from(
         new Set(filtered.map((d) => getGroupKey(d, microorganism)))
-    );
+    ).filter((key) => selectedCombinations.includes(key));
 
     const groupColors: { [key: string]: string } = {};
     groupKeys.forEach((key, i) => {
@@ -529,6 +534,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         height={500}
                         data={chartData}
                         margin={{ top: 10, right: 60, left: 20, bottom: 40 }}
+                        barCategoryGap="35%"
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis

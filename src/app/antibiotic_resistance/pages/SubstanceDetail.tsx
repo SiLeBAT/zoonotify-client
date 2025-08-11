@@ -26,12 +26,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
+import { getGroupKey, SubstanceChart } from "./SubstanceChart";
+
 import i18next from "i18next";
 import {
     INFORMATION,
     RESISTANCES,
 } from "../../shared/infrastructure/router/routes";
-import { SubstanceChart } from "./SubstanceChart";
 import Markdown from "markdown-to-jsx";
 import type { SelectChangeEvent } from "@mui/material/Select";
 
@@ -181,6 +182,14 @@ export const SubstanceDetail: React.FC<{
         ResistanceApiItem[]
     >([]);
     const [showResults, setShowResults] = useState(false);
+    const [availableCombinations, setAvailableCombinations] = useState<
+        string[]
+    >([]);
+    const [selectedCombinations, setSelectedCombinations] = useState<string[]>(
+        []
+    );
+
+    const [maxComboDialogOpen, setMaxComboDialogOpen] = useState(false);
 
     // For substances multi-select at top
     const [substanceFilter, setSubstanceFilter] = useState<string[]>([]);
@@ -282,6 +291,41 @@ export const SubstanceDetail: React.FC<{
         updateSubstanceFilterUrl(microorganism, sel, sub);
     };
     // ---------------------------------------------
+    useEffect(() => {
+        if (!filteredFullData.length || !chartYear) {
+            setAvailableCombinations([]);
+            setSelectedCombinations([]);
+            return;
+        }
+        // Only use data for the selected year
+        const yearData = filteredFullData.filter(
+            (d) => d.samplingYear === chartYear
+        );
+
+        // Compute group keys for current year only
+        const groupKeys = Array.from(
+            new Set(yearData.map((d) => getGroupKey(d, microorganism)))
+        );
+        setAvailableCombinations(groupKeys);
+
+        // Always auto-select up to 4 valid combinations for this year
+        setSelectedCombinations((prev) => {
+            const newSelected = prev.filter((g) => groupKeys.includes(g));
+            if (newSelected.length < 4) {
+                for (
+                    let i = 0;
+                    i < groupKeys.length && newSelected.length < 4;
+                    ++i
+                ) {
+                    const gk = groupKeys[i];
+                    if (!newSelected.includes(gk)) {
+                        newSelected.push(gk);
+                    }
+                }
+            }
+            return newSelected;
+        });
+    }, [filteredFullData, microorganism, chartYear]);
 
     // DATA FETCHING
     useEffect(() => {
@@ -799,6 +843,73 @@ export const SubstanceDetail: React.FC<{
                 {/* MAIN CONTENT */}
                 <Box flex={1} ml="370px" px={4} py={3}>
                     {renderSubstanceFilter()}
+                    <FormControl sx={{ minWidth: 350, mb: 2 }}>
+                        <InputLabel>{t("combinations")}</InputLabel>
+                        <Select
+                            multiple
+                            value={selectedCombinations}
+                            onChange={(e) => {
+                                const v = e.target.value as string[];
+                                if (v.includes("all")) {
+                                    // Select all, or none
+                                    setSelectedCombinations(
+                                        selectedCombinations.length ===
+                                            availableCombinations.length
+                                            ? []
+                                            : availableCombinations.slice(0, 4) // Only allow 4 at once if selecting all
+                                    );
+                                } else if (v.length > 4) {
+                                    setMaxComboDialogOpen(true); // Show dialog
+                                } else {
+                                    setSelectedCombinations(v);
+                                }
+                            }}
+                            renderValue={(selectedValues) =>
+                                (selectedValues as string[]).join(", ")
+                            }
+                            MenuProps={{
+                                PaperProps: { style: { maxHeight: 400 } },
+                            }}
+                        >
+                            <MenuItem value="all">
+                                <Checkbox
+                                    checked={
+                                        selectedCombinations.length ===
+                                        availableCombinations.length
+                                    }
+                                    indeterminate={
+                                        selectedCombinations.length > 0 &&
+                                        selectedCombinations.length <
+                                            availableCombinations.length
+                                    }
+                                />
+                                <ListItemText
+                                    primary={
+                                        selectedCombinations.length ===
+                                        availableCombinations.length
+                                            ? "Deselect All"
+                                            : "Select All"
+                                    }
+                                />
+                            </MenuItem>
+                            {availableCombinations.length === 0 ? (
+                                <MenuItem disabled value="">
+                                    No options
+                                </MenuItem>
+                            ) : (
+                                availableCombinations.map((key) => (
+                                    <MenuItem key={key} value={key}>
+                                        <Checkbox
+                                            checked={selectedCombinations.includes(
+                                                key
+                                            )}
+                                        />
+                                        <ListItemText primary={key} />
+                                    </MenuItem>
+                                ))
+                            )}
+                        </Select>
+                    </FormControl>
 
                     {/* Show results if available */}
                     {showResults && (
@@ -810,6 +921,9 @@ export const SubstanceDetail: React.FC<{
                                         data={filteredFullData}
                                         microorganism={microorganism}
                                         year={chartYear}
+                                        selectedCombinations={
+                                            selectedCombinations
+                                        }
                                     />
                                 </>
                             ) : (
@@ -830,6 +944,22 @@ export const SubstanceDetail: React.FC<{
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Close</Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={maxComboDialogOpen}
+                    onClose={() => setMaxComboDialogOpen(false)}
+                >
+                    <DialogTitle>{t("combination_limit_title")}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            {t("combination_limit_message")}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setMaxComboDialogOpen(false)}>
+                            {t("ok")}
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </Box>
