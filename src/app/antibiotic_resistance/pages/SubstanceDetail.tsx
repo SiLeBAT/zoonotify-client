@@ -558,7 +558,7 @@ export const SubstanceDetail: React.FC<{
                         size="small"
                         onClick={() => handleInfoClick("ANTIBIOTIC_SUBSTANCE")}
                     >
-                        <InfoIcon />
+                        <InfoIcon fontSize="small" />
                     </IconButton>
                 </Tooltip>
             </Stack>
@@ -843,73 +843,96 @@ export const SubstanceDetail: React.FC<{
                 {/* MAIN CONTENT */}
                 <Box flex={1} ml="370px" px={4} py={3}>
                     {renderSubstanceFilter()}
-                    <FormControl sx={{ minWidth: 350, mb: 2 }}>
-                        <InputLabel>{t("combinations")}</InputLabel>
-                        <Select
-                            multiple
-                            value={selectedCombinations}
-                            onChange={(e) => {
-                                const v = e.target.value as string[];
-                                if (v.includes("all")) {
-                                    // Select all, or none
-                                    setSelectedCombinations(
-                                        selectedCombinations.length ===
-                                            availableCombinations.length
-                                            ? []
-                                            : availableCombinations.slice(0, 4) // Only allow 4 at once if selecting all
-                                    );
-                                } else if (v.length > 4) {
-                                    setMaxComboDialogOpen(true); // Show dialog
-                                } else {
-                                    setSelectedCombinations(v);
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                        sx={{ mb: 2 }}
+                    >
+                        <FormControl sx={{ minWidth: 350 }}>
+                            <InputLabel>{t("combinations")}</InputLabel>
+                            <Select
+                                multiple
+                                value={selectedCombinations}
+                                onChange={(e) => {
+                                    const v = e.target.value as string[];
+                                    if (v.includes("all")) {
+                                        setSelectedCombinations(
+                                            selectedCombinations.length ===
+                                                availableCombinations.length
+                                                ? []
+                                                : availableCombinations.slice(
+                                                      0,
+                                                      4
+                                                  ) // keep max 4
+                                        );
+                                    } else if (v.length > 4) {
+                                        setMaxComboDialogOpen(true);
+                                    } else {
+                                        setSelectedCombinations(v);
+                                    }
+                                }}
+                                renderValue={(selectedValues) =>
+                                    (selectedValues as string[]).join(", ")
                                 }
-                            }}
-                            renderValue={(selectedValues) =>
-                                (selectedValues as string[]).join(", ")
-                            }
-                            MenuProps={{
-                                PaperProps: { style: { maxHeight: 400 } },
-                            }}
-                        >
-                            <MenuItem value="all">
-                                <Checkbox
-                                    checked={
-                                        selectedCombinations.length ===
-                                        availableCombinations.length
-                                    }
-                                    indeterminate={
-                                        selectedCombinations.length > 0 &&
-                                        selectedCombinations.length <
+                                MenuProps={{
+                                    PaperProps: { style: { maxHeight: 400 } },
+                                }}
+                            >
+                                <MenuItem value="all">
+                                    <Checkbox
+                                        checked={
+                                            selectedCombinations.length ===
                                             availableCombinations.length
-                                    }
-                                />
-                                <ListItemText
-                                    primary={
-                                        selectedCombinations.length ===
-                                        availableCombinations.length
-                                            ? "Deselect All"
-                                            : "Select All"
-                                    }
-                                />
-                            </MenuItem>
-                            {availableCombinations.length === 0 ? (
-                                <MenuItem disabled value="">
-                                    No options
+                                        }
+                                        indeterminate={
+                                            selectedCombinations.length > 0 &&
+                                            selectedCombinations.length <
+                                                availableCombinations.length
+                                        }
+                                    />
+                                    <ListItemText
+                                        primary={
+                                            selectedCombinations.length ===
+                                            availableCombinations.length
+                                                ? t("DESELECT_ALL") ||
+                                                  "Deselect All"
+                                                : t("SELECT_ALL") ||
+                                                  "Select All"
+                                        }
+                                    />
                                 </MenuItem>
-                            ) : (
-                                availableCombinations.map((key) => (
-                                    <MenuItem key={key} value={key}>
-                                        <Checkbox
-                                            checked={selectedCombinations.includes(
-                                                key
-                                            )}
-                                        />
-                                        <ListItemText primary={key} />
+
+                                {availableCombinations.length === 0 ? (
+                                    <MenuItem disabled value="">
+                                        {t("No options")}
                                     </MenuItem>
-                                ))
-                            )}
-                        </Select>
-                    </FormControl>
+                                ) : (
+                                    availableCombinations.map((key) => (
+                                        <MenuItem key={key} value={key}>
+                                            <Checkbox
+                                                checked={selectedCombinations.includes(
+                                                    key
+                                                )}
+                                            />
+                                            <ListItemText primary={key} />
+                                        </MenuItem>
+                                    ))
+                                )}
+                            </Select>
+                        </FormControl>
+
+                        {/* Info button for combinations */}
+                        <Tooltip title={t("More Info on Combinations")}>
+                            <IconButton
+                                size="small"
+                                onClick={() => handleInfoClick("combinations")}
+                                sx={{ ml: 0.5 }}
+                            >
+                                <InfoIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                    </Stack>
 
                     {/* Show results if available */}
                     {showResults && (
