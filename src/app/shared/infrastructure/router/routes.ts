@@ -8,6 +8,7 @@ export const pageRoute = {
     prevalencePagePath: "/prevalence",
     antimicrobialPagePath: "/antimicrobial",
     antibioticResistancePagePath: "/antibiotic-resistance",
+    microbialCountsPagePath: "/microbial-counts",
 };
 
 const env = process.env.REACT_APP_ENV;
@@ -38,4 +39,5 @@ export const MICROORGANISMS = `${CMS_API_ENDPOINT}/microorganisms`;
 export const RESISTANCES = `${CMS_API_ENDPOINT}/resistances`;
 export const SPECIES = `${CMS_API_ENDPOINT}/species`;
 export const TREND_INFORMATION = `${CMS_API_ENDPOINT}/trend-information`;
+export const MICROBIAL_COUNTS = `${CMS_API_ENDPOINT}/microbial-counts`;
 export const ANTIMICROBIAL_SUBSTANCES = `${CMS_API_ENDPOINT}/antimicrobial-substances`;
