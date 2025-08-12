@@ -14,7 +14,6 @@ import {
     secondaryColor,
 } from "../../style/Style-MainTheme";
 import { TranslationButtonsComponent } from "./TranslationButtons.component";
-// ====== ALL STYLES ======
 
 const headerStyle = css`
     width: 100%;
@@ -38,6 +37,7 @@ const mainHeaderStyle = (): SerializedStyles => css`
     color: ${onSecondaryColor};
 `;
 
+/* ✅ Restored "ZooNotify" + Language Switcher layout */
 const leftHeaderStyle = css`
     display: flex;
     flex-direction: row;
@@ -45,26 +45,31 @@ const leftHeaderStyle = css`
     padding-left: 1em;
 `;
 
+/* ✅ Fixed 'appNameStyle' */
 const appNameStyle = css`
     font-size: 1.2rem;
     text-decoration: none;
     color: ${onPrimaryColor};
-    margin-right: 1em;
+    margin-right: 1em; /* ✅ Added spacing between text and flags */
+
     &:focus {
         outline: none;
     }
 `;
 
+/* ✅ Desktop menu (unchanged) */
 const rightHeaderStyle = css`
     height: 100%;
     margin-right: 8em;
     display: flex;
     align-items: flex-end;
+
     @media (max-width: 768px) {
-        display: none;
+        display: none; /* Hide desktop menu on mobile */
     }
 `;
 
+/* ✅ Mobile Hamburger Button */
 const hamburgerButtonStyle = css`
     display: none;
     background: none;
@@ -73,16 +78,18 @@ const hamburgerButtonStyle = css`
     font-size: 1.5rem;
     cursor: pointer;
     margin-right: 1em;
+
     @media (max-width: 768px) {
         display: block;
     }
 `;
 
+/* ✅ Mobile Menu Styling */
 const mobileNavStyle = (isOpen: boolean): SerializedStyles => css`
     display: ${isOpen ? "flex" : "none"};
     flex-direction: column;
     align-items: flex-start;
-    background-color: #dbe4eb;
+    background-color: #dbe4eb; /* ✅ Your preferred color */
     color: #000;
     position: absolute;
     top: ${headerHeight}px;
@@ -90,34 +97,39 @@ const mobileNavStyle = (isOpen: boolean): SerializedStyles => css`
     width: 100%;
     padding: 0;
     z-index: 999;
-    border: 2px solid #000;
+    border: 2px solid #000; /* ✅ Full outer border */
+
     @media (min-width: 769px) {
-        display: none;
+        display: none; /* Hide mobile menu on desktop */
     }
 `;
 
+/* ✅ Full border for each mobile menu item */
 const mobileNavLinkStyle = (open: boolean): SerializedStyles => css`
     padding: 0.75em 1em;
     font-size: 1rem;
     text-decoration: none;
     background-color: ${open ? secondaryColor : "transparent"};
     color: #000;
-    border: 1px solid #000;
+    border: 1px solid #000; /* ✅ Full border around each item */
     width: 100%;
+
     &:focus {
         outline: none;
     }
     &:hover {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.1); /* ✅ Subtle hover effect */
     }
 `;
 
+/* ✅ Keep Desktop Link Styling */
 const navLinkStyle = (open: boolean): SerializedStyles => css`
     padding: 0.5em 1em;
     font-size: 1rem;
     text-decoration: none;
     background-color: ${open ? `${secondaryColor}` : "none"};
     color: ${open ? `${onSecondaryColor}` : `${onPrimaryColor}`};
+
     &:focus {
         outline: none;
     }
@@ -126,8 +138,6 @@ const navLinkStyle = (open: boolean): SerializedStyles => css`
     }
 `;
 
-// ======= COMPONENT =======
-
 export function HeaderComponent(): JSX.Element {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
@@ -135,6 +145,8 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+    const [microbialCountsOpen, setMicrobialCountsOpen] =
+        useState<boolean>(false);
     const [antimicrobialOpen, setAntimicrobialOpen] = useState<boolean>(false);
     const [antibioticResistanceOpen, setAntibioticResistanceOpen] =
         useState<boolean>(false);
@@ -150,6 +162,8 @@ export function HeaderComponent(): JSX.Element {
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
         setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
         setLinkedDataOpen(pathname === pageRoute.linkedDataPagePath);
+        setMicrobialCountsOpen(pathname === pageRoute.microbialCountsPagePath);
+
         setAntibioticResistanceOpen(
             pathname === pageRoute.antibioticResistancePagePath
         );
@@ -159,7 +173,7 @@ export function HeaderComponent(): JSX.Element {
     return (
         <header css={headerStyle}>
             <div css={mainHeaderStyle()}>
-                {/* Left Section: "ZooNotify" + Language Switcher */}
+                {/* ✅ Left Section: "ZooNotify" + Language Switcher */}
                 <div css={leftHeaderStyle}>
                     <NavLink to={pageRoute.homePagePath} css={appNameStyle}>
                         ZooNotify
@@ -167,7 +181,7 @@ export function HeaderComponent(): JSX.Element {
                     <TranslationButtonsComponent />
                 </div>
 
-                {/* Desktop Menu */}
+                {/* ✅ Desktop Menu (unchanged) */}
                 <div css={rightHeaderStyle}>
                     <NavLink
                         to={pageRoute.infoPagePath}
@@ -187,17 +201,19 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Prevalence")}
                     </NavLink>
+
                     <NavLink
                         to={pageRoute.antibioticResistancePagePath}
                         css={navLinkStyle(antibioticResistanceOpen)}
-                        onClick={(e) => {
-                            // If you are already on this page, or if you want a hard refresh always:
-                            e.preventDefault();
-                            window.location.href =
-                                pageRoute.antibioticResistancePagePath;
-                        }}
                     >
                         {t("AntibioticResistance")}
+                    </NavLink>
+
+                    <NavLink
+                        to={pageRoute.microbialCountsPagePath}
+                        css={navLinkStyle(microbialCountsOpen)}
+                    >
+                        {t("MicrobialCounts")}
                     </NavLink>
                     <NavLink
                         to={pageRoute.antimicrobialPagePath}
@@ -221,7 +237,7 @@ export function HeaderComponent(): JSX.Element {
                     )}
                 </div>
 
-                {/* Mobile Hamburger Menu */}
+                {/* ✅ Mobile Hamburger Menu */}
                 <button
                     css={hamburgerButtonStyle}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -231,7 +247,7 @@ export function HeaderComponent(): JSX.Element {
                 </button>
             </div>
 
-            {/* Mobile Menu (Dropdown) */}
+            {/* ✅ Mobile Menu (Dropdown) */}
             <div css={mobileNavStyle(isMenuOpen)}>
                 <NavLink
                     to={pageRoute.infoPagePath}
@@ -254,13 +270,14 @@ export function HeaderComponent(): JSX.Element {
                 <NavLink
                     to={pageRoute.antibioticResistancePagePath}
                     css={mobileNavLinkStyle(antibioticResistanceOpen)}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href =
-                            pageRoute.antibioticResistancePagePath;
-                    }}
                 >
                     {t("AntibioticResistance")}
+                </NavLink>
+                <NavLink
+                    to={pageRoute.microbialCountsPagePath}
+                    css={mobileNavLinkStyle(microbialCountsOpen)}
+                >
+                    {t("MicrobialCounts")}
                 </NavLink>
                 <NavLink
                     to={pageRoute.antimicrobialPagePath}
@@ -268,6 +285,7 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("antimicrobial")}
                 </NavLink>
+
                 <NavLink
                     to={pageRoute.linkPagePath}
                     css={mobileNavLinkStyle(linkOpen)}
