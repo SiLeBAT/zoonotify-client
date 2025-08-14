@@ -11,7 +11,22 @@ import {
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
 import { SubstanceDetail } from "./SubstanceDetail";
+import LZString from "lz-string";
 
+function decodeCompressedState(sParam: string | null): null | {
+    m?: string;
+    v?: string;
+    l?: string;
+} {
+    if (!sParam) return null;
+    try {
+        const json = LZString.decompressFromEncodedURIComponent(sParam);
+        if (!json) return null;
+        return JSON.parse(json) as { m?: string; v?: string; l?: string };
+    } catch {
+        return null;
+    }
+}
 // --- These constants stay the same ---
 const ORGANISMS = [
     "E. coli",
@@ -102,6 +117,16 @@ function updateUrl(
     view: "main" | "trend" | "substance"
 ): void {
     const params = new URLSearchParams(window.location.search);
+    const hasCompressed = params.get("s");
+
+    // If we are in 'substance' view AND there is already a compressed state,
+    // do not touch the URL here. SubstanceDetail manages the 's=' param.
+    if (view === "substance" && hasCompressed) {
+        return;
+    }
+
+    // Otherwise, write the legacy simple params and remove 's'
+    params.delete("s");
     params.set("microorganism", selectedOrg);
     params.set("view", view);
     params.set("lang", i18next.language);
@@ -113,6 +138,25 @@ function readStateFromUrl(): {
     view: "main" | "trend" | "substance";
 } {
     const params = new URLSearchParams(window.location.search);
+
+    // NEW: prefer compressed deep link if present
+    const decoded = decodeCompressedState(params.get("s"));
+    if (decoded) {
+        const orgFromS =
+            decoded.m && ORGANISMS.includes(decoded.m)
+                ? decoded.m
+                : ORGANISMS[0];
+        // If the payload carries a view, use it; otherwise default to 'substance'
+        const viewFromS =
+            decoded.v === "trend" ||
+            decoded.v === "main" ||
+            decoded.v === "substance"
+                ? decoded.v
+                : "substance";
+        return { selectedOrg: orgFromS, view: viewFromS };
+    }
+
+    // Legacy behavior (no 's' param)
     const orgParam = params.get("microorganism");
     const selectedOrg =
         typeof orgParam === "string" && ORGANISMS.includes(orgParam)

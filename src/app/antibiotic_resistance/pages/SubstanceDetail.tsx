@@ -27,6 +27,7 @@ import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
 import { getGroupKey, SubstanceChart } from "./SubstanceChart";
+import LZString from "lz-string";
 
 import i18next from "i18next";
 import {
@@ -104,52 +105,137 @@ const menuItemTextStyle = `.menu-item-text-wrap {
 }`;
 
 // ======== URL STATE HELPERS (for deep linking) ========
-function updateSubstanceFilterUrl(
+// ---- Short URL helpers (add this block) ----
+type ShortKey =
+    | "y" // samplingYear
+    | "a" // antimicrobialSubstance
+    | "s" // specie
+    | "u" // superCategorySampleOrigin
+    | "o" // sampleOrigin
+    | "g" // samplingStage
+    | "mG" // matrixGroup
+    | "m"; // matrix
+
+const SHORT_MAP: Record<ShortKey, FilterKey> = {
+    y: "samplingYear",
+    a: "antimicrobialSubstance",
+    s: "specie",
+    u: "superCategorySampleOrigin",
+    o: "sampleOrigin",
+    g: "samplingStage",
+    mG: "matrixGroup",
+    m: "matrix",
+};
+
+const LONG_TO_SHORT = Object.fromEntries(
+    Object.entries(SHORT_MAP).map(([shortK, longK]) => [longK, shortK])
+) as Record<FilterKey, ShortKey>;
+
+function encodeStateToParam(
+    microorganism: string,
+    selected: Record<FilterKey, string[]>,
+    substanceFilter: string[],
+    lang: string
+): string {
+    const f: Partial<Record<ShortKey, string[]>> = {};
+    (Object.keys(selected) as FilterKey[]).forEach((k) => {
+        const val = selected[k];
+        if (val && val.length) f[LONG_TO_SHORT[k]] = val;
+    });
+    if (substanceFilter.length) {
+        f[LONG_TO_SHORT.antimicrobialSubstance] = substanceFilter;
+    }
+
+    const payload = { m: microorganism, v: "substance", l: lang, f };
+    return LZString.compressToEncodedURIComponent(JSON.stringify(payload));
+}
+
+function decodeStateFromParam(sParam: string | null): {
+    microorganism?: string;
+    lang?: string;
+    selected: Record<FilterKey, string[]>;
+    substanceFilter: string[];
+} | null {
+    if (!sParam) return null;
+    try {
+        const json = LZString.decompressFromEncodedURIComponent(sParam);
+        if (!json) return null;
+        const { m, l, f } = JSON.parse(json) as {
+            m?: string;
+            l?: string;
+            f?: Partial<Record<ShortKey, string[]>>;
+        };
+        const selected: Record<FilterKey, string[]> = { ...emptyFilterState };
+        (Object.keys(f || {}) as ShortKey[]).forEach((sk) => {
+            const longKey = SHORT_MAP[sk];
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if (longKey) selected[longKey] = (f as any)[sk] || [];
+        });
+        const substanceFilter = selected.antimicrobialSubstance || [];
+        return { microorganism: m, lang: l, selected, substanceFilter };
+    } catch {
+        return null;
+    }
+}
+
+// Writer: set ?s=... in the address bar
+function updateSubstanceFilterUrlCompressed(
     microorganism: string,
     selected: Record<FilterKey, string[]>,
     substanceFilter: string[]
 ): void {
-    const params = new URLSearchParams(window.location.search);
-    params.set("microorganism", microorganism);
-
-    Object.entries(selected).forEach(([key, arr]) => {
-        if (arr.length) params.set(key, arr.join(","));
-        else params.delete(key);
-    });
-    if (substanceFilter.length)
-        params.set("antimicrobialSubstance", substanceFilter.join(","));
-    else params.delete("antimicrobialSubstance");
-
-    params.set("view", "substance");
-    params.set("lang", i18next.language);
-
-    window.history.replaceState(null, "", `?${params.toString()}`);
+    const s = encodeStateToParam(
+        microorganism,
+        selected,
+        substanceFilter,
+        i18next.language
+    );
+    window.history.replaceState(null, "", `?s=${s}`);
 }
 
-function readSubstanceFilterStateFromUrl(
+// Reader: prefer compressed; fall back to legacy params (so old links still work)
+function readStateFromUrlCompressed(
     allSubstances: FilterOption[],
-    allYears: FilterOption[]
-): {
-    selected: Record<FilterKey, string[]>;
-    substanceFilter: string[];
-} {
+    allYears: FilterOption[],
+    microorganism: string
+): { selected: Record<FilterKey, string[]>; substanceFilter: string[] } {
     const params = new URLSearchParams(window.location.search);
-    const result: Record<FilterKey, string[]> = { ...emptyFilterState };
+    const decoded = decodeStateFromParam(params.get("s"));
+    if (decoded) {
+        const selected = decoded.selected || { ...emptyFilterState };
+        if (!selected.samplingYear?.length) {
+            selected.samplingYear = allYears.map((y) => y.documentId);
+        }
+        const sf = decoded.substanceFilter.length
+            ? decoded.substanceFilter
+            : allSubstances.map((s) => s.documentId);
+        return { selected, substanceFilter: sf };
+    }
+
+    // Legacy reader (your old behavior)
+    const legacySelected: Record<FilterKey, string[]> = { ...emptyFilterState };
     (Object.keys(emptyFilterState) as FilterKey[]).forEach((key) => {
         const val = params.get(key);
-        result[key] = val ? val.split(",").filter((v) => v) : [];
+        legacySelected[key] = val ? val.split(",").filter(Boolean) : [];
     });
-    // Default: if no years param, select ALL
     if (!params.get("samplingYear")) {
-        result.samplingYear = allYears.map((y) => y.documentId);
+        legacySelected.samplingYear = allYears.map((y) => y.documentId);
     }
-    const substanceParam = params.get("antimicrobialSubstance");
-    let substanceFilter = substanceParam
-        ? substanceParam.split(",").filter((v) => v)
-        : [];
-    if (substanceParam === null)
-        substanceFilter = allSubstances.map((s) => s.documentId); // default all
-    return { selected: result, substanceFilter };
+    const legacySubstanceParam = params.get("antimicrobialSubstance");
+    const legacySubstanceFilter =
+        legacySubstanceParam?.split(",").filter(Boolean) ??
+        allSubstances.map((s) => s.documentId);
+
+    // Immediately rewrite to compressed for cleanliness
+    const sNew = encodeStateToParam(
+        microorganism,
+        legacySelected,
+        legacySubstanceFilter,
+        i18next.language
+    );
+    window.history.replaceState(null, "", `?s=${sNew}`);
+
+    return { selected: legacySelected, substanceFilter: legacySubstanceFilter };
 }
 
 // ======================= COMPONENT =============================
@@ -288,7 +374,7 @@ export const SubstanceDetail: React.FC<{
             new Set(filtered.map((d) => d.samplingYear))
         ).sort((a, b) => b - a);
         setChartYear(years.length > 0 ? years[0] : undefined);
-        updateSubstanceFilterUrl(microorganism, sel, sub);
+        updateSubstanceFilterUrlCompressed(microorganism, sel, sub);
     };
     // ---------------------------------------------
     useEffect(() => {
@@ -405,9 +491,10 @@ export const SubstanceDetail: React.FC<{
 
         // --- DEEP LINKING: Set filters from URL
         const { selected: urlSelected, substanceFilter: urlSubstanceFilter } =
-            readSubstanceFilterStateFromUrl(
+            readStateFromUrlCompressed(
                 antimicrobialSubstance,
-                samplingYear
+                samplingYear,
+                microorganism
             );
 
         setSelected(urlSelected);
@@ -436,7 +523,7 @@ export const SubstanceDetail: React.FC<{
         setShowResults(false);
         setSubstanceFilter(allSubstances.map((a) => a.documentId));
         setChartYear(undefined);
-        updateSubstanceFilterUrl(
+        updateSubstanceFilterUrlCompressed(
             microorganism,
             {
                 ...emptyFilterState,
@@ -724,8 +811,11 @@ export const SubstanceDetail: React.FC<{
 
     // --- When filters change, but after first load, keep URL up to date (but don't auto search again!)
     useEffect(() => {
-        updateSubstanceFilterUrl(microorganism, selected, substanceFilter);
-        // Don't auto-search, just keep URL in sync if user changes filters manually.
+        updateSubstanceFilterUrlCompressed(
+            microorganism,
+            selected,
+            substanceFilter
+        );
     }, [selected, substanceFilter, microorganism]);
 
     return (
