@@ -996,7 +996,7 @@ export const SubstanceDetail: React.FC<{
                                                 : availableCombinations.slice(
                                                       0,
                                                       4
-                                                  ) // keep max 4
+                                                  )
                                         );
                                     } else if (v.length > 4) {
                                         setMaxComboDialogOpen(true);
