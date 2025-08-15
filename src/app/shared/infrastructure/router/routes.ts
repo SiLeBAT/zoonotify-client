@@ -34,6 +34,7 @@ export const SAMPLE_ORIGINS = `${CMS_API_ENDPOINT}/sample-origins`;
 export const SUPER_CATEGORY_SAMPLE_ORIGINS = `${CMS_API_ENDPOINT}/super-category-sample-origins`;
 export const MATRICES = `${CMS_API_ENDPOINT}/matrices`;
 export const MATRIX_GROUPS = `${CMS_API_ENDPOINT}/matrix-groups`;
+
 export const SAMPLING_STAGES = `${CMS_API_ENDPOINT}/sampling-stages`;
 export const MICROORGANISMS = `${CMS_API_ENDPOINT}/microorganisms`;
 export const RESISTANCES = `${CMS_API_ENDPOINT}/resistances`;
