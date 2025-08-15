@@ -39,5 +39,6 @@ export const MICROORGANISMS = `${CMS_API_ENDPOINT}/microorganisms`;
 export const RESISTANCES = `${CMS_API_ENDPOINT}/resistances`;
 export const SPECIES = `${CMS_API_ENDPOINT}/species`;
 export const TREND_INFORMATION = `${CMS_API_ENDPOINT}/trend-information`;
+export const SUBSTANCE_INFORMATION = `${CMS_API_ENDPOINT}/substance-information`;
 export const MICROBIAL_COUNTS = `${CMS_API_ENDPOINT}/microbial-counts`;
 export const ANTIMICROBIAL_SUBSTANCES = `${CMS_API_ENDPOINT}/antimicrobial-substances`;
