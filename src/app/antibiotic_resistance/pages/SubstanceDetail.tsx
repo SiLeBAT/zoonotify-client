@@ -33,6 +33,7 @@ import i18next from "i18next";
 import {
     INFORMATION,
     RESISTANCES,
+    SUBSTANCE_INFORMATION,
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
 import type { SelectChangeEvent } from "@mui/material/Select";
@@ -288,6 +289,14 @@ export const SubstanceDetail: React.FC<{
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
+    const [substanceInfo, setSubstanceInfo] = useState<{
+        title: string;
+        description: string;
+    } | null>(null);
+    const [substanceInfoLoading, setSubstanceInfoLoading] = useState(false);
+    const [substanceInfoError, setSubstanceInfoError] = useState<string | null>(
+        null
+    );
 
     // For chart year dropdown
     const [chartYear, setChartYear] = useState<number | undefined>(undefined);
@@ -511,6 +520,39 @@ export const SubstanceDetail: React.FC<{
             }, 0);
         }
     }, [resistanceRawData]);
+
+    useEffect(() => {
+        let cancelled = false;
+        async function fetchSubstanceInfo(): Promise<void> {
+            setSubstanceInfoLoading(true);
+            setSubstanceInfoError(null);
+            try {
+                const url = `${SUBSTANCE_INFORMATION}?locale=${i18next.language}`;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const response = await callApiService<any>(url);
+                const data = response?.data?.data;
+                if (!cancelled && data) {
+                    const title = data.title ?? data.attributes?.title ?? "";
+                    const description =
+                        data.description ?? data.attributes?.description ?? "";
+                    setSubstanceInfo({ title, description });
+                }
+            } catch (e) {
+                if (!cancelled) {
+                    setSubstanceInfoError(
+                        "Failed to load substance information."
+                    );
+                    setSubstanceInfo(null);
+                }
+            } finally {
+                if (!cancelled) setSubstanceInfoLoading(false);
+            }
+        }
+        fetchSubstanceInfo();
+        return () => {
+            cancelled = true;
+        };
+    }, [i18next.language]);
 
     // Filtering logic (already above!)
 
@@ -1044,6 +1086,42 @@ export const SubstanceDetail: React.FC<{
                                     {t("No data for selected filters.")}
                                 </Typography>
                             )}
+                        </Box>
+                    )}
+
+                    {/* ----------- ALWAYS SHOW SUBSTANCE INFO BELOW ----------- */}
+                    {substanceInfoLoading && (
+                        <Box mt={3} display="flex" justifyContent="center">
+                            <Typography variant="body2" color="textSecondary">
+                                {t("Loading substance information...")}
+                            </Typography>
+                        </Box>
+                    )}
+                    {substanceInfoError && (
+                        <Box mt={3} display="flex" justifyContent="center">
+                            <Typography variant="body2" color="error">
+                                {substanceInfoError}
+                            </Typography>
+                        </Box>
+                    )}
+                    {substanceInfo && (
+                        <Box
+                            mt={3}
+                            mb={3}
+                            p={3}
+                            bgcolor="#f6f7fa"
+                            borderRadius={2}
+                        >
+                            <Typography
+                                variant="h6"
+                                gutterBottom
+                                sx={{ color: "#003663" }}
+                            >
+                                {substanceInfo.title}
+                            </Typography>
+                            <Markdown options={{ forceBlock: true }}>
+                                {substanceInfo.description}
+                            </Markdown>
                         </Box>
                     )}
                 </Box>
