@@ -16,6 +16,7 @@ import Markdown from "markdown-to-jsx";
 export interface AccordionProps {
     title: string;
     content: JSX.Element;
+    /** Keeps old behavior. Ignored when `expanded` is provided (controlled mode). */
     defaultExpanded: boolean;
     centerContent: boolean;
     showCopyIcon?: boolean;
@@ -23,6 +24,11 @@ export interface AccordionProps {
     maxHeight?: string;
     /** gap in px between the title (summary) and the first line of content */
     contentGap?: number;
+
+    /** NEW: controlled open state (optional). If provided, component is controlled. */
+    expanded?: boolean;
+    /** NEW: notifies parent when user toggles the accordion. */
+    onToggle?: (expanded: boolean) => void;
 }
 
 export function ZNAccordion(props: AccordionProps): JSX.Element {
@@ -55,9 +61,16 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
             .catch((err) => console.error("Failed to copy:", err));
     };
 
+    // Decide controlled vs uncontrolled:
+    const controlled = props.expanded !== undefined;
+
     return (
         <Accordion
-            defaultExpanded={props.defaultExpanded}
+            // Controlled if `expanded` is provided, otherwise use defaultExpanded (uncontrolled)
+            {...(controlled
+                ? { expanded: props.expanded }
+                : { defaultExpanded: props.defaultExpanded })}
+            onChange={(_, exp) => props.onToggle?.(exp)}
             sx={{
                 border: "none",
                 boxShadow: "none",
@@ -116,6 +129,7 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                     >
                         <Markdown>{props.title}</Markdown>
                     </Typography>
+
                     {/* Copy icon always at the end */}
                     {props.showCopyIcon && (
                         <Tooltip
@@ -140,7 +154,6 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
 
             <AccordionDetails
                 sx={{
-                    // configurable gap here:
                     marginLeft: "2em",
                     marginRight: "2em",
                     display: "block",
