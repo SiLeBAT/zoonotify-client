@@ -392,10 +392,12 @@ This file contains comma-separated data, which supports the correct format of nu
                 </Box>
                 {/* --- BAR CHART --- */}
                 {chartData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={500}>
+                    <ResponsiveContainer width="100%" height={550}>
                         <BarChart
                             layout="vertical"
                             data={chartData}
+                            barCategoryGap="65%"
+                            barGap={4}
                             margin={{
                                 top: 10,
                                 right: 25,
@@ -448,6 +450,8 @@ This file contains comma-separated data, which supports the correct format of nu
                                     name={legendLabels[groupKey]}
                                     fill={groupColors[groupKey]}
                                     barSize={22}
+                                    stroke="#fff"
+                                    strokeWidth={1}
                                     isAnimationActive={false}
                                 />
                             ))}
