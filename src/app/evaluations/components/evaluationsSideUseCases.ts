@@ -12,7 +12,6 @@ import {
     category,
     diagramType,
     division,
-    initialFilterSelection,
     matrix,
     microorganism,
     productionType,
@@ -24,7 +23,6 @@ interface EvaluationInformationItem {
     id: number;
     content: string;
     title?: string;
-    // etc. if you have more fields
 }
 
 interface EvaluationInformationAPIResponse {
@@ -61,27 +59,9 @@ const useEvaluationSideComponent = (): {
 } => {
     const { t } = useTranslation(["ExplanationPage"]);
     const evaluationContext = useEvaluationData();
+    const selectedFilters = evaluationContext.selectedFilters; // <-- read from context
 
     const [howtoContent, setHowtoContent] = useState("");
-
-    const [selectedFilters, setSelectedFilters] = useState<FilterSelection>(
-        initialFilterSelection
-    );
-
-    // Whenever filters change, update the context
-    useEffect(() => {
-        evaluationContext.updateFilters(selectedFilters);
-    }, [selectedFilters, evaluationContext]);
-
-    const handleChange =
-        (key: keyof FilterSelection) =>
-        (value: string | string[]): void => {
-            const newValue = Array.isArray(value) ? value : [value];
-            setSelectedFilters((prev) => ({
-                ...prev,
-                [key]: newValue,
-            }));
-        };
 
     // Build selection items from constants
     const availableOptions: SelectionItemCollection = {
@@ -93,17 +73,29 @@ const useEvaluationSideComponent = (): {
         division: toSelectionItem(division, t),
     };
 
-    const selectionConfig: SelectionFilterConfig[] = Object.keys(
-        selectedFilters
+    // Handle a change to any filter key by writing back to context
+    const handleChange =
+        (key: keyof FilterSelection) =>
+        (value: string | string[]): void => {
+            const newValue = Array.isArray(value) ? value : [value];
+            evaluationContext.updateFilters({
+                ...selectedFilters,
+                [key]: newValue,
+            });
+        };
+
+    const selectionConfig: SelectionFilterConfig[] = (
+        Object.keys(selectedFilters) as (keyof FilterSelection)[]
     ).map((key) => ({
         label: t(key.toUpperCase()),
-        id: key,
-        selectedItems: [...selectedFilters[key as keyof FilterSelection]],
+        id: key as string,
+        selectedItems: [...selectedFilters[key]],
         selectionOptions:
             availableOptions[key as keyof SelectionItemCollection],
-        handleChange: (event) => {
-            const value = event.target.value;
-            handleChange(key as keyof FilterSelection)(value);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        handleChange: (event: any) => {
+            const value = event?.target?.value ?? event;
+            handleChange(key)(value);
         },
     }));
 
@@ -113,9 +105,8 @@ const useEvaluationSideComponent = (): {
         callApiService<EvaluationInformationAPIResponse>(url)
             .then((response) => {
                 if (response.data) {
-                    // "response.data.data" is the single "flat" item
                     const item = response.data.data;
-                    setHowtoContent(item.content); // no more item.attributes.content
+                    setHowtoContent(item.content);
                 }
                 return response;
             })
