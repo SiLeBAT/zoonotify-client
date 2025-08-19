@@ -61,6 +61,7 @@ type Evaluation = Record<DivisionToken, EvaluationEntry[]>;
 interface EvaluationDataContext {
     readonly isLoading: boolean;
     readonly evaluationsData: Evaluation;
+    readonly selectedFilters: FilterSelection; // <-- exposed
     updateFilters: (newFilters: FilterSelection) => void;
     showDivision: (division: string) => boolean;
 }
@@ -74,6 +75,7 @@ export const DefaultEvaluationDataContext =
             LEBENSMITTEL: [],
             MULTIPLE: [],
         },
+        selectedFilters: initialFilterSelection, // <-- default
         updateFilters: () => {},
         showDivision: () => true,
     });
@@ -108,10 +110,10 @@ function isCompleteEntry(entry: {
 /** Helper: parse URL query -> FilterSelection */
 function parseQueryParams(queryParams: URLSearchParams): FilterSelection {
     const filters: FilterSelection = { ...initialFilterSelection };
-    Object.keys(filters).forEach((key) => {
-        const param = queryParams.get(key);
+    (Object.keys(filters) as (keyof FilterSelection)[]).forEach((key) => {
+        const param = queryParams.get(String(key));
         if (param) {
-            filters[key as keyof FilterSelection] = param.split(",");
+            filters[key] = param.split(",");
         }
     });
     return filters;
@@ -120,11 +122,13 @@ function parseQueryParams(queryParams: URLSearchParams): FilterSelection {
 /** Helper: build query string from FilterSelection */
 function buildQueryString(filters: FilterSelection): string {
     const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, arr]) => {
-        if (arr.length) {
-            params.set(key, arr.join(","));
+    (Object.entries(filters) as [keyof FilterSelection, string[]][]).forEach(
+        ([key, arr]) => {
+            if (arr.length) {
+                params.set(String(key), arr.join(","));
+            }
         }
-    });
+    );
     return params.toString();
 }
 
@@ -147,8 +151,11 @@ function applyFiltersStrict(
             ).every((filterKey) => {
                 const selectedVals = filterSelection[filterKey];
                 if (selectedVals.length === 0) return true;
-                if (item[filterKey] == null) return false;
-                return selectedVals.includes(item[filterKey]);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if ((item as any)[filterKey] == null) return false;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                return selectedVals.includes((item as any)[filterKey]);
             });
         });
     });
@@ -184,7 +191,7 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
             title: item.title,
             description: item.description,
             category: item.category,
-            division: divisionKey,
+            division: String(divisionKey),
             microorganism: item.microorganism,
             diagramType: item.diagramType,
             productionType: item.productionType,
@@ -193,7 +200,6 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
             dataPath,
         };
 
-        // Only push if the entry is complete
         if (isCompleteEntry(newEntry)) {
             result[divisionKey].push(newEntry);
         }
@@ -247,7 +253,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
                         new URLSearchParams(window.location.search)
                     );
 
-                    // If there are filters provided in the URL, apply them; otherwise, use full data.
+                    // If there are filters in the URL, apply them; otherwise use full data.
                     if (
                         Object.values(urlFilters).some((arr) => arr.length > 0)
                     ) {
@@ -290,11 +296,14 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         // Ensure the language parameter is included in the URL
         searchParams.set("lang", i18n.language);
 
-        // Build the new URL using the current pathname and search parameters
-        const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-
-        if (newUrl !== window.location.href) {
-            window.history.replaceState({}, "", newUrl);
+        // Build the new search and update only if changed
+        const newSearch = `?${searchParams.toString()}`;
+        if (newSearch !== window.location.search) {
+            window.history.replaceState(
+                {},
+                "",
+                `${window.location.pathname}${newSearch}`
+            );
         }
     }, [selectedFilters, originalData, i18n.language]);
 
@@ -304,7 +313,6 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     const showDivision = (div: string): boolean => {
-        // If the division filter is empty, show all divisions
         if (selectedFilters.division.length === 0) return true;
         return selectedFilters.division.includes(div);
     };
@@ -312,6 +320,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     const value: EvaluationDataContext = {
         isLoading,
         evaluationsData,
+        selectedFilters, // <-- exposed
         updateFilters,
         showDivision,
     };
