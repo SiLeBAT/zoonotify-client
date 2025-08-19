@@ -369,12 +369,13 @@ This file contains comma-separated data, which supports the correct format of nu
                             minHeight: "40px",
                         }}
                     >
-                        {/* 👇 Chart title with beautiful microorganism name! */}
                         {groupLabel || (
                             <>
                                 {year},{" "}
                                 <FormattedMicroorganismName
                                     microName={microorganism}
+                                    fontWeight="bold" // stays bold
+                                    // no fontSize needed, it will match h6 now
                                 />
                             </>
                         )}
@@ -516,6 +517,8 @@ This file contains comma-separated data, which supports the correct format of nu
                                 {year},{" "}
                                 <FormattedMicroorganismName
                                     microName={microorganism}
+                                    fontWeight="bold"
+                                    fontSize="inherit"
                                 />
                             </>
                         )}
