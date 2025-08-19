@@ -90,20 +90,34 @@ export const FormattedMicroorganismName: React.FC<
     microName,
     isBreadcrumb = false,
     fontWeight,
-    fontSize, // <--- accept prop
+    fontSize, // optional override
 }) => {
     const words = formatMicroorganismNameArray(microName);
+
     return (
         <Typography
             component="span"
+            variant="inherit" // <- inherit parent Typography (like h6) styles
             style={{
                 fontWeight: fontWeight ?? (isBreadcrumb ? "normal" : "bold"),
-                fontSize: fontSize ?? (isBreadcrumb ? "1.4rem" : undefined),
+                ...(fontSize ? { fontSize } : {}), // only apply if you explicitly pass it
             }}
         >
             {words.map((wordObj: WordObject, index: number) => (
                 <React.Fragment key={index}>
-                    {wordObj.italic ? <i>{wordObj.text}</i> : wordObj.text}{" "}
+                    {wordObj.italic ? (
+                        <i
+                            style={{
+                                fontStyle: "italic",
+                                fontSize: "inherit",
+                                fontWeight: "inherit",
+                            }}
+                        >
+                            {wordObj.text}
+                        </i>
+                    ) : (
+                        wordObj.text
+                    )}{" "}
                 </React.Fragment>
             ))}
         </Typography>
