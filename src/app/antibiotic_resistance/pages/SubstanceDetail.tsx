@@ -606,8 +606,10 @@ export const SubstanceDetail: React.FC<{
             substances.length > 0 &&
             substanceFilter.length === substances.length;
         const someSelected = substanceFilter.length > 0 && !allSelected;
+
         const handleChange = (event: SelectChangeEvent<string[]>): void => {
             const v = event.target.value as string[];
+
             let newSubstanceFilter: string[];
             if (v.includes("all")) {
                 newSubstanceFilter = allSelected
@@ -616,8 +618,15 @@ export const SubstanceDetail: React.FC<{
             } else {
                 newSubstanceFilter = v;
             }
+
+            // 1) update state
             setSubstanceFilter(newSubstanceFilter);
+
+            // 2) immediately re-run the search with the new value
+            //    (pass current `selected` plus the new substance array)
+            handleSearch(selected, newSubstanceFilter);
         };
+
         return (
             <Stack
                 direction="row"
@@ -659,6 +668,7 @@ export const SubstanceDetail: React.FC<{
                                 }
                             />
                         </MenuItem>
+
                         {substances.length === 0 ? (
                             <MenuItem disabled value="">
                                 {t("No options")}
@@ -682,6 +692,7 @@ export const SubstanceDetail: React.FC<{
                         )}
                     </Select>
                 </FormControl>
+
                 <Tooltip title={t("More Info on Antibiotic Substances")}>
                     <IconButton
                         size="small"
