@@ -36,6 +36,8 @@ import {
     RESISTANCES,
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
+import type { MenuProps } from "@mui/material/Menu"; // add this import
+
 import { TrendChart } from "./TrendChart";
 import type { SelectChangeEvent } from "@mui/material/Select";
 
@@ -177,6 +179,27 @@ function renderGroupLabel(
 }
 
 const CHARTS_PER_PAGE = 2;
+
+const SELECT_WIDTH = 760;
+
+const selectSx = {
+    width: SELECT_WIDTH,
+    "& .MuiSelect-select": {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+    },
+};
+
+// keep the menu the same width and anchored consistently
+const fixedMenuProps: Partial<MenuProps> = {
+    PaperProps: {
+        sx: { minWidth: SELECT_WIDTH },
+        style: { maxHeight: 400 },
+    },
+    anchorOrigin: { vertical: "bottom", horizontal: "left" },
+    transformOrigin: { vertical: "top", horizontal: "left" },
+};
 
 export const TrendDetails: React.FC<{
     microorganism: string;
@@ -494,13 +517,15 @@ export const TrendDetails: React.FC<{
                 alignItems="center"
                 sx={{ mb: 3 }}
             >
-                <FormControl sx={{ minWidth: 350 }}>
+                <FormControl sx={{ width: SELECT_WIDTH }}>
                     <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
                     <Select
                         multiple
                         value={substanceFilter}
                         onChange={handleChange}
                         label={t("ANTIBIOTIC_SUBSTANCE")}
+                        sx={selectSx} // ✅ fixed trigger width + ellipsis
+                        MenuProps={fixedMenuProps} // ✅ fixed menu width + anchor
                         renderValue={(selectedItems) =>
                             Array.isArray(selectedItems)
                                 ? substances
@@ -511,9 +536,6 @@ export const TrendDetails: React.FC<{
                                       .join(", ")
                                 : ""
                         }
-                        MenuProps={{
-                            PaperProps: { style: { maxHeight: 400 } },
-                        }}
                     >
                         <MenuItem value="all">
                             <Checkbox
