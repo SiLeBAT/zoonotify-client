@@ -21,6 +21,8 @@ import {
     Checkbox,
     ListItemText,
 } from "@mui/material";
+import type { MenuProps } from "@mui/material/Menu";
+
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
@@ -238,6 +240,27 @@ function readStateFromUrlCompressed(
 
     return { selected: legacySelected, substanceFilter: legacySubstanceFilter };
 }
+
+const SELECT_WIDTH = 760;
+
+export const selectSx = {
+    width: SELECT_WIDTH,
+    "& .MuiSelect-select": {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+    },
+};
+
+// 👇 give the object the right type so TS keeps the literal unions
+export const fixedMenuProps: Partial<MenuProps> = {
+    PaperProps: {
+        sx: { minWidth: SELECT_WIDTH },
+        style: { maxHeight: 400 },
+    },
+    anchorOrigin: { vertical: "bottom", horizontal: "left" },
+    transformOrigin: { vertical: "top", horizontal: "left" },
+};
 
 // ======================= COMPONENT =============================
 
@@ -634,7 +657,7 @@ export const SubstanceDetail: React.FC<{
                 alignItems="center"
                 sx={{ mb: 3 }}
             >
-                <FormControl sx={{ minWidth: 350 }}>
+                <FormControl sx={{ width: SELECT_WIDTH }}>
                     <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
                     <Select
                         multiple
@@ -651,9 +674,7 @@ export const SubstanceDetail: React.FC<{
                                       .join(", ")
                                 : ""
                         }
-                        MenuProps={{
-                            PaperProps: { style: { maxHeight: 400 } },
-                        }}
+                        MenuProps={fixedMenuProps}
                     >
                         <MenuItem value="all">
                             <Checkbox
@@ -992,7 +1013,7 @@ export const SubstanceDetail: React.FC<{
                         alignItems="center"
                         sx={{ mb: 2 }}
                     >
-                        <FormControl sx={{ minWidth: 350 }}>
+                        <FormControl sx={{ width: SELECT_WIDTH }}>
                             <InputLabel>{t("combinations")}</InputLabel>
                             <Select
                                 multiple
@@ -1018,9 +1039,7 @@ export const SubstanceDetail: React.FC<{
                                 renderValue={(selectedValues) =>
                                     (selectedValues as string[]).join(", ")
                                 }
-                                MenuProps={{
-                                    PaperProps: { style: { maxHeight: 400 } },
-                                }}
+                                MenuProps={fixedMenuProps}
                             >
                                 <MenuItem value="all">
                                     <Checkbox
