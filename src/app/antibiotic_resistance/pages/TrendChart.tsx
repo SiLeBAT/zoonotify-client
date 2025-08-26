@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import JSZip from "jszip";
 import {
@@ -15,6 +15,7 @@ import {
 import { Typography, Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
 
 export interface TrendChartProps {
     data: {
@@ -146,7 +147,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
     const { t, i18n } = useTranslation(["Antibiotic"]);
-
+    const [copied, setCopied] = useState(false);
     // -- Chart data preparation
     const startYear = 2010,
         endYear = 2023;
@@ -214,6 +215,31 @@ export const TrendChart: React.FC<TrendChartProps> = ({
             link.download = `trend_chart_${Date.now()}.png`;
             link.href = canvas.toDataURL("image/png", 1.0);
             link.click();
+        }
+    };
+
+    const handleShareLink = async (): Promise<void> => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1800);
+        } catch (err) {
+            // Fallback for older browsers / non-HTTPS
+            try {
+                const el = document.createElement("textarea");
+                el.value = window.location.href;
+                el.setAttribute("readonly", "");
+                el.style.position = "absolute";
+                el.style.left = "-9999px";
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand("copy");
+                document.body.removeChild(el);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1800);
+            } catch (e) {
+                console.error("Failed to copy link:", err);
+            }
         }
     };
 
@@ -604,7 +630,27 @@ This file contains comma-separated data, which supports the correct format of nu
                 >
                     {t("DOWNLOAD_ZIP_FILE")}
                 </Button>
+                <Button
+                    onClick={handleShareLink}
+                    variant="contained"
+                    sx={{ background: "#003663", color: "#fff" }}
+                    startIcon={<InsertLinkIcon />}
+                >
+                    {t("Share_Link") || "Share Link"}
+                </Button>
             </Stack>
+
+            {copied && (
+                <Typography
+                    color="success.main"
+                    textAlign="center"
+                    mt={1}
+                    fontWeight="bold"
+                >
+                    {t("Link copied to clipboard!") ||
+                        "Link copied to clipboard!"}
+                </Typography>
+            )}
         </Box>
     );
 };
