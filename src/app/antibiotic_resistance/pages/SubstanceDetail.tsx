@@ -1040,6 +1040,8 @@ export const SubstanceDetail: React.FC<{
                                     (selectedValues as string[]).join(", ")
                                 }
                                 MenuProps={fixedMenuProps}
+                                label={t("combinations")}
+                                sx={selectSx}
                             >
                                 <MenuItem value="all">
                                     <Checkbox
