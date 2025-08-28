@@ -442,58 +442,58 @@ export const SubstanceDetail: React.FC<{
 
     // === Cascading option recomputation (like your PrevalenceDataProvider) ===
     useEffect(() => {
-        // Use filtered data only after Search; otherwise full dataset
-        const dataToCompute = showResults
+        // 1) pick the data source
+        const dataToCompute: ResistanceApiItem[] = showResults
             ? filteredFullData
             : resistanceRawData;
 
-        // Given an excludeKey, filter using all current selections EXCEPT that key
+        // 2) helpers
+        const keys: FilterKey[] = [
+            "samplingYear",
+            "specie",
+            "superCategorySampleOrigin",
+            "sampleOrigin",
+            "samplingStage",
+            "matrixGroup",
+            "matrix",
+            "antimicrobialSubstance",
+        ];
+
         const filterRespectingSelections = (
             entry: ResistanceApiItem,
             excludeKey: FilterKey
         ): boolean => {
-            const keys: FilterKey[] = [
-                "samplingYear",
-                "specie",
-                "superCategorySampleOrigin",
-                "sampleOrigin",
-                "samplingStage",
-                "matrixGroup",
-                "matrix",
-                "antimicrobialSubstance",
-            ];
-
             for (const k of keys) {
-                if (k === excludeKey) continue; // ignore the one being recomputed
+                if (k === excludeKey) continue;
                 const sel = selected[k] ?? [];
-                if (sel.length === 0) continue; // no restriction
-                const val = getDocId(entry, k);
-                if (!val || !sel.includes(val)) return false;
+                if (sel.length === 0) continue;
+                const v = getDocId(entry, k);
+                if (!v || !sel.includes(v)) return false;
             }
             return true;
         };
 
-        // Build unique options for a given key from dataToCompute that passes the other selections
         const computeOptions = (key: FilterKey): FilterOption[] => {
             const map = new Map<string, { id: string; name: string }>();
             for (const e of dataToCompute) {
                 if (!filterRespectingSelections(e, key)) continue;
-                const docId = getDocId(e, key);
+                const documentId = getDocId(e, key);
                 const name = getName(e, key);
-                if (docId && name && !map.has(docId)) {
-                    // id isn’t used by your UI logic; we can store docId there too
-                    map.set(docId, { id: docId, name });
+                if (documentId && name && !map.has(documentId)) {
+                    map.set(documentId, { id: documentId, name });
                 }
             }
-            // sort by name (years will be fine, they’re strings of numbers)
             return Array.from(map.entries())
                 .map(([documentId, { id, name }]) => ({ id, name, documentId }))
                 .sort((a, b) =>
-                    a.name.localeCompare(b.name, undefined, { numeric: true })
+                    a.name.localeCompare(b.name, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                    })
                 );
         };
 
-        // Recompute for every dropdown you render (you already skip 'antimicrobialSubstance' in renderSelectWithSelectAll)
+        // 3) recompute options
         const next: Record<FilterKey, FilterOption[]> = {
             samplingYear: computeOptions("samplingYear"),
             specie: computeOptions("specie"),
@@ -504,41 +504,44 @@ export const SubstanceDetail: React.FC<{
             samplingStage: computeOptions("samplingStage"),
             matrixGroup: computeOptions("matrixGroup"),
             matrix: computeOptions("matrix"),
-            antimicrobialSubstance: computeOptions("antimicrobialSubstance"), // optional: include if you want top multi-select to shrink too
+            antimicrobialSubstance: computeOptions("antimicrobialSubstance"),
         };
 
         setFilterOptions(next);
 
-        // --- Optional but recommended: prune invalid selections so you never keep values that just disappeared ---
+        // 4) prune selected values ONLY IF they changed
         type SelectedState = Record<FilterKey, string[]>;
+        const arrEq = (a: string[], b: string[]): boolean =>
+            a.length === b.length && a.every((v, i) => v === b[i]);
 
         const prune = (key: FilterKey, current: string[]): string[] => {
             const valid = new Set((next[key] ?? []).map((o) => o.documentId));
+            // keep original order while filtering
             return current.filter((v) => valid.has(v));
         };
 
         setSelected((prev: SelectedState): SelectedState => {
+            let changed = false;
             const upd: SelectedState = { ...prev };
-            (Object.keys(upd) as FilterKey[]).forEach((k: FilterKey) => {
-                upd[k] = prune(k, upd[k]);
-            });
-            return upd;
+            for (const k of keys) {
+                const pruned = prune(k as FilterKey, prev[k as FilterKey]);
+                if (!arrEq(pruned, prev[k as FilterKey])) {
+                    upd[k as FilterKey] = pruned;
+                    changed = true;
+                }
+            }
+            return changed ? upd : prev; // <- critical: return prev to avoid re-run when unchanged
         });
 
-        // Also prune for the top "substanceFilter" if you want it to cascade too
-        setSubstanceFilter((prev) => {
+        // 5) (optional) prune the top substance multi-select, but guard it too
+        setSubstanceFilter((prev: string[]): string[] => {
             const valid = new Set(
                 next.antimicrobialSubstance.map((o) => o.documentId)
             );
-            return prev.filter((v) => valid.has(v));
+            const pruned = prev.filter((v) => valid.has(v));
+            return arrEq(pruned, prev) ? prev : pruned;
         });
-    }, [
-        // dependencies: whenever any of these changes, recompute the available options
-        selected,
-        showResults,
-        resistanceRawData,
-        filteredFullData,
-    ]);
+    }, [selected, showResults, resistanceRawData, filteredFullData]);
 
     // ----------- MOVED handleSearch UP -----------
     const handleSearch = (sel = selected, sub = substanceFilter): void => {
