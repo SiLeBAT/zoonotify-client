@@ -136,6 +136,50 @@ export interface ResistanceApiItem {
     maxKonfidenzintervall: number;
 }
 
+// Map filter key -> stable documentId value
+function getDocId(entry: ResistanceApiItem, key: FilterKey): string {
+    switch (key) {
+        case "samplingYear":
+            return entry.samplingYear != null ? String(entry.samplingYear) : "";
+        case "specie":
+            return entry.specie?.documentId ?? "";
+        case "superCategorySampleOrigin":
+            return entry.superCategorySampleOrigin?.documentId ?? "";
+        case "sampleOrigin":
+            return entry.sampleOrigin?.documentId ?? "";
+        case "samplingStage":
+            return entry.samplingStage?.documentId ?? "";
+        case "matrixGroup":
+            return entry.matrixGroup?.documentId ?? "";
+        case "matrix":
+            return entry.matrix?.documentId ?? "";
+        case "antimicrobialSubstance":
+            return entry.antimicrobialSubstance?.documentId ?? "";
+    }
+}
+
+// Map filter key -> display name
+function getName(entry: ResistanceApiItem, key: FilterKey): string {
+    switch (key) {
+        case "samplingYear":
+            return entry.samplingYear != null ? String(entry.samplingYear) : "";
+        case "specie":
+            return entry.specie?.name ?? "";
+        case "superCategorySampleOrigin":
+            return entry.superCategorySampleOrigin?.name ?? "";
+        case "sampleOrigin":
+            return entry.sampleOrigin?.name ?? "";
+        case "samplingStage":
+            return entry.samplingStage?.name ?? "";
+        case "matrixGroup":
+            return entry.matrixGroup?.name ?? "";
+        case "matrix":
+            return entry.matrix?.name ?? "";
+        case "antimicrobialSubstance":
+            return entry.antimicrobialSubstance?.name ?? "";
+    }
+}
+
 function shouldShowSpeciesFilter(microorganism: string): boolean {
     return (
         microorganism === "Campylobacter spp." ||
@@ -440,6 +484,115 @@ export const TrendDetails: React.FC<{
             );
         return result;
     };
+
+    // === Cascading option recomputation (like Substance) ===
+    useEffect(() => {
+        // Source dataset: before Search -> full; after Search -> filtered
+        const dataToCompute: ResistanceApiItem[] = showChart
+            ? filteredFullData
+            : resistanceRawData;
+
+        // Keys to respect when filtering
+        const keys: FilterKey[] = [
+            "samplingYear",
+            "specie",
+            "superCategorySampleOrigin",
+            "sampleOrigin",
+            "samplingStage",
+            "matrixGroup",
+            "matrix",
+            "antimicrobialSubstance",
+        ];
+
+        // Respect all current selections except the one we recompute
+        const filterRespectingSelections = (
+            entry: ResistanceApiItem,
+            excludeKey: FilterKey
+        ): boolean => {
+            for (const k of keys) {
+                if (k === excludeKey) continue;
+                const sel = selected[k] ?? [];
+                if (sel.length === 0) continue;
+                const v = getDocId(entry, k);
+                if (!v || !sel.includes(v)) return false;
+            }
+            return true;
+        };
+
+        // Build sorted, unique options from current data slice
+        const computeOptions = (key: FilterKey): FilterOption[] => {
+            const map = new Map<string, { id: string; name: string }>();
+            for (const e of dataToCompute) {
+                if (!filterRespectingSelections(e, key)) continue;
+                const documentId = getDocId(e, key);
+                const name = getName(e, key);
+                if (documentId && name && !map.has(documentId)) {
+                    map.set(documentId, { id: documentId, name });
+                }
+            }
+            return Array.from(map.entries())
+                .map(([documentId, { id, name }]) => ({ id, name, documentId }))
+                .sort((a, b) =>
+                    a.name.localeCompare(b.name, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                    })
+                );
+        };
+
+        // Recompute all dropdowns (you already hide antimicrobialSubstance in the sidebar renderer)
+        const next: Record<FilterKey, FilterOption[]> = {
+            samplingYear: computeOptions("samplingYear"),
+            specie: computeOptions("specie"),
+            superCategorySampleOrigin: computeOptions(
+                "superCategorySampleOrigin"
+            ),
+            sampleOrigin: computeOptions("sampleOrigin"),
+            samplingStage: computeOptions("samplingStage"),
+            matrixGroup: computeOptions("matrixGroup"),
+            matrix: computeOptions("matrix"),
+            antimicrobialSubstance: computeOptions("antimicrobialSubstance"), // keep if you want top multi-select to shrink too
+        };
+
+        setFilterOptions(next);
+
+        // ----- Prune invalid selections ONLY IF changed (prevents update loops)
+        type SelectedState = Record<FilterKey, string[]>;
+        const arrEq = (a: string[], b: string[]): boolean =>
+            a.length === b.length && a.every((v, i) => v === b[i]);
+
+        const prune = (key: FilterKey, current: string[]): string[] => {
+            const valid = new Set((next[key] ?? []).map((o) => o.documentId));
+            // keep original order
+            return current.filter((v) => valid.has(v));
+        };
+
+        setSelected((prev: SelectedState): SelectedState => {
+            let changed = false;
+            const upd: SelectedState = { ...prev };
+            for (const k of keys) {
+                const pruned = prune(k, prev[k]);
+                if (!arrEq(pruned, prev[k])) {
+                    upd[k] = pruned;
+                    changed = true;
+                }
+            }
+            return changed ? upd : prev; // critical to avoid infinite re-running
+        });
+
+        // Also prune top "Antibiotic Substance" selection, guarded
+        setSubstanceFilter((prev: string[]): string[] => {
+            const valid = new Set(
+                next.antimicrobialSubstance.map((o) => o.documentId)
+            );
+            const pruned = prev.filter((v) => valid.has(v));
+            return arrEq(pruned, prev) ? prev : pruned;
+        });
+
+        // Optional: if you want the top dropdown OPTIONS to also shrink,
+        // uncomment the next line:
+        // setAllSubstances(next.antimicrobialSubstance);
+    }, [selected, showChart, resistanceRawData, filteredFullData]);
 
     // Only update when search button pressed or substanceFilter changes
     const handleSearch = (): void => {
