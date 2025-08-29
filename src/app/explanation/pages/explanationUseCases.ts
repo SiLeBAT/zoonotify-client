@@ -1,4 +1,4 @@
-// useExplanationPageComponent.ts
+// explanationUseCases.ts
 // eslint-disable-next-line import/named
 import i18next, { TFunction } from "i18next";
 import * as lodash from "lodash";
@@ -18,23 +18,62 @@ import {
     AMRTablesDTO,
 } from "../model/ExplanationPage.model";
 
+/** ---------- Section mapping & labels (hard-coded EN/DE) ---------- */
+type SectionCode = "BACKGROUND" | "METHODS" | "GRAPHS" | "DATA" | "MAIN";
+
+const CMS_SECTION_TO_CODE: Record<string, SectionCode> = {
+    HINTERGRUND: "BACKGROUND",
+    METHODEN: "METHODS",
+    GRAPHIKEN: "GRAPHS",
+    DATEN: "DATA",
+    MAIN: "MAIN",
+};
+
+const ORDERED_SECTIONS: SectionCode[] = [
+    "BACKGROUND",
+    "METHODS",
+    "GRAPHS",
+    "DATA",
+    "MAIN",
+];
+
+const SECTION_UI_LABELS: Record<SectionCode, { en: string; de: string }> = {
+    BACKGROUND: { en: "Background", de: "Hintergrund" },
+    METHODS: { en: "Methods", de: "Methoden" },
+    GRAPHS: { en: "Graphs", de: "Grafiken" },
+    DATA: { en: "Data", de: "Daten" },
+    MAIN: { en: "Explanations", de: "Erläuterungen" },
+};
+
+function normLang(lng: string | undefined): "en" | "de" {
+    const base = (lng || "en").toLowerCase().split("-")[0];
+    return base === "de" ? "de" : "en";
+}
+
+function getSectionLabelByCode(code: SectionCode): string {
+    const lng = normLang(i18next.language);
+    return SECTION_UI_LABELS[code][lng];
+}
+
+/** --------------------------------------------------------------- */
+
 type ExplanationPageModel = {
-    explanationCollection: ExplanationCollection;
+    explanationCollection: ExplanationCollection; // grouped by SectionCode
     mainSection: ExplanationDTO[];
     title: string;
     amrData: AMRTablesDTO[];
     openAmrDialog: boolean;
     currentAMRID: string;
     deepLink: string;
-    // NEW ↓↓↓
     activeAnchor: string | null;
 };
 
 type ExplanationPageOperations = {
     handleOpen: (id: string) => void;
     handleClose: () => void;
-    // NEW ↓↓↓ when a user opens a subheading we update the hash
     openSectionByAnchor: (anchor: string) => void;
+    /** Translate a group key (either raw CMS or our SectionCode) to a UI label */
+    getSectionLabel: (groupKey: string) => string;
 };
 
 type ExplanationPageTranslations = {
@@ -63,7 +102,6 @@ const useExplanationPageComponent: UseCase<
     const [currentAMRID, setCurrentAMRID] = useState<string>("");
     const [openAmrDialog, setOpenAmrDialog] = useState<boolean>(false);
     const [deepLink, setDeepLink] = useState<string>("");
-    // NEW ↓↓↓ which anchor is currently active from the URL
     const [activeAnchor, setActiveAnchor] = useState<string | null>(null);
 
     // --- keep ?lang in sync with i18next ---
@@ -79,7 +117,6 @@ const useExplanationPageComponent: UseCase<
         const params = new URLSearchParams(location.search);
         if (params.get("lang") !== i18next.language) {
             params.set("lang", i18next.language);
-            // IMPORTANT: preserve the hash when adjusting the query
             history.replace({ search: params.toString(), hash: location.hash });
         }
         const currentUrl = window.location.origin + window.location.pathname;
@@ -98,7 +135,6 @@ const useExplanationPageComponent: UseCase<
         if (!activeAnchor) return;
         const el = document.getElementById(activeAnchor);
         if (el) {
-            // delay to ensure accordion content exists before scrolling
             setTimeout(
                 () => el.scrollIntoView({ behavior: "smooth", block: "start" }),
                 0
@@ -106,7 +142,7 @@ const useExplanationPageComponent: UseCase<
         }
     }, [activeAnchor]);
 
-    // --- load CMS data (anchors are derived from data, no hardcoding) ---
+    // --- load CMS data (normalize sections -> codes) ---
     useEffect(() => {
         callApiService<ExplanationAPIResponse>(
             `${EXPLANATION}?locale=${i18next.language}`
@@ -116,7 +152,6 @@ const useExplanationPageComponent: UseCase<
 
                 const items: ExplanationItem[] = response.data.data;
 
-                // Derive a stable anchor per item: prefer slug/uid, else id, else slugified title
                 const cmsData: ExplanationDTO[] = items.map((entry) => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const anyEntry: any = entry as any;
@@ -126,28 +161,31 @@ const useExplanationPageComponent: UseCase<
                         (entry.id != null
                             ? `sec-${entry.id}`
                             : slugify(entry.title));
+
+                    // normalize CMS section (German strings) into our SectionCode
+                    const sectionCode: SectionCode =
+                        CMS_SECTION_TO_CODE[entry.section] ?? "MAIN";
+
                     return {
                         title: entry.title,
                         description: entry.description,
-                        section: entry.section,
+                        section: sectionCode, // <— store normalized code
                         anchor,
-                    };
+                    } as ExplanationDTO;
                 });
 
-                // Sort by high-level section and group
-                const orderedSections = [
-                    "HINTERGRUND",
-                    "METHODEN",
-                    "GRAPHIKEN",
-                    "DATEN",
-                    "MAIN",
-                ];
+                // sort by ORDERED_SECTIONS
                 const ordered = cmsData.sort((a, b) => {
-                    const aIndex = orderedSections.indexOf(a.section);
-                    const bIndex = orderedSections.indexOf(b.section);
+                    const aIndex = ORDERED_SECTIONS.indexOf(
+                        a.section as SectionCode
+                    );
+                    const bIndex = ORDERED_SECTIONS.indexOf(
+                        b.section as SectionCode
+                    );
                     return aIndex - bIndex;
                 });
 
+                // group by normalized section code
                 const grouped = lodash.groupBy(ordered, "section");
                 setExplanationCollection(grouped);
                 setMainSection(grouped.MAIN || []);
@@ -156,14 +194,13 @@ const useExplanationPageComponent: UseCase<
             .catch((error) => {
                 console.error("Error fetching explanation data:", error);
             });
-    }, [t]);
+    }, [t, i18next.language]);
 
     // --- AMR dialog open/close ---
     const handleOpen = (id: string): void => {
         setCurrentAMRID(id);
         setOpenAmrDialog(true);
     };
-
     const handleClose = (): void => {
         setOpenAmrDialog(false);
     };
@@ -176,6 +213,17 @@ const useExplanationPageComponent: UseCase<
             hash: `#${anchor}`,
         });
         setActiveAnchor(anchor);
+    };
+
+    // --- translate group key to UI header label (handles raw CMS or code) ---
+    const getSectionLabel = (groupKey: string): string => {
+        const code =
+            (groupKey as SectionCode) in CMS_SECTION_TO_CODE
+                ? (CMS_SECTION_TO_CODE[
+                      groupKey as keyof typeof CMS_SECTION_TO_CODE
+                  ] as SectionCode)
+                : (groupKey as SectionCode);
+        return getSectionLabelByCode(code);
     };
 
     return {
@@ -193,6 +241,7 @@ const useExplanationPageComponent: UseCase<
             handleOpen,
             handleClose,
             openSectionByAnchor,
+            getSectionLabel, // <— expose to UI
         },
     };
 };
