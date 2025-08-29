@@ -1,3 +1,4 @@
+// InfoPageComponent.tsx
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Markdown from "markdown-to-jsx";
@@ -29,9 +30,20 @@ export function InfoPageComponent(props: {
         margin: "1em 0",
     } as const;
 
+    // Our hook now groups by normalized SectionCode keys (BACKGROUND, METHODS, ...)
+    // but this cast still works fine.
     const typedEntries: Array<[string, ExplanationDTO[]]> = Object.entries(
         (model.explanationCollection || {}) as ExplanationCollection
     ) as Array<[string, ExplanationDTO[]]>;
+
+    // Optional: enforce desired order visually
+    const order: string[] = ["BACKGROUND", "METHODS", "GRAPHS", "DATA", "MAIN"];
+    const sortedEntries =
+        typedEntries.length > 0
+            ? [...typedEntries].sort(
+                  ([a], [b]) => order.indexOf(a) - order.indexOf(b)
+              )
+            : [];
 
     return (
         <PageLayoutComponent>
@@ -62,7 +74,6 @@ export function InfoPageComponent(props: {
                     {/* MAIN section (deep-linkable) */}
                     {model.mainSection.length > 0 ? (
                         <section id={model.mainSection[0].anchor}>
-                            {/* underline each item; no extra spacing */}
                             <Box
                                 sx={{
                                     borderBottom: `2px solid ${theme.palette.primary.main}`,
@@ -94,14 +105,15 @@ export function InfoPageComponent(props: {
                     ) : null}
 
                     {/* Other CMS sections */}
-                    {typedEntries.length > 0
-                        ? typedEntries.map(([sectionToken, explanations]) => (
+                    {sortedEntries.length > 0
+                        ? sortedEntries.map(([sectionToken, explanations]) => (
                               <div key={sectionToken}>
                                   <Typography
                                       sx={subHeadingStyle}
                                       id={sectionToken}
                                   >
-                                      {sectionToken}
+                                      {/* 🔴 Use translated label from the hook */}
+                                      {operations.getSectionLabel(sectionToken)}
                                   </Typography>
 
                                   <div>
@@ -110,7 +122,6 @@ export function InfoPageComponent(props: {
                                               key={explanation.anchor}
                                               id={explanation.anchor}
                                           >
-                                              {/* underline each item; no extra spacing */}
                                               <Box
                                                   sx={{
                                                       borderBottom: `2px solid ${theme.palette.primary.main}`,
