@@ -230,14 +230,41 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
         MULTIPLE: [],
     });
     const [isLoading, setLoading] = useState(true);
+    // 0) Sync language from URL on first mount and ensure ?lang=... is present
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const urlLang = params.get("lang");
 
+        if (urlLang && urlLang !== i18n.language) {
+            i18n.changeLanguage(urlLang);
+        }
+
+        if (!urlLang) {
+            params.set("lang", i18n.language);
+            const newSearch = `?${params.toString()}`;
+            if (newSearch !== window.location.search) {
+                window.history.replaceState(
+                    {},
+                    "",
+                    `${window.location.pathname}${newSearch}`
+                );
+            }
+        }
+    }, []);
+
+    // 1) Fetch data from Strapi (flat shape)
     // 1) Fetch data from Strapi (flat shape)
     useEffect(() => {
         const fetchDataFromAPI = async (): Promise<void> => {
             setLoading(true);
             try {
-                // Multiple populate
-                const url = `${EVALUATIONS}?locale=${i18n.language}&populate=diagram&populate=csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`;
+                const params = new URLSearchParams(window.location.search);
+                const urlLang = params.get("lang");
+
+                // DO NOT force i18n from URL here – this caused the loop
+                const effectiveLang = urlLang || i18n.language;
+
+                const url = `${EVALUATIONS}?locale=${effectiveLang}&populate=diagram&populate=csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`;
                 const response = await callApiService<EvaluationAPIResponse>(
                     url
                 );
@@ -248,12 +275,9 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
                     );
                     setOriginalData(processedData);
 
-                    // Parse filters from URL
                     const urlFilters = parseQueryParams(
                         new URLSearchParams(window.location.search)
                     );
-
-                    // If there are filters in the URL, apply them; otherwise use full data.
                     if (
                         Object.values(urlFilters).some((arr) => arr.length > 0)
                     ) {
