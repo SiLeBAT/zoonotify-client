@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
+import { useLocation } from "react-router-dom";
 import {
     Typography,
     Dialog,
@@ -13,21 +14,25 @@ import i18next from "i18next";
 import { SubstanceDetail } from "./SubstanceDetail";
 import LZString from "lz-string";
 
-function decodeCompressedState(sParam: string | null): null | {
-    m?: string;
-    v?: string;
-    l?: string;
-} {
+// ---- Helpers for compressed state in URL (?s=...) ----
+function decodeCompressedState(
+    sParam: string | null
+): null | { m?: string; v?: "main" | "trend" | "substance"; l?: string } {
     if (!sParam) return null;
     try {
         const json = LZString.decompressFromEncodedURIComponent(sParam);
         if (!json) return null;
-        return JSON.parse(json) as { m?: string; v?: string; l?: string };
+        return JSON.parse(json) as {
+            m?: string;
+            v?: "main" | "trend" | "substance";
+            l?: string;
+        };
     } catch {
         return null;
     }
 }
-// --- These constants stay the same ---
+
+// ---- Constants ----
 const ORGANISMS = [
     "E. coli",
     "Campylobacter spp.",
@@ -43,7 +48,6 @@ const italicWords: string[] = [
     "jejuni",
     "faecalis",
     "faecium",
-    "coli",
     "E.",
     "C.",
     "Enterococcus",
@@ -58,10 +62,7 @@ interface WordObject {
 const formatMicroorganismNameArray = (
     microName: string | null | undefined
 ): WordObject[] => {
-    if (!microName) {
-        console.warn("Received null or undefined microorganism name");
-        return [];
-    }
+    if (!microName) return [];
     const words = microName
         .split(/([-\s])/)
         .filter((part: string) => part.length > 0);
@@ -86,21 +87,16 @@ export interface FormattedMicroorganismNameProps {
 
 export const FormattedMicroorganismName: React.FC<
     FormattedMicroorganismNameProps
-> = ({
-    microName,
-    isBreadcrumb = false,
-    fontWeight,
-    fontSize, // optional override
-}) => {
+> = ({ microName, isBreadcrumb = false, fontWeight, fontSize }) => {
     const words = formatMicroorganismNameArray(microName);
 
     return (
         <Typography
             component="span"
-            variant="inherit" // <- inherit parent Typography (like h6) styles
+            variant="inherit"
             style={{
                 fontWeight: fontWeight ?? (isBreadcrumb ? "normal" : "bold"),
-                ...(fontSize ? { fontSize } : {}), // only apply if you explicitly pass it
+                ...(fontSize ? { fontSize } : {}),
             }}
         >
             {words.map((wordObj: WordObject, index: number) => (
@@ -124,8 +120,7 @@ export const FormattedMicroorganismName: React.FC<
     );
 };
 
-// --- URL Deep Linking helpers ---
-
+// ---- URL sync helpers ----
 function updateUrl(
     selectedOrg: string,
     view: "main" | "trend" | "substance"
@@ -133,13 +128,10 @@ function updateUrl(
     const params = new URLSearchParams(window.location.search);
     const hasCompressed = params.get("s");
 
-    // If we are in 'substance' view AND there is already a compressed state,
-    // do not touch the URL here. SubstanceDetail manages the 's=' param.
-    if (view === "substance" && hasCompressed) {
-        return;
-    }
+    // If currently in 'substance' and an 's' state exists, SubstanceDetail owns the URL
+    if (view === "substance" && hasCompressed) return;
 
-    // Otherwise, write the legacy simple params and remove 's'
+    // Otherwise use simple params and remove 's'
     params.delete("s");
     params.set("microorganism", selectedOrg);
     params.set("view", view);
@@ -153,15 +145,14 @@ function readStateFromUrl(): {
 } {
     const params = new URLSearchParams(window.location.search);
 
-    // NEW: prefer compressed deep link if present
+    // Prefer compressed deep link (?s=...)
     const decoded = decodeCompressedState(params.get("s"));
     if (decoded) {
         const orgFromS =
             decoded.m && ORGANISMS.includes(decoded.m)
                 ? decoded.m
                 : ORGANISMS[0];
-        // If the payload carries a view, use it; otherwise default to 'substance'
-        const viewFromS =
+        const viewFromS: "main" | "trend" | "substance" =
             decoded.v === "trend" ||
             decoded.v === "main" ||
             decoded.v === "substance"
@@ -170,7 +161,7 @@ function readStateFromUrl(): {
         return { selectedOrg: orgFromS, view: viewFromS };
     }
 
-    // Legacy behavior (no 's' param)
+    // Legacy simple params
     const orgParam = params.get("microorganism");
     const selectedOrg =
         typeof orgParam === "string" && ORGANISMS.includes(orgParam)
@@ -181,7 +172,7 @@ function readStateFromUrl(): {
     return { selectedOrg, view };
 }
 
-// --- Breadcrumb component ---
+// ---- Breadcrumb ----
 function Breadcrumb({
     t,
     selectedOrg,
@@ -197,20 +188,14 @@ function Breadcrumb({
     return (
         <div className="abx-breadcrumb">
             <span
-                style={{
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                }}
+                style={{ textDecoration: "underline", cursor: "pointer" }}
                 onClick={handleShowMain}
             >
                 {t("AntibioticResistance")}
             </span>
             {" / "}
             <span
-                style={{
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                }}
+                style={{ textDecoration: "underline", cursor: "pointer" }}
                 onClick={handleShowMain}
             >
                 <FormattedMicroorganismName
@@ -224,72 +209,65 @@ function Breadcrumb({
     );
 }
 
-// --- Main component ---
+// ---- Main page component ----
 export function AntibioticResistancePageComponent(): JSX.Element {
     const { t } = useTranslation(["Antibiotic"]);
+    const routerLocation = useLocation(); // react-router v5 location (used below)
+
     const [state, setState] = useState<{
         selectedOrg: string;
         view: "main" | "trend" | "substance";
     }>(() => readStateFromUrl());
     const { selectedOrg, view } = state;
 
-    // State for "Coming soon" modal
     const [comingSoonOpen, setComingSoonOpen] = useState(false);
 
     // On mount: sync state from URL (deep link support)
-    useEffect((): void => {
-        const parsed = readStateFromUrl();
-        setState(parsed);
+    useEffect(() => {
+        setState(readStateFromUrl());
     }, []);
 
-    // Whenever selectedOrg or view changes, update URL
-    useEffect((): void => {
-        updateUrl(selectedOrg, view);
-    }, [selectedOrg, view]);
+    // Re-sync state whenever the router's query string changes (e.g., Header pushes ?view=main)
+    useEffect(() => {
+        const parsed = readStateFromUrl();
+        setState((prev) =>
+            prev.selectedOrg !== parsed.selectedOrg || prev.view !== parsed.view
+                ? parsed
+                : prev
+        );
+    }, [routerLocation.search]);
 
-    // Whenever language changes, update URL as well!
-    useEffect((): void => {
+    // Single URL-writer effect (depends also on language)
+    useEffect(() => {
         updateUrl(selectedOrg, view);
     }, [selectedOrg, view, i18next.language]);
 
-    // Handle org selection from sidebar
+    // Scroll to top when landing on main view
+    useEffect(() => {
+        if (view === "main") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    }, [view]);
+
+    // Handlers
     const handleOrgSelect = (org: string): void => {
         setState({ selectedOrg: org, view: "main" });
     };
 
-    // Go to trend view
     const handleTrendClick = (): void => {
-        setState((prev) => ({
-            ...prev,
-            view: "trend",
-        }));
+        setState((prev) => ({ ...prev, view: "trend" }));
     };
 
-    // Go to substance detail view
     const handleSubstanceClick = (): void => {
-        setState((prev) => ({
-            ...prev,
-            view: "substance",
-        }));
+        setState((prev) => ({ ...prev, view: "substance" }));
     };
 
-    // Go back to organism selection view (breadcrumb)
     const handleShowMain = (): void => {
-        setState((prev) => ({
-            ...prev,
-            view: "main",
-        }));
+        setState((prev) => ({ ...prev, view: "main" }));
     };
 
-    // Handle coming soon click
-    const handleComingSoon = (): void => {
-        setComingSoonOpen(true);
-    };
-
-    // Handle closing the modal
-    const handleCloseComingSoon = (): void => {
-        setComingSoonOpen(false);
-    };
+    const handleComingSoon = (): void => setComingSoonOpen(true);
+    const handleCloseComingSoon = (): void => setComingSoonOpen(false);
 
     return (
         <>
@@ -298,20 +276,17 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           display: flex;
           min-height: 120vh;
         }
-
         .abx-sidebar {
           width: 450px;
           padding: 2rem;
           background: #fff;
           box-sizing: border-box;
         }
-
         .abx-nav {
           list-style: none;
           margin: 0;
           padding: 0;
         }
-
         .abx-nav-item {
           position: relative;
           clip-path: polygon(
@@ -329,18 +304,15 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-bottom: 1.25rem;
           cursor: pointer;
         }
-
         .abx-active {
           background: #BFE1F2;
           color: #003663;
         }
-
         .abx-content {
           flex: 1;
           padding: 3rem;
           box-sizing: border-box;
         }
-
         .abx-breadcrumb {
           font-size: 1.4rem;
           color: #003663;
@@ -348,53 +320,49 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-top: 1.5rem;
           margin-bottom: 0.5rem;
         }
-
-      .image-box {
-        box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
-        padding: 0.4rem;
-        display: inline-block;
-        margin-right: 1.2rem;
-        margin-bottom: 1.2rem;
-        box-sizing: border-box;
-        cursor: pointer;
-        border-radius: 20px;
-        background: #fff;
-        transition: transform 0.18s, box-shadow 0.18s;
-      }
-
-      .image-box:hover {
-        transform: scale(1.04);
-        box-shadow: 0 10px 75px rgba(48,56,96,0.32), 0 8px 30px rgba(40,40,60,0.19);
-      }
-
-      .image-box img {
-        width: 350px;
-        height: 250px;
-        object-fit: contain;
-        display: block;
-        border-radius: 25px;
-        margin: 0 auto;
-      }
-
-      .image-box.bottom {
-        display: block;
-        margin-top: 2rem;
-        width: 365px;
-        max-width: 90vw;
-        margin-right: 0;
-        margin-left: 0;
-      }
-
-      .image-label {
-        font-size: 1.2rem;
-        color: #003663;
-        margin-top: 0.6rem;
-        margin-bottom: 0.2rem;
-        text-align: center;
-        width: 100%;
-        display: block;
-      }
+        .image-box {
+          box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
+          padding: 0.4rem;
+          display: inline-block;
+          margin-right: 1.2rem;
+          margin-bottom: 1.2rem;
+          box-sizing: border-box;
+          cursor: pointer;
+          border-radius: 20px;
+          background: #fff;
+          transition: transform 0.18s, box-shadow 0.18s;
+        }
+        .image-box:hover {
+          transform: scale(1.04);
+          box-shadow: 0 10px 75px rgba(48,56,96,0.32), 0 8px 30px rgba(40,40,60,0.19);
+        }
+        .image-box img {
+          width: 350px;
+          height: 250px;
+          object-fit: contain;
+          display: block;
+          border-radius: 25px;
+          margin: 0 auto;
+        }
+        .image-box.bottom {
+          display: block;
+          margin-top: 2rem;
+          width: 365px;
+          max-width: 90vw;
+          margin-right: 0;
+          margin-left: 0;
+        }
+        .image-label {
+          font-size: 1.2rem;
+          color: #003663;
+          margin-top: 0.6rem;
+          margin-bottom: 0.2rem;
+          text-align: center;
+          width: 100%;
+          display: block;
+        }
       `}</style>
+
             <PageLayoutComponent>
                 <Breadcrumb
                     t={t}
@@ -402,6 +370,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                     view={view}
                     handleShowMain={handleShowMain}
                 />
+
                 {view === "trend" ? (
                     <TrendDetails microorganism={selectedOrg} />
                 ) : view === "substance" ? (
@@ -432,6 +401,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 ))}
                             </ul>
                         </aside>
+
                         <section className="abx-content">
                             <div
                                 className="image-box"
@@ -440,6 +410,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 <div className="image-label">{t("Trend")}</div>
                                 <img src="/assets/trend.png" alt="Trend" />
                             </div>
+
                             <div
                                 className="image-box"
                                 onClick={handleSubstanceClick}
@@ -452,6 +423,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     alt="Substans"
                                 />
                             </div>
+
                             <div
                                 className="image-box bottom"
                                 onClick={handleComingSoon}
@@ -462,6 +434,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                         </section>
                     </div>
                 )}
+
                 <Dialog open={comingSoonOpen} onClose={handleCloseComingSoon}>
                     <DialogTitle>{t("ComingSoon")}</DialogTitle>
                     <DialogActions sx={{ justifyContent: "center" }}>

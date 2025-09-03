@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { SerializedStyles } from "@emotion/core";
 import { css } from "@emotion/react";
 import { useTranslation } from "react-i18next";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useHistory } from "react-router-dom";
+import i18next from "i18next";
 import { pageRoute } from "../../infrastructure/router/routes";
 import {
     headerHeight,
@@ -37,7 +38,6 @@ const mainHeaderStyle = (): SerializedStyles => css`
     color: ${onSecondaryColor};
 `;
 
-/* ✅ Restored "ZooNotify" + Language Switcher layout */
 const leftHeaderStyle = css`
     display: flex;
     flex-direction: row;
@@ -45,19 +45,17 @@ const leftHeaderStyle = css`
     padding-left: 1em;
 `;
 
-/* ✅ Fixed 'appNameStyle' */
 const appNameStyle = css`
     font-size: 1.2rem;
     text-decoration: none;
     color: ${onPrimaryColor};
-    margin-right: 1em; /* ✅ Added spacing between text and flags */
+    margin-right: 1em;
 
     &:focus {
         outline: none;
     }
 `;
 
-/* ✅ Desktop menu (unchanged) */
 const rightHeaderStyle = css`
     height: 100%;
     margin-right: 8em;
@@ -65,11 +63,10 @@ const rightHeaderStyle = css`
     align-items: flex-end;
 
     @media (max-width: 768px) {
-        display: none; /* Hide desktop menu on mobile */
+        display: none;
     }
 `;
 
-/* ✅ Mobile Hamburger Button */
 const hamburgerButtonStyle = css`
     display: none;
     background: none;
@@ -84,12 +81,11 @@ const hamburgerButtonStyle = css`
     }
 `;
 
-/* ✅ Mobile Menu Styling */
 const mobileNavStyle = (isOpen: boolean): SerializedStyles => css`
     display: ${isOpen ? "flex" : "none"};
     flex-direction: column;
     align-items: flex-start;
-    background-color: #dbe4eb; /* ✅ Your preferred color */
+    background-color: #dbe4eb;
     color: #000;
     position: absolute;
     top: ${headerHeight}px;
@@ -97,32 +93,30 @@ const mobileNavStyle = (isOpen: boolean): SerializedStyles => css`
     width: 100%;
     padding: 0;
     z-index: 999;
-    border: 2px solid #000; /* ✅ Full outer border */
+    border: 2px solid #000;
 
     @media (min-width: 769px) {
-        display: none; /* Hide mobile menu on desktop */
+        display: none;
     }
 `;
 
-/* ✅ Full border for each mobile menu item */
 const mobileNavLinkStyle = (open: boolean): SerializedStyles => css`
     padding: 0.75em 1em;
     font-size: 1rem;
     text-decoration: none;
     background-color: ${open ? secondaryColor : "transparent"};
     color: #000;
-    border: 1px solid #000; /* ✅ Full border around each item */
+    border: 1px solid #000;
     width: 100%;
 
     &:focus {
         outline: none;
     }
     &:hover {
-        background-color: rgba(0, 0, 0, 0.1); /* ✅ Subtle hover effect */
+        background-color: rgba(0, 0, 0, 0.1);
     }
 `;
 
-/* ✅ Keep Desktop Link Styling */
 const navLinkStyle = (open: boolean): SerializedStyles => css`
     padding: 0.5em 1em;
     font-size: 1rem;
@@ -151,6 +145,7 @@ export function HeaderComponent(): JSX.Element {
     const [antibioticResistanceOpen, setAntibioticResistanceOpen] =
         useState<boolean>(false);
 
+    const history = useHistory();
     const { t } = useTranslation(["Header"]);
     const showLD = process.env.REACT_APP_SHOW_LD === "true";
     const { pathname } = useLocation();
@@ -163,17 +158,36 @@ export function HeaderComponent(): JSX.Element {
         setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
         setLinkedDataOpen(pathname === pageRoute.linkedDataPagePath);
         setMicrobialCountsOpen(pathname === pageRoute.microbialCountsPagePath);
-
         setAntibioticResistanceOpen(
             pathname === pageRoute.antibioticResistancePagePath
         );
-        setIsMenuOpen(false); // Close mobile menu on navigation change
+        setIsMenuOpen(false);
     }, [pathname]);
+
+    // Clicking "AntibioticResistance" should always reset to ?view=main and scroll up.
+    const goToAntibioticResistanceMain = (e?: React.MouseEvent): void => {
+        if (e) e.preventDefault();
+
+        const current = new URLSearchParams(window.location.search);
+        const params = new URLSearchParams();
+        const micro = current.get("microorganism");
+        if (micro) params.set("microorganism", micro);
+
+        params.set("view", "main");
+        params.set("lang", i18next.language);
+        // do not include 's' => clears deep-link state
+
+        setIsMenuOpen(false);
+        history.push(
+            `${pageRoute.antibioticResistancePagePath}?${params.toString()}`
+        );
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     return (
         <header css={headerStyle}>
             <div css={mainHeaderStyle()}>
-                {/* ✅ Left Section: "ZooNotify" + Language Switcher */}
                 <div css={leftHeaderStyle}>
                     <NavLink to={pageRoute.homePagePath} css={appNameStyle}>
                         ZooNotify
@@ -181,7 +195,6 @@ export function HeaderComponent(): JSX.Element {
                     <TranslationButtonsComponent />
                 </div>
 
-                {/* ✅ Desktop Menu (unchanged) */}
                 <div css={rightHeaderStyle}>
                     <NavLink
                         to={pageRoute.infoPagePath}
@@ -203,8 +216,9 @@ export function HeaderComponent(): JSX.Element {
                     </NavLink>
 
                     <NavLink
-                        to={pageRoute.antibioticResistancePagePath}
+                        to={`${pageRoute.antibioticResistancePagePath}?view=main`}
                         css={navLinkStyle(antibioticResistanceOpen)}
+                        onClick={goToAntibioticResistanceMain}
                     >
                         {t("AntibioticResistance")}
                     </NavLink>
@@ -237,7 +251,6 @@ export function HeaderComponent(): JSX.Element {
                     )}
                 </div>
 
-                {/* ✅ Mobile Hamburger Menu */}
                 <button
                     css={hamburgerButtonStyle}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -247,7 +260,6 @@ export function HeaderComponent(): JSX.Element {
                 </button>
             </div>
 
-            {/* ✅ Mobile Menu (Dropdown) */}
             <div css={mobileNavStyle(isMenuOpen)}>
                 <NavLink
                     to={pageRoute.infoPagePath}
@@ -267,12 +279,15 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("Prevalence")}
                 </NavLink>
+
                 <NavLink
-                    to={pageRoute.antibioticResistancePagePath}
+                    to={`${pageRoute.antibioticResistancePagePath}?view=main`}
                     css={mobileNavLinkStyle(antibioticResistanceOpen)}
+                    onClick={goToAntibioticResistanceMain}
                 >
                     {t("AntibioticResistance")}
                 </NavLink>
+
                 <NavLink
                     to={pageRoute.microbialCountsPagePath}
                     css={mobileNavLinkStyle(microbialCountsOpen)}
