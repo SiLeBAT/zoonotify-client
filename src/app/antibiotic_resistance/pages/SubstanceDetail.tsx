@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
     Box,
     Button,
@@ -312,6 +312,7 @@ export const SubstanceDetail: React.FC<{
     onShowMain: () => void;
 }> = ({ microorganism }) => {
     const { t } = useTranslation(["Antibiotic"]);
+    const hydratedFromUrlRef = useRef(false);
 
     const [resistanceRawData, setResistanceRawData] = useState<
         ResistanceApiItem[]
@@ -666,29 +667,29 @@ export const SubstanceDetail: React.FC<{
         });
         setAllSubstances(antimicrobialSubstance);
         setAllYears(samplingYear);
+    }, [resistanceRawData]);
 
-        // --- DEEP LINKING: Set filters from URL
+    // 3B) After options exist, hydrate from URL ONCE and (if needed) auto-search
+    useEffect(() => {
+        if (hydratedFromUrlRef.current) return;
+        if (allSubstances.length === 0 || allYears.length === 0) return;
+
         const { selected: urlSelected, substanceFilter: urlSubstanceFilter } =
-            readStateFromUrlCompressed(
-                antimicrobialSubstance,
-                samplingYear,
-                microorganism
-            );
+            readStateFromUrlCompressed(allSubstances, allYears, microorganism);
 
         setSelected(urlSelected);
         setSubstanceFilter(urlSubstanceFilter);
 
-        // --- AUTO-SEARCH if URL contains any filter or view=substance
         if (
             urlSubstanceFilter.length > 0 ||
             Object.values(urlSelected).some((arr) => arr.length > 0) ||
             window.location.search.includes("view=substance")
         ) {
-            setTimeout(() => {
-                handleSearch(urlSelected, urlSubstanceFilter); // <--- Now handleSearch is defined above!
-            }, 0);
+            handleSearch(urlSelected, urlSubstanceFilter);
         }
-    }, [resistanceRawData]);
+
+        hydratedFromUrlRef.current = true;
+    }, [allSubstances, allYears, microorganism, handleSearch]);
 
     useEffect(() => {
         let cancelled = false;
@@ -1031,6 +1032,7 @@ export const SubstanceDetail: React.FC<{
 
     // --- When filters change, but after first load, keep URL up to date (but don't auto search again!)
     useEffect(() => {
+        if (!hydratedFromUrlRef.current) return; // <-- prevents clobbering the incoming URL on first mount
         updateSubstanceFilterUrlCompressed(
             microorganism,
             selected,
