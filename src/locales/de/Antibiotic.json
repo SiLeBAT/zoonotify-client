@@ -3,14 +3,15 @@
   "Trend": "Trendgraph",
   "Substans": "Substanzgraph",
   "Multi": " Mehrfachreisistenzgraph",
-  "More Info on Sampling Year": "Mehr Informationen zu Probenahmejahr",
+  "More Info on Sampling Year": "Mehr Informationen zu Erhebungsjahr",
   "More Info on Antibiotic Substances": "Mehr Informationen zu Antimikrobielle Substanz",
   "More Info on Species": "Mehr Informationen zu Arten",
   "More Info on Super Categories": "Mehr Informationen zu Oberkategorie Probenursprungn",
   "More Info on Sample Origins": "Mehr Informationen zu Probenursprung",
-  "More Info on Sampling Stages": "Mehr Informationen Probenahmestelle",
+  "More Info on Sampling Stages": "Mehr Informationen zu Probenahmestelle",
   "More Info on Matrix Groups": "Mehr Informationen zu Matrixgruppe",
   "More Info on Matrices": "Mehr Informationen zu Matrizen",
+  "More Info on Combinations": "Mehr Informationen zu Kombinationen",
 
   "ANTIBIOTIC_SUBSTANCE": "Antimikrobielle Substanz",
   "Download_Chart": "DIAGRAMM HERUNTERLADEN",
@@ -41,6 +42,6 @@
   "combinations": "Kombinationen",
   "combination_limit_title": "Kombinationslimit",
   "combination_limit_message": "Es können maximal 4 Kombinationen für die Darstellung im Graph ausgewählt werden.",
-  "More Info on Combinations": "Mehr Informationen zu Kombination",
+
   "SEARCH": "Suche"
 }

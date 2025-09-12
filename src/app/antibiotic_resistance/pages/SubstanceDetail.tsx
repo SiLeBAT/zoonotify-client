@@ -336,12 +336,18 @@ export const SubstanceDetail: React.FC<{
         ResistanceApiItem[]
     >([]);
     const [showResults, setShowResults] = useState(false);
+
     const [availableCombinations, setAvailableCombinations] = useState<
         string[]
     >([]);
     const [selectedCombinations, setSelectedCombinations] = useState<string[]>(
         []
     );
+
+    // NEW: N per combination (for the selected year & current filters)
+    const [nPerCombination, setNPerCombination] = useState<
+        Record<string, number | undefined>
+    >({});
 
     const [maxComboDialogOpen, setMaxComboDialogOpen] = useState(false);
 
@@ -560,6 +566,7 @@ export const SubstanceDetail: React.FC<{
         if (!filteredFullData.length || !chartYear) {
             setAvailableCombinations([]);
             setSelectedCombinations([]);
+            setNPerCombination({});
             return;
         }
         // Only use data for the selected year
@@ -572,6 +579,16 @@ export const SubstanceDetail: React.FC<{
             new Set(yearData.map((d) => getGroupKey(d, microorganism)))
         );
         setAvailableCombinations(groupKeys);
+
+        // NEW: compute N per combination (same logic as legend — take first match)
+        const nMap: Record<string, number | undefined> = {};
+        groupKeys.forEach((gk) => {
+            const row = yearData.find(
+                (d) => getGroupKey(d, microorganism) === gk
+            );
+            nMap[gk] = row?.anzahlGetesteterIsolate ?? undefined;
+        });
+        setNPerCombination(nMap);
 
         // Always auto-select up to 4 valid combinations for this year
         setSelectedCombinations((prev) => {
@@ -1035,6 +1052,37 @@ export const SubstanceDetail: React.FC<{
         );
     }, [selected, substanceFilter, microorganism]);
 
+    // Helper: render combination label (italicize species for C./Enterococcus) + N
+    const renderCombinationMenuPrimary = (
+        comboKey: string
+    ): React.ReactNode => {
+        const N = nPerCombination[comboKey];
+        if (shouldShowSpeciesFilter(microorganism)) {
+            const parts = comboKey.split(" | ");
+            const species = parts[0];
+            const rest = parts.slice(1).join(" | ");
+            return (
+                <span>
+                    <span style={{ fontStyle: "italic" }}>{species}</span>
+                    {rest ? ` | ${rest}` : ""}
+                    <span style={{ color: "#888", fontWeight: 400 }}>
+                        {" "}
+                        (N={N ?? "?"})
+                    </span>
+                </span>
+            );
+        }
+        return (
+            <span>
+                {comboKey}
+                <span style={{ color: "#888", fontWeight: 400 }}>
+                    {" "}
+                    (N={N ?? "?"})
+                </span>
+            </span>
+        );
+    };
+
     return (
         <>
             <style>{menuItemTextStyle}</style>
@@ -1227,7 +1275,11 @@ export const SubstanceDetail: React.FC<{
                                                         key
                                                     )}
                                                 />
-                                                <ListItemText primary={key} />
+                                                <ListItemText
+                                                    primary={renderCombinationMenuPrimary(
+                                                        key
+                                                    )}
+                                                />
                                             </MenuItem>
                                         ))
                                     )}

@@ -1,13 +1,15 @@
 {
   "AntibioticResistance": "Antibiotic Resistance",
-  "More Info on Sampling Year": "More Info on Sampling Year",
-  "More Info on Antibiotic Substances": "More Info on Antibiotic Substances",
-  "More Info on Species": "More Info on Species",
-  "More Info on Super Categories": "More Info on  Superordinate Sample Origins",
-  "More Info on Sample Origins": "More Info on Sample Origins",
-  "More Info on Sampling Stages": "More Info on Sampling Stages",
-  "More Info on Matrix Groups": "More Info on Matrix Groups",
-  "More Info on Matrices": "More Info on Matrices",
+  "More Info on Sampling Year": "More Information on Sampling Year",
+  "More Info on Antibiotic Substances": "More Information on Antimicrobial Substance",
+  "More Info on Species": "More Information on Species",
+  "More Info on Super Categories": "More Information on  Superordinate Sample Origin",
+  "More Info on Sample Origins": "More Information on Sample Origin",
+  "More Info on Sampling Stages": "More Information on Sampling Stage",
+  "More Info on Matrix Groups": "More Information on Matrix Group",
+  "More Info on Combinations": "More Information on combinations",
+
+  "More Info on Matrices": "More Info on Matrix",
 
   "ANTIBIOTIC_SUBSTANCE": "Antimicrobial substance",
   "SPECIES": "Species",
@@ -42,7 +44,6 @@
   "combinations": "Combinations",
   "combination_limit_title": "Combination Limit",
   "combination_limit_message": "You can choose a maximum of 4 combinations to be displayed in the graph.",
-  "More Info on Combinations": "More information about combination",
 
   "SAMPLING_YEAR": "Sampling year"
 }
