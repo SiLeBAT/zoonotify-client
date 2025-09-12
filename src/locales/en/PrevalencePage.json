@@ -27,6 +27,7 @@
     "STEC": "STEC",
     "SALMONELLA_SPP": "Salmonella spp.",
     "VIBRIO_SPP": "Vibrio spp.",
+    "Share_Link": "Share Link",
     "YERSINIA_ENTEROCOLITICA": "Yersinia enterocolitica"
   },
   "DOWNLOAD_ZIP_FILE": "Data download",
@@ -45,7 +46,7 @@
 
   "PARAMETER": "Parameter",
   "TABLE_DETAIL": "Parameter",
-
+  "Share_Link": "Share Link",
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Superordinate sample origin",
   "RESET_FILTERS": "Reset Filters",
   "PREVALENCE_TABLE": "Prevalence Table",

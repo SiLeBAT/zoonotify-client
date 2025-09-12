@@ -1,4 +1,3 @@
-import i18next from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
@@ -24,7 +23,6 @@ interface EvaluationInformationItem {
     content: string;
     title?: string;
 }
-
 interface EvaluationInformationAPIResponse {
     data: EvaluationInformationItem;
     meta: unknown;
@@ -57,13 +55,13 @@ const useEvaluationSideComponent = (): {
         howToHeading: string;
     };
 } => {
-    const { t } = useTranslation(["ExplanationPage"]);
+    const { t, i18n } = useTranslation(["ExplanationPage"]);
     const evaluationContext = useEvaluationData();
-    const selectedFilters = evaluationContext.selectedFilters; // <-- read from context
+    const selectedFilters = evaluationContext.selectedFilters;
 
     const [howtoContent, setHowtoContent] = useState("");
 
-    // Build selection items from constants
+    // Build selection items from constants (values are stable tokens, labels are translated)
     const availableOptions: SelectionItemCollection = {
         matrix: toSelectionItem(matrix, t),
         productionType: toSelectionItem(productionType, t),
@@ -99,11 +97,13 @@ const useEvaluationSideComponent = (): {
         },
     }));
 
-    // 2) Fetch the single-type "Evaluation Information" in "flat" shape
+    // 2) Fetch the single-type "Evaluation Information" in the current language
     useEffect(() => {
-        const url = `${EVALUATION_INFO}?locale=${i18next.language}`;
+        let isActive = true;
+        const url = `${EVALUATION_INFO}?locale=${i18n.language}`;
         callApiService<EvaluationInformationAPIResponse>(url)
             .then((response) => {
+                if (!isActive) return response;
                 if (response.data) {
                     const item = response.data.data;
                     setHowtoContent(item.content);
@@ -114,7 +114,10 @@ const useEvaluationSideComponent = (): {
                 console.error("Error fetching 'How To' content", error);
                 throw error;
             });
-    }, [i18next.language]);
+        return () => {
+            isActive = false;
+        };
+    }, [i18n.language]);
 
     return {
         model: {

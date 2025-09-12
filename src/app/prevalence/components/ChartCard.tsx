@@ -1,8 +1,9 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 // eslint-disable-next-line import/named
 import { Chart as ChartJS, TooltipItem, Plugin } from "chart.js";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
 
 import {
     errorBarTooltipPlugin,
@@ -13,7 +14,6 @@ import { useTranslation } from "react-i18next";
 import { ChartDataPoint } from "./types";
 import { formatMicroorganismNameArray, WordObject } from "./utils";
 
-// Utility function to generate a stable random color
 const generateColorFromKey = (key: string): string => {
     let hash = 0;
     for (let i = 0; i < key.length; i++) {
@@ -23,39 +23,32 @@ const generateColorFromKey = (key: string): string => {
     return color;
 };
 
-// Custom plugin to render the formatted microorganism name in the chart canvas
 const customTitlePlugin = (microName: string | null): Plugin => ({
     id: "customTitle",
     beforeDraw(chart: ChartJS) {
         const { ctx, chartArea, width } = chart;
-
         if (!microName) return;
-
         const formattedWords: WordObject[] =
             formatMicroorganismNameArray(microName);
-        const titleYPosition = chartArea.top - 60; // Adjust Y position for the title
-
+        const titleYPosition = chartArea.top - 60;
         ctx.save();
-        ctx.textAlign = "left"; // Render left-to-right to position words precisely
+        ctx.textAlign = "left";
         ctx.fillStyle = "black";
-
         let xPosition =
             (width -
                 formattedWords.reduce((acc, { text, italic }) => {
                     ctx.font = italic
                         ? "italic bold 21px Arial"
                         : "bold 21px Arial";
-                    return acc + ctx.measureText(text).width + 1; // Add minimal spacing
+                    return acc + ctx.measureText(text).width + 1;
                 }, 0)) /
-            2; // Center-align the whole text block
+            2;
 
-        // Render each word with the appropriate style
         formattedWords.forEach(({ text, italic }) => {
             ctx.font = italic ? "italic bold 21px Arial" : "bold 21px Arial";
             ctx.fillText(text, xPosition, titleYPosition);
-            xPosition += ctx.measureText(text).width + 1; // Add minimal spacing between words
+            xPosition += ctx.measureText(text).width + 1;
         });
-
         ctx.restore();
     },
 });
@@ -85,8 +78,31 @@ const ChartCard: React.FC<ChartCardProps> = ({
     prevalenceUpdateDate,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
+    const [copied, setCopied] = React.useState(false);
 
-    // Generate a stable color based on the chartKey
+    const handleShareLink = async (): Promise<void> => {
+        const url = window.location.href;
+        try {
+            await navigator.clipboard.writeText(url);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1800);
+        } catch {
+            const ta = document.createElement("textarea");
+            ta.value = url;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "absolute";
+            ta.style.left = "-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand("copy");
+            } catch {}
+            document.body.removeChild(ta);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1800);
+        }
+    };
+
     const chartColor = generateColorFromKey(chartKey);
 
     return (
@@ -125,12 +141,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                     indexAxis: "y",
                     maintainAspectRatio: false,
                     layout: {
-                        padding: {
-                            top: 40, // Extra space for the custom title
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                        },
+                        padding: { top: 40, bottom: 0, left: 0, right: 0 },
                     },
                     scales: {
                         x: {
@@ -138,64 +149,39 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 display: true,
                                 text: t("Prevalence %"),
                                 color: "black",
-                                font: {
-                                    size: 17,
-                                    weight: "bold",
-                                },
+                                font: { size: 17, weight: "bold" },
                             },
                             beginAtZero: true,
                             max: xAxisMax,
-                            ticks: {
-                                color: "black",
-                                font: {
-                                    size: 14,
-                                },
-                            },
+                            ticks: { color: "black", font: { size: 14 } },
                         },
                         y: {
                             title: {
                                 display: true,
                                 text: t("Year"),
                                 color: "black",
-                                font: {
-                                    size: 17,
-                                    weight: "bold",
-                                },
+                                font: { size: 17, weight: "bold" },
                             },
                             reverse: false,
                             ticks: {
                                 color: "black",
-                                font: {
-                                    size: 13,
-                                },
+                                font: { size: 13 },
                                 callback: function (_, index) {
                                     return yearOptions[index];
                                 },
                             },
                         },
                     },
-
                     plugins: {
-                        title: {
-                            display: false,
-                        },
+                        title: { display: false },
                         legend: {
-                            labels: {
-                                color: "black",
-                                font: {
-                                    size: 14,
-                                },
-                            },
+                            labels: { color: "black", font: { size: 14 } },
                             position: "top",
                         },
                         tooltip: {
                             backgroundColor: "rgba(0, 0, 0, 1)",
-                            titleFont: {
-                                size: 14,
-                            },
-                            bodyFont: {
-                                size: 12,
-                            },
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 },
                             displayColors: true,
                             borderColor: "#fff",
                             borderWidth: 2,
@@ -210,7 +196,6 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                     const data = chartData[year] || {};
                                     const rawData =
                                         context.raw as ChartDataPoint;
-
                                     return [
                                         `${t("Prevalence")}: ${rawData.x}%`,
                                         `${t("CI_min")}: ${data.ciMin}`,
@@ -225,17 +210,14 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 },
                             },
                         },
-
-                        customTexts: {
-                            generatedOn: t("Generated on"),
-                        },
+                        customTexts: { generatedOn: t("Generated on") },
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } as any,
                     animation: false,
                 }}
                 plugins={[
                     errorBarTooltipPlugin,
-                    customTitlePlugin(currentMicroorganism), // Render title inside the canvas
+                    customTitlePlugin(currentMicroorganism),
                     {
                         id: "customErrorBars",
                         afterDraw: (chart: ChartJS) => drawErrorBars(chart),
@@ -249,20 +231,42 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 sx={{
                     display: "flex",
                     justifyContent: "center",
+                    gap: 2,
                     marginTop: 2,
+                    flexWrap: "wrap",
                 }}
             >
                 <Button
                     variant="contained"
                     size="medium"
                     onClick={() => downloadChart(chartRef, chartKey)}
-                    sx={{
-                        textTransform: "none",
-                    }}
+                    sx={{ textTransform: "none" }}
                 >
                     {t("Download_Chart")}
                 </Button>
+
+                <Button
+                    variant="contained"
+                    size="medium"
+                    onClick={handleShareLink}
+                    startIcon={<InsertLinkIcon />}
+                    sx={{ textTransform: "none" }}
+                >
+                    {t("Share_Link")}
+                </Button>
             </Box>
+
+            {copied && (
+                <Typography
+                    color="success.main"
+                    textAlign="center"
+                    mt={1}
+                    fontWeight="bold"
+                >
+                    {t("Link copied to clipboard!") ||
+                        "Link copied to clipboard!"}
+                </Typography>
+            )}
         </Box>
     );
 };

@@ -724,8 +724,6 @@ export const SubstanceDetail: React.FC<{
         };
     }, [i18next.language]);
 
-    // Filtering logic (already above!)
-
     // RESET
     const resetFilters = (): void => {
         setSelected({
@@ -769,7 +767,7 @@ export const SubstanceDetail: React.FC<{
     };
     const handleClose = (): void => setInfoDialogOpen(false);
 
-    // Multi-select substance filter at the TOP
+    // Multi-select substance filter (now LAST in the top controls)
     function renderSubstanceFilter(): JSX.Element {
         const substances = allSubstances;
         const allSelected =
@@ -789,11 +787,7 @@ export const SubstanceDetail: React.FC<{
                 newSubstanceFilter = v;
             }
 
-            // 1) update state
             setSubstanceFilter(newSubstanceFilter);
-
-            // 2) immediately re-run the search with the new value
-            //    (pass current `selected` plus the new substance array)
             handleSearch(selected, newSubstanceFilter);
         };
 
@@ -802,7 +796,7 @@ export const SubstanceDetail: React.FC<{
                 direction="row"
                 spacing={1}
                 alignItems="center"
-                sx={{ mb: 3 }}
+                sx={{ mb: 0 }}
             >
                 <FormControl sx={{ width: SELECT_WIDTH }}>
                     <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
@@ -872,6 +866,7 @@ export const SubstanceDetail: React.FC<{
             </Stack>
         );
     }
+
     // Multi-select with Select All for sidebar (includes year filter!)
     function renderSelectWithSelectAll(
         key: FilterKey,
@@ -993,7 +988,7 @@ export const SubstanceDetail: React.FC<{
         new Set(filteredFullData.map((d) => d.samplingYear))
     ).sort((a, b) => b - a);
 
-    // Chart year dropdown component (shown only if there are results)
+    // Chart year dropdown (now FIRST in the top controls)
     function renderChartYearDropdown(): JSX.Element | null {
         if (!availableYears.length) return null;
         return (
@@ -1001,7 +996,7 @@ export const SubstanceDetail: React.FC<{
                 direction="row"
                 alignItems="center"
                 spacing={1}
-                sx={{ mb: 2 }}
+                sx={{ mb: 0 }}
             >
                 <FormControl sx={{ minWidth: 180 }}>
                     <InputLabel>{t("SAMPLING_YEAR")}</InputLabel>
@@ -1030,9 +1025,9 @@ export const SubstanceDetail: React.FC<{
         );
     }
 
-    // --- When filters change, but after first load, keep URL up to date (but don't auto search again!)
+    // --- Keep URL up to date after hydration
     useEffect(() => {
-        if (!hydratedFromUrlRef.current) return; // <-- prevents clobbering the incoming URL on first mount
+        if (!hydratedFromUrlRef.current) return;
         updateSubstanceFilterUrlCompressed(
             microorganism,
             selected,
@@ -1152,106 +1147,115 @@ export const SubstanceDetail: React.FC<{
                         </Box>
                     </Box>
                 </Paper>
+
                 {/* MAIN CONTENT */}
                 <Box flex={1} ml="370px" px={4} py={3}>
-                    {renderSubstanceFilter()}
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                        alignItems="center"
-                        sx={{ mb: 2 }}
-                    >
-                        <FormControl sx={{ width: SELECT_WIDTH }}>
-                            <InputLabel>{t("combinations")}</InputLabel>
-                            <Select
-                                multiple
-                                value={selectedCombinations}
-                                onChange={(e) => {
-                                    const v = e.target.value as string[];
-                                    if (v.includes("all")) {
-                                        setSelectedCombinations(
-                                            selectedCombinations.length ===
-                                                availableCombinations.length
-                                                ? []
-                                                : availableCombinations.slice(
-                                                      0,
-                                                      4
-                                                  )
-                                        );
-                                    } else if (v.length > 4) {
-                                        setMaxComboDialogOpen(true);
-                                    } else {
-                                        setSelectedCombinations(v);
+                    {/* --- TOP CONTROLS ORDERED: 1) YEAR, 2) COMBINATIONS, 3) SUBSTANCE --- */}
+                    <Stack spacing={2} sx={{ mb: 2 }}>
+                        {renderChartYearDropdown()}
+
+                        <Stack
+                            direction="row"
+                            spacing={1}
+                            alignItems="center"
+                            sx={{ mb: 0 }}
+                        >
+                            <FormControl sx={{ width: SELECT_WIDTH }}>
+                                <InputLabel>{t("combinations")}</InputLabel>
+                                <Select
+                                    multiple
+                                    value={selectedCombinations}
+                                    onChange={(e) => {
+                                        const v = e.target.value as string[];
+                                        if (v.includes("all")) {
+                                            setSelectedCombinations(
+                                                selectedCombinations.length ===
+                                                    availableCombinations.length
+                                                    ? []
+                                                    : availableCombinations.slice(
+                                                          0,
+                                                          4
+                                                      )
+                                            );
+                                        } else if (v.length > 4) {
+                                            setMaxComboDialogOpen(true);
+                                        } else {
+                                            setSelectedCombinations(v);
+                                        }
+                                    }}
+                                    renderValue={(selectedValues) =>
+                                        (selectedValues as string[]).join(", ")
                                     }
-                                }}
-                                renderValue={(selectedValues) =>
-                                    (selectedValues as string[]).join(", ")
-                                }
-                                MenuProps={fixedMenuProps}
-                                label={t("combinations")}
-                                sx={selectSx}
-                            >
-                                <MenuItem value="all">
-                                    <Checkbox
-                                        checked={
-                                            selectedCombinations.length ===
-                                            availableCombinations.length
-                                        }
-                                        indeterminate={
-                                            selectedCombinations.length > 0 &&
-                                            selectedCombinations.length <
+                                    MenuProps={fixedMenuProps}
+                                    label={t("combinations")}
+                                    sx={selectSx}
+                                >
+                                    <MenuItem value="all">
+                                        <Checkbox
+                                            checked={
+                                                selectedCombinations.length ===
                                                 availableCombinations.length
-                                        }
-                                    />
-                                    <ListItemText
-                                        primary={
-                                            selectedCombinations.length ===
-                                            availableCombinations.length
-                                                ? t("DESELECT_ALL") ||
-                                                  "Deselect All"
-                                                : t("SELECT_ALL") ||
-                                                  "Select All"
-                                        }
-                                    />
-                                </MenuItem>
-
-                                {availableCombinations.length === 0 ? (
-                                    <MenuItem disabled value="">
-                                        {t("No options")}
+                                            }
+                                            indeterminate={
+                                                selectedCombinations.length >
+                                                    0 &&
+                                                selectedCombinations.length <
+                                                    availableCombinations.length
+                                            }
+                                        />
+                                        <ListItemText
+                                            primary={
+                                                selectedCombinations.length ===
+                                                availableCombinations.length
+                                                    ? t("DESELECT_ALL") ||
+                                                      "Deselect All"
+                                                    : t("SELECT_ALL") ||
+                                                      "Select All"
+                                            }
+                                        />
                                     </MenuItem>
-                                ) : (
-                                    availableCombinations.map((key) => (
-                                        <MenuItem key={key} value={key}>
-                                            <Checkbox
-                                                checked={selectedCombinations.includes(
-                                                    key
-                                                )}
-                                            />
-                                            <ListItemText primary={key} />
-                                        </MenuItem>
-                                    ))
-                                )}
-                            </Select>
-                        </FormControl>
 
-                        {/* Info button for combinations */}
-                        <Tooltip title={t("More Info on Combinations")}>
-                            <IconButton
-                                size="small"
-                                onClick={() => handleInfoClick("combinations")}
-                                sx={{ ml: 0.5 }}
-                            >
-                                <InfoIcon fontSize="small" />
-                            </IconButton>
-                        </Tooltip>
+                                    {availableCombinations.length === 0 ? (
+                                        <MenuItem disabled value="">
+                                            {t("No options")}
+                                        </MenuItem>
+                                    ) : (
+                                        availableCombinations.map((key) => (
+                                            <MenuItem key={key} value={key}>
+                                                <Checkbox
+                                                    checked={selectedCombinations.includes(
+                                                        key
+                                                    )}
+                                                />
+                                                <ListItemText primary={key} />
+                                            </MenuItem>
+                                        ))
+                                    )}
+                                </Select>
+                            </FormControl>
+
+                            <Tooltip title={t("More Info on Combinations")}>
+                                <IconButton
+                                    size="small"
+                                    onClick={() =>
+                                        handleInfoClick("combinations")
+                                    }
+                                    sx={{ ml: 0.5 }}
+                                >
+                                    <InfoIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                        </Stack>
+
+                        {renderSubstanceFilter()}
                     </Stack>
+                    {/* --- END TOP CONTROLS --- */}
 
                     {/* Show results if available */}
                     {showResults && (
                         <Box mt={2} mb={2}>
                             {filteredFullData.length > 0 && chartYear ? (
                                 <>
-                                    {renderChartYearDropdown()}
                                     <SubstanceChart
                                         data={filteredFullData}
                                         microorganism={microorganism}
