@@ -151,7 +151,9 @@ const menuItemTextStyle = `.menu-item-text-wrap {
 }`;
 
 // ======== URL STATE HELPERS (for deep linking) ========
-// ---- Short URL helpers (add this block) ----
+// We compress state into ?s=<compressed>
+// Now we also include chart year (y) and combinations (c) at top level.
+
 type ShortKey =
     | "y" // samplingYear
     | "a" // antimicrobialSubstance
@@ -181,7 +183,9 @@ function encodeStateToParam(
     microorganism: string,
     selected: Record<FilterKey, string[]>,
     substanceFilter: string[],
-    lang: string
+    lang: string,
+    chartYear?: number,
+    combinations?: string[]
 ): string {
     const f: Partial<Record<ShortKey, string[]>> = {};
     (Object.keys(selected) as FilterKey[]).forEach((k) => {
@@ -192,7 +196,18 @@ function encodeStateToParam(
         f[LONG_TO_SHORT.antimicrobialSubstance] = substanceFilter;
     }
 
-    const payload = { m: microorganism, v: "substance", l: lang, f };
+    const payload: {
+        m: string;
+        v: "substance";
+        l: string;
+        f: Partial<Record<ShortKey, string[]>>;
+        y?: number; // chartYear
+        c?: string[]; // combinations
+    } = { m: microorganism, v: "substance", l: lang, f };
+
+    if (typeof chartYear === "number") payload.y = chartYear;
+    if (combinations && combinations.length) payload.c = combinations;
+
     return LZString.compressToEncodedURIComponent(JSON.stringify(payload));
 }
 
@@ -201,15 +216,19 @@ function decodeStateFromParam(sParam: string | null): {
     lang?: string;
     selected: Record<FilterKey, string[]>;
     substanceFilter: string[];
+    chartYear?: number;
+    combinations: string[];
 } | null {
     if (!sParam) return null;
     try {
         const json = LZString.decompressFromEncodedURIComponent(sParam);
         if (!json) return null;
-        const { m, l, f } = JSON.parse(json) as {
+        const { m, l, f, y, c } = JSON.parse(json) as {
             m?: string;
             l?: string;
             f?: Partial<Record<ShortKey, string[]>>;
+            y?: number;
+            c?: string[];
         };
         const selected: Record<FilterKey, string[]> = { ...emptyFilterState };
         (Object.keys(f || {}) as ShortKey[]).forEach((sk) => {
@@ -218,7 +237,16 @@ function decodeStateFromParam(sParam: string | null): {
             if (longKey) selected[longKey] = (f as any)[sk] || [];
         });
         const substanceFilter = selected.antimicrobialSubstance || [];
-        return { microorganism: m, lang: l, selected, substanceFilter };
+        const chartYear = typeof y === "number" ? y : undefined;
+        const combinations = Array.isArray(c) ? c : [];
+        return {
+            microorganism: m,
+            lang: l,
+            selected,
+            substanceFilter,
+            chartYear,
+            combinations,
+        };
     } catch {
         return null;
     }
@@ -228,13 +256,17 @@ function decodeStateFromParam(sParam: string | null): {
 function updateSubstanceFilterUrlCompressed(
     microorganism: string,
     selected: Record<FilterKey, string[]>,
-    substanceFilter: string[]
+    substanceFilter: string[],
+    chartYear?: number,
+    combinations?: string[]
 ): void {
     const s = encodeStateToParam(
         microorganism,
         selected,
         substanceFilter,
-        i18next.language
+        i18next.language,
+        chartYear,
+        combinations
     );
     window.history.replaceState(null, "", `?s=${s}`);
 }
@@ -244,7 +276,12 @@ function readStateFromUrlCompressed(
     allSubstances: FilterOption[],
     allYears: FilterOption[],
     microorganism: string
-): { selected: Record<FilterKey, string[]>; substanceFilter: string[] } {
+): {
+    selected: Record<FilterKey, string[]>;
+    substanceFilter: string[];
+    chartYear?: number;
+    combinations: string[];
+} {
     const params = new URLSearchParams(window.location.search);
     const decoded = decodeStateFromParam(params.get("s"));
     if (decoded) {
@@ -255,7 +292,12 @@ function readStateFromUrlCompressed(
         const sf = decoded.substanceFilter.length
             ? decoded.substanceFilter
             : allSubstances.map((s) => s.documentId);
-        return { selected, substanceFilter: sf };
+        return {
+            selected,
+            substanceFilter: sf,
+            chartYear: decoded.chartYear,
+            combinations: decoded.combinations || [],
+        };
     }
 
     // Legacy reader (your old behavior)
@@ -272,7 +314,7 @@ function readStateFromUrlCompressed(
         legacySubstanceParam?.split(",").filter(Boolean) ??
         allSubstances.map((s) => s.documentId);
 
-    // Immediately rewrite to compressed for cleanliness
+    // Immediately rewrite to compressed for cleanliness (no year/combos in legacy)
     const sNew = encodeStateToParam(
         microorganism,
         legacySelected,
@@ -281,7 +323,12 @@ function readStateFromUrlCompressed(
     );
     window.history.replaceState(null, "", `?s=${sNew}`);
 
-    return { selected: legacySelected, substanceFilter: legacySubstanceFilter };
+    return {
+        selected: legacySelected,
+        substanceFilter: legacySubstanceFilter,
+        chartYear: undefined,
+        combinations: [],
+    };
 }
 
 const SELECT_WIDTH = 760;
@@ -344,7 +391,7 @@ export const SubstanceDetail: React.FC<{
         []
     );
 
-    // NEW: N per combination (for the selected year & current filters)
+    // N per combination (for the selected year & current filters)
     const [nPerCombination, setNPerCombination] = useState<
         Record<string, number | undefined>
     >({});
@@ -447,14 +494,12 @@ export const SubstanceDetail: React.FC<{
         [resistanceRawData, selected, substanceFilter]
     );
 
-    // === Cascading option recomputation (like your PrevalenceDataProvider) ===
+    // === Cascading option recomputation
     useEffect(() => {
-        // 1) pick the data source
         const dataToCompute: ResistanceApiItem[] = showResults
             ? filteredFullData
             : resistanceRawData;
 
-        // 2) helpers
         const keys: FilterKey[] = [
             "samplingYear",
             "specie",
@@ -500,7 +545,6 @@ export const SubstanceDetail: React.FC<{
                 );
         };
 
-        // 3) recompute options
         const next: Record<FilterKey, FilterOption[]> = {
             samplingYear: computeOptions("samplingYear"),
             specie: computeOptions("specie"),
@@ -516,14 +560,12 @@ export const SubstanceDetail: React.FC<{
 
         setFilterOptions(next);
 
-        // 4) prune selected values ONLY IF they changed
         type SelectedState = Record<FilterKey, string[]>;
         const arrEq = (a: string[], b: string[]): boolean =>
             a.length === b.length && a.every((v, i) => v === b[i]);
 
         const prune = (key: FilterKey, current: string[]): string[] => {
             const valid = new Set((next[key] ?? []).map((o) => o.documentId));
-            // keep original order while filtering
             return current.filter((v) => valid.has(v));
         };
 
@@ -537,10 +579,9 @@ export const SubstanceDetail: React.FC<{
                     changed = true;
                 }
             }
-            return changed ? upd : prev; // <- critical: return prev to avoid re-run when unchanged
+            return changed ? upd : prev;
         });
 
-        // 5) (optional) prune the top substance multi-select, but guard it too
         setSubstanceFilter((prev: string[]): string[] => {
             const valid = new Set(
                 next.antimicrobialSubstance.map((o) => o.documentId)
@@ -550,18 +591,41 @@ export const SubstanceDetail: React.FC<{
         });
     }, [selected, showResults, resistanceRawData, filteredFullData]);
 
-    // ----------- MOVED handleSearch UP -----------
-    const handleSearch = (sel = selected, sub = substanceFilter): void => {
+    // ----------- handleSearch updates year + URL -----------
+    const handleSearch = (
+        sel = selected,
+        sub = substanceFilter,
+        overrideYear?: number
+    ): void => {
         const filtered = filterDataWithSelected(sel, sub);
         setFilteredFullData(filtered);
         setShowResults(true);
+
         const years = Array.from(
             new Set(filtered.map((d) => d.samplingYear))
         ).sort((a, b) => b - a);
-        setChartYear(years.length > 0 ? years[0] : undefined);
-        updateSubstanceFilterUrlCompressed(microorganism, sel, sub);
+
+        const nextYear =
+            typeof overrideYear === "number"
+                ? overrideYear
+                : years.length > 0
+                ? years[0]
+                : undefined;
+
+        setChartYear(nextYear);
+
+        // combinations will be refined by the effect below; keep current for now
+        updateSubstanceFilterUrlCompressed(
+            microorganism,
+            sel,
+            sub,
+            nextYear,
+            selectedCombinations
+        );
     };
     // ---------------------------------------------
+
+    // Recompute combinations + N whenever data/year changes
     useEffect(() => {
         if (!filteredFullData.length || !chartYear) {
             setAvailableCombinations([]);
@@ -569,18 +633,16 @@ export const SubstanceDetail: React.FC<{
             setNPerCombination({});
             return;
         }
-        // Only use data for the selected year
+
         const yearData = filteredFullData.filter(
             (d) => d.samplingYear === chartYear
         );
 
-        // Compute group keys for current year only
         const groupKeys = Array.from(
             new Set(yearData.map((d) => getGroupKey(d, microorganism)))
         );
         setAvailableCombinations(groupKeys);
 
-        // NEW: compute N per combination (same logic as legend — take first match)
         const nMap: Record<string, number | undefined> = {};
         groupKeys.forEach((gk) => {
             const row = yearData.find(
@@ -590,22 +652,14 @@ export const SubstanceDetail: React.FC<{
         });
         setNPerCombination(nMap);
 
-        // Always auto-select up to 4 valid combinations for this year
         setSelectedCombinations((prev) => {
-            const newSelected = prev.filter((g) => groupKeys.includes(g));
-            if (newSelected.length < 4) {
-                for (
-                    let i = 0;
-                    i < groupKeys.length && newSelected.length < 4;
-                    ++i
-                ) {
-                    const gk = groupKeys[i];
-                    if (!newSelected.includes(gk)) {
-                        newSelected.push(gk);
-                    }
-                }
+            const pruned = prev.filter((g) => groupKeys.includes(g));
+            if (pruned.length >= 1) return pruned; // respect deep-linked choices if valid
+            const auto: string[] = [];
+            for (let i = 0; i < groupKeys.length && auto.length < 4; i++) {
+                auto.push(groupKeys[i]);
             }
-            return newSelected;
+            return auto;
         });
     }, [filteredFullData, microorganism, chartYear]);
 
@@ -639,9 +693,8 @@ export const SubstanceDetail: React.FC<{
         }
     }, [i18next.language, microorganism]);
 
-    // Set options for all filters (use documentId as key for all) & read URL
+    // Set options & years from fetched data
     useEffect(() => {
-        // Years (as documentId = value)
         const years = Array.from(
             new Set(
                 resistanceRawData
@@ -686,23 +739,31 @@ export const SubstanceDetail: React.FC<{
         setAllYears(samplingYear);
     }, [resistanceRawData]);
 
-    // 3B) After options exist, hydrate from URL ONCE and (if needed) auto-search
+    // Hydrate from URL ONCE (now includes year & combinations)
     useEffect(() => {
         if (hydratedFromUrlRef.current) return;
         if (allSubstances.length === 0 || allYears.length === 0) return;
 
-        const { selected: urlSelected, substanceFilter: urlSubstanceFilter } =
-            readStateFromUrlCompressed(allSubstances, allYears, microorganism);
+        const {
+            selected: urlSelected,
+            substanceFilter: urlSubstanceFilter,
+            chartYear: urlYear,
+            combinations: urlCombos,
+        } = readStateFromUrlCompressed(allSubstances, allYears, microorganism);
 
         setSelected(urlSelected);
         setSubstanceFilter(urlSubstanceFilter);
+
+        // Seed year + combinations from URL (will be validated by effects)
+        if (typeof urlYear === "number") setChartYear(urlYear);
+        if (urlCombos?.length) setSelectedCombinations(urlCombos);
 
         if (
             urlSubstanceFilter.length > 0 ||
             Object.values(urlSelected).some((arr) => arr.length > 0) ||
             window.location.search.includes("view=substance")
         ) {
-            handleSearch(urlSelected, urlSubstanceFilter);
+            handleSearch(urlSelected, urlSubstanceFilter, urlYear);
         }
 
         hydratedFromUrlRef.current = true;
@@ -743,20 +804,22 @@ export const SubstanceDetail: React.FC<{
 
     // RESET
     const resetFilters = (): void => {
-        setSelected({
+        const resetSel = {
             ...emptyFilterState,
             samplingYear: allYears.map((a) => a.documentId),
-        });
+        };
+        const resetSubs = allSubstances.map((a) => a.documentId);
+        setSelected(resetSel);
         setShowResults(false);
-        setSubstanceFilter(allSubstances.map((a) => a.documentId));
+        setSubstanceFilter(resetSubs);
         setChartYear(undefined);
+        setSelectedCombinations([]);
         updateSubstanceFilterUrlCompressed(
             microorganism,
-            {
-                ...emptyFilterState,
-                samplingYear: allYears.map((a) => a.documentId),
-            },
-            allSubstances.map((a) => a.documentId)
+            resetSel,
+            resetSubs,
+            undefined,
+            []
         );
     };
 
@@ -784,7 +847,7 @@ export const SubstanceDetail: React.FC<{
     };
     const handleClose = (): void => setInfoDialogOpen(false);
 
-    // Multi-select substance filter (now LAST in the top controls)
+    // Substance filter (top controls)
     function renderSubstanceFilter(): JSX.Element {
         const substances = allSubstances;
         const allSelected =
@@ -805,7 +868,7 @@ export const SubstanceDetail: React.FC<{
             }
 
             setSubstanceFilter(newSubstanceFilter);
-            handleSearch(selected, newSubstanceFilter);
+            handleSearch(selected, newSubstanceFilter, chartYear);
         };
 
         return (
@@ -893,7 +956,7 @@ export const SubstanceDetail: React.FC<{
     ): JSX.Element {
         if (key === "antimicrobialSubstance") return <></>;
         const options = filterOptions[key];
-        const value = selected[key]; // array of documentIds (or year as string)
+        const value = selected[key];
         const allSelected =
             options.length > 0 && value.length === options.length;
         const someSelected = value.length > 0 && !allSelected;
@@ -1000,12 +1063,12 @@ export const SubstanceDetail: React.FC<{
         );
     }
 
-    // Compute available years for the chart (based on filtered data)
+    // Compute available years for the chart
     const availableYears = Array.from(
         new Set(filteredFullData.map((d) => d.samplingYear))
     ).sort((a, b) => b - a);
 
-    // Chart year dropdown (now FIRST in the top controls)
+    // Chart year dropdown
     function renderChartYearDropdown(): JSX.Element | null {
         if (!availableYears.length) return null;
         return (
@@ -1020,7 +1083,18 @@ export const SubstanceDetail: React.FC<{
                     <Select
                         value={chartYear ?? ""}
                         label={t("SAMPLING_YEAR")}
-                        onChange={(e) => setChartYear(Number(e.target.value))}
+                        onChange={(e) => {
+                            const y = Number(e.target.value);
+                            setChartYear(y);
+                            // updating URL immediately with new year + existing combinations
+                            updateSubstanceFilterUrlCompressed(
+                                microorganism,
+                                selected,
+                                substanceFilter,
+                                y,
+                                selectedCombinations
+                            );
+                        }}
                     >
                         {availableYears.map((y) => (
                             <MenuItem key={y} value={y}>
@@ -1042,17 +1116,25 @@ export const SubstanceDetail: React.FC<{
         );
     }
 
-    // --- Keep URL up to date after hydration
+    // Keep URL up to date after hydration (now includes year + combinations)
     useEffect(() => {
         if (!hydratedFromUrlRef.current) return;
         updateSubstanceFilterUrlCompressed(
             microorganism,
             selected,
-            substanceFilter
+            substanceFilter,
+            chartYear,
+            selectedCombinations
         );
-    }, [selected, substanceFilter, microorganism]);
+    }, [
+        selected,
+        substanceFilter,
+        microorganism,
+        chartYear,
+        selectedCombinations,
+    ]);
 
-    // Helper: render combination label (italicize species for C./Enterococcus) + N
+    // Combination label (italicize species) + N
     const renderCombinationMenuPrimary = (
         comboKey: string
     ): React.ReactNode => {
@@ -1230,6 +1312,19 @@ export const SubstanceDetail: React.FC<{
                                         } else {
                                             setSelectedCombinations(v);
                                         }
+                                        // update URL immediately with new combinations
+                                        updateSubstanceFilterUrlCompressed(
+                                            microorganism,
+                                            selected,
+                                            substanceFilter,
+                                            chartYear,
+                                            v.includes("all")
+                                                ? availableCombinations.slice(
+                                                      0,
+                                                      4
+                                                  )
+                                                : (e.target.value as string[])
+                                        );
                                     }}
                                     renderValue={(selectedValues) =>
                                         (selectedValues as string[]).join(", ")
