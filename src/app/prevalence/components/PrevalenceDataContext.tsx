@@ -20,8 +20,9 @@ import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
 
 /** 1) A simple "Matrix"-style interface for each relation */
 interface Matrix {
-    id: number;
-    name: string;
+    id: number; // locale-specific id
+    name: string; // localized label
+    documentId?: string; // locale-agnostic id (same across locales)
 }
 
 /** 2) A single "flat" Prevalence item from Strapi v5 */
@@ -57,18 +58,31 @@ export type PrevalenceEntry = {
     percentageOfPositive: number;
     ciMin: number;
     ciMax: number;
+
     matrix: string;
+    matrixDocId?: string;
+
     matrixGroup: string;
+    matrixGroupDocId?: string;
+
     samplingStage: string;
+    samplingStageDocId?: string;
+
     sampleOrigin: string;
+    sampleOriginDocId?: string;
+
     microorganism: string;
+    microorganismDocId?: string;
+
     superCategorySampleOrigin: string;
+    superCategorySampleOriginDocId?: string;
 };
 
 export type SearchParameters = Record<string, string[]>;
 
 interface Option {
-    name: string;
+    documentId: string; // value (stable across locales)
+    name: string; // label (localized)
 }
 
 /** 5) The shape of your React context */
@@ -80,13 +94,13 @@ interface PrevalenceDataContext {
     matrixGroupOptions: Option[];
     superCategorySampleOriginOptions: Option[];
     yearOptions: number[];
-    selectedMicroorganisms: string[];
-    selectedSampleOrigins: string[];
-    selectedMatrices: string[];
-    selectedSamplingStages: string[];
-    selectedMatrixGroups: string[];
+    selectedMicroorganisms: string[]; // docIds
+    selectedSampleOrigins: string[]; // docIds
+    selectedMatrices: string[]; // docIds
+    selectedSamplingStages: string[]; // docIds
+    selectedMatrixGroups: string[]; // docIds
     selectedYear: number[];
-    selectedSuperCategory: string[];
+    selectedSuperCategory: string[]; // docIds
     setSelectedMicroorganisms: (microorganisms: string[]) => void;
     setSelectedSampleOrigins: (sampleOrigins: string[]) => void;
     setSelectedMatrices: (matrices: string[]) => void;
@@ -149,13 +163,26 @@ function processApiResponse(
                 percentageOfPositive: item.percentageOfPositive ?? 0,
                 ciMin: item.ciMin ?? 0,
                 ciMax: item.ciMax ?? 0,
+
                 matrix: item.matrix?.name ?? "",
+                matrixDocId: item.matrix?.documentId,
+
                 matrixGroup: item.matrixGroup?.name ?? "",
+                matrixGroupDocId: item.matrixGroup?.documentId,
+
                 microorganism: item.microorganism?.name ?? "",
+                microorganismDocId: item.microorganism?.documentId,
+
                 samplingStage: item.samplingStage?.name ?? "",
+                samplingStageDocId: item.samplingStage?.documentId,
+
                 sampleOrigin: item.sampleOrigin?.name ?? "",
+                sampleOriginDocId: item.sampleOrigin?.documentId,
+
                 superCategorySampleOrigin:
                     item.superCategorySampleOrigin?.name ?? "",
+                superCategorySampleOriginDocId:
+                    item.superCategorySampleOrigin?.documentId,
             };
             validEntries.push(entry);
         } catch (err) {
@@ -174,14 +201,12 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
     // -------------- Language Setup --------------
-    // Check if a language is specified in the URL as ?lang=en and update i18next if necessary.
     useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const langParam = urlSearchParams.get("lang");
         if (langParam && langParam !== i18next.language) {
             i18next.changeLanguage(langParam);
         }
-        // Ensure the URL always has the lang parameter
         if (!langParam) {
             urlSearchParams.set("lang", i18next.language);
             window.history.replaceState(
@@ -195,21 +220,22 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     // -------------- State --------------
     const [selectedMicroorganisms, setSelectedMicroorganisms] = useState<
         string[]
-    >([]);
+    >([]); // docIds
     const [selectedSampleOrigins, setSelectedSampleOrigins] = useState<
         string[]
-    >([]);
-    const [selectedMatrices, setSelectedMatrices] = useState<string[]>([]);
+    >([]); // docIds
+    const [selectedMatrices, setSelectedMatrices] = useState<string[]>([]); // docIds
     const [selectedSamplingStages, setSelectedSamplingStages] = useState<
         string[]
-    >([]);
+    >([]); // docIds
     const [selectedMatrixGroups, setSelectedMatrixGroups] = useState<string[]>(
         []
-    );
+    ); // docIds
     const [selectedYear, setSelectedYear] = useState<number[]>([]);
     const [selectedSuperCategory, setSelectedSuperCategory] = useState<
         string[]
-    >([]);
+    >([]); // docIds
+
     const [prevalenceData, setPrevalenceData] = useState<PrevalenceEntry[]>([]);
     const [fullPrevalenceData, setFullPrevalenceData] = useState<
         PrevalenceEntry[]
@@ -244,7 +270,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     // -------------- 1) fetchPrevalenceData --------------
     const fetchPrevalenceData = async (): Promise<void> => {
         try {
-            // Populate all required relations
             const relationsToPopulate = [
                 "matrix",
                 "microorganism",
@@ -308,14 +333,23 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     data: Array<{
                         id: number;
                         name?: string;
-                        attributes?: { name: string };
+                        documentId?: string;
+                        attributes?: { name: string; documentId?: string };
                     }>;
                 }>(`${endpoint}?locale=${i18next.language}`);
 
                 if (response.data && Array.isArray(response.data.data)) {
-                    return response.data.data.map((item) => ({
-                        name: item.name ?? item.attributes?.name ?? "",
-                    }));
+                    return response.data.data
+                        .map((item) => {
+                            const name =
+                                item.name ?? item.attributes?.name ?? "";
+                            const documentId =
+                                (item.documentId ??
+                                    item.attributes?.documentId ??
+                                    "") + "";
+                            return { name, documentId };
+                        })
+                        .filter((o) => o.name && o.documentId);
                 }
                 return [];
             };
@@ -397,40 +431,35 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             let query = `${PREVALENCES}?locale=${i18next.language}&pagination[pageSize]=${MAX_PAGE_SIZE}`;
             const filters: string[] = [];
 
-            // For relational fields
+            // Filter relations by documentId (locale-agnostic, stable)
             const addRelationalFilter = (
                 field: string,
-                values: string[]
+                docIds: string[]
             ): void => {
-                if (values.length > 0) {
-                    filters.push(
-                        values
-                            .map(
-                                (value) =>
-                                    `filters[${field}][name][$eq]=${encodeURIComponent(
-                                        value
-                                    )}`
-                            )
-                            .join("&")
+                if (docIds.length > 0) {
+                    // Repeat $in param (Strapi accepts repeated $in keys)
+                    docIds.forEach((docId) =>
+                        filters.push(
+                            `filters[${field}][documentId][$in]=${encodeURIComponent(
+                                docId
+                            )}`
+                        )
                     );
                 }
             };
 
-            // For numeric fields (e.g., samplingYear)
+            // Numeric field
             const addSimpleFilter = (
                 field: string,
                 values: (string | number)[]
             ): void => {
                 if (values.length > 0) {
-                    filters.push(
-                        values
-                            .map(
-                                (value) =>
-                                    `filters[${field}][$eq]=${encodeURIComponent(
-                                        value
-                                    )}`
-                            )
-                            .join("&")
+                    values.forEach((value) =>
+                        filters.push(
+                            `filters[${field}][$eq]=${encodeURIComponent(
+                                value
+                            )}`
+                        )
                     );
                 }
             };
@@ -468,6 +497,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     setError
                 );
                 setPrevalenceData(processedData);
+
                 setSearchParameters({
                     microorganism: microorganisms,
                     sampleOrigin: sampleOrigins,
@@ -491,12 +521,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 })) {
                     values.forEach((value) => searchParams.append(key, value));
                 }
-
-                // Also persist the language setting in the URL
-                if (!searchParams.has("lang")) {
-                    searchParams.append("lang", i18next.language);
-                }
-
+                // persist lang in URL
+                searchParams.set("lang", i18next.language);
                 const searchString = searchParams.toString();
                 if (searchString) {
                     window.history.replaceState(null, "", `?${searchString}`);
@@ -533,24 +559,22 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 );
                 const params: SearchParameters = {};
                 urlSearchParams.forEach((value, key) => {
-                    if (!params[key]) {
-                        params[key] = [];
-                    }
+                    if (!params[key]) params[key] = [];
                     params[key].push(value);
                 });
 
                 const initialSelectedMicroorganisms =
-                    params.microorganism || [];
-                const initialSelectedSampleOrigins = params.sampleOrigin || [];
-                const initialSelectedMatrices = params.matrix || [];
+                    params.microorganism || []; // docIds
+                const initialSelectedSampleOrigins = params.sampleOrigin || []; // docIds
+                const initialSelectedMatrices = params.matrix || []; // docIds
                 const initialSelectedSamplingStages =
-                    params.samplingStage || [];
-                const initialSelectedMatrixGroups = params.matrixGroup || [];
+                    params.samplingStage || []; // docIds
+                const initialSelectedMatrixGroups = params.matrixGroup || []; // docIds
                 const initialSelectedYear = params.samplingYear
                     ? params.samplingYear.map(Number)
                     : [];
                 const initialSelectedSuperCategory =
-                    params.superCategorySampleOrigin || [];
+                    params.superCategorySampleOrigin || []; // docIds
 
                 setSelectedMicroorganisms(initialSelectedMicroorganisms);
                 setSelectedSampleOrigins(initialSelectedSampleOrigins);
@@ -561,9 +585,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 setSelectedSuperCategory(initialSelectedSuperCategory);
 
                 setSearchParameters(params);
-                const anyParamsPresent = Object.values(params).some(
-                    (arr) => arr.length > 0 && arr[0] !== params.lang?.[0]
+                const anyParamsPresent = Object.entries(params).some(
+                    ([k, arr]) =>
+                        k !== "lang" && Array.isArray(arr) && arr.length > 0
                 );
+
                 if (anyParamsPresent) {
                     setIsSearchTriggered(true);
                     await fetchDataFromAPI({
@@ -593,99 +619,87 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     }, []);
 
     // -------------- 6) Recompute Options Based on Selection --------------
-    type PrevalenceEntryKey =
-        | "microorganism"
-        | "sampleOrigin"
-        | "matrix"
-        | "samplingStage"
-        | "matrixGroup"
-        | "superCategorySampleOrigin";
 
     useEffect(() => {
         const updateOptionsBasedOnSelection = (): void => {
-            // Use the filtered data if a search is active; otherwise use the full dataset.
             const dataToCompute = isSearchTriggered
                 ? prevalenceData
                 : fullPrevalenceData;
 
-            const computeOptions = (
-                excludeFilter: PrevalenceEntryKey | "samplingYear",
-                getOptionValue: (entry: PrevalenceEntry) => string | number
-            ): Option[] => {
-                const filtered = dataToCompute.filter((entry) => {
-                    const conditions = [
-                        excludeFilter !== "microorganism"
-                            ? selectedMicroorganisms.length === 0 ||
-                              selectedMicroorganisms.includes(
-                                  entry.microorganism
-                              )
-                            : true,
-                        excludeFilter !== "sampleOrigin"
-                            ? selectedSampleOrigins.length === 0 ||
-                              selectedSampleOrigins.includes(entry.sampleOrigin)
-                            : true,
-                        excludeFilter !== "matrix"
-                            ? selectedMatrices.length === 0 ||
-                              selectedMatrices.includes(entry.matrix)
-                            : true,
-                        excludeFilter !== "samplingStage"
-                            ? selectedSamplingStages.length === 0 ||
-                              selectedSamplingStages.includes(
-                                  entry.samplingStage
-                              )
-                            : true,
-                        excludeFilter !== "matrixGroup"
-                            ? selectedMatrixGroups.length === 0 ||
-                              selectedMatrixGroups.includes(entry.matrixGroup)
-                            : true,
-                        excludeFilter !== "superCategorySampleOrigin"
-                            ? selectedSuperCategory.length === 0 ||
-                              selectedSuperCategory.includes(
-                                  entry.superCategorySampleOrigin
-                              )
-                            : true,
-                        excludeFilter !== "samplingYear"
-                            ? selectedYear.length === 0 ||
-                              selectedYear.includes(entry.samplingYear)
-                            : true,
-                    ];
-                    return conditions.every(Boolean);
-                });
+            const filteredBySelections = dataToCompute.filter((entry) => {
+                const conds = [
+                    selectedMicroorganisms.length === 0 ||
+                        selectedMicroorganisms.includes(
+                            entry.microorganismDocId ?? ""
+                        ),
+                    selectedSampleOrigins.length === 0 ||
+                        selectedSampleOrigins.includes(
+                            entry.sampleOriginDocId ?? ""
+                        ),
+                    selectedMatrices.length === 0 ||
+                        selectedMatrices.includes(entry.matrixDocId ?? ""),
+                    selectedSamplingStages.length === 0 ||
+                        selectedSamplingStages.includes(
+                            entry.samplingStageDocId ?? ""
+                        ),
+                    selectedMatrixGroups.length === 0 ||
+                        selectedMatrixGroups.includes(
+                            entry.matrixGroupDocId ?? ""
+                        ),
+                    selectedSuperCategory.length === 0 ||
+                        selectedSuperCategory.includes(
+                            entry.superCategorySampleOriginDocId ?? ""
+                        ),
+                    selectedYear.length === 0 ||
+                        selectedYear.includes(entry.samplingYear),
+                ];
+                return conds.every(Boolean);
+            });
 
-                const names = Array.from(new Set(filtered.map(getOptionValue)))
-                    .map(String)
-                    .sort((a, b) => a.localeCompare(b));
-
-                return names.map((name) => ({ name }));
+            // Build options maps docId -> name (label)
+            const toMapAdd = (
+                map: Map<string, string>,
+                docId?: string,
+                name?: string
+            ): void => {
+                if (docId && name && !map.has(docId)) map.set(docId, name);
             };
 
-            setMicroorganismOptions(
-                computeOptions("microorganism", (entry) => entry.microorganism)
-            );
-            setSampleOriginOptions(
-                computeOptions("sampleOrigin", (entry) => entry.sampleOrigin)
-            );
-            setMatrixOptions(computeOptions("matrix", (entry) => entry.matrix));
-            setSamplingStageOptions(
-                computeOptions("samplingStage", (entry) => entry.samplingStage)
-            );
-            setMatrixGroupOptions(
-                computeOptions("matrixGroup", (entry) => entry.matrixGroup)
-            );
-            setSuperCategorySampleOriginOptions(
-                computeOptions(
-                    "superCategorySampleOrigin",
-                    (entry) => entry.superCategorySampleOrigin
-                )
-            );
+            const microMap = new Map<string, string>();
+            const soMap = new Map<string, string>();
+            const mMap = new Map<string, string>();
+            const stageMap = new Map<string, string>();
+            const groupMap = new Map<string, string>();
+            const superMap = new Map<string, string>();
+            const yearsSet = new Set<number>();
 
-            const years = computeOptions(
-                "samplingYear",
-                (entry) => entry.samplingYear
-            )
-                .map((option) => parseInt(option.name, 10))
-                .sort((a, b) => a - b);
+            filteredBySelections.forEach((e) => {
+                toMapAdd(microMap, e.microorganismDocId, e.microorganism);
+                toMapAdd(soMap, e.sampleOriginDocId, e.sampleOrigin);
+                toMapAdd(mMap, e.matrixDocId, e.matrix);
+                toMapAdd(stageMap, e.samplingStageDocId, e.samplingStage);
+                toMapAdd(groupMap, e.matrixGroupDocId, e.matrixGroup);
+                toMapAdd(
+                    superMap,
+                    e.superCategorySampleOriginDocId,
+                    e.superCategorySampleOrigin
+                );
+                yearsSet.add(e.samplingYear);
+            });
 
+            const mapToOptions = (m: Map<string, string>): Option[] =>
+                Array.from(m.entries())
+                    .sort((a, b) => a[1].localeCompare(b[1]))
+                    .map(([documentId, name]) => ({ documentId, name }));
+
+            setMicroorganismOptions(mapToOptions(microMap));
+            setSampleOriginOptions(mapToOptions(soMap));
+            setMatrixOptions(mapToOptions(mMap));
+            setSamplingStageOptions(mapToOptions(stageMap));
+            setMatrixGroupOptions(mapToOptions(groupMap));
+            setSuperCategorySampleOriginOptions(mapToOptions(superMap));
+
+            const years = Array.from(yearsSet).sort((a, b) => a - b);
             setYearOptions(years);
         };
 
