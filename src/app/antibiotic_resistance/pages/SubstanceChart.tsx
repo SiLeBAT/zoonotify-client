@@ -77,14 +77,14 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     data,
     year,
     microorganism,
-    selectedCombinations, // <--- ADD THIS!
+    selectedCombinations,
     groupLabel,
 }) => {
     const { t } = useTranslation(["Antibiotic"]);
     const chartRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
 
-    // Prepare data
+    // Prepare data for the current year & visibility rules used by the chart
     const filtered = data.filter(
         (d) =>
             d.samplingYear === year &&
@@ -92,12 +92,14 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             d.anzahlGetesteterIsolate >= 10
     );
 
+    // These are the substances actually plotted (already upstream-filtered)
     const substances = Array.from(
         new Set(
             filtered.map((d) => d.antimicrobialSubstance?.name).filter(Boolean)
         )
     ).sort();
 
+    // Only include user-selected combinations (max 4) in the chart
     const groupKeys = Array.from(
         new Set(filtered.map((d) => getGroupKey(d, microorganism)))
     ).filter((key) => selectedCombinations.includes(key));
@@ -111,8 +113,8 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     groupKeys.forEach((key) => {
         legendLabels[key] = key;
     });
-    const [copied, setCopied] = React.useState(false);
 
+    const [copied, setCopied] = React.useState(false);
     const handleShareLink = async (): Promise<void> => {
         try {
             await navigator.clipboard.writeText(window.location.href);
@@ -123,17 +125,15 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         }
     };
 
-    // --- For each groupKey, get the first available N for the groupKey ---
+    // Map group -> N (first found row for the group)
     const nPerGroup: { [key: string]: number | undefined } = {};
     groupKeys.forEach((groupKey) => {
-        // Find first filtered row for this groupKey and get its N
         const row = filtered.find(
             (d) => getGroupKey(d, microorganism) === groupKey
         );
         nPerGroup[groupKey] = row?.anzahlGetesteterIsolate ?? undefined;
     });
 
-    // --- Legend label formatter with correct N (unique for group) ---
     const legendFormatter = (value: string): React.ReactNode => {
         const N = nPerGroup[value];
         if (
@@ -158,7 +158,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
                     )}
                     <span style={{ color: "#888", fontWeight: 400 }}>
                         {" "}
-                        (N={N !== undefined && N !== null ? N : "?"})
+                        (N={N ?? "?"})
                     </span>
                 </span>
             );
@@ -168,15 +168,15 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
                 {value}
                 <span style={{ color: "#888", fontWeight: 400 }}>
                     {" "}
-                    (N={N !== undefined && N !== null ? N : "?"})
+                    (N={N ?? "?"})
                 </span>
             </span>
         );
     };
 
+    // Build the rows used by the chart (visible bars)
     const chartData = substances.map((substance) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const row: any = { substance };
+        const row: Record<string, unknown> = { substance };
         groupKeys.forEach((groupKey) => {
             const found = filtered.find(
                 (d) =>
@@ -194,7 +194,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         return row;
     });
 
-    // Download handlers and CSV as before...
+    // ---------- EXPORTS ----------
     const handleDownloadChart = async (): Promise<void> => {
         if (fixedSizeChartRef.current) {
             const canvas = await html2canvas(fixedSizeChartRef.current, {
@@ -227,6 +227,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         translate: (key: string) => string
     ): string {
         if (!rows || !rows.length) return "";
+
         const headers = [
             "samplingYear",
             "superCategorySampleOrigin",
@@ -247,27 +248,40 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             row: ResistanceApiItem,
             h: typeof headers[number]
         ): string {
+            // read loosely to avoid TS union assignment errors
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            let v = (row as any)[h];
-            if (v && typeof v === "object") {
-                if ("name" in v) v = v.name;
-                else v = JSON.stringify(v);
+            const raw: any = (row as any)[h];
+
+            if (raw == null) return "";
+
+            if (typeof raw === "number") {
+                let n = raw.toString();
+                if (decimalSep === ",") n = n.replace(".", ",");
+                return n;
             }
-            if (v == null) return "";
-            if (typeof v === "number") {
-                let valStr = v.toString();
-                if (decimalSep === ",") valStr = valStr.replace(".", ",");
-                return valStr;
+
+            // unwrap common Strapi-ish objects with a 'name' field
+            if (typeof raw === "object") {
+                const maybeName = (raw as { name?: unknown }).name;
+                const str =
+                    maybeName != null ? String(maybeName) : JSON.stringify(raw);
+                // escape separators/quotes/newlines
+                if (
+                    str.includes(sep) ||
+                    str.includes('"') ||
+                    str.includes("\n")
+                ) {
+                    return `"${str.replace(/"/g, '""')}"`;
+                }
+                return str;
             }
-            let vStr = String(v);
-            if (
-                vStr.includes(sep) ||
-                vStr.includes('"') ||
-                vStr.includes("\n")
-            ) {
-                vStr = `"${vStr.replace(/"/g, '""')}"`;
+
+            // primitive (string/boolean/etc.)
+            const s = String(raw);
+            if (s.includes(sep) || s.includes('"') || s.includes("\n")) {
+                return `"${s.replace(/"/g, '""')}"`;
             }
-            return vStr;
+            return s;
         }
 
         const headerRow = headers.map((h) => translate(h) || h).join(sep);
@@ -312,8 +326,7 @@ This file contains comma-separated data, which supports the correct format of nu
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
-    // FIXED TOOLTIP FORMATTER -- always shows correct N!
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // Tooltip (kept the same)
     const tooltipFormatter = (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value: any,
@@ -334,7 +347,17 @@ This file contains comma-separated data, which supports the correct format of nu
         ];
     };
 
-    // UI
+    // === NEW: rows that exactly match what the chart is showing ===
+    const visibleSubstanceNames = new Set(substances);
+    const rowsForCsv = filtered.filter((d) => {
+        const gk = getGroupKey(d, microorganism);
+        const subName = d.antimicrobialSubstance?.name ?? "";
+        return (
+            selectedCombinations.includes(gk) &&
+            visibleSubstanceNames.has(subName)
+        );
+    });
+
     return (
         <Box>
             <div
@@ -348,7 +371,7 @@ This file contains comma-separated data, which supports the correct format of nu
                     minHeight: "160px",
                 }}
             >
-                {/* --- LABEL --- */}
+                {/* Title */}
                 <Box
                     display="flex"
                     alignItems="center"
@@ -374,8 +397,7 @@ This file contains comma-separated data, which supports the correct format of nu
                                 {year},{" "}
                                 <FormattedMicroorganismName
                                     microName={microorganism}
-                                    fontWeight="bold" // stays bold
-                                    // no fontSize needed, it will match h6 now
+                                    fontWeight="bold"
                                 />
                             </>
                         )}
@@ -391,7 +413,8 @@ This file contains comma-separated data, which supports the correct format of nu
                         }}
                     />
                 </Box>
-                {/* --- BAR CHART --- */}
+
+                {/* Chart */}
                 {chartData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={550}>
                         <BarChart
@@ -404,7 +427,7 @@ This file contains comma-separated data, which supports the correct format of nu
                                 right: 25,
                                 left: 20,
                                 bottom: 40,
-                            }} // add right margin!
+                            }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis
@@ -477,7 +500,7 @@ This file contains comma-separated data, which supports the correct format of nu
                 )}
             </div>
 
-            {/* Off-screen for export */}
+            {/* Off-screen fixed-size chart for PNG export */}
             <div
                 ref={fixedSizeChartRef}
                 style={{
@@ -511,7 +534,6 @@ This file contains comma-separated data, which supports the correct format of nu
                             minHeight: "40px",
                         }}
                     >
-                        {/* 👇 Chart title with beautiful microorganism name! */}
                         {groupLabel || (
                             <>
                                 {year},{" "}
@@ -534,6 +556,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         }}
                     />
                 </Box>
+
                 {chartData.length > 0 ? (
                     <BarChart
                         layout="vertical"
@@ -582,7 +605,7 @@ This file contains comma-separated data, which supports the correct format of nu
                                 boxShadow: "none",
                             }}
                             formatter={legendFormatter}
-                        />{" "}
+                        />
                         {groupKeys.map((groupKey) => (
                             <Bar
                                 key={groupKey}
@@ -615,13 +638,12 @@ This file contains comma-separated data, which supports the correct format of nu
                     </Button>
                 )}
                 <Button
-                    onClick={() => downloadZipWithCSVs(filtered)}
+                    onClick={() => downloadZipWithCSVs(rowsForCsv)}
                     variant="contained"
                     sx={{ background: "#003663", color: "#fff" }}
                 >
                     {t("DOWNLOAD_ZIP_FILE")}
                 </Button>
-                {/* <<< SHARE LINK BUTTON */}
                 <Button
                     onClick={handleShareLink}
                     variant="contained"
