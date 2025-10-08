@@ -1,3 +1,4 @@
+// InfoPageComponent.tsx
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Markdown from "markdown-to-jsx";
@@ -5,7 +6,12 @@ import React from "react";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import { ExplanationTermComponent } from "../components/ExplanationTermComponent copy";
 import { InfoPageAmrDialogComponent } from "../components/InfoPage-AmrsDialog.component";
-import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
+import {
+    AmrKey,
+    AmrsTable,
+    ExplanationDTO,
+    ExplanationCollection,
+} from "../model/ExplanationPage.model";
 import { useExplanationPageComponent } from "./explanationUseCases";
 
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
@@ -15,7 +21,6 @@ export function InfoPageComponent(props: {
     onAmrDataExport: (amrKey: AmrKey) => void;
 }): JSX.Element {
     const { model, operations } = useExplanationPageComponent(null);
-
     const theme = useTheme();
 
     const subHeadingStyle = {
@@ -25,9 +30,20 @@ export function InfoPageComponent(props: {
         margin: "1em 0",
     } as const;
 
-    const handleExportAmrData = (amrKey: AmrKey): void => {
-        props.onAmrDataExport(amrKey);
-    };
+    // Our hook now groups by normalized SectionCode keys (BACKGROUND, METHODS, ...)
+    // but this cast still works fine.
+    const typedEntries: Array<[string, ExplanationDTO[]]> = Object.entries(
+        (model.explanationCollection || {}) as ExplanationCollection
+    ) as Array<[string, ExplanationDTO[]]>;
+
+    // Optional: enforce desired order visually
+    const order: string[] = ["BACKGROUND", "METHODS", "GRAPHS", "DATA", "MAIN"];
+    const sortedEntries =
+        typedEntries.length > 0
+            ? [...typedEntries].sort(
+                  ([a], [b]) => order.indexOf(a) - order.indexOf(b)
+              )
+            : [];
 
     return (
         <PageLayoutComponent>
@@ -53,79 +69,105 @@ export function InfoPageComponent(props: {
                 >
                     {model.title}
                 </Typography>
+
                 <div>
+                    {/* MAIN section (deep-linkable) */}
                     {model.mainSection.length > 0 ? (
-                        <ZNAccordion
-                            key="mainSection"
-                            title={model.mainSection[0].title}
-                            content={
-                                <Markdown>
-                                    {model.mainSection[0].description}
-                                </Markdown>
-                            }
-                            defaultExpanded={false}
-                            centerContent={false}
-                        />
+                        <section id={model.mainSection[0].anchor}>
+                            <Box
+                                sx={{
+                                    borderBottom: `2px solid ${theme.palette.primary.main}`,
+                                }}
+                            >
+                                <ZNAccordion
+                                    key="mainSection"
+                                    title={model.mainSection[0].title}
+                                    content={
+                                        <Markdown>
+                                            {model.mainSection[0].description}
+                                        </Markdown>
+                                    }
+                                    expanded={
+                                        model.activeAnchor ===
+                                        model.mainSection[0].anchor
+                                    }
+                                    defaultExpanded={false}
+                                    centerContent={false}
+                                    onToggle={(open) =>
+                                        open &&
+                                        operations.openSectionByAnchor(
+                                            model.mainSection[0].anchor
+                                        )
+                                    }
+                                />
+                            </Box>
+                        </section>
                     ) : null}
-                    {Object.entries(model.explanationCollection).length > 0
-                        ? Object.entries(model.explanationCollection).map(
-                              ([sectionToken, explanations]) => {
-                                  return (
-                                      <div key={sectionToken}>
-                                          <Typography
-                                              sx={subHeadingStyle}
-                                              id={sectionToken}
+
+                    {/* Other CMS sections */}
+                    {sortedEntries.length > 0
+                        ? sortedEntries.map(([sectionToken, explanations]) => (
+                              <div key={sectionToken}>
+                                  <Typography
+                                      sx={subHeadingStyle}
+                                      id={sectionToken}
+                                  >
+                                      {/* 🔴 Use translated label from the hook */}
+                                      {operations.getSectionLabel(sectionToken)}
+                                  </Typography>
+
+                                  <div>
+                                      {explanations.map((explanation) => (
+                                          <section
+                                              key={explanation.anchor}
+                                              id={explanation.anchor}
                                           >
-                                              {sectionToken}
-                                          </Typography>
-                                          <div>
-                                              {explanations.map(
-                                                  (explanation) => {
-                                                      return (
-                                                          <ZNAccordion
-                                                              key={
-                                                                  explanation.title
+                                              <Box
+                                                  sx={{
+                                                      borderBottom: `2px solid ${theme.palette.primary.main}`,
+                                                  }}
+                                              >
+                                                  <ZNAccordion
+                                                      key={explanation.anchor}
+                                                      title={explanation.title}
+                                                      content={
+                                                          <ExplanationTermComponent
+                                                              handleOpen={
+                                                                  operations.handleOpen
                                                               }
-                                                              title={
-                                                                  explanation.title
-                                                              }
-                                                              content={
-                                                                  <ExplanationTermComponent
-                                                                      handleOpen={
-                                                                          operations.handleOpen
-                                                                      }
-                                                                      description={
-                                                                          explanation.description
-                                                                      }
-                                                                  ></ExplanationTermComponent>
-                                                              }
-                                                              defaultExpanded={
-                                                                  false
-                                                              }
-                                                              centerContent={
-                                                                  false
+                                                              description={
+                                                                  explanation.description
                                                               }
                                                           />
-                                                      );
-                                                  }
-                                              )}
-                                          </div>
-                                      </div>
-                                  );
-                              }
-                          )
+                                                      }
+                                                      expanded={
+                                                          model.activeAnchor ===
+                                                          explanation.anchor
+                                                      }
+                                                      defaultExpanded={false}
+                                                      centerContent={false}
+                                                      onToggle={(open) =>
+                                                          open &&
+                                                          operations.openSectionByAnchor(
+                                                              explanation.anchor
+                                                          )
+                                                      }
+                                                  />
+                                              </Box>
+                                          </section>
+                                      ))}
+                                  </div>
+                              </div>
+                          ))
                         : null}
+
+                    {/* AMR dialog */}
                     {model.openAmrDialog && model.currentAMRID ? (
                         <InfoPageAmrDialogComponent
                             resistancesTableData={
                                 props.tableData[model.currentAMRID as AmrKey]
                             }
                             onClose={operations.handleClose}
-                            onAmrDataExport={() =>
-                                handleExportAmrData(
-                                    model.currentAMRID as AmrKey
-                                )
-                            }
                         />
                     ) : null}
                 </div>

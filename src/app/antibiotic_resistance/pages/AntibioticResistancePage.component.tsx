@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
+import { useLocation } from "react-router-dom";
 import {
     Typography,
     Dialog,
@@ -10,8 +11,28 @@ import {
 } from "@mui/material";
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
+import { SubstanceDetail } from "./SubstanceDetail";
+import LZString from "lz-string";
 
-// --- These constants stay the same ---
+// ---- Helpers for compressed state in URL (?s=...) ----
+function decodeCompressedState(
+    sParam: string | null
+): null | { m?: string; v?: "main" | "trend" | "substance"; l?: string } {
+    if (!sParam) return null;
+    try {
+        const json = LZString.decompressFromEncodedURIComponent(sParam);
+        if (!json) return null;
+        return JSON.parse(json) as {
+            m?: string;
+            v?: "main" | "trend" | "substance";
+            l?: string;
+        };
+    } catch {
+        return null;
+    }
+}
+
+// ---- Constants ----
 const ORGANISMS = [
     "E. coli",
     "Campylobacter spp.",
@@ -27,7 +48,6 @@ const italicWords: string[] = [
     "jejuni",
     "faecalis",
     "faecium",
-    "coli",
     "E.",
     "C.",
     "Enterococcus",
@@ -42,10 +62,7 @@ interface WordObject {
 const formatMicroorganismNameArray = (
     microName: string | null | undefined
 ): WordObject[] => {
-    if (!microName) {
-        console.warn("Received null or undefined microorganism name");
-        return [];
-    }
+    if (!microName) return [];
     const words = microName
         .split(/([-\s])/)
         .filter((part: string) => part.length > 0);
@@ -64,150 +81,193 @@ const formatMicroorganismNameArray = (
 export interface FormattedMicroorganismNameProps {
     microName: string | null | undefined;
     isBreadcrumb?: boolean;
-    fontWeight?: "normal" | "bold" | number; // add this
+    fontSize?: string | number;
+    fontWeight?: "normal" | "bold" | number;
 }
 
 export const FormattedMicroorganismName: React.FC<
     FormattedMicroorganismNameProps
-> = ({ microName, isBreadcrumb = false, fontWeight }) => {
+> = ({ microName, isBreadcrumb = false, fontWeight, fontSize }) => {
     const words = formatMicroorganismNameArray(microName);
+
     return (
         <Typography
             component="span"
+            variant="inherit"
             style={{
                 fontWeight: fontWeight ?? (isBreadcrumb ? "normal" : "bold"),
-                fontSize: "1.4rem",
+                ...(fontSize ? { fontSize } : {}),
             }}
         >
             {words.map((wordObj: WordObject, index: number) => (
                 <React.Fragment key={index}>
-                    {wordObj.italic ? <i>{wordObj.text}</i> : wordObj.text}{" "}
+                    {wordObj.italic ? (
+                        <i
+                            style={{
+                                fontStyle: "italic",
+                                fontSize: "inherit",
+                                fontWeight: "inherit",
+                            }}
+                        >
+                            {wordObj.text}
+                        </i>
+                    ) : (
+                        wordObj.text
+                    )}{" "}
                 </React.Fragment>
             ))}
         </Typography>
     );
 };
 
-// --- URL Deep Linking helpers ---
-function updateUrl(selectedOrg: string, showTrendDetails: boolean): void {
+// ---- URL sync helpers ----
+function updateUrl(
+    selectedOrg: string,
+    view: "main" | "trend" | "substance"
+): void {
     const params = new URLSearchParams(window.location.search);
+    const hasCompressed = params.get("s");
+
+    // If currently in 'substance' and an 's' state exists, SubstanceDetail owns the URL
+    if (view === "substance" && hasCompressed) return;
+
+    // Otherwise use simple params and remove 's'
+    params.delete("s");
     params.set("microorganism", selectedOrg);
-    params.set("view", showTrendDetails ? "trend" : "main");
-    // Always sync lang!
-    params.set("lang", i18next.language); // Always set, even if present
+    params.set("view", view);
+    params.set("lang", i18next.language);
     window.history.replaceState(null, "", `?${params.toString()}`);
 }
 
 function readStateFromUrl(): {
     selectedOrg: string;
-    showTrendDetails: boolean;
+    view: "main" | "trend" | "substance";
 } {
     const params = new URLSearchParams(window.location.search);
+
+    // Prefer compressed deep link (?s=...)
+    const decoded = decodeCompressedState(params.get("s"));
+    if (decoded) {
+        const orgFromS =
+            decoded.m && ORGANISMS.includes(decoded.m)
+                ? decoded.m
+                : ORGANISMS[0];
+        const viewFromS: "main" | "trend" | "substance" =
+            decoded.v === "trend" ||
+            decoded.v === "main" ||
+            decoded.v === "substance"
+                ? decoded.v
+                : "substance";
+        return { selectedOrg: orgFromS, view: viewFromS };
+    }
+
+    // Legacy simple params
     const orgParam = params.get("microorganism");
-    // Type-safe, no non-null assertion
     const selectedOrg =
         typeof orgParam === "string" && ORGANISMS.includes(orgParam)
             ? orgParam
             : ORGANISMS[0];
-    const showTrendDetails = params.get("view") === "trend";
-    return { selectedOrg, showTrendDetails };
+    const view =
+        (params.get("view") as "main" | "trend" | "substance") || "main";
+    return { selectedOrg, view };
 }
 
-// --- Breadcrumb component ---
+// ---- Breadcrumb ----
 function Breadcrumb({
     t,
     selectedOrg,
-    showTrendDetails,
+    view,
     handleShowMain,
 }: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: any;
     selectedOrg: string;
-    showTrendDetails: boolean;
+    view: "main" | "trend" | "substance";
     handleShowMain: () => void;
 }): JSX.Element {
     return (
         <div className="abx-breadcrumb">
-            {t("AntibioticResistance")} /{" "}
-            {showTrendDetails ? (
-                <>
-                    <span
-                        style={{
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                        }}
-                        onClick={handleShowMain}
-                    >
-                        <FormattedMicroorganismName
-                            microName={selectedOrg}
-                            isBreadcrumb={true}
-                        />
-                    </span>
-                    {" / "}
-                    {t("Trend")}
-                </>
-            ) : (
+            <span
+                style={{ textDecoration: "underline", cursor: "pointer" }}
+                onClick={handleShowMain}
+            >
+                {t("AntibioticResistance")}
+            </span>
+            {" / "}
+            <span
+                style={{ textDecoration: "underline", cursor: "pointer" }}
+                onClick={handleShowMain}
+            >
                 <FormattedMicroorganismName
                     microName={selectedOrg}
                     isBreadcrumb={true}
                 />
-            )}
+            </span>
+            {view === "trend" && <> / {t("Trend")}</>}
+            {view === "substance" && <> / {t("Substans")}</>}
         </div>
     );
 }
 
-// --- Main component ---
+// ---- Main page component ----
 export function AntibioticResistancePageComponent(): JSX.Element {
     const { t } = useTranslation(["Antibiotic"]);
+    const routerLocation = useLocation(); // react-router v5 location (used below)
+
     const [state, setState] = useState<{
         selectedOrg: string;
-        showTrendDetails: boolean;
+        view: "main" | "trend" | "substance";
     }>(() => readStateFromUrl());
-    const { selectedOrg, showTrendDetails } = state;
+    const { selectedOrg, view } = state;
 
-    // State for "Coming soon" modal
     const [comingSoonOpen, setComingSoonOpen] = useState(false);
 
     // On mount: sync state from URL (deep link support)
-    useEffect((): void => {
-        const parsed = readStateFromUrl();
-        setState(parsed);
+    useEffect(() => {
+        setState(readStateFromUrl());
     }, []);
 
-    // Whenever selectedOrg or showTrendDetails change, update URL
-    useEffect((): void => {
-        updateUrl(selectedOrg, showTrendDetails);
-    }, [selectedOrg, showTrendDetails]);
+    // Re-sync state whenever the router's query string changes (e.g., Header pushes ?view=main)
+    useEffect(() => {
+        const parsed = readStateFromUrl();
+        setState((prev) =>
+            prev.selectedOrg !== parsed.selectedOrg || prev.view !== parsed.view
+                ? parsed
+                : prev
+        );
+    }, [routerLocation.search]);
 
-    // Whenever language changes, update URL as well!
-    useEffect((): void => {
-        updateUrl(selectedOrg, showTrendDetails);
-    }, [selectedOrg, showTrendDetails, i18next.language]);
+    // Single URL-writer effect (depends also on language)
+    useEffect(() => {
+        updateUrl(selectedOrg, view);
+    }, [selectedOrg, view, i18next.language]);
 
-    // Handle org selection from sidebar
+    // Scroll to top when landing on main view
+    useEffect(() => {
+        if (view === "main") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    }, [view]);
+
+    // Handlers
     const handleOrgSelect = (org: string): void => {
-        setState({ selectedOrg: org, showTrendDetails: false });
+        setState({ selectedOrg: org, view: "main" });
     };
 
-    // Go to trend view
     const handleTrendClick = (): void => {
-        setState((prev) => ({ ...prev, showTrendDetails: true }));
+        setState((prev) => ({ ...prev, view: "trend" }));
     };
 
-    // Go back to organism selection view (now from breadcrumb only)
+    const handleSubstanceClick = (): void => {
+        setState((prev) => ({ ...prev, view: "substance" }));
+    };
+
     const handleShowMain = (): void => {
-        setState((prev) => ({ ...prev, showTrendDetails: false }));
+        setState((prev) => ({ ...prev, view: "main" }));
     };
 
-    // Handle coming soon click
-    const handleComingSoon = (): void => {
-        setComingSoonOpen(true);
-    };
-
-    // Handle closing the modal
-    const handleCloseComingSoon = (): void => {
-        setComingSoonOpen(false);
-    };
+    const handleComingSoon = (): void => setComingSoonOpen(true);
+    const handleCloseComingSoon = (): void => setComingSoonOpen(false);
 
     return (
         <>
@@ -216,20 +276,17 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           display: flex;
           min-height: 120vh;
         }
-
         .abx-sidebar {
           width: 450px;
           padding: 2rem;
           background: #fff;
           box-sizing: border-box;
         }
-
         .abx-nav {
           list-style: none;
           margin: 0;
           padding: 0;
         }
-
         .abx-nav-item {
           position: relative;
           clip-path: polygon(
@@ -247,70 +304,80 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-bottom: 1.25rem;
           cursor: pointer;
         }
-
         .abx-active {
           background: #BFE1F2;
           color: #003663;
         }
-
         .abx-content {
           flex: 1;
           padding: 3rem;
           box-sizing: border-box;
         }
-
         .abx-breadcrumb {
           font-size: 1.4rem;
           color: #003663;
-          text-align: center;   
-                     margin-top: 1.5rem; 
-          margin-bottom: 0.5 rem;
+          text-align: center;
+          margin-top: 1.5rem;
+          margin-bottom: 0.5rem;
         }
-
         .image-box {
-          border: 4px solid #003663;
-          padding: 1rem;
+          box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
+          padding: 0.4rem;
           display: inline-block;
-          margin-right: 1rem;
-          margin-bottom: 1rem;
+          margin-right: 1.2rem;
+          margin-bottom: 1.2rem;
           box-sizing: border-box;
           cursor: pointer;
-          transition: transform 0.2s;
+          border-radius: 20px;
+          background: #fff;
+          transition: transform 0.18s, box-shadow 0.18s;
         }
-
         .image-box:hover {
-          transform: scale(1.05);
+          transform: scale(1.04);
+          box-shadow: 0 10px 75px rgba(48,56,96,0.32), 0 8px 30px rgba(40,40,60,0.19);
         }
-
+        .image-box img {
+          width: 350px;
+          height: 250px;
+          object-fit: contain;
+          display: block;
+          border-radius: 25px;
+          margin: 0 auto;
+        }
         .image-box.bottom {
           display: block;
           margin-top: 2rem;
-          width: 100%;
-          max-width: 490px;
+          width: 365px;
+          max-width: 90vw;
+          margin-right: 0;
+          margin-left: 0;
         }
-
-        .image-box img {
-          width: 450px;
-          height: 400px;
-          object-fit: contain;
-          display: block;
-        }
-
         .image-label {
           font-size: 1.2rem;
           color: #003663;
-          margin-bottom: 0.5rem;
+          margin-top: 0.6rem;
+          margin-bottom: 0.2rem;
+          text-align: center;
+          width: 100%;
+          display: block;
         }
       `}</style>
+
             <PageLayoutComponent>
                 <Breadcrumb
                     t={t}
                     selectedOrg={selectedOrg}
-                    showTrendDetails={showTrendDetails}
+                    view={view}
                     handleShowMain={handleShowMain}
                 />
-                {showTrendDetails ? (
+
+                {view === "trend" ? (
                     <TrendDetails microorganism={selectedOrg} />
+                ) : view === "substance" ? (
+                    <SubstanceDetail
+                        microorganism={selectedOrg}
+                        onShowMain={handleShowMain}
+                    />
                 ) : (
                     <div className="abx-page">
                         <aside className="abx-sidebar">
@@ -327,13 +394,15 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     >
                                         <FormattedMicroorganismName
                                             microName={org}
+                                            fontWeight="bold"
+                                            fontSize="1.3rem"
                                         />
                                     </li>
                                 ))}
                             </ul>
                         </aside>
+
                         <section className="abx-content">
-                            {/* Breadcrumb is now at the top of content, see above */}
                             <div
                                 className="image-box"
                                 onClick={handleTrendClick}
@@ -341,9 +410,10 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 <div className="image-label">{t("Trend")}</div>
                                 <img src="/assets/trend.png" alt="Trend" />
                             </div>
+
                             <div
                                 className="image-box"
-                                onClick={handleComingSoon}
+                                onClick={handleSubstanceClick}
                             >
                                 <div className="image-label">
                                     {t("Substans")}
@@ -353,6 +423,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     alt="Substans"
                                 />
                             </div>
+
                             <div
                                 className="image-box bottom"
                                 onClick={handleComingSoon}
@@ -363,6 +434,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                         </section>
                     </div>
                 )}
+
                 <Dialog open={comingSoonOpen} onClose={handleCloseComingSoon}>
                     <DialogTitle>{t("ComingSoon")}</DialogTitle>
                     <DialogActions sx={{ justifyContent: "center" }}>

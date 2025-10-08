@@ -23,6 +23,7 @@
   "MRSA": "MRSA",
   "SALMONELLA_SPP": "Salmonella spp.",
   "STEC": "STEC",
+  "DOWNLOAD_ZIP_FILE": "Datenexport",
   "CARBA_E_COLI": "CARBA E. coli",
   "ENTEROCOCCUS_SPP": "Enterococcus spp.",
   "HUHN": "Huhn",
@@ -56,5 +57,14 @@
   "Apply All Filters": "Alle Filter anwenden",
   "No_Records": "Keine Einträge gefunden",
   "SELECT_ALL": "Alle auswählen",
+
+  "Short Substance": "Kurzbezeichnung",
+  "Substance Class": "Wirkstoffklasse",
+  "Wirkstoff": "Wirkstoff",
+  "Max": "Max",
+  "Min": "Min",
+  "CutOff": "CutOff",
+
+  "Methods.Amrs.CancelButton": "Schließen",
   "HOW_TO": "Anleitung"
 }

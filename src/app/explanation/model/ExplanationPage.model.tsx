@@ -42,6 +42,8 @@ export type MicroorgaName = MicroorgaNamePart;
 export interface ExplanationDTO {
     title: string;
     description: string;
+    anchor: string; // <-- NEW: used for #hash and element id
+
     section: string;
     // If you want a separate field for the translation:
     translatedSection?: string;

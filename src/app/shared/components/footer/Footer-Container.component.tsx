@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // Models below can be kept, but type of response can be "any" for v5 if you're unsure
 // import { CMSEntity, CMSResponse } from "../../../shared/model/CMS.model";
@@ -35,6 +35,7 @@ export const useFetchSupportEmail = (): {
                 );
                 console.log("API response for support email:", infoResponse);
 
+                // 🚨 NOTE the new path!
                 if (
                     infoResponse.data &&
                     infoResponse.data.data &&
@@ -63,7 +64,6 @@ export const useFetchSupportEmail = (): {
 
     return { supportEmail, error, clearError };
 };
-
 /**
  * FooterContainer component that uses the custom hook to fetch the support email.
  * It renders the footer layout along with the last update and link list components,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // eslint-disable-next-line import/named
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button, Link, Typography, useMediaQuery } from "@mui/material";
+import { Button, Typography, useMediaQuery } from "@mui/material";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
@@ -34,18 +34,20 @@ const italicWords: string[] = [
     "Echinococcus",
     "Campylobacter",
 ];
+
 const GERMAN_README = `
 Dieser ZooNotify-Daten-Download enthält diese README-Datei, zwei CSV-Dateien und eine zusätzliche Textdatei. Der Inhalt und die Verwendung dieser Dateien wird im Folgenden erläutert.
 
 prevalence_data_dot.csv: für Software mit deutschen Spracheinstellungen 
 Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit deutschen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Kommas als Dezimaltrennzeichen verwenden. 
 
-prevalence_data_comma.csv: für Software mit englischen Spracheinstellungen 
+prevalence_data_comma.csv: für Software mit englischen Spracheeinstellungen 
 Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden. 
 
 search_parameters.txt
 In der Textdatei search_parameters.txt finden Sie Informationen zu den Parametern, die Sie im Suchmenü von ZooNotify ausgewählt haben, bevor Sie die Daten heruntergeladen haben. Die heruntergeladenen CSV-Dateien enthalten nur Daten, die mit den in der Datei search_parameters.txt angegebenen Suchkriterien übereinstimmen.
 `;
+
 const ENGLISH_README = `
 This ZooNotify data download contains this README-file, two CSV-files and one additional text file. The content and use of these files is explained below.
 
@@ -62,10 +64,7 @@ In the text file search_parameters.txt you will find information about the param
 const formatMicroorganismName = (
     microName: string | null | undefined
 ): JSX.Element => {
-    if (!microName) {
-        console.warn("Received null or undefined microorganism name");
-        return <></>;
-    }
+    if (!microName) return <></>;
     const words = microName
         .split(/(\s+|-)/)
         .filter((part: string) => part.trim().length > 0);
@@ -91,6 +90,7 @@ const formatMicroorganismName = (
             <></>
         );
 };
+
 const localTooltipTheme = createTheme({
     components: {
         MuiTooltip: {
@@ -116,9 +116,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-    const [filename, setFilename] = useState<string>("");
     const theme = useTheme();
-    // Use media query to detect small screens (below 1600px width)
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
     const { searchParameters, prevalenceUpdateDate } = usePrevalenceFilters();
 
@@ -136,12 +134,15 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         decimalSeparator: string
     ): string => {
         const csvRows: string[] = [];
+        // ✅ CSV columns (Matrix Group included, table unchanged)
         const headers: Array<keyof PrevalenceEntry> = [
             "samplingYear",
             "microorganism",
             "sampleOrigin",
+            "superCategorySampleOrigin",
             "samplingStage",
             "matrix",
+            "matrixGroup", // <-- added for CSV only
             "numberOfSamples",
             "numberOfPositive",
             "percentageOfPositive",
@@ -164,7 +165,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             samplingStage: "SAMPLING_STAGE",
             sampleOrigin: "SAMPLE_ORIGIN",
             microorganism: "MICROORGANISM",
-            superCategorySampleOrigin: "SUPER_CATEGORY_SAMPLE_ORIGIN",
+            superCategorySampleOrigin: "SUPER-CATEGORY-SAMPLE-ORIGIN",
         };
 
         csvRows.push(
@@ -185,7 +186,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                 if (typeof value === "number") {
                     return formatNumber(value, decimalSeparator);
                 }
-                return `"${value.replace(/"/g, '""')}"`;
+                return `"${String(value ?? "").replace(/"/g, '""')}"`;
             });
             csvRows.push(values.join(";"));
         });
@@ -193,53 +194,65 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         return csvRows.join("\n");
     };
 
-    const prepareDownload = async (): Promise<void> => {
-        if (prevalenceData.length === 0) return;
+    /** Build the ZIP from the *current* grid rows & current search parameters */
+    const prepareDownload = async (): Promise<{
+        url: string;
+        name: string;
+    } | null> => {
+        if (prevalenceData.length === 0) return null;
 
         const zip = new JSZip();
         const timestamp = getFormattedTimestamp();
 
-        // 1) Generate CSV files
+        // CSVs from current rows
         const csvContentDot = createCSVContent(prevalenceData, ".");
         const csvContentComma = createCSVContent(prevalenceData, ",");
 
         zip.file(`prevalence_data_dot_${timestamp}.csv`, csvContentDot);
         zip.file(`prevalence_data_comma_${timestamp}.csv`, csvContentComma);
 
-        // 2) Add search_parameters.txt
+        // Search parameters + README
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
-        const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson
-            .split("\n")
-            .map((line) => {
-                if (line.includes("{")) return line;
-                const keyMatch = line.match(/"(.*?)":/);
-                if (keyMatch) {
-                    const key = keyMatch[1];
-                    return `\n--- ${key.toUpperCase()} ---\n${line}`;
-                }
-                return line;
-            })
-            .join("\n")}`;
-
-        // 3) Pick the correct README text without i18n
+        const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson}`;
         const readmeContent =
             language?.toLowerCase() === "de" ? GERMAN_README : ENGLISH_README;
 
         zip.file(`search_parameters_${timestamp}.txt`, formattedText);
         zip.file(`README_${timestamp}.txt`, readmeContent);
-        // 4) Generate the blob
+
+        // Blob
         const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
-
-        setDownloadUrl(url);
-        setFilename(`data_package_${timestamp}.zip`);
+        const name = `data_package_${timestamp}.zip`;
+        return { url, name };
     };
 
-    useEffect(() => {
-        if (prevalenceData.length > 0) {
-            prepareDownload();
+    /** Click handler: build fresh ZIP, revoke old URL, trigger download */
+    const handleDownloadClick = async (): Promise<void> => {
+        if (downloadUrl) {
+            URL.revokeObjectURL(downloadUrl);
+            setDownloadUrl(null);
         }
-    }, [prevalenceData, searchParameters]);
+        const res = await prepareDownload();
+        if (!res) return;
+
+        setDownloadUrl(res.url);
+
+        // Auto-trigger download
+        const a = document.createElement("a");
+        a.href = res.url;
+        a.download = res.name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    };
+
+    /** Cleanup blob URL on unmount / change */
+    useEffect(() => {
+        return () => {
+            if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+        };
+    }, [downloadUrl]);
 
     const localeText = {
         noRowsLabel: t("dataGrid.noRowsLabel"),
@@ -282,6 +295,15 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             headerAlign: "left",
         },
         {
+            field: "superCategorySampleOrigin",
+            headerName: t("SUPER-CATEGORY-SAMPLE-ORIGIN"),
+            minWidth: 180,
+            flex: 1,
+            headerClassName: "header-style",
+            align: "left",
+            headerAlign: "left",
+        },
+        {
             field: "samplingStage",
             headerName: t("SAMPLING_STAGE"),
             minWidth: 150,
@@ -299,6 +321,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             align: "left",
             headerAlign: "left",
         },
+        // (No matrixGroup column in the table)
         {
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
@@ -361,6 +384,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             <div style={{ marginBottom: "10px" }}>
                 <DataGridControls heading={t("TABLE_DETAIL")} />
             </div>
+
             <ZNAccordion
                 title={t("PREVALENCE_TABLE")}
                 content={
@@ -384,12 +408,13 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             {t("Generated on")}:{" "}
                             {prevalenceUpdateDate || t("No date available")}
                         </Typography>
+
                         <ThemeProvider theme={localTooltipTheme}>
                             <DataGrid
                                 rows={prevalenceData}
                                 columns={columns}
                                 loading={loading}
-                                disableColumnFilter={true}
+                                disableColumnFilter
                                 hideFooter={false}
                                 localeText={localeText}
                                 sx={{
@@ -454,43 +479,33 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                 }}
                             />
                         </ThemeProvider>
-                        {downloadUrl && (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                style={{
-                                    margin: "0.5em",
-                                    backgroundColor: theme.palette.primary.main,
-                                }}
-                            >
-                                <Link
-                                    href={downloadUrl}
-                                    download={filename}
-                                    style={{
-                                        width: "100%",
-                                        padding: "0.5em 1em",
-                                        color: "inherit",
-                                        textDecoration: "none",
-                                    }}
-                                >
-                                    {t("DOWNLOAD_ZIP_FILE")}
-                                </Link>
-                            </Button>
-                        )}
+
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleDownloadClick}
+                            disabled={prevalenceData.length === 0}
+                            style={{
+                                margin: "0.5em",
+                                backgroundColor: theme.palette.primary.main,
+                            }}
+                        >
+                            {t("DOWNLOAD_ZIP_FILE")}
+                        </Button>
                     </div>
                 }
-                defaultExpanded={true}
+                defaultExpanded
                 centerContent={false}
                 withTopBorder={false}
             />
-            <div style={{ height: "10px" }}></div>
+
+            <div style={{ height: "10px" }} />
+
             <ZNAccordion
                 title={t("PREVALENCE_CHART")}
                 content={
                     <div
                         style={{
-                            // On small screens, allow a larger maxHeight so the full chart is visible,
-                            // and enable vertical scrolling if needed.
                             maxHeight: isSmallScreen ? "1650px" : "950px",
                             width: "100%",
                             overflowY: "hidden",
@@ -501,7 +516,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                         </div>
                     </div>
                 }
-                defaultExpanded={true}
+                defaultExpanded
                 centerContent={false}
                 withTopBorder={false}
             />

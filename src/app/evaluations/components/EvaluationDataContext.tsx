@@ -3,6 +3,7 @@ import React, {
     createContext,
     useContext,
     useEffect,
+    useRef,
     useState,
 } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,7 +16,8 @@ import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
 import { FilterSelection } from "../model/Evaluations.model";
 import { initialFilterSelection } from "../model/constants";
 
-// 1) "Flat" diagram/csv fields
+/* ================== API/Types ================== */
+
 interface DiagramData {
     id: number;
     url: string;
@@ -25,7 +27,7 @@ interface EvaluationItem {
     title: string;
     description: string;
     category: string;
-    division: string; // "TIERE", "FUTTERMITTEL", ...
+    division: string; // localized string
     microorganism: string;
     diagramType: string;
     productionType: string;
@@ -33,14 +35,11 @@ interface EvaluationItem {
     diagram?: DiagramData;
     csv_data?: DiagramData;
 }
-
-// 2) The entire Strapi response
 interface EvaluationAPIResponse {
     data: EvaluationItem[];
     meta: unknown;
 }
 
-// 3) The internal shapes
 type DivisionToken = "FUTTERMITTEL" | "TIERE" | "LEBENSMITTEL" | "MULTIPLE";
 interface EvaluationEntry {
     id: string;
@@ -61,19 +60,25 @@ type Evaluation = Record<DivisionToken, EvaluationEntry[]>;
 interface EvaluationDataContext {
     readonly isLoading: boolean;
     readonly evaluationsData: Evaluation;
+    readonly selectedFilters: FilterSelection;
     updateFilters: (newFilters: FilterSelection) => void;
     showDivision: (division: string) => boolean;
 }
 
+/* ================== Helpers ================== */
+
+const emptyEvaluation: Evaluation = {
+    FUTTERMITTEL: [],
+    TIERE: [],
+    LEBENSMITTEL: [],
+    MULTIPLE: [],
+};
+
 export const DefaultEvaluationDataContext =
     createContext<EvaluationDataContext>({
         isLoading: true,
-        evaluationsData: {
-            FUTTERMITTEL: [],
-            TIERE: [],
-            LEBENSMITTEL: [],
-            MULTIPLE: [],
-        },
+        evaluationsData: emptyEvaluation,
+        selectedFilters: initialFilterSelection,
         updateFilters: () => {},
         showDivision: () => true,
     });
@@ -88,7 +93,6 @@ export const useEvaluationData = (): EvaluationDataContext => {
     return context;
 };
 
-/** Helper: isCompleteEntry if you only want items with both chart + csv. */
 function isCompleteEntry(entry: {
     title: string;
     description: string;
@@ -105,30 +109,29 @@ function isCompleteEntry(entry: {
     );
 }
 
-/** Helper: parse URL query -> FilterSelection */
 function parseQueryParams(queryParams: URLSearchParams): FilterSelection {
     const filters: FilterSelection = { ...initialFilterSelection };
-    Object.keys(filters).forEach((key) => {
-        const param = queryParams.get(key);
+    (Object.keys(filters) as (keyof FilterSelection)[]).forEach((key) => {
+        const param = queryParams.get(String(key));
         if (param) {
-            filters[key as keyof FilterSelection] = param.split(",");
+            filters[key] = param.split(",").filter(Boolean);
         }
     });
     return filters;
 }
 
-/** Helper: build query string from FilterSelection */
 function buildQueryString(filters: FilterSelection): string {
     const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, arr]) => {
-        if (arr.length) {
-            params.set(key, arr.join(","));
+    (Object.entries(filters) as [keyof FilterSelection, string[]][]).forEach(
+        ([key, arr]) => {
+            if (arr.length) {
+                params.set(String(key), arr.join(","));
+            }
         }
-    });
+    );
     return params.toString();
 }
 
-/** Filter logic */
 function applyFiltersStrict(
     filterSelection: FilterSelection,
     data: Evaluation
@@ -147,8 +150,10 @@ function applyFiltersStrict(
             ).every((filterKey) => {
                 const selectedVals = filterSelection[filterKey];
                 if (selectedVals.length === 0) return true;
-                if (item[filterKey] == null) return false;
-                return selectedVals.includes(item[filterKey]);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if ((item as any)[filterKey] == null) return false;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                return selectedVals.includes((item as any)[filterKey]);
             });
         });
     });
@@ -156,7 +161,6 @@ function applyFiltersStrict(
     return filteredData;
 }
 
-/** Convert "flat" Strapi data -> internal `Evaluation` structure */
 function processApiResponse(apiData: EvaluationItem[]): Evaluation {
     const result: Evaluation = {
         FUTTERMITTEL: [],
@@ -166,11 +170,8 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
     };
 
     apiData.forEach((item) => {
-        // Ensure division is uppercase so it matches our keys
         const divisionKey = item.division.toUpperCase() as keyof Evaluation;
-        if (!result[divisionKey]) {
-            return;
-        }
+        if (!result[divisionKey]) return;
 
         const chartPath = item.diagram?.url
             ? CMS_BASE_ENDPOINT + item.diagram.url
@@ -184,7 +185,7 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
             title: item.title,
             description: item.description,
             category: item.category,
-            division: divisionKey,
+            division: String(divisionKey),
             microorganism: item.microorganism,
             diagramType: item.diagramType,
             productionType: item.productionType,
@@ -193,7 +194,6 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
             dataPath,
         };
 
-        // Only push if the entry is complete
         if (isCompleteEntry(newEntry)) {
             result[divisionKey].push(newEntry);
         }
@@ -202,7 +202,8 @@ function processApiResponse(apiData: EvaluationItem[]): Evaluation {
     return result;
 }
 
-/** The main provider */
+/* ================== Provider ================== */
+
 export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
@@ -211,30 +212,53 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     const [selectedFilters, setSelectedFilters] = useState<FilterSelection>(
         initialFilterSelection
     );
-    const [originalData, setOriginalData] = useState<Evaluation>({
-        FUTTERMITTEL: [],
-        TIERE: [],
-        LEBENSMITTEL: [],
-        MULTIPLE: [],
-    });
-    const [evaluationsData, setEvaluationsData] = useState<Evaluation>({
-        FUTTERMITTEL: [],
-        TIERE: [],
-        LEBENSMITTEL: [],
-        MULTIPLE: [],
-    });
+    const [originalData, setOriginalData] =
+        useState<Evaluation>(emptyEvaluation);
+    const [evaluationsData, setEvaluationsData] =
+        useState<Evaluation>(emptyEvaluation);
     const [isLoading, setLoading] = useState(true);
 
-    // 1) Fetch data from Strapi (flat shape)
+    // guard against stale fetches overwriting fresh state
+    const fetchIdRef = useRef(0);
+
+    // On first mount: align with ?lang=... if present; otherwise write current language to URL.
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const urlLang = params.get("lang");
+
+        if (urlLang && urlLang !== i18n.language) {
+            i18n.changeLanguage(urlLang);
+        }
+        if (!urlLang) {
+            params.set("lang", i18n.language);
+            const newSearch = `?${params.toString()}`;
+            if (newSearch !== window.location.search) {
+                window.history.replaceState(
+                    {},
+                    "",
+                    `${window.location.pathname}${newSearch}`
+                );
+            }
+        }
+        // run once on mount
+    }, []);
+
+    // Fetch data whenever the app language changes.
+    // IMPORTANT: Reset filters unless URL explicitly provides them (prevents “no results” after language switch).
+    useEffect(() => {
+        let isActive = true;
+        const myFetchId = ++fetchIdRef.current;
+
         const fetchDataFromAPI = async (): Promise<void> => {
             setLoading(true);
             try {
-                // Multiple populate
-                const url = `${EVALUATIONS}?locale=${i18n.language}&populate=diagram&populate=csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`;
+                const effectiveLang = i18n.language;
+                const url = `${EVALUATIONS}?locale=${effectiveLang}&populate=diagram&populate=csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`;
                 const response = await callApiService<EvaluationAPIResponse>(
                     url
                 );
+
+                if (!isActive || myFetchId !== fetchIdRef.current) return;
 
                 if (response.data) {
                     const processedData = processApiResponse(
@@ -242,69 +266,71 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
                     );
                     setOriginalData(processedData);
 
-                    // Parse filters from URL
                     const urlFilters = parseQueryParams(
                         new URLSearchParams(window.location.search)
                     );
+                    const hasUrlFilters = Object.values(urlFilters).some(
+                        (arr) => arr.length > 0
+                    );
 
-                    // If there are filters provided in the URL, apply them; otherwise, use full data.
-                    if (
-                        Object.values(urlFilters).some((arr) => arr.length > 0)
-                    ) {
+                    if (hasUrlFilters) {
+                        // honor deep links
                         setSelectedFilters(urlFilters);
                         setEvaluationsData(
                             applyFiltersStrict(urlFilters, processedData)
                         );
                     } else {
+                        // RESET filters on language change so results are visible immediately
+                        setSelectedFilters(initialFilterSelection);
                         setEvaluationsData(processedData);
                     }
                 }
             } catch (error) {
                 console.error("Fetching evaluation data failed", error);
+            } finally {
+                if (isActive && myFetchId === fetchIdRef.current) {
+                    setLoading(false);
+                }
             }
-            setLoading(false);
         };
 
         void fetchDataFromAPI();
+        return () => {
+            isActive = false;
+        };
     }, [i18n.language]);
 
-    // 2) Whenever selectedFilters or language changes, re-apply filters and update URL deep link
+    // Re-apply filters on any state change and keep URL (including lang) in sync
     useEffect(() => {
-        // Only apply filters if data is loaded
-        if (
-            !originalData.FUTTERMITTEL.length &&
-            !originalData.TIERE.length &&
-            !originalData.LEBENSMITTEL.length &&
-            !originalData.MULTIPLE.length
-        ) {
-            return;
-        }
+        const hasData =
+            originalData.FUTTERMITTEL.length ||
+            originalData.TIERE.length ||
+            originalData.LEBENSMITTEL.length ||
+            originalData.MULTIPLE.length;
+        if (!hasData) return;
 
         const newData = applyFiltersStrict(selectedFilters, originalData);
         setEvaluationsData(newData);
 
-        // Build query string from filters
         const filterQuery = buildQueryString(selectedFilters);
         const searchParams = new URLSearchParams(filterQuery);
-
-        // Ensure the language parameter is included in the URL
         searchParams.set("lang", i18n.language);
 
-        // Build the new URL using the current pathname and search parameters
-        const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-
-        if (newUrl !== window.location.href) {
-            window.history.replaceState({}, "", newUrl);
+        const newSearch = `?${searchParams.toString()}`;
+        if (newSearch !== window.location.search) {
+            window.history.replaceState(
+                {},
+                "",
+                `${window.location.pathname}${newSearch}`
+            );
         }
     }, [selectedFilters, originalData, i18n.language]);
 
-    // 3) Public API
     const updateFilters = (newFilters: FilterSelection): void => {
         setSelectedFilters(newFilters);
     };
 
     const showDivision = (div: string): boolean => {
-        // If the division filter is empty, show all divisions
         if (selectedFilters.division.length === 0) return true;
         return selectedFilters.division.includes(div);
     };
@@ -312,6 +338,7 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     const value: EvaluationDataContext = {
         isLoading,
         evaluationsData,
+        selectedFilters,
         updateFilters,
         showDivision,
     };

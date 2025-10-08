@@ -1,19 +1,18 @@
 import Markdown from "markdown-to-jsx";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AMR_TABLE } from "../../shared/infrastructure/router/routes";
+// import { AMR_TABLE } from "../../shared/infrastructure/router/routes";   // <<-- Don't use the static AMR_TABLE now!
+import { CMS_API_ENDPOINT } from "../../shared/infrastructure/router/routes";
 import { AmrKey, AmrsTable } from "../model/ExplanationPage.model";
 import { InfoPageComponent } from "./ExplanationMainComponent";
 import { ErrorSnackbar } from "../../shared/components/ErrorSnackbar/ErrorSnackbar";
-
-// "Flat" antibiotic
 interface AntibioticFlat {
     id: number;
     shortName: string;
     name: string;
 }
 
-// "Flat" cut-off record
+// --- FLAT CUT-OFF RECORD TYPE ---
 interface YearlyCutOffDataFlat {
     id: number;
     min: number;
@@ -25,7 +24,7 @@ interface YearlyCutOffDataFlat {
     antibiotic?: AntibioticFlat;
 }
 
-// "Flat" AMR table item
+// --- FLAT AMR TABLE ITEM ---
 interface AMRTableItem {
     id: number;
     table_id: string; // e.g. "3a", "3b", "1", etc.
@@ -34,11 +33,12 @@ interface AMRTableItem {
     cut_offs: YearlyCutOffDataFlat[];
 }
 
-// The entire response from your AMR_TABLE endpoint
+// --- RESPONSE TYPE FROM API ---
 interface AMRTableFlatResponse {
     data: AMRTableItem[];
     meta?: unknown;
 }
+// ... (keep your interfaces as before) ...
 
 const InfoPageContainer: React.FC = (): ReactElement => {
     const [amrTableData, setAmrTableData] = useState<Record<AmrKey, AmrsTable>>(
@@ -46,25 +46,28 @@ const InfoPageContainer: React.FC = (): ReactElement => {
     );
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const { t } = useTranslation(["InfoPage"]);
+    const { i18n, t } = useTranslation(["InfoPage"]);
 
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
             try {
                 setLoading(true);
+                setError(null);
 
-                // 1) Fetch the "flat" JSON from your AMR_TABLE endpoint
-                const response = await fetch(AMR_TABLE);
+                // Build dynamic URL based on language and Strapi API pattern you tested:
+                const locale = i18n.language.split("-")[0] || "de";
+                const url = `${CMS_API_ENDPOINT}/resistance-tables?locale=${locale}&populate=cut_offs.antibiotic`;
+
+                const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const json: AMRTableFlatResponse = await response.json();
 
-                // 2) Transform the array into a dictionary: Record<AmrKey, AmrsTable>
+                // (Transformation stays the same as your code!)
                 const transformedData = json.data.reduce<
                     Record<AmrKey, AmrsTable>
                 >((acc, item) => {
-                    // Rename properties to camelCase
                     const {
                         table_id: tableId,
                         description,
@@ -72,17 +75,14 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                         cut_offs: cutOffs,
                     } = item;
 
-                    // Only proceed if tableId is one of your known keys
                     if (
                         !["1", "2", "3a", "3b", "4", "5a", "5b"].includes(
                             tableId
                         )
                     ) {
-                        // If tableId is something else, skip it
                         return acc;
                     }
 
-                    // Distinct years (descending)
                     const years: string[] = cutOffs
                         .reduce(
                             (yearList: string[], rec: YearlyCutOffDataFlat) => {
@@ -96,7 +96,6 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                         )
                         .sort((a, b) => b.localeCompare(a));
 
-                    // Distinct antibiotic shortNames
                     const antibiotics: string[] = cutOffs.reduce(
                         (microbs: string[], rec: YearlyCutOffDataFlat) => {
                             const shortName = rec.antibiotic?.shortName;
@@ -129,8 +128,6 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                         tableRows: antibiotics.map((antibioticShort) => {
                             let antibioticName = "";
                             let substanceClass = "";
-
-                            // Build concentrationList for each year
                             const concentrationList: Record<
                                 string,
                                 { cutOff: string; min: string; max: string }
@@ -180,8 +177,8 @@ const InfoPageContainer: React.FC = (): ReactElement => {
             }
         };
 
-        void fetchData();
-    }, [t]);
+        fetchData();
+    }, [i18n.language]);
 
     const handleCloseError = (): void => {
         setError(null);
@@ -193,7 +190,6 @@ const InfoPageContainer: React.FC = (): ReactElement => {
 
     const handleExportAmrData = (amrKey: AmrKey): void => {
         console.log("Export functionality for", amrKey);
-        // e.g. CSV or Excel export
     };
 
     return (

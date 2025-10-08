@@ -1,14 +1,16 @@
 {
   "AntibioticResistance": "Antibiotic Resistance",
-  "More Info on Sampling Year": "More Info on Sampling Year",
-  "More Info on Antibiotic Substances": "More Info on Antibiotic Substances",
-  "More Info on Species": "More Info on Species",
-  "More Info on Super Categories": "More Info on Super Categories",
-  "More Info on Sample Origins": "More Info on Sample Origins",
-  "More Info on Sampling Stages": "More Info on Sampling Stages",
-  "More Info on Matrix Groups": "More Info on Matrix Groups",
-  "More Info on Matrices": "More Info on Matrices",
-  "SAMPLING_YEAR": "Sampling Year",
+  "More Info on Sampling Year": "More Information on Sampling Year",
+  "More Info on Antibiotic Substances": "More Information on Antimicrobial Substance",
+  "More Info on Species": "More Information on Species",
+  "More Info on Super Categories": "More Information on  Superordinate Sample Origin",
+  "More Info on Sample Origins": "More Information on Sample Origin",
+  "More Info on Sampling Stages": "More Information on Sampling Stage",
+  "More Info on Matrix Groups": "More Information on Matrix Group",
+  "More Info on Combinations": "More Information on combinations",
+
+  "More Info on Matrices": "More Info on Matrix",
+
   "ANTIBIOTIC_SUBSTANCE": "Antimicrobial substance",
   "SPECIES": "Species",
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Superordinate Sample Origin",
@@ -30,10 +32,18 @@
   "DOWNLOAD_ZIP_FILE": "Data download",
   "Year": "Year",
   "Resistenzrate (%)": "Resistance rate (%)",
-
   "anzahlResistenterIsolate": "number of resistant isolates",
   "minKonfidenzintervall": "minimum confidence interval",
   "maxKonfidenzintervall": "maximum confidence interval",
+  "Not enough data to display the chart.": "Es waren nicht genügend Daten vorhanden, um ein Diagramm zu erstellen. Bitte laden Sie die Daten herunter, um weitere Details zu erhalten.",
+  "TESTED_SUBSTANCES": "Tested substances",
+  "PROPORTION_RESISTANT_ISOLATES": "Proportion of resistant isolates (%)",
+  "Share_Link": "Share Link",
+  "Link copied to clipboard!": "Link copied to clipboard!",
+  "Multi": " Multiple resistance Graph",
+  "combinations": "Combinations",
+  "combination_limit_title": "Combination Limit",
+  "combination_limit_message": "You can choose a maximum of 4 combinations to be displayed in the graph.",
 
-  "Multi": " Multiple resistance Graph"
+  "SAMPLING_YEAR": "Sampling year"
 }
