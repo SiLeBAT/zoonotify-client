@@ -3,23 +3,23 @@ import React, {
     ReactNode,
     createContext,
     useContext,
-    useState,
     useEffect,
+    useState,
 } from "react";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import {
-    MICROORGANISMS,
-    SAMPLE_ORIGINS,
     MATRICES,
-    SAMPLING_STAGES,
     MATRIX_GROUPS,
-    SUPER_CATEGORY_SAMPLE_ORIGINS,
+    MICROORGANISMS,
     PREVALENCES,
+    SAMPLE_ORIGINS,
+    SAMPLING_STAGES,
+    SUPER_CATEGORY_SAMPLE_ORIGINS,
 } from "../../shared/infrastructure/router/routes";
 import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
 
 /** 1) A simple "Matrix"-style interface for each relation */
-interface Matrix {
+interface CMSEntry {
     id: number; // locale-specific id
     name: string; // localized label
     documentId?: string; // locale-agnostic id (same across locales)
@@ -34,13 +34,13 @@ interface PrevalenceItem {
     percentageOfPositive: number;
     ciMin: number;
     ciMax: number;
-    matrix?: Matrix;
-    matrixDetail?: Matrix;
-    matrixGroup?: Matrix;
-    microorganism?: Matrix;
-    samplingStage?: Matrix;
-    sampleOrigin?: Matrix;
-    superCategorySampleOrigin?: Matrix;
+    matrix?: CMSEntry;
+    matrixDetail?: CMSEntry;
+    matrixGroup?: CMSEntry;
+    microorganism?: CMSEntry;
+    samplingStage?: CMSEntry;
+    sampleOrigin?: CMSEntry;
+    superCategorySampleOrigin?: CMSEntry;
 }
 
 /** 3) Entire Strapi response for "Prevalences" */
@@ -291,7 +291,9 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     setError
                 );
                 setFullPrevalenceData(processedData);
+                console.log("Full prevalence data fetched:");
                 setPrevalenceData(processedData);
+                console.log("Prevalence data fetched:");
             }
         } catch (err) {
             console.error("Error fetching prevalence data:", err);
@@ -369,7 +371,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 fetchOption(MATRIX_GROUPS),
                 fetchOption(SUPER_CATEGORY_SAMPLE_ORIGINS),
             ]);
-
+            console.log("Original microorganism options:", microorganisms);
             setMicroorganismOptions(microorganisms);
             setSampleOriginOptions(sampleOrigins);
             setMatrixOptions(matrices);
@@ -622,6 +624,14 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     useEffect(() => {
         const updateOptionsBasedOnSelection = (): void => {
+            console.log("Updating options based on current selections...");
+            console.log("Current Options:", microorganismOptions.length);
+            console.log(
+                "fullPrevalenceData length:",
+                fullPrevalenceData.length
+            );
+            console.log("prevalenceData length:", prevalenceData.length);
+
             const dataToCompute = isSearchTriggered
                 ? prevalenceData
                 : fullPrevalenceData;
@@ -692,6 +702,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     .sort((a, b) => a[1].localeCompare(b[1]))
                     .map(([documentId, name]) => ({ documentId, name }));
 
+            console.log("Computed microorganism options:", microMap.size);
             setMicroorganismOptions(mapToOptions(microMap));
             setSampleOriginOptions(mapToOptions(soMap));
             setMatrixOptions(mapToOptions(mMap));
