@@ -1,37 +1,38 @@
-import React, { useState, useEffect, useMemo } from "react";
+import InfoIcon from "@mui/icons-material/Info";
+import Search from "@mui/icons-material/Search";
 import {
     Box,
     Button,
-    IconButton,
-    Stack,
-    Tooltip,
+    Checkbox,
     Dialog,
-    DialogTitle,
+    DialogActions,
     DialogContent,
     DialogContentText,
-    DialogActions,
-    Grow,
+    DialogTitle,
     FormControl,
+    Grow,
+    IconButton,
     InputLabel,
-    Select,
-    MenuItem,
-    Checkbox,
     ListItemText,
+    MenuItem,
     OutlinedInput,
+    Select,
+    Stack,
+    Tooltip,
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
-import Search from "@mui/icons-material/Search";
-import { useTranslation } from "react-i18next";
-import { usePrevalenceFilters } from "./PrevalenceDataContext";
-import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { CMSResponse } from "../../shared/model/CMS.model";
 import i18next from "i18next";
+import Markdown from "markdown-to-jsx";
+import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
+import { LoadingProcessComponent } from "../../shared/components/loading_process/LoadingProcess.component";
+import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import {
     INFORMATION,
     PEREVALENCE_INFO,
 } from "../../shared/infrastructure/router/routes";
-import Markdown from "markdown-to-jsx";
-import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
+import { CMSResponse } from "../../shared/model/CMS.model";
+import { usePrevalenceFilters } from "./PrevalenceDataContext";
 
 /** ---------- CMS content model ---------- */
 interface Content {
@@ -395,6 +396,7 @@ export function PrevalenceSideContent(): JSX.Element {
         setShowError,
         fetchOptions,
         setIsSearchTriggered,
+        loading,
     } = usePrevalenceFilters();
 
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -790,10 +792,14 @@ export function PrevalenceSideContent(): JSX.Element {
                 maxWidth: "95%",
             }}
         >
-            <Stack spacing={2.5} alignItems="flex-start">
-                {orderedComponents}
-                {remainingComponents}
-            </Stack>
+            {loading ? (
+                <LoadingProcessComponent />
+            ) : (
+                <Stack spacing={2.5} alignItems="flex-start">
+                    {orderedComponents}
+                    {remainingComponents}
+                </Stack>
+            )}
 
             {/* Info dialog */}
             <Dialog open={infoDialogOpen} onClose={handleClose}>
