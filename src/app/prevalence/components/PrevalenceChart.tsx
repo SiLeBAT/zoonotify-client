@@ -1,20 +1,20 @@
-import React, { useRef, useState, useEffect } from "react";
-import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import {
     Box,
     CircularProgress,
-    Typography,
     Grid,
     Pagination,
+    Typography,
     useMediaQuery,
 } from "@mui/material";
-import { Chart as ChartJS, registerables } from "chart.js";
 import type { ChartConfiguration } from "chart.js";
+import { Chart as ChartJS, registerables } from "chart.js";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
-import { getCurrentTimestamp } from "./utils";
+import { MicroorganismSelect } from "./MicroorganismSelect";
+import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { ChartDataPoint } from "./types";
+import { getCurrentTimestamp } from "./utils";
 
 ChartJS.register(...registerables);
 
@@ -256,7 +256,7 @@ const PrevalenceChart: React.FC = () => {
                         </Typography>
                     ) : (
                         <>
-                            <Grid container spacing={2}>
+                            <Grid container rowSpacing={0} columnSpacing={2}>
                                 {chartKeys.map((key) => {
                                     const sanitizedKey = sanitizeKey(key);
                                     const refKey = `${sanitizedKey}-${currentMicroorganism}`;
