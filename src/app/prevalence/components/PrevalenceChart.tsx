@@ -18,6 +18,8 @@ import { getCurrentTimestamp } from "./utils";
 
 ChartJS.register(...registerables);
 
+let [yearMin, yearMax] = [3000, 0];
+
 const PrevalenceChart: React.FC = () => {
     const { prevalenceData, loading, prevalenceUpdateDate } =
         usePrevalenceFilters();
@@ -73,6 +75,7 @@ const PrevalenceChart: React.FC = () => {
     } => {
         const chartData: { [key: string]: { [key: number]: ChartDataPoint } } =
             {};
+
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === currentMicroorganism) {
                 const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
@@ -103,16 +106,15 @@ const PrevalenceChart: React.FC = () => {
             currentPage * chartsPerPage
         )
     );
-    const [yearMin, yearMax] = Object.values(chartData).flatMap((yearData) => {
-        const years = Object.keys(yearData).sort();
-        return [years[0], years[years.length - 1]];
-    });
+
+    const yearRange = prevalenceData.map((entry) => entry.samplingYear);
+    yearMin = Math.min(...yearRange);
+    yearMax = Math.max(...yearRange);
 
     const yearOptions = Array.from(
-        { length: Number(yearMax) - Number(yearMin) + 1 },
-        (_, i) => Number(yearMin) + i
+        { length: yearMax - yearMin + 1 },
+        (_, i) => yearMin + i
     ).reverse();
-
     // Gather all ciMax values from all chart data points
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
         Object.values(yearData).map((data) => data.ciMax)
