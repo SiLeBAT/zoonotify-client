@@ -291,9 +291,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     setError
                 );
                 setFullPrevalenceData(processedData);
-                console.log("Full prevalence data fetched:");
                 setPrevalenceData(processedData);
-                console.log("Prevalence data fetched:");
             }
         } catch (err) {
             console.error("Error fetching prevalence data:", err);
@@ -320,7 +318,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             if (response.data?.data?.date) {
                 setPrevalenceUpdateDate(response.data.data.date || null);
             } else {
-                console.log("Date not found in response data.");
+                console.error("Date not found in response data.");
             }
         } catch (err) {
             console.error("Error fetching Prevalence-update date:", err);
@@ -371,7 +369,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 fetchOption(MATRIX_GROUPS),
                 fetchOption(SUPER_CATEGORY_SAMPLE_ORIGINS),
             ]);
-            console.log("Original microorganism options:", microorganisms);
             setMicroorganismOptions(microorganisms);
             setSampleOriginOptions(sampleOrigins);
             setMatrixOptions(matrices);
@@ -624,14 +621,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     useEffect(() => {
         const updateOptionsBasedOnSelection = (): void => {
-            console.log("Updating options based on current selections...");
-            console.log("Current Options:", microorganismOptions.length);
-            console.log(
-                "fullPrevalenceData length:",
-                fullPrevalenceData.length
-            );
-            console.log("prevalenceData length:", prevalenceData.length);
-
             const dataToCompute = isSearchTriggered
                 ? prevalenceData
                 : fullPrevalenceData;
@@ -702,7 +691,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     .sort((a, b) => a[1].localeCompare(b[1]))
                     .map(([documentId, name]) => ({ documentId, name }));
 
-            console.log("Computed microorganism options:", microMap.size);
             setMicroorganismOptions(mapToOptions(microMap));
             setSampleOriginOptions(mapToOptions(soMap));
             setMatrixOptions(mapToOptions(mMap));

@@ -68,11 +68,6 @@ const PrevalenceChart: React.FC = () => {
         setCurrentPage(1);
     }, [currentMicroorganism]);
 
-    const yearOptions = Array.from(
-        { length: 15 },
-        (_, i) => 2009 + i
-    ).reverse();
-
     const generateChartData = (): {
         [key: string]: { [key: number]: ChartDataPoint };
     } => {
@@ -108,6 +103,15 @@ const PrevalenceChart: React.FC = () => {
             currentPage * chartsPerPage
         )
     );
+    const [yearMin, yearMax] = Object.values(chartData).flatMap((yearData) => {
+        const years = Object.keys(yearData).sort();
+        return [years[0], years[years.length - 1]];
+    });
+
+    const yearOptions = Array.from(
+        { length: Number(yearMax) - Number(yearMin) + 1 },
+        (_, i) => Number(yearMin) + i
+    ).reverse();
 
     // Gather all ciMax values from all chart data points
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
