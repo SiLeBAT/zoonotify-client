@@ -1,22 +1,24 @@
-import React, { useRef, useState, useEffect } from "react";
-import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import {
     Box,
     CircularProgress,
-    Typography,
     Grid,
     Pagination,
+    Typography,
     useMediaQuery,
 } from "@mui/material";
-import { Chart as ChartJS, registerables } from "chart.js";
 import type { ChartConfiguration } from "chart.js";
+import { Chart as ChartJS, registerables } from "chart.js";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MicroorganismSelect } from "./MicroorganismSelect";
 import { ChartCard } from "./ChartCard";
-import { getCurrentTimestamp } from "./utils";
+import { MicroorganismSelect } from "./MicroorganismSelect";
+import { usePrevalenceFilters } from "./PrevalenceDataContext";
 import { ChartDataPoint } from "./types";
+import { getCurrentTimestamp } from "./utils";
 
 ChartJS.register(...registerables);
+
+let [yearMin, yearMax] = [3000, 0];
 
 const PrevalenceChart: React.FC = () => {
     const { prevalenceData, loading, prevalenceUpdateDate } =
@@ -68,16 +70,12 @@ const PrevalenceChart: React.FC = () => {
         setCurrentPage(1);
     }, [currentMicroorganism]);
 
-    const yearOptions = Array.from(
-        { length: 15 },
-        (_, i) => 2009 + i
-    ).reverse();
-
     const generateChartData = (): {
         [key: string]: { [key: number]: ChartDataPoint };
     } => {
         const chartData: { [key: string]: { [key: number]: ChartDataPoint } } =
             {};
+
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === currentMicroorganism) {
                 const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
@@ -109,6 +107,14 @@ const PrevalenceChart: React.FC = () => {
         )
     );
 
+    const yearRange = prevalenceData.map((entry) => entry.samplingYear);
+    yearMin = Math.min(...yearRange);
+    yearMax = Math.max(...yearRange);
+
+    const yearOptions = Array.from(
+        { length: yearMax - yearMin + 1 },
+        (_, i) => yearMin + i
+    ).reverse();
     // Gather all ciMax values from all chart data points
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
         Object.values(yearData).map((data) => data.ciMax)
@@ -256,7 +262,7 @@ const PrevalenceChart: React.FC = () => {
                         </Typography>
                     ) : (
                         <>
-                            <Grid container spacing={2}>
+                            <Grid container rowSpacing={0} columnSpacing={2}>
                                 {chartKeys.map((key) => {
                                     const sanitizedKey = sanitizeKey(key);
                                     const refKey = `${sanitizedKey}-${currentMicroorganism}`;

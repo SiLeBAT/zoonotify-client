@@ -3,23 +3,23 @@ import React, {
     ReactNode,
     createContext,
     useContext,
-    useState,
     useEffect,
+    useState,
 } from "react";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import {
-    MICROORGANISMS,
-    SAMPLE_ORIGINS,
     MATRICES,
-    SAMPLING_STAGES,
     MATRIX_GROUPS,
-    SUPER_CATEGORY_SAMPLE_ORIGINS,
+    MICROORGANISMS,
     PREVALENCES,
+    SAMPLE_ORIGINS,
+    SAMPLING_STAGES,
+    SUPER_CATEGORY_SAMPLE_ORIGINS,
 } from "../../shared/infrastructure/router/routes";
 import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
 
 /** 1) A simple "Matrix"-style interface for each relation */
-interface Matrix {
+interface CMSEntry {
     id: number; // locale-specific id
     name: string; // localized label
     documentId?: string; // locale-agnostic id (same across locales)
@@ -34,13 +34,13 @@ interface PrevalenceItem {
     percentageOfPositive: number;
     ciMin: number;
     ciMax: number;
-    matrix?: Matrix;
-    matrixDetail?: Matrix;
-    matrixGroup?: Matrix;
-    microorganism?: Matrix;
-    samplingStage?: Matrix;
-    sampleOrigin?: Matrix;
-    superCategorySampleOrigin?: Matrix;
+    matrix?: CMSEntry;
+    matrixDetail?: CMSEntry;
+    matrixGroup?: CMSEntry;
+    microorganism?: CMSEntry;
+    samplingStage?: CMSEntry;
+    sampleOrigin?: CMSEntry;
+    superCategorySampleOrigin?: CMSEntry;
 }
 
 /** 3) Entire Strapi response for "Prevalences" */
@@ -318,7 +318,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             if (response.data?.data?.date) {
                 setPrevalenceUpdateDate(response.data.data.date || null);
             } else {
-                console.log("Date not found in response data.");
+                console.error("Date not found in response data.");
             }
         } catch (err) {
             console.error("Error fetching Prevalence-update date:", err);
@@ -369,7 +369,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 fetchOption(MATRIX_GROUPS),
                 fetchOption(SUPER_CATEGORY_SAMPLE_ORIGINS),
             ]);
-
             setMicroorganismOptions(microorganisms);
             setSampleOriginOptions(sampleOrigins);
             setMatrixOptions(matrices);

@@ -1,21 +1,21 @@
-import React, { useRef, useState } from "react";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import html2canvas from "html2canvas";
 import JSZip from "jszip";
+import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
     CartesianGrid,
     Label,
+    Legend,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
-import { Typography, Button, Box, Stack } from "@mui/material";
-import { useTranslation } from "react-i18next";
 import { ResistanceApiItem } from "./TrendDetails";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
 
 export interface TrendChartProps {
     data: {
@@ -341,13 +341,13 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         const readmeContentDe = `
 Dieser ZooNotify-Daten-Download enthält diese README-Datei und zwei CSV-Dateien. Die Verwendung der CSV-Dateien wird im Folgenden erläutert.
 
-Die data_dot.csv Datei: Ist für die Nutzung von Software mit deutschen Spracheinstellungen 
-Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit deutschen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Kommas als Dezimaltrennzeichen verwenden. 
+Die data_dot.csv Datei: Ist für die Nutzung von Software mit deutschen Spracheinstellungen
+Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit deutschen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Kommas als Dezimaltrennzeichen verwenden.
 
-Die data_comma.csv Datei:  Ist für die Nutzung von Software mit englischen Spracheinstellungen 
-Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden. 
+Die data_comma.csv Datei:  Ist für die Nutzung von Software mit englischen Spracheinstellungen
+Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden.
 `;
-        const readmeContentEn = `   
+        const readmeContentEn = `
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
 
 The data_dot.csv: Is for use in software with German language settings

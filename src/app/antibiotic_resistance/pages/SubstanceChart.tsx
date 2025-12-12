@@ -1,21 +1,21 @@
-import React, { useRef } from "react";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import html2canvas from "html2canvas";
 import JSZip from "jszip";
+import React, { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
-    BarChart,
     Bar,
-    XAxis,
-    YAxis,
-    Tooltip,
+    BarChart,
+    CartesianGrid,
     Legend,
     ResponsiveContainer,
-    CartesianGrid,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
-import { Typography, Button, Box, Stack } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { ResistanceApiItem } from "./TrendDetails";
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import { ResistanceApiItem } from "./TrendDetails";
 
 const BAR_COLORS = [
     "#F08080",
@@ -303,7 +303,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         const csvComma = generateCSV(rows, ",", ".", t);
         const csvDot = generateCSV(rows, ";", ",", t);
 
-        const readmeContentEn = `   
+        const readmeContentEn = `
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
 
 The data_dot.csv: Is for use in software with German language settings

@@ -33,7 +33,6 @@ export const useFetchSupportEmail = (): {
                 const infoResponse: ApiResponse<any> = await callApiService(
                     CONFIGURATION
                 );
-                console.log("API response for support email:", infoResponse);
 
                 // 🚨 NOTE the new path!
                 if (
@@ -41,10 +40,6 @@ export const useFetchSupportEmail = (): {
                     infoResponse.data.data &&
                     infoResponse.data.data.supportEmail
                 ) {
-                    console.log(
-                        "Fetched supportEmail:",
-                        infoResponse.data.data.supportEmail
-                    );
                     setSupportEmail(infoResponse.data.data.supportEmail);
                 } else {
                     console.warn(
