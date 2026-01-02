@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, Typography, useMediaQuery } from "@mui/material";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import JSZip from "jszip";
@@ -116,6 +117,10 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+    // ✅ Added for Share Link (same logic as your ChartCard)
+    //const [ setCopied] = useState(false);
+
     const theme = useTheme();
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
     const { searchParameters, prevalenceUpdateDate } = usePrevalenceFilters();
@@ -245,6 +250,26 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         document.body.appendChild(a);
         a.click();
         a.remove();
+    };
+
+    /** ✅ Share link handler (copied from your ChartCard logic) */
+    const handleShareLink = async (): Promise<void> => {
+        const url = window.location.href;
+        try {
+            await navigator.clipboard.writeText(url);
+        } catch {
+            const ta = document.createElement("textarea");
+            ta.value = url;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "absolute";
+            ta.style.left = "-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand("copy");
+            } catch {}
+            document.body.removeChild(ta);
+        }
     };
 
     /** Cleanup blob URL on unmount / change */
@@ -480,6 +505,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             />
                         </ThemeProvider>
 
+                        {/* Download ZIP */}
                         <Button
                             variant="contained"
                             color="primary"
@@ -492,6 +518,24 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                         >
                             {t("DOWNLOAD_ZIP_FILE")}
                         </Button>
+
+                        {/* ✅ Share link button UNDER the Download ZIP button */}
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleShareLink}
+                            startIcon={<InsertLinkIcon />}
+                            style={{
+                                margin: "0 0.5em 0.5em 0.5em",
+                                backgroundColor: theme.palette.primary.main,
+                                textTransform: "none",
+                                alignSelf: "center",
+                            }}
+                        >
+                            {t("Share_Link")}
+                        </Button>
+
+                        {/* ✅ Copied message (optional) */}
                     </div>
                 }
                 defaultExpanded

@@ -1,9 +1,8 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 // eslint-disable-next-line import/named
 import { Chart as ChartJS, TooltipItem, Plugin } from "chart.js";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
 
 import {
     errorBarTooltipPlugin,
@@ -19,8 +18,7 @@ const generateColorFromKey = (key: string): string => {
     for (let i = 0; i < key.length; i++) {
         hash = key.charCodeAt(i) + ((hash << 5) - hash);
     }
-    const color = `hsl(${hash % 360}, 70%, 60%)`;
-    return color;
+    return `hsl(${hash % 360}, 70%, 60%)`;
 };
 
 const customTitlePlugin = (microName: string | null): Plugin => ({
@@ -28,12 +26,15 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
     beforeDraw(chart: ChartJS) {
         const { ctx, chartArea, width } = chart;
         if (!microName) return;
+
         const formattedWords: WordObject[] =
             formatMicroorganismNameArray(microName);
         const titleYPosition = chartArea.top - 60;
+
         ctx.save();
         ctx.textAlign = "left";
         ctx.fillStyle = "black";
+
         let xPosition =
             (width -
                 formattedWords.reduce((acc, { text, italic }) => {
@@ -49,6 +50,7 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
             ctx.fillText(text, xPosition, titleYPosition);
             xPosition += ctx.measureText(text).width + 1;
         });
+
         ctx.restore();
     },
 });
@@ -78,31 +80,6 @@ const ChartCard: React.FC<ChartCardProps> = ({
     prevalenceUpdateDate,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
-    const [copied, setCopied] = React.useState(false);
-
-    const handleShareLink = async (): Promise<void> => {
-        const url = window.location.href;
-        try {
-            await navigator.clipboard.writeText(url);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1800);
-        } catch {
-            const ta = document.createElement("textarea");
-            ta.value = url;
-            ta.setAttribute("readonly", "");
-            ta.style.position = "absolute";
-            ta.style.left = "-9999px";
-            document.body.appendChild(ta);
-            ta.select();
-            try {
-                document.execCommand("copy");
-            } catch {}
-            document.body.removeChild(ta);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1800);
-        }
-    };
-
     const chartColor = generateColorFromKey(chartKey);
 
     return (
@@ -244,29 +221,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 >
                     {t("Download_Chart")}
                 </Button>
-
-                <Button
-                    variant="contained"
-                    size="medium"
-                    onClick={handleShareLink}
-                    startIcon={<InsertLinkIcon />}
-                    sx={{ textTransform: "none" }}
-                >
-                    {t("Share_Link")}
-                </Button>
             </Box>
-
-            {copied && (
-                <Typography
-                    color="success.main"
-                    textAlign="center"
-                    mt={1}
-                    fontWeight="bold"
-                >
-                    {t("Link copied to clipboard!") ||
-                        "Link copied to clipboard!"}
-                </Typography>
-            )}
         </Box>
     );
 };
