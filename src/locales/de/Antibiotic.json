@@ -42,6 +42,7 @@
   "combinations": "Kombinationen",
   "combination_limit_title": "Kombinationslimit",
   "combination_limit_message": "Es können maximal 4 Kombinationen für die Darstellung im Graph ausgewählt werden.",
+  "data_not_plotted": "keine grafische Darstellung",
 
   "SEARCH": "Suche"
 }

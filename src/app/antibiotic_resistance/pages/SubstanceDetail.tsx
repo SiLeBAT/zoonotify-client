@@ -1134,11 +1134,20 @@ export const SubstanceDetail: React.FC<{
         selectedCombinations,
     ]);
 
-    // Combination label (italicize species) + N
+    // ✅ Combination label + N + “data is not plotted” when N < 10
     const renderCombinationMenuPrimary = (
         comboKey: string
     ): React.ReactNode => {
         const N = nPerCombination[comboKey];
+        const notPlotted = typeof N === "number" && N < 10;
+
+        const nText =
+            N != null
+                ? notPlotted
+                    ? `N=${N}, ${t("data_not_plotted")}`
+                    : `N=${N}`
+                : "N=?";
+
         if (shouldShowSpeciesFilter(microorganism)) {
             const parts = comboKey.split(" | ");
             const species = parts[0];
@@ -1149,17 +1158,18 @@ export const SubstanceDetail: React.FC<{
                     {rest ? ` | ${rest}` : ""}
                     <span style={{ color: "#888", fontWeight: 400 }}>
                         {" "}
-                        (N={N ?? "?"})
+                        ({nText})
                     </span>
                 </span>
             );
         }
+
         return (
             <span>
                 {comboKey}
                 <span style={{ color: "#888", fontWeight: 400 }}>
                     {" "}
-                    (N={N ?? "?"})
+                    ({nText})
                 </span>
             </span>
         );
@@ -1297,33 +1307,33 @@ export const SubstanceDetail: React.FC<{
                                     value={selectedCombinations}
                                     onChange={(e) => {
                                         const v = e.target.value as string[];
+
+                                        let nextCombos: string[] = v;
+
                                         if (v.includes("all")) {
-                                            setSelectedCombinations(
+                                            nextCombos =
                                                 selectedCombinations.length ===
-                                                    availableCombinations.length
+                                                availableCombinations.length
                                                     ? []
                                                     : availableCombinations.slice(
                                                           0,
                                                           4
-                                                      )
-                                            );
+                                                      );
+                                            setSelectedCombinations(nextCombos);
                                         } else if (v.length > 4) {
                                             setMaxComboDialogOpen(true);
+                                            return;
                                         } else {
                                             setSelectedCombinations(v);
                                         }
+
                                         // update URL immediately with new combinations
                                         updateSubstanceFilterUrlCompressed(
                                             microorganism,
                                             selected,
                                             substanceFilter,
                                             chartYear,
-                                            v.includes("all")
-                                                ? availableCombinations.slice(
-                                                      0,
-                                                      4
-                                                  )
-                                                : (e.target.value as string[])
+                                            nextCombos
                                         );
                                     }}
                                     renderValue={(selectedValues) =>
@@ -1402,16 +1412,12 @@ export const SubstanceDetail: React.FC<{
                     {showResults && (
                         <Box mt={2} mb={2}>
                             {filteredFullData.length > 0 && chartYear ? (
-                                <>
-                                    <SubstanceChart
-                                        data={filteredFullData}
-                                        microorganism={microorganism}
-                                        year={chartYear}
-                                        selectedCombinations={
-                                            selectedCombinations
-                                        }
-                                    />
-                                </>
+                                <SubstanceChart
+                                    data={filteredFullData}
+                                    microorganism={microorganism}
+                                    year={chartYear}
+                                    selectedCombinations={selectedCombinations}
+                                />
                             ) : (
                                 <Typography sx={{ mt: 3, fontStyle: "italic" }}>
                                     {t("No data for selected filters.")}
@@ -1468,6 +1474,7 @@ export const SubstanceDetail: React.FC<{
                         <Button onClick={handleClose}>Close</Button>
                     </DialogActions>
                 </Dialog>
+
                 <Dialog
                     open={maxComboDialogOpen}
                     onClose={() => setMaxComboDialogOpen(false)}
