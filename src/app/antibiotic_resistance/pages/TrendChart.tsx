@@ -499,7 +499,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             align="center"
                             sx={{ fontStyle: "italic", fontSize: "1.15rem" }}
                         >
-                            {t("Not enough data to display the chart.")}
+                            {t("Not enough data to display the chart")}
                         </Typography>
                     </Box>
                 )}
