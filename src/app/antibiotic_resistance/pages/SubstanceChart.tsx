@@ -73,6 +73,71 @@ interface SubstanceChartProps {
     groupLabel?: React.ReactNode;
 }
 
+type CsvHeaderKey =
+    | "samplingYear"
+    | "superCategorySampleOrigin"
+    | "sampleOrigin"
+    | "samplingStage"
+    | "matrixGroup"
+    | "matrix"
+    | "antimicrobialSubstance"
+    | "specie"
+    | "resistenzrate"
+    | "anzahlGetesteterIsolate"
+    | "anzahlResistenterIsolate"
+    | "minKonfidenzintervall"
+    | "maxKonfidenzintervall";
+
+const CSV_HEADERS: CsvHeaderKey[] = [
+    "samplingYear",
+    "superCategorySampleOrigin",
+    "sampleOrigin",
+    "samplingStage",
+    "matrixGroup",
+    "matrix",
+    "antimicrobialSubstance",
+    "specie",
+    "resistenzrate",
+    "anzahlGetesteterIsolate",
+    "anzahlResistenterIsolate",
+    "minKonfidenzintervall",
+    "maxKonfidenzintervall",
+];
+
+// ✅ Consistent, human-readable CSV header labels (same language per download)
+const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
+    en: {
+        samplingYear: "Sampling year",
+        superCategorySampleOrigin: "Super-category sample origin",
+        sampleOrigin: "Sample origin",
+        samplingStage: "Sampling stage",
+        matrixGroup: "Matrix group",
+        matrix: "Matrix",
+        antimicrobialSubstance: "Antimicrobial substance",
+        specie: "Species",
+        resistenzrate: "Resistance rate", // ✅ required by your task
+        anzahlGetesteterIsolate: "Number of tested isolates", // ✅ required by your task
+        anzahlResistenterIsolate: "Number of resistant isolates",
+        minKonfidenzintervall: "Minimum confidence interval",
+        maxKonfidenzintervall: "Maximum confidence interval",
+    },
+    de: {
+        samplingYear: "Probenjahr",
+        superCategorySampleOrigin: "Oberkategorie Probenherkunft",
+        sampleOrigin: "Probenherkunft",
+        samplingStage: "Probenahmestufe",
+        matrixGroup: "Matrixgruppe",
+        matrix: "Matrix",
+        antimicrobialSubstance: "Antimikrobielle Substanz",
+        specie: "Spezies",
+        resistenzrate: "Resistenzrate",
+        anzahlGetesteterIsolate: "Anzahl getesteter Isolate",
+        anzahlResistenterIsolate: "Anzahl resistenter Isolate",
+        minKonfidenzintervall: "Minimales Konfidenzintervall",
+        maxKonfidenzintervall: "Maximales Konfidenzintervall",
+    },
+};
+
 export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     data,
     year,
@@ -80,9 +145,16 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     selectedCombinations,
     groupLabel,
 }) => {
-    const { t } = useTranslation(["Antibiotic"]);
+    const { t, i18n } = useTranslation(["Antibiotic"]);
     const chartRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
+
+    // Decide export language (keep it simple & consistent)
+    const exportLang: "en" | "de" = i18n.language
+        ?.toLowerCase()
+        .startsWith("de")
+        ? "de"
+        : "en";
 
     // Prepare data for the current year & visibility rules used by the chart
     const filtered = data.filter(
@@ -220,35 +292,18 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             .replace("T", "_");
     }
 
+    function getCsvHeaderLabel(key: CsvHeaderKey): string {
+        return CSV_HEADER_LABELS[exportLang][key] ?? key;
+    }
+
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
-        decimalSep: "." | ",",
-        translate: (key: string) => string
+        decimalSep: "." | ","
     ): string {
         if (!rows || !rows.length) return "";
 
-        const headers = [
-            "samplingYear",
-            "superCategorySampleOrigin",
-            "sampleOrigin",
-            "samplingStage",
-            "matrixGroup",
-            "matrix",
-            "antimicrobialSubstance",
-            "specie",
-            "resistenzrate",
-            "anzahlGetesteterIsolate",
-            "anzahlResistenterIsolate",
-            "minKonfidenzintervall",
-            "maxKonfidenzintervall",
-        ] as const;
-
-        function valueForCSV(
-            row: ResistanceApiItem,
-            h: typeof headers[number]
-        ): string {
-            // read loosely to avoid TS union assignment errors
+        function valueForCSV(row: ResistanceApiItem, h: CsvHeaderKey): string {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const raw: any = (row as any)[h];
 
@@ -265,7 +320,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
                 const maybeName = (raw as { name?: unknown }).name;
                 const str =
                     maybeName != null ? String(maybeName) : JSON.stringify(raw);
-                // escape separators/quotes/newlines
                 if (
                     str.includes(sep) ||
                     str.includes('"') ||
@@ -276,7 +330,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
                 return str;
             }
 
-            // primitive (string/boolean/etc.)
             const s = String(raw);
             if (s.includes(sep) || s.includes('"') || s.includes("\n")) {
                 return `"${s.replace(/"/g, '""')}"`;
@@ -284,11 +337,15 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             return s;
         }
 
-        const headerRow = headers.map((h) => translate(h) || h).join(sep);
+        // ✅ Header row is now guaranteed: same language + consistent formatting
+        const headerRow = CSV_HEADERS.map((h) => getCsvHeaderLabel(h)).join(
+            sep
+        );
+
         const csvRows = [
             headerRow,
             ...rows.map((row) =>
-                headers.map((h) => valueForCSV(row, h)).join(sep)
+                CSV_HEADERS.map((h) => valueForCSV(row, h)).join(sep)
             ),
         ];
         return csvRows.join("\n");
@@ -300,8 +357,8 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        const csvComma = generateCSV(rows, ",", ".", t);
-        const csvDot = generateCSV(rows, ";", ",", t);
+        const csvComma = generateCSV(rows, ",", ".");
+        const csvDot = generateCSV(rows, ";", ",");
 
         const readmeContentEn = `
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
@@ -326,7 +383,6 @@ This file contains comma-separated data, which supports the correct format of nu
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
-    // Tooltip (kept the same)
     const tooltipFormatter = (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value: any,
@@ -347,7 +403,7 @@ This file contains comma-separated data, which supports the correct format of nu
         ];
     };
 
-    // === NEW: rows that exactly match what the chart is showing ===
+    // rows that exactly match what the chart is showing
     const visibleSubstanceNames = new Set(substances);
     const rowsForCsv = filtered.filter((d) => {
         const gk = getGroupKey(d, microorganism);
