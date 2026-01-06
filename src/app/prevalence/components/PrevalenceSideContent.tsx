@@ -69,7 +69,7 @@ const formatMicroorganismName = (
     return (
         <>
             {parts.map((word, i) => {
-                if (word.trim() === "" || word === "-") return word; // keep separators
+                if (word.trim() === "" || word === "-") return word;
                 const isItalic = italicWords.some((w) =>
                     word.toLowerCase().includes(w.toLowerCase())
                 );
@@ -82,7 +82,6 @@ const formatMicroorganismName = (
         </>
     );
 };
-/** -------------------------------------------------------------------- */
 
 /** ---------- Local MultiSelect ---------- */
 type LocalOption = { value: string; label: string };
@@ -94,7 +93,6 @@ type LocalMultiSelectProps = {
     label: string;
     onChange: (values: string[]) => void;
     formatLabel?: (label: string) => React.ReactNode;
-    /** when true, list shows only currently selected items */
     showOnlySelected?: boolean;
 };
 
@@ -108,7 +106,6 @@ const MENU_PROPS = {
     },
 } as const;
 
-/** ===== Ellipsis helper ===== */
 const LINE_CLAMP = 1 as 1 | 2;
 const Ellipsis: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const singleLine = LINE_CLAMP === 1;
@@ -138,10 +135,6 @@ const Ellipsis: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
 };
 
-/**
- * Keeps list stable while open, commits on close, SelectAll (visible),
- * label memory for hidden options, and supports "showOnlySelected".
- */
 const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
     selected,
     options,
@@ -170,13 +163,11 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
     const baseList =
         open && frozenOptionsWhileOpen ? frozenOptionsWhileOpen : options;
 
-    // when showOnlySelected, narrow visible list to selected values (use staged when open)
     const currentSelection = open ? staged : selected;
     const optionsToRender = showOnlySelected
         ? baseList.filter((o) => currentSelection.includes(o.value))
         : baseList;
 
-    // for rendering labels even if hidden
     const valueToLabel = useMemo(() => {
         const m = new Map<string, string>();
         (open ? frozenOptionsWhileOpen ?? options : options).forEach((o) =>
@@ -189,7 +180,6 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         if (!options?.length) return;
         setLabelMemory((prev) => {
             const next = new Map(prev);
-            // rename destructured `label` to avoid shadowing the prop `label`
             options.forEach(({ value, label: optLabel }) => {
                 if (next.get(value) !== optLabel) next.set(value, optLabel);
             });
@@ -197,7 +187,6 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         });
     }, [options]);
 
-    // Select-all logic works only when not in showOnlySelected mode
     const allVisibleValues = useMemo(
         () => optionsToRender.map((o) => o.value),
         [optionsToRender]
@@ -250,14 +239,14 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
                 value={open ? staged : selected}
                 input={<OutlinedInput label={label} />}
                 onOpen={() => {
-                    setFrozenOptionsWhileOpen(options); // freeze current options so list doesn't shrink while picking
+                    setFrozenOptionsWhileOpen(options);
                     setStaged(selected);
                     setOpen(true);
                 }}
                 onClose={() => {
                     setOpen(false);
                     setFrozenOptionsWhileOpen(null);
-                    onChange(staged); // commit staged selection
+                    onChange(staged);
                 }}
                 onChange={(e) => {
                     const next =
@@ -299,7 +288,6 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
                 }}
                 MenuProps={MENU_PROPS}
             >
-                {/* Hide Select All row when showing only selected items */}
                 {!showOnlySelected && (
                     <MenuItem
                         key="__select_all__"
@@ -340,7 +328,7 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
                             <MenuItem
                                 key={opt.value}
                                 value={opt.value}
-                                onMouseDown={(e) => e.preventDefault()} // keep menu open
+                                onMouseDown={(e) => e.preventDefault()}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -366,7 +354,6 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         </FormControl>
     );
 };
-/** --------------------------------------------------------------------------- */
 
 export function PrevalenceSideContent(): JSX.Element {
     const { t, i18n } = useTranslation(["PrevalencePage"]);
@@ -405,29 +392,16 @@ export function PrevalenceSideContent(): JSX.Element {
     const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
     const [prevalenceInfo, setPrevalenceInfo] = useState<string>("");
 
-    // After Search, we toggle "show selected only" per filter — but only for filters with selections
     const [showOnlySelected, setShowOnlySelected] = useState(false);
 
-    /**
-     * 🔒 Directional freeze store:
-     * - key -> options snapshot captured the FIRST time user interacts with that filter
-     * - earlier filters render from their snapshot forever (until language change or reset)
-     * - later filters use live options from context (so forward cascade still works)
-     */
     const [frozenByKey, setFrozenByKey] = useState<
         Record<string, LocalOption[]>
     >({});
 
-    const freezeIfFirstTime = (
-        key: string,
-        liveOptions: LocalOption[]
-    ): void => {
-        setFrozenByKey((prev) =>
-            prev[key] ? prev : { ...prev, [key]: liveOptions }
-        );
+    const freezeIfFirstTime = (key: string, live: LocalOption[]): void => {
+        setFrozenByKey((prev) => (prev[key] ? prev : { ...prev, [key]: live }));
     };
 
-    // helper: show selected-only only if the user actually selected something in that filter
     const onlySel = (arr: unknown[]): boolean =>
         showOnlySelected && arr.length > 0;
 
@@ -439,7 +413,6 @@ export function PrevalenceSideContent(): JSX.Element {
 
     useEffect(() => {
         const handleLanguageChange = (): void => {
-            // refresh data AND clear freezes so labels re-localize
             setFrozenByKey({});
             setSelectedOrder([]);
             setShowOnlySelected(false);
@@ -449,7 +422,6 @@ export function PrevalenceSideContent(): JSX.Element {
         return () => i18n.off("languageChanged", handleLanguageChange);
     }, [i18n, fetchOptions]);
 
-    // Fetch Prevalence Information (accordion content)
     useEffect(() => {
         const fetchPrevalenceInfo = async (): Promise<void> => {
             try {
@@ -470,7 +442,6 @@ export function PrevalenceSideContent(): JSX.Element {
         fetchPrevalenceInfo();
     }, [i18next.language]);
 
-    // Info dialog fetch (per-filter descriptions)
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
@@ -503,11 +474,10 @@ export function PrevalenceSideContent(): JSX.Element {
         setShowError(false);
         await fetchDataFromAPI();
         setShowError(true);
-        setShowOnlySelected(true); // turn on “selected-only” mode (conditionally per filter via onlySel)
+        setShowOnlySelected(true);
         setIsSearchTriggered(true);
     };
 
-    // Helper: convert context options -> LocalOption[]
     const toLocal = (
         arr: { documentId?: string; name: string }[] | undefined
     ): LocalOption[] =>
@@ -515,7 +485,6 @@ export function PrevalenceSideContent(): JSX.Element {
             .filter((o) => !!o.documentId && !!o.name)
             .map((o) => ({ value: o.documentId as string, label: o.name }));
 
-    /** live options from context (these are the cascaded lists) */
     const liveOptions = {
         year: (yearOptions ?? []).map((y) => ({
             value: String(y),
@@ -529,7 +498,6 @@ export function PrevalenceSideContent(): JSX.Element {
         matrix: toLocal(matrixOptions),
     };
 
-    /** for each key, use frozen snapshot if it exists (earlier filters), else live list (later filters) */
     const getOptionsFor = (key: keyof typeof liveOptions): LocalOption[] =>
         frozenByKey[key] ?? liveOptions[key];
 
@@ -547,8 +515,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     showOnlySelected={onlySel(selectedYear)}
                     onChange={(values) => {
                         freezeIfFirstTime("year", liveOptions.year);
-                        const nums = values.map((v) => parseInt(v, 10));
-                        setSelectedYear(nums);
+                        setSelectedYear(values.map((v) => parseInt(v, 10)));
                         updateFilterOrder("year");
                     }}
                 />
@@ -747,18 +714,16 @@ export function PrevalenceSideContent(): JSX.Element {
         ),
     };
 
-    const getTransitionIn = (): boolean => true;
-
-    const orderedComponents = selectedOrder.map((key: string) => (
-        <Grow in={getTransitionIn()} timeout={500} key={key}>
+    const orderedComponents = selectedOrder.map((key) => (
+        <Grow in timeout={500} key={key}>
             {filterComponents[key]}
         </Grow>
     ));
 
     const remainingComponents = Object.keys(filterComponents)
-        .filter((key: string) => !selectedOrder.includes(key))
-        .map((key: string) => (
-            <Grow in={getTransitionIn()} timeout={500} key={key}>
+        .filter((key) => !selectedOrder.includes(key))
+        .map((key) => (
+            <Grow in timeout={500} key={key}>
                 {filterComponents[key]}
             </Grow>
         ));
@@ -783,25 +748,98 @@ export function PrevalenceSideContent(): JSX.Element {
     return (
         <Box
             sx={{
-                padding: "10px",
-                height: "120vh",
-                p: 2,
-                overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
                 width: "430px",
-                maxHeight: "calc(140vh)",
                 maxWidth: "95%",
+                p: 2,
+                boxSizing: "border-box",
+
+                // ✅ KEY FIX (works on all sizes)
+                height: "100vh",
+                maxHeight: "100vh",
+                "@supports (height: 100dvh)": {
+                    height: "100dvh",
+                    maxHeight: "100dvh",
+                },
             }}
         >
-            {loading ? (
-                <LoadingProcessComponent />
-            ) : (
-                <Stack spacing={2.5} alignItems="flex-start">
-                    {orderedComponents}
-                    {remainingComponents}
-                </Stack>
-            )}
+            {/* ✅ Scroll area includes filters + buttons + accordion */}
+            <Box
+                sx={{
+                    flex: 1,
+                    minHeight: 0,
+                    overflowY: "auto",
+                    pr: 1,
+                    pb: 7,
+                }}
+            >
+                {loading ? (
+                    <LoadingProcessComponent />
+                ) : (
+                    <>
+                        <Stack spacing={2.5} alignItems="flex-start">
+                            {orderedComponents}
+                            {remainingComponents}
+                        </Stack>
 
-            {/* Info dialog */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                mt: 2,
+                                gap: "16px",
+                                flexWrap: "wrap",
+                            }}
+                        >
+                            <Button
+                                variant="contained"
+                                startIcon={<Search />}
+                                onClick={handleSearch}
+                            >
+                                {t("SEARCH")}
+                            </Button>
+                            <Button variant="contained" onClick={resetFilters}>
+                                {t("RESET_FILTERS")}
+                            </Button>
+                        </Box>
+
+                        <Box sx={{ mt: 2 }}>
+                            <ZNAccordion
+                                title={t("PREVALENCE_INFORMATION")}
+                                content={
+                                    <Markdown
+                                        options={{
+                                            overrides: {
+                                                a: {
+                                                    props: {
+                                                        target: "_blank",
+                                                        rel: "noopener noreferrer",
+                                                    },
+                                                },
+                                                p: {
+                                                    component: "p",
+                                                    props: {
+                                                        style: {
+                                                            marginTop: -1,
+                                                            marginBottom: 0,
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        {prevalenceInfo}
+                                    </Markdown>
+                                }
+                                defaultExpanded={true}
+                                centerContent={false}
+                            />
+                        </Box>
+                    </>
+                )}
+            </Box>
+
             <Dialog open={infoDialogOpen} onClose={handleClose}>
                 <DialogTitle>{infoDialogTitle}</DialogTitle>
                 <DialogContent>
@@ -835,59 +873,6 @@ export function PrevalenceSideContent(): JSX.Element {
                     <Button onClick={handleClose}>{t("CLOSE", "Close")}</Button>
                 </DialogActions>
             </Dialog>
-
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    mt: 2,
-                    gap: "16px",
-                }}
-            >
-                <Button
-                    variant="contained"
-                    startIcon={<Search />}
-                    onClick={handleSearch}
-                >
-                    {t("SEARCH")}
-                </Button>
-                <Button variant="contained" onClick={resetFilters}>
-                    {t("RESET_FILTERS")}
-                </Button>
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-                <ZNAccordion
-                    title={t("PREVALENCE_INFORMATION")}
-                    content={
-                        <Markdown
-                            options={{
-                                overrides: {
-                                    a: {
-                                        props: {
-                                            target: "_blank",
-                                            rel: "noopener noreferrer",
-                                        },
-                                    },
-                                    p: {
-                                        component: "p",
-                                        props: {
-                                            style: {
-                                                marginTop: -1,
-                                                marginBottom: 0,
-                                            },
-                                        },
-                                    },
-                                },
-                            }}
-                        >
-                            {prevalenceInfo}
-                        </Markdown>
-                    }
-                    defaultExpanded={true}
-                    centerContent={false}
-                />
-            </Box>
         </Box>
     );
 }
