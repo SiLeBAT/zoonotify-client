@@ -126,13 +126,7 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
             >
                 {payload.value}
             </text>
-            <text
-                x={x}
-                y={y + 28}
-                textAnchor="middle"
-                fill="#888"
-                fontSize={10}
-            >
+            <text x={x} y={y + 28} textAnchor="middle" fill="#888" fontSize={9}>
                 N = {nValue}
             </text>
         </g>
