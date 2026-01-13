@@ -21,13 +21,22 @@ ChartJS.register(...registerables);
 let [yearMin, yearMax] = [3000, 0];
 
 const PrevalenceChart: React.FC = () => {
-    const { prevalenceData, loading, prevalenceUpdateDate } =
-        usePrevalenceFilters();
+    // ✅ ADD selectedYear, setSelectedYear, yearOptions (from context)
+    const {
+        prevalenceData,
+        loading,
+        prevalenceUpdateDate,
+        selectedYear,
+        setSelectedYear,
+        yearOptions, // <-- this is the same "yearOptions" you used in sidebar
+    } = usePrevalenceFilters();
+
     const chartRefs = useRef<{
         [key: string]: React.RefObject<
             ChartJS<"bar", ChartDataPoint[], unknown>
         >;
     }>({});
+
     const { t } = useTranslation(["PrevalencePage"]);
     const [currentMicroorganism, setCurrentMicroorganism] =
         useState<string>("");
@@ -63,7 +72,7 @@ const PrevalenceChart: React.FC = () => {
         ) {
             setCurrentMicroorganism(availableMicroorganisms[0]);
         }
-    }, [availableMicroorganisms]);
+    }, [availableMicroorganisms, currentMicroorganism]);
 
     // Reset pagination when the microorganism changes
     useEffect(() => {
@@ -92,6 +101,7 @@ const PrevalenceChart: React.FC = () => {
                 };
             }
         });
+
         return chartData;
     };
 
@@ -107,23 +117,24 @@ const PrevalenceChart: React.FC = () => {
         )
     );
 
+    // ---- Local year range (used ONLY if context yearOptions is empty) ----
     const yearRange = prevalenceData.map((entry) => entry.samplingYear);
     yearMin = Math.min(...yearRange);
     yearMax = Math.max(...yearRange);
 
-    const yearOptions = Array.from(
+    // ✅ Rename this to avoid conflict with context yearOptions
+    const yearOptionsForChart = Array.from(
         { length: yearMax - yearMin + 1 },
         (_, i) => yearMin + i
     ).reverse();
+
     // Gather all ciMax values from all chart data points
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
         Object.values(yearData).map((data) => data.ciMax)
     );
     const maxCiPlus = Math.max(...allCiMaxValues);
-    // Set x-axis max to 100 if max ciMax is greater than 25, otherwise 25
     const xAxisMax = maxCiPlus > 25 ? 100 : 25;
 
-    // Sanitization function
     const sanitizeKey = (key: string): string => {
         return key.replace(/[^a-z0-9_\-]/gi, "_");
     };
@@ -137,19 +148,25 @@ const PrevalenceChart: React.FC = () => {
             return;
         }
         const originalChart = chartRef.current;
+
         const canvasWidth = 1380;
         const canvasHeight = 1000;
+
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = canvasWidth;
         tempCanvas.height = canvasHeight;
+
         const tempCtx = tempCanvas.getContext("2d");
         if (!tempCtx) {
             console.error("Failed to get temp canvas context");
             return;
         }
+
         tempCtx.fillStyle = "white";
         tempCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
         const originalConfig = originalChart.config;
+
         const clonedConfig: ChartConfiguration<
             "bar",
             ChartDataPoint[],
@@ -184,7 +201,6 @@ const PrevalenceChart: React.FC = () => {
                         title: {
                             ...originalConfig.options?.scales?.x?.title,
                             display: true,
-                            // Use the translation function for the x-axis label
                             text: t("Prevalence %"),
                             color: "black",
                             font: { size: 22, weight: "bold" },
@@ -200,7 +216,6 @@ const PrevalenceChart: React.FC = () => {
                         title: {
                             ...originalConfig.options?.scales?.y?.title,
                             display: true,
-                            // Use the translation function for the y-axis label
                             text: t("Year"),
                             color: "black",
                             font: { size: 24, weight: "bold" },
@@ -221,17 +236,26 @@ const PrevalenceChart: React.FC = () => {
             },
             plugins: originalConfig.plugins,
         };
+
         tempCtx.save();
         const tempChart = new ChartJS(tempCtx, clonedConfig);
         await tempChart.update();
         tempCtx.restore();
+
         const link = document.createElement("a");
         const sanitizedChartKey = sanitizeKey(chartKey);
         link.href = tempCanvas.toDataURL("image/png", 1.0);
         link.download = `${sanitizedChartKey}-${getCurrentTimestamp()}.png`;
         link.click();
+
         tempChart.destroy();
     };
+
+    // ✅ Prefer context years for slider marks; fallback to local computed years
+    const allYearsForSlider =
+        yearOptions && yearOptions.length > 0
+            ? yearOptions
+            : yearOptionsForChart;
 
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
@@ -266,6 +290,7 @@ const PrevalenceChart: React.FC = () => {
                                 {chartKeys.map((key) => {
                                     const sanitizedKey = sanitizeKey(key);
                                     const refKey = `${sanitizedKey}-${currentMicroorganism}`;
+
                                     if (!chartRefs.current[refKey]) {
                                         chartRefs.current[refKey] =
                                             React.createRef<
@@ -276,8 +301,10 @@ const PrevalenceChart: React.FC = () => {
                                                 >
                                             >();
                                     }
+
                                     const isDisplayed =
                                         displayedChartsSet.has(key);
+
                                     return (
                                         <Grid
                                             item
@@ -305,7 +332,14 @@ const PrevalenceChart: React.FC = () => {
                                                 currentMicroorganism={
                                                     currentMicroorganism
                                                 }
-                                                yearOptions={yearOptions}
+                                                // ✅ keep this for chart labels/data if your ChartCard still needs it
+                                                //yearOptions={yearOptionsForChart}
+                                                // ✅ NEW props for slider in ChartCard
+                                                allYears={allYearsForSlider}
+                                                selectedYears={selectedYear}
+                                                onChangeSelectedYears={
+                                                    setSelectedYear
+                                                }
                                                 xAxisMax={xAxisMax}
                                                 downloadChart={downloadChart}
                                                 prevalenceUpdateDate={
