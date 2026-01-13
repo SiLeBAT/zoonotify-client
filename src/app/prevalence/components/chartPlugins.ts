@@ -25,12 +25,12 @@ export const whiteBackgroundAndLogoPlugin = (
         const ctx = chart.ctx;
 
         // Define padding for logo and text
-        const padding = 20;
+        const padding = 13;
 
         // Draw the logo if it has finished loading
         if (logoImage.complete) {
-            const logoWidth = 90; // Logo width
-            const logoHeight = 30; // Logo height
+            const logoWidth = 78; // Logo width
+            const logoHeight = 27; // Logo height
 
             // Position for top-right corner of the full canvas
             const logoX = chart.width - logoWidth - padding; // Right edge with padding
@@ -58,7 +58,11 @@ export const whiteBackgroundAndLogoPlugin = (
         ctx.font = "10px Arial";
         ctx.fillStyle = "#000";
         ctx.textAlign = "right";
-        ctx.fillText(dateText, chart.width - padding, chart.height - padding);
+        ctx.fillText(
+            dateText,
+            chart.width - padding,
+            chart.height - padding - 14
+        );
     },
 });
 
