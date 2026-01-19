@@ -505,28 +505,42 @@ export function PrevalenceSideContent(): JSX.Element {
         year: (
             <Box
                 key="year"
-                sx={{ display: "flex", alignItems: "center", width: "100%" }}
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                }}
             >
-                <LocalMultiSelect
-                    selected={selectedYear.map(String)}
-                    options={getOptionsFor("year")}
-                    name="years"
-                    label={t("SAMPLING_YEAR")}
-                    showOnlySelected={onlySel(selectedYear)}
-                    onChange={(values) => {
-                        freezeIfFirstTime("year", liveOptions.year);
-                        setSelectedYear(values.map((v) => parseInt(v, 10)));
-                        updateFilterOrder("year");
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
                     }}
-                />
-                <Tooltip title={t("More Info on Sampling Year")}>
-                    <IconButton
-                        onClick={() => handleInfoClick("SAMPLING_YEAR")}
-                        sx={{ ml: 0.2 }}
-                    >
-                        <InfoIcon />
-                    </IconButton>
-                </Tooltip>
+                >
+                    <LocalMultiSelect
+                        selected={selectedYear.map(String)}
+                        options={getOptionsFor("year")}
+                        name="years"
+                        label={t("SAMPLING_YEAR")}
+                        showOnlySelected={onlySel(selectedYear)}
+                        onChange={(values) => {
+                            freezeIfFirstTime("year", liveOptions.year);
+                            setSelectedYear(values.map((v) => parseInt(v, 10)));
+                            updateFilterOrder("year");
+                        }}
+                    />
+                    <Tooltip title={t("More Info on Sampling Year")}>
+                        <IconButton
+                            onClick={() => handleInfoClick("SAMPLING_YEAR")}
+                            sx={{ ml: 0.2 }}
+                        >
+                            <InfoIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+
+                {/* ❌ YearRangeSlider REMOVED (slider now exists on top of chart) */}
             </Box>
         ),
 
@@ -754,8 +768,6 @@ export function PrevalenceSideContent(): JSX.Element {
                 maxWidth: "95%",
                 p: 2,
                 boxSizing: "border-box",
-
-                // ✅ KEY FIX (works on all sizes)
                 height: "100vh",
                 maxHeight: "100vh",
                 "@supports (height: 100dvh)": {
@@ -764,7 +776,6 @@ export function PrevalenceSideContent(): JSX.Element {
                 },
             }}
         >
-            {/* ✅ Scroll area includes filters + buttons + accordion */}
             <Box
                 sx={{
                     flex: 1,

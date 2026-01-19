@@ -200,7 +200,7 @@ function Breadcrumb({
             >
                 <FormattedMicroorganismName
                     microName={selectedOrg}
-                    isBreadcrumb={true}
+                    isBreadcrumb
                 />
             </span>
             {view === "trend" && <> / {t("Trend")}</>}
@@ -212,7 +212,7 @@ function Breadcrumb({
 // ---- Main page component ----
 export function AntibioticResistancePageComponent(): JSX.Element {
     const { t } = useTranslation(["Antibiotic"]);
-    const routerLocation = useLocation(); // react-router v5 location (used below)
+    const routerLocation = useLocation();
 
     const [state, setState] = useState<{
         selectedOrg: string;
@@ -227,7 +227,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         setState(readStateFromUrl());
     }, []);
 
-    // Re-sync state whenever the router's query string changes (e.g., Header pushes ?view=main)
+    // Re-sync state whenever the router's query string changes
     useEffect(() => {
         const parsed = readStateFromUrl();
         setState((prev) =>
@@ -276,17 +276,24 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           display: flex;
           min-height: 120vh;
         }
+
         .abx-sidebar {
           width: 450px;
           padding: 2rem;
           background: #fff;
           box-sizing: border-box;
+
+          /* IMPORTANT: keep sidebar below breadcrumb layer */
+          position: relative;
+          z-index: 1;
         }
+
         .abx-nav {
           list-style: none;
           margin: 0;
           padding: 0;
         }
+
         .abx-nav-item {
           position: relative;
           clip-path: polygon(
@@ -304,22 +311,38 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-bottom: 1.25rem;
           cursor: pointer;
         }
+
         .abx-active {
           background: #BFE1F2;
           color: #003663;
         }
+
         .abx-content {
           flex: 1;
           padding: 3rem;
           box-sizing: border-box;
+
+          /* IMPORTANT: keep content below breadcrumb layer */
+          position: relative;
+          z-index: 1;
         }
+
+        /* ✅ Breadcrumb: ONLY TEXT, always on top, no white box */
         .abx-breadcrumb {
           font-size: 1.4rem;
           color: #003663;
           text-align: center;
           margin-top: 1.5rem;
           margin-bottom: 0.5rem;
+
+          position: sticky;
+          top: 10px;
+          z-index: 99999;
+
+          background: transparent; /* no box */
+          pointer-events: auto;
         }
+
         .image-box {
           box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
           padding: 0.4rem;
@@ -332,10 +355,12 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           background: #fff;
           transition: transform 0.18s, box-shadow 0.18s;
         }
+
         .image-box:hover {
           transform: scale(1.04);
           box-shadow: 0 10px 75px rgba(48,56,96,0.32), 0 8px 30px rgba(40,40,60,0.19);
         }
+
         .image-box img {
           width: 350px;
           height: 250px;
@@ -344,6 +369,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           border-radius: 25px;
           margin: 0 auto;
         }
+
         .image-box.bottom {
           display: block;
           margin-top: 2rem;
@@ -352,6 +378,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-right: 0;
           margin-left: 0;
         }
+
         .image-label {
           font-size: 1.2rem;
           color: #003663;
@@ -360,6 +387,27 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           text-align: center;
           width: 100%;
           display: block;
+        }
+
+        /* Mobile layout */
+        @media (max-width: 900px) {
+          .abx-page {
+            flex-direction: column;
+          }
+
+          .abx-sidebar {
+            width: 100%;
+            padding: 1.25rem;
+          }
+
+          .abx-content {
+            padding: 1.25rem;
+          }
+
+          .abx-breadcrumb {
+            top: 12px;
+            font-size: 1.15rem;
+          }
         }
       `}</style>
 
