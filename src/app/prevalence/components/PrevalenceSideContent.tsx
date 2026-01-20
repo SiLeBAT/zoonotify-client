@@ -107,6 +107,7 @@ const MENU_PROPS = {
 } as const;
 
 const LINE_CLAMP = 1 as 1 | 2;
+
 const Ellipsis: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const singleLine = LINE_CLAMP === 1;
     return (
@@ -152,6 +153,10 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         LocalOption[] | null
     >(null);
 
+    /**
+     * ✅ labelMemory keeps a persistent map of value -> label.
+     * This prevents showing docIds in the Select input if options change dynamically.
+     */
     const [labelMemory, setLabelMemory] = useState<Map<string, string>>(
         new Map()
     );
@@ -164,40 +169,39 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         open && frozenOptionsWhileOpen ? frozenOptionsWhileOpen : options;
 
     const currentSelection = open ? staged : selected;
+
     const optionsToRender = showOnlySelected
         ? baseList.filter((o) => currentSelection.includes(o.value))
         : baseList;
 
-    const valueToLabel = useMemo(() => {
-        const m = new Map<string, string>();
-        (open ? frozenOptionsWhileOpen ?? options : options).forEach((o) =>
-            m.set(o.value, o.label)
-        );
-        return m;
-    }, [open, options, frozenOptionsWhileOpen]);
-
+    /** ✅ Always keep labelMemory updated from BOTH live options and frozen options */
     useEffect(() => {
-        if (!options?.length) return;
+        const source = frozenOptionsWhileOpen ?? options;
+        if (!source?.length) return;
+
         setLabelMemory((prev) => {
             const next = new Map(prev);
-            options.forEach(({ value, label: optLabel }) => {
-                if (next.get(value) !== optLabel) next.set(value, optLabel);
+            source.forEach(({ value, label: optLabel }) => {
+                if (value && optLabel) next.set(value, optLabel);
             });
             return next;
         });
-    }, [options]);
+    }, [options, frozenOptionsWhileOpen]);
 
     const allVisibleValues = useMemo(
         () => optionsToRender.map((o) => o.value),
         [optionsToRender]
     );
+
     const numCheckedVisible = useMemo(
         () => allVisibleValues.filter((v) => staged.includes(v)).length,
         [allVisibleValues, staged]
     );
+
     const allVisibleSelected =
         allVisibleValues.length > 0 &&
         numCheckedVisible === allVisibleValues.length;
+
     const someVisibleSelected = numCheckedVisible > 0 && !allVisibleSelected;
 
     const selectAllText = allVisibleSelected
@@ -225,8 +229,16 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
     const pretty = (raw: string): React.ReactNode =>
         formatLabel ? formatLabel(raw) : raw;
 
+    /**
+     * ✅ Robust label resolver:
+     * 1) try current list (baseList)
+     * 2) try labelMemory (persisted)
+     * 3) fallback to raw value (docId)
+     */
     const labelFor = (val: string): React.ReactNode => {
-        const raw = valueToLabel.get(val) ?? labelMemory.get(val) ?? val;
+        const fromCurrentList = baseList.find((o) => o.value === val)?.label;
+        const fromMemory = labelMemory.get(val);
+        const raw = fromCurrentList ?? fromMemory ?? val;
         return pretty(raw);
     };
 
@@ -539,8 +551,6 @@ export function PrevalenceSideContent(): JSX.Element {
                         </IconButton>
                     </Tooltip>
                 </Box>
-
-                {/* ❌ YearRangeSlider REMOVED (slider now exists on top of chart) */}
             </Box>
         ),
 

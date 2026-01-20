@@ -1,8 +1,8 @@
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography, useMediaQuery } from "@mui/material";
 import html2canvas from "html2canvas";
 import JSZip from "jszip";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
     Bar,
@@ -104,7 +104,7 @@ const CSV_HEADERS: CsvHeaderKey[] = [
     "maxKonfidenzintervall",
 ];
 
-// ✅ Consistent, human-readable CSV header labels (same language per download)
+// ✅ Consistent, human-readable CSV header labels
 const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
     en: {
         samplingYear: "Sampling year",
@@ -115,8 +115,8 @@ const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
         matrix: "Matrix",
         antimicrobialSubstance: "Antimicrobial substance",
         specie: "Species",
-        resistenzrate: "Resistance rate", // ✅ required by your task
-        anzahlGetesteterIsolate: "Number of tested isolates", // ✅ required by your task
+        resistenzrate: "Resistance rate",
+        anzahlGetesteterIsolate: "Number of tested isolates",
         anzahlResistenterIsolate: "Number of resistant isolates",
         minKonfidenzintervall: "Minimum confidence interval",
         maxKonfidenzintervall: "Maximum confidence interval",
@@ -149,14 +149,16 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     const chartRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
 
-    // Decide export language (keep it simple & consistent)
+    /** ✅ responsive breakpoint */
+    const isSmallScreen = useMediaQuery("(max-width:1500px)");
+
+    // Decide export language
     const exportLang: "en" | "de" = i18n.language
         ?.toLowerCase()
         .startsWith("de")
         ? "de"
         : "en";
 
-    // Prepare data for the current year & visibility rules used by the chart
     const filtered = data.filter(
         (d) =>
             d.samplingYear === year &&
@@ -164,14 +166,12 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             d.anzahlGetesteterIsolate >= 10
     );
 
-    // These are the substances actually plotted (already upstream-filtered)
     const substances = Array.from(
         new Set(
             filtered.map((d) => d.antimicrobialSubstance?.name).filter(Boolean)
         )
     ).sort();
 
-    // Only include user-selected combinations (max 4) in the chart
     const groupKeys = Array.from(
         new Set(filtered.map((d) => getGroupKey(d, microorganism)))
     ).filter((key) => selectedCombinations.includes(key));
@@ -197,7 +197,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         }
     };
 
-    // Map group -> N (first found row for the group)
     const nPerGroup: { [key: string]: number | undefined } = {};
     groupKeys.forEach((groupKey) => {
         const row = filtered.find(
@@ -246,7 +245,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         );
     };
 
-    // Build the rows used by the chart (visible bars)
     const chartData = substances.map((substance) => {
         const row: Record<string, unknown> = { substance };
         groupKeys.forEach((groupKey) => {
@@ -315,7 +313,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
                 return n;
             }
 
-            // unwrap common Strapi-ish objects with a 'name' field
             if (typeof raw === "object") {
                 const maybeName = (raw as { name?: unknown }).name;
                 const str =
@@ -337,7 +334,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             return s;
         }
 
-        // ✅ Header row is now guaranteed: same language + consistent formatting
         const headerRow = CSV_HEADERS.map((h) => getCsvHeaderLabel(h)).join(
             sep
         );
@@ -403,7 +399,6 @@ This file contains comma-separated data, which supports the correct format of nu
         ];
     };
 
-    // rows that exactly match what the chart is showing
     const visibleSubstanceNames = new Set(substances);
     const rowsForCsv = filtered.filter((d) => {
         const gk = getGroupKey(d, microorganism);
@@ -413,6 +408,49 @@ This file contains comma-separated data, which supports the correct format of nu
             visibleSubstanceNames.has(subName)
         );
     });
+
+    /** ✅ Responsive legend configuration */
+    const legendProps = useMemo(() => {
+        if (isSmallScreen) {
+            // Bottom / horizontal legend for small screens
+            return {
+                verticalAlign: "bottom" as const,
+                align: "center" as const,
+                layout: "horizontal" as const,
+                wrapperStyle: {
+                    paddingTop: 29,
+                    paddingLeft: 0,
+                    width: "100%",
+                    maxWidth: "100%",
+                    whiteSpace: "normal",
+                    fontSize: 12,
+                    lineHeight: 1.2,
+                } as React.CSSProperties,
+            };
+        }
+
+        // Right / vertical legend for large screens
+        return {
+            verticalAlign: "middle" as const,
+            align: "right" as const,
+            layout: "vertical" as const,
+            wrapperStyle: {
+                paddingLeft: 24,
+                width: 400,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                background: "#fff",
+                borderRadius: 8,
+                boxShadow: "0 0 4px #eee",
+                fontSize: 14,
+                lineHeight: 1.25,
+            } as React.CSSProperties,
+        };
+    }, [isSmallScreen]);
+
+    /** ✅ Give the chart more height on small screens because legend goes under it */
+    const responsiveHeight = isSmallScreen ? 680 : 550;
 
     return (
         <Box>
@@ -472,7 +510,7 @@ This file contains comma-separated data, which supports the correct format of nu
 
                 {/* Chart */}
                 {chartData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={550}>
+                    <ResponsiveContainer width="100%" height={responsiveHeight}>
                         <BarChart
                             layout="vertical"
                             data={chartData}
@@ -480,9 +518,10 @@ This file contains comma-separated data, which supports the correct format of nu
                             barGap={4}
                             margin={{
                                 top: 10,
-                                right: 25,
+                                // ✅ give extra right space only when legend is on right
+                                right: isSmallScreen ? 20 : 25,
                                 left: 20,
-                                bottom: 40,
+                                bottom: isSmallScreen ? 90 : 40,
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
@@ -508,19 +547,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             />
                             <Tooltip formatter={tooltipFormatter} />
                             <Legend
-                                verticalAlign="middle"
-                                align="right"
-                                layout="vertical"
-                                wrapperStyle={{
-                                    paddingLeft: 24,
-                                    width: 400,
-                                    top: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    background: "#fff",
-                                    borderRadius: 8,
-                                    boxShadow: "0 0 4px #eee",
-                                }}
+                                {...legendProps}
                                 formatter={legendFormatter}
                             />
                             {groupKeys.map((groupKey) => (
@@ -556,7 +583,7 @@ This file contains comma-separated data, which supports the correct format of nu
                 )}
             </div>
 
-            {/* Off-screen fixed-size chart for PNG export */}
+            {/* Off-screen fixed-size chart for PNG export (keep legend right as before) */}
             <div
                 ref={fixedSizeChartRef}
                 style={{
@@ -659,6 +686,8 @@ This file contains comma-separated data, which supports the correct format of nu
                                 background: "transparent",
                                 borderRadius: 0,
                                 boxShadow: "none",
+                                fontSize: 14,
+                                lineHeight: 1.25,
                             }}
                             formatter={legendFormatter}
                         />

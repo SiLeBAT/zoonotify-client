@@ -21,14 +21,17 @@ ChartJS.register(...registerables);
 let [yearMin, yearMax] = [3000, 0];
 
 const PrevalenceChart: React.FC = () => {
-    // ✅ ADD selectedYear, setSelectedYear, yearOptions (from context)
     const {
         prevalenceData,
         loading,
         prevalenceUpdateDate,
         selectedYear,
         setSelectedYear,
-        yearOptions, // <-- this is the same "yearOptions" you used in sidebar
+        yearOptions,
+
+        /** ✅ NEW from context */
+        selectedChartMicroorganism,
+        setSelectedChartMicroorganism,
     } = usePrevalenceFilters();
 
     const chartRefs = useRef<{
@@ -38,8 +41,7 @@ const PrevalenceChart: React.FC = () => {
     }>({});
 
     const { t } = useTranslation(["PrevalencePage"]);
-    const [currentMicroorganism, setCurrentMicroorganism] =
-        useState<string>("");
+
     const [availableMicroorganisms, setAvailableMicroorganisms] = useState<
         string[]
     >([]);
@@ -52,10 +54,17 @@ const PrevalenceChart: React.FC = () => {
     const updateAvailableMicroorganisms = (): void => {
         const microorganismsWithData = Array.from(
             new Set(prevalenceData.map((entry) => entry.microorganism))
-        );
+        ).filter(Boolean);
+
         setAvailableMicroorganisms(microorganismsWithData);
-        if (microorganismsWithData.length > 0 && !currentMicroorganism) {
-            setCurrentMicroorganism(microorganismsWithData[0]);
+
+        // If none selected or invalid, set default
+        if (
+            microorganismsWithData.length > 0 &&
+            (!selectedChartMicroorganism ||
+                !microorganismsWithData.includes(selectedChartMicroorganism))
+        ) {
+            setSelectedChartMicroorganism(microorganismsWithData[0]);
         }
     };
 
@@ -65,19 +74,10 @@ const PrevalenceChart: React.FC = () => {
         }
     }, [prevalenceData]);
 
-    useEffect(() => {
-        if (
-            currentMicroorganism &&
-            !availableMicroorganisms.includes(currentMicroorganism)
-        ) {
-            setCurrentMicroorganism(availableMicroorganisms[0]);
-        }
-    }, [availableMicroorganisms, currentMicroorganism]);
-
     // Reset pagination when the microorganism changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [currentMicroorganism]);
+    }, [selectedChartMicroorganism]);
 
     const generateChartData = (): {
         [key: string]: { [key: number]: ChartDataPoint };
@@ -86,7 +86,7 @@ const PrevalenceChart: React.FC = () => {
             {};
 
         prevalenceData.forEach((entry) => {
-            if (entry.microorganism === currentMicroorganism) {
+            if (entry.microorganism === selectedChartMicroorganism) {
                 const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
                 if (!chartData[key]) {
                     chartData[key] = {};
@@ -122,13 +122,11 @@ const PrevalenceChart: React.FC = () => {
     yearMin = Math.min(...yearRange);
     yearMax = Math.max(...yearRange);
 
-    // ✅ Rename this to avoid conflict with context yearOptions
     const yearOptionsForChart = Array.from(
         { length: yearMax - yearMin + 1 },
         (_, i) => yearMin + i
     ).reverse();
 
-    // Gather all ciMax values from all chart data points
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
         Object.values(yearData).map((data) => data.ciMax)
     );
@@ -251,7 +249,6 @@ const PrevalenceChart: React.FC = () => {
         tempChart.destroy();
     };
 
-    // ✅ Prefer context years for slider marks; fallback to local computed years
     const allYearsForSlider =
         yearOptions && yearOptions.length > 0
             ? yearOptions
@@ -270,9 +267,9 @@ const PrevalenceChart: React.FC = () => {
                 }}
             >
                 <MicroorganismSelect
-                    currentMicroorganism={currentMicroorganism}
+                    currentMicroorganism={selectedChartMicroorganism}
                     availableMicroorganisms={availableMicroorganisms}
-                    setCurrentMicroorganism={setCurrentMicroorganism}
+                    setCurrentMicroorganism={setSelectedChartMicroorganism}
                 />
             </Box>
 
@@ -289,7 +286,7 @@ const PrevalenceChart: React.FC = () => {
                             <Grid container rowSpacing={0} columnSpacing={2}>
                                 {chartKeys.map((key) => {
                                     const sanitizedKey = sanitizeKey(key);
-                                    const refKey = `${sanitizedKey}-${currentMicroorganism}`;
+                                    const refKey = `${sanitizedKey}-${selectedChartMicroorganism}`;
 
                                     if (!chartRefs.current[refKey]) {
                                         chartRefs.current[refKey] =
@@ -330,11 +327,8 @@ const PrevalenceChart: React.FC = () => {
                                                     chartRefs.current[refKey]
                                                 }
                                                 currentMicroorganism={
-                                                    currentMicroorganism
+                                                    selectedChartMicroorganism
                                                 }
-                                                // ✅ keep this for chart labels/data if your ChartCard still needs it
-                                                //yearOptions={yearOptionsForChart}
-                                                // ✅ NEW props for slider in ChartCard
                                                 allYears={allYearsForSlider}
                                                 selectedYears={selectedYear}
                                                 onChangeSelectedYears={

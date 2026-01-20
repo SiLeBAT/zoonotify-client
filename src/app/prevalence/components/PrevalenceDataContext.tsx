@@ -18,6 +18,9 @@ import {
 } from "../../shared/infrastructure/router/routes";
 import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
 
+/** ✅ URL param for chart microorganism (name, NOT docId) */
+const CHART_MICRO_PARAM = "chartMicro";
+
 /** 1) A simple "Matrix"-style interface for each relation */
 interface CMSEntry {
     id: number; // locale-specific id
@@ -85,6 +88,32 @@ interface Option {
     name: string; // label (localized)
 }
 
+/** ✅ URL helpers (preserve other params) */
+const readChartMicroFromUrl = (): string => {
+    try {
+        const sp = new URLSearchParams(window.location.search);
+        return sp.get(CHART_MICRO_PARAM) ?? "";
+    } catch {
+        return "";
+    }
+};
+
+const writeChartMicroToUrl = (microName: string): void => {
+    try {
+        const sp = new URLSearchParams(window.location.search);
+        if (!microName) sp.delete(CHART_MICRO_PARAM);
+        else sp.set(CHART_MICRO_PARAM, microName);
+
+        window.history.replaceState(
+            null,
+            "",
+            `${window.location.pathname}?${sp.toString()}`
+        );
+    } catch {
+        // ignore
+    }
+};
+
 /** 5) The shape of your React context */
 interface PrevalenceDataContext {
     microorganismOptions: Option[];
@@ -94,6 +123,7 @@ interface PrevalenceDataContext {
     matrixGroupOptions: Option[];
     superCategorySampleOriginOptions: Option[];
     yearOptions: number[];
+
     selectedMicroorganisms: string[]; // docIds
     selectedSampleOrigins: string[]; // docIds
     selectedMatrices: string[]; // docIds
@@ -101,6 +131,7 @@ interface PrevalenceDataContext {
     selectedMatrixGroups: string[]; // docIds
     selectedYear: number[];
     selectedSuperCategory: string[]; // docIds
+
     setSelectedMicroorganisms: (microorganisms: string[]) => void;
     setSelectedSampleOrigins: (sampleOrigins: string[]) => void;
     setSelectedMatrices: (matrices: string[]) => void;
@@ -108,6 +139,11 @@ interface PrevalenceDataContext {
     setSelectedMatrixGroups: (matrixGroups: string[]) => void;
     setSelectedYear: (year: number[]) => void;
     setSelectedSuperCategory: (superCategory: string[]) => void;
+
+    /** ✅ NEW: chart dropdown microorganism name (deep link) */
+    selectedChartMicroorganism: string;
+    setSelectedChartMicroorganism: (name: string) => void;
+
     triggerSearch: () => void;
     fetchDataFromAPI: (selectedFilters?: {
         microorganisms: string[];
@@ -120,6 +156,7 @@ interface PrevalenceDataContext {
     }) => Promise<void>;
     fetchOptions: () => Promise<void>;
     setIsSearchTriggered: (triggered: boolean) => void;
+
     prevalenceData: PrevalenceEntry[];
     error: string | null;
     loading: boolean;
@@ -236,6 +273,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         string[]
     >([]); // docIds
 
+    /** ✅ NEW: chart dropdown microorganism name (deep link) */
+    const [selectedChartMicroorganism, setSelectedChartMicroorganism] =
+        useState<string>(() => readChartMicroFromUrl());
+
     const [prevalenceData, setPrevalenceData] = useState<PrevalenceEntry[]>([]);
     const [fullPrevalenceData, setFullPrevalenceData] = useState<
         PrevalenceEntry[]
@@ -266,6 +307,13 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [prevalenceUpdateDate, setPrevalenceUpdateDate] = useState<
         string | null
     >(null);
+
+    /** ✅ keep chartMicro in URL when changed (preserve other params) */
+    useEffect(() => {
+        if (selectedChartMicroorganism) {
+            writeChartMicroToUrl(selectedChartMicroorganism);
+        }
+    }, [selectedChartMicroorganism]);
 
     // -------------- 1) fetchPrevalenceData --------------
     const fetchPrevalenceData = async (): Promise<void> => {
@@ -508,6 +556,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 });
                 setIsSearchTriggered(true);
 
+                /** ✅ Build URL from filters, but KEEP lang + chartMicro */
                 const searchParams = new URLSearchParams();
                 for (const [key, values] of Object.entries({
                     microorganism: microorganisms,
@@ -520,8 +569,18 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 })) {
                     values.forEach((value) => searchParams.append(key, value));
                 }
+
                 // persist lang in URL
                 searchParams.set("lang", i18next.language);
+
+                // persist chartMicro in URL (name)
+                if (selectedChartMicroorganism) {
+                    searchParams.set(
+                        CHART_MICRO_PARAM,
+                        selectedChartMicroorganism
+                    );
+                }
+
                 const searchString = searchParams.toString();
                 if (searchString) {
                     window.history.replaceState(null, "", `?${searchString}`);
@@ -583,10 +642,16 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 setSelectedYear(initialSelectedYear);
                 setSelectedSuperCategory(initialSelectedSuperCategory);
 
+                // ✅ initialize chartMicro from URL
+                setSelectedChartMicroorganism(readChartMicroFromUrl());
+
                 setSearchParameters(params);
                 const anyParamsPresent = Object.entries(params).some(
                     ([k, arr]) =>
-                        k !== "lang" && Array.isArray(arr) && arr.length > 0
+                        k !== "lang" &&
+                        k !== CHART_MICRO_PARAM &&
+                        Array.isArray(arr) &&
+                        arr.length > 0
                 );
 
                 if (anyParamsPresent) {
@@ -716,6 +781,33 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         isSearchTriggered,
     ]);
 
+    /** ✅ Keep chart dropdown valid when data changes (set default if missing) */
+    useEffect(() => {
+        const dataToUse = isSearchTriggered
+            ? prevalenceData
+            : fullPrevalenceData;
+        if (!dataToUse || dataToUse.length === 0) return;
+
+        const availableNames = Array.from(
+            new Set(dataToUse.map((e) => e.microorganism).filter(Boolean))
+        );
+
+        if (availableNames.length === 0) return;
+
+        if (
+            !selectedChartMicroorganism ||
+            !availableNames.includes(selectedChartMicroorganism)
+        ) {
+            setSelectedChartMicroorganism(availableNames[0]);
+            writeChartMicroToUrl(availableNames[0]);
+        }
+    }, [
+        fullPrevalenceData,
+        prevalenceData,
+        isSearchTriggered,
+        selectedChartMicroorganism,
+    ]);
+
     // -------------- 7) Trigger Search --------------
     const triggerSearch = (): void => {
         fetchDataFromAPI();
@@ -741,7 +833,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             fetchOptions();
             fetchPrevalenceUpdateDate();
         }
-        // Update URL to reflect the current language
+        // Update URL to reflect the current language (preserves chartMicro if present)
         const urlSearchParams = new URLSearchParams(window.location.search);
         urlSearchParams.set("lang", i18next.language);
         window.history.replaceState(null, "", `?${urlSearchParams.toString()}`);
@@ -770,6 +862,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedYear,
         selectedSuperCategory,
         setSelectedSuperCategory,
+
+        /** ✅ NEW */
+        selectedChartMicroorganism,
+        setSelectedChartMicroorganism,
+
         triggerSearch,
         fetchDataFromAPI,
         fetchOptions,
