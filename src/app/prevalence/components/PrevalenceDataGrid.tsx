@@ -123,8 +123,11 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
-    const { searchParameters, prevalenceUpdateDate } = usePrevalenceFilters();
-
+    const {
+        searchParameters,
+        prevalenceUpdateDate,
+        selectedChartMicroorganism,
+    } = usePrevalenceFilters();
     const getFormattedTimestamp = (): string => {
         const date = new Date();
         return date.toISOString().replace(/[:.]/g, "-");
@@ -254,12 +257,22 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
     /** ✅ Share link handler (copied from your ChartCard logic) */
     const handleShareLink = async (): Promise<void> => {
-        const url = window.location.href;
+        const url = new URL(window.location.href);
+
+        // ✅ store chart dropdown microorganism (NAME) in URL
+        if (selectedChartMicroorganism) {
+            url.searchParams.set("chartMicro", selectedChartMicroorganism);
+        } else {
+            url.searchParams.delete("chartMicro");
+        }
+
+        const shareUrl = url.toString();
+
         try {
-            await navigator.clipboard.writeText(url);
+            await navigator.clipboard.writeText(shareUrl);
         } catch {
             const ta = document.createElement("textarea");
-            ta.value = url;
+            ta.value = shareUrl;
             ta.setAttribute("readonly", "");
             ta.style.position = "absolute";
             ta.style.left = "-9999px";
