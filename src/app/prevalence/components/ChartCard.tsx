@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Box, Button, Slider } from "@mui/material";
+import React, { useMemo } from "react";
+import { Box, Button } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 // eslint-disable-next-line import/named
 import { Chart as ChartJS, TooltipItem, Plugin } from "chart.js";
@@ -58,134 +58,6 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
     },
 });
 
-/** -------------------------- Year slider (INLINE) ------------------------- */
-type YearRangeSliderProps = {
-    years: number[];
-    selectedYears: number[];
-    onChangeSelectedYears: (years: number[]) => void;
-    label: string;
-};
-
-const YearRangeSlider: React.FC<YearRangeSliderProps> = ({
-    years,
-    selectedYears,
-    onChangeSelectedYears,
-    label,
-}) => {
-    const sortedYears = useMemo(
-        () => [...(years ?? [])].filter(Number.isFinite).sort((a, b) => a - b),
-        [years]
-    );
-
-    const minYear = sortedYears[0] ?? 0;
-    const maxYear = sortedYears[sortedYears.length - 1] ?? 0;
-
-    const yearSet = useMemo(() => new Set(sortedYears), [sortedYears]);
-
-    const snapToValidYear = (y: number): number => {
-        if (yearSet.has(y)) return y;
-
-        let best = sortedYears[0] ?? y;
-        let bestDist = Math.abs(best - y);
-        for (const yy of sortedYears) {
-            const d = Math.abs(yy - y);
-            if (d < bestDist) {
-                best = yy;
-                bestDist = d;
-            }
-        }
-        return best;
-    };
-
-    const derivedValue: [number, number] = useMemo(() => {
-        if (!selectedYears || selectedYears.length === 0)
-            return [minYear, maxYear];
-        const s = [...selectedYears].sort((a, b) => a - b);
-        const a = snapToValidYear(s[0]);
-        const b = snapToValidYear(s[s.length - 1]);
-        return a <= b ? [a, b] : [b, a];
-    }, [selectedYears, minYear, maxYear, sortedYears]);
-
-    const [temp, setTemp] = useState<[number, number]>(derivedValue);
-
-    useEffect(() => {
-        setTemp(derivedValue);
-    }, [derivedValue]);
-
-    const marks = useMemo(
-        () => sortedYears.map((y) => ({ value: y })),
-        [sortedYears]
-    );
-
-    const yearsInRange = (a: number, b: number): number[] => {
-        const from = Math.min(a, b);
-        const to = Math.max(a, b);
-        return sortedYears.filter((y) => y >= from && y <= to);
-    };
-
-    if (!sortedYears.length) return null;
-
-    return (
-        // ✅ move slider UP: remove mt and reduce bottom spacing
-        <Box sx={{ width: "100%", mt: 0, mb: 0.5 }}>
-            <Box sx={{ fontSize: "0.9rem", mb: 0.2 }}>
-                {label}: <b>{temp[0]}</b> — <b>{temp[1]}</b>
-            </Box>
-
-            <Slider
-                value={temp}
-                min={minYear}
-                max={maxYear}
-                step={1}
-                marks={marks}
-                track="normal"
-                disableSwap
-                valueLabelDisplay="auto"
-                onChange={(_, v) => setTemp(v as [number, number])}
-                onChangeCommitted={(_, v) => {
-                    const [rawA, rawB] = v as [number, number];
-                    const a = snapToValidYear(Math.round(rawA));
-                    const b = snapToValidYear(Math.round(rawB));
-                    onChangeSelectedYears(yearsInRange(a, b));
-                }}
-                sx={{
-                    px: 0.5,
-                    // ✅ slightly smaller to reduce height
-                    "& .MuiSlider-thumb": { width: 16, height: 16 },
-                    "& .MuiSlider-rail": {
-                        opacity: 1,
-                        height: 6,
-                        borderRadius: 999,
-                    },
-                    "& .MuiSlider-track": { height: 6, borderRadius: 999 },
-                    "& .MuiSlider-mark": {
-                        width: 8,
-                        height: 8,
-                        borderRadius: "50%",
-                        transform: "translate(-50%, -50%)",
-                        opacity: 1,
-                    },
-                    "& .MuiSlider-markActive": { opacity: 1 },
-                }}
-            />
-
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: "0.8rem",
-                    opacity: 0.8,
-                    mt: 0, // ✅ was 0.3
-                    px: 0.5,
-                }}
-            >
-                <span>{minYear}</span>
-                <span>{maxYear}</span>
-            </Box>
-        </Box>
-    );
-};
-
 /** ------------------------------ Props ------------------------------ */
 interface ChartCardProps {
     chartKey: string;
@@ -193,9 +65,8 @@ interface ChartCardProps {
     chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>;
     currentMicroorganism: string | null;
 
-    allYears: number[];
-    selectedYears: number[];
-    onChangeSelectedYears: (years: number[]) => void;
+    /** years filtered globally (from the single slider in PrevalenceChart) */
+    yearsToShow: number[];
 
     xAxisMax: number;
     downloadChart: (
@@ -211,9 +82,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
     chartData,
     chartRef,
     currentMicroorganism,
-    allYears,
-    selectedYears,
-    onChangeSelectedYears,
+    yearsToShow,
     xAxisMax,
     downloadChart,
     prevalenceUpdateDate,
@@ -221,45 +90,35 @@ const ChartCard: React.FC<ChartCardProps> = ({
     const { t } = useTranslation(["PrevalencePage"]);
     const chartColor = generateColorFromKey(chartKey);
 
-    const yearsToShow = useMemo(() => {
-        const base = selectedYears?.length ? selectedYears : allYears;
-        return [...base].filter(Number.isFinite).sort((a, b) => a - b);
-    }, [selectedYears, allYears]);
+    const safeYearsToShow = useMemo(
+        () =>
+            [...(yearsToShow ?? [])]
+                .filter(Number.isFinite)
+                .sort((a, b) => a - b),
+        [yearsToShow]
+    );
 
     return (
         <Box
             sx={{
                 backgroundColor: "white",
                 height: "620px",
-
-                // ✅ reduce top padding so slider sits higher
-                pt: 1, // was padding: 5
+                pt: 2,
                 px: 5,
                 pb: 8,
-
                 borderRadius: 2,
                 boxShadow: 2,
                 margin: "0 5px",
                 position: "relative",
             }}
         >
-            {/* ✅ Slider at TOP (now higher) */}
-            <Box sx={{ mb: 0.6 }}>
-                <YearRangeSlider
-                    years={allYears ?? []}
-                    selectedYears={selectedYears ?? []}
-                    label={t("SAMPLING_YEAR")}
-                    onChangeSelectedYears={onChangeSelectedYears}
-                />
-            </Box>
-
             <Bar
                 data={{
-                    labels: yearsToShow,
+                    labels: safeYearsToShow,
                     datasets: [
                         {
                             label: chartKey,
-                            data: yearsToShow.map(
+                            data: safeYearsToShow.map(
                                 (year) =>
                                     chartData[year] || {
                                         x: 0,
@@ -275,12 +134,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 options={{
                     indexAxis: "y",
                     maintainAspectRatio: false,
-
-                    // ✅ reduce top padding a bit (still enough for title)
                     layout: {
                         padding: { top: 30, bottom: 15, left: 0, right: 0 },
                     },
-
                     scales: {
                         x: {
                             title: {
@@ -305,7 +161,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 color: "black",
                                 font: { size: 13 },
                                 callback: function (_, index) {
-                                    return yearsToShow[index];
+                                    return safeYearsToShow[index];
                                 },
                             },
                         },

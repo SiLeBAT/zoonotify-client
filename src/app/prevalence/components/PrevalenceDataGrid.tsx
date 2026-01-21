@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // eslint-disable-next-line import/named
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button, Typography, useMediaQuery } from "@mui/material";
+import { Button, Typography, useMediaQuery, Box, Stack } from "@mui/material";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import { DataGridControls } from "./DataGridControls";
@@ -69,6 +69,7 @@ const formatMicroorganismName = (
     const words = microName
         .split(/(\s+|-)/)
         .filter((part: string) => part.trim().length > 0);
+
     return words
         .map((word: string, index: number) => {
             const italic = italicWords.some((italicWord: string) =>
@@ -118,9 +119,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     const { t } = useTranslation(["PrevalencePage"]);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
-    // ✅ Added for Share Link (same logic as your ChartCard)
-    //const [ setCopied] = useState(false);
-
     const theme = useTheme();
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
     const {
@@ -128,6 +126,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         prevalenceUpdateDate,
         selectedChartMicroorganism,
     } = usePrevalenceFilters();
+
     const getFormattedTimestamp = (): string => {
         const date = new Date();
         return date.toISOString().replace(/[:.]/g, "-");
@@ -142,7 +141,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         decimalSeparator: string
     ): string => {
         const csvRows: string[] = [];
-        // ✅ CSV columns (Matrix Group included, table unchanged)
+
         const headers: Array<keyof PrevalenceEntry> = [
             "samplingYear",
             "microorganism",
@@ -150,7 +149,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "superCategorySampleOrigin",
             "samplingStage",
             "matrix",
-            "matrixGroup", // <-- added for CSV only
+            "matrixGroup", // CSV only
             "numberOfSamples",
             "numberOfPositive",
             "percentageOfPositive",
@@ -202,7 +201,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         return csvRows.join("\n");
     };
 
-    /** Build the ZIP from the *current* grid rows & current search parameters */
     const prepareDownload = async (): Promise<{
         url: string;
         name: string;
@@ -212,14 +210,12 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         const zip = new JSZip();
         const timestamp = getFormattedTimestamp();
 
-        // CSVs from current rows
         const csvContentDot = createCSVContent(prevalenceData, ".");
         const csvContentComma = createCSVContent(prevalenceData, ",");
 
         zip.file(`prevalence_data_dot_${timestamp}.csv`, csvContentDot);
         zip.file(`prevalence_data_comma_${timestamp}.csv`, csvContentComma);
 
-        // Search parameters + README
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
         const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson}`;
         const readmeContent =
@@ -228,14 +224,12 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         zip.file(`search_parameters_${timestamp}.txt`, formattedText);
         zip.file(`README_${timestamp}.txt`, readmeContent);
 
-        // Blob
         const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
         const name = `data_package_${timestamp}.zip`;
         return { url, name };
     };
 
-    /** Click handler: build fresh ZIP, revoke old URL, trigger download */
     const handleDownloadClick = async (): Promise<void> => {
         if (downloadUrl) {
             URL.revokeObjectURL(downloadUrl);
@@ -246,7 +240,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
         setDownloadUrl(res.url);
 
-        // Auto-trigger download
         const a = document.createElement("a");
         a.href = res.url;
         a.download = res.name;
@@ -255,11 +248,9 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         a.remove();
     };
 
-    /** ✅ Share link handler (copied from your ChartCard logic) */
     const handleShareLink = async (): Promise<void> => {
         const url = new URL(window.location.href);
 
-        // ✅ store chart dropdown microorganism (NAME) in URL
         if (selectedChartMicroorganism) {
             url.searchParams.set("chartMicro", selectedChartMicroorganism);
         } else {
@@ -285,7 +276,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         }
     };
 
-    /** Cleanup blob URL on unmount / change */
     useEffect(() => {
         return () => {
             if (downloadUrl) URL.revokeObjectURL(downloadUrl);
@@ -359,7 +349,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             align: "left",
             headerAlign: "left",
         },
-        // (No matrixGroup column in the table)
         {
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
@@ -518,37 +507,49 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                             />
                         </ThemeProvider>
 
-                        {/* Download ZIP */}
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleDownloadClick}
-                            disabled={prevalenceData.length === 0}
-                            style={{
-                                margin: "0.5em",
-                                backgroundColor: theme.palette.primary.main,
-                            }}
-                        >
-                            {t("DOWNLOAD_ZIP_FILE")}
-                        </Button>
+                        {/* ✅ Buttons row: next to each other + same size */}
+                        <Box sx={{ px: 1, py: 1 }}>
+                            <Stack
+                                direction="row"
+                                spacing={1}
+                                justifyContent="center"
+                                alignItems="stretch"
+                                sx={{ width: "100%" }}
+                            >
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleDownloadClick}
+                                    disabled={prevalenceData.length === 0}
+                                    sx={{
+                                        flex: 1,
+                                        maxWidth: 320,
+                                        minHeight: 44,
+                                        backgroundColor:
+                                            theme.palette.primary.main,
+                                    }}
+                                >
+                                    {t("DOWNLOAD_ZIP_FILE")}
+                                </Button>
 
-                        {/* ✅ Share link button UNDER the Download ZIP button */}
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleShareLink}
-                            startIcon={<InsertLinkIcon />}
-                            style={{
-                                margin: "0 0.5em 0.5em 0.5em",
-                                backgroundColor: theme.palette.primary.main,
-                                textTransform: "none",
-                                alignSelf: "center",
-                            }}
-                        >
-                            {t("Share_Link")}
-                        </Button>
-
-                        {/* ✅ Copied message (optional) */}
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleShareLink}
+                                    startIcon={<InsertLinkIcon />}
+                                    sx={{
+                                        flex: 1,
+                                        maxWidth: 320,
+                                        minHeight: 44,
+                                        backgroundColor:
+                                            theme.palette.primary.main,
+                                        textTransform: "none",
+                                    }}
+                                >
+                                    {t("Share_Link")}
+                                </Button>
+                            </Stack>
+                        </Box>
                     </div>
                 }
                 defaultExpanded
