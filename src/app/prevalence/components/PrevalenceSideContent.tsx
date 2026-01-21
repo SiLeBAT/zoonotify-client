@@ -517,11 +517,7 @@ export function PrevalenceSideContent(): JSX.Element {
         year: (
             <Box
                 key="year"
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                }}
+                sx={{ display: "flex", flexDirection: "column", width: "100%" }}
             >
                 <Box
                     sx={{
@@ -778,21 +774,23 @@ export function PrevalenceSideContent(): JSX.Element {
                 maxWidth: "95%",
                 p: 2,
                 boxSizing: "border-box",
+
                 height: "100vh",
-                maxHeight: "100vh",
-                "@supports (height: 100dvh)": {
-                    height: "100dvh",
-                    maxHeight: "100dvh",
-                },
+                "@supports (height: 100dvh)": { height: "100dvh" },
+
+                minHeight: 0,
+                overflowX: "hidden",
             }}
         >
+            {/* ✅ Scrollable content */}
             <Box
                 sx={{
                     flex: 1,
-                    minHeight: 0,
+                    minHeight: 0, // ✅ critical
                     overflowY: "auto",
+                    overflowX: "hidden",
                     pr: 1,
-                    pb: 7,
+                    pb: 5,
                 }}
             >
                 {loading ? (
@@ -803,27 +801,6 @@ export function PrevalenceSideContent(): JSX.Element {
                             {orderedComponents}
                             {remainingComponents}
                         </Stack>
-
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                mt: 2,
-                                gap: "16px",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            <Button
-                                variant="contained"
-                                startIcon={<Search />}
-                                onClick={handleSearch}
-                            >
-                                {t("SEARCH")}
-                            </Button>
-                            <Button variant="contained" onClick={resetFilters}>
-                                {t("RESET_FILTERS")}
-                            </Button>
-                        </Box>
 
                         <Box sx={{ mt: 2 }}>
                             <ZNAccordion
@@ -859,6 +836,39 @@ export function PrevalenceSideContent(): JSX.Element {
                         </Box>
                     </>
                 )}
+            </Box>
+
+            {/* ✅ Sticky footer buttons always visible */}
+            <Box
+                sx={{
+                    position: "sticky",
+                    bottom: 0,
+                    zIndex: 10,
+                    pt: 2,
+                    pb: 1,
+                    backgroundColor: "background.paper",
+                    borderTop: "1px solid rgba(0,0,0,0.12)",
+                }}
+            >
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "16px",
+                        flexWrap: "wrap",
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        startIcon={<Search />}
+                        onClick={handleSearch}
+                    >
+                        {t("SEARCH")}
+                    </Button>
+                    <Button variant="contained" onClick={resetFilters}>
+                        {t("RESET_FILTERS")}
+                    </Button>
+                </Box>
             </Box>
 
             <Dialog open={infoDialogOpen} onClose={handleClose}>

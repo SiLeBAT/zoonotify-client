@@ -375,7 +375,7 @@ This file contains comma-separated data, which supports the correct format of nu
             <div
                 ref={chartContainerRef}
                 style={{
-                    padding: "35px",
+                    padding: "12px",
                     background: "#fff",
                     borderRadius: "16px",
                     position: "relative",
