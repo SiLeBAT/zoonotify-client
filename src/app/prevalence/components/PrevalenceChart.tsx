@@ -5,10 +5,11 @@ import {
     Pagination,
     Typography,
     useMediaQuery,
+    Slider,
 } from "@mui/material";
 import type { ChartConfiguration } from "chart.js";
 import { Chart as ChartJS, registerables } from "chart.js";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ChartCard } from "./ChartCard";
 import { MicroorganismSelect } from "./MicroorganismSelect";
@@ -20,6 +21,155 @@ ChartJS.register(...registerables);
 
 let [yearMin, yearMax] = [3000, 0];
 
+/** --------- Single Year Range Slider (GLOBAL) ---------- */
+type YearRangeSliderProps = {
+    years: number[];
+    selectedYears: number[];
+    onChangeSelectedYears: (years: number[]) => void;
+    label: string;
+};
+
+const YearRangeSlider: React.FC<YearRangeSliderProps> = ({
+    years,
+    selectedYears,
+    onChangeSelectedYears,
+    label,
+}) => {
+    const sortedYears = useMemo(
+        () => [...(years ?? [])].filter(Number.isFinite).sort((a, b) => a - b),
+        [years]
+    );
+
+    const minYear = sortedYears[0] ?? 0;
+    const maxYear = sortedYears[sortedYears.length - 1] ?? 0;
+
+    const yearSet = useMemo(() => new Set(sortedYears), [sortedYears]);
+
+    const snapToValidYear = (y: number): number => {
+        if (yearSet.has(y)) return y;
+
+        let best = sortedYears[0] ?? y;
+        let bestDist = Math.abs(best - y);
+        for (const yy of sortedYears) {
+            const d = Math.abs(yy - y);
+            if (d < bestDist) {
+                best = yy;
+                bestDist = d;
+            }
+        }
+        return best;
+    };
+
+    const derivedValue: [number, number] = useMemo(() => {
+        if (!selectedYears || selectedYears.length === 0)
+            return [minYear, maxYear];
+        const s = [...selectedYears].sort((a, b) => a - b);
+        const a = snapToValidYear(s[0]);
+        const b = snapToValidYear(s[s.length - 1]);
+        return a <= b ? [a, b] : [b, a];
+    }, [selectedYears, minYear, maxYear]);
+
+    const [temp, setTemp] = useState<[number, number]>(derivedValue);
+
+    useEffect(() => {
+        setTemp(derivedValue);
+    }, [derivedValue]);
+
+    const marks = useMemo(
+        () => sortedYears.map((y) => ({ value: y })),
+        [sortedYears]
+    );
+
+    const yearsInRange = (a: number, b: number): number[] => {
+        const from = Math.min(a, b);
+        const to = Math.max(a, b);
+        return sortedYears.filter((y) => y >= from && y <= to);
+    };
+
+    if (!sortedYears.length) return null;
+
+    // ✅ Make slider slightly narrower than container (prevents edge clipping + scroll)
+    const INNER_SIDE_GAP_PX = 64; // total gap (left+right). tweak: 48/64/80
+
+    return (
+        <Box sx={{ width: "100%", mt: 1, overflow: "visible" }}>
+            <Box sx={{ fontSize: "0.9rem", mb: 0.75 }}>
+                {label}: <b>{temp[0]}</b> — <b>{temp[1]}</b>
+            </Box>
+
+            {/* ✅ Centered inner rail area */}
+            <Box
+                sx={{
+                    width: `calc(100% - ${INNER_SIDE_GAP_PX}px)`,
+                    mx: "auto",
+                    overflow: "visible",
+                }}
+            >
+                <Slider
+                    value={temp}
+                    min={minYear}
+                    max={maxYear}
+                    step={1}
+                    marks={marks}
+                    track="normal"
+                    disableSwap
+                    valueLabelDisplay="auto"
+                    onChange={(_, v) => setTemp(v as [number, number])}
+                    onChangeCommitted={(_, v) => {
+                        const [rawA, rawB] = v as [number, number];
+                        const a = snapToValidYear(Math.round(rawA));
+                        const b = snapToValidYear(Math.round(rawB));
+                        onChangeSelectedYears(yearsInRange(a, b));
+                    }}
+                    sx={{
+                        width: "100%",
+                        overflow: "visible",
+
+                        "& .MuiSlider-thumb": {
+                            width: 18,
+                            height: 18,
+                            zIndex: 2,
+                        },
+                        "& .MuiSlider-rail": {
+                            opacity: 1,
+                            height: 6,
+                            borderRadius: 999,
+                        },
+                        "& .MuiSlider-track": { height: 6, borderRadius: 999 },
+                        "& .MuiSlider-mark": {
+                            width: 8,
+                            height: 8,
+                            borderRadius: "50%",
+                            transform: "translate(-50%, -50%)",
+                            opacity: 1,
+                        },
+                        "& .MuiSlider-markActive": { opacity: 1 },
+
+                        "& .MuiSlider-valueLabel": {
+                            whiteSpace: "nowrap",
+                            zIndex: 3,
+                        },
+                    }}
+                />
+
+                {/* ✅ min/max labels aligned with inner rail */}
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        fontSize: "0.8rem",
+                        opacity: 0.8,
+                        mt: 0.5,
+                    }}
+                >
+                    <span>{minYear}</span>
+                    <span>{maxYear}</span>
+                </Box>
+            </Box>
+        </Box>
+    );
+};
+
 const PrevalenceChart: React.FC = () => {
     const {
         prevalenceData,
@@ -28,8 +178,6 @@ const PrevalenceChart: React.FC = () => {
         selectedYear,
         setSelectedYear,
         yearOptions,
-
-        /** ✅ NEW from context */
         selectedChartMicroorganism,
         setSelectedChartMicroorganism,
     } = usePrevalenceFilters();
@@ -45,10 +193,9 @@ const PrevalenceChart: React.FC = () => {
     const [availableMicroorganisms, setAvailableMicroorganisms] = useState<
         string[]
     >([]);
-
     const [currentPage, setCurrentPage] = useState(1);
-    const chartsPerPage = 2;
 
+    const chartsPerPage = 2;
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
 
     const updateAvailableMicroorganisms = (): void => {
@@ -58,7 +205,6 @@ const PrevalenceChart: React.FC = () => {
 
         setAvailableMicroorganisms(microorganismsWithData);
 
-        // If none selected or invalid, set default
         if (
             microorganismsWithData.length > 0 &&
             (!selectedChartMicroorganism ||
@@ -69,12 +215,9 @@ const PrevalenceChart: React.FC = () => {
     };
 
     useEffect(() => {
-        if (prevalenceData.length > 0) {
-            updateAvailableMicroorganisms();
-        }
+        if (prevalenceData.length > 0) updateAvailableMicroorganisms();
     }, [prevalenceData]);
 
-    // Reset pagination when the microorganism changes
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedChartMicroorganism]);
@@ -88,9 +231,7 @@ const PrevalenceChart: React.FC = () => {
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === selectedChartMicroorganism) {
                 const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
-                if (!chartData[key]) {
-                    chartData[key] = {};
-                }
+                if (!chartData[key]) chartData[key] = {};
                 chartData[key][entry.samplingYear] = {
                     x: entry.percentageOfPositive,
                     y: entry.samplingYear,
@@ -117,7 +258,7 @@ const PrevalenceChart: React.FC = () => {
         )
     );
 
-    // ---- Local year range (used ONLY if context yearOptions is empty) ----
+    // ---- Year range fallback if context yearOptions empty ----
     const yearRange = prevalenceData.map((entry) => entry.samplingYear);
     yearMin = Math.min(...yearRange);
     yearMax = Math.max(...yearRange);
@@ -125,7 +266,21 @@ const PrevalenceChart: React.FC = () => {
     const yearOptionsForChart = Array.from(
         { length: yearMax - yearMin + 1 },
         (_, i) => yearMin + i
-    ).reverse();
+    );
+
+    const allYearsForSlider =
+        yearOptions && yearOptions.length > 0
+            ? yearOptions
+            : yearOptionsForChart;
+
+    /** ✅ Years shown on charts */
+    const yearsToShow = useMemo(() => {
+        const base =
+            selectedYear && selectedYear.length > 0
+                ? selectedYear
+                : allYearsForSlider;
+        return [...base].filter(Number.isFinite).sort((a, b) => a - b);
+    }, [selectedYear, allYearsForSlider]);
 
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
         Object.values(yearData).map((data) => data.ciMax)
@@ -171,9 +326,7 @@ const PrevalenceChart: React.FC = () => {
             unknown
         > = {
             type: "bar",
-            data: {
-                ...originalConfig.data,
-            },
+            data: { ...originalConfig.data },
             options: {
                 ...originalConfig.options,
                 responsive: false,
@@ -181,12 +334,7 @@ const PrevalenceChart: React.FC = () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 animation: false as any,
                 layout: {
-                    padding: {
-                        top: 60,
-                        bottom: 40,
-                        left: 60,
-                        right: 80,
-                    },
+                    padding: { top: 60, bottom: 40, left: 60, right: 80 },
                 },
                 scales: {
                     x: {
@@ -249,14 +397,9 @@ const PrevalenceChart: React.FC = () => {
         tempChart.destroy();
     };
 
-    const allYearsForSlider =
-        yearOptions && yearOptions.length > 0
-            ? yearOptions
-            : yearOptionsForChart;
-
     return (
         <Box sx={{ padding: 0, position: "relative", minHeight: "100vh" }}>
-            {/* Top form control */}
+            {/* ✅ Sticky top controls (dropdown + slider same width container) */}
             <Box
                 sx={{
                     position: "sticky",
@@ -264,13 +407,23 @@ const PrevalenceChart: React.FC = () => {
                     zIndex: 1000,
                     padding: 2,
                     backgroundColor: "rgb(219, 228, 235)",
+                    overflow: "visible",
                 }}
             >
-                <MicroorganismSelect
-                    currentMicroorganism={selectedChartMicroorganism}
-                    availableMicroorganisms={availableMicroorganisms}
-                    setCurrentMicroorganism={setSelectedChartMicroorganism}
-                />
+                <Box sx={{ maxWidth: 1400, mx: "auto", width: "100%" }}>
+                    <MicroorganismSelect
+                        currentMicroorganism={selectedChartMicroorganism}
+                        availableMicroorganisms={availableMicroorganisms}
+                        setCurrentMicroorganism={setSelectedChartMicroorganism}
+                    />
+
+                    <YearRangeSlider
+                        years={allYearsForSlider ?? []}
+                        selectedYears={selectedYear ?? []}
+                        label={t("SAMPLING_YEAR")}
+                        onChangeSelectedYears={setSelectedYear}
+                    />
+                </Box>
             </Box>
 
             {loading ? (
@@ -329,11 +482,7 @@ const PrevalenceChart: React.FC = () => {
                                                 currentMicroorganism={
                                                     selectedChartMicroorganism
                                                 }
-                                                allYears={allYearsForSlider}
-                                                selectedYears={selectedYear}
-                                                onChangeSelectedYears={
-                                                    setSelectedYear
-                                                }
+                                                yearsToShow={yearsToShow}
                                                 xAxisMax={xAxisMax}
                                                 downloadChart={downloadChart}
                                                 prevalenceUpdateDate={
@@ -345,7 +494,6 @@ const PrevalenceChart: React.FC = () => {
                                 })}
                             </Grid>
 
-                            {/* Pagination */}
                             <Box
                                 sx={{
                                     position: "sticky",
