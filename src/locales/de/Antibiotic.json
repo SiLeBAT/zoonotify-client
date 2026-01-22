@@ -26,7 +26,8 @@
   "Resistenzrate (%)": "Resistenzrate (%)",
   "MATRIX": "Matrix",
   "Search options": "Suchoptionen",
-  "RESET_FILTERS": "Filter zurücksetzen",
+  "RESET FILTERS": "Filter zurücksetzen",
+
   "SELECT_ALL": "Alle auswählen",
   "DESELECT_ALL": " Alle abwählen",
   "ALL_VALUES": "Alle Werte",
