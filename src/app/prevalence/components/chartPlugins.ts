@@ -25,7 +25,7 @@ export const whiteBackgroundAndLogoPlugin = (
         const ctx = chart.ctx;
 
         // Define padding for logo and text
-        const padding = 22;
+        const padding = 23;
 
         // Draw the logo if it has finished loading
         if (logoImage.complete) {
