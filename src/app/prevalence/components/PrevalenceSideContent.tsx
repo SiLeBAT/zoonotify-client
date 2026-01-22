@@ -69,7 +69,7 @@ const formatMicroorganismName = (
     return (
         <>
             {parts.map((word, i) => {
-                if (word.trim() === "" || word === "-") return word;
+                if (word.trim() === "" || word === "-") return word; // keep separators
                 const isItalic = italicWords.some((w) =>
                     word.toLowerCase().includes(w.toLowerCase())
                 );
@@ -82,6 +82,7 @@ const formatMicroorganismName = (
         </>
     );
 };
+/** -------------------------------------------------------------------- */
 
 /** ---------- Local MultiSelect ---------- */
 type LocalOption = { value: string; label: string };
@@ -93,6 +94,7 @@ type LocalMultiSelectProps = {
     label: string;
     onChange: (values: string[]) => void;
     formatLabel?: (label: string) => React.ReactNode;
+    /** when true, list shows only currently selected items */
     showOnlySelected?: boolean;
 };
 
@@ -106,8 +108,8 @@ const MENU_PROPS = {
     },
 } as const;
 
+/** ===== Ellipsis helper ===== */
 const LINE_CLAMP = 1 as 1 | 2;
-
 const Ellipsis: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const singleLine = LINE_CLAMP === 1;
     return (
@@ -136,6 +138,10 @@ const Ellipsis: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
 };
 
+/**
+ * Keeps list stable while open, commits on close, SelectAll (visible),
+ * label memory for hidden options, and supports "showOnlySelected".
+ */
 const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
     selected,
     options,
@@ -153,10 +159,6 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         LocalOption[] | null
     >(null);
 
-    /**
-     * ✅ labelMemory keeps a persistent map of value -> label.
-     * This prevents showing docIds in the Select input if options change dynamically.
-     */
     const [labelMemory, setLabelMemory] = useState<Map<string, string>>(
         new Map()
     );
@@ -169,39 +171,40 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         open && frozenOptionsWhileOpen ? frozenOptionsWhileOpen : options;
 
     const currentSelection = open ? staged : selected;
-
     const optionsToRender = showOnlySelected
         ? baseList.filter((o) => currentSelection.includes(o.value))
         : baseList;
 
-    /** ✅ Always keep labelMemory updated from BOTH live options and frozen options */
-    useEffect(() => {
-        const source = frozenOptionsWhileOpen ?? options;
-        if (!source?.length) return;
+    const valueToLabel = useMemo(() => {
+        const m = new Map<string, string>();
+        (open ? frozenOptionsWhileOpen ?? options : options).forEach((o) =>
+            m.set(o.value, o.label)
+        );
+        return m;
+    }, [open, options, frozenOptionsWhileOpen]);
 
+    useEffect(() => {
+        if (!options?.length) return;
         setLabelMemory((prev) => {
             const next = new Map(prev);
-            source.forEach(({ value, label: optLabel }) => {
-                if (value && optLabel) next.set(value, optLabel);
+            options.forEach(({ value, label: optLabel }) => {
+                if (next.get(value) !== optLabel) next.set(value, optLabel);
             });
             return next;
         });
-    }, [options, frozenOptionsWhileOpen]);
+    }, [options]);
 
     const allVisibleValues = useMemo(
         () => optionsToRender.map((o) => o.value),
         [optionsToRender]
     );
-
     const numCheckedVisible = useMemo(
         () => allVisibleValues.filter((v) => staged.includes(v)).length,
         [allVisibleValues, staged]
     );
-
     const allVisibleSelected =
         allVisibleValues.length > 0 &&
         numCheckedVisible === allVisibleValues.length;
-
     const someVisibleSelected = numCheckedVisible > 0 && !allVisibleSelected;
 
     const selectAllText = allVisibleSelected
@@ -229,16 +232,8 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
     const pretty = (raw: string): React.ReactNode =>
         formatLabel ? formatLabel(raw) : raw;
 
-    /**
-     * ✅ Robust label resolver:
-     * 1) try current list (baseList)
-     * 2) try labelMemory (persisted)
-     * 3) fallback to raw value (docId)
-     */
     const labelFor = (val: string): React.ReactNode => {
-        const fromCurrentList = baseList.find((o) => o.value === val)?.label;
-        const fromMemory = labelMemory.get(val);
-        const raw = fromCurrentList ?? fromMemory ?? val;
+        const raw = valueToLabel.get(val) ?? labelMemory.get(val) ?? val;
         return pretty(raw);
     };
 
@@ -366,6 +361,7 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         </FormControl>
     );
 };
+/** --------------------------------------------------------------------------- */
 
 export function PrevalenceSideContent(): JSX.Element {
     const { t, i18n } = useTranslation(["PrevalencePage"]);
@@ -410,8 +406,13 @@ export function PrevalenceSideContent(): JSX.Element {
         Record<string, LocalOption[]>
     >({});
 
-    const freezeIfFirstTime = (key: string, live: LocalOption[]): void => {
-        setFrozenByKey((prev) => (prev[key] ? prev : { ...prev, [key]: live }));
+    const freezeIfFirstTime = (
+        key: string,
+        liveOptions: LocalOption[]
+    ): void => {
+        setFrozenByKey((prev) =>
+            prev[key] ? prev : { ...prev, [key]: liveOptions }
+        );
     };
 
     const onlySel = (arr: unknown[]): boolean =>
@@ -514,39 +515,32 @@ export function PrevalenceSideContent(): JSX.Element {
         frozenByKey[key] ?? liveOptions[key];
 
     const filterComponents: { [key: string]: JSX.Element } = {
+        // (your filters remain the same as you sent — unchanged)
         year: (
             <Box
                 key="year"
-                sx={{ display: "flex", flexDirection: "column", width: "100%" }}
+                sx={{ display: "flex", alignItems: "center", width: "100%" }}
             >
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
+                <LocalMultiSelect
+                    selected={selectedYear.map(String)}
+                    options={getOptionsFor("year")}
+                    name="years"
+                    label={t("SAMPLING_YEAR")}
+                    showOnlySelected={onlySel(selectedYear)}
+                    onChange={(values) => {
+                        freezeIfFirstTime("year", liveOptions.year);
+                        setSelectedYear(values.map((v) => parseInt(v, 10)));
+                        updateFilterOrder("year");
                     }}
-                >
-                    <LocalMultiSelect
-                        selected={selectedYear.map(String)}
-                        options={getOptionsFor("year")}
-                        name="years"
-                        label={t("SAMPLING_YEAR")}
-                        showOnlySelected={onlySel(selectedYear)}
-                        onChange={(values) => {
-                            freezeIfFirstTime("year", liveOptions.year);
-                            setSelectedYear(values.map((v) => parseInt(v, 10)));
-                            updateFilterOrder("year");
-                        }}
-                    />
-                    <Tooltip title={t("More Info on Sampling Year")}>
-                        <IconButton
-                            onClick={() => handleInfoClick("SAMPLING_YEAR")}
-                            sx={{ ml: 0.2 }}
-                        >
-                            <InfoIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
+                />
+                <Tooltip title={t("More Info on Sampling Year")}>
+                    <IconButton
+                        onClick={() => handleInfoClick("SAMPLING_YEAR")}
+                        sx={{ ml: 0.2 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
             </Box>
         ),
 
@@ -734,15 +728,15 @@ export function PrevalenceSideContent(): JSX.Element {
         ),
     };
 
-    const orderedComponents = selectedOrder.map((key) => (
+    const orderedComponents = selectedOrder.map((key: string) => (
         <Grow in timeout={500} key={key}>
             {filterComponents[key]}
         </Grow>
     ));
 
     const remainingComponents = Object.keys(filterComponents)
-        .filter((key) => !selectedOrder.includes(key))
-        .map((key) => (
+        .filter((key: string) => !selectedOrder.includes(key))
+        .map((key: string) => (
             <Grow in timeout={500} key={key}>
                 {filterComponents[key]}
             </Grow>
@@ -775,22 +769,23 @@ export function PrevalenceSideContent(): JSX.Element {
                 p: 2,
                 boxSizing: "border-box",
 
+                // ✅ IMPORTANT: ALWAYS give it a real height so inner scroll can work
                 height: "100vh",
-                "@supports (height: 100dvh)": { height: "100dvh" },
-
-                minHeight: 0,
-                overflowX: "hidden",
+                maxHeight: "100vh",
+                "@supports (height: 100dvh)": {
+                    height: "100dvh",
+                    maxHeight: "100dvh",
+                },
             }}
         >
-            {/* ✅ Scrollable content */}
             <Box
                 sx={{
                     flex: 1,
-                    minHeight: 0, // ✅ critical
+                    minHeight: 0,
                     overflowY: "auto",
-                    overflowX: "hidden",
                     pr: 1,
-                    pb: 5,
+                    pb: 12,
+                    WebkitOverflowScrolling: "touch",
                 }}
             >
                 {loading ? (
@@ -801,6 +796,27 @@ export function PrevalenceSideContent(): JSX.Element {
                             {orderedComponents}
                             {remainingComponents}
                         </Stack>
+
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                mt: 2,
+                                gap: "16px",
+                                flexWrap: "wrap",
+                            }}
+                        >
+                            <Button
+                                variant="contained"
+                                startIcon={<Search />}
+                                onClick={handleSearch}
+                            >
+                                {t("SEARCH")}
+                            </Button>
+                            <Button variant="contained" onClick={resetFilters}>
+                                {t("RESET_FILTERS")}
+                            </Button>
+                        </Box>
 
                         <Box sx={{ mt: 2 }}>
                             <ZNAccordion
@@ -836,39 +852,6 @@ export function PrevalenceSideContent(): JSX.Element {
                         </Box>
                     </>
                 )}
-            </Box>
-
-            {/* ✅ Sticky footer buttons always visible */}
-            <Box
-                sx={{
-                    position: "sticky",
-                    bottom: 0,
-                    zIndex: 10,
-                    pt: 2,
-                    pb: 1,
-                    backgroundColor: "background.paper",
-                    borderTop: "1px solid rgba(0,0,0,0.12)",
-                }}
-            >
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        gap: "16px",
-                        flexWrap: "wrap",
-                    }}
-                >
-                    <Button
-                        variant="contained"
-                        startIcon={<Search />}
-                        onClick={handleSearch}
-                    >
-                        {t("SEARCH")}
-                    </Button>
-                    <Button variant="contained" onClick={resetFilters}>
-                        {t("RESET_FILTERS")}
-                    </Button>
-                </Box>
             </Box>
 
             <Dialog open={infoDialogOpen} onClose={handleClose}>
