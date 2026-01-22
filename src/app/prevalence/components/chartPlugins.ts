@@ -25,12 +25,12 @@ export const whiteBackgroundAndLogoPlugin = (
         const ctx = chart.ctx;
 
         // Define padding for logo and text
-        const padding = 13;
+        const padding = 22;
 
         // Draw the logo if it has finished loading
         if (logoImage.complete) {
-            const logoWidth = 78; // Logo width
-            const logoHeight = 27; // Logo height
+            const logoWidth = 65; // Logo width
+            const logoHeight = 20; // Logo height
 
             // Position for top-right corner of the full canvas
             const logoX = chart.width - logoWidth - padding; // Right edge with padding
