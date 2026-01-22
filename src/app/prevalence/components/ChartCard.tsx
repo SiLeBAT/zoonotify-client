@@ -42,14 +42,14 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
             (width -
                 formattedWords.reduce((acc, { text, italic }) => {
                     ctx.font = italic
-                        ? "italic bold 21px Arial"
-                        : "bold 21px Arial";
+                        ? "italic bold 19px Arial"
+                        : "bold 19px Arial";
                     return acc + ctx.measureText(text).width + 1;
                 }, 0)) /
             2;
 
         formattedWords.forEach(({ text, italic }) => {
-            ctx.font = italic ? "italic bold 21px Arial" : "bold 21px Arial";
+            ctx.font = italic ? "italic bold 19px Arial" : "bold 19px Arial";
             ctx.fillText(text, xPosition, titleYPosition);
             xPosition += ctx.measureText(text).width + 1;
         });
