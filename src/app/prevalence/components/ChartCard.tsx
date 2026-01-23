@@ -65,7 +65,6 @@ interface ChartCardProps {
     chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>;
     currentMicroorganism: string | null;
 
-    /** years filtered globally (from the single slider in PrevalenceChart) */
     yearsToShow: number[];
 
     xAxisMax: number;
@@ -90,13 +89,17 @@ const ChartCard: React.FC<ChartCardProps> = ({
     const { t } = useTranslation(["PrevalencePage"]);
     const chartColor = generateColorFromKey(chartKey);
 
-    const safeYearsToShow = useMemo(
+    // ✅ Latest year first (top)
+    const yearsDesc = useMemo(
         () =>
             [...(yearsToShow ?? [])]
                 .filter(Number.isFinite)
-                .sort((a, b) => a - b),
+                .sort((a, b) => b - a),
         [yearsToShow]
     );
+
+    // ✅ Make category labels strings
+    const yearLabels = useMemo(() => yearsDesc.map(String), [yearsDesc]);
 
     return (
         <Box
@@ -114,19 +117,24 @@ const ChartCard: React.FC<ChartCardProps> = ({
         >
             <Bar
                 data={{
-                    labels: safeYearsToShow,
+                    labels: yearLabels,
                     datasets: [
                         {
                             label: chartKey,
-                            data: safeYearsToShow.map(
-                                (year) =>
-                                    chartData[year] || {
+                            data: yearsDesc.map((year) => {
+                                const d =
+                                    chartData[year] ||
+                                    ({
                                         x: 0,
-                                        y: year,
+                                        y: String(year),
                                         ciMin: 0,
                                         ciMax: 0,
-                                    }
-                            ) as ChartDataPoint[],
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    } as any);
+
+                                // ✅ Force y to be the category label (string)
+                                return { ...d, y: String(year) };
+                            }) as unknown as ChartDataPoint[],
                             backgroundColor: chartColor,
                         },
                     ],
@@ -150,18 +158,33 @@ const ChartCard: React.FC<ChartCardProps> = ({
                             ticks: { color: "black", font: { size: 14 } },
                         },
                         y: {
+                            // ✅ Force category axis so labels are used
+                            type: "category",
+                            labels: yearLabels,
+
                             title: {
                                 display: true,
                                 text: t("Year"),
                                 color: "black",
                                 font: { size: 17, weight: "bold" },
                             },
+
+                            // latest year already first in labels => keep reverse false
                             reverse: false,
+
                             ticks: {
                                 color: "black",
                                 font: { size: 13 },
-                                callback: function (_, index) {
-                                    return safeYearsToShow[index];
+
+                                // ✅ IMPORTANT: value is usually an index (0..n)
+                                // so we must convert it to the label:
+                                callback: function (value) {
+                                    // "this" is the scale
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    return (this as any).getLabelForValue(
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                        value as any
+                                    );
                                 },
                             },
                         },
@@ -184,12 +207,13 @@ const ChartCard: React.FC<ChartCardProps> = ({
                             callbacks: {
                                 label: (context: TooltipItem<"bar">) => {
                                     const year = parseInt(
-                                        context.label || "",
+                                        String(context.label ?? ""),
                                         10
                                     );
                                     const data = chartData[year] || {};
-                                    const rawData =
-                                        context.raw as ChartDataPoint;
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    const rawData = context.raw as any;
+
                                     return [
                                         `${t("Prevalence")}: ${rawData.x}%`,
                                         `${t("CI_min")}: ${data.ciMin}`,
