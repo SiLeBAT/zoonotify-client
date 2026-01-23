@@ -92,6 +92,7 @@ export interface ResistanceApiItem {
     minKonfidenzintervall: number;
     maxKonfidenzintervall: number;
 }
+
 // Map filter key to getter that returns the documentId string (or "" if absent)
 function getDocId(entry: ResistanceApiItem, key: FilterKey): string {
     switch (key) {
@@ -144,15 +145,16 @@ function shouldShowSpeciesFilter(microorganism: string): boolean {
 }
 
 const menuItemTextStyle = `.menu-item-text-wrap {
-    white-space: normal !important;
-    word-break: break-word !important;
-    max-width: 260px;
-    display: block;
+  white-space: normal !important;
+  word-break: break-word !important;
+  max-width: 260px;
+  display: block;
 }`;
 
 // ======== URL STATE HELPERS (for deep linking) ========
 // We compress state into ?s=<compressed>
-// Now we also include chart year (y) and combinations (c) at top level.
+// We also include chart year (y) and combinations (c) at top level.
+// We include language as "l" and APPLY it on initial load.
 
 type ShortKey =
     | "y" // samplingYear
@@ -252,6 +254,17 @@ function decodeStateFromParam(sParam: string | null): {
     }
 }
 
+// ✅ IMPORTANT: read lang early (before data fetch), so opening the link in another browser
+// does NOT fall back to that browser's default language (e.g. German).
+function readLangFromUrl(): string | undefined {
+    const params = new URLSearchParams(window.location.search);
+    const decoded = decodeStateFromParam(params.get("s"));
+    if (decoded?.lang) return decoded.lang;
+    // optional legacy support:
+    const legacy = params.get("lang") || params.get("locale");
+    return legacy || undefined;
+}
+
 // Writer: set ?s=... in the address bar
 function updateSubstanceFilterUrlCompressed(
     microorganism: string,
@@ -300,7 +313,7 @@ function readStateFromUrlCompressed(
         };
     }
 
-    // Legacy reader (your old behavior)
+    // Legacy reader (old behavior)
     const legacySelected: Record<FilterKey, string[]> = { ...emptyFilterState };
     (Object.keys(emptyFilterState) as FilterKey[]).forEach((key) => {
         const val = params.get(key);
@@ -314,7 +327,7 @@ function readStateFromUrlCompressed(
         legacySubstanceParam?.split(",").filter(Boolean) ??
         allSubstances.map((s) => s.documentId);
 
-    // Immediately rewrite to compressed for cleanliness (no year/combos in legacy)
+    // Immediately rewrite to compressed for cleanliness
     const sNew = encodeStateToParam(
         microorganism,
         legacySelected,
@@ -359,6 +372,11 @@ export const SubstanceDetail: React.FC<{
     onShowMain: () => void;
 }> = ({ microorganism }) => {
     const { t } = useTranslation(["Antibiotic"]);
+
+    // ✅ language hydration guard (so we change language exactly once, early)
+    const langHydratedRef = useRef(false);
+
+    // ✅ deep-link hydration guard (filters/year/combos) after options exist
     const hydratedFromUrlRef = useRef(false);
 
     const [resistanceRawData, setResistanceRawData] = useState<
@@ -409,6 +427,7 @@ export const SubstanceDetail: React.FC<{
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
+
     const [substanceInfo, setSubstanceInfo] = useState<{
         title: string;
         description: string;
@@ -420,6 +439,18 @@ export const SubstanceDetail: React.FC<{
 
     // For chart year dropdown
     const [chartYear, setChartYear] = useState<number | undefined>(undefined);
+
+    // ✅ 1) APPLY LANGUAGE FROM URL *BEFORE* FETCHING ANYTHING
+    useEffect(() => {
+        if (langHydratedRef.current) return;
+        langHydratedRef.current = true;
+
+        const urlLang = readLangFromUrl();
+        if (urlLang && urlLang !== i18next.language) {
+            // changeLanguage is async; we don't have to await here
+            void i18next.changeLanguage(urlLang);
+        }
+    }, []);
 
     // Helper for extracting unique filter options using documentId
     function unique<
@@ -441,7 +472,6 @@ export const SubstanceDetail: React.FC<{
         }));
     }
 
-    // --- Moved handleSearch UP, before useEffect that calls it ---
     const filterDataWithSelected = useCallback(
         (sel = selected, sub = substanceFilter): ResistanceApiItem[] => {
             let result = resistanceRawData;
@@ -494,6 +524,49 @@ export const SubstanceDetail: React.FC<{
         [resistanceRawData, selected, substanceFilter]
     );
 
+    // ----------- handleSearch updates year + URL -----------
+    const handleSearch = useCallback(
+        (
+            sel = selected,
+            sub = substanceFilter,
+            overrideYear?: number
+        ): void => {
+            const filtered = filterDataWithSelected(sel, sub);
+            setFilteredFullData(filtered);
+            setShowResults(true);
+
+            const years = Array.from(
+                new Set(filtered.map((d) => d.samplingYear))
+            ).sort((a, b) => b - a);
+
+            const nextYear =
+                typeof overrideYear === "number"
+                    ? overrideYear
+                    : years.length > 0
+                    ? years[0]
+                    : undefined;
+
+            setChartYear(nextYear);
+
+            // combinations will be refined by the effect below; keep current for now
+            updateSubstanceFilterUrlCompressed(
+                microorganism,
+                sel,
+                sub,
+                nextYear,
+                selectedCombinations
+            );
+        },
+        [
+            filterDataWithSelected,
+            microorganism,
+            selected,
+            substanceFilter,
+            selectedCombinations,
+        ]
+    );
+    // ---------------------------------------------
+
     // === Cascading option recomputation
     useEffect(() => {
         const dataToCompute: ResistanceApiItem[] = showResults
@@ -517,10 +590,10 @@ export const SubstanceDetail: React.FC<{
         ): boolean => {
             for (const k of keys) {
                 if (k === excludeKey) continue;
-                const sel = selected[k] ?? [];
-                if (sel.length === 0) continue;
+                const selArr = selected[k] ?? [];
+                if (selArr.length === 0) continue;
                 const v = getDocId(entry, k);
-                if (!v || !sel.includes(v)) return false;
+                if (!v || !selArr.includes(v)) return false;
             }
             return true;
         };
@@ -591,40 +664,6 @@ export const SubstanceDetail: React.FC<{
         });
     }, [selected, showResults, resistanceRawData, filteredFullData]);
 
-    // ----------- handleSearch updates year + URL -----------
-    const handleSearch = (
-        sel = selected,
-        sub = substanceFilter,
-        overrideYear?: number
-    ): void => {
-        const filtered = filterDataWithSelected(sel, sub);
-        setFilteredFullData(filtered);
-        setShowResults(true);
-
-        const years = Array.from(
-            new Set(filtered.map((d) => d.samplingYear))
-        ).sort((a, b) => b - a);
-
-        const nextYear =
-            typeof overrideYear === "number"
-                ? overrideYear
-                : years.length > 0
-                ? years[0]
-                : undefined;
-
-        setChartYear(nextYear);
-
-        // combinations will be refined by the effect below; keep current for now
-        updateSubstanceFilterUrlCompressed(
-            microorganism,
-            sel,
-            sub,
-            nextYear,
-            selectedCombinations
-        );
-    };
-    // ---------------------------------------------
-
     // Recompute combinations + N whenever data/year changes
     useEffect(() => {
         if (!filteredFullData.length || !chartYear) {
@@ -663,8 +702,10 @@ export const SubstanceDetail: React.FC<{
         });
     }, [filteredFullData, microorganism, chartYear]);
 
-    // DATA FETCHING
+    // DATA FETCHING (uses current i18next.language; language was applied early from URL)
     useEffect(() => {
+        let cancelled = false;
+
         async function fetchResistanceOptions(): Promise<void> {
             setLoading(true);
             setFetchError(null);
@@ -677,20 +718,27 @@ export const SubstanceDetail: React.FC<{
                     `&populate=*&pagination[pageSize]=8000`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const res = await callApiService<any>(url);
-                setResistanceRawData(res.data?.data || []);
+                if (!cancelled) setResistanceRawData(res.data?.data || []);
             } catch (err) {
-                setFetchError(
-                    "Failed to fetch filter options. Please try again."
-                );
+                if (!cancelled) {
+                    setFetchError(
+                        "Failed to fetch filter options. Please try again."
+                    );
+                }
                 console.error("Failed to fetch resistance options", err);
             } finally {
-                setLoading(false);
+                if (!cancelled) setLoading(false);
             }
         }
+
         if (microorganism) {
             fetchResistanceOptions();
             setShowResults(false);
         }
+
+        return () => {
+            cancelled = true;
+        };
     }, [i18next.language, microorganism]);
 
     // Set options & years from fetched data
@@ -703,6 +751,7 @@ export const SubstanceDetail: React.FC<{
                     .map(String)
             )
         ).sort();
+
         const samplingYear = years.map((y) => ({
             id: y,
             name: y,
@@ -960,6 +1009,7 @@ export const SubstanceDetail: React.FC<{
         const allSelected =
             options.length > 0 && value.length === options.length;
         const someSelected = value.length > 0 && !allSelected;
+
         const handleChange = (event: SelectChangeEvent<string[]>): void => {
             const v = event.target.value as string[];
             if (v.includes("all")) {
@@ -1013,6 +1063,7 @@ export const SubstanceDetail: React.FC<{
                                 }
                             />
                         </MenuItem>
+
                         {options.length === 0 ? (
                             <MenuItem disabled value="">
                                 {t("No options")}
@@ -1051,6 +1102,7 @@ export const SubstanceDetail: React.FC<{
                         )}
                     </Select>
                 </FormControl>
+
                 <Tooltip title={t(infoKey)}>
                     <IconButton
                         size="small"
@@ -1086,7 +1138,6 @@ export const SubstanceDetail: React.FC<{
                         onChange={(e) => {
                             const y = Number(e.target.value);
                             setChartYear(y);
-                            // updating URL immediately with new year + existing combinations
                             updateSubstanceFilterUrlCompressed(
                                 microorganism,
                                 selected,
@@ -1103,6 +1154,7 @@ export const SubstanceDetail: React.FC<{
                         ))}
                     </Select>
                 </FormControl>
+
                 <Tooltip title={t("More Info on Sampling Year")}>
                     <IconButton
                         size="small"
@@ -1116,7 +1168,7 @@ export const SubstanceDetail: React.FC<{
         );
     }
 
-    // Keep URL up to date after hydration (now includes year + combinations)
+    // Keep URL up to date after hydration (now includes language, year + combinations)
     useEffect(() => {
         if (!hydratedFromUrlRef.current) return;
         updateSubstanceFilterUrlCompressed(
@@ -1209,6 +1261,7 @@ export const SubstanceDetail: React.FC<{
                         <Typography variant="h5" align="center" mb={2}>
                             {t("Search options")}
                         </Typography>
+
                         {loading && (
                             <Stack alignItems="center" my={3}>
                                 <CircularProgress />
@@ -1217,11 +1270,13 @@ export const SubstanceDetail: React.FC<{
                                 </Typography>
                             </Stack>
                         )}
+
                         {fetchError && (
                             <Alert severity="error" sx={{ mb: 2 }}>
                                 {fetchError}
                             </Alert>
                         )}
+
                         <Stack spacing={2} sx={{ opacity: loading ? 0.5 : 1 }}>
                             {shouldShowSpeciesFilter(microorganism) &&
                                 renderSelectWithSelectAll(
@@ -1230,30 +1285,35 @@ export const SubstanceDetail: React.FC<{
                                     "More Info on Species",
                                     "SPECIES"
                                 )}
+
                             {renderSelectWithSelectAll(
                                 "superCategorySampleOrigin",
                                 t("SUPER-CATEGORY-SAMPLE-ORIGIN"),
                                 "More Info on Super Categories",
                                 "SUPER-CATEGORY-SAMPLE-ORIGIN"
                             )}
+
                             {renderSelectWithSelectAll(
                                 "sampleOrigin",
                                 t("SAMPLE_ORIGIN"),
                                 "More Info on Sample Origins",
                                 "SAMPLE_ORIGIN"
                             )}
+
                             {renderSelectWithSelectAll(
                                 "samplingStage",
                                 t("SAMPLING_STAGE"),
                                 "More Info on Sampling Stages",
                                 "SAMPLING_STAGE"
                             )}
+
                             {renderSelectWithSelectAll(
                                 "matrixGroup",
                                 t("MATRIX_GROUP"),
                                 "More Info on Matrix Groups",
                                 "MATRIX_GROUP"
                             )}
+
                             {renderSelectWithSelectAll(
                                 "matrix",
                                 t("MATRIX"),
@@ -1261,6 +1321,7 @@ export const SubstanceDetail: React.FC<{
                                 "MATRIX"
                             )}
                         </Stack>
+
                         <Box
                             mt={4}
                             display="flex"
@@ -1276,6 +1337,7 @@ export const SubstanceDetail: React.FC<{
                             >
                                 {t("SEARCH")}
                             </Button>
+
                             <Button
                                 variant="contained"
                                 sx={{ minWidth: 120, background: "#003663" }}
@@ -1319,6 +1381,7 @@ export const SubstanceDetail: React.FC<{
                                                           0,
                                                           4
                                                       );
+
                                             setSelectedCombinations(nextCombos);
                                         } else if (v.length > 4) {
                                             setMaxComboDialogOpen(true);
@@ -1327,7 +1390,6 @@ export const SubstanceDetail: React.FC<{
                                             setSelectedCombinations(v);
                                         }
 
-                                        // update URL immediately with new combinations
                                         updateSubstanceFilterUrlCompressed(
                                             microorganism,
                                             selected,
