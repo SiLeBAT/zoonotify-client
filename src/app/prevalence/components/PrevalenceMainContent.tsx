@@ -10,8 +10,9 @@ import { useFetchSupportEmail } from "../../shared/components/footer/Footer-Cont
 const PrevalenceMainContent: React.FC<{ heading: string }> = ({ heading }) => {
     const { prevalenceData, loading, error, showError } =
         usePrevalenceFilters();
+
     const theme = useTheme();
-    const { t, i18n } = useTranslation(["PrevalencePage"]); // <-- include i18n
+    const { t, i18n } = useTranslation(["PrevalencePage"]);
     const supportMail = useFetchSupportEmail();
 
     const mailtoLink =
@@ -43,17 +44,17 @@ const PrevalenceMainContent: React.FC<{ heading: string }> = ({ heading }) => {
                         {t("errorSuffix")}
                     </Alert>
                 )}
-                {prevalenceData.length > 0 && (
-                    <Box sx={{ width: "95%" }}>
-                        <PrevalenceDataGrid
-                            prevalenceData={prevalenceData}
-                            loading={loading}
-                            language={
-                                i18n.language.startsWith("de") ? "de" : "en"
-                            }
-                        />
-                    </Box>
-                )}
+
+                {/* ✅ ALWAYS render DataGrid component
+                    - Before search: it shows only INFORMATION accordion
+                    - After search: it shows table + chart + info */}
+                <Box sx={{ width: "95%" }}>
+                    <PrevalenceDataGrid
+                        prevalenceData={prevalenceData}
+                        loading={loading}
+                        language={i18n.language.startsWith("de") ? "de" : "en"}
+                    />
+                </Box>
             </Box>
         </>
     );
