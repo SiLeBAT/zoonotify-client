@@ -24,13 +24,9 @@ import i18next from "i18next";
 import Markdown from "markdown-to-jsx";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
 import { LoadingProcessComponent } from "../../shared/components/loading_process/LoadingProcess.component";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import {
-    INFORMATION,
-    PEREVALENCE_INFO,
-} from "../../shared/infrastructure/router/routes";
+import { INFORMATION } from "../../shared/infrastructure/router/routes";
 import { CMSResponse } from "../../shared/model/CMS.model";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
 
@@ -69,7 +65,7 @@ const formatMicroorganismName = (
     return (
         <>
             {parts.map((word, i) => {
-                if (word.trim() === "" || word === "-") return word; // keep separators
+                if (word.trim() === "" || word === "-") return word;
                 const isItalic = italicWords.some((w) =>
                     word.toLowerCase().includes(w.toLowerCase())
                 );
@@ -82,7 +78,6 @@ const formatMicroorganismName = (
         </>
     );
 };
-/** -------------------------------------------------------------------- */
 
 /** ---------- Local MultiSelect ---------- */
 type LocalOption = { value: string; label: string };
@@ -94,7 +89,6 @@ type LocalMultiSelectProps = {
     label: string;
     onChange: (values: string[]) => void;
     formatLabel?: (label: string) => React.ReactNode;
-    /** when true, list shows only currently selected items */
     showOnlySelected?: boolean;
 };
 
@@ -108,7 +102,6 @@ const MENU_PROPS = {
     },
 } as const;
 
-/** ===== Ellipsis helper ===== */
 const LINE_CLAMP = 1 as 1 | 2;
 const Ellipsis: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const singleLine = LINE_CLAMP === 1;
@@ -138,10 +131,6 @@ const Ellipsis: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
 };
 
-/**
- * Keeps list stable while open, commits on close, SelectAll (visible),
- * label memory for hidden options, and supports "showOnlySelected".
- */
 const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
     selected,
     options,
@@ -361,7 +350,6 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         </FormControl>
     );
 };
-/** --------------------------------------------------------------------------- */
 
 export function PrevalenceSideContent(): JSX.Element {
     const { t, i18n } = useTranslation(["PrevalencePage"]);
@@ -398,7 +386,6 @@ export function PrevalenceSideContent(): JSX.Element {
     const [infoDialogTitle, setInfoDialogTitle] = useState("");
     const [infoDialogContent, setInfoDialogContent] = useState("");
     const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
-    const [prevalenceInfo, setPrevalenceInfo] = useState<string>("");
 
     const [showOnlySelected, setShowOnlySelected] = useState(false);
 
@@ -434,26 +421,6 @@ export function PrevalenceSideContent(): JSX.Element {
         i18n.on("languageChanged", handleLanguageChange);
         return () => i18n.off("languageChanged", handleLanguageChange);
     }, [i18n, fetchOptions]);
-
-    useEffect(() => {
-        const fetchPrevalenceInfo = async (): Promise<void> => {
-            try {
-                const url = `${PEREVALENCE_INFO}?locale=${i18next.language}&publicationState=live`;
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const response = await callApiService<any>(url);
-                const entity = response.data?.data;
-                if (!entity || !entity.content) {
-                    setPrevalenceInfo("No prevalence information available.");
-                    return;
-                }
-                setPrevalenceInfo(entity.content);
-            } catch (error) {
-                console.error("Failed to fetch prevalence info:", error);
-                setPrevalenceInfo("Error loading prevalence information.");
-            }
-        };
-        fetchPrevalenceInfo();
-    }, [i18next.language]);
 
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
@@ -515,7 +482,6 @@ export function PrevalenceSideContent(): JSX.Element {
         frozenByKey[key] ?? liveOptions[key];
 
     const filterComponents: { [key: string]: JSX.Element } = {
-        // (your filters remain the same as you sent — unchanged)
         year: (
             <Box
                 key="year"
@@ -768,8 +734,6 @@ export function PrevalenceSideContent(): JSX.Element {
                 maxWidth: "95%",
                 p: 2,
                 boxSizing: "border-box",
-
-                // ✅ IMPORTANT: ALWAYS give it a real height so inner scroll can work
                 height: "100vh",
                 maxHeight: "100vh",
                 "@supports (height: 100dvh)": {
@@ -784,7 +748,8 @@ export function PrevalenceSideContent(): JSX.Element {
                     minHeight: 0,
                     overflowY: "auto",
                     pr: 1,
-                    pb: 12,
+                    // ✅ reduce pb because we removed big content at bottom
+                    pb: 4,
                     WebkitOverflowScrolling: "touch",
                 }}
             >
@@ -818,38 +783,8 @@ export function PrevalenceSideContent(): JSX.Element {
                             </Button>
                         </Box>
 
-                        <Box sx={{ mt: 2 }}>
-                            <ZNAccordion
-                                title={t("PREVALENCE_INFORMATION")}
-                                content={
-                                    <Markdown
-                                        options={{
-                                            overrides: {
-                                                a: {
-                                                    props: {
-                                                        target: "_blank",
-                                                        rel: "noopener noreferrer",
-                                                    },
-                                                },
-                                                p: {
-                                                    component: "p",
-                                                    props: {
-                                                        style: {
-                                                            marginTop: -1,
-                                                            marginBottom: 0,
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        {prevalenceInfo}
-                                    </Markdown>
-                                }
-                                defaultExpanded={true}
-                                centerContent={false}
-                            />
-                        </Box>
+                        {/* ✅ Spacer to keep design like before */}
+                        <Box sx={{ mt: 2 }} />
                     </>
                 )}
             </Box>
