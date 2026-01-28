@@ -30,13 +30,10 @@ export function InfoPageComponent(props: {
         margin: "1em 0",
     } as const;
 
-    // Our hook now groups by normalized SectionCode keys (BACKGROUND, METHODS, ...)
-    // but this cast still works fine.
     const typedEntries: Array<[string, ExplanationDTO[]]> = Object.entries(
         (model.explanationCollection || {}) as ExplanationCollection
     ) as Array<[string, ExplanationDTO[]]>;
 
-    // Optional: enforce desired order visually
     const order: string[] = ["BACKGROUND", "METHODS", "GRAPHS", "DATA", "MAIN"];
     const sortedEntries =
         typedEntries.length > 0
@@ -93,12 +90,15 @@ export function InfoPageComponent(props: {
                                     }
                                     defaultExpanded={false}
                                     centerContent={false}
-                                    onToggle={(open) =>
-                                        open &&
-                                        operations.openSectionByAnchor(
-                                            model.mainSection[0].anchor
-                                        )
-                                    }
+                                    onToggle={(open) => {
+                                        if (open) {
+                                            operations.openSectionByAnchor(
+                                                model.mainSection[0].anchor
+                                            );
+                                        } else {
+                                            operations.closeActiveSection();
+                                        }
+                                    }}
                                 />
                             </Box>
                         </section>
@@ -112,7 +112,6 @@ export function InfoPageComponent(props: {
                                       sx={subHeadingStyle}
                                       id={sectionToken}
                                   >
-                                      {/* 🔴 Use translated label from the hook */}
                                       {operations.getSectionLabel(sectionToken)}
                                   </Typography>
 
@@ -146,12 +145,15 @@ export function InfoPageComponent(props: {
                                                       }
                                                       defaultExpanded={false}
                                                       centerContent={false}
-                                                      onToggle={(open) =>
-                                                          open &&
-                                                          operations.openSectionByAnchor(
-                                                              explanation.anchor
-                                                          )
-                                                      }
+                                                      onToggle={(open) => {
+                                                          if (open) {
+                                                              operations.openSectionByAnchor(
+                                                                  explanation.anchor
+                                                              );
+                                                          } else {
+                                                              operations.closeActiveSection();
+                                                          }
+                                                      }}
                                                   />
                                               </Box>
                                           </section>
