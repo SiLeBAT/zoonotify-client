@@ -750,6 +750,7 @@ export function PrevalenceSideContent(): JSX.Element {
                     pr: 1,
                     // ✅ reduce pb because we removed big content at bottom
                     pb: 4,
+
                     pt: 2,
                     WebkitOverflowScrolling: "touch",
                 }}
