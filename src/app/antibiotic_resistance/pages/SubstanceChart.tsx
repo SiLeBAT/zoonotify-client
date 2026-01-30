@@ -74,6 +74,7 @@ interface SubstanceChartProps {
 }
 
 type CsvHeaderKey =
+    | "microorganism" // ✅ ADDED
     | "samplingYear"
     | "superCategorySampleOrigin"
     | "sampleOrigin"
@@ -89,6 +90,7 @@ type CsvHeaderKey =
     | "maxKonfidenzintervall";
 
 const CSV_HEADERS: CsvHeaderKey[] = [
+    "microorganism", // ✅ ADDED (first column)
     "samplingYear",
     "superCategorySampleOrigin",
     "sampleOrigin",
@@ -107,6 +109,7 @@ const CSV_HEADERS: CsvHeaderKey[] = [
 // ✅ Consistent, human-readable CSV header labels
 const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
     en: {
+        microorganism: "Microorganism", // ✅ ADDED
         samplingYear: "Sampling year",
         superCategorySampleOrigin: "Super-category sample origin",
         sampleOrigin: "Sample origin",
@@ -122,6 +125,7 @@ const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
         maxKonfidenzintervall: "Maximum confidence interval",
     },
     de: {
+        microorganism: "Mikroorganismus", // ✅ ADDED
         samplingYear: "Probenjahr",
         superCategorySampleOrigin: "Oberkategorie Probenherkunft",
         sampleOrigin: "Probenherkunft",
@@ -301,7 +305,19 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     ): string {
         if (!rows || !rows.length) return "";
 
+        function escapeIfNeeded(s: string): string {
+            if (s.includes(sep) || s.includes('"') || s.includes("\n")) {
+                return `"${s.replace(/"/g, '""')}"`;
+            }
+            return s;
+        }
+
         function valueForCSV(row: ResistanceApiItem, h: CsvHeaderKey): string {
+            // ✅ ADD microorganism column value (not present on row)
+            if (h === "microorganism") {
+                return escapeIfNeeded(String(microorganism ?? ""));
+            }
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const raw: any = (row as any)[h];
 
@@ -317,21 +333,10 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
                 const maybeName = (raw as { name?: unknown }).name;
                 const str =
                     maybeName != null ? String(maybeName) : JSON.stringify(raw);
-                if (
-                    str.includes(sep) ||
-                    str.includes('"') ||
-                    str.includes("\n")
-                ) {
-                    return `"${str.replace(/"/g, '""')}"`;
-                }
-                return str;
+                return escapeIfNeeded(str);
             }
 
-            const s = String(raw);
-            if (s.includes(sep) || s.includes('"') || s.includes("\n")) {
-                return `"${s.replace(/"/g, '""')}"`;
-            }
-            return s;
+            return escapeIfNeeded(String(raw));
         }
 
         const headerRow = CSV_HEADERS.map((h) => getCsvHeaderLabel(h)).join(
@@ -374,7 +379,14 @@ This file contains comma-separated data, which supports the correct format of nu
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `substance_data_${timestamp}.zip`;
+
+        // ✅ OPTIONAL: include microorganism in the zip filename
+        const safeMicro = String(microorganism ?? "").replace(
+            /[^a-zA-Z0-9._-]+/g,
+            "_"
+        );
+        a.download = `substance_data_${safeMicro}_${timestamp}.zip`;
+
         a.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }

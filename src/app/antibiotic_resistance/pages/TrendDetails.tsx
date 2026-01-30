@@ -1019,6 +1019,9 @@ export const TrendDetails: React.FC<{
                                                 <Box mb={5}>
                                                     <TrendChart
                                                         data={chartData}
+                                                        microorganism={
+                                                            microorganism
+                                                        }
                                                         fullData={groupItems}
                                                         groupLabel={renderGroupLabel(
                                                             groupKey,
