@@ -474,6 +474,9 @@ export const SubstanceDetail: React.FC<{
     const langHydratedRef = useRef(false);
     const hydratedFromUrlRef = useRef(false);
     const prevMicroRef = useRef<string | null>(null);
+    const keepEmptySubstanceAfterResetRef = useRef(false);
+
+    const prevVisibleSubstanceIdsRef = useRef<string[] | null>(null);
 
     const [resistanceRawData, setResistanceRawData] = useState<
         ResistanceApiItem[]
@@ -598,7 +601,28 @@ export const SubstanceDetail: React.FC<{
             sub = substanceFilter,
             overrideYear?: number
         ): void => {
-            const filtered = filterDataWithSelected(sel, sub);
+            // ✅ If user selected no substance, interpret it as "ALL visible substances"
+            let effectiveSub = sub;
+
+            if (effectiveSub.length === 0) {
+                const visibleSubs = uniqueFromItems(
+                    filterDataExcludingKey(
+                        resistanceRawData,
+                        sel,
+                        sub,
+                        "antimicrobialSubstance"
+                    ),
+                    "antimicrobialSubstance"
+                );
+
+                effectiveSub = visibleSubs.map((s) => s.documentId);
+
+                // ✅ update dropdown so UI matches the chart
+                keepEmptySubstanceAfterResetRef.current = false;
+                setSubstanceFilter(effectiveSub);
+            }
+
+            const filtered = filterDataWithSelected(sel, effectiveSub);
             setFilteredFullData(filtered);
             setShowResults(true);
 
@@ -618,7 +642,7 @@ export const SubstanceDetail: React.FC<{
             updateSubstanceFilterUrlCompressed(
                 microorganism,
                 sel,
-                sub,
+                effectiveSub,
                 apiLocale,
                 nextYear,
                 selectedCombinations
@@ -631,6 +655,7 @@ export const SubstanceDetail: React.FC<{
             substanceFilter,
             selectedCombinations,
             apiLocale,
+            resistanceRawData,
         ]
     );
 
@@ -782,12 +807,14 @@ export const SubstanceDetail: React.FC<{
             ...emptyFilterState,
             samplingYear: allYears.map((a) => a.documentId),
         };
-        const resetSubs = allSubstances.map((a) => a.documentId);
+        const resetSubs: string[] = []; // ✅ empty on reset
+        keepEmptySubstanceAfterResetRef.current = true;
 
         setSelected(resetSel);
         setShowResults(false);
         setFilteredFullData([]);
         setSubstanceFilter(resetSubs);
+
         setChartYear(undefined);
         setSelectedCombinations([]);
         setAvailableCombinations([]);
@@ -879,10 +906,41 @@ export const SubstanceDetail: React.FC<{
             ),
             "antimicrobialSubstance"
         );
-        const allowedSubs = new Set(visibleSubs.map((o) => o.documentId));
-        const prunedSubs = substanceFilter.filter((id) => allowedSubs.has(id));
-        if (prunedSubs.length !== substanceFilter.length) {
-            setSubstanceFilter(prunedSubs);
+
+        const visibleIds = visibleSubs.map((o) => o.documentId);
+        const allowedSubs = new Set(visibleIds);
+
+        // previous visible list (for detecting "Select All" mode)
+        const prevVisibleIds = prevVisibleSubstanceIdsRef.current;
+        const wasAllSelectedBefore =
+            prevVisibleIds != null &&
+            prevVisibleIds.length > 0 &&
+            substanceFilter.length === prevVisibleIds.length &&
+            substanceFilter.every((id) => prevVisibleIds.includes(id));
+
+        let nextSubstanceFilter = substanceFilter.filter((id) =>
+            allowedSubs.has(id)
+        );
+
+        // ✅ If user had "all" selected before, keep "all" selected after options change
+        if (wasAllSelectedBefore) {
+            nextSubstanceFilter = visibleIds;
+        }
+
+        // ✅ If nothing selected (edge-case), default to "all visible"
+        if (
+            nextSubstanceFilter.length === 0 &&
+            visibleIds.length > 0 &&
+            !keepEmptySubstanceAfterResetRef.current
+        ) {
+            nextSubstanceFilter = visibleIds;
+        }
+
+        if (
+            nextSubstanceFilter.length !== substanceFilter.length ||
+            nextSubstanceFilter.some((id, idx) => id !== substanceFilter[idx])
+        ) {
+            setSubstanceFilter(nextSubstanceFilter);
         }
     }, [resistanceRawData, selected, substanceFilter]);
 
@@ -1038,7 +1096,7 @@ export const SubstanceDetail: React.FC<{
     };
 
     function renderSubstanceFilter(): JSX.Element {
-        // ✅ WATERFALL options for substance
+        // ✅ WATERFALL options for substance (based on other filters)
         const substances = uniqueFromItems(
             filterDataExcludingKey(
                 resistanceRawData,
@@ -1049,9 +1107,13 @@ export const SubstanceDetail: React.FC<{
             "antimicrobialSubstance"
         );
 
+        const visibleIds = substances.map((s) => s.documentId);
+
         const allSelected =
-            substances.length > 0 &&
-            substanceFilter.length === substances.length;
+            visibleIds.length > 0 &&
+            substanceFilter.length === visibleIds.length &&
+            visibleIds.every((id) => substanceFilter.includes(id));
+
         const someSelected = substanceFilter.length > 0 && !allSelected;
 
         const handleChange = (event: SelectChangeEvent<string[]>): void => {
@@ -1059,15 +1121,29 @@ export const SubstanceDetail: React.FC<{
             let newSubstanceFilter: string[];
 
             if (v.includes("all")) {
-                newSubstanceFilter = allSelected
-                    ? []
-                    : substances.map((a) => a.documentId);
+                newSubstanceFilter = allSelected ? [] : visibleIds;
             } else {
-                newSubstanceFilter = v;
+                // keep only allowed visible ids (safety)
+                const allowed = new Set(visibleIds);
+                newSubstanceFilter = v.filter((id) => allowed.has(id));
             }
 
+            // ✅ Like combinations: change state, update URL, but DO NOT auto-search
+            keepEmptySubstanceAfterResetRef.current = false;
             setSubstanceFilter(newSubstanceFilter);
+
+            // ✅ Update chart immediately (same behavior as combinations)
             handleSearch(selected, newSubstanceFilter, chartYear);
+
+            // ✅ URL stays in sync
+            updateSubstanceFilterUrlCompressed(
+                microorganism,
+                selected,
+                newSubstanceFilter,
+                apiLocale,
+                chartYear,
+                selectedCombinations
+            );
         };
 
         return (
@@ -1090,7 +1166,7 @@ export const SubstanceDetail: React.FC<{
                                       .filter((o) =>
                                           selectedItems.includes(o.documentId)
                                       )
-                                      .map((o) => o.name) // ✅ already localized from API
+                                      .map((o) => o.name)
                                       .join(", ")
                                 : ""
                         }
@@ -1121,11 +1197,9 @@ export const SubstanceDetail: React.FC<{
                                     value={item.documentId}
                                 >
                                     <Checkbox
-                                        checked={
-                                            substanceFilter.indexOf(
-                                                item.documentId
-                                            ) > -1
-                                        }
+                                        checked={substanceFilter.includes(
+                                            item.documentId
+                                        )}
                                     />
                                     <ListItemText primary={item.name} />
                                 </MenuItem>
