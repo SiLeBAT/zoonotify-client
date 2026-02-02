@@ -149,11 +149,12 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     const { t, i18n } = useTranslation(["Antibiotic"]);
     const [copied, setCopied] = useState(false);
     // -- Chart data preparation
-    const startYear = 2010,
-        endYear = 2023;
+    const yearRange = data.map((entry) => entry.samplingYear);
+    const yearMin = Math.min(...yearRange);
+    const yearMax = Math.max(...yearRange);
     const years = Array.from(
-        { length: endYear - startYear + 1 },
-        (_, i) => startYear + i
+        { length: yearMax - yearMin + 1 },
+        (_, i) => yearMin + i
     );
     // *** FIXED: Use ALL_SUBSTANCES order for legend/plot! ***
     const substances = ALL_SUBSTANCES.filter((substance) =>
@@ -424,6 +425,7 @@ This file contains comma-separated data, which supports the correct format of nu
                 </Box>
 
                 {/* ---- CHART OR "NOT ENOUGH DATA" MESSAGE ---- */}
+
                 {enoughData ? (
                     <div ref={chartContainerRef}>
                         <ResponsiveContainer width="100%" height={450}>
