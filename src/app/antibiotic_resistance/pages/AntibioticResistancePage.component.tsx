@@ -412,75 +412,98 @@ export function AntibioticResistancePageComponent(): JSX.Element {
       `}</style>
 
             <PageLayoutComponent>
-                <Breadcrumb
-                    t={t}
-                    selectedOrg={selectedOrg}
-                    view={view}
-                    handleShowMain={handleShowMain}
-                />
-
                 {view === "trend" ? (
-                    <TrendDetails microorganism={selectedOrg} />
+                    <TrendDetails
+                        microorganism={selectedOrg}
+                        breadcrumb={
+                            <Breadcrumb
+                                t={t}
+                                selectedOrg={selectedOrg}
+                                view={view}
+                                handleShowMain={handleShowMain}
+                            />
+                        }
+                    />
                 ) : view === "substance" ? (
                     <SubstanceDetail
                         microorganism={selectedOrg}
                         onShowMain={handleShowMain}
+                        breadcrumb={
+                            <Breadcrumb
+                                t={t}
+                                selectedOrg={selectedOrg}
+                                view={view}
+                                handleShowMain={handleShowMain}
+                            />
+                        }
                     />
                 ) : (
-                    <div className="abx-page">
-                        <aside className="abx-sidebar">
-                            <ul className="abx-nav">
-                                {ORGANISMS.map((org) => (
-                                    <li
-                                        key={org}
-                                        className={`abx-nav-item${
-                                            org === selectedOrg
-                                                ? " abx-active"
-                                                : ""
-                                        }`}
-                                        onClick={() => handleOrgSelect(org)}
-                                    >
-                                        <FormattedMicroorganismName
-                                            microName={org}
-                                            fontWeight="bold"
-                                            fontSize="1.3rem"
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        </aside>
+                    <>
+                        <Breadcrumb
+                            t={t}
+                            selectedOrg={selectedOrg}
+                            view={view}
+                            handleShowMain={handleShowMain}
+                        />
+                        <div className="abx-page">
+                            <aside className="abx-sidebar">
+                                <ul className="abx-nav">
+                                    {ORGANISMS.map((org) => (
+                                        <li
+                                            key={org}
+                                            className={`abx-nav-item${
+                                                org === selectedOrg
+                                                    ? " abx-active"
+                                                    : ""
+                                            }`}
+                                            onClick={() => handleOrgSelect(org)}
+                                        >
+                                            <FormattedMicroorganismName
+                                                microName={org}
+                                                fontWeight="bold"
+                                                fontSize="1.3rem"
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </aside>
 
-                        <section className="abx-content">
-                            <div
-                                className="image-box"
-                                onClick={handleTrendClick}
-                            >
-                                <div className="image-label">{t("Trend")}</div>
-                                <img src="/assets/trend.png" alt="Trend" />
-                            </div>
-
-                            <div
-                                className="image-box"
-                                onClick={handleSubstanceClick}
-                            >
-                                <div className="image-label">
-                                    {t("Substans")}
+                            <section className="abx-content">
+                                <div
+                                    className="image-box"
+                                    onClick={handleTrendClick}
+                                >
+                                    <div className="image-label">
+                                        {t("Trend")}
+                                    </div>
+                                    <img src="/assets/trend.png" alt="Trend" />
                                 </div>
-                                <img
-                                    src="/assets/substans.png"
-                                    alt="Substans"
-                                />
-                            </div>
 
-                            <div
-                                className="image-box bottom"
-                                onClick={handleComingSoon}
-                            >
-                                <div className="image-label">{t("Multi")}</div>
-                                <img src="/assets/multi.png" alt="Multi" />
-                            </div>
-                        </section>
-                    </div>
+                                <div
+                                    className="image-box"
+                                    onClick={handleSubstanceClick}
+                                >
+                                    <div className="image-label">
+                                        {t("Substans")}
+                                    </div>
+                                    <img
+                                        src="/assets/substans.png"
+                                        alt="Substans"
+                                    />
+                                </div>
+
+                                <div
+                                    className="image-box bottom"
+                                    onClick={handleComingSoon}
+                                >
+                                    <div className="image-label">
+                                        {t("Multi")}
+                                    </div>
+                                    <img src="/assets/multi.png" alt="Multi" />
+                                </div>
+                            </section>
+                        </div>
+                    </>
                 )}
 
                 <Dialog open={comingSoonOpen} onClose={handleCloseComingSoon}>
