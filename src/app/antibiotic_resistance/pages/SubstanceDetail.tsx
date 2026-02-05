@@ -16,7 +16,6 @@ import {
     MenuItem,
     IconButton,
     Tooltip,
-    Paper,
     Dialog,
     DialogTitle,
     DialogContent,
@@ -44,6 +43,7 @@ import {
     SUBSTANCE_INFORMATION,
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
+import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
 
 // --- All filter option keys
 type FilterKey =
@@ -462,8 +462,10 @@ function filterDataExcludingKey(
 export const SubstanceDetail: React.FC<{
     microorganism: string;
     onShowMain: () => void;
-}> = ({ microorganism }) => {
+    breadcrumb?: React.ReactNode;
+}> = ({ microorganism, breadcrumb }) => {
     const { t, i18n } = useTranslation(["Antibiotic"]);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     // ✅ normalize locale for API: "de-DE" -> "de"
     const apiLocale = useMemo(() => {
@@ -1356,38 +1358,28 @@ export const SubstanceDetail: React.FC<{
         <>
             <style>{menuItemTextStyle}</style>
 
-            <Box display="flex" flexDirection="row">
+            <Box
+                display="flex"
+                flexDirection="row"
+                sx={{ width: "100%", height: "calc(100vh - 75px)" }}
+            >
                 {/* SIDEBAR */}
-                <Paper
-                    elevation={2}
-                    sx={{
-                        position: "fixed",
-                        left: 0,
-                        top: 56,
-                        width: 380,
-                        height: "calc(100vh - 75px)",
-                        bgcolor: "#fff",
-                        borderRight: "1px solid #e0e0e0",
-                        p: 0,
-                        overflow: "hidden",
-                        zIndex: 1000,
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
+                <SidebarComponent
+                    isOpen={isSidebarOpen}
+                    handleOpenClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    title={t("Search options")}
                 >
                     <Box
                         sx={{
-                            flex: 1,
                             display: "flex",
                             flexDirection: "column",
                             overflowY: "auto",
                             p: 3,
+                            width: "380px",
+                            maxWidth: "95%",
+                            height: "calc(100vh - 150px)",
                         }}
                     >
-                        <Typography variant="h5" align="center" mb={2}>
-                            {t("Search options")}
-                        </Typography>
-
                         {loading && (
                             <Stack alignItems="center" my={3}>
                                 <CircularProgress />
@@ -1474,10 +1466,21 @@ export const SubstanceDetail: React.FC<{
                             </Button>
                         </Box>
                     </Box>
-                </Paper>
+                </SidebarComponent>
 
                 {/* MAIN CONTENT */}
-                <Box flex={1} ml="370px" px={4} py={3}>
+                <Box
+                    flex={1}
+                    px={4}
+                    py={3}
+                    sx={{
+                        overflow: "auto",
+                        boxShadow: "15px 0 15px -15px rgba(0,0,0,0.15) inset",
+                        backgroundColor: "#fff",
+                        marginLeft: "20px",
+                    }}
+                >
+                    {breadcrumb}
                     <Stack spacing={2} sx={{ mb: 2 }}>
                         {renderChartYearDropdown()}
 
