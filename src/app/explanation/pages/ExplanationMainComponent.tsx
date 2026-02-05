@@ -46,133 +46,165 @@ export function InfoPageComponent(props: {
         <PageLayoutComponent>
             <Box
                 sx={{
-                    width: "60%",
                     maxHeight: "calc(100vh - 140px)",
                     overflowY: "auto",
-                    margin: "2em auto",
                 }}
             >
-                <Typography
-                    variant="h1"
+                <Box
                     sx={{
-                        marginBottom: "1rem",
-                        paddingBottom: "0.5em",
-                        fontSize: "3rem",
-                        textAlign: "center",
-                        fontWeight: "normal",
-                        color: theme.palette.primary.main,
-                        borderBottom: `1px solid ${theme.palette.primary.main}`,
+                        width: "60%",
+                        margin: "2em auto",
                     }}
                 >
-                    {model.title}
-                </Typography>
+                    <Typography
+                        variant="h1"
+                        sx={{
+                            marginBottom: "1rem",
+                            paddingBottom: "0.5em",
+                            fontSize: "3rem",
+                            textAlign: "center",
+                            fontWeight: "normal",
+                            color: theme.palette.primary.main,
+                            borderBottom: `1px solid ${theme.palette.primary.main}`,
+                        }}
+                    >
+                        {model.title}
+                    </Typography>
 
-                <div>
-                    {/* MAIN section (deep-linkable) */}
-                    {model.mainSection.length > 0 ? (
-                        <section id={model.mainSection[0].anchor}>
-                            <Box
-                                sx={{
-                                    borderBottom: `2px solid ${theme.palette.primary.main}`,
-                                }}
-                            >
-                                <ZNAccordion
-                                    key="mainSection"
-                                    title={model.mainSection[0].title}
-                                    content={
-                                        <Markdown>
-                                            {model.mainSection[0].description}
-                                        </Markdown>
-                                    }
-                                    expanded={
-                                        model.activeAnchor ===
-                                        model.mainSection[0].anchor
-                                    }
-                                    defaultExpanded={false}
-                                    centerContent={false}
-                                    onToggle={(open) => {
-                                        if (open) {
-                                            operations.openSectionByAnchor(
-                                                model.mainSection[0].anchor
-                                            );
-                                        } else {
-                                            operations.closeActiveSection();
-                                        }
+                    <div>
+                        {/* MAIN section (deep-linkable) */}
+                        {model.mainSection.length > 0 ? (
+                            <section id={model.mainSection[0].anchor}>
+                                <Box
+                                    sx={{
+                                        borderBottom: `2px solid ${theme.palette.primary.main}`,
                                     }}
-                                />
-                            </Box>
-                        </section>
-                    ) : null}
+                                >
+                                    <ZNAccordion
+                                        key="mainSection"
+                                        title={model.mainSection[0].title}
+                                        content={
+                                            <Markdown>
+                                                {
+                                                    model.mainSection[0]
+                                                        .description
+                                                }
+                                            </Markdown>
+                                        }
+                                        expanded={
+                                            model.activeAnchor ===
+                                            model.mainSection[0].anchor
+                                        }
+                                        defaultExpanded={false}
+                                        centerContent={false}
+                                        onToggle={(open) => {
+                                            if (open) {
+                                                operations.openSectionByAnchor(
+                                                    model.mainSection[0].anchor
+                                                );
+                                            } else {
+                                                operations.closeActiveSection();
+                                            }
+                                        }}
+                                    />
+                                </Box>
+                            </section>
+                        ) : null}
 
-                    {/* Other CMS sections */}
-                    {sortedEntries.length > 0
-                        ? sortedEntries.map(([sectionToken, explanations]) => (
-                              <div key={sectionToken}>
-                                  <Typography
-                                      sx={subHeadingStyle}
-                                      id={sectionToken}
-                                  >
-                                      {operations.getSectionLabel(sectionToken)}
-                                  </Typography>
-
-                                  <div>
-                                      {explanations.map((explanation) => (
-                                          <section
-                                              key={explanation.anchor}
-                                              id={explanation.anchor}
+                        {/* Other CMS sections */}
+                        {sortedEntries.length > 0
+                            ? sortedEntries.map(
+                                  ([sectionToken, explanations]) => (
+                                      <div key={sectionToken}>
+                                          <Typography
+                                              sx={subHeadingStyle}
+                                              id={sectionToken}
                                           >
-                                              <Box
-                                                  sx={{
-                                                      borderBottom: `2px solid ${theme.palette.primary.main}`,
-                                                  }}
-                                              >
-                                                  <ZNAccordion
-                                                      key={explanation.anchor}
-                                                      title={explanation.title}
-                                                      content={
-                                                          <ExplanationTermComponent
-                                                              handleOpen={
-                                                                  operations.handleOpen
-                                                              }
-                                                              description={
-                                                                  explanation.description
-                                                              }
-                                                          />
-                                                      }
-                                                      expanded={
-                                                          model.activeAnchor ===
-                                                          explanation.anchor
-                                                      }
-                                                      defaultExpanded={false}
-                                                      centerContent={false}
-                                                      onToggle={(open) => {
-                                                          if (open) {
-                                                              operations.openSectionByAnchor(
-                                                                  explanation.anchor
-                                                              );
-                                                          } else {
-                                                              operations.closeActiveSection();
-                                                          }
-                                                      }}
-                                                  />
-                                              </Box>
-                                          </section>
-                                      ))}
-                                  </div>
-                              </div>
-                          ))
-                        : null}
+                                              {operations.getSectionLabel(
+                                                  sectionToken
+                                              )}
+                                          </Typography>
 
-                    {/* AMR dialog */}
-                    {model.openAmrDialog && model.currentAMRID ? (
-                        <InfoPageAmrDialogComponent
-                            resistancesTableData={
-                                props.tableData[model.currentAMRID as AmrKey]
-                            }
-                            onClose={operations.handleClose}
-                        />
-                    ) : null}
-                </div>
+                                          <div>
+                                              {explanations.map(
+                                                  (explanation) => (
+                                                      <section
+                                                          key={
+                                                              explanation.anchor
+                                                          }
+                                                          id={
+                                                              explanation.anchor
+                                                          }
+                                                      >
+                                                          <Box
+                                                              sx={{
+                                                                  borderBottom: `2px solid ${theme.palette.primary.main}`,
+                                                              }}
+                                                          >
+                                                              <ZNAccordion
+                                                                  key={
+                                                                      explanation.anchor
+                                                                  }
+                                                                  title={
+                                                                      explanation.title
+                                                                  }
+                                                                  content={
+                                                                      <ExplanationTermComponent
+                                                                          handleOpen={
+                                                                              operations.handleOpen
+                                                                          }
+                                                                          description={
+                                                                              explanation.description
+                                                                          }
+                                                                      />
+                                                                  }
+                                                                  expanded={
+                                                                      model.activeAnchor ===
+                                                                      explanation.anchor
+                                                                  }
+                                                                  defaultExpanded={
+                                                                      false
+                                                                  }
+                                                                  centerContent={
+                                                                      false
+                                                                  }
+                                                                  onToggle={(
+                                                                      open
+                                                                  ) => {
+                                                                      if (
+                                                                          open
+                                                                      ) {
+                                                                          operations.openSectionByAnchor(
+                                                                              explanation.anchor
+                                                                          );
+                                                                      } else {
+                                                                          operations.closeActiveSection();
+                                                                      }
+                                                                  }}
+                                                              />
+                                                          </Box>
+                                                      </section>
+                                                  )
+                                              )}
+                                          </div>
+                                      </div>
+                                  )
+                              )
+                            : null}
+
+                        {/* AMR dialog */}
+                        {model.openAmrDialog && model.currentAMRID ? (
+                            <InfoPageAmrDialogComponent
+                                resistancesTableData={
+                                    props.tableData[
+                                        model.currentAMRID as AmrKey
+                                    ]
+                                }
+                                onClose={operations.handleClose}
+                            />
+                        ) : null}
+                    </div>
+                </Box>
             </Box>
         </PageLayoutComponent>
     );
