@@ -4,6 +4,7 @@ import React, {
     createContext,
     useContext,
     useEffect,
+    useRef,
     useState,
 } from "react";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
@@ -18,7 +19,7 @@ import {
 } from "../../shared/infrastructure/router/routes";
 import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
 
-/** ✅ URL param for chart microorganism (name, NOT docId) */
+/**  URL param for chart microorganism (name, NOT docId) */
 const CHART_MICRO_PARAM = "chartMicro";
 
 /** 1) A simple "Matrix"-style interface for each relation */
@@ -88,7 +89,7 @@ interface Option {
     name: string; // label (localized)
 }
 
-/** ✅ URL helpers (preserve other params) */
+/**  URL helpers (preserve other params) */
 const readChartMicroFromUrl = (): string => {
     try {
         const sp = new URLSearchParams(window.location.search);
@@ -113,6 +114,24 @@ const writeChartMicroToUrl = (microName: string): void => {
         // ignore
     }
 };
+
+/** URL <-> docId resolution helpers */
+function resolveUrlValueToDocId(
+    value: string,
+    options: Option[]
+): string | undefined {
+    // Name-match first (new format)
+    const byName = options.find((o) => o.name === value);
+    if (byName) return byName.documentId;
+    // Backwards compat: try matching as old-format documentId
+    const byDocId = options.find((o) => o.documentId === value);
+    if (byDocId) return byDocId.documentId;
+    return undefined;
+}
+
+function resolveDocIdToName(docId: string, options: Option[]): string {
+    return options.find((o) => o.documentId === docId)?.name ?? docId;
+}
 
 /** 5) The shape of your React context */
 interface PrevalenceDataContext {
@@ -140,7 +159,7 @@ interface PrevalenceDataContext {
     setSelectedYear: (year: number[]) => void;
     setSelectedSuperCategory: (superCategory: string[]) => void;
 
-    /** ✅ NEW: chart dropdown microorganism name (deep link) */
+    /** NEW: chart dropdown microorganism name (deep link) */
     selectedChartMicroorganism: string;
     setSelectedChartMicroorganism: (name: string) => void;
 
@@ -273,7 +292,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         string[]
     >([]); // docIds
 
-    /** ✅ NEW: chart dropdown microorganism name (deep link) */
+    /**  NEW: chart dropdown microorganism name (deep link) */
     const [selectedChartMicroorganism, setSelectedChartMicroorganism] =
         useState<string>(() => readChartMicroFromUrl());
 
@@ -308,7 +327,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         string | null
     >(null);
 
-    /** ✅ keep chartMicro in URL when changed (preserve other params) */
+    /** Ref to hold current options for URL resolution (available synchronously) */
+    const optionsRef = useRef<Record<string, Option[]>>({});
+
+    /**  keep chartMicro in URL when changed (preserve other params) */
     useEffect(() => {
         if (selectedChartMicroorganism) {
             writeChartMicroToUrl(selectedChartMicroorganism);
@@ -423,6 +445,15 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             setSamplingStageOptions(samplingStages);
             setMatrixGroupOptions(matrixGroups);
             setSuperCategorySampleOriginOptions(superCategories);
+
+            optionsRef.current = {
+                microorganism: microorganisms,
+                sampleOrigin: sampleOrigins,
+                matrix: matrices,
+                samplingStage: samplingStages,
+                matrixGroup: matrixGroups,
+                superCategorySampleOrigin: superCategories,
+            };
         } catch (err) {
             setError(
                 `Failed to fetch options: ${
@@ -556,7 +587,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 });
                 setIsSearchTriggered(true);
 
-                /** ✅ Build URL from filters, but KEEP lang + chartMicro */
+                /**  Build URL from filters, but KEEP lang + chartMicro */
+                /**  Use names (not docIds) in URL for stable deep links */
                 const searchParams = new URLSearchParams();
                 for (const [key, values] of Object.entries({
                     microorganism: microorganisms,
@@ -567,7 +599,19 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     samplingYear: years.map(String),
                     superCategorySampleOrigin: superCategories,
                 })) {
-                    values.forEach((value) => searchParams.append(key, value));
+                    if (key === "samplingYear") {
+                        values.forEach((value) =>
+                            searchParams.append(key, value)
+                        );
+                    } else {
+                        const opts = optionsRef.current[key] || [];
+                        values.forEach((docId) =>
+                            searchParams.append(
+                                key,
+                                resolveDocIdToName(docId, opts)
+                            )
+                        );
+                    }
                 }
 
                 // persist lang in URL
@@ -621,18 +665,44 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     params[key].push(value);
                 });
 
-                const initialSelectedMicroorganisms =
-                    params.microorganism || []; // docIds
-                const initialSelectedSampleOrigins = params.sampleOrigin || []; // docIds
-                const initialSelectedMatrices = params.matrix || []; // docIds
-                const initialSelectedSamplingStages =
-                    params.samplingStage || []; // docIds
-                const initialSelectedMatrixGroups = params.matrixGroup || []; // docIds
+                // Resolve URL values (names or old docIds) to docIds
+                const resolveList = (
+                    key: string,
+                    values: string[]
+                ): string[] => {
+                    const opts = optionsRef.current[key] || [];
+                    return values
+                        .map((v) => resolveUrlValueToDocId(v, opts))
+                        .filter((v): v is string => v !== undefined);
+                };
+
+                const initialSelectedMicroorganisms = resolveList(
+                    "microorganism",
+                    params.microorganism || []
+                );
+                const initialSelectedSampleOrigins = resolveList(
+                    "sampleOrigin",
+                    params.sampleOrigin || []
+                );
+                const initialSelectedMatrices = resolveList(
+                    "matrix",
+                    params.matrix || []
+                );
+                const initialSelectedSamplingStages = resolveList(
+                    "samplingStage",
+                    params.samplingStage || []
+                );
+                const initialSelectedMatrixGroups = resolveList(
+                    "matrixGroup",
+                    params.matrixGroup || []
+                );
                 const initialSelectedYear = params.samplingYear
                     ? params.samplingYear.map(Number)
                     : [];
-                const initialSelectedSuperCategory =
-                    params.superCategorySampleOrigin || []; // docIds
+                const initialSelectedSuperCategory = resolveList(
+                    "superCategorySampleOrigin",
+                    params.superCategorySampleOrigin || []
+                );
 
                 setSelectedMicroorganisms(initialSelectedMicroorganisms);
                 setSelectedSampleOrigins(initialSelectedSampleOrigins);
@@ -642,7 +712,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 setSelectedYear(initialSelectedYear);
                 setSelectedSuperCategory(initialSelectedSuperCategory);
 
-                // ✅ initialize chartMicro from URL
+                //  initialize chartMicro from URL
                 setSelectedChartMicroorganism(readChartMicroFromUrl());
 
                 setSearchParameters(params);
@@ -756,12 +826,28 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     .sort((a, b) => a[1].localeCompare(b[1]))
                     .map(([documentId, name]) => ({ documentId, name }));
 
-            setMicroorganismOptions(mapToOptions(microMap));
-            setSampleOriginOptions(mapToOptions(soMap));
-            setMatrixOptions(mapToOptions(mMap));
-            setSamplingStageOptions(mapToOptions(stageMap));
-            setMatrixGroupOptions(mapToOptions(groupMap));
-            setSuperCategorySampleOriginOptions(mapToOptions(superMap));
+            const microOpts = mapToOptions(microMap);
+            const soOpts = mapToOptions(soMap);
+            const mOpts = mapToOptions(mMap);
+            const stageOpts = mapToOptions(stageMap);
+            const groupOpts = mapToOptions(groupMap);
+            const superOpts = mapToOptions(superMap);
+
+            setMicroorganismOptions(microOpts);
+            setSampleOriginOptions(soOpts);
+            setMatrixOptions(mOpts);
+            setSamplingStageOptions(stageOpts);
+            setMatrixGroupOptions(groupOpts);
+            setSuperCategorySampleOriginOptions(superOpts);
+
+            optionsRef.current = {
+                microorganism: microOpts,
+                sampleOrigin: soOpts,
+                matrix: mOpts,
+                samplingStage: stageOpts,
+                matrixGroup: groupOpts,
+                superCategorySampleOrigin: superOpts,
+            };
 
             const years = Array.from(yearsSet).sort((a, b) => a - b);
             setYearOptions(years);
@@ -781,7 +867,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         isSearchTriggered,
     ]);
 
-    /** ✅ Keep chart dropdown valid when data changes (set default if missing) */
+    /** Keep chart dropdown valid when data changes (set default if missing) */
     useEffect(() => {
         const dataToUse = isSearchTriggered
             ? prevalenceData
@@ -816,23 +902,28 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     // -------------- 8) Re-fetch if language changes --------------
     useEffect(() => {
-        if (isSearchTriggered) {
-            // Re-run search using current filters when language changes
-            fetchDataFromAPI({
-                microorganisms: selectedMicroorganisms,
-                sampleOrigins: selectedSampleOrigins,
-                matrices: selectedMatrices,
-                samplingStages: selectedSamplingStages,
-                matrixGroups: selectedMatrixGroups,
-                years: selectedYear,
-                superCategories: selectedSuperCategory,
-            });
-        } else {
-            // If no search is active, just fetch the raw data and options
-            fetchPrevalenceData();
-            fetchOptions();
-            fetchPrevalenceUpdateDate();
-        }
+        const handleLanguageChange = async (): Promise<void> => {
+            // Always fetch options first so optionsRef has current-locale names
+            await fetchOptions();
+
+            if (isSearchTriggered) {
+                // Re-run search using current filters when language changes
+                await fetchDataFromAPI({
+                    microorganisms: selectedMicroorganisms,
+                    sampleOrigins: selectedSampleOrigins,
+                    matrices: selectedMatrices,
+                    samplingStages: selectedSamplingStages,
+                    matrixGroups: selectedMatrixGroups,
+                    years: selectedYear,
+                    superCategories: selectedSuperCategory,
+                });
+            } else {
+                // If no search is active, just fetch the raw data and update date
+                fetchPrevalenceData();
+                fetchPrevalenceUpdateDate();
+            }
+        };
+        void handleLanguageChange();
         // Update URL to reflect the current language (preserves chartMicro if present)
         const urlSearchParams = new URLSearchParams(window.location.search);
         urlSearchParams.set("lang", i18next.language);
