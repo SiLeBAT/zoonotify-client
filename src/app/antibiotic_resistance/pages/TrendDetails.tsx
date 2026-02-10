@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     Box,
     Button,
@@ -69,48 +69,6 @@ const emptyFilterState: Record<FilterKey, string[]> = {
     matrix: [],
 };
 
-function updateTrendFilterUrl(
-    microorganism: string,
-    selected: Record<FilterKey, string[]>,
-    substanceFilter: string[]
-): void {
-    const params = new URLSearchParams(window.location.search);
-    params.set("microorganism", microorganism);
-
-    Object.entries(selected).forEach(([key, arr]) => {
-        if (arr.length) params.set(key, arr.join(","));
-        else params.delete(key);
-    });
-    if (substanceFilter.length)
-        params.set("antimicrobialSubstance", substanceFilter.join(","));
-    else params.delete("antimicrobialSubstance");
-
-    params.set("view", "trend");
-    params.set("lang", i18next.language);
-
-    window.history.replaceState(null, "", `?${params.toString()}`);
-}
-
-// Read state from URL (using documentId as key)
-function readTrendFilterStateFromUrl(allSubstances: FilterOption[]): {
-    selected: Record<FilterKey, string[]>;
-    substanceFilter: string[];
-} {
-    const params = new URLSearchParams(window.location.search);
-    const result: Record<FilterKey, string[]> = { ...emptyFilterState };
-    (Object.keys(emptyFilterState) as FilterKey[]).forEach((key) => {
-        const val = params.get(key);
-        result[key] = val ? val.split(",").filter((v) => v) : [];
-    });
-    const substanceParam = params.get("antimicrobialSubstance");
-    let substanceFilter = substanceParam
-        ? substanceParam.split(",").filter((v) => v)
-        : [];
-    if (substanceParam === null)
-        substanceFilter = allSubstances.map((s) => s.documentId); // default all
-    return { selected: result, substanceFilter };
-}
-
 export interface ResistanceApiItem {
     id: number;
     samplingYear: number;
@@ -134,6 +92,197 @@ export interface ResistanceApiItem {
     anzahlResistenterIsolate: number;
     minKonfidenzintervall: number;
     maxKonfidenzintervall: number;
+}
+
+/** Get the relation object for a given filter key from a data item */
+function getRelObjectTrend(
+    item: ResistanceApiItem,
+    key: FilterKey
+): { name: string; documentId: string } | null {
+    switch (key) {
+        case "specie":
+            return item.specie ?? null;
+        case "superCategorySampleOrigin":
+            return item.superCategorySampleOrigin ?? null;
+        case "sampleOrigin":
+            return item.sampleOrigin ?? null;
+        case "samplingStage":
+            return item.samplingStage ?? null;
+        case "matrixGroup":
+            return item.matrixGroup ?? null;
+        case "matrix":
+            return item.matrix ?? null;
+        case "antimicrobialSubstance":
+            return item.antimicrobialSubstance ?? null;
+        default:
+            return null;
+    }
+}
+
+/** Build docId->name and name->docId maps for all filter keys */
+function buildDocIdToNameMapTrend(
+    items: ResistanceApiItem[]
+): Record<FilterKey, Map<string, string>> {
+    const result = {} as Record<FilterKey, Map<string, string>>;
+    const keys: FilterKey[] = [
+        "specie",
+        "superCategorySampleOrigin",
+        "sampleOrigin",
+        "samplingStage",
+        "matrixGroup",
+        "matrix",
+        "antimicrobialSubstance",
+    ];
+    for (const k of keys) {
+        const m = new Map<string, string>();
+        for (const item of items) {
+            const obj = getRelObjectTrend(item, k);
+            if (obj?.documentId && obj?.name) m.set(obj.documentId, obj.name);
+        }
+        result[k] = m;
+    }
+    result.samplingYear = new Map<string, string>();
+    return result;
+}
+
+function buildNameToDocIdMapTrend(
+    items: ResistanceApiItem[]
+): Record<FilterKey, Map<string, string>> {
+    const result = {} as Record<FilterKey, Map<string, string>>;
+    const keys: FilterKey[] = [
+        "specie",
+        "superCategorySampleOrigin",
+        "sampleOrigin",
+        "samplingStage",
+        "matrixGroup",
+        "matrix",
+        "antimicrobialSubstance",
+    ];
+    for (const k of keys) {
+        const m = new Map<string, string>();
+        for (const item of items) {
+            const obj = getRelObjectTrend(item, k);
+            if (obj?.name && obj?.documentId) m.set(obj.name, obj.documentId);
+        }
+        result[k] = m;
+    }
+    result.samplingYear = new Map<string, string>();
+    return result;
+}
+
+/** Resolve a URL value (name or old docId) to docId with backwards compat */
+function resolveUrlValueToDocIdTrend(
+    value: string,
+    nameToDocId: Map<string, string>,
+    docIdToName: Map<string, string>
+): string | undefined {
+    const byName = nameToDocId.get(value);
+    if (byName) return byName;
+    if (docIdToName.has(value)) return value;
+    return undefined;
+}
+
+function updateTrendFilterUrl(
+    microorganism: string,
+    selected: Record<FilterKey, string[]>,
+    substanceFilter: string[],
+    dataItems?: ResistanceApiItem[]
+): void {
+    const params = new URLSearchParams(window.location.search);
+    params.set("microorganism", microorganism);
+
+    // Build docId->name map for converting filter values to names
+    const docIdToName = dataItems
+        ? buildDocIdToNameMapTrend(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+
+    Object.entries(selected).forEach(([key, arr]) => {
+        if (arr.length) {
+            const k = key as FilterKey;
+            if (k === "samplingYear" || !docIdToName[k]) {
+                params.set(key, arr.join(","));
+            } else {
+                // Convert docIds to names for URL stability
+                params.set(
+                    key,
+                    arr
+                        .map((docId) => docIdToName[k].get(docId) ?? docId)
+                        .join(",")
+                );
+            }
+        } else {
+            params.delete(key);
+        }
+    });
+    if (substanceFilter.length) {
+        const subMap = docIdToName.antimicrobialSubstance;
+        params.set(
+            "antimicrobialSubstance",
+            subMap
+                ? substanceFilter
+                      .map((docId) => subMap.get(docId) ?? docId)
+                      .join(",")
+                : substanceFilter.join(",")
+        );
+    } else {
+        params.delete("antimicrobialSubstance");
+    }
+
+    params.set("view", "trend");
+    params.set("lang", i18next.language);
+
+    window.history.replaceState(null, "", `?${params.toString()}`);
+}
+
+// Read state from URL (names or old docIds -> resolve to docIds)
+function readTrendFilterStateFromUrl(
+    allSubstances: FilterOption[],
+    dataItems?: ResistanceApiItem[]
+): {
+    selected: Record<FilterKey, string[]>;
+    substanceFilter: string[];
+} {
+    const params = new URLSearchParams(window.location.search);
+    const result: Record<FilterKey, string[]> = { ...emptyFilterState };
+
+    // Build resolution maps from data
+    const nameToDocId = dataItems
+        ? buildNameToDocIdMapTrend(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+    const docIdToNameMap = dataItems
+        ? buildDocIdToNameMapTrend(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+
+    /** Resolve a list of URL values (names or old docIds) to docIds */
+    const resolveList = (key: FilterKey, values: string[]): string[] => {
+        if (key === "samplingYear" || !nameToDocId[key]) return values;
+        return values
+            .map((v) =>
+                resolveUrlValueToDocIdTrend(
+                    v,
+                    nameToDocId[key],
+                    docIdToNameMap[key]
+                )
+            )
+            .filter((v): v is string => v !== undefined);
+    };
+
+    (Object.keys(emptyFilterState) as FilterKey[]).forEach((key) => {
+        const val = params.get(key);
+        const rawValues = val ? val.split(",").filter((v) => v) : [];
+        result[key] = resolveList(key, rawValues);
+    });
+
+    const substanceParam = params.get("antimicrobialSubstance");
+    let substanceFilter = substanceParam
+        ? resolveList(
+              "antimicrobialSubstance",
+              substanceParam.split(",").filter((v) => v)
+          )
+        : [];
+    if (substanceParam === null)
+        substanceFilter = allSubstances.map((s) => s.documentId); // default all
+    return { selected: result, substanceFilter };
 }
 
 // Map filter key -> stable documentId value
@@ -251,6 +400,7 @@ export const TrendDetails: React.FC<{
 }> = ({ microorganism, breadcrumb }) => {
     const { t } = useTranslation(["Antibiotic"]);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const hydratedFromUrlRef = useRef(false);
 
     const [resistanceRawData, setResistanceRawData] = useState<
         ResistanceApiItem[]
@@ -372,7 +522,10 @@ export const TrendDetails: React.FC<{
         }
         if (microorganism) {
             fetchResistanceOptions();
-            setShowChart(false);
+            // Only hide chart when microorganism changes, not on language change
+            if (!hydratedFromUrlRef.current) {
+                setShowChart(false);
+            }
         }
     }, [i18next.language, microorganism]);
 
@@ -420,19 +573,23 @@ export const TrendDetails: React.FC<{
             antimicrobialSubstance,
         });
         setAllSubstances(antimicrobialSubstance);
-        setSubstanceFilter(antimicrobialSubstance.map((a) => a.documentId)); // default all
+
+        // Only default substanceFilter on first load (before URL hydration)
+        if (!hydratedFromUrlRef.current) {
+            setSubstanceFilter(antimicrobialSubstance.map((a) => a.documentId)); // default all
+        }
     }, [resistanceRawData]);
 
-    // On URL or data change: read filter state from URL
+    // Hydrate from URL ONCE on initial load
     useEffect(() => {
-        if (allSubstances.length > 0) {
-            const {
-                selected: urlSelected,
-                substanceFilter: urlSubstanceFilter,
-            } = readTrendFilterStateFromUrl(allSubstances);
-            setSelected(urlSelected);
-            setSubstanceFilter(urlSubstanceFilter);
-        }
+        if (hydratedFromUrlRef.current) return;
+        if (allSubstances.length === 0) return;
+
+        const { selected: urlSelected, substanceFilter: urlSubstanceFilter } =
+            readTrendFilterStateFromUrl(allSubstances, resistanceRawData);
+        setSelected(urlSelected);
+        setSubstanceFilter(urlSubstanceFilter);
+        hydratedFromUrlRef.current = true;
     }, [microorganism, allSubstances]);
 
     // Filtering logic (always by documentId)
@@ -486,6 +643,24 @@ export const TrendDetails: React.FC<{
             );
         return result;
     };
+
+    // On language change (after hydration): recompute filtered data + update URL with new names
+    useEffect(() => {
+        if (!hydratedFromUrlRef.current) return;
+        if (!resistanceRawData.length) return;
+
+        // Recompute filtered data with new-language data so cascading options update
+        if (showChart) {
+            setFilteredFullData(filterDataWithSelected());
+        }
+
+        updateTrendFilterUrl(
+            microorganism,
+            selected,
+            substanceFilter,
+            resistanceRawData
+        );
+    }, [resistanceRawData]);
 
     // === Cascading option recomputation (like Substance) ===
     useEffect(() => {
@@ -601,7 +776,12 @@ export const TrendDetails: React.FC<{
         setFilteredFullData(filterDataWithSelected());
         setShowChart(true);
         setCurrentPage(1);
-        updateTrendFilterUrl(microorganism, selected, substanceFilter);
+        updateTrendFilterUrl(
+            microorganism,
+            selected,
+            substanceFilter,
+            resistanceRawData
+        );
     };
 
     useEffect(() => {
@@ -618,7 +798,8 @@ export const TrendDetails: React.FC<{
         updateTrendFilterUrl(
             microorganism,
             { ...emptyFilterState },
-            allSubstances.map((a) => a.documentId)
+            allSubstances.map((a) => a.documentId),
+            resistanceRawData
         );
     };
 
@@ -663,7 +844,12 @@ export const TrendDetails: React.FC<{
                 newSubstanceFilter = v;
             }
             setSubstanceFilter(newSubstanceFilter);
-            updateTrendFilterUrl(microorganism, selected, newSubstanceFilter);
+            updateTrendFilterUrl(
+                microorganism,
+                selected,
+                newSubstanceFilter,
+                resistanceRawData
+            );
         };
         return (
             <Stack
@@ -679,8 +865,8 @@ export const TrendDetails: React.FC<{
                         value={substanceFilter}
                         onChange={handleChange}
                         label={t("ANTIBIOTIC_SUBSTANCE")}
-                        sx={selectSx} // ✅ fixed trigger width + ellipsis
-                        MenuProps={fixedMenuProps} // ✅ fixed menu width + anchor
+                        sx={selectSx} //  fixed trigger width + ellipsis
+                        MenuProps={fixedMenuProps} //  fixed menu width + anchor
                         renderValue={(selectedItems) =>
                             Array.isArray(selectedItems)
                                 ? substances

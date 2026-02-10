@@ -131,21 +131,131 @@ const LONG_TO_SHORT = Object.fromEntries(
     Object.entries(SHORT_MAP).map(([shortK, longK]) => [longK, shortK])
 ) as Record<FilterKey, ShortKey>;
 
+/** Get the relation object for a given filter key from a data item */
+function getRelObject(
+    item: ResistanceApiItem,
+    key: FilterKey
+): { name: string; documentId: string } | null {
+    switch (key) {
+        case "specie":
+            return item.specie ?? null;
+        case "superCategorySampleOrigin":
+            return item.superCategorySampleOrigin ?? null;
+        case "sampleOrigin":
+            return item.sampleOrigin ?? null;
+        case "samplingStage":
+            return item.samplingStage ?? null;
+        case "matrixGroup":
+            return item.matrixGroup ?? null;
+        case "matrix":
+            return item.matrix ?? null;
+        case "antimicrobialSubstance":
+            return item.antimicrobialSubstance ?? null;
+        default:
+            return null;
+    }
+}
+
+/** Build maps from docId->name and name->docId for each filter key */
+function buildDocIdToNameMap(
+    items: ResistanceApiItem[]
+): Record<FilterKey, Map<string, string>> {
+    const result = {} as Record<FilterKey, Map<string, string>>;
+    const keys: FilterKey[] = [
+        "specie",
+        "superCategorySampleOrigin",
+        "sampleOrigin",
+        "samplingStage",
+        "matrixGroup",
+        "matrix",
+        "antimicrobialSubstance",
+    ];
+    for (const k of keys) {
+        const m = new Map<string, string>();
+        for (const item of items) {
+            const obj = getRelObject(item, k);
+            if (obj?.documentId && obj?.name) m.set(obj.documentId, obj.name);
+        }
+        result[k] = m;
+    }
+    // samplingYear: identity (name === docId)
+    result.samplingYear = new Map<string, string>();
+    return result;
+}
+
+function buildNameToDocIdMap(
+    items: ResistanceApiItem[]
+): Record<FilterKey, Map<string, string>> {
+    const result = {} as Record<FilterKey, Map<string, string>>;
+    const keys: FilterKey[] = [
+        "specie",
+        "superCategorySampleOrigin",
+        "sampleOrigin",
+        "samplingStage",
+        "matrixGroup",
+        "matrix",
+        "antimicrobialSubstance",
+    ];
+    for (const k of keys) {
+        const m = new Map<string, string>();
+        for (const item of items) {
+            const obj = getRelObject(item, k);
+            if (obj?.name && obj?.documentId) m.set(obj.name, obj.documentId);
+        }
+        result[k] = m;
+    }
+    // samplingYear: identity
+    result.samplingYear = new Map<string, string>();
+    return result;
+}
+
+/** Resolve a URL value (name or old docId) to docId with backwards compat */
+function resolveUrlValueToDocIdAMR(
+    value: string,
+    nameToDocId: Map<string, string>,
+    docIdToName: Map<string, string>
+): string | undefined {
+    // Try name-match first (new format)
+    const byName = nameToDocId.get(value);
+    if (byName) return byName;
+    // Backwards compat: try as old-format documentId
+    if (docIdToName.has(value)) return value;
+    return undefined;
+}
+
 function encodeStateToParam(
     microorganism: string,
     selected: Record<FilterKey, string[]>,
     substanceFilter: string[],
     lang: string,
     chartYear?: number,
-    combinations?: string[] // ✅ stable ID-keys
+    combinations?: string[], // stable name-keys
+    dataItems?: ResistanceApiItem[] //  for docId->name conversion
 ): string {
+    // Build docId->name map for converting filter values to names
+    const docIdToName = dataItems
+        ? buildDocIdToNameMap(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+
     const f: Partial<Record<ShortKey, string[]>> = {};
     (Object.keys(selected) as FilterKey[]).forEach((k) => {
         const val = selected[k];
-        if (val && val.length) f[LONG_TO_SHORT[k]] = val;
+        if (val && val.length) {
+            if (k === "samplingYear" || !docIdToName[k]) {
+                f[LONG_TO_SHORT[k]] = val;
+            } else {
+                // Convert docIds to names for URL stability
+                f[LONG_TO_SHORT[k]] = val.map(
+                    (docId) => docIdToName[k].get(docId) ?? docId
+                );
+            }
+        }
     });
     if (substanceFilter.length) {
-        f[LONG_TO_SHORT.antimicrobialSubstance] = substanceFilter;
+        const subMap = docIdToName.antimicrobialSubstance;
+        f[LONG_TO_SHORT.antimicrobialSubstance] = subMap
+            ? substanceFilter.map((docId) => subMap.get(docId) ?? docId)
+            : substanceFilter;
     }
 
     const payload: {
@@ -221,7 +331,8 @@ function updateSubstanceFilterUrlCompressed(
     substanceFilter: string[],
     lang: string,
     chartYear?: number,
-    combinations?: string[]
+    combinations?: string[],
+    dataItems?: ResistanceApiItem[]
 ): void {
     const s = encodeStateToParam(
         microorganism,
@@ -229,7 +340,8 @@ function updateSubstanceFilterUrlCompressed(
         substanceFilter,
         lang,
         chartYear,
-        combinations
+        combinations,
+        dataItems
     );
     window.history.replaceState(null, "", `?s=${s}`);
 }
@@ -238,7 +350,8 @@ function readStateFromUrlCompressed(
     allSubstances: FilterOption[],
     allYears: FilterOption[],
     microorganism: string,
-    fallbackLang: string
+    fallbackLang: string,
+    dataItems?: ResistanceApiItem[] //  for name->docId resolution
 ): {
     selected: Record<FilterKey, string[]>;
     substanceFilter: string[];
@@ -248,18 +361,50 @@ function readStateFromUrlCompressed(
     const params = new URLSearchParams(window.location.search);
     const decoded = decodeStateFromParam(params.get("s"));
 
+    // Build resolution maps from data
+    const nameToDocId = dataItems
+        ? buildNameToDocIdMap(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+    const docIdToNameMap = dataItems
+        ? buildDocIdToNameMap(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+
+    /** Resolve a list of URL values (names or old docIds) to docIds */
+    const resolveList = (key: FilterKey, values: string[]): string[] => {
+        if (key === "samplingYear" || !nameToDocId[key]) return values;
+        return values
+            .map((v) =>
+                resolveUrlValueToDocIdAMR(
+                    v,
+                    nameToDocId[key],
+                    docIdToNameMap[key]
+                )
+            )
+            .filter((v): v is string => v !== undefined);
+    };
+
     if (decoded) {
         const selected = decoded.selected || { ...emptyFilterState };
+
+        // Resolve names back to docIds for each filter key
+        (Object.keys(selected) as FilterKey[]).forEach((k) => {
+            selected[k] = resolveList(k, selected[k]);
+        });
+
         if (!selected.samplingYear?.length) {
             selected.samplingYear = allYears.map((y) => y.documentId);
         }
-        const sf = decoded.substanceFilter.length
+
+        const rawSf = decoded.substanceFilter.length
             ? decoded.substanceFilter
             : allSubstances.map((s) => s.documentId);
+        const sf = resolveList("antimicrobialSubstance", rawSf);
 
         return {
             selected,
-            substanceFilter: sf,
+            substanceFilter: sf.length
+                ? sf
+                : allSubstances.map((s) => s.documentId),
             chartYear: decoded.chartYear,
             combinations: decoded.combinations || [],
         };
@@ -284,7 +429,10 @@ function readStateFromUrlCompressed(
         microorganism,
         legacySelected,
         legacySubstanceFilter,
-        fallbackLang
+        fallbackLang,
+        undefined,
+        undefined,
+        dataItems
     );
     window.history.replaceState(null, "", `?s=${sNew}`);
 
@@ -317,7 +465,7 @@ export const fixedMenuProps: Partial<MenuProps> = {
 };
 
 // ======================= COMBINATION STABLE KEY =============================
-// ✅ Stable key from documentIds, not localized names
+//  Stable key from names (stable across re-imports, unlike documentIds)
 function getComboIdKey(
     entry: ResistanceApiItem,
     microorganism: string
@@ -326,14 +474,14 @@ function getComboIdKey(
 
     // include species for only those microorganisms where it's relevant/visible
     if (shouldShowSpeciesFilter(microorganism)) {
-        parts.push(entry.specie?.documentId ?? "-");
+        parts.push(entry.specie?.name ?? "-");
     }
 
-    parts.push(entry.superCategorySampleOrigin?.documentId ?? "-");
-    parts.push(entry.sampleOrigin?.documentId ?? "-");
-    parts.push(entry.samplingStage?.documentId ?? "-");
-    parts.push(entry.matrixGroup?.documentId ?? "-");
-    parts.push(entry.matrix?.documentId ?? "-");
+    parts.push(entry.superCategorySampleOrigin?.name ?? "-");
+    parts.push(entry.sampleOrigin?.name ?? "-");
+    parts.push(entry.samplingStage?.name ?? "-");
+    parts.push(entry.matrixGroup?.name ?? "-");
+    parts.push(entry.matrix?.name ?? "-");
 
     return parts.join("|");
 }
@@ -467,7 +615,7 @@ export const SubstanceDetail: React.FC<{
     const { t, i18n } = useTranslation(["Antibiotic"]);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-    // ✅ normalize locale for API: "de-DE" -> "de"
+    //  normalize locale for API: "de-DE" -> "de"
     const apiLocale = useMemo(() => {
         const base = (i18n.language || "en").split("-")[0].toLowerCase();
         return base.startsWith("de") ? "de" : "en";
@@ -496,7 +644,7 @@ export const SubstanceDetail: React.FC<{
     >([]);
     const [showResults, setShowResults] = useState(false);
 
-    // ✅ combinations are now STABLE ID KEYS
+    //  combinations are now STABLE ID KEYS
     const [availableCombinations, setAvailableCombinations] = useState<
         string[]
     >([]);
@@ -532,7 +680,7 @@ export const SubstanceDetail: React.FC<{
 
     const [chartYear, setChartYear] = useState<number | undefined>(undefined);
 
-    // ✅ Apply language from URL once (use i18n, not i18next)
+    //  Apply language from URL once (use i18n, not i18next)
     useEffect(() => {
         if (langHydratedRef.current) return;
         langHydratedRef.current = true;
@@ -603,7 +751,7 @@ export const SubstanceDetail: React.FC<{
             sub = substanceFilter,
             overrideYear?: number
         ): void => {
-            // ✅ If user selected no substance, interpret it as "ALL visible substances"
+            //  If user selected no substance, interpret it as "ALL visible substances"
             let effectiveSub = sub;
 
             if (effectiveSub.length === 0) {
@@ -619,7 +767,7 @@ export const SubstanceDetail: React.FC<{
 
                 effectiveSub = visibleSubs.map((s) => s.documentId);
 
-                // ✅ update dropdown so UI matches the chart
+                //  update dropdown so UI matches the chart
                 keepEmptySubstanceAfterResetRef.current = false;
                 setSubstanceFilter(effectiveSub);
             }
@@ -647,7 +795,8 @@ export const SubstanceDetail: React.FC<{
                 effectiveSub,
                 apiLocale,
                 nextYear,
-                selectedCombinations
+                selectedCombinations,
+                resistanceRawData
             );
         },
         [
@@ -661,7 +810,7 @@ export const SubstanceDetail: React.FC<{
         ]
     );
 
-    // ✅ REFETCH when language changes (apiLocale changes)
+    //  REFETCH when language changes (apiLocale changes)
     useEffect(() => {
         let cancelled = false;
 
@@ -714,7 +863,7 @@ export const SubstanceDetail: React.FC<{
         };
     }, [apiLocale, microorganism]);
 
-    // ✅ Build "ALL" lists (for defaults + URL hydration)
+    //  Build "ALL" lists (for defaults + URL hydration)
     useEffect(() => {
         const yearsAll = uniqueFromItems(resistanceRawData, "samplingYear");
         const subsAll = uniqueFromItems(
@@ -725,14 +874,14 @@ export const SubstanceDetail: React.FC<{
         setAllSubstances(subsAll);
     }, [resistanceRawData]);
 
-    // ✅ IMPORTANT: If results were shown, after language refetch we re-run search
+    //  IMPORTANT: If results were shown, after language refetch we re-run search
     useEffect(() => {
         if (!hydratedFromUrlRef.current) return;
         if (!showResults) return;
         handleSearch(selected, substanceFilter, chartYear);
     }, [resistanceRawData, apiLocale]);
 
-    // ✅ Hydrate from URL ONCE
+    //  Hydrate from URL ONCE
     useEffect(() => {
         if (hydratedFromUrlRef.current) return;
         if (allSubstances.length === 0 || allYears.length === 0) return;
@@ -741,7 +890,8 @@ export const SubstanceDetail: React.FC<{
             allSubstances,
             allYears,
             microorganism,
-            apiLocale
+            apiLocale,
+            resistanceRawData
         );
 
         setSelected(decoded.selected);
@@ -767,7 +917,7 @@ export const SubstanceDetail: React.FC<{
         hydratedFromUrlRef.current = true;
     }, [allSubstances, allYears, microorganism, handleSearch, apiLocale]);
 
-    // ✅ Fetch substance info localized
+    //  Fetch substance info localized
     useEffect(() => {
         let cancelled = false;
 
@@ -809,7 +959,7 @@ export const SubstanceDetail: React.FC<{
             ...emptyFilterState,
             samplingYear: allYears.map((a) => a.documentId),
         };
-        const resetSubs: string[] = []; // ✅ empty on reset
+        const resetSubs: string[] = []; //  empty on reset
         keepEmptySubstanceAfterResetRef.current = true;
 
         setSelected(resetSel);
@@ -829,7 +979,8 @@ export const SubstanceDetail: React.FC<{
             resetSubs,
             apiLocale,
             undefined,
-            []
+            [],
+            resistanceRawData
         );
     };
 
@@ -858,7 +1009,7 @@ export const SubstanceDetail: React.FC<{
 
     const handleClose = (): void => setInfoDialogOpen(false);
 
-    // ✅ WATERFALL prune selections when available options shrink
+    //  WATERFALL prune selections when available options shrink
     useEffect(() => {
         if (!resistanceRawData.length) return;
 
@@ -924,12 +1075,12 @@ export const SubstanceDetail: React.FC<{
             allowedSubs.has(id)
         );
 
-        // ✅ If user had "all" selected before, keep "all" selected after options change
+        //  If user had "all" selected before, keep "all" selected after options change
         if (wasAllSelectedBefore) {
             nextSubstanceFilter = visibleIds;
         }
 
-        // ✅ If nothing selected (edge-case), default to "all visible"
+        //  If nothing selected (edge-case), default to "all visible"
         if (
             nextSubstanceFilter.length === 0 &&
             visibleIds.length > 0 &&
@@ -946,7 +1097,7 @@ export const SubstanceDetail: React.FC<{
         }
     }, [resistanceRawData, selected, substanceFilter]);
 
-    // ✅ Compute combinations using stable keys + localized labels
+    //  Compute combinations using stable keys + localized labels
     useEffect(() => {
         if (!filteredFullData.length || !chartYear) {
             setAvailableCombinations([]);
@@ -1011,7 +1162,8 @@ export const SubstanceDetail: React.FC<{
                                 substanceFilter,
                                 apiLocale,
                                 y,
-                                selectedCombinations
+                                selectedCombinations,
+                                resistanceRawData
                             );
                         }}
                     >
@@ -1045,7 +1197,8 @@ export const SubstanceDetail: React.FC<{
             substanceFilter,
             apiLocale,
             chartYear,
-            selectedCombinations
+            selectedCombinations,
+            resistanceRawData
         );
     }, [
         selected,
@@ -1054,6 +1207,7 @@ export const SubstanceDetail: React.FC<{
         chartYear,
         selectedCombinations,
         apiLocale,
+        resistanceRawData,
     ]);
 
     const renderCombinationMenuPrimary = (
@@ -1098,7 +1252,7 @@ export const SubstanceDetail: React.FC<{
     };
 
     function renderSubstanceFilter(): JSX.Element {
-        // ✅ WATERFALL options for substance (based on other filters)
+        //  WATERFALL options for substance (based on other filters)
         const substances = uniqueFromItems(
             filterDataExcludingKey(
                 resistanceRawData,
@@ -1130,21 +1284,22 @@ export const SubstanceDetail: React.FC<{
                 newSubstanceFilter = v.filter((id) => allowed.has(id));
             }
 
-            // ✅ Like combinations: change state, update URL, but DO NOT auto-search
+            //  Like combinations: change state, update URL, but DO NOT auto-search
             keepEmptySubstanceAfterResetRef.current = false;
             setSubstanceFilter(newSubstanceFilter);
 
-            // ✅ Update chart immediately (same behavior as combinations)
+            //  Update chart immediately (same behavior as combinations)
             handleSearch(selected, newSubstanceFilter, chartYear);
 
-            // ✅ URL stays in sync
+            //  URL stays in sync
             updateSubstanceFilterUrlCompressed(
                 microorganism,
                 selected,
                 newSubstanceFilter,
                 apiLocale,
                 chartYear,
-                selectedCombinations
+                selectedCombinations,
+                resistanceRawData
             );
         };
 
@@ -1230,7 +1385,7 @@ export const SubstanceDetail: React.FC<{
     ): JSX.Element {
         if (key === "antimicrobialSubstance") return <></>;
 
-        // ✅ WATERFALL options: filter by all other selections except itself
+        // WATERFALL options: filter by all other selections except itself
         const options = uniqueFromItems(
             filterDataExcludingKey(
                 resistanceRawData,
@@ -1347,7 +1502,7 @@ export const SubstanceDetail: React.FC<{
         );
     }
 
-    // ✅ For chart: convert stable ids -> current localized labels (so chart file doesn't need changes)
+    //  For chart: convert stable ids -> current localized labels (so chart file doesn't need changes)
     const selectedCombinationLabelsForChart = useMemo(() => {
         return selectedCombinations
             .map((idKey) => comboLabelMap[idKey])
@@ -1489,7 +1644,7 @@ export const SubstanceDetail: React.FC<{
                                 <InputLabel>{t("combinations")}</InputLabel>
                                 <Select
                                     multiple
-                                    value={selectedCombinations} // ✅ stable ids
+                                    value={selectedCombinations} //  stable ids
                                     onChange={(e) => {
                                         const v = e.target.value as string[];
                                         let nextCombos: string[] = v;
@@ -1517,7 +1672,8 @@ export const SubstanceDetail: React.FC<{
                                             substanceFilter,
                                             apiLocale,
                                             chartYear,
-                                            nextCombos
+                                            nextCombos,
+                                            resistanceRawData
                                         );
                                     }}
                                     renderValue={(selectedValues) =>
