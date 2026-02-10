@@ -35,7 +35,7 @@ import {
     RESISTANCES,
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
-import type { MenuProps } from "@mui/material/Menu"; // add this import
+import type { MenuProps } from "@mui/material/Menu";
 import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
 
 import { TrendChart } from "./TrendChart";
@@ -425,9 +425,8 @@ export const TrendDetails: React.FC<{
     >([]);
     const [showChart, setShowChart] = useState(false);
 
-    // For substances multi-select at top
     const [substanceFilter, setSubstanceFilter] = useState<string[]>([]);
-    // To update available substance options
+
     const [allSubstances, setAllSubstances] = useState<FilterOption[]>([]);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -522,7 +521,7 @@ export const TrendDetails: React.FC<{
         }
         if (microorganism) {
             fetchResistanceOptions();
-            // Only hide chart when microorganism changes, not on language change
+
             if (!hydratedFromUrlRef.current) {
                 setShowChart(false);
             }
@@ -728,7 +727,7 @@ export const TrendDetails: React.FC<{
             samplingStage: computeOptions("samplingStage"),
             matrixGroup: computeOptions("matrixGroup"),
             matrix: computeOptions("matrix"),
-            antimicrobialSubstance: computeOptions("antimicrobialSubstance"), // keep if you want top multi-select to shrink too
+            antimicrobialSubstance: computeOptions("antimicrobialSubstance"),
         };
 
         setFilterOptions(next);
@@ -790,7 +789,6 @@ export const TrendDetails: React.FC<{
         //setCurrentPage(1);
     }, [substanceFilter]);
 
-    // RESET
     const resetFilters = (): void => {
         setSelected({ ...emptyFilterState });
         setShowChart(false);
@@ -865,8 +863,8 @@ export const TrendDetails: React.FC<{
                         value={substanceFilter}
                         onChange={handleChange}
                         label={t("ANTIBIOTIC_SUBSTANCE")}
-                        sx={selectSx} //  fixed trigger width + ellipsis
-                        MenuProps={fixedMenuProps} //  fixed menu width + anchor
+                        sx={selectSx}
+                        MenuProps={fixedMenuProps}
                         renderValue={(selectedItems) =>
                             Array.isArray(selectedItems)
                                 ? substances
