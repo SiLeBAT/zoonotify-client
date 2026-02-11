@@ -40,147 +40,16 @@ import { SidebarComponent } from "../../shared/components/layout/SidebarComponen
 
 import { TrendChart } from "./TrendChart";
 import type { SelectChangeEvent } from "@mui/material/Select";
-
-// --- All filter option keys
-type FilterKey =
-    | "samplingYear"
-    | "antimicrobialSubstance"
-    | "specie"
-    | "superCategorySampleOrigin"
-    | "sampleOrigin"
-    | "samplingStage"
-    | "matrixGroup"
-    | "matrix";
-
-type FilterOption = {
-    id: string;
-    name: string;
-    documentId: string; // shared cross-language!
-};
-
-const emptyFilterState: Record<FilterKey, string[]> = {
-    samplingYear: [],
-    antimicrobialSubstance: [],
-    specie: [],
-    superCategorySampleOrigin: [],
-    sampleOrigin: [],
-    samplingStage: [],
-    matrixGroup: [],
-    matrix: [],
-};
-
-export interface ResistanceApiItem {
-    id: number;
-    samplingYear: number;
-    superCategorySampleOrigin?: {
-        id: number;
-        name: string;
-        documentId: string;
-    } | null;
-    sampleOrigin?: { id: number; name: string; documentId: string } | null;
-    samplingStage?: { id: number; name: string; documentId: string } | null;
-    matrixGroup?: { id: number; name: string; documentId: string } | null;
-    matrix?: { id: number; name: string; documentId: string } | null;
-    antimicrobialSubstance?: {
-        id: number;
-        name: string;
-        documentId: string;
-    } | null;
-    specie?: { id: number; name: string; documentId: string } | null;
-    resistenzrate: number;
-    anzahlGetesteterIsolate: number;
-    anzahlResistenterIsolate: number;
-    minKonfidenzintervall: number;
-    maxKonfidenzintervall: number;
-}
-
-/** Get the relation object for a given filter key from a data item */
-function getRelObjectTrend(
-    item: ResistanceApiItem,
-    key: FilterKey
-): { name: string; documentId: string } | null {
-    switch (key) {
-        case "specie":
-            return item.specie ?? null;
-        case "superCategorySampleOrigin":
-            return item.superCategorySampleOrigin ?? null;
-        case "sampleOrigin":
-            return item.sampleOrigin ?? null;
-        case "samplingStage":
-            return item.samplingStage ?? null;
-        case "matrixGroup":
-            return item.matrixGroup ?? null;
-        case "matrix":
-            return item.matrix ?? null;
-        case "antimicrobialSubstance":
-            return item.antimicrobialSubstance ?? null;
-        default:
-            return null;
-    }
-}
-
-/** Build docId->name and name->docId maps for all filter keys */
-function buildDocIdToNameMapTrend(
-    items: ResistanceApiItem[]
-): Record<FilterKey, Map<string, string>> {
-    const result = {} as Record<FilterKey, Map<string, string>>;
-    const keys: FilterKey[] = [
-        "specie",
-        "superCategorySampleOrigin",
-        "sampleOrigin",
-        "samplingStage",
-        "matrixGroup",
-        "matrix",
-        "antimicrobialSubstance",
-    ];
-    for (const k of keys) {
-        const m = new Map<string, string>();
-        for (const item of items) {
-            const obj = getRelObjectTrend(item, k);
-            if (obj?.documentId && obj?.name) m.set(obj.documentId, obj.name);
-        }
-        result[k] = m;
-    }
-    result.samplingYear = new Map<string, string>();
-    return result;
-}
-
-function buildNameToDocIdMapTrend(
-    items: ResistanceApiItem[]
-): Record<FilterKey, Map<string, string>> {
-    const result = {} as Record<FilterKey, Map<string, string>>;
-    const keys: FilterKey[] = [
-        "specie",
-        "superCategorySampleOrigin",
-        "sampleOrigin",
-        "samplingStage",
-        "matrixGroup",
-        "matrix",
-        "antimicrobialSubstance",
-    ];
-    for (const k of keys) {
-        const m = new Map<string, string>();
-        for (const item of items) {
-            const obj = getRelObjectTrend(item, k);
-            if (obj?.name && obj?.documentId) m.set(obj.name, obj.documentId);
-        }
-        result[k] = m;
-    }
-    result.samplingYear = new Map<string, string>();
-    return result;
-}
-
-/** Resolve a URL value (name or old docId) to docId with backwards compat */
-function resolveUrlValueToDocIdTrend(
-    value: string,
-    nameToDocId: Map<string, string>,
-    docIdToName: Map<string, string>
-): string | undefined {
-    const byName = nameToDocId.get(value);
-    if (byName) return byName;
-    if (docIdToName.has(value)) return value;
-    return undefined;
-}
+import {
+    type FilterKey,
+    type FilterOption,
+    type ResistanceApiItem,
+    emptyFilterState,
+    buildDocIdToNameMap,
+    buildNameToDocIdMap,
+    resolveUrlValueToDocId,
+} from "./resistanceHelpers";
+export type { ResistanceApiItem } from "./resistanceHelpers";
 
 function updateTrendFilterUrl(
     microorganism: string,
@@ -193,7 +62,7 @@ function updateTrendFilterUrl(
 
     // Build docId->name map for converting filter values to names
     const docIdToName = dataItems
-        ? buildDocIdToNameMapTrend(dataItems)
+        ? buildDocIdToNameMap(dataItems)
         : ({} as Record<FilterKey, Map<string, string>>);
 
     Object.entries(selected).forEach(([key, arr]) => {
@@ -247,10 +116,10 @@ function readTrendFilterStateFromUrl(
 
     // Build resolution maps from data
     const nameToDocId = dataItems
-        ? buildNameToDocIdMapTrend(dataItems)
+        ? buildNameToDocIdMap(dataItems)
         : ({} as Record<FilterKey, Map<string, string>>);
     const docIdToNameMap = dataItems
-        ? buildDocIdToNameMapTrend(dataItems)
+        ? buildDocIdToNameMap(dataItems)
         : ({} as Record<FilterKey, Map<string, string>>);
 
     /** Resolve a list of URL values (names or old docIds) to docIds */
@@ -258,11 +127,7 @@ function readTrendFilterStateFromUrl(
         if (key === "samplingYear" || !nameToDocId[key]) return values;
         return values
             .map((v) =>
-                resolveUrlValueToDocIdTrend(
-                    v,
-                    nameToDocId[key],
-                    docIdToNameMap[key]
-                )
+                resolveUrlValueToDocId(v, nameToDocId[key], docIdToNameMap[key])
             )
             .filter((v): v is string => v !== undefined);
     };

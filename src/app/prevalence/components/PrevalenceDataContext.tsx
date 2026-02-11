@@ -1,4 +1,5 @@
 import i18next from "i18next";
+import { resolveUrlValueToDocId as resolveUrlValueToDocIdBase } from "../../antibiotic_resistance/pages/resistanceHelpers";
 import React, {
     ReactNode,
     createContext,
@@ -115,18 +116,14 @@ const writeChartMicroToUrl = (microName: string): void => {
     }
 };
 
-/** URL <-> docId resolution helpers */
+/** URL <-> docId resolution helpers (uses shared helper from resistanceHelpers) */
 function resolveUrlValueToDocId(
     value: string,
     options: Option[]
 ): string | undefined {
-    // Name-match first (new format)
-    const byName = options.find((o) => o.name === value);
-    if (byName) return byName.documentId;
-    // Backwards compat: try matching as old-format documentId
-    const byDocId = options.find((o) => o.documentId === value);
-    if (byDocId) return byDocId.documentId;
-    return undefined;
+    const nameToDocId = new Map(options.map((o) => [o.name, o.documentId]));
+    const docIdToName = new Map(options.map((o) => [o.documentId, o.name]));
+    return resolveUrlValueToDocIdBase(value, nameToDocId, docIdToName);
 }
 
 function resolveDocIdToName(docId: string, options: Option[]): string {

@@ -44,59 +44,15 @@ import {
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
 import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
-
-// --- All filter option keys
-type FilterKey =
-    | "samplingYear"
-    | "antimicrobialSubstance"
-    | "specie"
-    | "superCategorySampleOrigin"
-    | "sampleOrigin"
-    | "samplingStage"
-    | "matrixGroup"
-    | "matrix";
-
-type FilterOption = {
-    id: string;
-    name: string;
-    documentId: string;
-};
-
-const emptyFilterState: Record<FilterKey, string[]> = {
-    samplingYear: [],
-    antimicrobialSubstance: [],
-    specie: [],
-    superCategorySampleOrigin: [],
-    sampleOrigin: [],
-    samplingStage: [],
-    matrixGroup: [],
-    matrix: [],
-};
-
-export interface ResistanceApiItem {
-    id: number;
-    samplingYear: number;
-    superCategorySampleOrigin?: {
-        id: number;
-        name: string;
-        documentId: string;
-    } | null;
-    sampleOrigin?: { id: number; name: string; documentId: string } | null;
-    samplingStage?: { id: number; name: string; documentId: string } | null;
-    matrixGroup?: { id: number; name: string; documentId: string } | null;
-    matrix?: { id: number; name: string; documentId: string } | null;
-    antimicrobialSubstance?: {
-        id: number;
-        name: string;
-        documentId: string;
-    } | null;
-    specie?: { id: number; name: string; documentId: string } | null;
-    resistenzrate: number;
-    anzahlGetesteterIsolate: number;
-    anzahlResistenterIsolate: number;
-    minKonfidenzintervall: number;
-    maxKonfidenzintervall: number;
-}
+import {
+    type FilterKey,
+    type FilterOption,
+    type ResistanceApiItem,
+    emptyFilterState,
+    buildDocIdToNameMap,
+    buildNameToDocIdMap,
+    resolveUrlValueToDocId as resolveUrlValueToDocIdShared,
+} from "./resistanceHelpers";
 
 function shouldShowSpeciesFilter(microorganism: string): boolean {
     return (
@@ -130,98 +86,6 @@ const SHORT_MAP: Record<ShortKey, FilterKey> = {
 const LONG_TO_SHORT = Object.fromEntries(
     Object.entries(SHORT_MAP).map(([shortK, longK]) => [longK, shortK])
 ) as Record<FilterKey, ShortKey>;
-
-/** Get the relation object for a given filter key from a data item */
-function getRelObject(
-    item: ResistanceApiItem,
-    key: FilterKey
-): { name: string; documentId: string } | null {
-    switch (key) {
-        case "specie":
-            return item.specie ?? null;
-        case "superCategorySampleOrigin":
-            return item.superCategorySampleOrigin ?? null;
-        case "sampleOrigin":
-            return item.sampleOrigin ?? null;
-        case "samplingStage":
-            return item.samplingStage ?? null;
-        case "matrixGroup":
-            return item.matrixGroup ?? null;
-        case "matrix":
-            return item.matrix ?? null;
-        case "antimicrobialSubstance":
-            return item.antimicrobialSubstance ?? null;
-        default:
-            return null;
-    }
-}
-
-/** Build maps from docId->name and name->docId for each filter key */
-function buildDocIdToNameMap(
-    items: ResistanceApiItem[]
-): Record<FilterKey, Map<string, string>> {
-    const result = {} as Record<FilterKey, Map<string, string>>;
-    const keys: FilterKey[] = [
-        "specie",
-        "superCategorySampleOrigin",
-        "sampleOrigin",
-        "samplingStage",
-        "matrixGroup",
-        "matrix",
-        "antimicrobialSubstance",
-    ];
-    for (const k of keys) {
-        const m = new Map<string, string>();
-        for (const item of items) {
-            const obj = getRelObject(item, k);
-            if (obj?.documentId && obj?.name) m.set(obj.documentId, obj.name);
-        }
-        result[k] = m;
-    }
-    // samplingYear: identity (name === docId)
-    result.samplingYear = new Map<string, string>();
-    return result;
-}
-
-function buildNameToDocIdMap(
-    items: ResistanceApiItem[]
-): Record<FilterKey, Map<string, string>> {
-    const result = {} as Record<FilterKey, Map<string, string>>;
-    const keys: FilterKey[] = [
-        "specie",
-        "superCategorySampleOrigin",
-        "sampleOrigin",
-        "samplingStage",
-        "matrixGroup",
-        "matrix",
-        "antimicrobialSubstance",
-    ];
-    for (const k of keys) {
-        const m = new Map<string, string>();
-        for (const item of items) {
-            const obj = getRelObject(item, k);
-            if (obj?.name && obj?.documentId) m.set(obj.name, obj.documentId);
-        }
-        result[k] = m;
-    }
-    // samplingYear: identity
-    result.samplingYear = new Map<string, string>();
-    return result;
-}
-
-/** Resolve a URL value (name or old docId) to docId with backwards compat */
-function resolveUrlValueToDocIdAMR(
-    value: string,
-    nameToDocId: Map<string, string>,
-    docIdToName: Map<string, string>
-): string | undefined {
-    // Try name-match first (new format)
-    const byName = nameToDocId.get(value);
-    if (byName) return byName;
-    // Backwards compat: try as old-format documentId
-    if (docIdToName.has(value)) return value;
-    return undefined;
-}
 
 function encodeStateToParam(
     microorganism: string,
@@ -374,7 +238,7 @@ function readStateFromUrlCompressed(
         if (key === "samplingYear" || !nameToDocId[key]) return values;
         return values
             .map((v) =>
-                resolveUrlValueToDocIdAMR(
+                resolveUrlValueToDocIdShared(
                     v,
                     nameToDocId[key],
                     docIdToNameMap[key]
