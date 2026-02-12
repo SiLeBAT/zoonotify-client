@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import JSZip from "jszip";
 import {
     DialogButton,
     DialogComponent,
 } from "../../shared/components/dialog/Dialog.component";
-
 import { AmrsTable, AmrsTableData } from "../model/ExplanationPage.model";
 
 const tableTextStyle = {
@@ -22,8 +22,102 @@ const tableTextStyle = {
     whiteSpace: "nowrap",
 } as const;
 
+// === Export helpers (INLINE, no new file) ===
+
+function getFormattedTimestamp(): string {
+    const d = new Date();
+    return d
+        .toISOString()
+        .replace(/:/g, "-")
+        .replace(/\..+/, "")
+        .replace("T", "_");
+}
+
+function generateAmrTableCSV(
+    rows: AmrsTableData[],
+    years: string[],
+    sep: "," | ";",
+    decimalSep: "." | ",",
+    t: (key: string) => string
+): string {
+    if (!rows || !rows.length) return "";
+
+    // Headers with translation support
+    const headers = [
+        t("Short Substance"),
+        t("Substance Class"),
+        t("Wirkstoff"),
+        ...years.flatMap((year) => [
+            `${t("Max")} (${year})`,
+            `${t("Min")} (${year})`,
+            `${t("CutOff")} (${year})`,
+        ]),
+    ];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function valueStr(val: any): string {
+        if (val === null || val === undefined) return "";
+        let str = String(val);
+        if (typeof val === "number" && decimalSep === ",") {
+            str = str.replace(".", ",");
+        }
+        // Escape if separator, quotes, or linebreaks
+        if (str.includes(sep) || str.includes('"') || str.includes("\n")) {
+            str = `"${str.replace(/"/g, '""')}"`;
+        }
+        return str;
+    }
+
+    const csvRows = [
+        headers.join(sep),
+        ...rows.map((row) => {
+            const baseCells = [
+                valueStr(row.shortSubstance),
+                valueStr(row.substanceClass),
+                valueStr(row.wirkstoff),
+            ];
+            const yearCells = years.flatMap((year) => {
+                const yearObj = row.concentrationList[year] || {};
+                return [
+                    valueStr(yearObj.max),
+                    valueStr(yearObj.min),
+                    valueStr(yearObj.cutOff),
+                ];
+            });
+            return [...baseCells, ...yearCells].join(sep);
+        }),
+    ];
+    return csvRows.join("\n");
+}
+
+async function downloadAmrTableZip(
+    rows: AmrsTableData[],
+    years: string[],
+    t: (key: string) => string
+): Promise<void> {
+    const timestamp = getFormattedTimestamp();
+    const zip = new JSZip();
+
+    const csvComma = generateAmrTableCSV(rows, years, ",", ".", t);
+    const csvDot = generateAmrTableCSV(rows, years, ";", ",", t);
+
+    zip.file(`amr_table_comma_${timestamp}.csv`, csvComma);
+    zip.file(`amr_table_dot_${timestamp}.csv`, csvDot);
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `amr_table_${timestamp}.zip`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// === End Export helpers ===
+
 function createTableRowCells(row: AmrsTableData): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
+
     tableCellList.push(
         <TableCell
             sx={tableTextStyle}
@@ -41,18 +135,23 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
         >
             {row.substanceClass}
         </TableCell>,
-
         <TableCell
             sx={tableTextStyle}
             component="td"
             scope="row"
-            key={`amr-table-cell-${row.amrSubstance}-substanceClass`}
+            key={`amr-table-cell-${row.amrSubstance}-wirkstoff`}
         >
             {row.wirkstoff}
         </TableCell>
     );
 
-    for (const year of Object.keys(row.concentrationList)) {
+    // **Sort the years descending before rendering**
+    const sortedYears = Object.keys(row.concentrationList).sort(
+        (a, b) => parseInt(b) - parseInt(a)
+    );
+
+    // Render the data for each year in descending order
+    for (const year of sortedYears) {
         const concentrationPerYear = row.concentrationList[year];
         tableCellList.push(
             <TableCell
@@ -60,9 +159,9 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 component="td"
                 scope="row"
                 align="right"
-                key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
+                key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
             >
-                {concentrationPerYear.cutOff}
+                {concentrationPerYear.max}
             </TableCell>,
             <TableCell
                 sx={tableTextStyle}
@@ -78,9 +177,9 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
                 component="td"
                 scope="row"
                 align="right"
-                key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
+                key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
             >
-                {concentrationPerYear.max}
+                {concentrationPerYear.cutOff}
             </TableCell>
         );
     }
@@ -91,16 +190,32 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
 export function InfoPageAmrDialogComponent(props: {
     resistancesTableData: AmrsTable;
     onClose: () => void;
-    onAmrDataExport: () => void;
 }): JSX.Element {
     const { t } = useTranslation(["InfoPage"]);
+    //console.log("DOWNLOAD_ZIP_FILE", t("DOWNLOAD_ZIP_FILE"));
+    //console.log("InfoPageAmrDialogComponent file loaded");
 
     const handleClose = (): void => {
         props.onClose();
     };
 
-    const handleSubmit = (): void => {
-        props.onAmrDataExport();
+    // Get all unique years (sorted descending)
+    const yearsSet = new Set<string>();
+    props.resistancesTableData.tableRows.forEach((row) => {
+        Object.keys(row.concentrationList).forEach((year) =>
+            yearsSet.add(year)
+        );
+    });
+    const allYears = Array.from(yearsSet).sort(
+        (a, b) => parseInt(b) - parseInt(a)
+    );
+
+    const handleExport = async (): Promise<void> => {
+        await downloadAmrTableZip(
+            props.resistancesTableData.tableRows,
+            allYears,
+            t
+        );
     };
 
     const tableSubHeader: JSX.Element[] = [];
@@ -195,13 +310,16 @@ export function InfoPageAmrDialogComponent(props: {
         </TableContainer>
     );
 
-    const amrTableCancelButton: DialogButton = {
-        content: t("Methods.Amrs.CancelButton"),
-        onClick: handleClose,
+    // === BUTTONS (now with Export + Cancel) ===
+
+    const amrTableExportButton: DialogButton = {
+        content: t("DOWNLOAD_ZIP_FILE"),
+        onClick: handleExport,
     };
-    const amrTableSubmitButton: DialogButton = {
-        content: t("Methods.Amrs.ExportButton"),
-        onClick: handleSubmit,
+    console.log(t("DOWNLOAD_ZIP_FILE"));
+    const amrTableCancelButton: DialogButton = {
+        content: t("Methods.Amrs.CancelButton") || "Close",
+        onClick: handleClose,
     };
 
     return DialogComponent({
@@ -210,6 +328,6 @@ export function InfoPageAmrDialogComponent(props: {
         dialogContentText: props.resistancesTableData.description,
         dialogContent: dialogTableContent,
         cancelButton: amrTableCancelButton,
-        submitButton: amrTableSubmitButton,
+        submitButton: amrTableExportButton, // <<--- Export is the main action, Cancel closes
     });
 }

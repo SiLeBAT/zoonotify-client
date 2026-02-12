@@ -1,93 +1,139 @@
-import { List, ListSubheader } from "@mui/material";
-import i18next from "i18next";
 import React, { useEffect, useState } from "react";
+import { List, ListItem, ListSubheader } from "@mui/material";
+//import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+import Markdown from "markdown-to-jsx";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { ListContentListItemComponent } from "./ListContent-ListItem.component";
 import { EXTERNAL_LINKS } from "../../shared/infrastructure/router/routes";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 
-// Define a type for the category
 type Category =
-    | "LEGAL-REGULATION"
+    | "LEGAL_REGULATION"
     | "REPORTS"
-    | "ORGANIZATION-AND-INSTITUTE"
-    | "ONLINE-TOOLS";
+    | "ORGANIZATION_AND_INSTITUTES"
+    | "ONLINE_TOOLS";
 
 interface ExternalLink {
-    name: string;
-    link: string;
+    id: number;
     category: Category;
-    priority: number;
+    content: string | null;
 }
 
-type ExternalLinkResponse = CMSResponse<
-    CMSEntity<ExternalLink>[],
-    {
+interface ExternalLinkResponse {
+    data: ExternalLink[];
+    meta: {
         pagination: {
             page: number;
             pageSize: number;
             pageCount: number;
             total: number;
         };
-    }
->;
+    };
+}
 
 export function LinkPageLinkListComponent(): JSX.Element {
-    const { t } = useTranslation(["ExternLinks"]);
+    const { t, i18n } = useTranslation(["ExternLinks"]);
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
+    // Update the browser URL to always include the current language as a query parameter.
     useEffect(() => {
-        // API endpoint without sorting since we will handle sorting in the frontend
-        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18next.language}`;
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("lang") !== i18n.language) {
+            params.set("lang", i18n.language);
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.replaceState({}, "", newUrl);
+        }
+    }, [i18n.language]);
+
+    useEffect(() => {
+        const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18n.language}`;
+        console.log("[LinkPageLinkList] Fetching from:", apiEndpoint);
 
         callApiService<ExternalLinkResponse>(apiEndpoint)
             .then((response) => {
-                if (response.data && response.data.data) {
-                    const extractedLinks = response.data.data.map(
-                        (item: CMSEntity<ExternalLink>) => item.attributes
-                    );
-
-                    // Sort the extracted links by priority in descending order
-                    const sortedLinks = extractedLinks.sort(
-                        (a, b) => b.priority - a.priority
-                    );
-
-                    setLinkData(sortedLinks);
+                console.log("[LinkPageLinkList] Raw response:", response);
+                if (response?.data?.data) {
+                    setLinkData(response.data.data);
+                } else {
+                    console.warn("[LinkPageLinkList] No data in response");
                 }
-                return null;
+                return response;
             })
-            .catch((error) => {
-                console.error("Error fetching data: ", error);
+            .catch((err) => {
+                console.error("[LinkPageLinkList] Error fetching data:", err);
             });
-    }, [i18next.language]);
+    }, [i18n.language]);
 
-    const groupByCategory = (
+    // Group links by category
+    function groupByCategory(
         links: ExternalLink[]
-    ): Record<Category, ExternalLink[]> => {
-        return links.reduce<Record<Category, ExternalLink[]>>((acc, link) => {
-            if (!acc[link.category]) acc[link.category] = [];
+    ): Record<Category, ExternalLink[]> {
+        return links.reduce((acc, link) => {
+            if (!acc[link.category]) {
+                acc[link.category] = [];
+            }
             acc[link.category].push(link);
             return acc;
         }, {} as Record<Category, ExternalLink[]>);
-    };
+    }
 
     const groupedLinks = groupByCategory(linkData);
 
+    // Specify category order
+    const categoryOrder: Category[] = [
+        "ONLINE_TOOLS",
+        "REPORTS",
+        "ORGANIZATION_AND_INSTITUTES",
+        "LEGAL_REGULATION",
+    ];
+
     return (
         <div>
-            {Object.entries(groupedLinks).map(([category, links]) => (
-                <List key={category}>
-                    <ListSubheader>{t(`${category}`, category)}</ListSubheader>
-                    {links.map((link, index) => (
-                        <ListContentListItemComponent
-                            key={`Link${index}`}
-                            link={link.link}
-                            text={link.name}
-                        />
-                    ))}
-                </List>
-            ))}
+            {categoryOrder.map((category) => {
+                // Filter out items that don't have non-empty content.
+                const itemsForCategory = (groupedLinks[category] || []).filter(
+                    (item) => item.content && item.content.trim() !== ""
+                );
+
+                // Only render the category if there is at least one valid item.
+                if (itemsForCategory.length === 0) {
+                    return null;
+                }
+
+                const categoryLabel = t(category, { defaultValue: category });
+                console.log(
+                    `[LinkPageLinkList] Rendering category: "${categoryLabel}"`
+                );
+
+                return (
+                    <List key={category}>
+                        <ListSubheader>{categoryLabel}</ListSubheader>
+                        {itemsForCategory.map((item) => {
+                            console.log(
+                                "[LinkPageLinkList] Rendering item:",
+                                item
+                            );
+                            return (
+                                <ListItem key={item.id}>
+                                    <Markdown
+                                        options={{
+                                            overrides: {
+                                                a: {
+                                                    props: {
+                                                        target: "_blank",
+                                                        rel: "noopener noreferrer",
+                                                    },
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        {item.content ?? ""}
+                                    </Markdown>
+                                </ListItem>
+                            );
+                        })}
+                    </List>
+                );
+            })}
         </div>
     );
 }

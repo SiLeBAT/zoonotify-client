@@ -1,3 +1,5 @@
+// InfoPageFiltersContentComponent.tsx
+
 import { Typography } from "@mui/material";
 import React from "react";
 // eslint-disable-next-line import/named
@@ -21,7 +23,7 @@ const subContentDescriptionStyle = {
     paddingLeft: "1.5em",
     hyphens: "auto",
     textAlign: "justify",
-    lineHight: "1.6",
+    lineHeight: "1.6",
 } as const;
 
 function generateContentWithSubContent(
@@ -32,8 +34,7 @@ function generateContentWithSubContent(
     const subContent: JSX.Element[] = [];
 
     for (const describedFilterSubKey of Object.keys(describedFiltersContent)) {
-        const subFilter: Record<string, string> =
-            describedFiltersContent[describedFilterSubKey];
+        const subFilter = describedFiltersContent[describedFilterSubKey];
         const subFilterName = subFilter.Name;
 
         let descriptionName: string | JSX.Element = subFilterName;
@@ -53,12 +54,14 @@ function generateContentWithSubContent(
                 </span>
             );
         } else if (
-            describedFilterSubKey === "microorganism-1" ||
-            describedFilterSubKey === "microorganism-2" ||
-            describedFilterSubKey === "microorganism-3" ||
-            describedFilterSubKey === "microorganism-4" ||
-            describedFilterSubKey === "microorganism-5" ||
-            describedFilterSubKey === "microorganism-9"
+            [
+                "microorganism-1",
+                "microorganism-2",
+                "microorganism-3",
+                "microorganism-4",
+                "microorganism-5",
+                "microorganism-9",
+            ].includes(describedFilterSubKey)
         ) {
             descriptionName = (
                 <span>
@@ -84,10 +87,11 @@ function generateContentWithSubContent(
                 <span>
                     {subFilter.Description1}
                     {birdSpecies.Gallus}
-                    {subFilter.Description2}{" "}
+                    {subFilter.Description2}
                 </span>
             );
         }
+
         subContent.push(
             <Typography
                 component="p"
@@ -144,12 +148,12 @@ export function InfoPageFiltersContentComponent(props: {
             case "origin":
             case "samplingStage":
             case "category": {
-                const describedFiltersContent: Record<
-                    string,
-                    Record<string, string>
-                > = t(`Filters.${describedFilter}.${describedFilter}-types`, {
-                    returnObjects: true,
-                });
+                const describedFiltersContent = t(
+                    `Filters.${describedFilter}.${describedFilter}-types`,
+                    {
+                        returnObjects: true,
+                    }
+                ) as Record<string, Record<string, string>>;
                 const filterDescription: string = t(
                     `Filters.${describedFilter}.Description`
                 );
@@ -164,9 +168,9 @@ export function InfoPageFiltersContentComponent(props: {
                         defaultExpanded={false}
                         centerContent={false}
                         key={`accordion_${describedFilter}`}
+                        maxHeight="1000px" // Set maxHeight to enable scroll
                     />
                 );
-
                 break;
             }
             case "resistance": {
@@ -195,9 +199,9 @@ export function InfoPageFiltersContentComponent(props: {
                         defaultExpanded={false}
                         centerContent={false}
                         key="accordion_resistance"
+                        maxHeight="1000px" // Set maxHeight to enable scroll
                     />
                 );
-
                 break;
             }
             case "samplingContext": {
@@ -220,9 +224,9 @@ export function InfoPageFiltersContentComponent(props: {
                         defaultExpanded={false}
                         centerContent={false}
                         key="accordion_samplingContext"
+                        maxHeight="1000px" // Set maxHeight to enable scroll
                     />
                 );
-
                 break;
             }
             default: {
@@ -231,21 +235,18 @@ export function InfoPageFiltersContentComponent(props: {
                         title={t(`Filters.${describedFilter}.Name`)}
                         content={
                             <Typography component="p">
-                                {t(`Filters.${describedFilter}.Description`)}{" "}
+                                {t(`Filters.${describedFilter}.Description`)}
                             </Typography>
                         }
                         defaultExpanded={false}
                         centerContent={false}
                         key={`accordion_${describedFilter}`}
+                        maxHeight="1000px" // Set maxHeight to enable scroll
                     />
                 );
             }
         }
     }
-    console.log(
-        "Translation for Filters.microorganism.Name:",
-        t("Filters.microorganism.Name")
-    );
 
     return <div>{filterAccordionsList}</div>;
 }

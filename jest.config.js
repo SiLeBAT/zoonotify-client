@@ -11,6 +11,7 @@ module.exports = {
     },
     collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/app/App.tsx"],
     setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
+   
     testEnvironment: "jest-environment-jsdom",
     
   };

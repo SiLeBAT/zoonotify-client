@@ -16,14 +16,23 @@ import Markdown from "markdown-to-jsx";
 export interface AccordionProps {
     title: string;
     content: JSX.Element;
+    /** Keeps old behavior. Ignored when `expanded` is provided (controlled mode). */
     defaultExpanded: boolean;
     centerContent: boolean;
-    showCopyIcon?: boolean; // This is the new boolean flag property
-    withTopBorder?: boolean; // New prop to control the border appearance
+    showCopyIcon?: boolean;
+    withTopBorder?: boolean;
+    maxHeight?: string;
+    /** gap in px between the title (summary) and the first line of content */
+    contentGap?: number;
+
+    /** NEW: controlled open state (optional). If provided, component is controlled. */
+    expanded?: boolean;
+    /** NEW: notifies parent when user toggles the accordion. */
+    onToggle?: (expanded: boolean) => void;
 }
 
 export function ZNAccordion(props: AccordionProps): JSX.Element {
-    const { withTopBorder = true } = props; // Default to true if not provided
+    const { withTopBorder = true } = props;
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const theme = useTheme();
 
@@ -47,39 +56,34 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
             .then(() => {
                 setTooltipOpen(true);
                 setTimeout(() => setTooltipOpen(false), 2000);
-                return null; // Return null to satisfy linting
+                return null;
             })
-            .catch((err) => {
-                console.error("Failed to copy:", err);
-                throw err; // Throw error to satisfy linting
-            });
+            .catch((err) => console.error("Failed to copy:", err));
     };
+
+    // Decide controlled vs uncontrolled:
+    const controlled = props.expanded !== undefined;
 
     return (
         <Accordion
-            defaultExpanded={props.defaultExpanded}
+            // Controlled if `expanded` is provided, otherwise use defaultExpanded (uncontrolled)
+            {...(controlled
+                ? { expanded: props.expanded }
+                : { defaultExpanded: props.defaultExpanded })}
+            onChange={(_, exp) => props.onToggle?.(exp)}
             sx={{
                 border: "none",
                 boxShadow: "none",
-                "&:before": {
-                    display: "none",
-                },
-                "&.MuiAccordion-root.Mui-expanded": {
-                    margin: "1em 0", // Margin only when expanded
-                },
-                "& .MuiAccordionSummary-root": {
-                    margin: 0,
-                    borderBottom: "none",
-                },
-                "& .MuiAccordionDetails-root": {
-                    padding: "16px 24px", // Default padding for content
-                },
+                "&:before": { display: "none" },
+                "&.Mui-expanded": { margin: "1em 0" },
                 ...(withTopBorder && {
                     "&:before": {
                         display: "block",
                         content: '""',
                         width: "100%",
-                        height: "2px", // Set the border height to 2px to make it thinner
+                        textAlign: "left",
+                        alignItems: "center",
+                        height: "2px",
                         backgroundColor: theme.palette.primary.main,
                     },
                 }),
@@ -87,25 +91,46 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
         >
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="shared-accordion-content"
-                id="shared-accordion-header"
+                aria-controls="zn-accordion-content"
+                id="zn-accordion-header"
                 sx={{
-                    borderBottom: "none",
-                    margin: 0,
+                    px: 5,
+                    py: 1,
+                    minHeight: 0,
+                    "& .MuiAccordionSummary-content": {
+                        margin: 0,
+                        "&.Mui-expanded": { margin: 0 },
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
+                    },
                 }}
             >
-                <Typography
+                <Box
                     sx={{
-                        flex: 1,
-                        fontWeight: "bold",
-                        fontSize: "1rem",
-                        textAlign: "left",
-                        margin: 0,
                         display: "flex",
-                        alignItems: "center", // To align the title and the icon properly
+                        alignItems: "center",
+                        width: "100%",
                     }}
                 >
-                    <Markdown>{props.title}</Markdown>
+                    {/* Title text, can wrap */}
+                    <Typography
+                        sx={{
+                            fontWeight: "bold",
+                            fontSize: "1rem",
+                            textAlign: "left",
+                            flex: 1,
+                            margin: 0,
+                            pr: 1,
+                            wordBreak: "break-word",
+                        }}
+                        component="span"
+                    >
+                        <Markdown>{props.title}</Markdown>
+                    </Typography>
+
+                    {/* Copy icon always at the end */}
                     {props.showCopyIcon && (
                         <Tooltip
                             title="Copy to Clipboard"
@@ -119,14 +144,14 @@ export function ZNAccordion(props: AccordionProps): JSX.Element {
                                 onMouseEnter={() => setTooltipOpen(true)}
                                 onMouseLeave={() => setTooltipOpen(false)}
                                 size="small"
-                                sx={{ ml: 1 }} // Add some space between the title and the icon
                             >
                                 <ContentCopyIcon fontSize="small" />
                             </IconButton>
                         </Tooltip>
                     )}
-                </Typography>
+                </Box>
             </AccordionSummary>
+
             <AccordionDetails
                 sx={{
                     marginLeft: "2em",

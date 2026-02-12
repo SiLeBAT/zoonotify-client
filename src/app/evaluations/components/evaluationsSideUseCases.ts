@@ -1,11 +1,8 @@
-import i18next from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { EVALUATION_INFO } from "../../shared/infrastructure/router/routes";
-import { CMSEntity, CMSResponse } from "../../shared/model/CMS.model";
 import {
-    EvaluationInformationAttributesDTO,
     FilterSelection,
     SelectionFilterConfig,
     SelectionItem,
@@ -14,13 +11,24 @@ import {
     category,
     diagramType,
     division,
-    initialFilterSelection,
     matrix,
     microorganism,
     productionType,
 } from "../model/constants";
 import { useEvaluationData } from "./EvaluationDataContext";
 
+/** 1) The "flat" interface for single-type "Evaluation Information" */
+interface EvaluationInformationItem {
+    id: number;
+    content: string;
+    title?: string;
+}
+interface EvaluationInformationAPIResponse {
+    data: EvaluationInformationItem;
+    meta: unknown;
+}
+
+/** For building the selection items */
 interface SelectionItemCollection {
     matrix: SelectionItem[];
     productionType: SelectionItem[];
@@ -29,6 +37,7 @@ interface SelectionItemCollection {
     microorganism: SelectionItem[];
     division: SelectionItem[];
 }
+
 function toSelectionItem(
     stringItems: string[],
     translate: (key: string) => string
@@ -46,31 +55,13 @@ const useEvaluationSideComponent = (): {
         howToHeading: string;
     };
 } => {
-    const { t } = useTranslation(["ExplanationPage"]);
+    const { t, i18n } = useTranslation(["ExplanationPage"]);
     const evaluationContext = useEvaluationData();
+    const selectedFilters = evaluationContext.selectedFilters;
 
     const [howtoContent, setHowtoContent] = useState("");
 
-    const [selectedFilters, setSelectedFilters] = useState<FilterSelection>(
-        initialFilterSelection
-    );
-
-    useEffect(() => {
-        evaluationContext.updateFilters(selectedFilters);
-    }, [selectedFilters]);
-
-    const handleChange =
-        (key: keyof FilterSelection) =>
-        (value: string | string[]): void => {
-            const newValue = Array.isArray(value) ? value : [value];
-            setSelectedFilters((prev: FilterSelection) => {
-                return {
-                    ...prev,
-                    [key]: newValue,
-                };
-            });
-        };
-
+    // Build selection items from constants (values are stable tokens, labels are translated)
     const availableOptions: SelectionItemCollection = {
         matrix: toSelectionItem(matrix, t),
         productionType: toSelectionItem(productionType, t),
@@ -80,38 +71,53 @@ const useEvaluationSideComponent = (): {
         division: toSelectionItem(division, t),
     };
 
-    const selectionConfig: SelectionFilterConfig[] = Object.keys(
-        selectedFilters
-    ).map((key) => {
-        return {
-            label: t(key.toUpperCase()),
-            id: key,
-            selectedItems: [...selectedFilters[key as keyof FilterSelection]],
-            selectionOptions:
-                availableOptions[key as keyof typeof availableOptions],
-            handleChange: (event) => {
-                const value = event.target.value;
-                handleChange(key as keyof FilterSelection)(value);
-            },
+    // Handle a change to any filter key by writing back to context
+    const handleChange =
+        (key: keyof FilterSelection) =>
+        (value: string | string[]): void => {
+            const newValue = Array.isArray(value) ? value : [value];
+            evaluationContext.updateFilters({
+                ...selectedFilters,
+                [key]: newValue,
+            });
         };
-    });
 
+    const selectionConfig: SelectionFilterConfig[] = (
+        Object.keys(selectedFilters) as (keyof FilterSelection)[]
+    ).map((key) => ({
+        label: t(key.toUpperCase()),
+        id: key as string,
+        selectedItems: [...selectedFilters[key]],
+        selectionOptions:
+            availableOptions[key as keyof SelectionItemCollection],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        handleChange: (event: any) => {
+            const value = event?.target?.value ?? event;
+            handleChange(key)(value);
+        },
+    }));
+
+    // 2) Fetch the single-type "Evaluation Information" in the current language
     useEffect(() => {
-        callApiService<
-            CMSResponse<CMSEntity<EvaluationInformationAttributesDTO>, unknown>
-        >(`${EVALUATION_INFO}?locale=${i18next.language}`)
+        let isActive = true;
+        const url = `${EVALUATION_INFO}?locale=${i18n.language}`;
+        callApiService<EvaluationInformationAPIResponse>(url)
             .then((response) => {
+                if (!isActive) return response;
                 if (response.data) {
-                    const data = response.data.data;
-                    setHowtoContent(data.attributes.content);
+                    const item = response.data.data;
+                    setHowtoContent(item.content);
                 }
-                return response; // Ensure to return a value
+                return response;
             })
             .catch((error) => {
                 console.error("Error fetching 'How To' content", error);
-                throw error; // Ensure to throw an error
+                throw error;
             });
-    }, [i18next.language]);
+        return () => {
+            isActive = false;
+        };
+    }, [i18n.language]);
 
     return {
         model: {

@@ -1,9 +1,9 @@
-import i18next from "i18next";
 import React, {
     ReactNode,
     createContext,
     useContext,
     useEffect,
+    useRef,
     useState,
 } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,47 +12,197 @@ import {
     CMS_BASE_ENDPOINT,
     EVALUATIONS,
 } from "../../shared/infrastructure/router/routes";
-import {
-    CMSEntity,
-    CMSResponse,
-    MAX_PAGE_SIZE,
-} from "../../shared/model/CMS.model";
-import {
-    Evaluation,
-    EvaluationAttributesDTO,
-    FilterSelection,
-} from "../model/Evaluations.model";
+import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
+import { FilterSelection } from "../model/Evaluations.model";
 import { initialFilterSelection } from "../model/constants";
 
+/* ================== API/Types ================== */
+
+interface DiagramData {
+    id: number;
+    url: string;
+}
+interface EvaluationItem {
+    id: number;
+    title: string;
+    description: string;
+    category: string;
+    division: string; // localized string
+    microorganism: string;
+    diagramType: string;
+    productionType: string;
+    matrix: string;
+    diagram?: DiagramData;
+    csv_data?: DiagramData;
+}
+interface EvaluationAPIResponse {
+    data: EvaluationItem[];
+    meta: unknown;
+}
+
+type DivisionToken = "FUTTERMITTEL" | "TIERE" | "LEBENSMITTEL" | "MULTIPLE";
+interface EvaluationEntry {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    division: string;
+    microorganism: string;
+    diagramType: string;
+    productionType: string;
+    matrix: string;
+    chartPath: string;
+    dataPath: string;
+}
+type Evaluation = Record<DivisionToken, EvaluationEntry[]>;
+
+/** Context Interface */
 interface EvaluationDataContext {
     readonly isLoading: boolean;
     readonly evaluationsData: Evaluation;
+    readonly selectedFilters: FilterSelection;
     updateFilters: (newFilters: FilterSelection) => void;
     showDivision: (division: string) => boolean;
 }
 
+/* ================== Helpers ================== */
+
+const emptyEvaluation: Evaluation = {
+    FUTTERMITTEL: [],
+    TIERE: [],
+    LEBENSMITTEL: [],
+    MULTIPLE: [],
+};
+
 export const DefaultEvaluationDataContext =
     createContext<EvaluationDataContext>({
         isLoading: true,
-        evaluationsData: {
-            FUTTERMITTEL: [],
-            TIERE: [],
-            LEBENSMITTEL: [],
-            MULTIPLE: [],
-        },
+        evaluationsData: emptyEvaluation,
+        selectedFilters: initialFilterSelection,
         updateFilters: () => {},
-        showDivision: (div: string) => (div ? true : true),
+        showDivision: () => true,
     });
 
 export const useEvaluationData = (): EvaluationDataContext => {
     const context = useContext(DefaultEvaluationDataContext);
     if (context === undefined) {
         throw new Error(
-            "useEvaluationFilters must be used within a EvaluationDataProvider"
+            "useEvaluationData must be used within an EvaluationDataProvider"
         );
     }
     return context;
 };
+
+function isCompleteEntry(entry: {
+    title: string;
+    description: string;
+    category: string;
+    chartPath: string;
+    dataPath: string;
+}): boolean {
+    return (
+        Boolean(entry.title?.trim()) &&
+        Boolean(entry.description?.trim()) &&
+        Boolean(entry.category?.trim()) &&
+        Boolean(entry.chartPath?.trim()) &&
+        Boolean(entry.dataPath?.trim())
+    );
+}
+
+function parseQueryParams(queryParams: URLSearchParams): FilterSelection {
+    const filters: FilterSelection = { ...initialFilterSelection };
+    (Object.keys(filters) as (keyof FilterSelection)[]).forEach((key) => {
+        const param = queryParams.get(String(key));
+        if (param) {
+            filters[key] = param.split(",").filter(Boolean);
+        }
+    });
+    return filters;
+}
+
+function buildQueryString(filters: FilterSelection): string {
+    const params = new URLSearchParams();
+    (Object.entries(filters) as [keyof FilterSelection, string[]][]).forEach(
+        ([key, arr]) => {
+            if (arr.length) {
+                params.set(String(key), arr.join(","));
+            }
+        }
+    );
+    return params.toString();
+}
+
+function applyFiltersStrict(
+    filterSelection: FilterSelection,
+    data: Evaluation
+): Evaluation {
+    const filteredData: Evaluation = {
+        FUTTERMITTEL: [],
+        TIERE: [],
+        LEBENSMITTEL: [],
+        MULTIPLE: [],
+    };
+
+    (Object.keys(data) as (keyof Evaluation)[]).forEach((divisionKey) => {
+        filteredData[divisionKey] = data[divisionKey].filter((item) => {
+            return (
+                Object.keys(filterSelection) as (keyof FilterSelection)[]
+            ).every((filterKey) => {
+                const selectedVals = filterSelection[filterKey];
+                if (selectedVals.length === 0) return true;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if ((item as any)[filterKey] == null) return false;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                return selectedVals.includes((item as any)[filterKey]);
+            });
+        });
+    });
+
+    return filteredData;
+}
+
+function processApiResponse(apiData: EvaluationItem[]): Evaluation {
+    const result: Evaluation = {
+        FUTTERMITTEL: [],
+        TIERE: [],
+        LEBENSMITTEL: [],
+        MULTIPLE: [],
+    };
+
+    apiData.forEach((item) => {
+        const divisionKey = item.division.toUpperCase() as keyof Evaluation;
+        if (!result[divisionKey]) return;
+
+        const chartPath = item.diagram?.url
+            ? CMS_BASE_ENDPOINT + item.diagram.url
+            : "";
+        const dataPath = item.csv_data?.url
+            ? CMS_BASE_ENDPOINT + item.csv_data.url
+            : "";
+
+        const newEntry: EvaluationEntry = {
+            id: item.id.toString(),
+            title: item.title,
+            description: item.description,
+            category: item.category,
+            division: String(divisionKey),
+            microorganism: item.microorganism,
+            diagramType: item.diagramType,
+            productionType: item.productionType,
+            matrix: item.matrix,
+            chartPath,
+            dataPath,
+        };
+
+        if (isCompleteEntry(newEntry)) {
+            result[divisionKey].push(newEntry);
+        }
+    });
+
+    return result;
+}
+
+/* ================== Provider ================== */
 
 export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
@@ -62,123 +212,133 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     const [selectedFilters, setSelectedFilters] = useState<FilterSelection>(
         initialFilterSelection
     );
-
-    const [originalData, setOriginalData] = useState<Evaluation>({
-        FUTTERMITTEL: [],
-        TIERE: [],
-        LEBENSMITTEL: [],
-        MULTIPLE: [],
-    });
-    const [evaluationsData, setEvaluationsData] = useState<Evaluation>({
-        FUTTERMITTEL: [],
-        TIERE: [],
-        LEBENSMITTEL: [],
-        MULTIPLE: [],
-    });
-
+    const [originalData, setOriginalData] =
+        useState<Evaluation>(emptyEvaluation);
+    const [evaluationsData, setEvaluationsData] =
+        useState<Evaluation>(emptyEvaluation);
     const [isLoading, setLoading] = useState(true);
 
-    const fetchDataFromAPI = async (): Promise<void> => {
-        setLoading(true);
-        try {
-            const response = await callApiService<
-                CMSResponse<CMSEntity<EvaluationAttributesDTO>[], unknown>
-            >(
-                `${EVALUATIONS}?locale=${i18next.language}&populate=diagram,csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`
-            );
-            if (response.data) {
-                const processedData = processApiResponse(response.data.data);
-                setOriginalData(processedData);
-                setEvaluationsData(processedData);
-            }
-        } catch (error) {
-            console.error("Fetching data failed", error);
-        }
-        setLoading(false);
-    };
+    // guard against stale fetches overwriting fresh state
+    const fetchIdRef = useRef(0);
 
+    // On first mount: align with ?lang=... if present; otherwise write current language to URL.
     useEffect(() => {
-        fetchDataFromAPI();
+        const params = new URLSearchParams(window.location.search);
+        const urlLang = params.get("lang");
+
+        if (urlLang && urlLang !== i18n.language) {
+            i18n.changeLanguage(urlLang);
+        }
+        if (!urlLang) {
+            params.set("lang", i18n.language);
+            const newSearch = `?${params.toString()}`;
+            if (newSearch !== window.location.search) {
+                window.history.replaceState(
+                    {},
+                    "",
+                    `${window.location.pathname}${newSearch}`
+                );
+            }
+        }
+        // run once on mount
     }, []);
 
+    // Fetch data whenever the app language changes.
+    // IMPORTANT: Reset filters unless URL explicitly provides them (prevents “no results” after language switch).
     useEffect(() => {
-        const handleLanguageChange = (): void => {
-            fetchDataFromAPI();
-        };
+        let isActive = true;
+        const myFetchId = ++fetchIdRef.current;
 
-        i18n.on("languageChanged", handleLanguageChange);
+        const fetchDataFromAPI = async (): Promise<void> => {
+            setLoading(true);
+            try {
+                const effectiveLang = i18n.language;
+                const url = `${EVALUATIONS}?locale=${effectiveLang}&populate=diagram&populate=csv_data&pagination[pageSize]=${MAX_PAGE_SIZE}`;
+                const response = await callApiService<EvaluationAPIResponse>(
+                    url
+                );
 
-        return () => {
-            i18n.off("languageChanged", handleLanguageChange);
-        };
-    }, [i18n]);
+                if (!isActive || myFetchId !== fetchIdRef.current) return;
 
-    function processApiResponse(
-        apiData: CMSEntity<EvaluationAttributesDTO>[]
-    ): Evaluation {
-        const result: Evaluation = {
-            FUTTERMITTEL: [],
-            TIERE: [],
-            LEBENSMITTEL: [],
-            MULTIPLE: [],
-        };
-        apiData.forEach((entry) => {
-            const divisionToken = entry.attributes.division as keyof Evaluation;
-            if (result[divisionToken]) {
-                result[divisionToken].push({
-                    id: entry.id.toString(),
-                    title: entry.attributes.title,
-                    description: entry.attributes.description,
-                    category: entry.attributes.category,
-                    division: divisionToken,
-                    microorganism: entry.attributes.microorganism,
-                    diagramType: entry.attributes.diagramType,
-                    productionType: entry.attributes.productionType,
-                    matrix: entry.attributes.matrix,
-                    chartPath:
-                        CMS_BASE_ENDPOINT +
-                        entry.attributes.diagram.data.attributes.url,
-                    dataPath:
-                        CMS_BASE_ENDPOINT +
-                        entry.attributes.csv_data.data.attributes.url,
-                });
-            }
-        });
-        return result;
-    }
+                if (response.data) {
+                    const processedData = processApiResponse(
+                        response.data.data
+                    );
+                    setOriginalData(processedData);
 
-    const applyFilters = (filterSelection: FilterSelection): void => {
-        const filteredData: Evaluation = {
-            FUTTERMITTEL: [],
-            TIERE: [],
-            LEBENSMITTEL: [],
-            MULTIPLE: [],
-        };
-        Object.keys(originalData).forEach((divisionKey) => {
-            const divisionValue = divisionKey as keyof Evaluation;
-            filteredData[divisionValue] = originalData[divisionValue].filter(
-                (item) => {
-                    return Object.keys(filterSelection).every((filterKey) => {
-                        const key = filterKey as keyof FilterSelection;
-                        return filterSelection[key].includes(item[key]);
-                    });
+                    const urlFilters = parseQueryParams(
+                        new URLSearchParams(window.location.search)
+                    );
+                    const hasUrlFilters = Object.values(urlFilters).some(
+                        (arr) => arr.length > 0
+                    );
+
+                    if (hasUrlFilters) {
+                        // honor deep links
+                        setSelectedFilters(urlFilters);
+                        setEvaluationsData(
+                            applyFiltersStrict(urlFilters, processedData)
+                        );
+                    } else {
+                        // RESET filters on language change so results are visible immediately
+                        setSelectedFilters(initialFilterSelection);
+                        setEvaluationsData(processedData);
+                    }
                 }
-            );
-        });
-        setEvaluationsData(filteredData);
-    };
+            } catch (error) {
+                console.error("Fetching evaluation data failed", error);
+            } finally {
+                if (isActive && myFetchId === fetchIdRef.current) {
+                    setLoading(false);
+                }
+            }
+        };
 
-    const showDivision = (div: string): boolean =>
-        selectedFilters.division.includes(div);
+        void fetchDataFromAPI();
+        return () => {
+            isActive = false;
+        };
+    }, [i18n.language]);
+
+    // Re-apply filters on any state change and keep URL (including lang) in sync
+    useEffect(() => {
+        const hasData =
+            originalData.FUTTERMITTEL.length ||
+            originalData.TIERE.length ||
+            originalData.LEBENSMITTEL.length ||
+            originalData.MULTIPLE.length;
+        if (!hasData) return;
+
+        const newData = applyFiltersStrict(selectedFilters, originalData);
+        setEvaluationsData(newData);
+
+        const filterQuery = buildQueryString(selectedFilters);
+        const searchParams = new URLSearchParams(filterQuery);
+        searchParams.set("lang", i18n.language);
+
+        const newSearch = `?${searchParams.toString()}`;
+        if (newSearch !== window.location.search) {
+            window.history.replaceState(
+                {},
+                "",
+                `${window.location.pathname}${newSearch}`
+            );
+        }
+    }, [selectedFilters, originalData, i18n.language]);
 
     const updateFilters = (newFilters: FilterSelection): void => {
         setSelectedFilters(newFilters);
-        applyFilters(newFilters);
     };
 
-    const value = {
+    const showDivision = (div: string): boolean => {
+        if (selectedFilters.division.length === 0) return true;
+        return selectedFilters.division.includes(div);
+    };
+
+    const value: EvaluationDataContext = {
         isLoading,
         evaluationsData,
+        selectedFilters,
         updateFilters,
         showDivision,
     };

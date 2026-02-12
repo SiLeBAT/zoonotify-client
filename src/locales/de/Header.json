@@ -4,6 +4,10 @@
   "Export": "Exportieren",
   "ExampleQueries": "Beispielabfragen",
   "Links": "Externe Links",
-  "prevalence": "Prävalenz",
+  "antimicrobial": "Antibiotikaeinsatz",
+  "MicrobialCounts": "Keimzahlen",
+
+  "AntibioticResistance": "Antibiotikaresistenz",
+  "Prevalence": "Prävalenz",
   "Evaluations": "Auswertungen"
 }
