@@ -10,6 +10,8 @@ export function EvaluationSideContent(): JSX.Element {
             selectionConfig={model.selectionConfig}
             howToHeading={model.howToHeading}
             howToContent={model.howto}
+            resetAllFilters={model.resetAllFilters}
+            applyAllFilters={model.applyAllFilters}
         />
     );
 }
