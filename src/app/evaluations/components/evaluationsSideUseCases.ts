@@ -53,6 +53,8 @@ const useEvaluationSideComponent = (): {
         selectionConfig: SelectionFilterConfig[];
         howto: string;
         howToHeading: string;
+        resetAllFilters: () => void;
+        applyAllFilters: () => void;
     };
 } => {
     const { t, i18n } = useTranslation(["ExplanationPage"]);
@@ -81,6 +83,29 @@ const useEvaluationSideComponent = (): {
                 [key]: newValue,
             });
         };
+
+    const resetAllFilters = (): void => {
+        const emptyFilters: FilterSelection = {
+            division: [],
+            microorganism: [],
+            category: [],
+            productionType: [],
+            matrix: [],
+            diagramType: [],
+        };
+        evaluationContext.updateFilters(emptyFilters);
+    };
+
+    const applyAllFilters = (): void => {
+        evaluationContext.updateFilters({
+            division: [...division],
+            microorganism: [...microorganism],
+            category: [...category],
+            productionType: [...productionType],
+            matrix: [...matrix],
+            diagramType: [...diagramType],
+        });
+    };
 
     const selectionConfig: SelectionFilterConfig[] = (
         Object.keys(selectedFilters) as (keyof FilterSelection)[]
@@ -124,6 +149,8 @@ const useEvaluationSideComponent = (): {
             selectionConfig,
             howto: howtoContent,
             howToHeading: t("HOW_TO"),
+            resetAllFilters,
+            applyAllFilters,
         },
     };
 };
