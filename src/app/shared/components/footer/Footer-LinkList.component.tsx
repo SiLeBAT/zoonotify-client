@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
+import { pageRoute } from "../../infrastructure/router/routes";
 
 export function FooterLinkListComponent(props: {
     supportMail: string | undefined;
@@ -133,7 +134,7 @@ export function FooterLinkListComponent(props: {
                 </Link>
             </ListItem>
             <ListItem sx={footerElementStyle}>
-                <NavLink to="/dpd" style={linkStyle}>
+                <NavLink to={pageRoute.dpdPagePath} style={linkStyle}>
                     <Typography
                         sx={{ fontSize: "inherit", lineHeight: "inherit" }}
                     >
