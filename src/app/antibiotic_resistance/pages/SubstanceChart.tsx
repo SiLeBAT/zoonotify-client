@@ -125,11 +125,11 @@ const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
         maxKonfidenzintervall: "Maximum confidence interval",
     },
     de: {
-        microorganism: "Mikroorganismus", // ✅ ADDED
-        samplingYear: "Probenjahr",
-        superCategorySampleOrigin: "Oberkategorie Probenherkunft",
-        sampleOrigin: "Probenherkunft",
-        samplingStage: "Probenahmestufe",
+        microorganism: "Mikroorganismus",
+        samplingYear: "Erhebungsjahr",
+        superCategorySampleOrigin: "Oberkategorie Probenursprung",
+        sampleOrigin: "Probenursprung",
+        samplingStage: "Probenahmestelle",
         matrixGroup: "Matrixgruppe",
         matrix: "Matrix",
         antimicrobialSubstance: "Antimikrobielle Substanz",
