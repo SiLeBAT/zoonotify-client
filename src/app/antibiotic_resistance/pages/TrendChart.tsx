@@ -347,8 +347,9 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        const csvComma = generateCSV(rows, ",", ".", t);
-        const csvDot = generateCSV(rows, ";", ",", t);
+        const BOM = "\uFEFF";
+        const csvComma = BOM + generateCSV(rows, ",", ".", t);
+        const csvDot = BOM + generateCSV(rows, ";", ",", t);
 
         const readmeContentDe = `
 Dieser ZooNotify-Daten-Download enthält diese README-Datei und zwei CSV-Dateien. Die Verwendung der CSV-Dateien wird im Folgenden erläutert.
