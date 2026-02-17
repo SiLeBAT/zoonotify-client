@@ -329,7 +329,7 @@ export const fixedMenuProps: Partial<MenuProps> = {
 };
 
 // ======================= COMBINATION STABLE KEY =============================
-//  Stable key from names (stable across re-imports, unlike documentIds)
+//  Stable key from documentIds (language-independent, survives locale switches)
 function getComboIdKey(
     entry: ResistanceApiItem,
     microorganism: string
@@ -338,14 +338,14 @@ function getComboIdKey(
 
     // include species for only those microorganisms where it's relevant/visible
     if (shouldShowSpeciesFilter(microorganism)) {
-        parts.push(entry.specie?.name ?? "-");
+        parts.push(entry.specie?.documentId ?? "-");
     }
 
-    parts.push(entry.superCategorySampleOrigin?.name ?? "-");
-    parts.push(entry.sampleOrigin?.name ?? "-");
-    parts.push(entry.samplingStage?.name ?? "-");
-    parts.push(entry.matrixGroup?.name ?? "-");
-    parts.push(entry.matrix?.name ?? "-");
+    parts.push(entry.superCategorySampleOrigin?.documentId ?? "-");
+    parts.push(entry.sampleOrigin?.documentId ?? "-");
+    parts.push(entry.samplingStage?.documentId ?? "-");
+    parts.push(entry.matrixGroup?.documentId ?? "-");
+    parts.push(entry.matrix?.documentId ?? "-");
 
     return parts.join("|");
 }
