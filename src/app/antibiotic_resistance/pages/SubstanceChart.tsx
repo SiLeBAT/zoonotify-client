@@ -358,8 +358,9 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        const csvComma = generateCSV(rows, ",", ".");
-        const csvDot = generateCSV(rows, ";", ",");
+        const BOM = "\uFEFF";
+        const csvComma = BOM + generateCSV(rows, ",", ".");
+        const csvDot = BOM + generateCSV(rows, ";", ",");
 
         const readmeContentEn = `
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
