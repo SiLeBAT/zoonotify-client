@@ -528,10 +528,9 @@ export const TrendDetails: React.FC<{
 
     // === Cascading option recomputation (like Substance) ===
     useEffect(() => {
-        // Source dataset: before Search -> full; after Search -> filtered
-        const dataToCompute: ResistanceApiItem[] = showChart
-            ? filteredFullData
-            : resistanceRawData;
+        // Always use full raw data so dropdown options are never restricted
+        // by the current search results — filteredFullData is only for charts
+        const dataToCompute: ResistanceApiItem[] = resistanceRawData;
 
         // Keys to respect when filtering
         const keys: FilterKey[] = [
@@ -621,19 +620,11 @@ export const TrendDetails: React.FC<{
             return changed ? upd : prev; // critical to avoid infinite re-running
         });
 
-        // Also prune top "Antibiotic Substance" selection, guarded
-        setSubstanceFilter((prev: string[]): string[] => {
-            const valid = new Set(
-                next.antimicrobialSubstance.map((o) => o.documentId)
-            );
-            const pruned = prev.filter((v) => valid.has(v));
-            return arrEq(pruned, prev) ? prev : pruned;
-        });
-
-        // Optional: if you want the top dropdown OPTIONS to also shrink,
-        // uncomment the next line:
-        // setAllSubstances(next.antimicrobialSubstance);
-    }, [selected, showChart, resistanceRawData, filteredFullData]);
+        // Note: substanceFilter is intentionally NOT pruned here.
+        // Pruning it would trigger the substanceFilter effect which
+        // auto-updates the charts — causing charts to refresh every time
+        // the user changes a sidebar filter, before Search is clicked.
+    }, [selected, resistanceRawData]);
 
     // Only update when search button pressed or substanceFilter changes
     const handleSearch = (): void => {
