@@ -431,15 +431,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         }}
                     >
                         {groupLabel ? (
-                            <>
-                                {groupLabel}
-                                {" — "}
-                                <FormattedMicroorganismName
-                                    microName={microorganism}
-                                    fontWeight="bold"
-                                    fontSize="inherit"
-                                />
-                            </>
+                            groupLabel
                         ) : (
                             <FormattedMicroorganismName
                                 microName={microorganism}
@@ -576,15 +568,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         }}
                     >
                         {groupLabel ? (
-                            <>
-                                {groupLabel}
-                                {" — "}
-                                <FormattedMicroorganismName
-                                    microName={microorganism}
-                                    fontWeight="bold"
-                                    fontSize="inherit"
-                                />
-                            </>
+                            groupLabel
                         ) : (
                             <FormattedMicroorganismName
                                 microName={microorganism}
