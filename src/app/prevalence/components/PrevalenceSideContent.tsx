@@ -160,9 +160,10 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
         open && frozenOptionsWhileOpen ? frozenOptionsWhileOpen : options;
 
     const currentSelection = open ? staged : selected;
-    const optionsToRender = showOnlySelected
-        ? baseList.filter((o) => currentSelection.includes(o.value))
-        : baseList;
+    const optionsToRender =
+        showOnlySelected && !open
+            ? baseList.filter((o) => currentSelection.includes(o.value))
+            : baseList;
 
     const valueToLabel = useMemo(() => {
         const m = new Map<string, string>();
@@ -284,7 +285,7 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
                 }}
                 MenuProps={MENU_PROPS}
             >
-                {!showOnlySelected && (
+                {(!showOnlySelected || open) && (
                     <MenuItem
                         key="__select_all__"
                         onMouseDown={(e) => e.preventDefault()}
@@ -304,7 +305,7 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
                     </MenuItem>
                 )}
 
-                {!showOnlySelected && <Box sx={{ height: 4 }} />}
+                {(!showOnlySelected || open) && <Box sx={{ height: 4 }} />}
 
                 {optionsToRender.length === 0 ? (
                     <MenuItem disabled>
@@ -389,31 +390,16 @@ export function PrevalenceSideContent(): JSX.Element {
 
     const [showOnlySelected, setShowOnlySelected] = useState(false);
 
-    const [frozenByKey, setFrozenByKey] = useState<
-        Record<string, LocalOption[]>
-    >({});
-
-    const freezeIfFirstTime = (
-        key: string,
-        liveOptions: LocalOption[]
-    ): void => {
-        setFrozenByKey((prev) =>
-            prev[key] ? prev : { ...prev, [key]: liveOptions }
-        );
-    };
-
     const onlySel = (arr: unknown[]): boolean =>
         showOnlySelected && arr.length > 0;
 
     useEffect(() => {
         setSelectedOrder([]);
-        setFrozenByKey({});
         setShowOnlySelected(false);
     }, []);
 
     useEffect(() => {
         const handleLanguageChange = (): void => {
-            setFrozenByKey({});
             setSelectedOrder([]);
             setShowOnlySelected(false);
             fetchOptions();
@@ -478,9 +464,6 @@ export function PrevalenceSideContent(): JSX.Element {
         matrix: toLocal(matrixOptions),
     };
 
-    const getOptionsFor = (key: keyof typeof liveOptions): LocalOption[] =>
-        frozenByKey[key] ?? liveOptions[key];
-
     const filterComponents: { [key: string]: JSX.Element } = {
         year: (
             <Box
@@ -489,12 +472,12 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <LocalMultiSelect
                     selected={selectedYear.map(String)}
-                    options={getOptionsFor("year")}
+                    options={liveOptions.year}
                     name="years"
                     label={t("SAMPLING_YEAR")}
                     showOnlySelected={onlySel(selectedYear)}
                     onChange={(values) => {
-                        freezeIfFirstTime("year", liveOptions.year);
+                        if (showOnlySelected) setShowOnlySelected(false);
                         setSelectedYear(values.map((v) => parseInt(v, 10)));
                         updateFilterOrder("year");
                     }}
@@ -517,16 +500,13 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <LocalMultiSelect
                     selected={selectedMicroorganisms}
-                    options={getOptionsFor("microorganism")}
+                    options={liveOptions.microorganism}
                     name="microorganisms"
                     label={t("MICROORGANISM")}
                     formatLabel={formatMicroorganismName}
                     showOnlySelected={onlySel(selectedMicroorganisms)}
                     onChange={(vals) => {
-                        freezeIfFirstTime(
-                            "microorganism",
-                            liveOptions.microorganism
-                        );
+                        if (showOnlySelected) setShowOnlySelected(false);
                         setSelectedMicroorganisms(vals);
                         updateFilterOrder("microorganism");
                     }}
@@ -549,15 +529,12 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <LocalMultiSelect
                     selected={selectedSuperCategory}
-                    options={getOptionsFor("superCategory")}
+                    options={liveOptions.superCategory}
                     name="superCategories"
                     label={t("SUPER-CATEGORY-SAMPLE-ORIGIN")}
                     showOnlySelected={onlySel(selectedSuperCategory)}
                     onChange={(vals) => {
-                        freezeIfFirstTime(
-                            "superCategory",
-                            liveOptions.superCategory
-                        );
+                        if (showOnlySelected) setShowOnlySelected(false);
                         setSelectedSuperCategory(vals);
                         updateFilterOrder("superCategory");
                     }}
@@ -582,15 +559,12 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <LocalMultiSelect
                     selected={selectedSampleOrigins}
-                    options={getOptionsFor("sampleOrigin")}
+                    options={liveOptions.sampleOrigin}
                     name="sampleOrigins"
                     label={t("SAMPLE_ORIGIN")}
                     showOnlySelected={onlySel(selectedSampleOrigins)}
                     onChange={(vals) => {
-                        freezeIfFirstTime(
-                            "sampleOrigin",
-                            liveOptions.sampleOrigin
-                        );
+                        if (showOnlySelected) setShowOnlySelected(false);
                         setSelectedSampleOrigins(vals);
                         updateFilterOrder("sampleOrigin");
                     }}
@@ -613,15 +587,12 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <LocalMultiSelect
                     selected={selectedSamplingStages}
-                    options={getOptionsFor("samplingStage")}
+                    options={liveOptions.samplingStage}
                     name="samplingStages"
                     label={t("SAMPLING_STAGE")}
                     showOnlySelected={onlySel(selectedSamplingStages)}
                     onChange={(vals) => {
-                        freezeIfFirstTime(
-                            "samplingStage",
-                            liveOptions.samplingStage
-                        );
+                        if (showOnlySelected) setShowOnlySelected(false);
                         setSelectedSamplingStages(vals);
                         updateFilterOrder("samplingStage");
                     }}
@@ -644,15 +615,12 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <LocalMultiSelect
                     selected={selectedMatrixGroups}
-                    options={getOptionsFor("matrixGroup")}
+                    options={liveOptions.matrixGroup}
                     name="matrixGroups"
                     label={t("MATRIX_GROUP")}
                     showOnlySelected={onlySel(selectedMatrixGroups)}
                     onChange={(vals) => {
-                        freezeIfFirstTime(
-                            "matrixGroup",
-                            liveOptions.matrixGroup
-                        );
+                        if (showOnlySelected) setShowOnlySelected(false);
                         setSelectedMatrixGroups(vals);
                         updateFilterOrder("matrixGroup");
                     }}
@@ -672,12 +640,12 @@ export function PrevalenceSideContent(): JSX.Element {
             >
                 <LocalMultiSelect
                     selected={selectedMatrices}
-                    options={getOptionsFor("matrix")}
+                    options={liveOptions.matrix}
                     name="matrices"
                     label={t("MATRIX")}
                     showOnlySelected={onlySel(selectedMatrices)}
                     onChange={(vals) => {
-                        freezeIfFirstTime("matrix", liveOptions.matrix);
+                        if (showOnlySelected) setShowOnlySelected(false);
                         setSelectedMatrices(vals);
                         updateFilterOrder("matrix");
                     }}
@@ -717,7 +685,6 @@ export function PrevalenceSideContent(): JSX.Element {
         setSelectedYear([]);
         setSelectedSuperCategory([]);
         setSelectedOrder([]);
-        setFrozenByKey({});
         setShowOnlySelected(false);
         setIsSearchTriggered(false);
         setShowError(false);
@@ -785,7 +752,7 @@ export function PrevalenceSideContent(): JSX.Element {
                             </Button>
                         </Box>
 
-                        {/* ✅ Spacer to keep design like before */}
+                        {/*  Spacer to keep design like before */}
                         <Box sx={{ mt: 2 }} />
                     </>
                 )}

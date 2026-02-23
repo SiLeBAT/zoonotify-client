@@ -265,8 +265,6 @@ const PrevalenceChart: React.FC = () => {
                         availableMicroorganisms={availableMicroorganisms}
                         setCurrentMicroorganism={setSelectedChartMicroorganism}
                     />
-
-                    {/* YearRangeSlider disabled for release */}
                 </Box>
             </Box>
 

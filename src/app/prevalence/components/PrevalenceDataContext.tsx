@@ -753,41 +753,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     useEffect(() => {
         const updateOptionsBasedOnSelection = (): void => {
-            const dataToCompute = isSearchTriggered
-                ? prevalenceData
-                : fullPrevalenceData;
+            const data = fullPrevalenceData;
 
-            const filteredBySelections = dataToCompute.filter((entry) => {
-                const conds = [
-                    selectedMicroorganisms.length === 0 ||
-                        selectedMicroorganisms.includes(
-                            entry.microorganismDocId ?? ""
-                        ),
-                    selectedSampleOrigins.length === 0 ||
-                        selectedSampleOrigins.includes(
-                            entry.sampleOriginDocId ?? ""
-                        ),
-                    selectedMatrices.length === 0 ||
-                        selectedMatrices.includes(entry.matrixDocId ?? ""),
-                    selectedSamplingStages.length === 0 ||
-                        selectedSamplingStages.includes(
-                            entry.samplingStageDocId ?? ""
-                        ),
-                    selectedMatrixGroups.length === 0 ||
-                        selectedMatrixGroups.includes(
-                            entry.matrixGroupDocId ?? ""
-                        ),
-                    selectedSuperCategory.length === 0 ||
-                        selectedSuperCategory.includes(
-                            entry.superCategorySampleOriginDocId ?? ""
-                        ),
-                    selectedYear.length === 0 ||
-                        selectedYear.includes(entry.samplingYear),
-                ];
-                return conds.every(Boolean);
-            });
-
-            // Build options maps docId -> name (label)
             const toMapAdd = (
                 map: Map<string, string>,
                 docId?: string,
@@ -796,32 +763,138 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 if (docId && name && !map.has(docId)) map.set(docId, name);
             };
 
-            const microMap = new Map<string, string>();
-            const soMap = new Map<string, string>();
-            const mMap = new Map<string, string>();
-            const stageMap = new Map<string, string>();
-            const groupMap = new Map<string, string>();
-            const superMap = new Map<string, string>();
-            const yearsSet = new Set<number>();
-
-            filteredBySelections.forEach((e) => {
-                toMapAdd(microMap, e.microorganismDocId, e.microorganism);
-                toMapAdd(soMap, e.sampleOriginDocId, e.sampleOrigin);
-                toMapAdd(mMap, e.matrixDocId, e.matrix);
-                toMapAdd(stageMap, e.samplingStageDocId, e.samplingStage);
-                toMapAdd(groupMap, e.matrixGroupDocId, e.matrixGroup);
-                toMapAdd(
-                    superMap,
-                    e.superCategorySampleOriginDocId,
-                    e.superCategorySampleOrigin
-                );
-                yearsSet.add(e.samplingYear);
-            });
-
             const mapToOptions = (m: Map<string, string>): Option[] =>
                 Array.from(m.entries())
                     .sort((a, b) => a[1].localeCompare(b[1]))
                     .map(([documentId, name]) => ({ documentId, name }));
+
+            /**
+             * For each filter, compute its available options by filtering
+             * the full dataset with every OTHER selection applied — but
+             * excluding that filter's own selection.  This way changing
+             * one filter immediately cascades to update all others.
+             */
+            const matchesMicro = (e: PrevalenceEntry): boolean =>
+                selectedMicroorganisms.length === 0 ||
+                selectedMicroorganisms.includes(e.microorganismDocId ?? "");
+            const matchesOrigin = (e: PrevalenceEntry): boolean =>
+                selectedSampleOrigins.length === 0 ||
+                selectedSampleOrigins.includes(e.sampleOriginDocId ?? "");
+            const matchesMatrix = (e: PrevalenceEntry): boolean =>
+                selectedMatrices.length === 0 ||
+                selectedMatrices.includes(e.matrixDocId ?? "");
+            const matchesStage = (e: PrevalenceEntry): boolean =>
+                selectedSamplingStages.length === 0 ||
+                selectedSamplingStages.includes(e.samplingStageDocId ?? "");
+            const matchesGroup = (e: PrevalenceEntry): boolean =>
+                selectedMatrixGroups.length === 0 ||
+                selectedMatrixGroups.includes(e.matrixGroupDocId ?? "");
+            const matchesSuper = (e: PrevalenceEntry): boolean =>
+                selectedSuperCategory.length === 0 ||
+                selectedSuperCategory.includes(
+                    e.superCategorySampleOriginDocId ?? ""
+                );
+            const matchesYear = (e: PrevalenceEntry): boolean =>
+                selectedYear.length === 0 ||
+                selectedYear.includes(e.samplingYear);
+
+            // Microorganism options — exclude micro selection
+            const microMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(microMap, e.microorganismDocId, e.microorganism)
+            );
+
+            // Sample-origin options — exclude origin selection
+            const soMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(soMap, e.sampleOriginDocId, e.sampleOrigin)
+            );
+
+            // Matrix options — exclude matrix selection
+            const mMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) => toMapAdd(mMap, e.matrixDocId, e.matrix));
+
+            // Sampling-stage options — exclude stage selection
+            const stageMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(stageMap, e.samplingStageDocId, e.samplingStage)
+            );
+
+            // Matrix-group options — exclude group selection
+            const groupMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(groupMap, e.matrixGroupDocId, e.matrixGroup)
+            );
+
+            // Super-category options — exclude super selection
+            const superMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(
+                    superMap,
+                    e.superCategorySampleOriginDocId,
+                    e.superCategorySampleOrigin
+                )
+            );
+
+            // Year options — exclude year selection
+            const yearsSet = new Set<number>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e)
+            ).forEach((e) => yearsSet.add(e.samplingYear));
 
             const microOpts = mapToOptions(microMap);
             const soOpts = mapToOptions(soMap);
@@ -860,8 +933,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         selectedSuperCategory,
         selectedYear,
         fullPrevalenceData,
-        prevalenceData,
-        isSearchTriggered,
     ]);
 
     /** Keep chart dropdown valid when data changes (set default if missing) */
