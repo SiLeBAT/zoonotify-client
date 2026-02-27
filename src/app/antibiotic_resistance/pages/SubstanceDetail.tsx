@@ -52,6 +52,7 @@ import {
     buildDocIdToNameMap,
     buildNameToDocIdMap,
     resolveUrlValueToDocId as resolveUrlValueToDocIdShared,
+    buildMicroorganismFilter,
 } from "./resistanceHelpers";
 
 function shouldShowSpeciesFilter(microorganism: string): boolean {
@@ -685,9 +686,7 @@ export const SubstanceDetail: React.FC<{
             try {
                 const url =
                     `${RESISTANCES}?locale=${apiLocale}` +
-                    `&filters[microorganism][name][$eq]=${encodeURIComponent(
-                        microorganism
-                    )}` +
+                    buildMicroorganismFilter(microorganism) +
                     `&populate=*&pagination[pageSize]=8000`;
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
