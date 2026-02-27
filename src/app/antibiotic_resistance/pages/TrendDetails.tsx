@@ -48,6 +48,7 @@ import {
     buildDocIdToNameMap,
     buildNameToDocIdMap,
     resolveUrlValueToDocId,
+    buildMicroorganismFilter,
 } from "./resistanceHelpers";
 export type { ResistanceApiItem } from "./resistanceHelpers";
 
@@ -368,9 +369,7 @@ export const TrendDetails: React.FC<{
             try {
                 const url =
                     `${RESISTANCES}?locale=${i18next.language}` +
-                    `&filters[microorganism][name][$eq]=${encodeURIComponent(
-                        microorganism
-                    )}` +
+                    buildMicroorganismFilter(microorganism) +
                     `&populate=*&pagination[pageSize]=8000`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const res = await callApiService<any>(url);
