@@ -722,40 +722,37 @@ export function PrevalenceSideContent(): JSX.Element {
                     WebkitOverflowScrolling: "touch",
                 }}
             >
-                {loading ? (
-                    <LoadingProcessComponent />
-                ) : (
-                    <>
-                        <Stack spacing={2.5} alignItems="flex-start">
-                            {orderedComponents}
-                            {remainingComponents}
-                        </Stack>
+                {loading && <LoadingProcessComponent />}
+                <Box sx={{ display: loading ? "none" : "block" }}>
+                    <Stack spacing={2.5} alignItems="flex-start">
+                        {orderedComponents}
+                        {remainingComponents}
+                    </Stack>
 
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                mt: 2,
-                                gap: "16px",
-                                flexWrap: "wrap",
-                            }}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            mt: 2,
+                            gap: "16px",
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        <Button
+                            variant="contained"
+                            startIcon={<Search />}
+                            onClick={handleSearch}
                         >
-                            <Button
-                                variant="contained"
-                                startIcon={<Search />}
-                                onClick={handleSearch}
-                            >
-                                {t("SEARCH")}
-                            </Button>
-                            <Button variant="contained" onClick={resetFilters}>
-                                {t("RESET_FILTERS")}
-                            </Button>
-                        </Box>
+                            {t("SEARCH")}
+                        </Button>
+                        <Button variant="contained" onClick={resetFilters}>
+                            {t("RESET_FILTERS")}
+                        </Button>
+                    </Box>
 
-                        {/*  Spacer to keep design like before */}
-                        <Box sx={{ mt: 2 }} />
-                    </>
-                )}
+                    {/*  Spacer to keep design like before */}
+                    <Box sx={{ mt: 2 }} />
+                </Box>
             </Box>
 
             <Dialog open={infoDialogOpen} onClose={handleClose}>
