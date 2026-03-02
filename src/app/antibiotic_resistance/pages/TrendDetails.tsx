@@ -215,12 +215,13 @@ function getGroupKey(r: ResistanceApiItem): string {
 
 function renderGroupLabel(
     key: string,
-    t: (key: string) => string
+    t: (key: string) => string,
+    microorganism?: string
 ): React.ReactNode {
     const [specie, matrix, sampleOrigin, samplingStage] = key.split("|||");
     return (
         <>
-            {specie && (
+            {specie ? (
                 <>
                     {t("SPECIES")}:{" "}
                     <FormattedMicroorganismName
@@ -230,6 +231,18 @@ function renderGroupLabel(
                     />
                     {", "}
                 </>
+            ) : (
+                microorganism && (
+                    <>
+                        {t("MICROORGANISM")}:{" "}
+                        <FormattedMicroorganismName
+                            microName={microorganism}
+                            fontWeight="bold"
+                            fontSize="1.3rem"
+                        />
+                        {", "}
+                    </>
+                )
             )}
             {t("MATRIX")}: {matrix}, {t("SAMPLE_ORIGIN")}: {sampleOrigin},{" "}
             {t("SAMPLING_STAGE")}: {samplingStage}
@@ -1069,7 +1082,8 @@ export const TrendDetails: React.FC<{
                                                         fullData={groupItems}
                                                         groupLabel={renderGroupLabel(
                                                             groupKey,
-                                                            t
+                                                            t,
+                                                            microorganism
                                                         )}
                                                     />
                                                 </Box>
