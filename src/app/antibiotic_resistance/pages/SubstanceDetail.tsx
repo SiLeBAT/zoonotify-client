@@ -1375,6 +1375,7 @@ export const SubstanceDetail: React.FC<{
     return (
         <>
             <style>{menuItemTextStyle}</style>
+            <style>{`.abx-breadcrumb { position: static !important; z-index: 1 !important; }`}</style>
 
             <Box
                 display="flex"
