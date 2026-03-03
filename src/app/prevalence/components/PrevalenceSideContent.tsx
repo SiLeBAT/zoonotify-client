@@ -456,7 +456,9 @@ export function PrevalenceSideContent(): JSX.Element {
             value: String(y),
             label: String(y),
         })),
-        microorganism: toLocal(microorganismOptions),
+        microorganism: toLocal(microorganismOptions).filter(
+            (o) => o.label !== "E. coli" && !o.label.startsWith("Enterococcus")
+        ),
         superCategory: toLocal(superCategorySampleOriginOptions),
         sampleOrigin: toLocal(sampleOriginOptions),
         samplingStage: toLocal(samplingStageOptions),
