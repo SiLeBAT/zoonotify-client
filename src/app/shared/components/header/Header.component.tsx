@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
-// eslint-disable-next-line import/named
-import { SerializedStyles } from "@emotion/core";
+import type { SerializedStyles } from "@emotion/react";
 import { css } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
