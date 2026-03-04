@@ -134,7 +134,6 @@ const navLinkStyle = (open: boolean): SerializedStyles => css`
 export function HeaderComponent(): JSX.Element {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
-    const [linkedDataOpen, setLinkedDataOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
@@ -146,7 +145,6 @@ export function HeaderComponent(): JSX.Element {
 
     const history = useHistory();
     const { t } = useTranslation(["Header"]);
-    const showLD = process.env.REACT_APP_SHOW_LD === "true";
     const { pathname } = useLocation();
 
     useEffect(() => {
@@ -155,7 +153,6 @@ export function HeaderComponent(): JSX.Element {
         setEvaluationsOpen(pathname === pageRoute.evaluationsPagePath);
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
         setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
-        setLinkedDataOpen(pathname === pageRoute.linkedDataPagePath);
         setMicrobialCountsOpen(pathname === pageRoute.microbialCountsPagePath);
         setAntibioticResistanceOpen(
             pathname === pageRoute.antibioticResistancePagePath
@@ -240,14 +237,6 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Links")}
                     </NavLink>
-                    {showLD && (
-                        <NavLink
-                            to={pageRoute.linkedDataPagePath}
-                            css={navLinkStyle(linkedDataOpen)}
-                        >
-                            {"LD"}
-                        </NavLink>
-                    )}
                 </div>
 
                 <button
@@ -306,14 +295,6 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("Links")}
                 </NavLink>
-                {showLD && (
-                    <NavLink
-                        to={pageRoute.linkedDataPagePath}
-                        css={mobileNavLinkStyle(linkedDataOpen)}
-                    >
-                        {"LD"}
-                    </NavLink>
-                )}
             </div>
         </header>
     );

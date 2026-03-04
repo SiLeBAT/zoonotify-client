@@ -4,7 +4,6 @@ export const pageRoute = {
     infoPagePath: "/explanations",
     evaluationsPagePath: "/evaluations",
     dpdPagePath: "/dataProtectionDeclaration",
-    linkedDataPagePath: "/ld",
     prevalencePagePath: "/prevalence",
     antimicrobialPagePath: "/antimicrobial",
     antibioticResistancePagePath: "/antibiotic-resistance",
