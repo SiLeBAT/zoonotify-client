@@ -21,14 +21,16 @@ module.exports = (env, argv) => {
             historyApiFallback: {
                 index: "index.html",
             },
-            proxy: {
-                "/v1": {
+            proxy: [
+                {
+                    context: ["/v1"],
                     target: backendURL,
                 },
-                "/api-docs": {
+                {
+                    context: ["/api-docs"],
                     target: backendURL,
                 },
-            },
+            ],
         },
         resolve: {
             extensions: [".js", ".json", ".ts", ".tsx"],
