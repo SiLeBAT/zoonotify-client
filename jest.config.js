@@ -6,13 +6,9 @@ module.exports = {
     testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     moduleNameMapper: {
-      "\\.(css|jpg|png)$": "<rootDir>/empty-module.js",
+      "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/empty-module.js",
       "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     },
     collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/app/App.tsx"],
-    setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
-   
     testEnvironment: "jest-environment-jsdom",
-    
   };
-  

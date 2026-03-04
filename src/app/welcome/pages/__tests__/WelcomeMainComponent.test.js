@@ -1,11 +1,11 @@
 // WelcomeMainComponent.test.js
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { WelcomeMainComponent } from "./WelcomeMainComponent";
-import { useWelcomePageComponent } from "./welcomeUseCase";
+import { WelcomeMainComponent } from "../WelcomeMainComponent";
+import { useWelcomePageComponent } from "../welcomeUseCase";
 
 // Mock the useWelcomePageComponent hook
-jest.mock("./welcomeUseCase", () => ({
+jest.mock("../welcomeUseCase", () => ({
     useWelcomePageComponent: jest.fn(),
 }));
 
@@ -13,7 +13,7 @@ jest.mock("./welcomeUseCase", () => ({
 jest.mock("markdown-to-jsx", () => ({ children }) => <div>{children}</div>);
 
 // Mock the LogoCardComponent
-jest.mock("../../shared/components/logo_card/LogoCard.component", () => ({
+jest.mock("../../../shared/components/logo_card/LogoCard.component", () => ({
     LogoCardComponent: (props) => (
         <div data-testid="logoCard">
             {props.title} - {props.subtitle} - {props.text}
@@ -22,7 +22,7 @@ jest.mock("../../shared/components/logo_card/LogoCard.component", () => ({
 }));
 
 // Mock the PageLayoutComponent
-jest.mock("../../shared/components/layout/PageLayoutComponent", () => ({
+jest.mock("../../../shared/components/layout/PageLayoutComponent", () => ({
     PageLayoutComponent: ({ children }) => <div>{children}</div>,
 }));
 

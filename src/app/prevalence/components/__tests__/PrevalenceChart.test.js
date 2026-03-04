@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { PrevalenceChart } from "./PrevalenceChart";
-import { usePrevalenceFilters } from "./PrevalenceDataContext";
+import { PrevalenceChart } from "../PrevalenceChart";
+import { usePrevalenceFilters } from "../PrevalenceDataContext";
 
 // Mock translations
 jest.mock("react-i18next", () => ({
@@ -11,7 +11,7 @@ jest.mock("react-i18next", () => ({
 }));
 
 // Mock PrevalenceDataContext
-jest.mock("./PrevalenceDataContext", () => ({
+jest.mock("../PrevalenceDataContext", () => ({
     usePrevalenceFilters: jest.fn(),
 }));
 
@@ -52,12 +52,20 @@ describe("PrevalenceChart Component", () => {
         usePrevalenceFilters.mockReturnValue({
             prevalenceData: mockPrevalenceData,
             loading: false,
+            prevalenceUpdateDate: null,
+            selectedYear: [],
+            setSelectedYear: jest.fn(),
+            yearOptions: [2021, 2022],
+            selectedChartMicroorganism: "E. Coli",
+            setSelectedChartMicroorganism: jest.fn(),
         });
     });
 
     it("renders without crashing", () => {
         render(<PrevalenceChart />);
-        expect(screen.getByText("Download_All_Charts")).toBeInTheDocument();
+        expect(
+            screen.getByLabelText("Select_Microorganism")
+        ).toBeInTheDocument();
     });
 
     it("displays loading indicator when loading is true", () => {
