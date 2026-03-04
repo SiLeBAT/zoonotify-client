@@ -285,7 +285,7 @@ export function InfoPageAmrDialogComponent(props: {
                             .map((headerValue) => (
                                 <TableCell
                                     key={`header-amr-${headerValue}`}
-                                    css={tableTextStyle}
+                                    sx={tableTextStyle}
                                     component="th"
                                     colSpan={3}
                                     align="center"

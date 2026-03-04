@@ -11,7 +11,6 @@ import {
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useTranslation } from "react-i18next";
 import { SelectionItem } from "../model/Evaluations.model";
-import { useStyles } from "./../utils/utils";
 
 interface FilterMultiSelectionComponentProps {
     selectedItems: string[];
@@ -33,7 +32,6 @@ export function FilterMultiSelectionComponent({
     extra,
 }: FilterMultiSelectionComponentProps): JSX.Element {
     const { t } = useTranslation(["ExplanationPage"]);
-    const classes = useStyles();
 
     const italicWords: string[] = [
         "Salmonella",
@@ -107,10 +105,7 @@ export function FilterMultiSelectionComponent({
     };
 
     return (
-        <FormControl
-            className={classes.formControl}
-            sx={{ flex: "1 1 0", width: "100%" }}
-        >
+        <FormControl sx={{ m: 1, flex: "1 1 0", width: "100%" }}>
             <InputLabel id="select-label">{label}</InputLabel>
             <Select
                 labelId="select-label"

@@ -11,7 +11,6 @@ import Select from "@mui/material/Select";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SelectionItem } from "../model/LinkedData.model";
-import { useStyles } from "./../utils/utils";
 
 type FilterMultiSelectionComponentProps = {
     selectedItems: string[];
@@ -31,7 +30,6 @@ export function FilterMultiSelectionComponent({
     actions,
 }: FilterMultiSelectionComponentProps): JSX.Element {
     const { t } = useTranslation(["ExplanationPage"]);
-    const classes = useStyles();
     const isAllSelected =
         selectionOptions.length > 0 &&
         selectedItems.length == selectionOptions.length;
@@ -53,7 +51,7 @@ export function FilterMultiSelectionComponent({
         actions.handleChange(event);
     };
     return (
-        <FormControl className={classes.formControl} sx={{ flex: "1 1 0" }}>
+        <FormControl sx={{ m: 1, width: 300, flex: "1 1 0" }}>
             <InputLabel id="select-label">{label}</InputLabel>
             <Select
                 labelId="select-label"
@@ -76,14 +74,23 @@ export function FilterMultiSelectionComponent({
             >
                 <MenuItem
                     value="all"
-                    classes={{
-                        root: isAllSelected ? classes.selectedAll : "",
-                    }}
+                    sx={
+                        isAllSelected
+                            ? {
+                                  backgroundColor: "rgba(0,0,0,0.08)",
+                                  "&:hover": {
+                                      backgroundColor: "rgba(0,0,0,0.08)",
+                                  },
+                              }
+                            : undefined
+                    }
                 >
                     <ListItemIcon>
                         <Checkbox
-                            classes={{
-                                indeterminate: classes.indeterminateColor,
+                            sx={{
+                                "&.MuiCheckbox-indeterminate": {
+                                    color: "#f50057",
+                                },
                             }}
                             checked={isAllSelected}
                             indeterminate={
@@ -93,7 +100,7 @@ export function FilterMultiSelectionComponent({
                         />
                     </ListItemIcon>
                     <ListItemText
-                        classes={{ primary: classes.selectAllText }}
+                        primaryTypographyProps={{ sx: { fontWeight: 500 } }}
                         primary={t("Select_All")}
                     />
                 </MenuItem>

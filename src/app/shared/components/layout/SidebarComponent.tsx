@@ -8,6 +8,7 @@ interface SidebarComponentProps {
     isOpen: boolean;
     handleOpenClick: () => void;
     title: string;
+    children?: React.ReactNode;
 }
 
 export const SidebarComponent: React.FC<SidebarComponentProps> = ({
