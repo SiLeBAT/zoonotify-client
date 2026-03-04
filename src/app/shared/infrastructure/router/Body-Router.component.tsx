@@ -2,7 +2,6 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { EvaluationsMainComponent } from "../../../evaluations/pages/EvaluationsMainComponent";
 import { InfoPageContainer } from "../../../explanation/pages/InfoPage-Container.component";
-import { LinkedDataComponent } from "../../../ld/pages/LinkedDataComponent";
 import { DataProtectionPageComponent } from "../../../pages/data_protection/DataProtectionPage.component";
 import { ErrorPageComponent } from "../../../pages/error/ErrorPage.component";
 import { LinkPageComponent } from "../../../pages/links/LinkPage.component";
@@ -20,8 +19,6 @@ function ErrorPage(): JSX.Element {
 }
 
 export function BodyRouterComponent(): JSX.Element {
-    const showLD = process.env.REACT_APP_SHOW_LD === "true";
-
     return (
         <Switch>
             <Route
@@ -66,13 +63,6 @@ export function BodyRouterComponent(): JSX.Element {
                 path={pageRoute.dpdPagePath}
                 component={DataProtectionPageComponent}
             />
-            {showLD && (
-                <Route
-                    path={pageRoute.linkedDataPagePath}
-                    component={LinkedDataComponent}
-                />
-            )}
-
             <Route component={ErrorPage} />
         </Switch>
     );
