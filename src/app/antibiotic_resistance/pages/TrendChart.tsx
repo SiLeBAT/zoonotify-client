@@ -15,9 +15,11 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import { ResistanceApiItem } from "./TrendDetails";
 
 export interface TrendChartProps {
+    microorganism: string; // ✅ ADDED
     data: {
         samplingYear: number;
         resistenzrate: number;
@@ -62,6 +64,7 @@ const ALL_SUBSTANCES = [
     "TMP",
     "VAN",
 ];
+
 const COLORS = [
     "#F08080",
     "#B8860B",
@@ -94,6 +97,7 @@ const COLORS = [
     "#CD5C5C",
     "#008080",
 ];
+
 const SUBSTANCE_COLORS: { [substance: string]: string } = {};
 ALL_SUBSTANCES.forEach((substance, idx) => {
     SUBSTANCE_COLORS[substance] = COLORS[idx % COLORS.length];
@@ -126,13 +130,7 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
             >
                 {payload.value}
             </text>
-            <text
-                x={x}
-                y={y + 28}
-                textAnchor="middle"
-                fill="#888"
-                fontSize={10}
-            >
+            <text x={x} y={y + 28} textAnchor="middle" fill="#888" fontSize={9}>
                 N = {nValue}
             </text>
         </g>
@@ -142,12 +140,14 @@ const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
 export const TrendChart: React.FC<TrendChartProps> = ({
     data,
     fullData,
+    microorganism, // ✅ ADDED
     groupLabel,
 }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
     const { t, i18n } = useTranslation(["Antibiotic"]);
     const [copied, setCopied] = useState(false);
+
     // -- Chart data preparation
     const yearRange = data.map((entry) => entry.samplingYear);
     const yearMin = Math.min(...yearRange);
@@ -156,6 +156,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         { length: yearMax - yearMin + 1 },
         (_, i) => yearMin + i
     );
+
     // *** FIXED: Use ALL_SUBSTANCES order for legend/plot! ***
     const substances = ALL_SUBSTANCES.filter((substance) =>
         data.some((d) => d.antimicrobialSubstance === substance)
@@ -253,7 +254,9 @@ export const TrendChart: React.FC<TrendChartProps> = ({
             .replace("T", "_");
     }
 
+    // ✅ Add microorganism column to export
     const headerFieldToTKey: Record<string, string> = {
+        microorganism: "Microorganism",
         samplingYear: "SAMPLING_YEAR",
         superCategorySampleOrigin: "SUPER-CATEGORY-SAMPLE-ORIGIN",
         sampleOrigin: "SAMPLE_ORIGIN",
@@ -268,6 +271,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         minKonfidenzintervall: "minKonfidenzintervall",
         maxKonfidenzintervall: "maxKonfidenzintervall",
     };
+
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
@@ -275,7 +279,9 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         translate: (key: string) => string
     ): string {
         if (!rows || !rows.length) return "";
+
         const headers = [
+            "microorganism",
             "samplingYear",
             "superCategorySampleOrigin",
             "sampleOrigin",
@@ -291,10 +297,22 @@ export const TrendChart: React.FC<TrendChartProps> = ({
             "maxKonfidenzintervall",
         ] as const;
 
+        function escapeIfNeeded(s: string): string {
+            if (s.includes(sep) || s.includes('"') || s.includes("\n")) {
+                return `"${s.replace(/"/g, '""')}"`;
+            }
+            return s;
+        }
+
         function valueForCSV(
             row: ResistanceApiItem,
             h: typeof headers[number]
         ): string {
+            // ✅ microorganism is not on row; inject from prop
+            if (h === "microorganism") {
+                return escapeIfNeeded(String(microorganism ?? ""));
+            }
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let v = (row as any)[h];
             if (v && typeof v === "object") {
@@ -307,20 +325,13 @@ export const TrendChart: React.FC<TrendChartProps> = ({
                 if (decimalSep === ",") valStr = valStr.replace(".", ",");
                 return valStr;
             }
-            let vStr = String(v);
-            if (
-                vStr.includes(sep) ||
-                vStr.includes('"') ||
-                vStr.includes("\n")
-            ) {
-                vStr = `"${vStr.replace(/"/g, '""')}"`;
-            }
-            return vStr;
+            return escapeIfNeeded(String(v));
         }
 
         const headerRow = headers
             .map((h) => translate(headerFieldToTKey[h] || h))
             .join(sep);
+
         const csvRows = [
             headerRow,
             ...rows.map((row) =>
@@ -336,8 +347,9 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        const csvComma = generateCSV(rows, ",", ".", t);
-        const csvDot = generateCSV(rows, ";", ",", t);
+        const BOM = "\uFEFF";
+        const csvComma = BOM + generateCSV(rows, ",", ".", t);
+        const csvDot = BOM + generateCSV(rows, ";", ",", t);
 
         const readmeContentDe = `
 Dieser ZooNotify-Daten-Download enthält diese README-Datei und zwei CSV-Dateien. Die Verwendung der CSV-Dateien wird im Folgenden erläutert.
@@ -348,6 +360,7 @@ Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Soft
 Die data_comma.csv Datei:  Ist für die Nutzung von Software mit englischen Spracheinstellungen
 Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden.
 `;
+
         const readmeContentEn = `
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
 
@@ -370,7 +383,14 @@ This file contains comma-separated data, which supports the correct format of nu
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `trend_data_${timestamp}.zip`;
+
+        // ✅ include microorganism in filename (no replaceAll for older TS)
+        const safeMicro = String(microorganism ?? "").replace(
+            /[^a-zA-Z0-9._-]+/g,
+            "_"
+        );
+        a.download = `trend_data_${safeMicro}_${timestamp}.zip`;
+
         a.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
@@ -381,7 +401,7 @@ This file contains comma-separated data, which supports the correct format of nu
             <div
                 ref={chartContainerRef}
                 style={{
-                    padding: "35px",
+                    padding: "12px",
                     background: "#fff",
                     borderRadius: "16px",
                     position: "relative",
@@ -410,8 +430,17 @@ This file contains comma-separated data, which supports the correct format of nu
                             minHeight: "40px",
                         }}
                     >
-                        {groupLabel}
+                        {groupLabel ? (
+                            groupLabel
+                        ) : (
+                            <FormattedMicroorganismName
+                                microName={microorganism}
+                                fontWeight="bold"
+                                fontSize="inherit"
+                            />
+                        )}
                     </Typography>
+
                     <img
                         src="/assets/bfr_logo.png"
                         alt="BfR Logo"
@@ -425,7 +454,6 @@ This file contains comma-separated data, which supports the correct format of nu
                 </Box>
 
                 {/* ---- CHART OR "NOT ENOUGH DATA" MESSAGE ---- */}
-
                 {enoughData ? (
                     <div ref={chartContainerRef}>
                         <ResponsiveContainer width="100%" height={450}>
@@ -499,7 +527,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             align="center"
                             sx={{ fontStyle: "italic", fontSize: "1.15rem" }}
                         >
-                            {t("Not enough data to display the chart.")}
+                            {t("Not enough data to display the chart")}
                         </Typography>
                     </Box>
                 )}
@@ -539,8 +567,17 @@ This file contains comma-separated data, which supports the correct format of nu
                             minHeight: "40px",
                         }}
                     >
-                        {groupLabel}
+                        {groupLabel ? (
+                            groupLabel
+                        ) : (
+                            <FormattedMicroorganismName
+                                microName={microorganism}
+                                fontWeight="bold"
+                                fontSize="inherit"
+                            />
+                        )}
                     </Typography>
+
                     <img
                         src="/assets/bfr_logo.png"
                         alt="BfR Logo"
@@ -552,6 +589,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         }}
                     />
                 </Box>
+
                 {enoughData ? (
                     <LineChart width={1200} height={500} data={chartData}>
                         <CartesianGrid strokeDasharray="3 3" />

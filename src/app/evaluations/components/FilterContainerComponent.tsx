@@ -10,35 +10,19 @@ type FilterContainerComponentProps = {
     selectionConfig: SelectionFilterConfig[];
     howToHeading: string;
     howToContent: string;
+    resetAllFilters: () => void;
+    applyAllFilters: () => void;
 };
 
 export function FilterContainerComponent({
     selectionConfig,
     howToContent,
     howToHeading,
+    resetAllFilters,
+    applyAllFilters,
 }: FilterContainerComponentProps): JSX.Element {
     const { t, i18n } = useTranslation(["ExplanationPage"]);
     const [tooltipOpen, setTooltipOpen] = useState<string | null>(null);
-
-    const handleResetFilters = (): void => {
-        selectionConfig.forEach((config) => {
-            const event = { target: { value: [] } };
-            config.handleChange(event);
-        });
-    };
-
-    const handleApplyAllFilters = (): void => {
-        selectionConfig.forEach((config) => {
-            const event = {
-                target: {
-                    value: config.selectionOptions.map(
-                        (option) => option.value
-                    ),
-                },
-            };
-            config.handleChange(event);
-        });
-    };
 
     return (
         <Box
@@ -92,7 +76,7 @@ export function FilterContainerComponent({
                 );
             })}
             <Button
-                onClick={handleResetFilters}
+                onClick={resetAllFilters}
                 variant="contained"
                 sx={{
                     mb: 2,
@@ -108,7 +92,7 @@ export function FilterContainerComponent({
                 {t("Delete All Filters")}
             </Button>
             <Button
-                onClick={handleApplyAllFilters}
+                onClick={applyAllFilters}
                 variant="contained"
                 color="primary"
                 sx={{

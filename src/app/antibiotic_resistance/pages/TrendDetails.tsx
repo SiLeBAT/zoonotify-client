@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     Box,
     Button,
@@ -10,7 +10,6 @@ import {
     MenuItem,
     IconButton,
     Tooltip,
-    Paper,
     Dialog,
     DialogTitle,
     DialogContent,
@@ -36,54 +35,68 @@ import {
     RESISTANCES,
 } from "../../shared/infrastructure/router/routes";
 import Markdown from "markdown-to-jsx";
-import type { MenuProps } from "@mui/material/Menu"; // add this import
+import type { MenuProps } from "@mui/material/Menu";
+import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
 
 import { TrendChart } from "./TrendChart";
 import type { SelectChangeEvent } from "@mui/material/Select";
-
-// --- All filter option keys
-type FilterKey =
-    | "samplingYear"
-    | "antimicrobialSubstance"
-    | "specie"
-    | "superCategorySampleOrigin"
-    | "sampleOrigin"
-    | "samplingStage"
-    | "matrixGroup"
-    | "matrix";
-
-type FilterOption = {
-    id: string;
-    name: string;
-    documentId: string; // shared cross-language!
-};
-
-const emptyFilterState: Record<FilterKey, string[]> = {
-    samplingYear: [],
-    antimicrobialSubstance: [],
-    specie: [],
-    superCategorySampleOrigin: [],
-    sampleOrigin: [],
-    samplingStage: [],
-    matrixGroup: [],
-    matrix: [],
-};
+import {
+    type FilterKey,
+    type FilterOption,
+    type ResistanceApiItem,
+    emptyFilterState,
+    buildDocIdToNameMap,
+    buildNameToDocIdMap,
+    resolveUrlValueToDocId,
+    buildMicroorganismFilter,
+} from "./resistanceHelpers";
+export type { ResistanceApiItem } from "./resistanceHelpers";
 
 function updateTrendFilterUrl(
     microorganism: string,
     selected: Record<FilterKey, string[]>,
-    substanceFilter: string[]
+    substanceFilter: string[],
+    dataItems?: ResistanceApiItem[]
 ): void {
     const params = new URLSearchParams(window.location.search);
     params.set("microorganism", microorganism);
 
+    // Build docId->name map for converting filter values to names
+    const docIdToName = dataItems
+        ? buildDocIdToNameMap(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+
     Object.entries(selected).forEach(([key, arr]) => {
-        if (arr.length) params.set(key, arr.join(","));
-        else params.delete(key);
+        if (arr.length) {
+            const k = key as FilterKey;
+            if (k === "samplingYear" || !docIdToName[k]) {
+                params.set(key, arr.join(","));
+            } else {
+                // Convert docIds to names for URL stability
+                params.set(
+                    key,
+                    arr
+                        .map((docId) => docIdToName[k].get(docId) ?? docId)
+                        .join(",")
+                );
+            }
+        } else {
+            params.delete(key);
+        }
     });
-    if (substanceFilter.length)
-        params.set("antimicrobialSubstance", substanceFilter.join(","));
-    else params.delete("antimicrobialSubstance");
+    if (substanceFilter.length) {
+        const subMap = docIdToName.antimicrobialSubstance;
+        params.set(
+            "antimicrobialSubstance",
+            subMap
+                ? substanceFilter
+                      .map((docId) => subMap.get(docId) ?? docId)
+                      .join(",")
+                : substanceFilter.join(",")
+        );
+    } else {
+        params.delete("antimicrobialSubstance");
+    }
 
     params.set("view", "trend");
     params.set("lang", i18next.language);
@@ -91,49 +104,51 @@ function updateTrendFilterUrl(
     window.history.replaceState(null, "", `?${params.toString()}`);
 }
 
-// Read state from URL (using documentId as key)
-function readTrendFilterStateFromUrl(allSubstances: FilterOption[]): {
+// Read state from URL (names or old docIds -> resolve to docIds)
+function readTrendFilterStateFromUrl(
+    allSubstances: FilterOption[],
+    dataItems?: ResistanceApiItem[]
+): {
     selected: Record<FilterKey, string[]>;
     substanceFilter: string[];
 } {
     const params = new URLSearchParams(window.location.search);
     const result: Record<FilterKey, string[]> = { ...emptyFilterState };
+
+    // Build resolution maps from data
+    const nameToDocId = dataItems
+        ? buildNameToDocIdMap(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+    const docIdToNameMap = dataItems
+        ? buildDocIdToNameMap(dataItems)
+        : ({} as Record<FilterKey, Map<string, string>>);
+
+    /** Resolve a list of URL values (names or old docIds) to docIds */
+    const resolveList = (key: FilterKey, values: string[]): string[] => {
+        if (key === "samplingYear" || !nameToDocId[key]) return values;
+        return values
+            .map((v) =>
+                resolveUrlValueToDocId(v, nameToDocId[key], docIdToNameMap[key])
+            )
+            .filter((v): v is string => v !== undefined);
+    };
+
     (Object.keys(emptyFilterState) as FilterKey[]).forEach((key) => {
         const val = params.get(key);
-        result[key] = val ? val.split(",").filter((v) => v) : [];
+        const rawValues = val ? val.split(",").filter((v) => v) : [];
+        result[key] = resolveList(key, rawValues);
     });
+
     const substanceParam = params.get("antimicrobialSubstance");
     let substanceFilter = substanceParam
-        ? substanceParam.split(",").filter((v) => v)
+        ? resolveList(
+              "antimicrobialSubstance",
+              substanceParam.split(",").filter((v) => v)
+          )
         : [];
     if (substanceParam === null)
         substanceFilter = allSubstances.map((s) => s.documentId); // default all
     return { selected: result, substanceFilter };
-}
-
-export interface ResistanceApiItem {
-    id: number;
-    samplingYear: number;
-    superCategorySampleOrigin?: {
-        id: number;
-        name: string;
-        documentId: string;
-    } | null;
-    sampleOrigin?: { id: number; name: string; documentId: string } | null;
-    samplingStage?: { id: number; name: string; documentId: string } | null;
-    matrixGroup?: { id: number; name: string; documentId: string } | null;
-    matrix?: { id: number; name: string; documentId: string } | null;
-    antimicrobialSubstance?: {
-        id: number;
-        name: string;
-        documentId: string;
-    } | null;
-    specie?: { id: number; name: string; documentId: string } | null;
-    resistenzrate: number;
-    anzahlGetesteterIsolate: number;
-    anzahlResistenterIsolate: number;
-    minKonfidenzintervall: number;
-    maxKonfidenzintervall: number;
 }
 
 // Map filter key -> stable documentId value
@@ -200,12 +215,13 @@ function getGroupKey(r: ResistanceApiItem): string {
 
 function renderGroupLabel(
     key: string,
-    t: (key: string) => string
+    t: (key: string) => string,
+    microorganism?: string
 ): React.ReactNode {
     const [specie, matrix, sampleOrigin, samplingStage] = key.split("|||");
     return (
         <>
-            {specie && (
+            {specie ? (
                 <>
                     {t("SPECIES")}:{" "}
                     <FormattedMicroorganismName
@@ -215,6 +231,18 @@ function renderGroupLabel(
                     />
                     {", "}
                 </>
+            ) : (
+                microorganism && (
+                    <>
+                        {t("MICROORGANISM")}:{" "}
+                        <FormattedMicroorganismName
+                            microName={microorganism}
+                            fontWeight="bold"
+                            fontSize="1.3rem"
+                        />
+                        {", "}
+                    </>
+                )
             )}
             {t("MATRIX")}: {matrix}, {t("SAMPLE_ORIGIN")}: {sampleOrigin},{" "}
             {t("SAMPLING_STAGE")}: {samplingStage}
@@ -247,8 +275,11 @@ const fixedMenuProps: Partial<MenuProps> = {
 
 export const TrendDetails: React.FC<{
     microorganism: string;
-}> = ({ microorganism }) => {
+    breadcrumb?: React.ReactNode;
+}> = ({ microorganism, breadcrumb }) => {
     const { t } = useTranslation(["Antibiotic"]);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const hydratedFromUrlRef = useRef(false);
 
     const [resistanceRawData, setResistanceRawData] = useState<
         ResistanceApiItem[]
@@ -273,9 +304,8 @@ export const TrendDetails: React.FC<{
     >([]);
     const [showChart, setShowChart] = useState(false);
 
-    // For substances multi-select at top
     const [substanceFilter, setSubstanceFilter] = useState<string[]>([]);
-    // To update available substance options
+
     const [allSubstances, setAllSubstances] = useState<FilterOption[]>([]);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -352,9 +382,7 @@ export const TrendDetails: React.FC<{
             try {
                 const url =
                     `${RESISTANCES}?locale=${i18next.language}` +
-                    `&filters[microorganism][name][$eq]=${encodeURIComponent(
-                        microorganism
-                    )}` +
+                    buildMicroorganismFilter(microorganism) +
                     `&populate=*&pagination[pageSize]=8000`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const res = await callApiService<any>(url);
@@ -370,7 +398,10 @@ export const TrendDetails: React.FC<{
         }
         if (microorganism) {
             fetchResistanceOptions();
-            setShowChart(false);
+
+            if (!hydratedFromUrlRef.current) {
+                setShowChart(false);
+            }
         }
     }, [i18next.language, microorganism]);
 
@@ -418,19 +449,23 @@ export const TrendDetails: React.FC<{
             antimicrobialSubstance,
         });
         setAllSubstances(antimicrobialSubstance);
-        setSubstanceFilter(antimicrobialSubstance.map((a) => a.documentId)); // default all
+
+        // Only default substanceFilter on first load (before URL hydration)
+        if (!hydratedFromUrlRef.current) {
+            setSubstanceFilter(antimicrobialSubstance.map((a) => a.documentId)); // default all
+        }
     }, [resistanceRawData]);
 
-    // On URL or data change: read filter state from URL
+    // Hydrate from URL ONCE on initial load
     useEffect(() => {
-        if (allSubstances.length > 0) {
-            const {
-                selected: urlSelected,
-                substanceFilter: urlSubstanceFilter,
-            } = readTrendFilterStateFromUrl(allSubstances);
-            setSelected(urlSelected);
-            setSubstanceFilter(urlSubstanceFilter);
-        }
+        if (hydratedFromUrlRef.current) return;
+        if (allSubstances.length === 0) return;
+
+        const { selected: urlSelected, substanceFilter: urlSubstanceFilter } =
+            readTrendFilterStateFromUrl(allSubstances, resistanceRawData);
+        setSelected(urlSelected);
+        setSubstanceFilter(urlSubstanceFilter);
+        hydratedFromUrlRef.current = true;
     }, [microorganism, allSubstances]);
 
     // Filtering logic (always by documentId)
@@ -485,12 +520,29 @@ export const TrendDetails: React.FC<{
         return result;
     };
 
+    // On language change (after hydration): recompute filtered data + update URL with new names
+    useEffect(() => {
+        if (!hydratedFromUrlRef.current) return;
+        if (!resistanceRawData.length) return;
+
+        // Recompute filtered data with new-language data so cascading options update
+        if (showChart) {
+            setFilteredFullData(filterDataWithSelected());
+        }
+
+        updateTrendFilterUrl(
+            microorganism,
+            selected,
+            substanceFilter,
+            resistanceRawData
+        );
+    }, [resistanceRawData]);
+
     // === Cascading option recomputation (like Substance) ===
     useEffect(() => {
-        // Source dataset: before Search -> full; after Search -> filtered
-        const dataToCompute: ResistanceApiItem[] = showChart
-            ? filteredFullData
-            : resistanceRawData;
+        // Always use full raw data so dropdown options are never restricted
+        // by the current search results — filteredFullData is only for charts
+        const dataToCompute: ResistanceApiItem[] = resistanceRawData;
 
         // Keys to respect when filtering
         const keys: FilterKey[] = [
@@ -551,7 +603,7 @@ export const TrendDetails: React.FC<{
             samplingStage: computeOptions("samplingStage"),
             matrixGroup: computeOptions("matrixGroup"),
             matrix: computeOptions("matrix"),
-            antimicrobialSubstance: computeOptions("antimicrobialSubstance"), // keep if you want top multi-select to shrink too
+            antimicrobialSubstance: computeOptions("antimicrobialSubstance"),
         };
 
         setFilterOptions(next);
@@ -580,26 +632,23 @@ export const TrendDetails: React.FC<{
             return changed ? upd : prev; // critical to avoid infinite re-running
         });
 
-        // Also prune top "Antibiotic Substance" selection, guarded
-        setSubstanceFilter((prev: string[]): string[] => {
-            const valid = new Set(
-                next.antimicrobialSubstance.map((o) => o.documentId)
-            );
-            const pruned = prev.filter((v) => valid.has(v));
-            return arrEq(pruned, prev) ? prev : pruned;
-        });
-
-        // Optional: if you want the top dropdown OPTIONS to also shrink,
-        // uncomment the next line:
-        // setAllSubstances(next.antimicrobialSubstance);
-    }, [selected, showChart, resistanceRawData, filteredFullData]);
+        // Note: substanceFilter is intentionally NOT pruned here.
+        // Pruning it would trigger the substanceFilter effect which
+        // auto-updates the charts — causing charts to refresh every time
+        // the user changes a sidebar filter, before Search is clicked.
+    }, [selected, resistanceRawData]);
 
     // Only update when search button pressed or substanceFilter changes
     const handleSearch = (): void => {
         setFilteredFullData(filterDataWithSelected());
         setShowChart(true);
         setCurrentPage(1);
-        updateTrendFilterUrl(microorganism, selected, substanceFilter);
+        updateTrendFilterUrl(
+            microorganism,
+            selected,
+            substanceFilter,
+            resistanceRawData
+        );
     };
 
     useEffect(() => {
@@ -608,7 +657,6 @@ export const TrendDetails: React.FC<{
         //setCurrentPage(1);
     }, [substanceFilter]);
 
-    // RESET
     const resetFilters = (): void => {
         setSelected({ ...emptyFilterState });
         setShowChart(false);
@@ -616,7 +664,8 @@ export const TrendDetails: React.FC<{
         updateTrendFilterUrl(
             microorganism,
             { ...emptyFilterState },
-            allSubstances.map((a) => a.documentId)
+            allSubstances.map((a) => a.documentId),
+            resistanceRawData
         );
     };
 
@@ -661,7 +710,12 @@ export const TrendDetails: React.FC<{
                 newSubstanceFilter = v;
             }
             setSubstanceFilter(newSubstanceFilter);
-            updateTrendFilterUrl(microorganism, selected, newSubstanceFilter);
+            updateTrendFilterUrl(
+                microorganism,
+                selected,
+                newSubstanceFilter,
+                resistanceRawData
+            );
         };
         return (
             <Stack
@@ -677,8 +731,8 @@ export const TrendDetails: React.FC<{
                         value={substanceFilter}
                         onChange={handleChange}
                         label={t("ANTIBIOTIC_SUBSTANCE")}
-                        sx={selectSx} // ✅ fixed trigger width + ellipsis
-                        MenuProps={fixedMenuProps} // ✅ fixed menu width + anchor
+                        sx={selectSx}
+                        MenuProps={fixedMenuProps}
                         renderValue={(selectedItems) =>
                             Array.isArray(selectedItems)
                                 ? substances
@@ -873,37 +927,29 @@ export const TrendDetails: React.FC<{
     return (
         <>
             <style>{menuItemTextStyle}</style>
-            <Box display="flex" flexDirection="row">
+            <style>{`.abx-breadcrumb { position: static !important; z-index: 1 !important; }`}</style>
+            <Box
+                display="flex"
+                flexDirection="row"
+                sx={{ width: "100%", height: "calc(100vh - 75px)" }}
+            >
                 {/* SIDEBAR */}
-                <Paper
-                    elevation={2}
-                    sx={{
-                        position: "fixed",
-                        left: 0,
-                        top: 56,
-                        width: 380,
-                        height: "calc(100vh - 75px)",
-                        bgcolor: "#fff",
-                        borderRight: "1px solid #e0e0e0",
-                        p: 0,
-                        overflow: "hidden",
-                        zIndex: 1000,
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
+                <SidebarComponent
+                    isOpen={isSidebarOpen}
+                    handleOpenClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    title={t("Search options")}
                 >
                     <Box
                         sx={{
-                            flex: 1,
                             display: "flex",
                             flexDirection: "column",
                             overflowY: "auto",
                             p: 3,
+                            width: "380px",
+                            maxWidth: "95%",
+                            height: "calc(100vh - 150px)",
                         }}
                     >
-                        <Typography variant="h5" align="center" mb={2}>
-                            {t("Search options")}
-                        </Typography>
                         {loading && (
                             <Stack alignItems="center" my={3}>
                                 <CircularProgress />
@@ -981,9 +1027,20 @@ export const TrendDetails: React.FC<{
                             </Button>
                         </Box>
                     </Box>
-                </Paper>
+                </SidebarComponent>
                 {/* MAIN CONTENT */}
-                <Box flex={1} ml="370px" px={4} py={3}>
+                <Box
+                    flex={1}
+                    px={4}
+                    py={3}
+                    sx={{
+                        overflow: "auto",
+                        boxShadow: "15px 0 15px -15px rgba(0,0,0,0.15) inset",
+                        backgroundColor: "#fff",
+                        marginLeft: "20px",
+                    }}
+                >
+                    {breadcrumb}
                     {renderSubstanceFilter()}
 
                     {/* Show charts if available */}
@@ -1019,10 +1076,14 @@ export const TrendDetails: React.FC<{
                                                 <Box mb={5}>
                                                     <TrendChart
                                                         data={chartData}
+                                                        microorganism={
+                                                            microorganism
+                                                        }
                                                         fullData={groupItems}
                                                         groupLabel={renderGroupLabel(
                                                             groupKey,
-                                                            t
+                                                            t,
+                                                            microorganism
                                                         )}
                                                     />
                                                 </Box>

@@ -5,6 +5,10 @@ import Markdown from "markdown-to-jsx";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { DATA_PROTECTION } from "./../../shared/infrastructure/router/routes";
+import {
+    ApiResponse,
+    callApiService,
+} from "../../shared/infrastructure/api/callApi.service";
 
 interface DataProtectionAttributes {
     subheading: string;
@@ -20,35 +24,43 @@ export function DataProtectionPageComponent(): JSX.Element {
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
             try {
-                // Append the locale parameter to the fetch URL to request localized data
-                const response = await fetch(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const response: ApiResponse<any> = await callApiService(
                     `${DATA_PROTECTION}?locale=${i18n.language}`
                 );
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                const attributes = data.data
-                    .attributes as DataProtectionAttributes;
-                if (attributes) {
-                    setDataProtectionInfo(attributes);
+
+                // Strapi v5 flat structure: data.data.field (no .attributes wrapper)
+                if (
+                    response.data &&
+                    response.data.data &&
+                    response.data.data.content
+                ) {
+                    setDataProtectionInfo({
+                        subheading: response.data.data.subheading,
+                        content: response.data.data.content,
+                    });
                     setError(null);
+                } else {
+                    console.warn(
+                        "Data protection content not found in API response (Strapi v5 structure)."
+                    );
+                    setError(t("errorLoadingData"));
                 }
             } catch (err) {
-                console.error(err);
-                setError(t("unknownError"));
+                console.error("Error fetching data protection info:", err);
+                setError(t("errorLoadingData"));
             }
         };
 
         fetchData();
-    }, [i18n.language]);
+    }, [i18n.language, t]);
 
     if (error) {
-        return <Typography>{t("errorLoadingData")}</Typography>;
+        return <Typography>{error}</Typography>;
     }
 
     if (!dataProtectionInfo) {
-        return <Typography>{t("unknownError")}</Typography>;
+        return <Typography>{t("Loading")}</Typography>;
     }
 
     const title = t("Heading");

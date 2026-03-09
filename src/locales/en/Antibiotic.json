@@ -10,8 +10,9 @@
   "More Info on Combinations": "More Information on combinations",
 
   "More Info on Matrices": "More Info on Matrix",
-
+  "data_not_plotted": "data is not plotted",
   "ANTIBIOTIC_SUBSTANCE": "Antimicrobial substance",
+  "MICROORGANISM": "Microorganism",
   "SPECIES": "Species",
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Superordinate Sample Origin",
   "SAMPLE_ORIGIN": "Sample Origin",
@@ -35,7 +36,7 @@
   "anzahlResistenterIsolate": "number of resistant isolates",
   "minKonfidenzintervall": "minimum confidence interval",
   "maxKonfidenzintervall": "maximum confidence interval",
-  "Not enough data to display the chart.": "Es waren nicht genügend Daten vorhanden, um ein Diagramm zu erstellen. Bitte laden Sie die Daten herunter, um weitere Details zu erhalten.",
+  "Not enough data to display the chart": "Not enough data to display the chart. N< 10 or data for only one year.",
   "TESTED_SUBSTANCES": "Tested substances",
   "PROPORTION_RESISTANT_ISOLATES": "Proportion of resistant isolates (%)",
   "Share_Link": "Share Link",

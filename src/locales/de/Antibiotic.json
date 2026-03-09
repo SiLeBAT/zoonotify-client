@@ -2,7 +2,7 @@
   "AntibioticResistance": "Antibiotikaresistenz",
   "Trend": "Trendgraph",
   "Substans": "Substanzgraph",
-  "Multi": " Mehrfachreisistenzgraph",
+  "Multi": " Mehrfachresistenzgraph",
   "More Info on Sampling Year": "Mehr Informationen zu Erhebungsjahr",
   "More Info on Antibiotic Substances": "Mehr Informationen zu Antimikrobielle Substanz",
   "More Info on Species": "Mehr Informationen zu Arten",
@@ -17,6 +17,7 @@
   "Download_Chart": "DIAGRAMM HERUNTERLADEN",
   "Year": "Erhebungsjahr",
   "ComingSoon": "Bald verfügbar...",
+  "MICROORGANISM": "Mikroorganismus",
   "SPECIES": "Spezies",
   "DOWNLOAD_ZIP_FILE": "Datenexport",
   "SUPER-CATEGORY-SAMPLE-ORIGIN": "Oberkategorie Probenursprung",
@@ -26,14 +27,15 @@
   "Resistenzrate (%)": "Resistenzrate (%)",
   "MATRIX": "Matrix",
   "Search options": "Suchoptionen",
-  "RESET_FILTERS": "Filter zurücksetzen",
+  "RESET FILTERS": "Filter zurücksetzen",
+
   "SELECT_ALL": "Alle auswählen",
   "DESELECT_ALL": " Alle abwählen",
   "ALL_VALUES": "Alle Werte",
   "anzahlResistenterIsolate": "anzahlResistenterIsolate",
   "minKonfidenzintervall": "minKonfidenzintervall",
   "maxKonfidenzintervall": "maxKonfidenzintervall",
-  "Not enough data to display the chart.": "There was not enough data to generate a plot. Please download the data for more details.",
+  "Not enough data to display the chart": "Nicht genügend Daten für eine grafische Darstellung. N < 10 oder Daten für nur ein Jahr.",
   "TESTED_SUBSTANCES": "Getestete Substanzen",
   "PROPORTION_RESISTANT_ISOLATES": "Anteil resistenter Isolate (%)",
   "SAMPLING_YEAR": "Erhebungsjahr",
@@ -42,6 +44,7 @@
   "combinations": "Kombinationen",
   "combination_limit_title": "Kombinationslimit",
   "combination_limit_message": "Es können maximal 4 Kombinationen für die Darstellung im Graph ausgewählt werden.",
+  "data_not_plotted": "keine grafische Darstellung",
 
   "SEARCH": "Suche"
 }

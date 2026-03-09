@@ -1,9 +1,11 @@
 import i18next from "i18next";
+import { resolveUrlValueToDocId as resolveUrlValueToDocIdBase } from "../../antibiotic_resistance/pages/resistanceHelpers";
 import React, {
     ReactNode,
     createContext,
     useContext,
     useEffect,
+    useRef,
     useState,
 } from "react";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
@@ -17,6 +19,9 @@ import {
     SUPER_CATEGORY_SAMPLE_ORIGINS,
 } from "../../shared/infrastructure/router/routes";
 import { MAX_PAGE_SIZE } from "../../shared/model/CMS.model";
+
+/**  URL param for chart microorganism (name, NOT docId) */
+const CHART_MICRO_PARAM = "chartMicro";
 
 /** 1) A simple "Matrix"-style interface for each relation */
 interface CMSEntry {
@@ -85,6 +90,46 @@ interface Option {
     name: string; // label (localized)
 }
 
+/**  URL helpers (preserve other params) */
+const readChartMicroFromUrl = (): string => {
+    try {
+        const sp = new URLSearchParams(window.location.search);
+        return sp.get(CHART_MICRO_PARAM) ?? "";
+    } catch {
+        return "";
+    }
+};
+
+const writeChartMicroToUrl = (microName: string): void => {
+    try {
+        const sp = new URLSearchParams(window.location.search);
+        if (!microName) sp.delete(CHART_MICRO_PARAM);
+        else sp.set(CHART_MICRO_PARAM, microName);
+
+        window.history.replaceState(
+            null,
+            "",
+            `${window.location.pathname}?${sp.toString()}`
+        );
+    } catch {
+        // ignore
+    }
+};
+
+/** URL <-> docId resolution helpers (uses shared helper from resistanceHelpers) */
+function resolveUrlValueToDocId(
+    value: string,
+    options: Option[]
+): string | undefined {
+    const nameToDocId = new Map(options.map((o) => [o.name, o.documentId]));
+    const docIdToName = new Map(options.map((o) => [o.documentId, o.name]));
+    return resolveUrlValueToDocIdBase(value, nameToDocId, docIdToName);
+}
+
+function resolveDocIdToName(docId: string, options: Option[]): string {
+    return options.find((o) => o.documentId === docId)?.name ?? docId;
+}
+
 /** 5) The shape of your React context */
 interface PrevalenceDataContext {
     microorganismOptions: Option[];
@@ -94,6 +139,7 @@ interface PrevalenceDataContext {
     matrixGroupOptions: Option[];
     superCategorySampleOriginOptions: Option[];
     yearOptions: number[];
+
     selectedMicroorganisms: string[]; // docIds
     selectedSampleOrigins: string[]; // docIds
     selectedMatrices: string[]; // docIds
@@ -101,6 +147,7 @@ interface PrevalenceDataContext {
     selectedMatrixGroups: string[]; // docIds
     selectedYear: number[];
     selectedSuperCategory: string[]; // docIds
+
     setSelectedMicroorganisms: (microorganisms: string[]) => void;
     setSelectedSampleOrigins: (sampleOrigins: string[]) => void;
     setSelectedMatrices: (matrices: string[]) => void;
@@ -108,6 +155,11 @@ interface PrevalenceDataContext {
     setSelectedMatrixGroups: (matrixGroups: string[]) => void;
     setSelectedYear: (year: number[]) => void;
     setSelectedSuperCategory: (superCategory: string[]) => void;
+
+    /** NEW: chart dropdown microorganism name (deep link) */
+    selectedChartMicroorganism: string;
+    setSelectedChartMicroorganism: (name: string) => void;
+
     triggerSearch: () => void;
     fetchDataFromAPI: (selectedFilters?: {
         microorganisms: string[];
@@ -120,6 +172,7 @@ interface PrevalenceDataContext {
     }) => Promise<void>;
     fetchOptions: () => Promise<void>;
     setIsSearchTriggered: (triggered: boolean) => void;
+
     prevalenceData: PrevalenceEntry[];
     error: string | null;
     loading: boolean;
@@ -236,6 +289,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         string[]
     >([]); // docIds
 
+    /**  NEW: chart dropdown microorganism name (deep link) */
+    const [selectedChartMicroorganism, setSelectedChartMicroorganism] =
+        useState<string>(() => readChartMicroFromUrl());
+
     const [prevalenceData, setPrevalenceData] = useState<PrevalenceEntry[]>([]);
     const [fullPrevalenceData, setFullPrevalenceData] = useState<
         PrevalenceEntry[]
@@ -266,6 +323,16 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     const [prevalenceUpdateDate, setPrevalenceUpdateDate] = useState<
         string | null
     >(null);
+
+    /** Ref to hold current options for URL resolution (available synchronously) */
+    const optionsRef = useRef<Record<string, Option[]>>({});
+
+    /**  keep chartMicro in URL when changed (preserve other params) */
+    useEffect(() => {
+        if (selectedChartMicroorganism) {
+            writeChartMicroToUrl(selectedChartMicroorganism);
+        }
+    }, [selectedChartMicroorganism]);
 
     // -------------- 1) fetchPrevalenceData --------------
     const fetchPrevalenceData = async (): Promise<void> => {
@@ -375,6 +442,15 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             setSamplingStageOptions(samplingStages);
             setMatrixGroupOptions(matrixGroups);
             setSuperCategorySampleOriginOptions(superCategories);
+
+            optionsRef.current = {
+                microorganism: microorganisms,
+                sampleOrigin: sampleOrigins,
+                matrix: matrices,
+                samplingStage: samplingStages,
+                matrixGroup: matrixGroups,
+                superCategorySampleOrigin: superCategories,
+            };
         } catch (err) {
             setError(
                 `Failed to fetch options: ${
@@ -508,6 +584,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 });
                 setIsSearchTriggered(true);
 
+                /**  Build URL from filters, but KEEP lang + chartMicro */
+                /**  Use names (not docIds) in URL for stable deep links */
                 const searchParams = new URLSearchParams();
                 for (const [key, values] of Object.entries({
                     microorganism: microorganisms,
@@ -518,10 +596,32 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     samplingYear: years.map(String),
                     superCategorySampleOrigin: superCategories,
                 })) {
-                    values.forEach((value) => searchParams.append(key, value));
+                    if (key === "samplingYear") {
+                        values.forEach((value) =>
+                            searchParams.append(key, value)
+                        );
+                    } else {
+                        const opts = optionsRef.current[key] || [];
+                        values.forEach((docId) =>
+                            searchParams.append(
+                                key,
+                                resolveDocIdToName(docId, opts)
+                            )
+                        );
+                    }
                 }
+
                 // persist lang in URL
                 searchParams.set("lang", i18next.language);
+
+                // persist chartMicro in URL (name)
+                if (selectedChartMicroorganism) {
+                    searchParams.set(
+                        CHART_MICRO_PARAM,
+                        selectedChartMicroorganism
+                    );
+                }
+
                 const searchString = searchParams.toString();
                 if (searchString) {
                     window.history.replaceState(null, "", `?${searchString}`);
@@ -562,18 +662,44 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     params[key].push(value);
                 });
 
-                const initialSelectedMicroorganisms =
-                    params.microorganism || []; // docIds
-                const initialSelectedSampleOrigins = params.sampleOrigin || []; // docIds
-                const initialSelectedMatrices = params.matrix || []; // docIds
-                const initialSelectedSamplingStages =
-                    params.samplingStage || []; // docIds
-                const initialSelectedMatrixGroups = params.matrixGroup || []; // docIds
+                // Resolve URL values (names or old docIds) to docIds
+                const resolveList = (
+                    key: string,
+                    values: string[]
+                ): string[] => {
+                    const opts = optionsRef.current[key] || [];
+                    return values
+                        .map((v) => resolveUrlValueToDocId(v, opts))
+                        .filter((v): v is string => v !== undefined);
+                };
+
+                const initialSelectedMicroorganisms = resolveList(
+                    "microorganism",
+                    params.microorganism || []
+                );
+                const initialSelectedSampleOrigins = resolveList(
+                    "sampleOrigin",
+                    params.sampleOrigin || []
+                );
+                const initialSelectedMatrices = resolveList(
+                    "matrix",
+                    params.matrix || []
+                );
+                const initialSelectedSamplingStages = resolveList(
+                    "samplingStage",
+                    params.samplingStage || []
+                );
+                const initialSelectedMatrixGroups = resolveList(
+                    "matrixGroup",
+                    params.matrixGroup || []
+                );
                 const initialSelectedYear = params.samplingYear
                     ? params.samplingYear.map(Number)
                     : [];
-                const initialSelectedSuperCategory =
-                    params.superCategorySampleOrigin || []; // docIds
+                const initialSelectedSuperCategory = resolveList(
+                    "superCategorySampleOrigin",
+                    params.superCategorySampleOrigin || []
+                );
 
                 setSelectedMicroorganisms(initialSelectedMicroorganisms);
                 setSelectedSampleOrigins(initialSelectedSampleOrigins);
@@ -583,10 +709,16 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 setSelectedYear(initialSelectedYear);
                 setSelectedSuperCategory(initialSelectedSuperCategory);
 
+                //  initialize chartMicro from URL
+                setSelectedChartMicroorganism(readChartMicroFromUrl());
+
                 setSearchParameters(params);
                 const anyParamsPresent = Object.entries(params).some(
                     ([k, arr]) =>
-                        k !== "lang" && Array.isArray(arr) && arr.length > 0
+                        k !== "lang" &&
+                        k !== CHART_MICRO_PARAM &&
+                        Array.isArray(arr) &&
+                        arr.length > 0
                 );
 
                 if (anyParamsPresent) {
@@ -621,41 +753,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     useEffect(() => {
         const updateOptionsBasedOnSelection = (): void => {
-            const dataToCompute = isSearchTriggered
-                ? prevalenceData
-                : fullPrevalenceData;
+            const data = fullPrevalenceData;
 
-            const filteredBySelections = dataToCompute.filter((entry) => {
-                const conds = [
-                    selectedMicroorganisms.length === 0 ||
-                        selectedMicroorganisms.includes(
-                            entry.microorganismDocId ?? ""
-                        ),
-                    selectedSampleOrigins.length === 0 ||
-                        selectedSampleOrigins.includes(
-                            entry.sampleOriginDocId ?? ""
-                        ),
-                    selectedMatrices.length === 0 ||
-                        selectedMatrices.includes(entry.matrixDocId ?? ""),
-                    selectedSamplingStages.length === 0 ||
-                        selectedSamplingStages.includes(
-                            entry.samplingStageDocId ?? ""
-                        ),
-                    selectedMatrixGroups.length === 0 ||
-                        selectedMatrixGroups.includes(
-                            entry.matrixGroupDocId ?? ""
-                        ),
-                    selectedSuperCategory.length === 0 ||
-                        selectedSuperCategory.includes(
-                            entry.superCategorySampleOriginDocId ?? ""
-                        ),
-                    selectedYear.length === 0 ||
-                        selectedYear.includes(entry.samplingYear),
-                ];
-                return conds.every(Boolean);
-            });
-
-            // Build options maps docId -> name (label)
             const toMapAdd = (
                 map: Map<string, string>,
                 docId?: string,
@@ -664,39 +763,161 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 if (docId && name && !map.has(docId)) map.set(docId, name);
             };
 
-            const microMap = new Map<string, string>();
-            const soMap = new Map<string, string>();
-            const mMap = new Map<string, string>();
-            const stageMap = new Map<string, string>();
-            const groupMap = new Map<string, string>();
-            const superMap = new Map<string, string>();
-            const yearsSet = new Set<number>();
-
-            filteredBySelections.forEach((e) => {
-                toMapAdd(microMap, e.microorganismDocId, e.microorganism);
-                toMapAdd(soMap, e.sampleOriginDocId, e.sampleOrigin);
-                toMapAdd(mMap, e.matrixDocId, e.matrix);
-                toMapAdd(stageMap, e.samplingStageDocId, e.samplingStage);
-                toMapAdd(groupMap, e.matrixGroupDocId, e.matrixGroup);
-                toMapAdd(
-                    superMap,
-                    e.superCategorySampleOriginDocId,
-                    e.superCategorySampleOrigin
-                );
-                yearsSet.add(e.samplingYear);
-            });
-
             const mapToOptions = (m: Map<string, string>): Option[] =>
                 Array.from(m.entries())
                     .sort((a, b) => a[1].localeCompare(b[1]))
                     .map(([documentId, name]) => ({ documentId, name }));
 
-            setMicroorganismOptions(mapToOptions(microMap));
-            setSampleOriginOptions(mapToOptions(soMap));
-            setMatrixOptions(mapToOptions(mMap));
-            setSamplingStageOptions(mapToOptions(stageMap));
-            setMatrixGroupOptions(mapToOptions(groupMap));
-            setSuperCategorySampleOriginOptions(mapToOptions(superMap));
+            /**
+             * For each filter, compute its available options by filtering
+             * the full dataset with every OTHER selection applied — but
+             * excluding that filter's own selection.  This way changing
+             * one filter immediately cascades to update all others.
+             */
+            const matchesMicro = (e: PrevalenceEntry): boolean =>
+                selectedMicroorganisms.length === 0 ||
+                selectedMicroorganisms.includes(e.microorganismDocId ?? "");
+            const matchesOrigin = (e: PrevalenceEntry): boolean =>
+                selectedSampleOrigins.length === 0 ||
+                selectedSampleOrigins.includes(e.sampleOriginDocId ?? "");
+            const matchesMatrix = (e: PrevalenceEntry): boolean =>
+                selectedMatrices.length === 0 ||
+                selectedMatrices.includes(e.matrixDocId ?? "");
+            const matchesStage = (e: PrevalenceEntry): boolean =>
+                selectedSamplingStages.length === 0 ||
+                selectedSamplingStages.includes(e.samplingStageDocId ?? "");
+            const matchesGroup = (e: PrevalenceEntry): boolean =>
+                selectedMatrixGroups.length === 0 ||
+                selectedMatrixGroups.includes(e.matrixGroupDocId ?? "");
+            const matchesSuper = (e: PrevalenceEntry): boolean =>
+                selectedSuperCategory.length === 0 ||
+                selectedSuperCategory.includes(
+                    e.superCategorySampleOriginDocId ?? ""
+                );
+            const matchesYear = (e: PrevalenceEntry): boolean =>
+                selectedYear.length === 0 ||
+                selectedYear.includes(e.samplingYear);
+
+            // Microorganism options — exclude micro selection
+            const microMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(microMap, e.microorganismDocId, e.microorganism)
+            );
+
+            // Sample-origin options — exclude origin selection
+            const soMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(soMap, e.sampleOriginDocId, e.sampleOrigin)
+            );
+
+            // Matrix options — exclude matrix selection
+            const mMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) => toMapAdd(mMap, e.matrixDocId, e.matrix));
+
+            // Sampling-stage options — exclude stage selection
+            const stageMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(stageMap, e.samplingStageDocId, e.samplingStage)
+            );
+
+            // Matrix-group options — exclude group selection
+            const groupMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesSuper(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(groupMap, e.matrixGroupDocId, e.matrixGroup)
+            );
+
+            // Super-category options — exclude super selection
+            const superMap = new Map<string, string>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesYear(e)
+            ).forEach((e) =>
+                toMapAdd(
+                    superMap,
+                    e.superCategorySampleOriginDocId,
+                    e.superCategorySampleOrigin
+                )
+            );
+
+            // Year options — exclude year selection
+            const yearsSet = new Set<number>();
+            data.filter(
+                (e) =>
+                    matchesMicro(e) &&
+                    matchesOrigin(e) &&
+                    matchesMatrix(e) &&
+                    matchesStage(e) &&
+                    matchesGroup(e) &&
+                    matchesSuper(e)
+            ).forEach((e) => yearsSet.add(e.samplingYear));
+
+            const microOpts = mapToOptions(microMap);
+            const soOpts = mapToOptions(soMap);
+            const mOpts = mapToOptions(mMap);
+            const stageOpts = mapToOptions(stageMap);
+            const groupOpts = mapToOptions(groupMap);
+            const superOpts = mapToOptions(superMap);
+
+            setMicroorganismOptions(microOpts);
+            setSampleOriginOptions(soOpts);
+            setMatrixOptions(mOpts);
+            setSamplingStageOptions(stageOpts);
+            setMatrixGroupOptions(groupOpts);
+            setSuperCategorySampleOriginOptions(superOpts);
+
+            optionsRef.current = {
+                microorganism: microOpts,
+                sampleOrigin: soOpts,
+                matrix: mOpts,
+                samplingStage: stageOpts,
+                matrixGroup: groupOpts,
+                superCategorySampleOrigin: superOpts,
+            };
 
             const years = Array.from(yearsSet).sort((a, b) => a - b);
             setYearOptions(years);
@@ -712,8 +933,33 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         selectedSuperCategory,
         selectedYear,
         fullPrevalenceData,
+    ]);
+
+    /** Keep chart dropdown valid when data changes (set default if missing) */
+    useEffect(() => {
+        const dataToUse = isSearchTriggered
+            ? prevalenceData
+            : fullPrevalenceData;
+        if (!dataToUse || dataToUse.length === 0) return;
+
+        const availableNames = Array.from(
+            new Set(dataToUse.map((e) => e.microorganism).filter(Boolean))
+        );
+
+        if (availableNames.length === 0) return;
+
+        if (
+            !selectedChartMicroorganism ||
+            !availableNames.includes(selectedChartMicroorganism)
+        ) {
+            setSelectedChartMicroorganism(availableNames[0]);
+            writeChartMicroToUrl(availableNames[0]);
+        }
+    }, [
+        fullPrevalenceData,
         prevalenceData,
         isSearchTriggered,
+        selectedChartMicroorganism,
     ]);
 
     // -------------- 7) Trigger Search --------------
@@ -724,24 +970,29 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
 
     // -------------- 8) Re-fetch if language changes --------------
     useEffect(() => {
-        if (isSearchTriggered) {
-            // Re-run search using current filters when language changes
-            fetchDataFromAPI({
-                microorganisms: selectedMicroorganisms,
-                sampleOrigins: selectedSampleOrigins,
-                matrices: selectedMatrices,
-                samplingStages: selectedSamplingStages,
-                matrixGroups: selectedMatrixGroups,
-                years: selectedYear,
-                superCategories: selectedSuperCategory,
-            });
-        } else {
-            // If no search is active, just fetch the raw data and options
-            fetchPrevalenceData();
-            fetchOptions();
-            fetchPrevalenceUpdateDate();
-        }
-        // Update URL to reflect the current language
+        const handleLanguageChange = async (): Promise<void> => {
+            // Always fetch options first so optionsRef has current-locale names
+            await fetchOptions();
+
+            if (isSearchTriggered) {
+                // Re-run search using current filters when language changes
+                await fetchDataFromAPI({
+                    microorganisms: selectedMicroorganisms,
+                    sampleOrigins: selectedSampleOrigins,
+                    matrices: selectedMatrices,
+                    samplingStages: selectedSamplingStages,
+                    matrixGroups: selectedMatrixGroups,
+                    years: selectedYear,
+                    superCategories: selectedSuperCategory,
+                });
+            } else {
+                // If no search is active, just fetch the raw data and update date
+                fetchPrevalenceData();
+                fetchPrevalenceUpdateDate();
+            }
+        };
+        void handleLanguageChange();
+        // Update URL to reflect the current language (preserves chartMicro if present)
         const urlSearchParams = new URLSearchParams(window.location.search);
         urlSearchParams.set("lang", i18next.language);
         window.history.replaceState(null, "", `?${urlSearchParams.toString()}`);
@@ -770,6 +1021,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedYear,
         selectedSuperCategory,
         setSelectedSuperCategory,
+
+        /** ✅ NEW */
+        selectedChartMicroorganism,
+        setSelectedChartMicroorganism,
+
         triggerSearch,
         fetchDataFromAPI,
         fetchOptions,

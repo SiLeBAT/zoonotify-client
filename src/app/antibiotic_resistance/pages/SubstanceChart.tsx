@@ -1,8 +1,8 @@
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography, useMediaQuery } from "@mui/material";
 import html2canvas from "html2canvas";
 import JSZip from "jszip";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
     Bar,
@@ -73,6 +73,75 @@ interface SubstanceChartProps {
     groupLabel?: React.ReactNode;
 }
 
+type CsvHeaderKey =
+    | "microorganism" // ✅ ADDED
+    | "samplingYear"
+    | "superCategorySampleOrigin"
+    | "sampleOrigin"
+    | "samplingStage"
+    | "matrixGroup"
+    | "matrix"
+    | "antimicrobialSubstance"
+    | "specie"
+    | "resistenzrate"
+    | "anzahlGetesteterIsolate"
+    | "anzahlResistenterIsolate"
+    | "minKonfidenzintervall"
+    | "maxKonfidenzintervall";
+
+const CSV_HEADERS: CsvHeaderKey[] = [
+    "microorganism", // ✅ ADDED (first column)
+    "samplingYear",
+    "superCategorySampleOrigin",
+    "sampleOrigin",
+    "samplingStage",
+    "matrixGroup",
+    "matrix",
+    "antimicrobialSubstance",
+    "specie",
+    "resistenzrate",
+    "anzahlGetesteterIsolate",
+    "anzahlResistenterIsolate",
+    "minKonfidenzintervall",
+    "maxKonfidenzintervall",
+];
+
+// ✅ Consistent, human-readable CSV header labels
+const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
+    en: {
+        microorganism: "Microorganism", // ✅ ADDED
+        samplingYear: "Sampling year",
+        superCategorySampleOrigin: "Super-category sample origin",
+        sampleOrigin: "Sample origin",
+        samplingStage: "Sampling stage",
+        matrixGroup: "Matrix group",
+        matrix: "Matrix",
+        antimicrobialSubstance: "Antimicrobial substance",
+        specie: "Species",
+        resistenzrate: "Resistance rate",
+        anzahlGetesteterIsolate: "Number of tested isolates",
+        anzahlResistenterIsolate: "Number of resistant isolates",
+        minKonfidenzintervall: "Minimum confidence interval",
+        maxKonfidenzintervall: "Maximum confidence interval",
+    },
+    de: {
+        microorganism: "Mikroorganismus",
+        samplingYear: "Erhebungsjahr",
+        superCategorySampleOrigin: "Oberkategorie Probenursprung",
+        sampleOrigin: "Probenursprung",
+        samplingStage: "Probenahmestelle",
+        matrixGroup: "Matrixgruppe",
+        matrix: "Matrix",
+        antimicrobialSubstance: "Antimikrobielle Substanz",
+        specie: "Spezies",
+        resistenzrate: "Resistenzrate",
+        anzahlGetesteterIsolate: "Anzahl getesteter Isolate",
+        anzahlResistenterIsolate: "Anzahl resistenter Isolate",
+        minKonfidenzintervall: "Minimales Konfidenzintervall",
+        maxKonfidenzintervall: "Maximales Konfidenzintervall",
+    },
+};
+
 export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     data,
     year,
@@ -80,11 +149,20 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     selectedCombinations,
     groupLabel,
 }) => {
-    const { t } = useTranslation(["Antibiotic"]);
+    const { t, i18n } = useTranslation(["Antibiotic"]);
     const chartRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
 
-    // Prepare data for the current year & visibility rules used by the chart
+    /** ✅ responsive breakpoint */
+    const isSmallScreen = useMediaQuery("(max-width:1500px)");
+
+    // Decide export language
+    const exportLang: "en" | "de" = i18n.language
+        ?.toLowerCase()
+        .startsWith("de")
+        ? "de"
+        : "en";
+
     const filtered = data.filter(
         (d) =>
             d.samplingYear === year &&
@@ -92,14 +170,12 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             d.anzahlGetesteterIsolate >= 10
     );
 
-    // These are the substances actually plotted (already upstream-filtered)
     const substances = Array.from(
         new Set(
             filtered.map((d) => d.antimicrobialSubstance?.name).filter(Boolean)
         )
     ).sort();
 
-    // Only include user-selected combinations (max 4) in the chart
     const groupKeys = Array.from(
         new Set(filtered.map((d) => getGroupKey(d, microorganism)))
     ).filter((key) => selectedCombinations.includes(key));
@@ -125,7 +201,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         }
     };
 
-    // Map group -> N (first found row for the group)
     const nPerGroup: { [key: string]: number | undefined } = {};
     groupKeys.forEach((groupKey) => {
         const row = filtered.find(
@@ -174,7 +249,6 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         );
     };
 
-    // Build the rows used by the chart (visible bars)
     const chartData = substances.map((substance) => {
         const row: Record<string, unknown> = { substance };
         groupKeys.forEach((groupKey) => {
@@ -220,35 +294,30 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             .replace("T", "_");
     }
 
+    function getCsvHeaderLabel(key: CsvHeaderKey): string {
+        return CSV_HEADER_LABELS[exportLang][key] ?? key;
+    }
+
     function generateCSV(
         rows: ResistanceApiItem[],
         sep: "," | ";",
-        decimalSep: "." | ",",
-        translate: (key: string) => string
+        decimalSep: "." | ","
     ): string {
         if (!rows || !rows.length) return "";
 
-        const headers = [
-            "samplingYear",
-            "superCategorySampleOrigin",
-            "sampleOrigin",
-            "samplingStage",
-            "matrixGroup",
-            "matrix",
-            "antimicrobialSubstance",
-            "specie",
-            "resistenzrate",
-            "anzahlGetesteterIsolate",
-            "anzahlResistenterIsolate",
-            "minKonfidenzintervall",
-            "maxKonfidenzintervall",
-        ] as const;
+        function escapeIfNeeded(s: string): string {
+            if (s.includes(sep) || s.includes('"') || s.includes("\n")) {
+                return `"${s.replace(/"/g, '""')}"`;
+            }
+            return s;
+        }
 
-        function valueForCSV(
-            row: ResistanceApiItem,
-            h: typeof headers[number]
-        ): string {
-            // read loosely to avoid TS union assignment errors
+        function valueForCSV(row: ResistanceApiItem, h: CsvHeaderKey): string {
+            // ✅ ADD microorganism column value (not present on row)
+            if (h === "microorganism") {
+                return escapeIfNeeded(String(microorganism ?? ""));
+            }
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const raw: any = (row as any)[h];
 
@@ -260,35 +329,24 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
                 return n;
             }
 
-            // unwrap common Strapi-ish objects with a 'name' field
             if (typeof raw === "object") {
                 const maybeName = (raw as { name?: unknown }).name;
                 const str =
                     maybeName != null ? String(maybeName) : JSON.stringify(raw);
-                // escape separators/quotes/newlines
-                if (
-                    str.includes(sep) ||
-                    str.includes('"') ||
-                    str.includes("\n")
-                ) {
-                    return `"${str.replace(/"/g, '""')}"`;
-                }
-                return str;
+                return escapeIfNeeded(str);
             }
 
-            // primitive (string/boolean/etc.)
-            const s = String(raw);
-            if (s.includes(sep) || s.includes('"') || s.includes("\n")) {
-                return `"${s.replace(/"/g, '""')}"`;
-            }
-            return s;
+            return escapeIfNeeded(String(raw));
         }
 
-        const headerRow = headers.map((h) => translate(h) || h).join(sep);
+        const headerRow = CSV_HEADERS.map((h) => getCsvHeaderLabel(h)).join(
+            sep
+        );
+
         const csvRows = [
             headerRow,
             ...rows.map((row) =>
-                headers.map((h) => valueForCSV(row, h)).join(sep)
+                CSV_HEADERS.map((h) => valueForCSV(row, h)).join(sep)
             ),
         ];
         return csvRows.join("\n");
@@ -300,8 +358,9 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        const csvComma = generateCSV(rows, ",", ".", t);
-        const csvDot = generateCSV(rows, ";", ",", t);
+        const BOM = "\uFEFF";
+        const csvComma = BOM + generateCSV(rows, ",", ".");
+        const csvDot = BOM + generateCSV(rows, ";", ",");
 
         const readmeContentEn = `
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
@@ -321,12 +380,18 @@ This file contains comma-separated data, which supports the correct format of nu
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `substance_data_${timestamp}.zip`;
+
+        // ✅ OPTIONAL: include microorganism in the zip filename
+        const safeMicro = String(microorganism ?? "").replace(
+            /[^a-zA-Z0-9._-]+/g,
+            "_"
+        );
+        a.download = `substance_data_${safeMicro}_${timestamp}.zip`;
+
         a.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
-    // Tooltip (kept the same)
     const tooltipFormatter = (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value: any,
@@ -347,7 +412,6 @@ This file contains comma-separated data, which supports the correct format of nu
         ];
     };
 
-    // === NEW: rows that exactly match what the chart is showing ===
     const visibleSubstanceNames = new Set(substances);
     const rowsForCsv = filtered.filter((d) => {
         const gk = getGroupKey(d, microorganism);
@@ -357,6 +421,49 @@ This file contains comma-separated data, which supports the correct format of nu
             visibleSubstanceNames.has(subName)
         );
     });
+
+    /** ✅ Responsive legend configuration */
+    const legendProps = useMemo(() => {
+        if (isSmallScreen) {
+            // Bottom / horizontal legend for small screens
+            return {
+                verticalAlign: "bottom" as const,
+                align: "center" as const,
+                layout: "horizontal" as const,
+                wrapperStyle: {
+                    paddingTop: 29,
+                    paddingLeft: 0,
+                    width: "100%",
+                    maxWidth: "100%",
+                    whiteSpace: "normal",
+                    fontSize: 12,
+                    lineHeight: 1.2,
+                } as React.CSSProperties,
+            };
+        }
+
+        // Right / vertical legend for large screens
+        return {
+            verticalAlign: "middle" as const,
+            align: "right" as const,
+            layout: "vertical" as const,
+            wrapperStyle: {
+                paddingLeft: 24,
+                width: 400,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                background: "#fff",
+                borderRadius: 8,
+                boxShadow: "0 0 4px #eee",
+                fontSize: 14,
+                lineHeight: 1.25,
+            } as React.CSSProperties,
+        };
+    }, [isSmallScreen]);
+
+    /** ✅ Give the chart more height on small screens because legend goes under it */
+    const responsiveHeight = isSmallScreen ? 680 : 550;
 
     return (
         <Box>
@@ -416,7 +523,7 @@ This file contains comma-separated data, which supports the correct format of nu
 
                 {/* Chart */}
                 {chartData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={550}>
+                    <ResponsiveContainer width="100%" height={responsiveHeight}>
                         <BarChart
                             layout="vertical"
                             data={chartData}
@@ -424,9 +531,10 @@ This file contains comma-separated data, which supports the correct format of nu
                             barGap={4}
                             margin={{
                                 top: 10,
-                                right: 25,
+                                // ✅ give extra right space only when legend is on right
+                                right: isSmallScreen ? 20 : 25,
                                 left: 20,
-                                bottom: 40,
+                                bottom: isSmallScreen ? 90 : 40,
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
@@ -452,19 +560,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             />
                             <Tooltip formatter={tooltipFormatter} />
                             <Legend
-                                verticalAlign="middle"
-                                align="right"
-                                layout="vertical"
-                                wrapperStyle={{
-                                    paddingLeft: 24,
-                                    width: 400,
-                                    top: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    background: "#fff",
-                                    borderRadius: 8,
-                                    boxShadow: "0 0 4px #eee",
-                                }}
+                                {...legendProps}
                                 formatter={legendFormatter}
                             />
                             {groupKeys.map((groupKey) => (
@@ -494,13 +590,13 @@ This file contains comma-separated data, which supports the correct format of nu
                             align="center"
                             sx={{ fontStyle: "italic", fontSize: "1.15rem" }}
                         >
-                            {t("Not enough data to display the chart.")}
+                            {t("Not enough data to display the chart")}
                         </Typography>
                     </Box>
                 )}
             </div>
 
-            {/* Off-screen fixed-size chart for PNG export */}
+            {/* Off-screen fixed-size chart for PNG export (keep legend right as before) */}
             <div
                 ref={fixedSizeChartRef}
                 style={{
@@ -572,9 +668,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             domain={[0, 100]}
                             tickFormatter={(v: number) => `${v}%`}
                             label={{
-                                value: t(
-                                    "Percentage of resistant isolates (%)"
-                                ),
+                                value: t("PROPORTION_RESISTANT_ISOLATES"),
                                 position: "bottom",
                                 offset: 10,
                             }}
@@ -584,7 +678,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             type="category"
                             width={90}
                             label={{
-                                value: t("Substances tested"),
+                                value: t("TESTED_SUBSTANCES"),
                                 angle: -90,
                                 position: "insideLeft",
                             }}
@@ -603,6 +697,8 @@ This file contains comma-separated data, which supports the correct format of nu
                                 background: "transparent",
                                 borderRadius: 0,
                                 boxShadow: "none",
+                                fontSize: 14,
+                                lineHeight: 1.25,
                             }}
                             formatter={legendFormatter}
                         />

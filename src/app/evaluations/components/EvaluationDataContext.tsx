@@ -143,12 +143,19 @@ function applyFiltersStrict(
         MULTIPLE: [],
     };
 
+    // If ALL filters are empty, show nothing (reset state)
+    const allEmpty = (Object.values(filterSelection) as string[][]).every(
+        (arr) => arr.length === 0
+    );
+    if (allEmpty) return filteredData;
+
     (Object.keys(data) as (keyof Evaluation)[]).forEach((divisionKey) => {
         filteredData[divisionKey] = data[divisionKey].filter((item) => {
             return (
                 Object.keys(filterSelection) as (keyof FilterSelection)[]
             ).every((filterKey) => {
                 const selectedVals = filterSelection[filterKey];
+                // Empty filter = no constraint on this dimension
                 if (selectedVals.length === 0) return true;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 if ((item as any)[filterKey] == null) return false;

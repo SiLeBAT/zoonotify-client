@@ -71,7 +71,13 @@ type ExplanationPageModel = {
 type ExplanationPageOperations = {
     handleOpen: (id: string) => void;
     handleClose: () => void;
+
+    /** Open accordion by anchor (set URL hash) */
     openSectionByAnchor: (anchor: string) => void;
+
+    /** Close accordion (remove URL hash) */
+    closeActiveSection: () => void;
+
     /** Translate a group key (either raw CMS or our SectionCode) to a UI label */
     getSectionLabel: (groupKey: string) => string;
 };
@@ -115,15 +121,32 @@ const useExplanationPageComponent: UseCase<
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
+
+        // Ensure URL always has the current language
         if (params.get("lang") !== i18next.language) {
             params.set("lang", i18next.language);
-            history.replace({ search: params.toString(), hash: location.hash });
+            history.replace({
+                pathname: location.pathname,
+                search: params.toString(),
+                hash: location.hash,
+            });
         }
+
+        // Build deep link from current path + query + hash
         const currentUrl = window.location.origin + window.location.pathname;
-        setDeepLink(
-            `${currentUrl}?lang=${i18next.language}${location.hash || ""}`
-        );
-    }, [i18next.language, location.search, location.hash, history]);
+        const finalParams = new URLSearchParams(location.search);
+        if (finalParams.get("lang") !== i18next.language) {
+            finalParams.set("lang", i18next.language);
+        }
+        const qs = finalParams.toString();
+        setDeepLink(`${currentUrl}?${qs}${location.hash || ""}`);
+    }, [
+        i18next.language,
+        location.pathname,
+        location.search,
+        location.hash,
+        history,
+    ]);
 
     // --- read the hash whenever it changes and scroll into view ---
     useEffect(() => {
@@ -162,19 +185,17 @@ const useExplanationPageComponent: UseCase<
                             ? `sec-${entry.id}`
                             : slugify(entry.title));
 
-                    // normalize CMS section (German strings) into our SectionCode
                     const sectionCode: SectionCode =
                         CMS_SECTION_TO_CODE[entry.section] ?? "MAIN";
 
                     return {
                         title: entry.title,
                         description: entry.description,
-                        section: sectionCode, // <— store normalized code
+                        section: sectionCode,
                         anchor,
                     } as ExplanationDTO;
                 });
 
-                // sort by ORDERED_SECTIONS
                 const ordered = cmsData.sort((a, b) => {
                     const aIndex = ORDERED_SECTIONS.indexOf(
                         a.section as SectionCode
@@ -185,7 +206,6 @@ const useExplanationPageComponent: UseCase<
                     return aIndex - bIndex;
                 });
 
-                // group by normalized section code
                 const grouped = lodash.groupBy(ordered, "section");
                 setExplanationCollection(grouped);
                 setMainSection(grouped.MAIN || []);
@@ -205,14 +225,21 @@ const useExplanationPageComponent: UseCase<
         setOpenAmrDialog(false);
     };
 
-    // --- when a user opens a subheading, update the hash (keeps ?lang) ---
+    // --- open: set hash (keeps query params) ---
     const openSectionByAnchor = (anchor: string): void => {
         history.push({
             pathname: location.pathname,
             search: location.search,
             hash: `#${anchor}`,
         });
+        // optional, but helps UI react immediately
         setActiveAnchor(anchor);
+    };
+
+    // --- close: remove hash completely (keep pathname + search) ---
+    const closeActiveSection = (): void => {
+        history.replace(`${location.pathname}${location.search}`); // no #...
+        setActiveAnchor(null);
     };
 
     // --- translate group key to UI header label (handles raw CMS or code) ---
@@ -241,7 +268,8 @@ const useExplanationPageComponent: UseCase<
             handleOpen,
             handleClose,
             openSectionByAnchor,
-            getSectionLabel, // <— expose to UI
+            closeActiveSection,
+            getSectionLabel,
         },
     };
 };

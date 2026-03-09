@@ -2,13 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 // eslint-disable-next-line import/named
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button, Typography, useMediaQuery } from "@mui/material";
+import { Button, Typography, useMediaQuery, Box, Stack } from "@mui/material";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import JSZip from "jszip";
+import i18next from "i18next";
+import Markdown from "markdown-to-jsx";
+
 import { DataGridControls } from "./DataGridControls";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
-import JSZip from "jszip";
 import { PrevalenceEntry, usePrevalenceFilters } from "./PrevalenceDataContext";
 import { PrevalenceChart } from "./PrevalenceChart";
+
+import { callApiService } from "../../shared/infrastructure/api/callApi.service";
+import { PEREVALENCE_INFO } from "../../shared/infrastructure/router/routes";
 
 interface PrevalenceDataGridProps {
     prevalenceData: PrevalenceEntry[];
@@ -68,6 +75,7 @@ const formatMicroorganismName = (
     const words = microName
         .split(/(\s+|-)/)
         .filter((part: string) => part.trim().length > 0);
+
     return words
         .map((word: string, index: number) => {
             const italic = italicWords.some((italicWord: string) =>
@@ -115,10 +123,45 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
     language,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
+
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+    // ✅ Prevalence info (moved here)
+    const [prevalenceInfo, setPrevalenceInfo] = useState<string>("");
+
     const theme = useTheme();
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
-    const { searchParameters, prevalenceUpdateDate } = usePrevalenceFilters();
+
+    const {
+        searchParameters,
+        prevalenceUpdateDate,
+        selectedChartMicroorganism,
+        isSearchTriggered, // ✅ IMPORTANT: used to show/hide accordions
+    } = usePrevalenceFilters();
+
+    // ✅ Fetch prevalence information (always fetch so it is ready on first page load)
+    useEffect(() => {
+        const fetchPrevalenceInfo = async (): Promise<void> => {
+            try {
+                const url = `${PEREVALENCE_INFO}?locale=${i18next.language}&publicationState=live`;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const response = await callApiService<any>(url);
+                const entity = response.data?.data;
+
+                if (!entity || !entity.content) {
+                    setPrevalenceInfo("No prevalence information available.");
+                    return;
+                }
+
+                setPrevalenceInfo(entity.content);
+            } catch (error) {
+                console.error("Failed to fetch prevalence info:", error);
+                setPrevalenceInfo("Error loading prevalence information.");
+            }
+        };
+
+        fetchPrevalenceInfo();
+    }, [i18next.language]);
 
     const getFormattedTimestamp = (): string => {
         const date = new Date();
@@ -134,7 +177,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         decimalSeparator: string
     ): string => {
         const csvRows: string[] = [];
-        // ✅ CSV columns (Matrix Group included, table unchanged)
+
         const headers: Array<keyof PrevalenceEntry> = [
             "samplingYear",
             "microorganism",
@@ -142,7 +185,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             "superCategorySampleOrigin",
             "samplingStage",
             "matrix",
-            "matrixGroup", // <-- added for CSV only
+            "matrixGroup", // CSV only
             "numberOfSamples",
             "numberOfPositive",
             "percentageOfPositive",
@@ -194,7 +237,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         return csvRows.join("\n");
     };
 
-    /** Build the ZIP from the *current* grid rows & current search parameters */
     const prepareDownload = async (): Promise<{
         url: string;
         name: string;
@@ -204,14 +246,12 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         const zip = new JSZip();
         const timestamp = getFormattedTimestamp();
 
-        // CSVs from current rows
         const csvContentDot = createCSVContent(prevalenceData, ".");
         const csvContentComma = createCSVContent(prevalenceData, ",");
 
         zip.file(`prevalence_data_dot_${timestamp}.csv`, csvContentDot);
         zip.file(`prevalence_data_comma_${timestamp}.csv`, csvContentComma);
 
-        // Search parameters + README
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
         const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson}`;
         const readmeContent =
@@ -220,14 +260,12 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         zip.file(`search_parameters_${timestamp}.txt`, formattedText);
         zip.file(`README_${timestamp}.txt`, readmeContent);
 
-        // Blob
         const blob = await zip.generateAsync({ type: "blob" });
         const url = window.URL.createObjectURL(blob);
         const name = `data_package_${timestamp}.zip`;
         return { url, name };
     };
 
-    /** Click handler: build fresh ZIP, revoke old URL, trigger download */
     const handleDownloadClick = async (): Promise<void> => {
         if (downloadUrl) {
             URL.revokeObjectURL(downloadUrl);
@@ -238,7 +276,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
 
         setDownloadUrl(res.url);
 
-        // Auto-trigger download
         const a = document.createElement("a");
         a.href = res.url;
         a.download = res.name;
@@ -247,7 +284,34 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         a.remove();
     };
 
-    /** Cleanup blob URL on unmount / change */
+    const handleShareLink = async (): Promise<void> => {
+        const url = new URL(window.location.href);
+
+        if (selectedChartMicroorganism) {
+            url.searchParams.set("chartMicro", selectedChartMicroorganism);
+        } else {
+            url.searchParams.delete("chartMicro");
+        }
+
+        const shareUrl = url.toString();
+
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+        } catch {
+            const ta = document.createElement("textarea");
+            ta.value = shareUrl;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "absolute";
+            ta.style.left = "-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand("copy");
+            } catch {}
+            document.body.removeChild(ta);
+        }
+    };
+
     useEffect(() => {
         return () => {
             if (downloadUrl) URL.revokeObjectURL(downloadUrl);
@@ -321,7 +385,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
             align: "left",
             headerAlign: "left",
         },
-        // (No matrixGroup column in the table)
         {
             field: "numberOfSamples",
             headerName: t("NUMBER_OF_SAMPLES"),
@@ -379,147 +442,238 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         },
     ];
 
+    const InfoAccordion = (
+        <ZNAccordion
+            title={t("PREVALENCE_INFORMATION")}
+            content={
+                <Markdown
+                    options={{
+                        overrides: {
+                            a: {
+                                props: {
+                                    target: "_blank",
+                                    rel: "noopener noreferrer",
+                                },
+                            },
+                            p: {
+                                component: "p",
+                                props: {
+                                    style: {
+                                        marginTop: -1,
+                                        marginBottom: 0,
+                                    },
+                                },
+                            },
+                        },
+                    }}
+                >
+                    {prevalenceInfo}
+                </Markdown>
+            }
+            defaultExpanded
+            centerContent={false}
+            withTopBorder={false}
+        />
+    );
+
     return (
         <>
-            <div style={{ marginBottom: "10px" }}>
-                <DataGridControls heading={t("TABLE_DETAIL")} />
-            </div>
+            {/* ✅ BEFORE SEARCH: show only information */}
+            {!isSearchTriggered && <>{InfoAccordion}</>}
 
-            <ZNAccordion
-                title={t("PREVALENCE_TABLE")}
-                content={
-                    <div
-                        style={{
-                            height: 600,
-                            width: "100%",
-                            overflowX: "auto",
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        <Typography
-                            variant="subtitle1"
-                            style={{
-                                marginBottom: "10px",
-                                fontSize: "0.875rem",
-                                color: theme.palette.text.secondary,
-                            }}
-                        >
-                            {t("Generated on")}:{" "}
-                            {prevalenceUpdateDate || t("No date available")}
-                        </Typography>
+            {/* ✅ AFTER SEARCH: show table + chart + info under chart */}
+            {isSearchTriggered && (
+                <>
+                    <div style={{ marginBottom: "10px" }}>
+                        <DataGridControls heading={t("TABLE_DETAIL")} />
+                    </div>
 
-                        <ThemeProvider theme={localTooltipTheme}>
-                            <DataGrid
-                                rows={prevalenceData}
-                                columns={columns}
-                                loading={loading}
-                                disableColumnFilter
-                                hideFooter={false}
-                                localeText={localeText}
-                                sx={{
-                                    backgroundColor: "white",
-                                    border: 2,
-                                    borderColor: "primary.main",
-                                    "& .header-style": {
-                                        fontWeight: "bold",
-                                        whiteSpace: "normal !important",
-                                        wordWrap: "break-word !important",
-                                        fontSize: "1rem",
-                                        textAlign: "center",
-                                        backgroundColor:
-                                            theme.palette.primary.light,
-                                        color: theme.palette.primary
-                                            .contrastText,
-                                        border: "1px solid #e0e0e0",
-                                    },
-                                    "& .MuiDataGrid-root": {
-                                        borderWidth: "1px",
-                                        borderColor: "rgba(224, 224, 224, 1)",
-                                    },
-                                    "& .MuiDataGrid-cell": {
-                                        border: "1px solid #e0e0e0",
-                                        textAlign: "center",
-                                    },
-                                    "& .MuiDataGrid-columnHeaders": {
-                                        borderBottom: "1px solid #e0e0e0",
-                                        borderRight: "1px solid #e0e0e0",
-                                    },
-                                    "& .MuiDataGrid-columnSeparator": {
-                                        visibility: "hidden",
-                                    },
-                                    "& .MuiDataGrid-row": {
-                                        borderBottom: "1px solid #e0e0e0",
-                                    },
-                                    "& .MuiDataGrid-iconButtonContainer:hover":
-                                        {
-                                            backgroundColor:
-                                                "rgba(0, 0, 0, 0.3)",
-                                        },
-                                    "& .MuiDataGrid-menuIconButton:hover": {
-                                        backgroundColor: "rgba(0, 0, 0, 0.3)",
-                                    },
-                                    "& .MuiDataGrid-sortIcon:hover": {
-                                        backgroundColor: "rgba(0, 0, 0, 0.3)",
-                                    },
-                                    "& .MuiDataGrid-iconButtonContainer": {
-                                        color: "#ffffff",
-                                    },
-                                    "& .MuiDataGrid-menuIconButton": {
-                                        color: "#ffffff !important",
-                                    },
-                                    "& .MuiSvgIcon-root": {
-                                        color: "#ffffff",
-                                    },
-                                    "& .MuiTooltip-tooltip": {
-                                        backgroundColor: "#f0f0f0",
-                                        color: "#000000",
-                                        fontSize: "1rem",
-                                    },
+                    <ZNAccordion
+                        title={t("PREVALENCE_TABLE")}
+                        content={
+                            <div
+                                style={{
+                                    height: 600,
+                                    width: "100%",
+                                    overflowX: "auto",
+                                    display: "flex",
+                                    flexDirection: "column",
                                 }}
-                            />
-                        </ThemeProvider>
+                            >
+                                <Typography
+                                    variant="subtitle1"
+                                    style={{
+                                        marginBottom: "10px",
+                                        fontSize: "0.875rem",
+                                        color: theme.palette.text.secondary,
+                                    }}
+                                >
+                                    {t("Generated on")}:{" "}
+                                    {prevalenceUpdateDate ||
+                                        t("No date available")}
+                                </Typography>
 
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleDownloadClick}
-                            disabled={prevalenceData.length === 0}
-                            style={{
-                                margin: "0.5em",
-                                backgroundColor: theme.palette.primary.main,
-                            }}
-                        >
-                            {t("DOWNLOAD_ZIP_FILE")}
-                        </Button>
-                    </div>
-                }
-                defaultExpanded
-                centerContent={false}
-                withTopBorder={false}
-            />
+                                <ThemeProvider theme={localTooltipTheme}>
+                                    <DataGrid
+                                        rows={prevalenceData}
+                                        columns={columns}
+                                        loading={loading}
+                                        disableColumnFilter
+                                        hideFooter={false}
+                                        localeText={localeText}
+                                        sx={{
+                                            backgroundColor: "white",
+                                            border: 2,
+                                            borderColor: "primary.main",
+                                            "& .header-style": {
+                                                fontWeight: "bold",
+                                                whiteSpace: "normal !important",
+                                                wordWrap:
+                                                    "break-word !important",
+                                                fontSize: "1rem",
+                                                textAlign: "center",
+                                                backgroundColor:
+                                                    theme.palette.primary.light,
+                                                color: theme.palette.primary
+                                                    .contrastText,
+                                                border: "1px solid #e0e0e0",
+                                            },
+                                            "& .MuiDataGrid-root": {
+                                                borderWidth: "1px",
+                                                borderColor:
+                                                    "rgba(224, 224, 224, 1)",
+                                            },
+                                            "& .MuiDataGrid-cell": {
+                                                border: "1px solid #e0e0e0",
+                                                textAlign: "center",
+                                            },
+                                            "& .MuiDataGrid-columnHeaders": {
+                                                borderBottom:
+                                                    "1px solid #e0e0e0",
+                                                borderRight:
+                                                    "1px solid #e0e0e0",
+                                            },
+                                            "& .MuiDataGrid-columnSeparator": {
+                                                visibility: "hidden",
+                                            },
+                                            "& .MuiDataGrid-row": {
+                                                borderBottom:
+                                                    "1px solid #e0e0e0",
+                                            },
+                                            "& .MuiDataGrid-iconButtonContainer:hover":
+                                                {
+                                                    backgroundColor:
+                                                        "rgba(0, 0, 0, 0.3)",
+                                                },
+                                            "& .MuiDataGrid-menuIconButton:hover":
+                                                {
+                                                    backgroundColor:
+                                                        "rgba(0, 0, 0, 0.3)",
+                                                },
+                                            "& .MuiDataGrid-sortIcon:hover": {
+                                                backgroundColor:
+                                                    "rgba(0, 0, 0, 0.3)",
+                                            },
+                                            "& .MuiDataGrid-iconButtonContainer":
+                                                {
+                                                    color: "#ffffff",
+                                                },
+                                            "& .MuiDataGrid-menuIconButton": {
+                                                color: "#ffffff !important",
+                                            },
+                                            "& .MuiSvgIcon-root": {
+                                                color: "#ffffff",
+                                            },
+                                            "& .MuiTooltip-tooltip": {
+                                                backgroundColor: "#f0f0f0",
+                                                color: "#000000",
+                                                fontSize: "1rem",
+                                            },
+                                        }}
+                                    />
+                                </ThemeProvider>
 
-            <div style={{ height: "10px" }} />
+                                <Box sx={{ px: 1, py: 1 }}>
+                                    <Stack
+                                        direction="row"
+                                        spacing={1}
+                                        justifyContent="center"
+                                        alignItems="stretch"
+                                        sx={{ width: "100%" }}
+                                    >
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={handleDownloadClick}
+                                            disabled={
+                                                prevalenceData.length === 0
+                                            }
+                                            sx={{
+                                                flex: 1,
+                                                maxWidth: 320,
+                                                minHeight: 44,
+                                                backgroundColor:
+                                                    theme.palette.primary.main,
+                                            }}
+                                        >
+                                            {t("DOWNLOAD_ZIP_FILE")}
+                                        </Button>
 
-            <ZNAccordion
-                title={t("PREVALENCE_CHART")}
-                content={
-                    <div
-                        style={{
-                            maxHeight: isSmallScreen ? "1650px" : "950px",
-                            width: "100%",
-                            overflowY: "hidden",
-                        }}
-                    >
-                        <div style={{ height: "100%", width: "100%" }}>
-                            <PrevalenceChart />
-                        </div>
-                    </div>
-                }
-                defaultExpanded
-                centerContent={false}
-                withTopBorder={false}
-            />
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={handleShareLink}
+                                            startIcon={<InsertLinkIcon />}
+                                            sx={{
+                                                flex: 1,
+                                                maxWidth: 320,
+                                                minHeight: 44,
+                                                backgroundColor:
+                                                    theme.palette.primary.main,
+                                                textTransform: "none",
+                                            }}
+                                        >
+                                            {t("Share_Link")}
+                                        </Button>
+                                    </Stack>
+                                </Box>
+                            </div>
+                        }
+                        defaultExpanded
+                        centerContent={false}
+                        withTopBorder={false}
+                    />
+
+                    <div style={{ height: "10px" }} />
+
+                    <ZNAccordion
+                        title={t("PREVALENCE_CHART")}
+                        content={
+                            <div
+                                style={{
+                                    maxHeight: isSmallScreen
+                                        ? "1650px"
+                                        : "950px",
+                                    width: "100%",
+                                    overflowY: "hidden",
+                                }}
+                            >
+                                <div style={{ height: "100%", width: "100%" }}>
+                                    <PrevalenceChart />
+                                </div>
+                            </div>
+                        }
+                        defaultExpanded
+                        centerContent={false}
+                        withTopBorder={false}
+                    />
+
+                    <div style={{ height: "10px" }} />
+
+                    {/* ✅ After search: info goes under chart */}
+                    {InfoAccordion}
+                </>
+            )}
         </>
     );
 };
