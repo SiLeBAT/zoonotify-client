@@ -48,6 +48,7 @@ import {
     buildDocIdToNameMap,
     buildNameToDocIdMap,
     resolveUrlValueToDocId,
+    buildMicroorganismFilter,
 } from "./resistanceHelpers";
 export type { ResistanceApiItem } from "./resistanceHelpers";
 
@@ -214,12 +215,13 @@ function getGroupKey(r: ResistanceApiItem): string {
 
 function renderGroupLabel(
     key: string,
-    t: (key: string) => string
+    t: (key: string) => string,
+    microorganism?: string
 ): React.ReactNode {
     const [specie, matrix, sampleOrigin, samplingStage] = key.split("|||");
     return (
         <>
-            {specie && (
+            {specie ? (
                 <>
                     {t("SPECIES")}:{" "}
                     <FormattedMicroorganismName
@@ -229,6 +231,18 @@ function renderGroupLabel(
                     />
                     {", "}
                 </>
+            ) : (
+                microorganism && (
+                    <>
+                        {t("MICROORGANISM")}:{" "}
+                        <FormattedMicroorganismName
+                            microName={microorganism}
+                            fontWeight="bold"
+                            fontSize="1.3rem"
+                        />
+                        {", "}
+                    </>
+                )
             )}
             {t("MATRIX")}: {matrix}, {t("SAMPLE_ORIGIN")}: {sampleOrigin},{" "}
             {t("SAMPLING_STAGE")}: {samplingStage}
@@ -368,9 +382,7 @@ export const TrendDetails: React.FC<{
             try {
                 const url =
                     `${RESISTANCES}?locale=${i18next.language}` +
-                    `&filters[microorganism][name][$eq]=${encodeURIComponent(
-                        microorganism
-                    )}` +
+                    buildMicroorganismFilter(microorganism) +
                     `&populate=*&pagination[pageSize]=8000`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const res = await callApiService<any>(url);
@@ -528,10 +540,9 @@ export const TrendDetails: React.FC<{
 
     // === Cascading option recomputation (like Substance) ===
     useEffect(() => {
-        // Source dataset: before Search -> full; after Search -> filtered
-        const dataToCompute: ResistanceApiItem[] = showChart
-            ? filteredFullData
-            : resistanceRawData;
+        // Always use full raw data so dropdown options are never restricted
+        // by the current search results — filteredFullData is only for charts
+        const dataToCompute: ResistanceApiItem[] = resistanceRawData;
 
         // Keys to respect when filtering
         const keys: FilterKey[] = [
@@ -621,19 +632,11 @@ export const TrendDetails: React.FC<{
             return changed ? upd : prev; // critical to avoid infinite re-running
         });
 
-        // Also prune top "Antibiotic Substance" selection, guarded
-        setSubstanceFilter((prev: string[]): string[] => {
-            const valid = new Set(
-                next.antimicrobialSubstance.map((o) => o.documentId)
-            );
-            const pruned = prev.filter((v) => valid.has(v));
-            return arrEq(pruned, prev) ? prev : pruned;
-        });
-
-        // Optional: if you want the top dropdown OPTIONS to also shrink,
-        // uncomment the next line:
-        // setAllSubstances(next.antimicrobialSubstance);
-    }, [selected, showChart, resistanceRawData, filteredFullData]);
+        // Note: substanceFilter is intentionally NOT pruned here.
+        // Pruning it would trigger the substanceFilter effect which
+        // auto-updates the charts — causing charts to refresh every time
+        // the user changes a sidebar filter, before Search is clicked.
+    }, [selected, resistanceRawData]);
 
     // Only update when search button pressed or substanceFilter changes
     const handleSearch = (): void => {
@@ -924,6 +927,7 @@ export const TrendDetails: React.FC<{
     return (
         <>
             <style>{menuItemTextStyle}</style>
+            <style>{`.abx-breadcrumb { position: static !important; z-index: 1 !important; }`}</style>
             <Box
                 display="flex"
                 flexDirection="row"
@@ -1078,7 +1082,8 @@ export const TrendDetails: React.FC<{
                                                         fullData={groupItems}
                                                         groupLabel={renderGroupLabel(
                                                             groupKey,
-                                                            t
+                                                            t,
+                                                            microorganism
                                                         )}
                                                     />
                                                 </Box>

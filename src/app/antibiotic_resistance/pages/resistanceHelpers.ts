@@ -121,6 +121,31 @@ export function buildNameToDocIdMap(
     return result;
 }
 
+/**
+ * Organisms stored in the DB with full translated names (both EN and DE)
+ * instead of the short abbreviation shown in the UI.
+ * e.g. "MRSA" → "Methicillin-resistant Staphylococcus aureus (MRSA)"
+ *               "Methicillin-resistente Staphylococcus aureus (MRSA)"
+ */
+const CONTAINS_FILTER_ORGANISMS = new Set(["MRSA", "STEC"]);
+
+/**
+ * Returns the Strapi filter query segment for a microorganism name.
+ * Uses $containsi for organisms whose UI name is an abbreviation that
+ * appears inside the full DB name (e.g. "(MRSA)", "(STEC)").
+ * Falls back to exact $eq match for all other organisms.
+ */
+export function buildMicroorganismFilter(microorganism: string): string {
+    if (CONTAINS_FILTER_ORGANISMS.has(microorganism)) {
+        return `&filters[microorganism][name][$containsi]=${encodeURIComponent(
+            `(${microorganism})`
+        )}`;
+    }
+    return `&filters[microorganism][name][$eq]=${encodeURIComponent(
+        microorganism
+    )}`;
+}
+
 /** Resolve a URL value (name or old docId) to docId with backwards compat */
 export function resolveUrlValueToDocId(
     value: string,

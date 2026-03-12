@@ -125,11 +125,11 @@ const CSV_HEADER_LABELS: Record<"en" | "de", Record<CsvHeaderKey, string>> = {
         maxKonfidenzintervall: "Maximum confidence interval",
     },
     de: {
-        microorganism: "Mikroorganismus", // ✅ ADDED
-        samplingYear: "Probenjahr",
-        superCategorySampleOrigin: "Oberkategorie Probenherkunft",
-        sampleOrigin: "Probenherkunft",
-        samplingStage: "Probenahmestufe",
+        microorganism: "Mikroorganismus",
+        samplingYear: "Erhebungsjahr",
+        superCategorySampleOrigin: "Oberkategorie Probenursprung",
+        sampleOrigin: "Probenursprung",
+        samplingStage: "Probenahmestelle",
         matrixGroup: "Matrixgruppe",
         matrix: "Matrix",
         antimicrobialSubstance: "Antimikrobielle Substanz",
@@ -358,8 +358,9 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         const timestamp = getFormattedTimestamp();
         const zip = new JSZip();
 
-        const csvComma = generateCSV(rows, ",", ".");
-        const csvDot = generateCSV(rows, ";", ",");
+        const BOM = "\uFEFF";
+        const csvComma = BOM + generateCSV(rows, ",", ".");
+        const csvDot = BOM + generateCSV(rows, ";", ",");
 
         const readmeContentEn = `
 This ZooNotify data download contains this README-file and two CSV-files. The use of these CSV-files is explained below.
@@ -667,9 +668,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             domain={[0, 100]}
                             tickFormatter={(v: number) => `${v}%`}
                             label={{
-                                value: t(
-                                    "Percentage of resistant isolates (%)"
-                                ),
+                                value: t("PROPORTION_RESISTANT_ISOLATES"),
                                 position: "bottom",
                                 offset: 10,
                             }}
@@ -679,7 +678,7 @@ This file contains comma-separated data, which supports the correct format of nu
                             type="category"
                             width={90}
                             label={{
-                                value: t("Substances tested"),
+                                value: t("TESTED_SUBSTANCES"),
                                 angle: -90,
                                 position: "insideLeft",
                             }}
