@@ -115,7 +115,10 @@ async function downloadAmrTableZip(
 
 // === End Export helpers ===
 
-function createTableRowCells(row: AmrsTableData): JSX.Element[] {
+function createTableRowCells(
+    row: AmrsTableData,
+    allYears: string[]
+): JSX.Element[] {
     const tableCellList: JSX.Element[] = [];
 
     tableCellList.push(
@@ -145,43 +148,66 @@ function createTableRowCells(row: AmrsTableData): JSX.Element[] {
         </TableCell>
     );
 
-    // **Sort the years descending before rendering**
-    const sortedYears = Object.keys(row.concentrationList).sort(
-        (a, b) => parseInt(b) - parseInt(a)
-    );
-
-    // Render the data for each year in descending order
-    for (const year of sortedYears) {
+    // Iterate allYears (already sorted descending, matches the header order)
+    // so that missing years render empty cells and columns stay aligned
+    for (const year of allYears) {
         const concentrationPerYear = row.concentrationList[year];
-        tableCellList.push(
-            <TableCell
-                sx={tableTextStyle}
-                component="td"
-                scope="row"
-                align="right"
-                key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
-            >
-                {concentrationPerYear.max}
-            </TableCell>,
-            <TableCell
-                sx={tableTextStyle}
-                component="td"
-                scope="row"
-                align="right"
-                key={`amr-table-cell-${row.amrSubstance}-${year}-min`}
-            >
-                {concentrationPerYear.min}
-            </TableCell>,
-            <TableCell
-                sx={tableTextStyle}
-                component="td"
-                scope="row"
-                align="right"
-                key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
-            >
-                {concentrationPerYear.cutOff}
-            </TableCell>
-        );
+        if (concentrationPerYear) {
+            tableCellList.push(
+                <TableCell
+                    sx={tableTextStyle}
+                    component="td"
+                    scope="row"
+                    align="right"
+                    key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
+                >
+                    {concentrationPerYear.max}
+                </TableCell>,
+                <TableCell
+                    sx={tableTextStyle}
+                    component="td"
+                    scope="row"
+                    align="right"
+                    key={`amr-table-cell-${row.amrSubstance}-${year}-min`}
+                >
+                    {concentrationPerYear.min}
+                </TableCell>,
+                <TableCell
+                    sx={tableTextStyle}
+                    component="td"
+                    scope="row"
+                    align="right"
+                    key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
+                >
+                    {concentrationPerYear.cutOff}
+                </TableCell>
+            );
+        } else {
+            // No data for this year — render empty cells to keep columns aligned
+            tableCellList.push(
+                <TableCell
+                    sx={tableTextStyle}
+                    component="td"
+                    scope="row"
+                    align="right"
+                    key={`amr-table-cell-${row.amrSubstance}-${year}-max`}
+                />,
+                <TableCell
+                    sx={tableTextStyle}
+                    component="td"
+                    scope="row"
+                    align="right"
+                    key={`amr-table-cell-${row.amrSubstance}-${year}-min`}
+                />,
+                <TableCell
+                    sx={tableTextStyle}
+                    component="td"
+                    scope="row"
+                    align="right"
+                    key={`amr-table-cell-${row.amrSubstance}-${year}-cutOff`}
+                />
+            );
+        }
     }
 
     return tableCellList;
@@ -302,7 +328,7 @@ export function InfoPageAmrDialogComponent(props: {
                 <TableBody>
                     {props.resistancesTableData.tableRows.map((row) => (
                         <TableRow key={`amr-table-row-${row.amrSubstance}`}>
-                            {createTableRowCells(row)}
+                            {createTableRowCells(row, allYears)}
                         </TableRow>
                     ))}
                 </TableBody>
