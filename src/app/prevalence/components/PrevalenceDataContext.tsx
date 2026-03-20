@@ -694,7 +694,7 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     params.matrixGroup || []
                 );
                 const initialSelectedYear = params.samplingYear
-                    ? params.samplingYear.map(Number)
+                    ? params.samplingYear.map(Number).filter(Number.isFinite)
                     : [];
                 const initialSelectedSuperCategory = resolveList(
                     "superCategorySampleOrigin",
@@ -894,7 +894,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     matchesStage(e) &&
                     matchesGroup(e) &&
                     matchesSuper(e)
-            ).forEach((e) => yearsSet.add(e.samplingYear));
+            ).forEach((e) => {
+                if (Number.isFinite(e.samplingYear))
+                    yearsSet.add(e.samplingYear);
+            });
 
             const microOpts = mapToOptions(microMap);
             const soOpts = mapToOptions(soMap);
