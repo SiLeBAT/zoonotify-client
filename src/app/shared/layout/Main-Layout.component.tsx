@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import { BrowserRouter } from "react-router-dom";
 
 import { BodyRouterComponent } from "../infrastructure/router/Body-Router.component";
+import { HeaderComponent } from "../components/header/Header.component";
 
 const wrapperStyle = css`
     height: 100%;
@@ -30,6 +31,7 @@ export function MainLayoutComponent(): JSX.Element {
     return (
         <div css={wrapperStyle}>
             <BrowserRouter>
+                <HeaderComponent />
                 <div css={bodyStyle}>
                     <BodyRouterComponent />
                 </div>

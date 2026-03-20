@@ -2,7 +2,6 @@
 import { css } from "@emotion/react";
 import React, { useState } from "react";
 import { FooterContainer } from "../footer/Footer-Container.component";
-import { HeaderComponent } from "../header/Header.component";
 import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
 
 // Wrapper: no fixed height or forced 100vh
@@ -12,11 +11,6 @@ const layoutWrapperStyle = css`
     box-sizing: border-box;
 
     overflow-y: hidden;
-`;
-
-// Keep the header above other elements
-const headerStyle = css`
-    z-index: 1;
 `;
 
 // Main content can scroll freely
@@ -49,10 +43,6 @@ export const PageLayoutComponent: React.FC<PageLayoutProps> = ({
 
     return (
         <div css={layoutWrapperStyle}>
-            <header css={headerStyle}>
-                <HeaderComponent />
-            </header>
-
             <main css={mainStyle}>{children}</main>
 
             <footer css={footerStyle}>
