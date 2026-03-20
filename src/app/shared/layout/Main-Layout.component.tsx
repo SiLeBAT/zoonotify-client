@@ -15,6 +15,7 @@ const wrapperStyle = css`
 const bodyStyle = css`
     flex: 1 1 0;
     margin-top: 42px;
+    margin-bottom: 42px;
     z-index: 0;
     box-sizing: border-box;
     overflow-x: hidden;
