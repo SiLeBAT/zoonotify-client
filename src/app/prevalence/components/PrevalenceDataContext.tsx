@@ -327,12 +327,24 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     /** Ref to hold current options for URL resolution (available synchronously) */
     const optionsRef = useRef<Record<string, Option[]>>({});
 
-    /**  keep chartMicro in URL when changed (preserve other params) */
+    /** Track whether chartMicro was explicitly provided in the URL on initial load */
+    const chartMicroWasInUrl = useRef(!!readChartMicroFromUrl());
+
+    /**  keep chartMicro in URL when changed (preserve other params)
+     *   Only write to URL if:
+     *   - chartMicro was already in the URL on load (preserve / update deep links), OR
+     *   - a search has been triggered by the user.
+     *   This prevents a chartMicro param from appearing in the URL on a fresh
+     *   page load before the user has selected or searched for anything.
+     */
     useEffect(() => {
-        if (selectedChartMicroorganism) {
+        if (
+            selectedChartMicroorganism &&
+            (isSearchTriggered || chartMicroWasInUrl.current)
+        ) {
             writeChartMicroToUrl(selectedChartMicroorganism);
         }
-    }, [selectedChartMicroorganism]);
+    }, [selectedChartMicroorganism, isSearchTriggered]);
 
     // -------------- 1) fetchPrevalenceData --------------
     const fetchPrevalenceData = async (): Promise<void> => {
@@ -955,8 +967,15 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
             !selectedChartMicroorganism ||
             !availableNames.includes(selectedChartMicroorganism)
         ) {
+            // If chartMicro was explicitly provided in the URL and no search has
+            // been triggered yet, preserve it — overwriting it would break deep links
+            // shared from a different locale or before the user presses Search.
+            if (!isSearchTriggered && chartMicroWasInUrl.current) {
+                return;
+            }
+            // Only update state; the standalone URL-sync effect above will
+            // write to URL when appropriate (search triggered or was in URL).
             setSelectedChartMicroorganism(availableNames[0]);
-            writeChartMicroToUrl(availableNames[0]);
         }
     }, [
         fullPrevalenceData,
