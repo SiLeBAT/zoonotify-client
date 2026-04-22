@@ -56,7 +56,7 @@
     "react-router-dom": "^5.2.0",
     "react-simple-image-viewer": "^1.2.2",
     "recharts": "^2.15.3",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
