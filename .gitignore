@@ -36,3 +36,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+.gitnexus
+
+# AI
+CLAUDE.md
+AGENTS.md
+.claude/
