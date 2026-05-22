@@ -8,6 +8,7 @@ module.exports = {
     moduleNameMapper: {
       "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/empty-module.js",
       "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      "^canvas$": "<rootDir>/empty-module.js",
     },
     collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/app/App.tsx"],
     testEnvironment: "jest-environment-jsdom",

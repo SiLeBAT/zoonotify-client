@@ -2,6 +2,7 @@ import { Button, Divider } from "@mui/material";
 import { useTheme } from "@mui/system";
 import Markdown from "markdown-to-jsx";
 import React from "react";
+import { openLinksInNewTab } from "./markdownOptions";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MyEvent = any;
@@ -15,6 +16,7 @@ export function ExplanationTermComponent(props: {
         <Markdown
             options={{
                 overrides: {
+                    ...openLinksInNewTab,
                     br: {
                         component: Divider,
                         props: {
