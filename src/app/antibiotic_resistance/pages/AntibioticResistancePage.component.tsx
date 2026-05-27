@@ -8,11 +8,15 @@ import {
     DialogTitle,
     DialogActions,
     Button,
+    Tooltip,
+    IconButton,
 } from "@mui/material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
 import { SubstanceDetail } from "./SubstanceDetail";
 import LZString from "lz-string";
+import { useAmrPageTooltips } from "./amrPageUseCase";
 
 // ---- Helpers for compressed state in URL (?s=...) ----
 function decodeCompressedState(
@@ -222,6 +226,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
     const [comingSoonOpen, setComingSoonOpen] = useState(false);
 
+    const { trendTooltip, substanceTooltip, multiTooltip } =
+        useAmrPageTooltips();
+
     // On mount: sync state from URL (deep link support)
     useEffect(() => {
         setState(readStateFromUrl());
@@ -344,6 +351,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         }
 
         .image-box {
+          position: relative;
           box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
           padding: 0.4rem;
           display: inline-block;
@@ -354,6 +362,18 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           border-radius: 20px;
           background: #fff;
           transition: transform 0.18s, box-shadow 0.18s;
+        }
+
+        .image-box-info {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          z-index: 2;
+          color: #003663;
+          background: rgba(255,255,255,0.85);
+        }
+        .image-box-info:hover {
+          background: rgba(255,255,255,1);
         }
 
         .image-box:hover {
@@ -473,6 +493,26 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     className="image-box"
                                     onClick={handleTrendClick}
                                 >
+                                    {trendTooltip && (
+                                        <Tooltip
+                                            title={trendTooltip}
+                                            placement="top"
+                                            arrow
+                                        >
+                                            <IconButton
+                                                className="image-box-info"
+                                                size="small"
+                                                aria-label={t(
+                                                    "MoreInfoOnTrend"
+                                                )}
+                                                onClick={(e): void =>
+                                                    e.stopPropagation()
+                                                }
+                                            >
+                                                <InfoOutlinedIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
                                     <div className="image-label">
                                         {t("Trend")}
                                     </div>
@@ -483,6 +523,26 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     className="image-box"
                                     onClick={handleSubstanceClick}
                                 >
+                                    {substanceTooltip && (
+                                        <Tooltip
+                                            title={substanceTooltip}
+                                            placement="top"
+                                            arrow
+                                        >
+                                            <IconButton
+                                                className="image-box-info"
+                                                size="small"
+                                                aria-label={t(
+                                                    "MoreInfoOnSubstance"
+                                                )}
+                                                onClick={(e): void =>
+                                                    e.stopPropagation()
+                                                }
+                                            >
+                                                <InfoOutlinedIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
                                     <div className="image-label">
                                         {t("Substans")}
                                     </div>
@@ -496,6 +556,26 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                     className="image-box bottom"
                                     onClick={handleComingSoon}
                                 >
+                                    {multiTooltip && (
+                                        <Tooltip
+                                            title={multiTooltip}
+                                            placement="top"
+                                            arrow
+                                        >
+                                            <IconButton
+                                                className="image-box-info"
+                                                size="small"
+                                                aria-label={t(
+                                                    "MoreInfoOnMulti"
+                                                )}
+                                                onClick={(e): void =>
+                                                    e.stopPropagation()
+                                                }
+                                            >
+                                                <InfoOutlinedIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
                                     <div className="image-label">
                                         {t("Multi")}
                                     </div>

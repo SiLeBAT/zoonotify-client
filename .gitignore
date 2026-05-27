@@ -2,6 +2,7 @@
 
 # compiled output
 /public
+/build
 
 # dependencies
 /node_modules
