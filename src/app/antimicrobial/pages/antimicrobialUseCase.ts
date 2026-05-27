@@ -1,9 +1,9 @@
 import i18next from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { ANTIMICROBIALS } from "../../shared/infrastructure/router/routes";
+import { AMU_PAGE } from "../../shared/infrastructure/router/routes";
 import { UseCase } from "../../shared/model/UseCases";
 
 interface AntimicrobialDTO {
@@ -17,7 +17,7 @@ interface AntimicrobialDTO {
 }
 
 interface AntimicrobialResponse {
-    data: AntimicrobialDTO[];
+    data: AntimicrobialDTO;
     meta: unknown;
 }
 
@@ -65,19 +65,15 @@ export const useAntimicrobialPageComponent: UseCase<
     // fetch + parse with async/await
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
-            const url = `${ANTIMICROBIALS}?locale=${i18next.language}`;
+            const url = `${AMU_PAGE}?locale=${i18next.language}`;
 
             try {
                 const resp = await callApiService<AntimicrobialResponse>(url);
-                const items = resp.data?.data ?? [];
-                if (items.length === 0) {
-                    // no data, leave hardcoded values
-                    return;
-                }
+                const amuTitle = resp.data?.data.title || "";
+                const amuDescription = resp.data?.data.description || "";
 
-                const first = items[0];
-                setTitle(first.title || hardCodedTitle);
-                setDescription(first.description || hardCodedDescription);
+                setTitle(amuTitle || hardCodedTitle);
+                setDescription(amuDescription || hardCodedDescription);
             } catch (err) {
                 console.error("Antimicrobial fetch error:", err);
             }
