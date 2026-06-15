@@ -14,13 +14,23 @@ import { ChartDataPoint } from "./types";
 import { formatMicroorganismNameArray, WordObject } from "./utils";
 
 /** ----------------------------- Color helper ----------------------------- */
-const generateColorFromKey = (key: string): string => {
-    let hash = 0;
-    for (let i = 0; i < key.length; i++) {
-        hash = key.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return `hsl(${hash % 360}, 70%, 60%)`;
-};
+// Curated, colourblind-safe palette (Okabe-Ito subset). Charts are coloured by
+// their global index, not by hashing the key: because the two charts shown on a
+// page are always consecutive indices, consecutive palette entries guarantee the
+// adjacent pair is visually distinct (the hash approach could land two charts on
+// near-identical hues). Yellow/black from the full Okabe-Ito set are omitted as
+// they read poorly as filled bars on a white card.
+const CHART_PALETTE = [
+    "#0072B2", // blue
+    "#E69F00", // orange
+    "#009E73", // green
+    "#D55E00", // vermillion
+    "#CC79A7", // purple
+    "#56B4E9", // sky blue
+];
+
+const colorForIndex = (index: number): string =>
+    CHART_PALETTE[index % CHART_PALETTE.length];
 
 /** ----------------------------- Title plugin ----------------------------- */
 const customTitlePlugin = (microName: string | null): Plugin => ({
@@ -61,6 +71,8 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
 /** ------------------------------ Props ------------------------------ */
 interface ChartCardProps {
     chartKey: string;
+    /** Global index of this chart among all chart keys; drives the bar colour. */
+    colorIndex: number;
     chartData: { [year: number]: ChartDataPoint };
     chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>;
     currentMicroorganism: string | null;
@@ -78,6 +90,7 @@ interface ChartCardProps {
 /** ------------------------------ Component ------------------------------ */
 const ChartCard: React.FC<ChartCardProps> = ({
     chartKey,
+    colorIndex,
     chartData,
     chartRef,
     currentMicroorganism,
@@ -87,7 +100,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
     prevalenceUpdateDate,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
-    const chartColor = generateColorFromKey(chartKey);
+    const chartColor = colorForIndex(colorIndex);
 
     // ✅ Latest year first (top)
     const yearsDesc = useMemo(
