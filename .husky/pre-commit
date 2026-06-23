@@ -1,7 +1,15 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run format
-npm run lint:fix
-git add .
+# Only format/lint the files that are actually staged for this commit.
+# Running prettier/eslint over the whole src/ tree (plus `git add .`) swept
+# every file into the commit — on a CRLF checkout prettier rewrote each
+# file's line endings, producing a 100+ file diff on every commit.
+files=$(git diff --cached --name-only --diff-filter=ACMR -- '*.js' '*.jsx' '*.ts' '*.tsx')
+if [ -n "$files" ]; then
+  echo "$files" | xargs npx prettier --write
+  echo "$files" | xargs npx eslint --fix
+  echo "$files" | xargs git add
+fi
+
 npm test -- --watchAll=false

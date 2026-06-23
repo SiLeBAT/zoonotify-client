@@ -1,31 +1,31 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import React, { useState } from "react";
-import { FooterContainer } from "../footer/Footer-Container.component";
 import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
 
-// Wrapper: no fixed height or forced 100vh
+// The page fills the body slot handed down by MainLayout (between the global
+// header and footer) and owns its scrolling via main. The footer now lives in
+// MainLayout as a sibling of the header, so it is not part of this component.
 const layoutWrapperStyle = css`
-    //display: flex;
+    display: flex;
     flex-direction: column;
+    height: 100%;
     box-sizing: border-box;
 
-    overflow-y: hidden;
+    overflow: hidden;
 `;
 
-// Main content can scroll freely
+// Main is the page's scroll container. min-height: 0 lets it shrink inside the
+// flex column so it scrolls instead of overflowing. Pages that bring their own
+// scrollable panes (e.g. prevalence's sidebar + results) simply fill it.
 const mainStyle = css`
-    flex: 1;
+    flex: 1 1 0;
+    min-height: 0;
     z-index: 0;
     box-sizing: border-box;
 
-    /* Let the browser handle scrolling */
     overflow-x: hidden;
-    overflow-y: hidden;
-`;
-
-const footerStyle = css`
-    z-index: 1;
+    overflow-y: auto;
 `;
 
 interface PageLayoutProps {
@@ -44,10 +44,6 @@ export const PageLayoutComponent: React.FC<PageLayoutProps> = ({
     return (
         <div css={layoutWrapperStyle}>
             <main css={mainStyle}>{children}</main>
-
-            <footer css={footerStyle}>
-                <FooterContainer />
-            </footer>
 
             <ErrorSnackbar
                 open={snackbarOpen}

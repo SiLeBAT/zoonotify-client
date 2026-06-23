@@ -20,9 +20,10 @@ const headerStyle = css`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    left: 0;
+    /* App-shell header: a natural-height flex item at the top of the column,
+       not position: fixed, so the body below never needs to reserve a
+       hardcoded header height. */
+    flex: 0 0 auto;
     z-index: 1000;
 `;
 
