@@ -23,10 +23,16 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
+    /* The app is a fixed-height shell (#application) that manages its own
+       internal scrolling. Clip the document so nothing — including elements
+       injected as <body> siblings by browser extensions — can make the whole
+       page scroll and push the fixed header/footer off-screen. */
+    overflow: hidden;
 }
 #application {
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 span.react-simple-image-viewer__close {
@@ -36,4 +42,11 @@ span.react-simple-image-viewer__close {
 button em {
     padding-left: 0.2em;
     padding-right: 0.2em;
+}
+
+/* Some browser extensions inject a tooltip container as a sibling of the app
+   root. When it is in its hidden state it still occupies layout space, which
+   could push content/footer around. Remove it from layout entirely. */
+.__xwc-tooltip-hidden {
+    display: none !important;
 }

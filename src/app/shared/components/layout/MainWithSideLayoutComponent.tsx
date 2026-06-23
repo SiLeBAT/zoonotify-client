@@ -24,9 +24,17 @@ export const MainWithSideLayout: React.FC<LayoutProps> = ({
         <Box
             style={{
                 display: "flex",
-                width: "100vw",
-                height: "100vh",
-                maxHeight: "calc(100vh )",
+                // Fill the main scroll area handed to us by PageLayoutComponent.
+                // Use 100% (not 100vw/100vh) so the box tracks its container and
+                // never overflows by the scrollbar width or the header height.
+                width: "100%",
+                height: "100%",
+                maxHeight: "100%",
+                // Clip and allow the row to shrink so a tall sidebar/content pane
+                // scrolls inside its own panel instead of stretching this row and
+                // forcing main to scroll.
+                minHeight: 0,
+                overflow: "hidden",
             }}
         >
             <SidebarComponent

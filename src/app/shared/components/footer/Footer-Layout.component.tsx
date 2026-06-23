@@ -17,8 +17,11 @@ export function FooterLayoutComponent({
         <Box
             component="footer"
             sx={{
-                // On mobile (xs, sm), let it scroll with the page:
+                // Bottom row of the app-shell column (sibling of header/body).
+                // flexShrink: 0 keeps it at its natural height so it is always
+                // visible and never gets squeezed or scrolled off-screen.
                 position: "static",
+                flexShrink: 0,
                 width: "100%",
                 backgroundColor: theme.palette.background.paper,
                 borderTop: `2px solid ${theme.palette.primary.main}`,
@@ -28,18 +31,16 @@ export function FooterLayoutComponent({
                 padding: theme.spacing(1),
                 boxSizing: "border-box",
 
-                // On md+ (≥900px by default), fix it at the bottom:
+                // On md+ (≥900px by default), render it as a single row. It sits
+                // at the bottom of the app-shell column as a natural-height flex
+                // item, so it no longer needs position: fixed.
                 [theme.breakpoints.up("md")]: {
-                    position: "fixed",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
                     height: `${footerHeight}px`,
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: theme.spacing(0, 2),
-                    zIndex: 1000, // Added z-index to ensure footer stays above other content
+                    zIndex: 1000,
                 },
             }}
         >
