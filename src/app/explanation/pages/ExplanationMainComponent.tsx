@@ -45,12 +45,7 @@ export function InfoPageComponent(props: {
 
     return (
         <PageLayoutComponent>
-            <Box
-                sx={{
-                    maxHeight: "calc(100vh - 140px)",
-                    overflowY: "auto",
-                }}
-            >
+            <Box>
                 <Box
                     sx={{
                         width: "60%",

@@ -67,9 +67,7 @@ export function DataProtectionPageComponent(): JSX.Element {
 
     return (
         <PageLayoutComponent>
-            <div
-                style={{ overflowY: "auto", maxHeight: "calc(100vh - 100px)" }}
-            >
+            <div>
                 <LogoCardComponent
                     title={title}
                     subtitle={dataProtectionInfo.subheading}

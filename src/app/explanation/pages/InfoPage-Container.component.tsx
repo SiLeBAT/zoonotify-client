@@ -192,8 +192,13 @@ const InfoPageContainer: React.FC = (): ReactElement => {
         console.log("Export functionality for", amrKey);
     };
 
+    // No wrapping <div> here: PageLayoutComponent (rendered by InfoPageComponent)
+    // uses height:100% to fill MainLayout's body slot and own its scrolling. An
+    // intermediate height:auto wrapper collapses that chain, leaving <main> at
+    // height 0 so the (fully rendered) content is clipped to nothing. A Fragment
+    // keeps PageLayoutComponent a direct child of the slot, like every other page.
     return (
-        <div>
+        <>
             <InfoPageComponent
                 tableData={amrTableData}
                 onAmrDataExport={handleExportAmrData}
@@ -203,7 +208,7 @@ const InfoPageContainer: React.FC = (): ReactElement => {
                     {error}
                 </ErrorSnackbar>
             )}
-        </div>
+        </>
     );
 };
 
