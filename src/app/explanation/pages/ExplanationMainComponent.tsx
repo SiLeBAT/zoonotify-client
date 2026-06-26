@@ -4,8 +4,9 @@ import { useTheme } from "@mui/material/styles";
 import Markdown from "markdown-to-jsx";
 import React from "react";
 import { ZNAccordion } from "../../shared/components/accordion/ZNAccordion";
-import { ExplanationTermComponent } from "../components/ExplanationTermComponent copy";
+import { ExplanationTermComponent } from "../components/ExplanationTermComponent";
 import { InfoPageAmrDialogComponent } from "../components/InfoPage-AmrsDialog.component";
+import { openLinksInNewTab } from "../components/markdownOptions";
 import {
     AmrKey,
     AmrsTable,
@@ -84,7 +85,12 @@ export function InfoPageComponent(props: {
                                         key="mainSection"
                                         title={model.mainSection[0].title}
                                         content={
-                                            <Markdown>
+                                            <Markdown
+                                                options={{
+                                                    overrides:
+                                                        openLinksInNewTab,
+                                                }}
+                                            >
                                                 {
                                                     model.mainSection[0]
                                                         .description

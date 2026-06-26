@@ -1,11 +1,11 @@
 const path = require("path");
 const backendURL = "http://localhost:3000";
 const contentBase = path.resolve(__dirname, "public");
-const Dotenv = require('dotenv-webpack');
-const webpack = require('webpack');
+const Dotenv = require("dotenv-webpack");
+const webpack = require("webpack");
 
 // Import package.json to access the version
-const packageJson = require('./package.json'); // Make sure the path to package.json is correct
+const packageJson = require("./package.json"); // Make sure the path to package.json is correct
 
 module.exports = (env, argv) => {
     return {
@@ -21,14 +21,16 @@ module.exports = (env, argv) => {
             historyApiFallback: {
                 index: "index.html",
             },
-            proxy: {
-                "/v1": {
+            proxy: [
+                {
+                    context: ["/v1"],
                     target: backendURL,
                 },
-                "/api-docs": {
+                {
+                    context: ["/api-docs"],
                     target: backendURL,
                 },
-            },
+            ],
         },
         resolve: {
             extensions: [".js", ".json", ".ts", ".tsx"],
@@ -57,12 +59,16 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new Dotenv({
-                path: `./.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`
+                path: `./.env${
+                    process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ""
+                }`,
             }),
             new webpack.DefinePlugin({
                 webappVersion: JSON.stringify(packageJson.version),
-                lastChange: env.lastChange ? JSON.stringify(env.lastChange): JSON.stringify(new Date().toISOString()),
-            })
-        ]
+                lastChange: env.lastChange
+                    ? JSON.stringify(env.lastChange)
+                    : JSON.stringify(new Date().toISOString()),
+            }),
+        ],
     };
 };

@@ -6,7 +6,7 @@ module.exports = {
         "eslint-comments",
         "jest",
         "promise",
-        "unicorn"
+        "unicorn",
     ],
     extends: [
         "airbnb-typescript",
@@ -15,10 +15,10 @@ module.exports = {
         "plugin:jest/recommended",
         "plugin:promise/recommended",
         "plugin:import/recommended",
-        "prettier"
+        "prettier",
     ],
     parserOptions: {
-        project: "./tsconfig.json",
+        project: "./tsconfig.eslint.json",
     },
     env: {
         node: true,
@@ -27,7 +27,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: ['**/*.test.js', '**/*.spec.js', 'src/setupTests.js'], // Define file patterns here
+            files: ["**/*.test.js", "**/*.spec.js", "src/setupTests.js"], // Define file patterns here
             rules: {
                 // Place test-specific rules here if needed
             },
@@ -39,7 +39,7 @@ module.exports = {
         "import/no-default-export": "error",
         "react/destructuring-assignment": "off",
         "react/jsx-filename-extension": "off",
-        '@typescript-eslint/no-var-requires': 'off',
+        "@typescript-eslint/no-var-requires": "off",
         "no-use-before-define": [
             "error",
             { functions: false, classes: true, variables: true },
@@ -58,7 +58,10 @@ module.exports = {
             },
         ],
         "unicorn/prevent-abbreviations": "off",
-        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+        "import/no-extraneous-dependencies": [
+            "error",
+            { devDependencies: true },
+        ],
         "unicorn/no-reduce": "off",
         "@typescript-eslint/no-explicit-any": 2,
         "unicorn/filename-case": "off",

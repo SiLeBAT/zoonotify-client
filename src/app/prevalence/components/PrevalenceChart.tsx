@@ -279,7 +279,7 @@ const PrevalenceChart: React.FC = () => {
                     ) : (
                         <>
                             <Grid container rowSpacing={0} columnSpacing={2}>
-                                {chartKeys.map((key) => {
+                                {chartKeys.map((key, index) => {
                                     const sanitizedKey = sanitizeKey(key);
                                     const refKey = `${sanitizedKey}-${selectedChartMicroorganism}`;
 
@@ -317,6 +317,7 @@ const PrevalenceChart: React.FC = () => {
                                         >
                                             <ChartCard
                                                 chartKey={key}
+                                                colorIndex={index}
                                                 chartData={chartData[key]}
                                                 chartRef={
                                                     chartRefs.current[refKey]

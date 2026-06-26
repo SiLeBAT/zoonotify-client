@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
-// eslint-disable-next-line import/named
-import { SerializedStyles } from "@emotion/core";
+import type { SerializedStyles } from "@emotion/react";
 import { css } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
@@ -21,9 +20,10 @@ const headerStyle = css`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    left: 0;
+    /* App-shell header: a natural-height flex item at the top of the column,
+       not position: fixed, so the body below never needs to reserve a
+       hardcoded header height. */
+    flex: 0 0 auto;
     z-index: 1000;
 `;
 
@@ -135,7 +135,6 @@ const navLinkStyle = (open: boolean): SerializedStyles => css`
 export function HeaderComponent(): JSX.Element {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [linkOpen, setLinkOpen] = useState<boolean>(false);
-    const [linkedDataOpen, setLinkedDataOpen] = useState<boolean>(false);
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
@@ -147,7 +146,6 @@ export function HeaderComponent(): JSX.Element {
 
     const history = useHistory();
     const { t } = useTranslation(["Header"]);
-    const showLD = process.env.REACT_APP_SHOW_LD === "true";
     const { pathname } = useLocation();
 
     useEffect(() => {
@@ -156,7 +154,6 @@ export function HeaderComponent(): JSX.Element {
         setEvaluationsOpen(pathname === pageRoute.evaluationsPagePath);
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
         setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
-        setLinkedDataOpen(pathname === pageRoute.linkedDataPagePath);
         setMicrobialCountsOpen(pathname === pageRoute.microbialCountsPagePath);
         setAntibioticResistanceOpen(
             pathname === pageRoute.antibioticResistancePagePath
@@ -241,14 +238,6 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Links")}
                     </NavLink>
-                    {showLD && (
-                        <NavLink
-                            to={pageRoute.linkedDataPagePath}
-                            css={navLinkStyle(linkedDataOpen)}
-                        >
-                            {"LD"}
-                        </NavLink>
-                    )}
                 </div>
 
                 <button
@@ -307,14 +296,6 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("Links")}
                 </NavLink>
-                {showLD && (
-                    <NavLink
-                        to={pageRoute.linkedDataPagePath}
-                        css={mobileNavLinkStyle(linkedDataOpen)}
-                    >
-                        {"LD"}
-                    </NavLink>
-                )}
             </div>
         </header>
     );

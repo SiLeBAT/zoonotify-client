@@ -43,7 +43,4 @@ HTMLCanvasElement.prototype.getContext = () => ({
     canvas: jest.fn(),
 });
 
-// If you use the canvas npm package as suggested by the error logs:
-const { createCanvas } = require("canvas");
-window.HTMLCanvasElement.prototype.getContext = () =>
-    createCanvas(200, 200).getContext("2d");
+require("jest-canvas-mock");

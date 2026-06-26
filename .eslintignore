@@ -11,5 +11,6 @@ coverage
 webpack.config.js
 .eslintrc.js
 jest.config.js
+empty-module.js
 
 cypress

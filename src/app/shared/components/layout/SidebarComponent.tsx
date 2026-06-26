@@ -8,6 +8,7 @@ interface SidebarComponentProps {
     isOpen: boolean;
     handleOpenClick: () => void;
     title: string;
+    children?: React.ReactNode;
 }
 
 export const SidebarComponent: React.FC<SidebarComponentProps> = ({
@@ -24,8 +25,17 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
             sx={{
                 maxWidth: "30%",
                 borderRight: "1px solid gray",
+                // Fill the layout row's height so the side content's inner scroll
+                // area can size correctly. Without passing height through the
+                // MUI Collapse wrappers, the panel grows with its content and is
+                // clipped by the row's overflow:hidden instead of scrolling.
+                height: "100%",
+                "& .MuiCollapse-wrapper": {
+                    height: "100%",
+                },
                 "&& .MuiCollapse-wrapperInner": {
                     width: "100%",
+                    height: "100%",
                 },
             }}
         >
@@ -35,6 +45,12 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                         style={{
                             zIndex: "101",
                             position: "relative",
+                            // Become a flex column that fills the wrapper so the
+                            // title stays fixed and the children pane scrolls.
+                            height: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                            minHeight: 0,
                         }}
                     >
                         <Box
@@ -44,12 +60,15 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                                 padding: 1,
                                 justifyContent: "center",
                                 gap: 2,
+                                flexShrink: 0,
                             }}
                         >
                             <Typography variant="h3">{title}</Typography>
                         </Box>
 
-                        {children}
+                        <Box sx={{ flex: 1, minHeight: 0, display: "flex" }}>
+                            {children}
+                        </Box>
                     </div>
 
                     <div

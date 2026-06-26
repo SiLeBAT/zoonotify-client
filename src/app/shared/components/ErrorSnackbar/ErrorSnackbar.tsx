@@ -19,6 +19,7 @@ const Alert = React.forwardRef<HTMLDivElement, CustomAlertProps>(
 interface ErrorSnackbarProps {
     open: boolean;
     handleClose: () => void;
+    children?: React.ReactNode;
 }
 
 export const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({

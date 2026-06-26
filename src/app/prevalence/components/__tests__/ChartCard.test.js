@@ -1,6 +1,7 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { ChartCard } from "./ChartCard";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { ChartCard } from "../ChartCard";
 
 // Mock translations
 jest.mock("react-i18next", () => ({
@@ -35,19 +36,19 @@ describe("ChartCard Component", () => {
                 numberOfPositive: 25,
             },
         },
-        // Remove chartRef from the props as it is not used in these tests
+        chartRef: { current: null },
         currentMicroorganism: "E. Coli",
-        yearOptions: [2021, 2022],
+        yearsToShow: [2021, 2022],
         xAxisMax: 100,
         downloadChart: jest.fn(),
+        prevalenceUpdateDate: null,
     };
 
-    it("renders without crashing and displays the microorganism name", () => {
+    it("renders without crashing and shows the download button", () => {
         render(<ChartCard {...defaultProps} />);
-        // Locate the heading by role and check its content
-        expect(screen.getByRole("heading", { level: 5 })).toHaveTextContent(
-            "E. Coli"
-        );
+        expect(
+            screen.getByRole("button", { name: "Download_Chart" })
+        ).toBeInTheDocument();
     });
 
     it("renders chart with correct data", () => {
@@ -55,12 +56,13 @@ describe("ChartCard Component", () => {
         expect(screen.getByTestId("chart")).toBeInTheDocument();
     });
 
-    it("calls downloadChart function when the download button is clicked", () => {
+    it("calls downloadChart function when the download button is clicked", async () => {
+        const user = userEvent.setup();
         render(<ChartCard {...defaultProps} />);
         const downloadButton = screen.getByRole("button", {
             name: "Download_Chart",
         });
-        fireEvent.click(downloadButton);
+        await user.click(downloadButton);
         expect(defaultProps.downloadChart).toHaveBeenCalledTimes(1);
     });
 });

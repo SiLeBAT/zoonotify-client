@@ -4,7 +4,6 @@ export const pageRoute = {
     infoPagePath: "/explanations",
     evaluationsPagePath: "/evaluations",
     dpdPagePath: "/dataProtectionDeclaration",
-    linkedDataPagePath: "/ld",
     prevalencePagePath: "/prevalence",
     antimicrobialPagePath: "/antimicrobial",
     antibioticResistancePagePath: "/antibiotic-resistance",
@@ -19,7 +18,7 @@ export const CMS_API_ENDPOINT = `${CMS_BASE_ENDPOINT}/api`;
 export const API_DOCUMENTATION_URL = `${CMS_BASE_ENDPOINT}${cms}/documentation/v2.2.0`;
 export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
-export const ANTIMICROBIALS = `${CMS_API_ENDPOINT}/antimicrobials`;
+export const AMU_PAGE = `${CMS_API_ENDPOINT}/amu-page`;
 export const EXPLANATION = `${CMS_API_ENDPOINT}/explanations`;
 export const EVALUATIONS = `${CMS_API_ENDPOINT}/evaluations`;
 export const PREVALENCES = `${CMS_API_ENDPOINT}/prevalences`;
@@ -41,5 +40,6 @@ export const RESISTANCES = `${CMS_API_ENDPOINT}/resistances`;
 export const SPECIES = `${CMS_API_ENDPOINT}/species`;
 export const TREND_INFORMATION = `${CMS_API_ENDPOINT}/trend-information`;
 export const SUBSTANCE_INFORMATION = `${CMS_API_ENDPOINT}/substance-information`;
+export const AMR_PAGE = `${CMS_API_ENDPOINT}/amr-page`;
 export const MICROBIAL_COUNTS = `${CMS_API_ENDPOINT}/microbial-counts`;
 export const ANTIMICROBIAL_SUBSTANCES = `${CMS_API_ENDPOINT}/antimicrobial-substances`;

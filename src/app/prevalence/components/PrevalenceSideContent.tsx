@@ -703,12 +703,11 @@ export function PrevalenceSideContent(): JSX.Element {
                 maxWidth: "95%",
                 p: 2,
                 boxSizing: "border-box",
-                height: "100vh",
-                maxHeight: "100vh",
-                "@supports (height: 100dvh)": {
-                    height: "100dvh",
-                    maxHeight: "100dvh",
-                },
+                // Fill the layout container (MainWithSideLayout) rather than the
+                // full viewport, so the inner scroll area sizes correctly and the
+                // Search/Reset buttons stay visible at the bottom.
+                height: "100%",
+                maxHeight: "100%",
             }}
         >
             <Box
