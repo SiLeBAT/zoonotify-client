@@ -18,19 +18,18 @@ export function WelcomeMainComponent(): JSX.Element {
 
     return (
         <PageLayoutComponent>
-            {/* Root container */}
+            {/* Root container: fill the main scroll area handed down by the
+                app-shell (PageLayoutComponent), not the whole viewport. Using
+                100vh here made this box taller than main and left empty space
+                above the footer plus an outer scrollbar. */}
             <Box
                 sx={{
-                    height: "100vh",
-                    width: "100vw",
-                    overflowY: "hidden", // Prevent outer scrollbar
+                    height: "100%",
+                    width: "100%",
+                    overflowY: "hidden",
                     display: "flex",
                     flexDirection: "column",
                     boxSizing: "border-box",
-                    // Mobile: use taller container
-                    "@media (max-width: 600px)": {
-                        height: "330vh",
-                    },
                 }}
             >
                 {/* Scrollable content area */}
