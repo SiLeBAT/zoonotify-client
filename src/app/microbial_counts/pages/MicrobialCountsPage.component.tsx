@@ -12,8 +12,6 @@ export function MicrobialCountsPageComponent(): JSX.Element {
         <PageLayoutComponent>
             <div
                 style={{
-                    maxHeight: "95vh",
-                    overflowY: "auto",
                     padding: "1rem",
                 }}
             >
