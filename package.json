@@ -1,10 +1,10 @@
 {
   "name": "zoonotify-client",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "description": "Web-basierte Abfrage von Zoonosen Surveillancedaten",
   "scripts": {
     "prepare": "husky install",
-     "postinstall": "node -e \"require('fs').rmSync('node_modules/canvas',{recursive:true,force:true})\"",
+    "postinstall": "node -e \"require('fs').rmSync('node_modules/canvas',{recursive:true,force:true})\"",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint src --fix --ext .js,.jsx,.ts,.tsx",
     "start": "cross-env npm run clean && npm run cp:all && webpack-dev-server --open",
