@@ -1,0 +1,79 @@
+name: 'SSH deploy into shared docroot'
+description: >
+  Deploy the client build into a shared Apache document root (public_html) that
+  also holds foreign content not in this repo (api/, cms/, uploads/, .htaccess,
+  ...). Only client-owned paths are touched: the fully-owned subdirs are mirrored
+  with --delete; root-level files are copied without --delete so nothing foreign
+  is ever removed. Implements ADR 0002.
+
+inputs:
+  source-dir:
+    description: 'Local build directory to deploy (e.g. ./public)'
+    required: true
+  target-dir:
+    description: 'Remote document root, relative to the SSH user home or absolute (e.g. public_html)'
+    required: true
+  mirror-dirs:
+    description: 'Space-separated, fully client-owned subdirectories to mirror with --delete'
+    required: false
+    default: 'assets locales'
+  ssh-host:
+    description: 'Target SSH host'
+    required: true
+  ssh-port:
+    description: 'SSH port (defaults to 22 if empty)'
+    required: false
+    default: '22'
+  ssh-user:
+    description: 'SSH user'
+    required: true
+  ssh-key:
+    description: 'Private SSH key for the deploy user'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: rsync build into shared docroot (preserving foreign content)
+      shell: bash
+      env:
+        SSH_KEY: ${{ inputs.ssh-key }}
+        SSH_HOST: ${{ inputs.ssh-host }}
+        SSH_PORT: ${{ inputs.ssh-port }}
+        SSH_USER: ${{ inputs.ssh-user }}
+        TARGET_DIR: ${{ inputs.target-dir }}
+        SOURCE_DIR: ${{ inputs.source-dir }}
+        MIRROR_DIRS: ${{ inputs.mirror-dirs }}
+      run: |
+        set -euo pipefail
+
+        # --- prepare SSH ---
+        PORT="${SSH_PORT:-22}"
+        mkdir -p ~/.ssh
+        printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        ssh-keyscan -p "$PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+        RSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes"
+
+        SRC="${SOURCE_DIR%/}"
+        DEST_BASE="${TARGET_DIR%/}"
+
+        # --- 1) mirror fully client-owned subdirs (drops stale files inside them) ---
+        ROOT_EXCLUDES=()
+        for d in $MIRROR_DIRS; do
+          if [ -d "$SRC/$d" ]; then
+            echo "Mirroring $d/"
+            rsync -az --delete -e "$RSH" "$SRC/$d/" "$SSH_USER@$SSH_HOST:$DEST_BASE/$d/"
+          else
+            echo "WARNING: $SRC/$d not found in build; skipping"
+          fi
+          ROOT_EXCLUDES+=("--exclude=/$d/")
+        done
+
+        # --- 2) copy remaining root-level build files WITHOUT --delete so that
+        #        foreign top-level entries (api/, cms/, uploads/, .htaccess, ...)
+        #        are never removed ---
+        echo "Copying root-level build files"
+        rsync -az -e "$RSH" "${ROOT_EXCLUDES[@]}" "$SRC/" "$SSH_USER@$SSH_HOST:$DEST_BASE/"
+
+        echo "Deploy complete: $DEST_BASE updated (foreign content preserved)"
