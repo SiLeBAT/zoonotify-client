@@ -1,34 +1,37 @@
 name: Deploy to PROD
 
+# Manual, tag-pinned production deploy (ADR 0001, step 6). Builds and deploys a
+# specific release tag - never develop HEAD. The `production` environment gates
+# the deploy job behind required reviewers (configured in repo Settings).
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to deploy (e.g. v4.4.0)'
+        required: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
         with:
-          node-version: '18.15.0'
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Set build date
+        id: meta
+        run: echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S%z')" >> "$GITHUB_OUTPUT"
 
-      - name: "Set current datetime as env variable"
-        run: |
-          echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S%z')" >> $GITHUB_OUTPUT
-        id: version  # this is used on variable path
-
-      - name: Build main.bundle.js
-        run: npm run build:prod -- --env=lastChange=${{ steps.version.outputs.builddate }}
+      - name: Build
+        run: npm run build:prod -- --env=lastChange=${{ steps.meta.outputs.builddate }}
       - run: npm run cp:all
 
-      - name: Archive build artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: prod-artifacts
           path: ./public
@@ -36,20 +39,23 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-
+    # Required reviewers + prod secrets are scoped to this environment.
+    environment: production
     steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4.1.7
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/download-artifact@v4
         with:
           name: prod-artifacts
           path: ./public
 
-      - name: Upload to PROD using Web FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+      - name: Deploy to PROD (SSH, shared docroot)
+        uses: ./.github/actions/ssh-deploy
         with:
-          server: ${{ secrets.PROD_SERVER }}
-          username: ${{ secrets.PROD_FTP_USER }}
-          password: ${{ secrets.PROD_FTP_PASS }}
-          local-dir: './public/'
-          server-dir: '/'
-          protocol: 'ftps'
+          source-dir: ./public
+          target-dir: ${{ vars.PROD_DEPLOY_DIR }}
+          ssh-host: ${{ secrets.PROD_SSH_HOST }}
+          ssh-port: ${{ vars.PROD_SSH_PORT }}
+          ssh-user: ${{ secrets.PROD_SSH_USER }}
+          ssh-key: ${{ secrets.PROD_SSH_KEY }}
