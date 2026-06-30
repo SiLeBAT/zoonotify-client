@@ -1,6 +1,6 @@
 {
   "name": "zoonotify-client",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "description": "Web-basierte Abfrage von Zoonosen Surveillancedaten",
   "scripts": {
     "prepare": "husky install",
@@ -85,8 +85,8 @@
     "babel-jest": "^29.7.0",
     "copyfiles": "^2.3.0",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
-    "dotenv-webpack": "^8.0.1",
+    "css-loader": "^7.1.4",
+    "dotenv-webpack": "^9.0.0",
     "eslint": "^8.23.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
@@ -103,7 +103,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
     "jest-canvas-mock": "^2.5.2",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-jsdom": "^30.4.1",
     "nodemon": "^2.0.4",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
@@ -111,7 +111,7 @@
     "style-loader": "^1.1.4",
     "ts-loader": "^9.3.1",
     "typescript": "^4.8.0",
-    "webpack": "^5.105.3",
+    "webpack": "^5.108.3",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.2.3"
   },
