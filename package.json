@@ -85,7 +85,7 @@
     "babel-jest": "^29.7.0",
     "copyfiles": "^2.3.0",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
+    "css-loader": "^7.1.4",
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.23.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
