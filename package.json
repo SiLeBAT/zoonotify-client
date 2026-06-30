@@ -107,12 +107,12 @@
     "nodemon": "^2.0.4",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "source-map-loader": "^4.0.0",
+    "source-map-loader": "^5.0.0",
     "style-loader": "^1.1.4",
     "ts-loader": "^9.3.1",
     "typescript": "^6.0.3",
     "webpack": "^5.108.3",
-    "webpack-cli": "^5.1.4",
+    "webpack-cli": "^7.1.0",
     "webpack-dev-server": "^5.2.3"
   },
   "znConfig": {

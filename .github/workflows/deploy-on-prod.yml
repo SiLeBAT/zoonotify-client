@@ -19,7 +19,9 @@ jobs:
           ref: ${{ inputs.tag }}
       - uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
+          # Pinned (not node-version-file) because this job checks out an
+          # arbitrary release tag, and older tags predate .nvmrc.
+          node-version: '20'
           cache: 'npm'
       - run: npm ci
 
