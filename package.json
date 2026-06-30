@@ -22,7 +22,11 @@
     "cp:all": "npm run cp:html && npm run cp:assets && npm run cp:localesDe && npm run cp:localesEn",
     "test": "jest",
     "test:coverage": "./node_modules/.bin/jest --coverage",
+    "typecheck": "tsc --noEmit",
     "format": "npx prettier --write src/"
+  },
+  "engines": {
+    "node": ">=20 <21"
   },
   "repository": {
     "type": "git",
