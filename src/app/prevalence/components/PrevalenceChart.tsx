@@ -3,6 +3,7 @@ import {
     CircularProgress,
     Grid,
     Pagination,
+    Slider,
     Typography,
     useMediaQuery,
 } from "@mui/material";
@@ -18,15 +19,11 @@ import { getCurrentTimestamp } from "./utils";
 
 ChartJS.register(...registerables);
 
-let [yearMin, yearMax] = [3000, 0];
-
 const PrevalenceChart: React.FC = () => {
     const {
         prevalenceData,
         loading,
         prevalenceUpdateDate,
-        selectedYear,
-        yearOptions,
         selectedChartMicroorganism,
         setSelectedChartMicroorganism,
     } = usePrevalenceFilters();
@@ -43,6 +40,42 @@ const PrevalenceChart: React.FC = () => {
         string[]
     >([]);
     const [currentPage, setCurrentPage] = useState(1);
+
+    /**
+     * Chart year window — a view-only range over the chart's year (y) axis.
+     * Ephemeral: it only reframes the charts (and the WYSIWYG figure export),
+     * never the table or the CSV "Data download". `null` means "full span".
+     * See docs/context/prevalence-visualization.md (monorepo root).
+     */
+    const [chartYearRange, setChartYearRange] = useState<
+        [number, number] | null
+    >(null);
+
+    /** Distinct years the selected microorganism actually has data for. */
+    const microYears = useMemo(() => {
+        const years = prevalenceData
+            .filter(
+                (entry) => entry.microorganism === selectedChartMicroorganism
+            )
+            .map((entry) => entry.samplingYear)
+            .filter(Number.isFinite);
+        return Array.from(new Set(years)).sort((a, b) => a - b);
+    }, [prevalenceData, selectedChartMicroorganism]);
+
+    const microYearMin = microYears[0];
+    const microYearMax = microYears[microYears.length - 1];
+
+    // The active window: an explicit selection, else the micro's full span.
+    const activeRange: [number, number] = chartYearRange ?? [
+        microYearMin,
+        microYearMax,
+    ];
+
+    // Reset the window to full span whenever the plotted microorganism or its
+    // year bounds change (microorganism switch or a fresh search). `null` = full.
+    useEffect(() => {
+        setChartYearRange(null);
+    }, [selectedChartMicroorganism, microYearMin, microYearMax]);
 
     const chartsPerPage = 2;
     const isSmallScreen = useMediaQuery("(max-width:1600px)");
@@ -107,32 +140,28 @@ const PrevalenceChart: React.FC = () => {
         )
     );
 
-    // ---- Year range fallback if context yearOptions empty ----
-    const yearRange = prevalenceData.map((entry) => entry.samplingYear);
-    yearMin = Math.min(...yearRange);
-    yearMax = Math.max(...yearRange);
+    const [rangeLo, rangeHi] = activeRange;
 
-    const yearOptionsForChart = Array.from(
-        { length: yearMax - yearMin + 1 },
-        (_, i) => yearMin + i
+    /**
+     * Years shown on the charts = the selected microorganism's years that fall
+     * inside the Chart year window. Intersection (not a contiguous fill), so a
+     * non-contiguous left-panel year filter is respected and years the micro has
+     * no data for drop out rather than showing as empty rows.
+     */
+    const yearsToShow = useMemo(
+        () => microYears.filter((y) => y >= rangeLo && y <= rangeHi),
+        [microYears, rangeLo, rangeHi]
     );
 
-    const allYearsForSlider =
-        yearOptions && yearOptions.length > 0
-            ? yearOptions
-            : yearOptionsForChart;
-
-    /** ✅ Years shown on charts */
-    const yearsToShow = useMemo(() => {
-        const base =
-            selectedYear && selectedYear.length > 0
-                ? selectedYear
-                : allYearsForSlider;
-        return [...base].filter(Number.isFinite).sort((a, b) => a - b);
-    }, [selectedYear, allYearsForSlider]);
-
+    // The prevalence-% axis rescales to the Chart year window: only CIs of years
+    // currently visible count. Zooming to low-prevalence years gives more detail,
+    // and because the PNG "Download chart" figure is WYSIWYG it captures this
+    // rescaled axis — while the CSV "Data download" stays full and unaffected.
+    const visibleYears = new Set(yearsToShow);
     const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
-        Object.values(yearData).map((data) => data.ciMax)
+        Object.entries(yearData)
+            .filter(([year]) => visibleYears.has(Number(year)))
+            .map(([, data]) => data.ciMax)
     );
     const maxCiPlus = Math.max(...allCiMaxValues);
     const xAxisMax = maxCiPlus > 25 ? 100 : 25;
@@ -265,6 +294,34 @@ const PrevalenceChart: React.FC = () => {
                         availableMicroorganisms={availableMicroorganisms}
                         setCurrentMicroorganism={setSelectedChartMicroorganism}
                     />
+                    {microYears.length >= 2 && (
+                        <Box sx={{ px: 1, mt: 1 }}>
+                            <Typography
+                                id="chart-year-range-label"
+                                variant="caption"
+                                component="label"
+                                sx={{
+                                    display: "block",
+                                    color: "text.secondary",
+                                    fontWeight: 500,
+                                }}
+                            >
+                                {t("Chart_Year_Range")}
+                            </Typography>
+                            <Slider
+                                size="small"
+                                value={activeRange}
+                                min={microYearMin}
+                                max={microYearMax}
+                                step={1}
+                                valueLabelDisplay="auto"
+                                aria-labelledby="chart-year-range-label"
+                                onChange={(_, value) =>
+                                    setChartYearRange(value as [number, number])
+                                }
+                            />
+                        </Box>
+                    )}
                 </Box>
             </Box>
 
