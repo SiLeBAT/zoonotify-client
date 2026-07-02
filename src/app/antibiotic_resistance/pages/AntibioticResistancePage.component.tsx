@@ -334,19 +334,21 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           z-index: 1;
         }
 
-        /* ✅ Breadcrumb: ONLY TEXT, always on top, no white box */
+        /* Breadcrumb: sticky bar, opaque so scrolled content can't bleed through */
         .abx-breadcrumb {
           font-size: 1.4rem;
           color: #003663;
           text-align: center;
-          margin-top: 1.5rem;
-          margin-bottom: 0.5rem;
 
           position: sticky;
-          top: 10px;
+          top: 0;
           z-index: 99999;
 
-          background: transparent; /* no box */
+          /* Opaque background masks content scrolling underneath */
+          background: #fff;
+          padding: 1rem 0 0.75rem;
+          margin-bottom: 0.5rem;
+          box-shadow: 0 2px 6px rgba(48, 56, 96, 0.12);
           pointer-events: auto;
         }
 
@@ -425,7 +427,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           }
 
           .abx-breadcrumb {
-            top: 12px;
+            top: 0;
             font-size: 1.15rem;
           }
         }
