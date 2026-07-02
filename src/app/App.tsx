@@ -5,7 +5,7 @@ import React, {
     useState,
     forwardRef,
 } from "react";
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import {
     StyledEngineProvider,
     ThemeProvider,
@@ -70,13 +70,17 @@ const App = (): ReactElement => {
     );
 };
 
-ReactDOM.render(
+const container = document.querySelector("#application");
+if (!container) {
+    throw new Error("Root container '#application' not found");
+}
+const root = createRoot(container);
+root.render(
     <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
             <Suspense fallback={<LoadingProcessComponent />}>
                 <App />
             </Suspense>
         </ThemeProvider>
-    </StyledEngineProvider>,
-    document.querySelector("#application")
+    </StyledEngineProvider>
 );
