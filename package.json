@@ -104,7 +104,6 @@
     "jest": "^30.4.2",
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^30.4.1",
-    "nodemon": "^2.0.4",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "source-map-loader": "^5.0.0",
