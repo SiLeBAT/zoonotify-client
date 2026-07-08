@@ -29,6 +29,8 @@
   "MoreInfoOnMulti": "More information about the Multiple Resistance Graph",
   "SELECT_ALL": "Select All",
   "DESELECT_ALL": "Deselect All",
+  "SELECT_ALL_COMBINATIONS": "Select first 4",
+  "DESELECT_ALL_COMBINATIONS": "Deselect all",
   "ALL_VALUES": "All values",
   "ComingSoon": "Coming soon...",
   "RESET_FILTERS": "Reset Filters",

@@ -34,6 +34,8 @@
 
   "SELECT_ALL": "Alle auswählen",
   "DESELECT_ALL": " Alle abwählen",
+  "SELECT_ALL_COMBINATIONS": "Erste 4 auswählen",
+  "DESELECT_ALL_COMBINATIONS": "Alle abwählen",
   "ALL_VALUES": "Alle Werte",
   "anzahlResistenterIsolate": "anzahlResistenterIsolate",
   "minKonfidenzintervall": "minKonfidenzintervall",
