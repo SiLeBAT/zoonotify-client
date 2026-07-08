@@ -107,6 +107,73 @@ ALL_SUBSTANCES.forEach((substance, idx) => {
 SUBSTANCE_COLORS.CIP = "#e41a1c"; // bright red
 SUBSTANCE_COLORS.GEN = "#377eb8"; // strong blue
 
+// Substances whose value at the hovered year is within this many percentage
+// points of the hovered one are treated as "overlapping" and shown together.
+const OVERLAP_THRESHOLD = 1.5;
+
+interface TrendTooltipProps {
+    active?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    payload?: any[];
+    label?: React.ReactNode;
+    hovered?: string | null;
+}
+
+// Custom tooltip: instead of listing every substance for the hovered year,
+// show only the substance whose data point is under the cursor, plus any other
+// substance whose value at that year overlaps it (within OVERLAP_THRESHOLD).
+const TrendTooltip: React.FC<TrendTooltipProps> = ({
+    active,
+    payload,
+    label,
+    hovered,
+}) => {
+    if (!active || !payload || payload.length === 0) return null;
+
+    const withValues = payload.filter(
+        (p) => p.value !== null && p.value !== undefined
+    );
+    if (withValues.length === 0) return null;
+
+    const hoveredEntry = hovered
+        ? withValues.find((p) => p.dataKey === hovered)
+        : undefined;
+
+    // Fall back to showing all substances until the cursor is actually over a
+    // specific line's point (so the tooltip is never empty).
+    let shown = withValues;
+    if (hoveredEntry) {
+        shown = withValues.filter(
+            (p) =>
+                p.dataKey === hovered ||
+                Math.abs(p.value - hoveredEntry.value) <= OVERLAP_THRESHOLD
+        );
+    }
+
+    return (
+        <div
+            style={{
+                background: "#fff",
+                border: "1px solid #ccc",
+                borderRadius: 6,
+                padding: "8px 12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                fontSize: 13,
+                lineHeight: 1.5,
+            }}
+        >
+            <div style={{ fontWeight: "bold", marginBottom: 4, color: "#333" }}>
+                {label}
+            </div>
+            {shown.map((p) => (
+                <div key={p.dataKey} style={{ color: p.color }}>
+                    {p.name} : {p.value.toFixed(1)}%
+                </div>
+            ))}
+        </div>
+    );
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
     const { x, y, payload } = props;
@@ -147,6 +214,11 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
     const { t, i18n } = useTranslation(["Antibiotic"]);
     const [copied, setCopied] = useState(false);
+    // Which substance's data point the cursor is currently over. Set when the
+    // mouse enters a line's active dot; drives the single-value tooltip.
+    const [hoveredSubstance, setHoveredSubstance] = useState<string | null>(
+        null
+    );
 
     // -- Chart data preparation
     const yearRange = data.map((entry) => entry.samplingYear);
@@ -306,7 +378,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
 
         function valueForCSV(
             row: ResistanceApiItem,
-            h: typeof headers[number]
+            h: (typeof headers)[number]
         ): string {
             // ✅ microorganism is not on row; inject from prop
             if (h === "microorganism") {
@@ -483,11 +555,10 @@ This file contains comma-separated data, which supports the correct format of nu
                                     />
                                 </YAxis>
                                 <Tooltip
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                    formatter={(value: any) =>
-                                        value !== null && value !== undefined
-                                            ? value.toFixed(1) + "%"
-                                            : "-"
+                                    content={
+                                        <TrendTooltip
+                                            hovered={hoveredSubstance}
+                                        />
                                     }
                                 />
                                 <Legend
@@ -508,6 +579,11 @@ This file contains comma-separated data, which supports the correct format of nu
                                         }
                                         strokeWidth={2}
                                         dot={{ r: 3 }}
+                                        activeDot={{
+                                            r: 5,
+                                            onMouseEnter: () =>
+                                                setHoveredSubstance(substance),
+                                        }}
                                         connectNulls
                                     />
                                 ))}
