@@ -1372,6 +1372,23 @@ export const SubstanceDetail: React.FC<{
             .filter(Boolean);
     }, [selectedCombinations, comboLabelMap]);
 
+    //  The chart can display at most MAX_COMBINATIONS combos, so "Select All" is
+    //  capped at that many. Measure the "all selected" state against the cap (not
+    //  the raw available count) so the toggle, checkbox and label work when more
+    //  than MAX_COMBINATIONS combinations are available.
+    const MAX_COMBINATIONS = 4;
+    const maxSelectableCombinations = Math.min(
+        MAX_COMBINATIONS,
+        availableCombinations.length
+    );
+    const allCombinationsSelected =
+        availableCombinations.length > 0 &&
+        selectedCombinations.length === maxSelectableCombinations;
+    //  When the cap actually limits the selection, say so ("Select first 4");
+    //  otherwise it really is a plain select-all.
+    const combinationsAreCapped =
+        availableCombinations.length > MAX_COMBINATIONS;
+
     return (
         <>
             <style>{menuItemTextStyle}</style>
@@ -1514,14 +1531,12 @@ export const SubstanceDetail: React.FC<{
                                         let nextCombos: string[] = v;
 
                                         if (v.includes("all")) {
-                                            nextCombos =
-                                                selectedCombinations.length ===
-                                                availableCombinations.length
-                                                    ? []
-                                                    : availableCombinations.slice(
-                                                          0,
-                                                          4
-                                                      );
+                                            nextCombos = allCombinationsSelected
+                                                ? []
+                                                : availableCombinations.slice(
+                                                      0,
+                                                      maxSelectableCombinations
+                                                  );
                                             setSelectedCombinations(nextCombos);
                                         } else if (v.length > 4) {
                                             setMaxComboDialogOpen(true);
@@ -1555,23 +1570,26 @@ export const SubstanceDetail: React.FC<{
                                 >
                                     <MenuItem value="all">
                                         <Checkbox
-                                            checked={
-                                                selectedCombinations.length ===
-                                                availableCombinations.length
-                                            }
+                                            checked={allCombinationsSelected}
                                             indeterminate={
                                                 selectedCombinations.length >
                                                     0 &&
-                                                selectedCombinations.length <
-                                                    availableCombinations.length
+                                                !allCombinationsSelected
                                             }
                                         />
                                         <ListItemText
                                             primary={
-                                                selectedCombinations.length ===
-                                                availableCombinations.length
-                                                    ? t("DESELECT_ALL") ||
-                                                      "Deselect All"
+                                                allCombinationsSelected
+                                                    ? combinationsAreCapped
+                                                        ? t(
+                                                              "DESELECT_ALL_COMBINATIONS"
+                                                          ) || "Deselect all"
+                                                        : t("DESELECT_ALL") ||
+                                                          "Deselect All"
+                                                    : combinationsAreCapped
+                                                    ? t(
+                                                          "SELECT_ALL_COMBINATIONS"
+                                                      ) || "Select first 4"
                                                     : t("SELECT_ALL") ||
                                                       "Select All"
                                             }
