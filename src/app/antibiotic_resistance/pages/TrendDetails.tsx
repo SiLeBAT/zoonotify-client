@@ -264,7 +264,10 @@ const selectSx = {
 };
 
 // keep the menu the same width and anchored consistently
+// variant "menu" instead of the default "selectedMenu": the latter focuses the
+// last selected option, which scrolls an all-selected list to the bottom on open
 const fixedMenuProps: Partial<MenuProps> = {
+    variant: "menu",
     PaperProps: {
         sx: { minWidth: SELECT_WIDTH },
         style: { maxHeight: 400 },
@@ -836,6 +839,7 @@ export const TrendDetails: React.FC<{
                                 : ""
                         }
                         MenuProps={{
+                            variant: "menu",
                             PaperProps: {
                                 style: {
                                     maxHeight: 400,
