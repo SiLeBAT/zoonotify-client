@@ -130,12 +130,28 @@ export function buildNameToDocIdMap(
 const CONTAINS_FILTER_ORGANISMS = new Set(["MRSA", "STEC"]);
 
 /**
+ * Organisms matched by a bare substring of their DB name rather than by the
+ * "(ABBREV)" pattern above. "ESBL/AmpC E. coli" is stored with a translated
+ * qualifier ("ESBL/AmpC-producing E. coli" / "ESBL/AmpC-bildende E. coli"),
+ * so the "ESBL" stem is the only locale-stable part of the name.
+ */
+const SUBSTRING_FILTER_ORGANISMS: Record<string, string> = {
+    "ESBL/AmpC E. coli": "ESBL",
+};
+
+/**
  * Returns the Strapi filter query segment for a microorganism name.
  * Uses $containsi for organisms whose UI name is an abbreviation that
  * appears inside the full DB name (e.g. "(MRSA)", "(STEC)").
  * Falls back to exact $eq match for all other organisms.
  */
 export function buildMicroorganismFilter(microorganism: string): string {
+    const substringMatch = SUBSTRING_FILTER_ORGANISMS[microorganism];
+    if (substringMatch) {
+        return `&filters[microorganism][name][$containsi]=${encodeURIComponent(
+            substringMatch
+        )}`;
+    }
     if (CONTAINS_FILTER_ORGANISMS.has(microorganism)) {
         return `&filters[microorganism][name][$containsi]=${encodeURIComponent(
             `(${microorganism})`
