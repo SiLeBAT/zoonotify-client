@@ -492,7 +492,11 @@ export const SubstanceDetail: React.FC<{
     const langHydratedRef = useRef(false);
     const hydratedFromUrlRef = useRef(false);
     const prevMicroRef = useRef<string | null>(null);
+    //  Reset leaves the dropdown empty but a later Search still means "all
+    //  substances"; Deselect All means the user wants no substances at all.
+    //  Two different intents, so two flags.
     const keepEmptySubstanceAfterResetRef = useRef(false);
+    const userClearedSubstancesRef = useRef(false);
 
     const prevVisibleSubstanceIdsRef = useRef<string[] | null>(null);
 
@@ -619,10 +623,15 @@ export const SubstanceDetail: React.FC<{
             sub = substanceFilter,
             overrideYear?: number
         ): void => {
-            //  If user selected no substance, interpret it as "ALL visible substances"
+            //  If user selected no substance, interpret it as "ALL visible
+            //  substances" — unless the empty selection is deliberate (Deselect
+            //  All / reset), which must be left alone
             let effectiveSub = sub;
 
-            if (effectiveSub.length === 0) {
+            if (
+                effectiveSub.length === 0 &&
+                !userClearedSubstancesRef.current
+            ) {
                 const visibleSubs = uniqueFromItems(
                     filterDataExcludingKey(
                         resistanceRawData,
@@ -640,7 +649,13 @@ export const SubstanceDetail: React.FC<{
                 setSubstanceFilter(effectiveSub);
             }
 
-            const filtered = filterDataWithSelected(sel, effectiveSub);
+            //  filterDataWithSelected reads an empty substance list as "no
+            //  constraint" and would return every substance, so a deliberate
+            //  empty selection has to short-circuit to no data
+            const filtered =
+                effectiveSub.length === 0
+                    ? []
+                    : filterDataWithSelected(sel, effectiveSub);
             setFilteredFullData(filtered);
             setShowResults(true);
 
@@ -827,6 +842,9 @@ export const SubstanceDetail: React.FC<{
         };
         const resetSubs: string[] = []; //  empty on reset
         keepEmptySubstanceAfterResetRef.current = true;
+        //  a reset is not a deliberate "no substances" choice: a later Search
+        //  must still fall back to all visible substances
+        userClearedSubstancesRef.current = false;
 
         setSelected(resetSel);
         setShowResults(false);
@@ -1151,7 +1169,11 @@ export const SubstanceDetail: React.FC<{
             }
 
             //  Like combinations: change state, update URL, but DO NOT auto-search
-            keepEmptySubstanceAfterResetRef.current = false;
+            //  Deselect All must stick: without these flags handleSearch and the
+            //  waterfall effect both re-select every visible substance
+            const cleared = newSubstanceFilter.length === 0;
+            userClearedSubstancesRef.current = cleared;
+            keepEmptySubstanceAfterResetRef.current = cleared;
             setSubstanceFilter(newSubstanceFilter);
 
             //  Update chart immediately (same behavior as combinations)
