@@ -1,18 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+    lang defaults to "de" to match i18next's fallbackLng (src/i18n.ts). This is
+    what a crawler sees before any JavaScript runs.
+-->
+<html lang="de">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>ZooNotify — Zoonosen-Surveillancedaten des BfR</title>
+        <meta
+            name="description"
+            content="ZooNotify stellt Surveillancedaten zu Zoonosen, Antibiotikaresistenzen und mikrobiellen Keimgehalten in Deutschland bereit — erhoben und veröffentlicht vom Bundesinstitut für Risikobewertung (BfR)."
+        />
+        <meta name="author" content="Bundesinstitut für Risikobewertung (BfR)" />
+        <meta name="theme-color" content="#003c7d" />
+
+        <!--
+            Open Graph / Twitter. These are the ONLY metadata a social or LLM
+            crawler sees, because those crawlers do not execute JavaScript.
+            Keep them accurate for the site as a whole.
+        -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="ZooNotify" />
+        <meta
+            property="og:title"
+            content="ZooNotify — Zoonosen-Surveillancedaten des BfR"
+        />
+        <meta
+            property="og:description"
+            content="Surveillancedaten zu Zoonosen, Antibiotikaresistenzen und mikrobiellen Keimgehalten in Deutschland."
+        />
+        <meta property="og:url" content="https://zoonotify.bfr.berlin/" />
+        <meta property="og:locale" content="de_DE" />
+        <meta property="og:locale:alternate" content="en_GB" />
+        <!-- TODO: replace with a purpose-built 1200x630 preview image. -->
+        <meta
+            property="og:image"
+            content="https://zoonotify.bfr.berlin/assets/bfr_logo.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:title"
+            content="ZooNotify — Zoonosen-Surveillancedaten des BfR"
+        />
+        <meta
+            name="twitter:description"
+            content="Surveillancedaten zu Zoonosen, Antibiotikaresistenzen und mikrobiellen Keimgehalten in Deutschland."
+        />
+        <meta
+            name="twitter:image"
+            content="https://zoonotify.bfr.berlin/assets/bfr_logo.png"
+        />
+
+        <link rel="canonical" href="https://zoonotify.bfr.berlin/" />
+        <link
+            rel="alternate"
+            hreflang="de"
+            href="https://zoonotify.bfr.berlin/?lang=de"
+        />
+        <link
+            rel="alternate"
+            hreflang="en"
+            href="https://zoonotify.bfr.berlin/?lang=en"
+        />
+        <link
+            rel="alternate"
+            hreflang="x-default"
+            href="https://zoonotify.bfr.berlin/"
+        />
+
         <link rel="stylesheet" href="assets/styles.css" />
         <link
             rel="shortcut icon"
             type="image/x-icon"
             href="assets/favicon.ico"
         />
-        <title>ZooNotify</title>
     </head>
     <body>
         <div id="application"></div>
+        <noscript>
+            <h1>ZooNotify — Zoonosen-Surveillancedaten des BfR</h1>
+            <p>
+                ZooNotify ist eine web-basierte Abfrage von Zoonosen-
+                Surveillancedaten des Bundesinstituts für Risikobewertung (BfR).
+                Für die Darstellung der Daten wird JavaScript benötigt.
+            </p>
+            <p>
+                ZooNotify is a web-based query tool for zoonotic disease
+                surveillance data published by the German Federal Institute for
+                Risk Assessment (BfR). JavaScript is required to display the
+                data.
+            </p>
+            <p>
+                <a href="https://www.bfr.bund.de/"
+                    >Bundesinstitut für Risikobewertung (BfR)</a
+                >
+            </p>
+        </noscript>
         <script src="main.bundle.js"></script>
     </body>
 </html>

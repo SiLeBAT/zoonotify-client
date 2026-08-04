@@ -32,6 +32,15 @@ module.exports = {
                 // Place test-specific rules here if needed
             },
         },
+        {
+            // Plain CommonJS build scripts (not part of the app bundle).
+            // Return-type annotations are a TypeScript syntax that a .js file
+            // cannot carry, so the rule is unsatisfiable rather than unmet.
+            files: ["scripts/**/*.js"],
+            rules: {
+                "@typescript-eslint/explicit-function-return-type": "off",
+            },
+        },
     ],
     rules: {
         "no-prototype-builtins": "off",
