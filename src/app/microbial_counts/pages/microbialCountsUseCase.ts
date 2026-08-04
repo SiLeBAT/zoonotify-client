@@ -2,7 +2,6 @@
 import i18next from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useHistory } from "react-router-dom";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { MICROBIAL_COUNTS } from "../../shared/infrastructure/router/routes";
 import { UseCase } from "../../shared/model/UseCases";
@@ -39,30 +38,12 @@ export const useMicrobialCountsPageComponent: UseCase<
     const hardCodedDescription =
         t("MicrobialCountsDescription") || "No content available yet.";
 
-    const location = useLocation();
-    const history = useHistory();
-
     const [title, setTitle] = useState<string>(hardCodedTitle);
     const [description, setDescription] =
         useState<string>(hardCodedDescription);
 
-    // URL -> i18next
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const localeParam = params.get("locale");
-        if (localeParam && localeParam !== i18next.language) {
-            i18next.changeLanguage(localeParam);
-        }
-    }, [location.search]);
-
-    // i18next -> URL
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        if (params.get("locale") !== i18next.language) {
-            params.set("locale", i18next.language);
-            history.replace({ search: params.toString() });
-        }
-    }, [i18next.language, location.search, history]);
+    // Language <-> URL sync is useLanguageUrlSync's job, mounted once in
+    // Body-Router.component.tsx.
 
     // fetch content
     useEffect(() => {

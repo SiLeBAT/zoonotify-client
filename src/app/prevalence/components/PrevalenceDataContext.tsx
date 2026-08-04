@@ -254,21 +254,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
     // -------------- Language Setup --------------
-    useEffect(() => {
-        const urlSearchParams = new URLSearchParams(window.location.search);
-        const langParam = urlSearchParams.get("lang");
-        if (langParam && langParam !== i18next.language) {
-            i18next.changeLanguage(langParam);
-        }
-        if (!langParam) {
-            urlSearchParams.set("lang", i18next.language);
-            window.history.replaceState(
-                null,
-                "",
-                `?${urlSearchParams.toString()}`
-            );
-        }
-    }, []);
+    // Handled by useLanguageUrlSync, mounted once in
+    // Body-Router.component.tsx.
 
     // -------------- State --------------
     const [selectedMicroorganisms, setSelectedMicroorganisms] = useState<

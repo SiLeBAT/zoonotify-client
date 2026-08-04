@@ -110,29 +110,10 @@ const useExplanationPageComponent: UseCase<
     const [deepLink, setDeepLink] = useState<string>("");
     const [activeAnchor, setActiveAnchor] = useState<string | null>(null);
 
-    // --- keep ?lang in sync with i18next ---
+    // Keeping ?lang in sync with i18next is useLanguageUrlSync's job, mounted
+    // once in Body-Router.component.tsx. This effect only builds the shareable
+    // deep link for the copy-link control.
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const queryLang = params.get("lang");
-        if (queryLang && queryLang !== i18next.language) {
-            i18next.changeLanguage(queryLang);
-        }
-    }, [location.search]);
-
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-
-        // Ensure URL always has the current language
-        if (params.get("lang") !== i18next.language) {
-            params.set("lang", i18next.language);
-            history.replace({
-                pathname: location.pathname,
-                search: params.toString(),
-                hash: location.hash,
-            });
-        }
-
-        // Build deep link from current path + query + hash
         const currentUrl = window.location.origin + window.location.pathname;
         const finalParams = new URLSearchParams(location.search);
         if (finalParams.get("lang") !== i18next.language) {
@@ -140,13 +121,7 @@ const useExplanationPageComponent: UseCase<
         }
         const qs = finalParams.toString();
         setDeepLink(`${currentUrl}?${qs}${location.hash || ""}`);
-    }, [
-        i18next.language,
-        location.pathname,
-        location.search,
-        location.hash,
-        history,
-    ]);
+    }, [i18next.language, location.pathname, location.search, location.hash]);
 
     // --- read the hash whenever it changes and scroll into view ---
     useEffect(() => {
