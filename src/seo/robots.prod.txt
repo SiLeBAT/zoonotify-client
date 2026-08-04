@@ -1,0 +1,12 @@
+# ZooNotify — production (zoonotify.bfr.berlin)
+# Public surveillance data published by the BfR. Crawling is welcome.
+
+User-agent: *
+Allow: /
+
+# Admin and API surfaces carry no indexable content.
+Disallow: /admin
+Disallow: /cms
+Disallow: /api-docs
+
+Sitemap: https://zoonotify.bfr.berlin/sitemap.xml
