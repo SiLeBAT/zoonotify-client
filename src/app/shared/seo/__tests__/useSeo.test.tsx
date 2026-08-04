@@ -64,6 +64,19 @@ const metaContent = (selector: string): string | null =>
 const linkHref = (selector: string): string | null =>
     document.head.querySelector(selector)?.getAttribute("href") ?? null;
 
+const jsonLdScripts = (): HTMLScriptElement[] =>
+    Array.from(
+        document.head.querySelectorAll<HTMLScriptElement>(
+            'script[type="application/ld+json"]'
+        )
+    );
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const jsonLd = (): any => {
+    const [script] = jsonLdScripts();
+    return script ? JSON.parse(script.textContent ?? "null") : null;
+};
+
 beforeEach(() => {
     seedStaticHead();
 });
@@ -205,5 +218,88 @@ describe("useSeo", () => {
         expect(metaContent('meta[property="og:url"]')).toBe(
             "http://localhost/prevalence?lang=en"
         );
+    });
+});
+
+describe("useSeo structured data", () => {
+    it("describes a data route as a schema.org Dataset, so it can surface in Dataset Search", async () => {
+        await renderAt("/prevalence");
+
+        expect(jsonLd()["@type"]).toBe("Dataset");
+    });
+
+    it.each(["/prevalence", "/antibiotic-resistance", "/microbial-counts"])(
+        "credits the BfR as the source of the dataset on %s",
+        async (path) => {
+            await renderAt(path, "en");
+            const data = jsonLd();
+
+            expect(data["@type"]).toBe("Dataset");
+            // A raw i18n key would mean the copy is missing, not that it resolved.
+            expect(data.name).not.toContain("datasetName");
+            expect(data.name).toBeTruthy();
+            expect(data.creator).toMatchObject({
+                "@type": "GovernmentOrganization",
+                url: "https://www.bfr.bund.de/",
+            });
+            expect(data.url).toBe(`http://localhost${path}?lang=en`);
+            expect(data.inLanguage).toBe("en");
+        }
+    );
+
+    it("does not claim licence terms or a reporting period it cannot verify", async () => {
+        await renderAt("/prevalence");
+        const data = jsonLd();
+
+        expect(data.license).toBeUndefined();
+        expect(data.temporalCoverage).toBeUndefined();
+    });
+
+    it("attributes the site itself to the BfR on the home route", async () => {
+        await renderAt("/");
+        const data = jsonLd();
+
+        expect(data["@type"]).toBe("WebSite");
+        expect(data.publisher).toMatchObject({
+            "@type": "GovernmentOrganization",
+            url: "https://www.bfr.bund.de/",
+        });
+        expect(data.inLanguage).toEqual(expect.arrayContaining(["de", "en"]));
+    });
+
+    it("still describes prose routes, so they are not structurally anonymous", async () => {
+        await renderAt("/explanations");
+
+        expect(jsonLd()["@type"]).toBe("WebPage");
+    });
+
+    it("emits exactly one block after navigating, so crawlers do not see a stale page described alongside the current one", async () => {
+        await renderAt("/prevalence");
+        await renderAt("/explanations");
+
+        expect(jsonLdScripts()).toHaveLength(1);
+        expect(jsonLd()["@type"]).toBe("WebPage");
+    });
+
+    it("re-describes the page when the language changes", async () => {
+        const { i18n } = await renderAt("/prevalence", "de");
+        expect(jsonLd().inLanguage).toBe("de");
+        const germanName = jsonLd().name;
+
+        await act(async () => {
+            await i18n.changeLanguage("en");
+        });
+
+        expect(jsonLd().inLanguage).toBe("en");
+        expect(jsonLd().name).not.toBe(germanName);
+    });
+
+    it("emits parseable JSON carrying the schema.org context", async () => {
+        await renderAt("/microbial-counts");
+        const [script] = jsonLdScripts();
+
+        expect(script.getAttribute("type")).toBe("application/ld+json");
+        expect(() => JSON.parse(script.textContent ?? "")).not.toThrow();
+        expect(jsonLd()["@context"]).toBe("https://schema.org");
     });
 });

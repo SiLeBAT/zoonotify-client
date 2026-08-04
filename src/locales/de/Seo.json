@@ -5,15 +5,18 @@
   },
   "prevalence": {
     "title": "Prävalenz",
-    "description": "Prävalenz von Zoonoseerregern in der Lebensmittelkette in Deutschland — interaktive Auswertung nach Erreger, Matrix und Probenahmestufe."
+    "description": "Prävalenz von Zoonoseerregern in der Lebensmittelkette in Deutschland — interaktive Auswertung nach Erreger, Matrix und Probenahmestufe.",
+    "datasetName": "Prävalenz von Zoonoseerregern in der Lebensmittelkette (Deutschland)"
   },
   "antibioticResistance": {
     "title": "Antibiotikaresistenz",
-    "description": "Antibiotikaresistenzen bei Zoonoseerregern und kommensalen Bakterien in Deutschland — Trends, Einzelsubstanzen und Mehrfachresistenzen."
+    "description": "Antibiotikaresistenzen bei Zoonoseerregern und kommensalen Bakterien in Deutschland — Trends, Einzelsubstanzen und Mehrfachresistenzen.",
+    "datasetName": "Antibiotikaresistenzen bei Zoonoseerregern und kommensalen Bakterien (Deutschland)"
   },
   "microbialCounts": {
     "title": "Keimzahlen",
-    "description": "Mikrobielle Keimzahlen entlang der Lebensmittelkette in Deutschland, erhoben im Rahmen des Zoonosen-Monitorings."
+    "description": "Mikrobielle Keimzahlen entlang der Lebensmittelkette in Deutschland, erhoben im Rahmen des Zoonosen-Monitorings.",
+    "datasetName": "Mikrobielle Keimzahlen in der Lebensmittelkette (Deutschland)"
   },
   "antimicrobial": {
     "title": "Antibiotikaeinsatz",

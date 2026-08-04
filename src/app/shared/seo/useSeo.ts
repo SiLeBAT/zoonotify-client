@@ -6,6 +6,7 @@ import {
     normalizeLanguage,
     SEO_LANGUAGES,
     SeoLanguage,
+    SeoRoute,
 } from "./seo.model";
 
 /**
@@ -16,6 +17,14 @@ import {
 const MANAGED_ATTR = "data-seo-managed";
 
 const OG_LOCALE: Record<SeoLanguage, string> = { de: "de_DE", en: "en_GB" };
+
+/** The publishing institute, reused across every structured-data node. */
+const BFR = {
+    "@type": "GovernmentOrganization",
+    name: "Bundesinstitut für Risikobewertung",
+    alternateName: "German Federal Institute for Risk Assessment",
+    url: "https://www.bfr.bund.de/",
+} as const;
 
 function upsert<E extends HTMLElement>(selector: string, create: () => E): E {
     const existing = document.head.querySelector<E>(selector);
@@ -60,6 +69,78 @@ function setLink(rel: string, href: string, hreflang?: string): void {
  */
 function canonicalUrl(pathname: string, language: SeoLanguage): string {
     return `${window.location.origin}${pathname}?lang=${language}`;
+}
+
+/**
+ * One node per page, picked by what the page actually is: the site itself on
+ * the home route, a Dataset where the page publishes data, and a plain WebPage
+ * for prose. Emitting Dataset everywhere would misdescribe the glossary and the
+ * privacy policy as data products.
+ */
+function buildJsonLd(
+    route: SeoRoute,
+    language: SeoLanguage,
+    pathname: string,
+    title: string,
+    description: string,
+    datasetName: string | null
+): Record<string, unknown> {
+    const origin = window.location.origin;
+
+    if (route.key === "home") {
+        return {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "ZooNotify",
+            description,
+            url: `${origin}/`,
+            inLanguage: [...SEO_LANGUAGES],
+            publisher: BFR,
+        };
+    }
+
+    if (route.dataset && datasetName) {
+        return {
+            "@context": "https://schema.org",
+            "@type": "Dataset",
+            name: datasetName,
+            description,
+            url: canonicalUrl(pathname, language),
+            inLanguage: language,
+            isAccessibleForFree: true,
+            creator: BFR,
+            publisher: BFR,
+            spatialCoverage: { "@type": "Place", name: "Deutschland" },
+            // `license` and `temporalCoverage` are deliberately absent. Both are
+            // factual claims about BfR's published data that this codebase
+            // cannot derive, and wrong structured data is worse than incomplete
+            // structured data. Add them once BfR confirms the licence terms and
+            // the earliest reporting year.
+        };
+    }
+
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: title,
+        description,
+        url: canonicalUrl(pathname, language),
+        inLanguage: language,
+        isPartOf: { "@type": "WebSite", name: "ZooNotify", url: `${origin}/` },
+        publisher: BFR,
+    };
+}
+
+const JSON_LD_ID = "seo-json-ld";
+
+function setJsonLd(payload: Record<string, unknown>): void {
+    const script = upsert<HTMLScriptElement>(`script#${JSON_LD_ID}`, () => {
+        const element = document.createElement("script");
+        element.id = JSON_LD_ID;
+        element.type = "application/ld+json";
+        return element;
+    });
+    script.textContent = JSON.stringify(payload);
 }
 
 /**
@@ -110,5 +191,16 @@ export function useSeo(): void {
         setMeta("property", "og:locale", OG_LOCALE[language]);
         setMeta("name", "twitter:title", document.title);
         setMeta("name", "twitter:description", t(`${route.key}.description`));
+
+        setJsonLd(
+            buildJsonLd(
+                route,
+                language,
+                pathname,
+                document.title,
+                t(`${route.key}.description`),
+                route.dataset ? t(route.dataset.nameKey) : null
+            )
+        );
     }, [pathname, i18n.language, t]);
 }

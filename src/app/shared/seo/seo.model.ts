@@ -30,11 +30,22 @@ export function normalizeLanguage(
     return isSupportedLanguage(base) ? (base as SeoLanguage) : "de";
 }
 
+/**
+ * Marks a route as publishing an actual dataset rather than prose. Only these
+ * emit schema.org Dataset markup, which is what makes them eligible for Google
+ * Dataset Search.
+ */
+export type SeoDataset = {
+    /** Key in the Seo i18n namespace holding the dataset's formal name. */
+    readonly nameKey: string;
+};
+
 export type SeoRoute = {
     /** Route path as declared in `pageRoute`. */
     readonly path: string;
     /** Key in the Seo i18n namespace: `<key>.title` and `<key>.description`. */
     readonly key: string;
+    readonly dataset?: SeoDataset;
 };
 
 /**
@@ -47,13 +58,22 @@ export const SEO_ROUTES: readonly SeoRoute[] = [
     { path: pageRoute.infoPagePath, key: "explanations" },
     { path: pageRoute.evaluationsPagePath, key: "evaluations" },
     { path: pageRoute.dpdPagePath, key: "dataProtection" },
-    { path: pageRoute.prevalencePagePath, key: "prevalence" },
+    {
+        path: pageRoute.prevalencePagePath,
+        key: "prevalence",
+        dataset: { nameKey: "prevalence.datasetName" },
+    },
     { path: pageRoute.antimicrobialPagePath, key: "antimicrobial" },
     {
         path: pageRoute.antibioticResistancePagePath,
         key: "antibioticResistance",
+        dataset: { nameKey: "antibioticResistance.datasetName" },
     },
-    { path: pageRoute.microbialCountsPagePath, key: "microbialCounts" },
+    {
+        path: pageRoute.microbialCountsPagePath,
+        key: "microbialCounts",
+        dataset: { nameKey: "microbialCounts.datasetName" },
+    },
 ];
 
 /**

@@ -5,15 +5,18 @@
   },
   "prevalence": {
     "title": "Prevalence",
-    "description": "Prevalence of zoonotic pathogens along the German food chain — explore the data interactively by pathogen, matrix and sampling stage."
+    "description": "Prevalence of zoonotic pathogens along the German food chain — explore the data interactively by pathogen, matrix and sampling stage.",
+    "datasetName": "Prevalence of zoonotic pathogens along the food chain (Germany)"
   },
   "antibioticResistance": {
     "title": "Antibiotic Resistance",
-    "description": "Antimicrobial resistance in zoonotic and commensal bacteria in Germany — trends, individual substances and multi-resistance patterns."
+    "description": "Antimicrobial resistance in zoonotic and commensal bacteria in Germany — trends, individual substances and multi-resistance patterns.",
+    "datasetName": "Antimicrobial resistance in zoonotic and commensal bacteria (Germany)"
   },
   "microbialCounts": {
     "title": "Microbial Counts",
-    "description": "Microbial counts along the German food chain, collected as part of the national zoonoses monitoring programme."
+    "description": "Microbial counts along the German food chain, collected as part of the national zoonoses monitoring programme.",
+    "datasetName": "Microbial counts along the food chain (Germany)"
   },
   "antimicrobial": {
     "title": "Antimicrobial Use",
