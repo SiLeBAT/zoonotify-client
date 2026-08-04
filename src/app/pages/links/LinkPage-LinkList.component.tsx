@@ -34,15 +34,8 @@ export function LinkPageLinkListComponent(): JSX.Element {
     const { t, i18n } = useTranslation(["ExternLinks"]);
     const [linkData, setLinkData] = useState<ExternalLink[]>([]);
 
-    // Update the browser URL to always include the current language as a query parameter.
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get("lang") !== i18n.language) {
-            params.set("lang", i18n.language);
-            const newUrl = `${window.location.pathname}?${params.toString()}`;
-            window.history.replaceState({}, "", newUrl);
-        }
-    }, [i18n.language]);
+    // The ?lang= parameter is maintained by useLanguageUrlSync, mounted once in
+    // Body-Router.component.tsx.
 
     useEffect(() => {
         const apiEndpoint = `${EXTERNAL_LINKS}?locale=${i18n.language}`;

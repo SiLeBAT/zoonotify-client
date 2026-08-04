@@ -4,6 +4,20 @@ import { pageRoute } from "../infrastructure/router/routes";
 export const SEO_LANGUAGES = ["de", "en"] as const;
 export type SeoLanguage = (typeof SEO_LANGUAGES)[number];
 
+const baseLanguage = (value: string | undefined | null): string =>
+    (value || "").split("-")[0].toLowerCase();
+
+/**
+ * Whether we publish this language at all. Kept separate from
+ * `normalizeLanguage` because the two answer different questions: callers
+ * acting on a URL-supplied value need to know it is real BEFORE collapsing it,
+ * otherwise "?lang=fr" reads as a request for the fallback and silently drags
+ * an English reader into German.
+ */
+export function isSupportedLanguage(value: string | undefined | null): boolean {
+    return (SEO_LANGUAGES as readonly string[]).includes(baseLanguage(value));
+}
+
 /**
  * i18next hands back tags like "de-DE"; our URLs and the `lang` attribute only
  * ever carry the bare language. Anything unrecognised falls back to the same
@@ -12,10 +26,8 @@ export type SeoLanguage = (typeof SEO_LANGUAGES)[number];
 export function normalizeLanguage(
     value: string | undefined | null
 ): SeoLanguage {
-    const base = (value || "").split("-")[0].toLowerCase();
-    return (SEO_LANGUAGES as readonly string[]).includes(base)
-        ? (base as SeoLanguage)
-        : "de";
+    const base = baseLanguage(value);
+    return isSupportedLanguage(base) ? (base as SeoLanguage) : "de";
 }
 
 export type SeoRoute = {
