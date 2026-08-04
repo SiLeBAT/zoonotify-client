@@ -9,7 +9,14 @@ i18n.use(HttpApi)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        ns: ["DataProtection", "Footer", "Header", "HomePage", "QueryPage"],
+        ns: [
+            "DataProtection",
+            "Footer",
+            "Header",
+            "HomePage",
+            "QueryPage",
+            "Seo",
+        ],
         debug: false,
         detection: {
             order: ["localStorage"],

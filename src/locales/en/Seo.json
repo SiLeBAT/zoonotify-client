@@ -1,0 +1,42 @@
+{
+  "home": {
+    "title": "ZooNotify — Zoonotic Disease Surveillance Data from the BfR",
+    "description": "Web-based query tool for surveillance data collected under Directive 99/2003/EC (Zoonoses Directive): pathogen findings along the food chain, published by the BfR."
+  },
+  "prevalence": {
+    "title": "Prevalence",
+    "description": "Prevalence of zoonotic pathogens along the German food chain — explore the data interactively by pathogen, matrix and sampling stage."
+  },
+  "antibioticResistance": {
+    "title": "Antibiotic Resistance",
+    "description": "Antimicrobial resistance in zoonotic and commensal bacteria in Germany — trends, individual substances and multi-resistance patterns."
+  },
+  "microbialCounts": {
+    "title": "Microbial Counts",
+    "description": "Microbial counts along the German food chain, collected as part of the national zoonoses monitoring programme."
+  },
+  "antimicrobial": {
+    "title": "Antimicrobial Use",
+    "description": "Data on antimicrobial use in food-producing animals in Germany, compiled by the German Federal Institute for Risk Assessment (BfR)."
+  },
+  "evaluations": {
+    "title": "Evaluations",
+    "description": "Charts and time series covering zoonotic pathogens, antimicrobial resistance and microbial counts from the German zoonoses monitoring programme."
+  },
+  "explanations": {
+    "title": "Explanations",
+    "description": "Terminology, methods and data sources behind the zoonoses monitoring programme: pathogens, matrices, sampling stages and resistance data explained."
+  },
+  "links": {
+    "title": "External Links",
+    "description": "Further sources on zoonoses, antimicrobial resistance and food safety from the BfR, EFSA, RKI and other institutions."
+  },
+  "dataProtection": {
+    "title": "Privacy Policy",
+    "description": "Privacy policy for ZooNotify, the zoonotic disease surveillance data portal of the German Federal Institute for Risk Assessment (BfR)."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The requested page does not exist."
+  }
+}

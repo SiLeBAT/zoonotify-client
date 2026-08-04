@@ -1,0 +1,42 @@
+{
+  "home": {
+    "title": "ZooNotify — Zoonosen-Surveillancedaten des BfR",
+    "description": "Web-basierte Abfrage von Surveillancedaten gemäß RL 99/2003/EU (Zoonosenrichtlinie): Erregernachweise in der Lebensmittelkette, erhoben vom BfR."
+  },
+  "prevalence": {
+    "title": "Prävalenz",
+    "description": "Prävalenz von Zoonoseerregern in der Lebensmittelkette in Deutschland — interaktive Auswertung nach Erreger, Matrix und Probenahmestufe."
+  },
+  "antibioticResistance": {
+    "title": "Antibiotikaresistenz",
+    "description": "Antibiotikaresistenzen bei Zoonoseerregern und kommensalen Bakterien in Deutschland — Trends, Einzelsubstanzen und Mehrfachresistenzen."
+  },
+  "microbialCounts": {
+    "title": "Keimzahlen",
+    "description": "Mikrobielle Keimzahlen entlang der Lebensmittelkette in Deutschland, erhoben im Rahmen des Zoonosen-Monitorings."
+  },
+  "antimicrobial": {
+    "title": "Antibiotikaeinsatz",
+    "description": "Daten zum Antibiotikaeinsatz bei lebensmittelliefernden Tieren in Deutschland, zusammengestellt vom Bundesinstitut für Risikobewertung."
+  },
+  "evaluations": {
+    "title": "Auswertungen",
+    "description": "Grafische Auswertungen und Zeitreihen zu Zoonoseerregern, Antibiotikaresistenzen und Keimzahlen aus dem deutschen Zoonosen-Monitoring."
+  },
+  "explanations": {
+    "title": "Erläuterungen",
+    "description": "Begriffe, Methoden und Datengrundlagen des Zoonosen-Monitorings: Erläuterungen zu Erregern, Matrizes, Probenahmestufen und Resistenzdaten."
+  },
+  "links": {
+    "title": "Externe Links",
+    "description": "Weiterführende Quellen zu Zoonosen, Antibiotikaresistenz und Lebensmittelsicherheit von BfR, EFSA, RKI und weiteren Institutionen."
+  },
+  "dataProtection": {
+    "title": "Datenschutzerklärung",
+    "description": "Datenschutzerklärung für ZooNotify, das Portal für Zoonosen-Surveillancedaten des Bundesinstituts für Risikobewertung (BfR)."
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die aufgerufene Seite existiert nicht."
+  }
+}

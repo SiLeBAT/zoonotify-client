@@ -13,12 +13,17 @@ import { AntimicrobialPageComponent } from "../../../antimicrobial/pages/Antimic
 import { MicrobialCountsPageComponent } from "../../../microbial_counts/pages/MicrobialCountsPage.component";
 
 import { pageRoute } from "./routes";
+import { useSeo } from "../../seo/useSeo";
 
 function ErrorPage(): JSX.Element {
     return <ErrorPageComponent errorStatus={404} />;
 }
 
 export function BodyRouterComponent(): JSX.Element {
+    // Mounted here, inside the router but above the Switch, so it runs for every
+    // route -- including any added later without a matching wiring step.
+    useSeo();
+
     return (
         <Switch>
             <Route
