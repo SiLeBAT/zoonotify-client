@@ -3,7 +3,6 @@ import { WELCOME } from "./../../shared/infrastructure/router/routes";
 import i18next, { TFunction } from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useHistory } from "react-router-dom";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { UseCase } from "../../shared/model/UseCases";
 
@@ -54,9 +53,6 @@ const useWelcomePageComponent: UseCase<
         [i18n.language]
     );
 
-    const location = useLocation();
-    const history = useHistory();
-
     // Start empty to avoid flashing the hard-coded text.
     const [subtitle, setSubtitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
@@ -64,25 +60,10 @@ const useWelcomePageComponent: UseCase<
     // Keep a flag to know if we've tried the CMS already.
     const fetchedRef = useRef(false);
 
-    // Effect 1: if URL has ?locale=xyz and it's different, switch i18n.
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const localeParam = params.get("locale");
-        if (localeParam && localeParam !== i18next.language) {
-            i18next.changeLanguage(localeParam);
-        }
-    }, [location.search]);
+    // Language <-> URL sync is useLanguageUrlSync's job, mounted once in
+    // Body-Router.component.tsx.
 
-    // Effect 2: reflect current i18n language back to the URL.
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        if (params.get("locale") !== i18next.language) {
-            params.set("locale", i18next.language);
-            history.replace({ search: params.toString() });
-        }
-    }, [i18next.language, location.search, history]);
-
-    // Effect 3: fetch from CMS; if empty or error, fall back to hard-coded.
+    // Effect: fetch from CMS; if empty or error, fall back to hard-coded.
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
