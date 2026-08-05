@@ -108,6 +108,30 @@ describe("resolveEnvironment", () => {
             expect(resolveEnvironment(nodeEnv).indexable).toBe(false);
         }
     );
+
+    it("refuses to guess in CI, rather than silently shipping a noindex build to production", () => {
+        expect(() => resolveEnvironment(undefined, { ci: true })).toThrow(
+            /NODE_ENV/
+        );
+    });
+
+    it("still falls back to development outside CI, so a local build needs no ceremony", () => {
+        expect(resolveEnvironment(undefined)).toMatchObject({
+            name: "development",
+            indexable: false,
+        });
+    });
+
+    it("advertises the public host in the production sitemap, never a local one", () => {
+        const { baseUrl } = resolveEnvironment("production");
+        const xml = buildSitemap(baseUrl, parseRoutePaths(ROUTES_SOURCE));
+
+        expect(locsIn(xml)).toHaveLength(18);
+        locsIn(xml).forEach((loc) => {
+            expect(loc).toMatch(/^https:\/\/zoonotify\.bfr\.berlin\//);
+        });
+        expect(xml).not.toMatch(/localhost/);
+    });
 });
 
 describe("withNoindex", () => {

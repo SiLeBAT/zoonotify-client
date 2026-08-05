@@ -22,7 +22,12 @@ jobs:
 
       - name: Build
         run: npm run build:qa -- --env=lastChange=${{ steps.meta.outputs.builddate }}
-      - run: npm run cp:all
+      # cross-env scopes NODE_ENV to the webpack process above, so cp:all needs
+      # to be told separately, or the sitemap is built for the wrong host.
+      - name: Copy static and crawler artifacts
+        run: npm run cp:all
+        env:
+          NODE_ENV: qa
 
       - uses: actions/upload-artifact@v7
         with:
