@@ -31,7 +31,13 @@ jobs:
 
       - name: Build
         run: npm run build:prod -- --env=lastChange=${{ steps.meta.outputs.builddate }}
-      - run: npm run cp:all
+      # cross-env scopes NODE_ENV to the webpack process above, so cp:all needs
+      # to be told separately. Without it copy-seo.js resolves to the
+      # non-indexable development profile and de-indexes the live site.
+      - name: Copy static and crawler artifacts
+        run: npm run cp:all
+        env:
+          NODE_ENV: production
 
       - uses: actions/upload-artifact@v7
         with:

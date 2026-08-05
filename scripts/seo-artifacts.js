@@ -86,15 +86,33 @@ const ENVIRONMENTS = {
 };
 
 /**
- * Only an explicit "production" is indexable. Anything unrecognised -- an unset
- * NODE_ENV, a typo, a new environment nobody wired up here -- falls back to the
- * non-indexable development profile, so the failure mode is "not indexed"
- * rather than "staging competing with production in search results".
+ * Only an explicit "production" is indexable. Anything unrecognised falls back
+ * to the non-indexable development profile, so a local build needs no ceremony
+ * and cannot accidentally advertise itself as production.
+ *
+ * In CI that fallback is refused outright. The CD workflows once ran the build
+ * and the copy step as two separate jobs, so `cross-env NODE_ENV=production`
+ * applied to webpack but not to this script: it silently resolved to
+ * "development" and would have shipped `Disallow: /`, a noindex tag and a
+ * localhost sitemap to the live site. A release that cannot name its own
+ * environment must fail, not guess -- the wrong guess de-indexes production and
+ * nothing downstream would have caught it.
  */
-function resolveEnvironment(nodeEnv) {
-    const name = Object.prototype.hasOwnProperty.call(ENVIRONMENTS, nodeEnv)
-        ? nodeEnv
-        : "development";
+function resolveEnvironment(nodeEnv, { ci = false } = {}) {
+    const known = Object.prototype.hasOwnProperty.call(ENVIRONMENTS, nodeEnv);
+    if (!known && ci) {
+        throw new Error(
+            `seo-artifacts: NODE_ENV is ${JSON.stringify(
+                nodeEnv
+            )}, which names ` +
+                `no known environment (${Object.keys(ENVIRONMENTS).join(
+                    ", "
+                )}). ` +
+                "Refusing to guess in CI: the fallback is non-indexable and would " +
+                "de-index production. Set NODE_ENV on the step that runs cp:all."
+        );
+    }
+    const name = known ? nodeEnv : "development";
     return { name, ...ENVIRONMENTS[name] };
 }
 

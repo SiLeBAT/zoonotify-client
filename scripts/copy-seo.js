@@ -33,7 +33,11 @@ const ROUTES_FILE = path.join(
 );
 
 function main() {
-    const environment = resolveEnvironment(process.env.NODE_ENV);
+    // `ci` makes an unnamed environment fatal rather than a silent fallback to
+    // the non-indexable development profile. See resolveEnvironment.
+    const environment = resolveEnvironment(process.env.NODE_ENV, {
+        ci: Boolean(process.env.CI),
+    });
     fs.mkdirSync(PUBLIC_DIR, { recursive: true });
 
     fs.copyFileSync(
