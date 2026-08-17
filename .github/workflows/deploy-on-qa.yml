@@ -16,12 +16,16 @@ jobs:
           cache: 'npm'
       - run: npm ci
 
-      - name: Set build date
+      - name: Set build date and commit hash
         id: meta
-        run: echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S%z')" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S%z')" >> "$GITHUB_OUTPUT"
+          echo "commithash=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
+      # QA builds label themselves with the deployed commit instead of the
+      # package version (the footer tooltip reads `client commit@<hash>`).
       - name: Build
-        run: npm run build:qa -- --env=lastChange=${{ steps.meta.outputs.builddate }}
+        run: npm run build:qa -- --env=lastChange=${{ steps.meta.outputs.builddate }} --env=commitHash=${{ steps.meta.outputs.commithash }}
       # cross-env scopes NODE_ENV to the webpack process above, so cp:all needs
       # to be told separately, or the sitemap is built for the wrong host.
       - name: Copy static and crawler artifacts
