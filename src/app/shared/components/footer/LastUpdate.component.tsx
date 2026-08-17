@@ -6,9 +6,18 @@ import { LastUpdateDateComponent } from "./LastUpdate-Date.component";
 import { LastUpdateVersionComponent } from "./LastUpdate-Version.component";
 
 export function LastUpdateComponent(): JSX.Element {
-    const { version } = environment;
+    const { version, commitHash } = environment;
     const theme = useTheme();
     const cmsVersion = window.sessionStorage.getItem("cms-version");
+    // On QA both sides report the short hash of the deployed commit; elsewhere
+    // they report their package version.
+    const cmsCommit = window.sessionStorage.getItem("cms-commit");
+    const serverText = cmsCommit
+        ? `server commit@${cmsCommit}`
+        : `server version@${cmsVersion}`;
+    const clientText = commitHash
+        ? `client commit@${commitHash}`
+        : `client version@${version}`;
     return (
         <Tooltip
             sx={{
@@ -23,12 +32,8 @@ export function LastUpdateComponent(): JSX.Element {
             title={
                 <>
                     <List dense>
-                        <LastUpdateVersionComponent
-                            text={`server version@${cmsVersion}`}
-                        />
-                        <LastUpdateVersionComponent
-                            text={`client version@${version}`}
-                        />
+                        <LastUpdateVersionComponent text={serverText} />
+                        <LastUpdateVersionComponent text={clientText} />
                     </List>
                 </>
             }
