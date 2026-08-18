@@ -1423,7 +1423,18 @@ export const SubstanceDetail: React.FC<{
             <Box
                 display="flex"
                 flexDirection="row"
-                sx={{ width: "100%", height: "calc(100vh - 75px)" }}
+                sx={{
+                    // Fill the scroll area PageLayoutComponent's <main> hands
+                    // down rather than guessing the header height with a 100vh
+                    // offset. A row taller than <main> makes <main> scroll on
+                    // top of the results pane's own scrollbar -- that is the
+                    // double scrollbar. Clip here so each pane scrolls itself.
+                    width: "100%",
+                    height: "100%",
+                    maxHeight: "100%",
+                    minHeight: 0,
+                    overflow: "hidden",
+                }}
             >
                 {/* SIDEBAR */}
                 <SidebarComponent
@@ -1439,7 +1450,12 @@ export const SubstanceDetail: React.FC<{
                             p: 3,
                             width: "380px",
                             maxWidth: "95%",
-                            height: "calc(100vh - 150px)",
+                            // Fill the sidebar panel handed down by
+                            // SidebarComponent so this pane owns its scrollbar
+                            // and the Search/Reset buttons stay reachable.
+                            height: "100%",
+                            maxHeight: "100%",
+                            boxSizing: "border-box",
                         }}
                     >
                         {loading && (
@@ -1536,7 +1552,11 @@ export const SubstanceDetail: React.FC<{
                     px={4}
                     py={3}
                     sx={{
+                        // Shrink inside the clipped row so overflow:auto
+                        // scrolls this pane instead of stretching the row.
                         overflow: "auto",
+                        minHeight: 0,
+                        boxSizing: "border-box",
                         boxShadow: "15px 0 15px -15px rgba(0,0,0,0.15) inset",
                         backgroundColor: "#fff",
                         marginLeft: "20px",
