@@ -510,9 +510,11 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 field: string,
                 docIds: string[]
             ): void => {
-                if (docIds.length > 0) {
+                // Drop empties: a junk value here silently matches nothing.
+                const clean = docIds.filter((id) => !!id);
+                if (clean.length > 0) {
                     // Repeat $in param (Strapi accepts repeated $in keys)
-                    docIds.forEach((docId) =>
+                    clean.forEach((docId) =>
                         filters.push(
                             `filters[${field}][documentId][$in]=${encodeURIComponent(
                                 docId
@@ -527,8 +529,16 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 field: string,
                 values: (string | number)[]
             ): void => {
-                if (values.length > 0) {
-                    values.forEach((value) =>
+                // Never send a non-numeric value to a numeric column: Strapi's
+                // NumberField.toDB throws "Expected a valid Number, got NaN" and
+                // the whole request 500s.
+                const clean = values.filter(
+                    (value) =>
+                        `${value}`.trim() !== "" &&
+                        Number.isFinite(Number(value))
+                );
+                if (clean.length > 0) {
+                    clean.forEach((value) =>
                         filters.push(
                             `filters[${field}][$eq]=${encodeURIComponent(
                                 value
