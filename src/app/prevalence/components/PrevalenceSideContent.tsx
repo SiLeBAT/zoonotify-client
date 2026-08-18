@@ -245,13 +245,17 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
                     setFrozenOptionsWhileOpen(null);
                     onChange(staged);
                 }}
-                onChange={(e) => {
-                    const next =
-                        typeof e.target.value === "string"
-                            ? (e.target.value as string).split(",")
-                            : (e.target.value as string[]);
-                    setStaged(next);
-                }}
+                // No `onChange` on purpose. MUI's Select overrides each child
+                // MenuItem's onClick with its own handler, which appends
+                // `child.props.value` to the selection. The "Select All" row has
+                // no `value`, so that handler pushes `undefined` into the array
+                // and the resulting onChange overwrote whatever
+                // toggleSelectAllVisible had just computed — which is how `NaN`
+                // reached selectedYear (parseInt(undefined) === NaN) and then the
+                // API as `filters[samplingYear][$eq]=NaN`. Every row already
+                // drives `staged` through its own toggleValue /
+                // toggleSelectAllVisible, and the Select is fully controlled via
+                // `value`, so MUI's computed value is redundant here.
                 renderValue={(vals) => {
                     const arr = vals as string[];
                     return (
@@ -480,7 +484,11 @@ export function PrevalenceSideContent(): JSX.Element {
                     showOnlySelected={onlySel(selectedYear)}
                     onChange={(values) => {
                         if (showOnlySelected) setShowOnlySelected(false);
-                        setSelectedYear(values.map((v) => parseInt(v, 10)));
+                        setSelectedYear(
+                            values
+                                .map((v) => parseInt(v, 10))
+                                .filter(Number.isFinite)
+                        );
                         updateFilterOrder("year");
                     }}
                 />
