@@ -1,34 +1,34 @@
 {
   "home": {
-    "title": "ZooNotify — Zoonotic Disease Surveillance Data from the BfR",
-    "description": "Web-based query tool for surveillance data collected under Directive 99/2003/EC (Zoonoses Directive): pathogen findings along the food chain, published by the BfR."
+    "title": "ZooNotify — Web-based query tool for zoonoses monitoring data",
+    "description": "The Federal Institute for Risk Assessment (BfR) provides data on the occurrence of zoonotic agents and their antimicrobial resistance along the food chain in Germany through this portal. The data are collected in accordance with the Zoonoses Monitoring Directive (Directive 2003/99/EC). ZooNotify allows users to filter and visualize the data. In addition, the data and generated graphs can be downloaded, making it easier to reuse and repurpose them."
   },
   "prevalence": {
     "title": "Prevalence",
-    "description": "Prevalence of zoonotic pathogens along the German food chain — explore the data interactively by pathogen, matrix and sampling stage.",
-    "datasetName": "Prevalence of zoonotic pathogens along the food chain (Germany)"
+    "description": "Prevalence of zoonotic agents along the German food chain — explore the data interactively by pathogen, matrix and sampling stage.",
+    "datasetName": "Prevalence of zoonotic agents along the food chain (Germany)"
   },
   "antibioticResistance": {
     "title": "Antibiotic Resistance",
-    "description": "Antimicrobial resistance in zoonotic and commensal bacteria in Germany — trends, individual substances and multi-resistance patterns.",
+    "description": "Antimicrobial resistance in zoonotic and commensal bacteria in Germany — trends, resistance rates and multi-resistance.",
     "datasetName": "Antimicrobial resistance in zoonotic and commensal bacteria (Germany)"
   },
   "microbialCounts": {
     "title": "Microbial Counts",
-    "description": "Microbial counts along the German food chain, collected as part of the national zoonoses monitoring programme.",
+    "description": "Microbial counts along the German food chain, collected as part of the national zoonoses monitoring.",
     "datasetName": "Microbial counts along the food chain (Germany)"
   },
   "antimicrobial": {
     "title": "Antimicrobial Use",
-    "description": "Data on antimicrobial use in food-producing animals in Germany, compiled by the German Federal Institute for Risk Assessment (BfR)."
+    "description": "Data on antimicrobial consumption quantities and treatment frequencies in food-producing animals in Germany, compiled by the German Federal Institute for Risk Assessment (BfR)."
   },
   "evaluations": {
     "title": "Evaluations",
-    "description": "Charts and time series covering zoonotic pathogens, antimicrobial resistance and microbial counts from the German zoonoses monitoring programme."
+    "description": "Graphical evaluations of microbiological typing of zoonotic pathogens and their antibiotic resistance from the German zoonosis monitoring across food chains."
   },
   "explanations": {
     "title": "Explanations",
-    "description": "Terminology, methods and data sources behind the zoonoses monitoring programme: pathogens, matrices, sampling stages and resistance data explained."
+    "description": "Background information on ZooNotify and zoonosis monitoring: explanations of methods for isolating strains and testing for antibiotic resistance, data visualisations and the use of the data."
   },
   "links": {
     "title": "External Links",
@@ -36,7 +36,7 @@
   },
   "dataProtection": {
     "title": "Privacy Policy",
-    "description": "Privacy policy for ZooNotify, the zoonotic disease surveillance data portal of the German Federal Institute for Risk Assessment (BfR)."
+    "description": "Privacy policy for ZooNotify, the zoonoses monitoring data portal of the German Federal Institute for Risk Assessment (BfR)."
   },
   "notFound": {
     "title": "Page not found",
