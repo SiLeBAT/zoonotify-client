@@ -1,34 +1,34 @@
 {
   "home": {
-    "title": "ZooNotify — Zoonosen-Surveillancedaten des BfR",
-    "description": "Web-basierte Abfrage von Surveillancedaten gemäß RL 99/2003/EU (Zoonosenrichtlinie): Erregernachweise in der Lebensmittelkette, erhoben vom BfR."
+    "title": "ZooNotify — Web-basierte Abfrage von Daten aus dem Zoonosen Monitoring",
+    "description": "Das Bundesinstitut für Risikobewertung (BfR) stellt in diesem Portal Daten zum Vorkommen von Zoonoseerregern und deren Antibiotika-Resistenzen entlang der Lebensmittelkette in Deutschland zur Verfügung. Die Daten werden im Rahmen der Zoonosen-Überwachungsrichtlinie (Richtlinie 2003/99/EG) gesammelt."
   },
   "prevalence": {
     "title": "Prävalenz",
-    "description": "Prävalenz von Zoonoseerregern in der Lebensmittelkette in Deutschland — interaktive Auswertung nach Erreger, Matrix und Probenahmestufe.",
-    "datasetName": "Prävalenz von Zoonoseerregern in der Lebensmittelkette (Deutschland)"
+    "description": "Prävalenz von Zoonoseerregern entlang von Lebensmittelketten in Deutschland — interaktive Auswertung nach Erreger, Matrix und Probenahmestelle.",
+    "datasetName": "Prävalenz von Zoonoseerregern entlang von Lebensmittelketten (Deutschland)"
   },
   "antibioticResistance": {
     "title": "Antibiotikaresistenz",
-    "description": "Antibiotikaresistenzen bei Zoonoseerregern und kommensalen Bakterien in Deutschland — Trends, Einzelsubstanzen und Mehrfachresistenzen.",
+    "description": "Antibiotikaresistenzen von Zoonoseerregern und kommensalen Bakterien entlang von Lebensmittelketten in Deutschland — Trends, Resistenzraten und Mehrfachresistenzen.",
     "datasetName": "Antibiotikaresistenzen bei Zoonoseerregern und kommensalen Bakterien (Deutschland)"
   },
   "microbialCounts": {
     "title": "Keimzahlen",
-    "description": "Mikrobielle Keimzahlen entlang der Lebensmittelkette in Deutschland, erhoben im Rahmen des Zoonosen-Monitorings.",
-    "datasetName": "Mikrobielle Keimzahlen in der Lebensmittelkette (Deutschland)"
+    "description": "Mikrobielle Keimzahlen entlang von Lebensmittelketten in Deutschland, erhoben im Rahmen des Zoonosen-Monitorings.",
+    "datasetName": "Mikrobielle Keimzahlen entlang von Lebensmittelketten (Deutschland)"
   },
   "antimicrobial": {
     "title": "Antibiotikaeinsatz",
-    "description": "Daten zum Antibiotikaeinsatz bei lebensmittelliefernden Tieren in Deutschland, zusammengestellt vom Bundesinstitut für Risikobewertung."
+    "description": "Daten zum Antibiotikaeinsatz und zur Therapiehäufigkeit bei lebensmittelliefernden Tieren in Deutschland, zusammengestellt vom Bundesinstitut für Risikobewertung."
   },
   "evaluations": {
     "title": "Auswertungen",
-    "description": "Grafische Auswertungen und Zeitreihen zu Zoonoseerregern, Antibiotikaresistenzen und Keimzahlen aus dem deutschen Zoonosen-Monitoring."
+    "description": "Grafische Auswertungen zu mikrobiologischen Typisierungen von Zoonoseerregern und deren Antibiotikaresistenzen aus dem deutschen Zoonosen-Monitoring entlang von Lebensmittelketten."
   },
   "explanations": {
     "title": "Erläuterungen",
-    "description": "Begriffe, Methoden und Datengrundlagen des Zoonosen-Monitorings: Erläuterungen zu Erregern, Matrizes, Probenahmestufen und Resistenzdaten."
+    "description": "Hintergrundinformationen zu ZooNotify und zum Zoonosen-Monitoring: Erläuterungen zu Methoden der Isolatgewinnung und Antibiotikaresistenztestung, zu Datenvisualisierungen und zur Verwendung der Daten."
   },
   "links": {
     "title": "Externe Links",
@@ -36,7 +36,7 @@
   },
   "dataProtection": {
     "title": "Datenschutzerklärung",
-    "description": "Datenschutzerklärung für ZooNotify, das Portal für Zoonosen-Surveillancedaten des Bundesinstituts für Risikobewertung (BfR)."
+    "description": "Datenschutzerklärung für ZooNotify, das Portal für Zoonosen-Monitoring-Daten des Bundesinstituts für Risikobewertung (BfR)."
   },
   "notFound": {
     "title": "Seite nicht gefunden",

@@ -120,8 +120,8 @@ describe("useSeo", () => {
         await renderAt("/prevalence", "en");
 
         expect(document.title).toContain("Prevalence");
-        expect(metaContent('meta[name="description"]')).toContain(
-            "zoonotic pathogens"
+        expect(metaContent('meta[name="description"]')).toBe(
+            seoEn.prevalence.description
         );
     });
 
@@ -212,8 +212,8 @@ describe("useSeo", () => {
         expect(metaContent('meta[property="og:title"]')).toContain(
             "Prevalence"
         );
-        expect(metaContent('meta[property="og:description"]')).toContain(
-            "zoonotic pathogens"
+        expect(metaContent('meta[property="og:description"]')).toBe(
+            seoEn.prevalence.description
         );
         expect(metaContent('meta[property="og:url"]')).toBe(
             "http://localhost/prevalence?lang=en"
