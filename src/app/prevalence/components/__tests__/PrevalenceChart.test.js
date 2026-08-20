@@ -162,6 +162,45 @@ describe("PrevalenceChart — Chart year window slider", () => {
         );
     });
 
+    it("shows the thumb value balloons only on hover/drag", () => {
+        mockContext();
+        const { container } = render(<PrevalenceChart />);
+
+        // Value balloons stay closed until the user interacts with a thumb.
+        expect(
+            container.querySelectorAll(".MuiSlider-valueLabelOpen")
+        ).toHaveLength(0);
+    });
+
+    it("marks every year of the span on the slider rail", () => {
+        mockContext();
+        const { container } = render(<PrevalenceChart />);
+
+        expect(container.querySelectorAll(".MuiSlider-mark")).toHaveLength(3);
+        const markLabels = Array.from(
+            container.querySelectorAll(".MuiSlider-markLabel")
+        ).map((node) => node.textContent);
+        expect(markLabels).toEqual(["2020", "2021", "2022"]);
+    });
+
+    it("thins the mark labels on a long span but keeps the bounds labelled", () => {
+        const years = Array.from({ length: 24 }, (_, i) => 2000 + i);
+        mockContext({
+            prevalenceData: dataForYears(years),
+            yearOptions: years,
+        });
+        const { container } = render(<PrevalenceChart />);
+
+        // A tick per year, but far fewer labels.
+        expect(container.querySelectorAll(".MuiSlider-mark")).toHaveLength(24);
+        const markLabels = Array.from(
+            container.querySelectorAll(".MuiSlider-markLabel")
+        ).map((node) => node.textContent);
+        expect(markLabels.length).toBeLessThanOrEqual(12);
+        expect(markLabels[0]).toBe("2000");
+        expect(markLabels[markLabels.length - 1]).toBe("2023");
+    });
+
     it("drops years outside the window from the rendered charts", () => {
         mockContext();
         render(<PrevalenceChart />);

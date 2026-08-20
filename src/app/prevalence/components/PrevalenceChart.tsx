@@ -71,6 +71,26 @@ const PrevalenceChart: React.FC = () => {
         microYearMax,
     ];
 
+    /**
+     * Tick marks for the year slider: one tick per year that actually has
+     * data. Labels are thinned to at most ~10 so they stay readable on long
+     * spans; the first and last year are always labelled so the bounds of the
+     * window are legible without dragging.
+     */
+    const yearMarks = useMemo(() => {
+        if (microYears.length < 2) return [];
+        const labelEvery = Math.ceil(microYears.length / 10);
+        return microYears.map((year, index) => ({
+            value: year,
+            label:
+                index === 0 ||
+                index === microYears.length - 1 ||
+                index % labelEvery === 0
+                    ? String(year)
+                    : undefined,
+        }));
+    }, [microYears]);
+
     // Reset the window to full span whenever the plotted microorganism or its
     // year bounds change (microorganism switch or a fresh search). `null` = full.
     useEffect(() => {
@@ -314,11 +334,23 @@ const PrevalenceChart: React.FC = () => {
                                 min={microYearMin}
                                 max={microYearMax}
                                 step={1}
+                                marks={yearMarks}
                                 valueLabelDisplay="auto"
                                 aria-labelledby="chart-year-range-label"
                                 onChange={(_, value) =>
                                     setChartYearRange(value as [number, number])
                                 }
+                                sx={{
+                                    // Room for the year tick labels below the
+                                    // rail; the value balloons only appear on
+                                    // hover/drag, so no extra space above.
+                                    mt: 1,
+                                    mb: 3,
+                                    "& .MuiSlider-markLabel": {
+                                        fontSize: "0.7rem",
+                                        color: "text.secondary",
+                                    },
+                                }}
                             />
                         </Box>
                     )}
