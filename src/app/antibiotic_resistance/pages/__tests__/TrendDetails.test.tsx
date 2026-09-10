@@ -1,11 +1,13 @@
 import React from "react";
 import {
+    act,
     render,
     screen,
     fireEvent,
     waitFor,
     within,
 } from "@testing-library/react";
+import i18next from "i18next";
 import { TrendDetails } from "../TrendDetails";
 import { callApiService } from "../../../shared/infrastructure/api/callApi.service";
 import type { ResistanceApiItem } from "../resistanceHelpers";
@@ -138,5 +140,54 @@ describe("TrendDetails substance filter", () => {
                 expect(within(option).getByRole("checkbox")).not.toBeChecked()
             );
         expect(substanceOptions()[0]).toHaveTextContent("SELECT_ALL");
+    });
+});
+
+describe("TrendDetails language switch", () => {
+    afterEach(() => {
+        (i18next as { language: string }).language = "en";
+    });
+
+    it("keeps the data of the latest language when an older response arrives late", async () => {
+        window.history.replaceState(null, "", "/");
+        const { rerender } = render(
+            <TrendDetails microorganism={MICROORGANISM} />
+        );
+        await waitFor(() =>
+            expect(substanceCombobox()).toHaveTextContent("Tetracyclin")
+        );
+
+        const pending: Record<string, (rows: ResistanceApiItem[]) => void> = {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        mockedCallApiService.mockImplementation((url: string): Promise<any> => {
+            if (!url.includes("resistance")) {
+                return Promise.resolve({ data: { data: [] } });
+            }
+            const locale = new URL(url, "http://x").searchParams.get("locale");
+            return new Promise((resolve) => {
+                pending[locale as string] = (rows) =>
+                    resolve({ data: { data: rows } });
+            });
+        });
+
+        // Switch to German and straight back before German has loaded.
+        (i18next as { language: string }).language = "de";
+        rerender(<TrendDetails microorganism={MICROORGANISM} />);
+        (i18next as { language: string }).language = "en";
+        rerender(<TrendDetails microorganism={MICROORGANISM} />);
+
+        const germanRows = ROWS.map((row) => ({
+            ...row,
+            antimicrobialSubstance: row.antimicrobialSubstance && {
+                ...row.antimicrobialSubstance,
+                name: `${row.antimicrobialSubstance.name} (DE)`,
+            },
+        })) as ResistanceApiItem[];
+
+        await act(async () => pending.en(ROWS));
+        await act(async () => pending.de(germanRows));
+
+        expect(substanceCombobox()).toHaveTextContent("Tetracyclin");
+        expect(substanceCombobox()).not.toHaveTextContent("(DE)");
     });
 });

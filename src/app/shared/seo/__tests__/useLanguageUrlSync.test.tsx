@@ -3,7 +3,7 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 // eslint-disable-next-line import/named
 import i18next, { i18n as I18nInstance } from "i18next";
 import { I18nextProvider, initReactI18next } from "react-i18next";
-import { MemoryRouter, useLocation } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, useLocation } from "react-router-dom";
 import { pageRoute } from "../../infrastructure/router/routes";
 import { useLanguageUrlSync } from "../useLanguageUrlSync";
 
@@ -130,5 +130,60 @@ describe("useLanguageUrlSync", () => {
         await waitFor(() =>
             expect(new URLSearchParams(search()).get("lang")).toBe("en")
         );
+    });
+
+    it("follows a language switch from the header flags instead of snapping back to the URL's language", async () => {
+        const { i18n, search } = await renderAt("/prevalence?lang=en", "en");
+
+        await act(async () => {
+            await i18n.changeLanguage("de");
+        });
+
+        await waitFor(() => {
+            expect(i18n.language).toBe("de");
+            expect(new URLSearchParams(search()).get("lang")).toBe("de");
+        });
+    });
+
+    describe("with the browser's own URL", () => {
+        afterEach(() => window.history.replaceState(null, "", "/"));
+
+        it("keeps filters a page wrote outside the router when the language is switched", async () => {
+            window.history.replaceState(
+                null,
+                "",
+                "/antibiotic-resistance?lang=en"
+            );
+            const instance = await createI18n("en");
+            renderHook(() => useLanguageUrlSync(), {
+                wrapper: ({ children }: { children: ReactNode }) => (
+                    <I18nextProvider i18n={instance}>
+                        <BrowserRouter>{children}</BrowserRouter>
+                    </I18nextProvider>
+                ),
+            });
+            await act(async () => undefined);
+
+            // AMR pages persist their filters with raw replaceState, which
+            // the router never sees.
+            window.history.replaceState(
+                null,
+                "",
+                "/antibiotic-resistance?microorganism=E.+coli&view=trend&superCategorySampleOrigin=Turkey&lang=en"
+            );
+
+            await act(async () => {
+                await instance.changeLanguage("de");
+            });
+
+            await waitFor(() => {
+                const params = new URLSearchParams(window.location.search);
+                expect(instance.language).toBe("de");
+                expect(params.get("lang")).toBe("de");
+                expect(params.get("microorganism")).toBe("E. coli");
+                expect(params.get("view")).toBe("trend");
+                expect(params.get("superCategorySampleOrigin")).toBe("Turkey");
+            });
+        });
     });
 });
