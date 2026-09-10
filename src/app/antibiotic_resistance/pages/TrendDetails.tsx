@@ -379,6 +379,10 @@ export const TrendDetails: React.FC<{
 
     // DATA FETCHING
     useEffect(() => {
+        // A response for a language or microorganism the reader has already
+        // left must not overwrite the current one (mixed-language charts).
+        let cancelled = false;
+
         async function fetchResistanceOptions(): Promise<void> {
             setLoading(true);
             setFetchError(null);
@@ -389,14 +393,16 @@ export const TrendDetails: React.FC<{
                     `&populate=*&pagination[pageSize]=8000`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const res = await callApiService<any>(url);
-                setResistanceRawData(res.data?.data || []);
+                if (!cancelled) setResistanceRawData(res.data?.data || []);
             } catch (err) {
-                setFetchError(
-                    "Failed to fetch filter options. Please try again."
-                );
+                if (!cancelled) {
+                    setFetchError(
+                        "Failed to fetch filter options. Please try again."
+                    );
+                }
                 console.error("Failed to fetch resistance options", err);
             } finally {
-                setLoading(false);
+                if (!cancelled) setLoading(false);
             }
         }
         if (microorganism) {
@@ -406,6 +412,10 @@ export const TrendDetails: React.FC<{
                 setShowChart(false);
             }
         }
+
+        return () => {
+            cancelled = true;
+        };
     }, [i18next.language, microorganism]);
 
     // Set options for all filters (use documentId as key for all)
