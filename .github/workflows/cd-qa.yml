@@ -64,3 +64,35 @@ jobs:
           ssh-port: ${{ vars.QA_SSH_PORT }}
           ssh-user: ${{ secrets.QA_SSH_USER }}
           ssh-key: ${{ secrets.QA_SSH_KEY }}
+
+  # Deliberately a separate job rather than steps appended to `deploy`: the
+  # deploy either worked or it did not, and folding the smoke run into it would
+  # make a site that shipped fine but answers wrongly indistinguishable from one
+  # that never shipped. Split, the run tells you which of the two happened.
+  smoke:
+    name: 'Smoke-test QA'
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # E2E_BASE_URL points the suite at a server it does not own, so
+      # playwright.config.ts starts no dev server and drives the deployment
+      # that just went out instead.
+      - name: Smoke-test the deployed QA site
+        run: npm run test:e2e:smoke
+        env:
+          E2E_BASE_URL: ${{ vars.QA_BASE_URL || 'https://zoonotify-dev.bfr.berlin' }}
+
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: qa-smoke-report
+          path: playwright-report/
+          retention-days: 7

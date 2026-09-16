@@ -73,7 +73,7 @@ jobs:
       # for it. No CMS runs here: the suite covers routing, metadata and the
       # language contract, all of which the app shell renders on its own.
       - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
