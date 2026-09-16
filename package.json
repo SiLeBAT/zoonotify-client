@@ -10,7 +10,7 @@
     "start": "cross-env npm run clean && npm run cp:all && webpack-dev-server --open",
     "start:qa": "npm run clean && cross-env NODE_ENV=qa npm run cp:all && cross-env NODE_ENV=qa webpack-dev-server --open",
     "start:prod": "npm run clean && cross-env NODE_ENV=production npm run cp:all && cross-env NODE_ENV=production webpack-dev-server --open",
-    "start:e2e": "cross-env npm run clean && npm run cp:all && webpack-dev-server",
+    "start:e2e": "npm run clean && cross-env NODE_ENV=development npm run cp:all && webpack-dev-server",
     "build": "cross-env webpack",
     "build:qa": "cross-env NODE_ENV=qa webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
