@@ -54,3 +54,28 @@ jobs:
       # errors AND build breakage on the PR, before merge (previously these
       # surfaced only after merge, when cd-qa built).
       - run: npm run build
+
+  e2e:
+    name: 'Run E2E tests'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run typecheck:e2e
+      # Only the browser the suite actually uses -- `playwright install` with no
+      # argument fetches firefox and webkit too, for nothing.
+      - run: npx playwright install --with-deps chromium
+      # playwright.config.ts starts the dev server itself (start:e2e) and waits
+      # for it. No CMS runs here: the suite covers routing, metadata and the
+      # language contract, all of which the app shell renders on its own.
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
