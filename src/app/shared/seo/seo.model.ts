@@ -1,5 +1,18 @@
 import { pageRoute } from "../infrastructure/router/routes";
 
+/** The query parameter that carries the active language. */
+export const LANG_PARAM = "lang";
+
+/**
+ * Pre-unification parameter name, still read so old links keep working.
+ *
+ * Both names live here rather than next to their users because the i18n
+ * bootstrap and the URL sync hook each need them: when they disagreed about a
+ * spelling, a legacy link resolved to the fallback language instead of the one
+ * it asked for.
+ */
+export const LEGACY_LANG_PARAM = "locale";
+
 /** The locales the CMS publishes. Mirrors `languages` in src/i18n.ts. */
 export const SEO_LANGUAGES = ["de", "en"] as const;
 export type SeoLanguage = (typeof SEO_LANGUAGES)[number];
