@@ -1,13 +1,17 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
-import { isSupportedLanguage, normalizeLanguage } from "./seo.model";
+import {
+    isSupportedLanguage,
+    LANG_PARAM,
+    LEGACY_LANG_PARAM,
+    normalizeLanguage,
+} from "./seo.model";
 
-/** The query parameter that carries the active language. */
-export const LANG_PARAM = "lang";
-
-/** Pre-unification parameter name, still read so old links keep working. */
-export const LEGACY_LANG_PARAM = "locale";
+// The definitions moved to seo.model, next to the rest of the language rules,
+// so src/i18n.ts can resolve the legacy name at init rather than repairing it
+// afterwards. Re-exported here so existing import sites keep working.
+export { LANG_PARAM, LEGACY_LANG_PARAM };
 
 /**
  * Pages such as AMR and prevalence persist their filters with raw
