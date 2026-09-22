@@ -35,7 +35,7 @@ import { useTranslation } from "react-i18next";
 
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
-import { getGroupKey, SubstanceChart } from "./SubstanceChart";
+import { SubstanceChart } from "./SubstanceChart";
 import LZString from "lz-string";
 import {
     INFORMATION,
@@ -49,18 +49,17 @@ import {
     type FilterOption,
     type ResistanceApiItem,
     emptyFilterState,
+    filterDataExcludingKey,
     buildDocIdToNameMap,
     buildNameToDocIdMap,
     resolveUrlValueToDocId as resolveUrlValueToDocIdShared,
     buildMicroorganismFilter,
+    buildCombinationKey,
+    buildCombinationLabel,
+    meetsMinimumN,
+    shouldShowSpeciesFilter,
+    uniqueFromItems,
 } from "./resistanceHelpers";
-
-function shouldShowSpeciesFilter(microorganism: string): boolean {
-    return (
-        microorganism === "Campylobacter spp." ||
-        microorganism === "Enterococcus spp."
-    );
-}
 
 const menuItemTextStyle = `.menu-item-text-wrap {
   white-space: normal !important;
@@ -331,147 +330,6 @@ export const fixedMenuProps: Partial<MenuProps> = {
     anchorOrigin: { vertical: "bottom", horizontal: "left" },
     transformOrigin: { vertical: "top", horizontal: "left" },
 };
-
-// ======================= COMBINATION STABLE KEY =============================
-//  Stable key from documentIds (language-independent, survives locale switches)
-function getComboIdKey(
-    entry: ResistanceApiItem,
-    microorganism: string
-): string {
-    const parts: string[] = [];
-
-    // include species for only those microorganisms where it's relevant/visible
-    if (shouldShowSpeciesFilter(microorganism)) {
-        parts.push(entry.specie?.documentId ?? "-");
-    }
-
-    parts.push(entry.superCategorySampleOrigin?.documentId ?? "-");
-    parts.push(entry.sampleOrigin?.documentId ?? "-");
-    parts.push(entry.samplingStage?.documentId ?? "-");
-    parts.push(entry.matrixGroup?.documentId ?? "-");
-    parts.push(entry.matrix?.documentId ?? "-");
-
-    return parts.join("|");
-}
-
-// ======================= WATERFALL HELPERS =============================
-
-function uniqueFromItems(
-    items: ResistanceApiItem[],
-    key: FilterKey
-): FilterOption[] {
-    if (key === "samplingYear") {
-        const years = Array.from(
-            new Set(
-                items
-                    .map((i) => i.samplingYear)
-                    .filter(Boolean)
-                    .map(String)
-            )
-        ).sort();
-        return years.map((y) => ({ id: y, name: y, documentId: y }));
-    }
-
-    const map = new Map<string, { id: string; name: string }>();
-
-    for (const row of items) {
-        const obj =
-            key === "specie"
-                ? row.specie
-                : key === "superCategorySampleOrigin"
-                ? row.superCategorySampleOrigin
-                : key === "sampleOrigin"
-                ? row.sampleOrigin
-                : key === "samplingStage"
-                ? row.samplingStage
-                : key === "matrixGroup"
-                ? row.matrixGroup
-                : key === "matrix"
-                ? row.matrix
-                : key === "antimicrobialSubstance"
-                ? row.antimicrobialSubstance
-                : null;
-
-        if (obj?.documentId && obj?.name && obj?.id !== undefined) {
-            map.set(obj.documentId, { id: String(obj.id), name: obj.name });
-        }
-    }
-
-    return Array.from(map.entries()).map(([documentId, v]) => ({
-        id: v.id,
-        name: v.name,
-        documentId,
-    }));
-}
-
-function filterDataExcludingKey(
-    data: ResistanceApiItem[],
-    sel: Record<FilterKey, string[]>,
-    sub: string[],
-    excludeKey: FilterKey
-): ResistanceApiItem[] {
-    let result = data;
-
-    if (excludeKey !== "samplingYear" && sel.samplingYear.length) {
-        result = result.filter((r) =>
-            sel.samplingYear.includes(String(r.samplingYear))
-        );
-    }
-    if (excludeKey !== "specie" && sel.specie.length) {
-        result = result.filter(
-            (r) => r.specie && sel.specie.includes(r.specie.documentId)
-        );
-    }
-    if (
-        excludeKey !== "superCategorySampleOrigin" &&
-        sel.superCategorySampleOrigin.length
-    ) {
-        result = result.filter(
-            (r) =>
-                r.superCategorySampleOrigin &&
-                sel.superCategorySampleOrigin.includes(
-                    r.superCategorySampleOrigin.documentId
-                )
-        );
-    }
-    if (excludeKey !== "sampleOrigin" && sel.sampleOrigin.length) {
-        result = result.filter(
-            (r) =>
-                r.sampleOrigin &&
-                sel.sampleOrigin.includes(r.sampleOrigin.documentId)
-        );
-    }
-    if (excludeKey !== "samplingStage" && sel.samplingStage.length) {
-        result = result.filter(
-            (r) =>
-                r.samplingStage &&
-                sel.samplingStage.includes(r.samplingStage.documentId)
-        );
-    }
-    if (excludeKey !== "matrixGroup" && sel.matrixGroup.length) {
-        result = result.filter(
-            (r) =>
-                r.matrixGroup &&
-                sel.matrixGroup.includes(r.matrixGroup.documentId)
-        );
-    }
-    if (excludeKey !== "matrix" && sel.matrix.length) {
-        result = result.filter(
-            (r) => r.matrix && sel.matrix.includes(r.matrix.documentId)
-        );
-    }
-
-    // antimicrobialSubstance uses substanceFilter (sub)
-    if (excludeKey !== "antimicrobialSubstance" && sub.length) {
-        result = result.filter(
-            (r) =>
-                r.antimicrobialSubstance &&
-                sub.includes(r.antimicrobialSubstance.documentId)
-        );
-    }
-
-    return result;
-}
 
 // ======================= COMPONENT =============================
 
@@ -999,9 +857,9 @@ export const SubstanceDetail: React.FC<{
         const nMap: Record<string, number | undefined> = {};
 
         for (const row of yearData) {
-            const idKey = getComboIdKey(row, microorganism);
+            const idKey = buildCombinationKey(row, microorganism);
             if (!labelMap[idKey]) {
-                labelMap[idKey] = getGroupKey(row, microorganism); // localized label
+                labelMap[idKey] = buildCombinationLabel(row, microorganism); // localized label
                 nMap[idKey] = row?.anzahlGetesteterIsolate ?? undefined;
             }
         }
@@ -1099,7 +957,7 @@ export const SubstanceDetail: React.FC<{
     ): React.ReactNode => {
         const label = comboLabelMap[comboIdKey] ?? comboIdKey;
         const N = nPerCombination[comboIdKey];
-        const notPlotted = typeof N === "number" && N < 10;
+        const notPlotted = typeof N === "number" && !meetsMinimumN(N);
 
         const nText =
             N != null
