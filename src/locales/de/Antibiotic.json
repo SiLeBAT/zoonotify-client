@@ -15,7 +15,6 @@
   "More Info on Matrix Groups": "Mehr Informationen zu Matrixgruppe",
   "More Info on Matrices": "Mehr Informationen zu Matrizen",
   "More Info on Combinations": "Mehr Informationen zu Kombinationen",
-
   "ANTIBIOTIC_SUBSTANCE": "Antimikrobielle Substanz",
   "Download_Chart": "DIAGRAMM HERUNTERLADEN",
   "Year": "Erhebungsjahr",
@@ -31,7 +30,6 @@
   "MATRIX": "Matrix",
   "Search options": "Suchoptionen",
   "RESET FILTERS": "Filter zurücksetzen",
-
   "SELECT_ALL": "Alle auswählen",
   "DESELECT_ALL": "Alle abwählen",
   "SELECT_ALL_COMBINATIONS": "Erste 4 auswählen",
@@ -50,6 +48,20 @@
   "combination_limit_title": "Kombinationslimit",
   "combination_limit_message": "Es können maximal 4 Kombinationen für die Darstellung im Graph ausgewählt werden.",
   "data_not_plotted": "keine grafische Darstellung",
-
-  "SEARCH": "Suche"
+  "SEARCH": "Suche",
+  "Multi_Breadcrumb": "Mehrfachresistenzgraph",
+  "No_multi_resistance_data": "Keine Daten zur Mehrfachresistenz verfügbar",
+  "MULTI_GROUP_0": "sensibel",
+  "MULTI_GROUP_1": "1× resistent",
+  "MULTI_GROUP_2": "2× resistent",
+  "MULTI_GROUP_3": "3× resistent",
+  "MULTI_GROUP_4": "4× resistent",
+  "MULTI_GROUP_5": ">4× resistent",
+  "MULTI_TOOLTIP": "{{isolates}} von {{n}} Isolaten ({{percent}} %)",
+  "MULTI_PROPORTION_AXIS": "Anteil der Isolate (%)",
+  "MULTI_RESISTANCE_GROUP": "Resistenzgruppe",
+  "MULTI_ISOLATES": "Anzahl der Isolate",
+  "MULTI_TESTED_ISOLATES": "Anzahl getesteter Isolate (N)",
+  "MULTI_PROPORTION": "Anteil der Isolate (%)",
+  "MULTI_README": "Dieser ZooNotify-Datendownload enthält diese README-Datei und zwei CSV-Dateien.\n\nmulti_resistance_dot_*.csv ist für Software mit deutschen Spracheinstellungen: durch Semikolon getrennt, mit Dezimalkomma.\nmulti_resistance_comma_*.csv ist für Software mit englischen Spracheinstellungen: durch Komma getrennt, mit Dezimalpunkt.\n\nJede Zeile ist eine Kombination und eine Resistenzgruppe: die Anzahl der Isolate dieser Gruppe, die Anzahl getesteter Isolate der Kombination (N) und der Anteil der Gruppe an N in Prozent."
 }
