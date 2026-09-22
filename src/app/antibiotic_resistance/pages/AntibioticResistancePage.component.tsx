@@ -15,20 +15,25 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
 import { SubstanceDetail } from "./SubstanceDetail";
+import { MultiResistanceDetail } from "./MultiResistanceDetail";
 import LZString from "lz-string";
 import { useAmrPageTooltips } from "./amrPageUseCase";
+
+type AmrView = "main" | "trend" | "substance" | "multi";
+
+const AMR_VIEWS: AmrView[] = ["main", "trend", "substance", "multi"];
 
 // ---- Helpers for compressed state in URL (?s=...) ----
 function decodeCompressedState(
     sParam: string | null
-): null | { m?: string; v?: "main" | "trend" | "substance"; l?: string } {
+): null | { m?: string; v?: AmrView; l?: string } {
     if (!sParam) return null;
     try {
         const json = LZString.decompressFromEncodedURIComponent(sParam);
         if (!json) return null;
         return JSON.parse(json) as {
             m?: string;
-            v?: "main" | "trend" | "substance";
+            v?: AmrView;
             l?: string;
         };
     } catch {
@@ -135,15 +140,12 @@ export const FormattedMicroorganismName: React.FC<
 };
 
 // ---- URL sync helpers ----
-function updateUrl(
-    selectedOrg: string,
-    view: "main" | "trend" | "substance"
-): void {
+function updateUrl(selectedOrg: string, view: AmrView): void {
     const params = new URLSearchParams(window.location.search);
     const hasCompressed = params.get("s");
 
-    // If currently in 'substance' and an 's' state exists, SubstanceDetail owns the URL
-    if (view === "substance" && hasCompressed) return;
+    // In a bar-graph view with an 's' state, that graph's detail owns the URL
+    if ((view === "substance" || view === "multi") && hasCompressed) return;
 
     // Otherwise use simple params and remove 's'
     params.delete("s");
@@ -157,16 +159,13 @@ function updateUrl(
  * Organisms without data have no charts to show, so any chart view requested
  * via a deep link collapses back to the main view.
  */
-function resolveView(
-    selectedOrg: string,
-    view: "main" | "trend" | "substance"
-): "main" | "trend" | "substance" {
+function resolveView(selectedOrg: string, view: AmrView): AmrView {
     return ORGANISMS_WITHOUT_DATA.has(selectedOrg) ? "main" : view;
 }
 
 function readStateFromUrl(): {
     selectedOrg: string;
-    view: "main" | "trend" | "substance";
+    view: AmrView;
 } {
     const params = new URLSearchParams(window.location.search);
 
@@ -177,10 +176,8 @@ function readStateFromUrl(): {
             decoded.m && ORGANISMS.includes(decoded.m)
                 ? decoded.m
                 : ORGANISMS[0];
-        const viewFromS: "main" | "trend" | "substance" =
-            decoded.v === "trend" ||
-            decoded.v === "main" ||
-            decoded.v === "substance"
+        const viewFromS: AmrView =
+            decoded.v && AMR_VIEWS.includes(decoded.v)
                 ? decoded.v
                 : "substance";
         return {
@@ -195,8 +192,7 @@ function readStateFromUrl(): {
         typeof orgParam === "string" && ORGANISMS.includes(orgParam)
             ? orgParam
             : ORGANISMS[0];
-    const view =
-        (params.get("view") as "main" | "trend" | "substance") || "main";
+    const view = (params.get("view") as AmrView) || "main";
     return { selectedOrg, view: resolveView(selectedOrg, view) };
 }
 
@@ -210,7 +206,7 @@ function Breadcrumb({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: any;
     selectedOrg: string;
-    view: "main" | "trend" | "substance";
+    view: AmrView;
     handleShowMain: () => void;
 }): JSX.Element {
     return (
@@ -233,6 +229,7 @@ function Breadcrumb({
             </span>
             {view === "trend" && <> / {t("Trend")}</>}
             {view === "substance" && <> / {t("Substans")}</>}
+            {view === "multi" && <> / {t("Multi_Breadcrumb")}</>}
         </div>
     );
 }
@@ -244,7 +241,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
     const [state, setState] = useState<{
         selectedOrg: string;
-        view: "main" | "trend" | "substance";
+        view: AmrView;
     }>(() => readStateFromUrl());
     const { selectedOrg, view } = state;
 
@@ -294,11 +291,14 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         setState((prev) => ({ ...prev, view: "substance" }));
     };
 
+    const handleMultiClick = (): void => {
+        setState((prev) => ({ ...prev, view: "multi" }));
+    };
+
     const handleShowMain = (): void => {
         setState((prev) => ({ ...prev, view: "main" }));
     };
 
-    const handleComingSoon = (): void => setComingSoonOpen(true);
     const handleCloseComingSoon = (): void => setComingSoonOpen(false);
 
     return (
@@ -484,6 +484,18 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             />
                         }
                     />
+                ) : view === "multi" ? (
+                    <MultiResistanceDetail
+                        microorganism={selectedOrg}
+                        breadcrumb={
+                            <Breadcrumb
+                                t={t}
+                                selectedOrg={selectedOrg}
+                                view={view}
+                                handleShowMain={handleShowMain}
+                            />
+                        }
+                    />
                 ) : (
                     <>
                         <Breadcrumb
@@ -586,7 +598,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
                                         <div
                                             className="image-box bottom"
-                                            onClick={handleComingSoon}
+                                            onClick={handleMultiClick}
                                         >
                                             {multiTooltip && (
                                                 <Tooltip

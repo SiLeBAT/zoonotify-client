@@ -8,7 +8,6 @@
   "More Info on Sampling Stages": "More Information on Sampling Stage",
   "More Info on Matrix Groups": "More Information on Matrix Group",
   "More Info on Combinations": "More Information on combinations",
-
   "More Info on Matrices": "More Info on Matrix",
   "data_not_plotted": "data is not plotted",
   "ANTIBIOTIC_SUBSTANCE": "Antimicrobial substance",
@@ -50,6 +49,20 @@
   "combinations": "Combinations",
   "combination_limit_title": "Combination Limit",
   "combination_limit_message": "You can choose a maximum of 4 combinations to be displayed in the graph.",
-
-  "SAMPLING_YEAR": "Sampling year"
+  "SAMPLING_YEAR": "Sampling year",
+  "Multi_Breadcrumb": "Multi-resistance Graph",
+  "No_multi_resistance_data": "No multi-resistance data available",
+  "MULTI_GROUP_0": "susceptible",
+  "MULTI_GROUP_1": "1× resistant",
+  "MULTI_GROUP_2": "2× resistant",
+  "MULTI_GROUP_3": "3× resistant",
+  "MULTI_GROUP_4": "4× resistant",
+  "MULTI_GROUP_5": ">4× resistant",
+  "MULTI_TOOLTIP": "{{isolates}} of {{n}} isolates ({{percent}} %)",
+  "MULTI_PROPORTION_AXIS": "Proportion of isolates (%)",
+  "MULTI_RESISTANCE_GROUP": "Resistance group",
+  "MULTI_ISOLATES": "Number of isolates",
+  "MULTI_TESTED_ISOLATES": "Number of tested isolates (N)",
+  "MULTI_PROPORTION": "Proportion of isolates (%)",
+  "MULTI_README": "This ZooNotify data download contains this README file and two CSV files.\n\nmulti_resistance_dot_*.csv is for software with German language settings: semicolon-separated, with a decimal comma.\nmulti_resistance_comma_*.csv is for software with English language settings: comma-separated, with a decimal point.\n\nEach row is one Combination and one Resistance group: the number of isolates in that group, the Combination's number of tested isolates (N) and the group's proportion of N in percent."
 }

@@ -1,0 +1,2426 @@
+{
+  "E. coli": {
+    "en": [
+      {
+        "id": 1,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 85,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 2,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 17,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 3,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 40,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 4,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 3,
+        "anzahlIsolate": 17,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 5,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 8,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 6,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 5,
+        "anzahlIsolate": 3,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 7,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "fresh",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 60,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 8,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "fresh",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 30,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 9,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "fresh",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 25,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 10,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "fresh",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 3,
+        "anzahlIsolate": 20,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 11,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "fresh",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 12,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "fresh",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 5,
+        "anzahlIsolate": 5,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 13,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "frozen",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 20,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 14,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "frozen",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 15,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "frozen",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 8,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 16,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "frozen",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 3,
+        "anzahlIsolate": 6,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 17,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "frozen",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 4,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 18,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Chicken meat",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "frozen",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 5,
+        "anzahlIsolate": 2,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 19,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Fattening pig",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 11,
+          "name": "Pork",
+          "documentId": "fx-m-pork"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 5,
+        "anzahlGetesteterIsolate": 7
+      },
+      {
+        "id": 20,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Food",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Fattening pig",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Retail",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Meat",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 11,
+          "name": "Pork",
+          "documentId": "fx-m-pork"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 2,
+        "anzahlGetesteterIsolate": 7
+      },
+      {
+        "id": 21,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Fattening pig",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 120,
+        "anzahlGetesteterIsolate": 175
+      },
+      {
+        "id": 22,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Fattening pig",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 30,
+        "anzahlGetesteterIsolate": 175
+      },
+      {
+        "id": 23,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Fattening pig",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 20,
+        "anzahlGetesteterIsolate": 175
+      },
+      {
+        "id": 24,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Fattening pig",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 5,
+        "anzahlGetesteterIsolate": 175
+      }
+    ],
+    "de": [
+      {
+        "id": 1,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 85,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 2,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 17,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 3,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 40,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 4,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 3,
+        "anzahlIsolate": 17,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 5,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 8,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 6,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 5,
+        "anzahlIsolate": 3,
+        "anzahlGetesteterIsolate": 170
+      },
+      {
+        "id": 7,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "frisch",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 60,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 8,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "frisch",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 30,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 9,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "frisch",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 25,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 10,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "frisch",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 3,
+        "anzahlIsolate": 20,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 11,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "frisch",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 12,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 12,
+          "name": "frisch",
+          "documentId": "fx-md-fresh"
+        },
+        "specie": null,
+        "resistanceGroup": 5,
+        "anzahlIsolate": 5,
+        "anzahlGetesteterIsolate": 150
+      },
+      {
+        "id": 13,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "tiefgefroren",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 20,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 14,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "tiefgefroren",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 15,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "tiefgefroren",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 8,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 16,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "tiefgefroren",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 3,
+        "anzahlIsolate": 6,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 17,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "tiefgefroren",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 4,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 18,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 10,
+          "name": "Hähnchenfleisch",
+          "documentId": "fx-m-chicken"
+        },
+        "matrixDetail": {
+          "id": 13,
+          "name": "tiefgefroren",
+          "documentId": "fx-md-frozen"
+        },
+        "specie": null,
+        "resistanceGroup": 5,
+        "anzahlIsolate": 2,
+        "anzahlGetesteterIsolate": 50
+      },
+      {
+        "id": 19,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Mastschwein",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 11,
+          "name": "Schweinefleisch",
+          "documentId": "fx-m-pork"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 5,
+        "anzahlGetesteterIsolate": 7
+      },
+      {
+        "id": 20,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 2,
+          "name": "Lebensmittel",
+          "documentId": "fx-sco-food"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Mastschwein",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 6,
+          "name": "Einzelhandel",
+          "documentId": "fx-ss-retail"
+        },
+        "matrixGroup": {
+          "id": 8,
+          "name": "Fleisch",
+          "documentId": "fx-mg-meat"
+        },
+        "matrix": {
+          "id": 11,
+          "name": "Schweinefleisch",
+          "documentId": "fx-m-pork"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 2,
+        "anzahlGetesteterIsolate": 7
+      },
+      {
+        "id": 21,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Mastschwein",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 0,
+        "anzahlIsolate": 120,
+        "anzahlGetesteterIsolate": 175
+      },
+      {
+        "id": 22,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Mastschwein",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 1,
+        "anzahlIsolate": 30,
+        "anzahlGetesteterIsolate": 175
+      },
+      {
+        "id": 23,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Mastschwein",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 2,
+        "anzahlIsolate": 20,
+        "anzahlGetesteterIsolate": 175
+      },
+      {
+        "id": 24,
+        "samplingYear": 2022,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 4,
+          "name": "Mastschwein",
+          "documentId": "fx-so-pig"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": null,
+        "resistanceGroup": 4,
+        "anzahlIsolate": 5,
+        "anzahlGetesteterIsolate": 175
+      }
+    ]
+  },
+  "Campylobacter spp.": {
+    "en": [
+      {
+        "id": 25,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 0,
+        "anzahlIsolate": 40,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 26,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 1,
+        "anzahlIsolate": 50,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 27,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 2,
+        "anzahlIsolate": 60,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 28,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 3,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 29,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 0,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 30,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 1,
+        "anzahlIsolate": 15,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 31,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 2,
+        "anzahlIsolate": 30,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 32,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 3,
+        "anzahlIsolate": 25,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 33,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Animal",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Broiler",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Slaughterhouse",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Caecal content",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Caecal content",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 4,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 90
+      }
+    ],
+    "de": [
+      {
+        "id": 25,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 0,
+        "anzahlIsolate": 40,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 26,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 1,
+        "anzahlIsolate": 50,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 27,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 2,
+        "anzahlIsolate": 60,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 28,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 14,
+          "name": "C. jejuni",
+          "documentId": "fx-sp-jejuni"
+        },
+        "resistanceGroup": 3,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 160
+      },
+      {
+        "id": 29,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 0,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 30,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 1,
+        "anzahlIsolate": 15,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 31,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 2,
+        "anzahlIsolate": 30,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 32,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 3,
+        "anzahlIsolate": 25,
+        "anzahlGetesteterIsolate": 90
+      },
+      {
+        "id": 33,
+        "samplingYear": 2023,
+        "superCategorySampleOrigin": {
+          "id": 1,
+          "name": "Tier",
+          "documentId": "fx-sco-animal"
+        },
+        "sampleOrigin": {
+          "id": 3,
+          "name": "Masthähnchen",
+          "documentId": "fx-so-broiler"
+        },
+        "samplingStage": {
+          "id": 5,
+          "name": "Schlachthof",
+          "documentId": "fx-ss-slaughter"
+        },
+        "matrixGroup": {
+          "id": 7,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-mg-caecum"
+        },
+        "matrix": {
+          "id": 9,
+          "name": "Blinddarminhalt",
+          "documentId": "fx-m-caecum"
+        },
+        "matrixDetail": null,
+        "specie": {
+          "id": 15,
+          "name": "C. coli",
+          "documentId": "fx-sp-coli"
+        },
+        "resistanceGroup": 4,
+        "anzahlIsolate": 10,
+        "anzahlGetesteterIsolate": 90
+      }
+    ]
+  }
+}
