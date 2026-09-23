@@ -17,11 +17,15 @@ import {
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import {
     type MultiResistanceBar,
-    RESISTANCE_GROUP_COUNT,
+    RESISTANCE_GROUP_CODES,
     toMultiResistanceCsv,
 } from "./multiResistanceHelpers";
 
-/** Sampled from the data steward's example plot: susceptible green → >4× dark red. */
+/**
+ * By group code. 0–5 are sampled from the data steward's example plot
+ * (susceptible green → >4× dark red); 6–10, MRSA's 5× … >8×, continue the
+ * red ramp past 4× so each scheme darkens left to right.
+ */
 const RESISTANCE_GROUP_COLORS = [
     "#47D406",
     "#FBFCBB",
@@ -29,9 +33,12 @@ const RESISTANCE_GROUP_COLORS = [
     "#FA9018",
     "#FA1C18",
     "#89110F",
+    "#D61610",
+    "#B01310",
+    "#89110F",
+    "#630C0B",
+    "#3D0706",
 ];
-
-const RANKS = Array.from({ length: RESISTANCE_GROUP_COUNT }, (_, r) => r);
 
 const BAR_HEIGHT = 44;
 
@@ -50,7 +57,11 @@ export const MultiResistanceChart: React.FC<MultiResistanceChartProps> = ({
     const chartRef = useRef<HTMLDivElement>(null);
     const [copied, setCopied] = useState(false);
 
-    const groupLabels = RANKS.map((r) => t(`MULTI_GROUP_${r}`));
+    const groupLabels = RESISTANCE_GROUP_CODES.map((r) =>
+        t(`MULTI_GROUP_${r}`)
+    );
+    // every bar of one microorganism shares its scheme
+    const ranks = bars[0]?.groups.map((g) => g.rank) ?? [];
 
     // one row per bar; stackOffset="expand" turns the counts into shares
     const chartData = bars.map((bar) => {
@@ -70,7 +81,7 @@ export const MultiResistanceChart: React.FC<MultiResistanceChartProps> = ({
     ): [string, string] => {
         const bar = barByLabel.get(item?.payload?.label);
         const rank = groupLabels.indexOf(name);
-        const group = bar?.groups[rank];
+        const group = bar?.groups.find((g) => g.rank === rank);
         if (!bar || !group) return ["-", name];
         return [
             t("MULTI_TOOLTIP", {
@@ -223,7 +234,7 @@ export const MultiResistanceChart: React.FC<MultiResistanceChartProps> = ({
                             align="center"
                             wrapperStyle={{ paddingTop: 30 }}
                         />
-                        {RANKS.map((rank) => (
+                        {ranks.map((rank) => (
                             <Bar
                                 key={rank}
                                 dataKey={`g${rank}`}

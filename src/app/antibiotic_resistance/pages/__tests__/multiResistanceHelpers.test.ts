@@ -6,7 +6,7 @@ import {
     encodeMultiResistanceState,
     toMultiResistanceCsv,
 } from "../multiResistanceHelpers";
-import { emptyFilterState } from "../resistanceHelpers";
+import { buildCombinationKey, emptyFilterState } from "../resistanceHelpers";
 
 const rel = (
     id: number,
@@ -40,6 +40,40 @@ const groupRow = (
 });
 
 describe("buildMultiResistanceBars", () => {
+    it("splits an MRSA-scheme microorganism's bars into its ten groups, 5× … >8× instead of >4×", () => {
+        const rows = [
+            groupRow(0, 70),
+            groupRow(1, 50),
+            groupRow(6, 30),
+            groupRow(10, 20),
+        ];
+
+        const { bars } = buildMultiResistanceBars(rows, "MRSA");
+
+        expect(bars[0].groups.map((g) => g.rank)).toEqual([
+            0, 1, 2, 3, 4, 6, 7, 8, 9, 10,
+        ]);
+        expect(bars[0].groups.map((g) => g.count)).toEqual([
+            70, 50, 0, 0, 0, 30, 0, 0, 0, 20,
+        ]);
+    });
+
+    it("keeps one scheme per microorganism: a Combination with only low groups still gets MRSA's ten", () => {
+        const other = {
+            samplingStage: rel(9, "Farm", "ss-farm"),
+        };
+        const rows = [
+            groupRow(0, 100),
+            groupRow(7, 70),
+            groupRow(0, 150, other),
+            groupRow(2, 20, other),
+        ];
+
+        const { bars } = buildMultiResistanceBars(rows, "MRSA");
+
+        expect(bars.map((b) => b.groups.length)).toEqual([10, 10]);
+    });
+
     it("gives each Resistance group its share of the Combination's tested isolates", () => {
         const rows = [
             groupRow(0, 85),
@@ -96,22 +130,14 @@ describe("buildMultiResistanceBars", () => {
         expect(belowMinimum.map((b) => b.n)).toEqual([9]);
     });
 
-    it("never pools two matrix details of one cell into a single bar", () => {
-        const fresh = { matrixDetail: rel(8, "fresh", "md-fresh") };
-        const frozen = {
-            matrixDetail: rel(9, "frozen", "md-frozen"),
-            anzahlGetesteterIsolate: 50,
-        };
-        const rows = [
-            groupRow(0, 170, fresh),
-            groupRow(0, 40, frozen),
-            groupRow(1, 10, frozen),
-        ];
+    it("keys a bar exactly like the Substance Graph's Combination, ignoring matrix detail", () => {
+        const row = groupRow(0, 170, {
+            matrixDetail: rel(8, "fresh", "md-fresh"),
+        });
 
-        const { bars } = buildMultiResistanceBars(rows, "E. coli");
+        const { bars } = buildMultiResistanceBars([row], "E. coli");
 
-        expect(bars.map((b) => b.n)).toEqual([170, 50]);
-        expect(bars[1].groups[0].proportion).toBeCloseTo(40 / 50);
+        expect(bars[0].key).toBe(buildCombinationKey(row, "E. coli"));
     });
 
     it.each(["Campylobacter spp.", "Enterococcus spp."])(
@@ -150,14 +176,14 @@ describe("buildMultiResistanceBars", () => {
         );
     });
 
-    it("names the matrix detail in the label only when it is set", () => {
+    it("leaves matrix detail out of the label", () => {
         const { bars } = buildMultiResistanceBars(
             [groupRow(0, 170, { matrixDetail: rel(8, "fresh", "md-fresh") })],
             "E. coli"
         );
 
         expect(bars[0].label).toBe(
-            "Caecal content – fresh – Broiler – Slaughterhouse (N = 170)"
+            "Caecal content – Broiler – Slaughterhouse (N = 170)"
         );
     });
 
