@@ -37,6 +37,7 @@ export const MATRIX_GROUPS = `${CMS_API_ENDPOINT}/matrix-groups`;
 export const SAMPLING_STAGES = `${CMS_API_ENDPOINT}/sampling-stages`;
 export const MICROORGANISMS = `${CMS_API_ENDPOINT}/microorganisms`;
 export const RESISTANCES = `${CMS_API_ENDPOINT}/resistances`;
+export const MULTI_RESISTANCES = `${CMS_API_ENDPOINT}/multi-resistances`;
 export const SPECIES = `${CMS_API_ENDPOINT}/species`;
 export const TREND_INFORMATION = `${CMS_API_ENDPOINT}/trend-information`;
 export const SUBSTANCE_INFORMATION = `${CMS_API_ENDPOINT}/substance-information`;

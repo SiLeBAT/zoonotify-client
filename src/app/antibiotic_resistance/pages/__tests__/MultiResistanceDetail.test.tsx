@@ -1,7 +1,35 @@
 import React from "react";
 import { render, screen, within, fireEvent } from "@testing-library/react";
 import { MultiResistanceDetail } from "../MultiResistanceDetail";
-import type { MultiResistanceBar } from "../multiResistanceHelpers";
+import type {
+    MultiResistanceBar,
+    MultiResistanceItem,
+} from "../multiResistanceHelpers";
+import { callApiService } from "../../../shared/infrastructure/api/callApi.service";
+import fixture from "./fixtures/multiResistance.fixture.json";
+
+jest.mock("../../../shared/infrastructure/api/callApi.service", () => ({
+    callApiService: jest.fn(),
+}));
+const mockedCallApiService = callApiService as jest.MockedFunction<
+    typeof callApiService
+>;
+
+type Fixture = Record<string, { en: MultiResistanceItem[] }>;
+
+/** Stands in for the CMS: answers with the fixture rows of the requested microorganism. */
+function serveFixture(): void {
+    mockedCallApiService.mockImplementation(async (url: string) => {
+        const decoded = decodeURIComponent(url);
+        const microorganism = Object.keys(fixture).find((name) =>
+            decoded.includes(name)
+        );
+        const rows = microorganism
+            ? (fixture as Fixture)[microorganism].en
+            : [];
+        return { status: 200, data: { data: rows } };
+    });
+}
 
 jest.mock("../../../shared/components/layout/SidebarComponent", () => ({
     SidebarComponent: ({ children }: { children: React.ReactNode }) => (
@@ -31,6 +59,11 @@ beforeAll(() => {
     window.scrollTo = jest.fn();
 });
 
+beforeEach(() => {
+    mockedCallApiService.mockReset();
+    serveFixture();
+});
+
 function renderDetail(microorganism: string): void {
     window.history.replaceState(null, "", "/");
     render(<MultiResistanceDetail microorganism={microorganism} />);
@@ -50,8 +83,7 @@ describe("MultiResistanceDetail", () => {
 
         expect(plottedLabels()).toEqual([
             "Caecal content – Broiler – Slaughterhouse (N = 170)",
-            "Chicken meat – fresh – Broiler – Retail (N = 150)",
-            "Chicken meat – frozen – Broiler – Retail (N = 50)",
+            "Chicken meat – Broiler – Retail (N = 150)",
         ]);
     });
 
@@ -66,6 +98,16 @@ describe("MultiResistanceDetail", () => {
                 /N=7, data_not_plotted/
             )
         ).toBeInTheDocument();
+    });
+
+    it("requests the microorganism's multi-resistance rows from the CMS in the UI language", async () => {
+        renderDetail("E. coli");
+        await screen.findByTestId("multi-resistance-chart");
+
+        const url = decodeURIComponent(mockedCallApiService.mock.calls[0][0]);
+        expect(url).toContain("/multi-resistances?locale=en");
+        expect(url).toContain("filters[microorganism][name]");
+        expect(url).toContain("E. coli");
     });
 
     it("says so when the microorganism has no multi-resistance data", async () => {

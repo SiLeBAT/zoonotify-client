@@ -12,17 +12,30 @@ import {
     shouldShowSpeciesFilter,
 } from "./resistanceHelpers";
 
-/** susceptible, 1×, 2×, 3×, 4×, >4× resistant — always in this order. */
-export const RESISTANCE_GROUP_COUNT = 6;
+/**
+ * Resistance group codes (ADR 0008): 0 susceptible, 1–4 = n× resistant,
+ * 5 = >4×, 6–9 = 5×–8×, 10 = >8×. The steward bins most microorganisms into
+ * six groups; MRSA into ten, continuing past 4× instead of stopping at >4×.
+ */
+export const RESISTANCE_GROUP_CODES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const SIX_GROUP_SCHEME = [0, 1, 2, 3, 4, 5];
+const TEN_GROUP_SCHEME = [0, 1, 2, 3, 4, 6, 7, 8, 9, 10];
 
 /** One Resistance group of one Combination, as the data delivers it. */
 export interface MultiResistanceItem extends ResistanceRelationFields {
     id: number;
     matrixDetail?: ResistanceRelationFields["matrix"];
-    /** Rank of the Resistance group: 0 = susceptible … 5 = >4× resistant. */
+    /** Resistance group code, see `RESISTANCE_GROUP_CODES`. */
     resistanceGroup: number;
     anzahlIsolate: number;
     anzahlGetesteterIsolate: number;
+}
+
+/** The groups one microorganism's bars split into, in order: its rows use one scheme. */
+export function resistanceGroupScheme(rows: MultiResistanceItem[]): number[] {
+    return rows.some((r) => r.resistanceGroup > 5)
+        ? TEN_GROUP_SCHEME
+        : SIX_GROUP_SCHEME;
 }
 
 export interface ResistanceGroupShare {
@@ -47,20 +60,7 @@ export interface MultiResistanceBars {
     belowMinimum: MultiResistanceBar[];
 }
 
-/**
- * The Substance Graph's Combination key plus matrix detail: its source rows
- * carry one, and two details of one cell must never share a bar.
- */
-export function buildMultiResistanceKey(
-    row: MultiResistanceItem,
-    microorganism: string
-): string {
-    return `${buildCombinationKey(row, microorganism)}|${
-        row.matrixDetail?.documentId ?? "-"
-    }`;
-}
-
-/** `[Species –] Matrix – [Matrix detail –] Sample origin – Sampling stage` */
+/** `[Species –] Matrix – Sample origin – Sampling stage`; matrix detail is not part of a Combination. */
 export function buildMultiResistanceName(
     row: MultiResistanceItem,
     microorganism: string
@@ -68,7 +68,6 @@ export function buildMultiResistanceName(
     const parts = [
         shouldShowSpeciesFilter(microorganism) ? row.specie?.name : undefined,
         row.matrix?.name,
-        row.matrixDetail?.name,
         row.sampleOrigin?.name,
         row.samplingStage?.name,
     ].filter((part): part is string => Boolean(part));
@@ -76,30 +75,28 @@ export function buildMultiResistanceName(
 }
 
 /**
- * One bar per Combination, split into the six Resistance groups by their
- * share of that Combination's tested isolates. Rows are never pooled.
+ * One bar per Combination, split into the microorganism's Resistance groups
+ * by their share of that Combination's tested isolates. Rows are never pooled.
  */
 export function buildMultiResistanceBars(
     rows: MultiResistanceItem[],
     microorganism: string
 ): MultiResistanceBars {
+    const scheme = resistanceGroupScheme(rows);
     const byKey = new Map<string, MultiResistanceItem[]>();
     for (const row of rows) {
-        const key = buildMultiResistanceKey(row, microorganism);
+        const key = buildCombinationKey(row, microorganism);
         byKey.set(key, [...(byKey.get(key) ?? []), row]);
     }
 
     const all = Array.from(byKey.entries()).map(([key, cell]) => {
         const n = cell[0].anzahlGetesteterIsolate;
-        const groups = Array.from(
-            { length: RESISTANCE_GROUP_COUNT },
-            (_, rank) => {
-                const count =
-                    cell.find((r) => r.resistanceGroup === rank)
-                        ?.anzahlIsolate ?? 0;
-                return { rank, count, proportion: count / n };
-            }
-        );
+        const groups = scheme.map((rank) => {
+            const count =
+                cell.find((r) => r.resistanceGroup === rank)?.anzahlIsolate ??
+                0;
+            return { rank, count, proportion: count / n };
+        });
         const name = buildMultiResistanceName(cell[0], microorganism);
         return { key, name, label: `${name} (N = ${n})`, n, groups };
     });
@@ -115,7 +112,7 @@ export interface MultiResistanceCsvOptions {
     decimalSep: "." | ",";
     /** Localized: Combination, Resistance group, isolates, N, percent. */
     headers: string[];
-    /** Localized Resistance group names, by rank. */
+    /** Localized Resistance group names, indexed by code. */
     groupLabels: string[];
 }
 
