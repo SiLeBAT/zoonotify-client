@@ -10,12 +10,10 @@ export const pageRoute = {
     microbialCountsPagePath: "/microbial-counts",
 };
 
-const env = process.env.REACT_APP_ENV;
-const cms = env === "qa" || env === "prod" ? "/cms" : "";
-
 export const CMS_BASE_ENDPOINT = process.env.REACT_APP_API_URL;
 export const CMS_API_ENDPOINT = `${CMS_BASE_ENDPOINT}/api`;
-export const API_DOCUMENTATION_URL = `${CMS_BASE_ENDPOINT}${cms}/documentation/v2.2.0`;
+// Static Swagger UI page, built by cp:api-docs outside the SPA.
+export const API_DOCUMENTATION_URL = "/assets/api-docs/";
 export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
 export const AMU_PAGE = `${CMS_API_ENDPOINT}/amu-page`;
