@@ -20,4 +20,7 @@ module.exports = {
     },
     collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/app/App.tsx"],
     testEnvironment: "jest-environment-jsdom",
+    // Headroom above testing-library's asyncUtilTimeout (5000ms, setupTests.js):
+    // a cold first test takes ~2s alone and over 13s with the CPU oversubscribed.
+    testTimeout: 30000,
 };
