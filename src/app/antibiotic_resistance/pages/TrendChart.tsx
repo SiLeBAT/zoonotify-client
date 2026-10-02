@@ -98,6 +98,10 @@ const COLORS = [
     "#008080",
 ];
 
+// Shared by the chart and the "not enough data" panel so paging between
+// groups does not shift the controls below.
+const CHART_HEIGHT = 450;
+
 const SUBSTANCE_COLORS: { [substance: string]: string } = {};
 ALL_SUBSTANCES.forEach((substance, idx) => {
     SUBSTANCE_COLORS[substance] = COLORS[idx % COLORS.length];
@@ -528,7 +532,7 @@ This file contains comma-separated data, which supports the correct format of nu
                 {/* ---- CHART OR "NOT ENOUGH DATA" MESSAGE ---- */}
                 {enoughData ? (
                     <div ref={chartContainerRef}>
-                        <ResponsiveContainer width="100%" height={450}>
+                        <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis
@@ -595,7 +599,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
-                        minHeight={300}
+                        height={CHART_HEIGHT}
                     >
                         <Typography
                             variant="body1"
