@@ -210,7 +210,7 @@ export const MultiResistanceDetail: React.FC<{
 
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         try {
-            const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
+            const url = `${INFORMATION}?filters[title][$eqi]=${encodeURIComponent(
                 t(categoryKey)
             )}&locale=${apiLocale}&pagination[pageSize]=1`;
             const response = await callApiService<
