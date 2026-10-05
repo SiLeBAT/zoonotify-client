@@ -6,8 +6,12 @@ import { visit } from "./support/app";
  * The API reference is a static Swagger UI page outside the SPA, assembled into
  * public/ by cp:api-docs. Its spec is imported rather than restated, so the
  * expectations follow whatever was last synced from zoonotify-cms.
+ *
+ * PAGE is the file, not the directory: the dev server would serve the
+ * directory index, but the deployed Apache hands /assets/api-docs/ to the SPA.
  */
-const PAGE = "/assets/api-docs/";
+const DIR = "/assets/api-docs/";
+const PAGE = `${DIR}index.html`;
 const documentedPaths = Object.keys(spec.paths).sort();
 
 test("the API reference page renders every documented operation", async ({
@@ -32,7 +36,7 @@ test("the API reference page renders every documented operation", async ({
 });
 
 test("the spec behind the page is downloadable", async ({ request }) => {
-    const response = await request.get(`${PAGE}openapi.json`);
+    const response = await request.get(`${DIR}openapi.json`);
 
     expect(response.status()).toBe(200);
     const body = await response.json();
