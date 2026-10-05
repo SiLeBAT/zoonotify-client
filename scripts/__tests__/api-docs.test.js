@@ -51,6 +51,12 @@ describe("API reference page wiring", () => {
         );
     });
 
+    it("serves the page for the bare directory URL on Apache", () => {
+        const htaccess = read("src", "assets", "api-docs", ".htaccess");
+        expect(htaccess).toMatch(/^RewriteEngine On$/m);
+        expect(htaccess).toMatch(/^RewriteRule \^\$ index\.html \[L\]$/m);
+    });
+
     it("pins swagger-ui-dist to an exact 5.x version", () => {
         expect(pkg.devDependencies["swagger-ui-dist"]).toMatch(/^5\.\d+\.\d+$/);
     });
