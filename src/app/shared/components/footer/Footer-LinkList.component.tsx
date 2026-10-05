@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import {
     API_DOCUMENTATION_URL,
+    API_REFERENCE_LINKED,
     pageRoute,
 } from "../../infrastructure/router/routes";
 
@@ -145,17 +146,19 @@ export function FooterLinkListComponent(props: {
                     </Typography>
                 </NavLink>
             </ListItem>
-            <ListItem sx={footerElementStyle}>
-                {/* A plain link, not a NavLink: the page lives outside the SPA
-                    router, so it needs a full page load. */}
-                <Link href={API_DOCUMENTATION_URL} sx={linkStyle}>
-                    <Typography
-                        sx={{ fontSize: "inherit", lineHeight: "inherit" }}
-                    >
-                        {t("Content.Api")}
-                    </Typography>
-                </Link>
-            </ListItem>
+            {API_REFERENCE_LINKED && (
+                <ListItem sx={footerElementStyle}>
+                    {/* A plain link, not a NavLink: the page lives outside the SPA
+                        router, so it needs a full page load. */}
+                    <Link href={API_DOCUMENTATION_URL} sx={linkStyle}>
+                        <Typography
+                            sx={{ fontSize: "inherit", lineHeight: "inherit" }}
+                        >
+                            {t("Content.Api")}
+                        </Typography>
+                    </Link>
+                </ListItem>
+            )}
             <ListItem sx={footerElementStyle}>{submitProblemLink}</ListItem>
         </List>
     );

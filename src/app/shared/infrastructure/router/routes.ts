@@ -14,6 +14,18 @@ export const CMS_BASE_ENDPOINT = process.env.REACT_APP_API_URL;
 export const CMS_API_ENDPOINT = `${CMS_BASE_ENDPOINT}/api`;
 // Static Swagger UI page, built by cp:api-docs outside the SPA.
 export const API_DOCUMENTATION_URL = "/assets/api-docs/";
+
+/**
+ * Whether the footer links the API reference. A build hides it by setting
+ * REACT_APP_API_REFERENCE_LINKED to "false": production does, until prod serves
+ * every collection the reference promises (issue 037). Flip it at go-live.
+ */
+export function isApiReferenceLinked(value: string | undefined): boolean {
+    return value?.trim() !== "false";
+}
+export const API_REFERENCE_LINKED = isApiReferenceLinked(
+    process.env.REACT_APP_API_REFERENCE_LINKED
+);
 export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
 export const AMU_PAGE = `${CMS_API_ENDPOINT}/amu-page`;
