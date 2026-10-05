@@ -12,8 +12,10 @@ export const pageRoute = {
 
 export const CMS_BASE_ENDPOINT = process.env.REACT_APP_API_URL;
 export const CMS_API_ENDPOINT = `${CMS_BASE_ENDPOINT}/api`;
-// Static Swagger UI page, built by cp:api-docs outside the SPA.
-export const API_DOCUMENTATION_URL = "/assets/api-docs/";
+// Static Swagger UI page, built by cp:api-docs outside the SPA. Linked by file
+// name: the deployed Apache's SPA fallback rewrites the bare directory URL to
+// the app's index.html, which has no route for it and renders blank.
+export const API_DOCUMENTATION_URL = "/assets/api-docs/index.html";
 
 /**
  * Whether the footer links the API reference. A build hides it by setting

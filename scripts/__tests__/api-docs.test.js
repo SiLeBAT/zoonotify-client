@@ -100,7 +100,7 @@ describe("API reference page wiring", () => {
                 "routes.ts"
             )
         ).toMatch(
-            /export const API_DOCUMENTATION_URL = "\/assets\/api-docs\/";/
+            /export const API_DOCUMENTATION_URL = "\/assets\/api-docs\/index\.html";/
         );
     });
 });
