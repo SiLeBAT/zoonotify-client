@@ -729,7 +729,7 @@ export const SubstanceDetail: React.FC<{
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
-            const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
+            const url = `${INFORMATION}?filters[title][$eqi]=${encodeURIComponent(
                 translatedCategory
             )}&locale=${apiLocale}&pagination[pageSize]=1`;
 

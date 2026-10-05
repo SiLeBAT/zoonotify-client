@@ -686,7 +686,7 @@ export const TrendDetails: React.FC<{
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
-            const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
+            const url = `${INFORMATION}?filters[title][$eqi]=${encodeURIComponent(
                 translatedCategory
             )}&locale=${i18next.language}&pagination[pageSize]=1`;
             const response = await callApiService<
