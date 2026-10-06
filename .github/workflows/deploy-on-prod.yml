@@ -43,6 +43,8 @@ jobs:
         with:
           name: prod-artifacts
           path: ./public
+          # Default skips dotfiles, which would drop public/assets/api-docs/.htaccess.
+          include-hidden-files: true
 
   deploy:
     needs: build
