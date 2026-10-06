@@ -686,7 +686,7 @@ export function PrevalenceSideContent(): JSX.Element {
             </Grow>
         ));
 
-    const resetFilters = async (): Promise<void> => {
+    const resetFilters = (): void => {
         setSelectedMicroorganisms([]);
         setSelectedSampleOrigins([]);
         setSelectedMatrices([]);
@@ -698,7 +698,9 @@ export function PrevalenceSideContent(): JSX.Element {
         setShowOnlySelected(false);
         setIsSearchTriggered(false);
         setShowError(false);
-        await fetchOptions();
+        // No fetchOptions() here: clearing the selections already makes the
+        // context recompute every option list from the full dataset, and the
+        // raw CMS lists would overwrite that cascade.
         window.history.replaceState(null, "", window.location.pathname);
     };
 
