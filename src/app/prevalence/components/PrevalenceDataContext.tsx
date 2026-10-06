@@ -402,7 +402,10 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                         documentId?: string;
                         attributes?: { name: string; documentId?: string };
                     }>;
-                }>(`${endpoint}?locale=${i18next.language}`);
+                }>(
+                    // Without a page size Strapi returns only its default 25
+                    `${endpoint}?locale=${i18next.language}&pagination[pageSize]=${MAX_PAGE_SIZE}`
+                );
 
                 if (response.data && Array.isArray(response.data.data)) {
                     return response.data.data
