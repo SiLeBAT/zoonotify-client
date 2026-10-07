@@ -68,5 +68,6 @@
   "MULTI_ISOLATES": "Anzahl der Isolate",
   "MULTI_TESTED_ISOLATES": "Anzahl getesteter Isolate (N)",
   "MULTI_PROPORTION": "Anteil der Isolate (%)",
-  "MULTI_README": "Dieser ZooNotify-Datendownload enthält diese README-Datei und zwei CSV-Dateien.\n\nmulti_resistance_dot_*.csv ist für Software mit deutschen Spracheinstellungen: durch Semikolon getrennt, mit Dezimalkomma.\nmulti_resistance_comma_*.csv ist für Software mit englischen Spracheinstellungen: durch Komma getrennt, mit Dezimalpunkt.\n\nJede Zeile ist eine Kombination und eine Resistenzgruppe: die Anzahl der Isolate dieser Gruppe, die Anzahl getesteter Isolate der Kombination (N) und der Anteil der Gruppe an N in Prozent."
+  "MULTI_README": "Dieser ZooNotify-Datendownload enthält diese README-Datei und zwei CSV-Dateien.\n\nmulti_resistance_dot_*.csv ist für Software mit deutschen Spracheinstellungen: durch Semikolon getrennt, mit Dezimalkomma.\nmulti_resistance_comma_*.csv ist für Software mit englischen Spracheinstellungen: durch Komma getrennt, mit Dezimalpunkt.\n\nJede Zeile ist eine Kombination und eine Resistenzgruppe: die Anzahl der Isolate dieser Gruppe, die Anzahl getesteter Isolate der Kombination (N) und der Anteil der Gruppe an N in Prozent.",
+  "Chart_Year_Range": "Angezeigter Jahresbereich"
 }

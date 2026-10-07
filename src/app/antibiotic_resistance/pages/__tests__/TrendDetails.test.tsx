@@ -23,7 +23,9 @@ jest.mock("../../../shared/components/layout/SidebarComponent", () => ({
 }));
 
 jest.mock("../TrendChart", () => ({
-    TrendChart: () => <div data-testid="trend-chart" />,
+    TrendChart: ({ yearWindow }: { yearWindow?: [number, number] | null }) => (
+        <div data-testid="trend-chart">{yearWindow?.join("-")}</div>
+    ),
 }));
 
 // Pulled in only for the heading; the real module drags in PageLayoutComponent,
@@ -189,5 +191,35 @@ describe("TrendDetails language switch", () => {
 
         expect(substanceCombobox()).toHaveTextContent("Tetracyclin");
         expect(substanceCombobox()).not.toHaveTextContent("(DE)");
+    });
+});
+
+describe("TrendDetails chart year window", () => {
+    it("draws every chart with one shared, slider-controlled year window", async () => {
+        const rowsOverYears = [2019, 2020, 2021].flatMap((samplingYear) =>
+            ROWS.map((row) => ({ ...row, samplingYear }))
+        ) as ResistanceApiItem[];
+        mockedCallApiService.mockImplementation(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (url: string): Promise<any> =>
+                Promise.resolve({
+                    data: {
+                        data: url.includes("resistance") ? rowsOverYears : [],
+                    },
+                })
+        );
+        await renderTrendDetails();
+
+        const charts = await screen.findAllByTestId("trend-chart");
+        charts.forEach((chart) => expect(chart).toHaveTextContent("2019-2021"));
+
+        const [startThumb] = within(
+            screen.getByText("Chart_Year_Range").parentElement as HTMLElement
+        ).getAllByRole("slider");
+        fireEvent.change(startThumb, { target: { value: 2020 } });
+
+        screen
+            .getAllByTestId("trend-chart")
+            .forEach((chart) => expect(chart).toHaveTextContent("2020-2021"));
     });
 });

@@ -69,5 +69,6 @@
   "MULTI_ISOLATES": "Number of isolates",
   "MULTI_TESTED_ISOLATES": "Number of tested isolates (N)",
   "MULTI_PROPORTION": "Proportion of isolates (%)",
-  "MULTI_README": "This ZooNotify data download contains this README file and two CSV files.\n\nmulti_resistance_dot_*.csv is for software with German language settings: semicolon-separated, with a decimal comma.\nmulti_resistance_comma_*.csv is for software with English language settings: comma-separated, with a decimal point.\n\nEach row is one Combination and one Resistance group: the number of isolates in that group, the Combination's number of tested isolates (N) and the group's proportion of N in percent."
+  "MULTI_README": "This ZooNotify data download contains this README file and two CSV files.\n\nmulti_resistance_dot_*.csv is for software with German language settings: semicolon-separated, with a decimal comma.\nmulti_resistance_comma_*.csv is for software with English language settings: comma-separated, with a decimal point.\n\nEach row is one Combination and one Resistance group: the number of isolates in that group, the Combination's number of tested isolates (N) and the group's proportion of N in percent.",
+  "Chart_Year_Range": "Displayed year range"
 }
