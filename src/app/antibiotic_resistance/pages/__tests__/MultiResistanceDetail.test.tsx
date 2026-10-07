@@ -120,6 +120,39 @@ describe("MultiResistanceDetail", () => {
             screen.queryByTestId("multi-resistance-chart")
         ).not.toBeInTheDocument();
     });
+
+    it("shows the CMS's multi-resistance information below the graph in the UI language", async () => {
+        mockedCallApiService.mockImplementation(async (url: string) =>
+            url.includes("/multi-resistance-information")
+                ? {
+                      status: 200,
+                      data: {
+                          data: {
+                              title: "About this graph",
+                              description: "Isolates are **grouped**.",
+                          },
+                      },
+                  }
+                : { status: 200, data: { data: [] } }
+        );
+        renderDetail("E. coli");
+
+        expect(await screen.findByText("About this graph")).toBeInTheDocument();
+        expect(screen.getByText("grouped").tagName).toBe("STRONG");
+        const infoUrl = mockedCallApiService.mock.calls
+            .map(([url]) => url)
+            .find((url) => url.includes("/multi-resistance-information"));
+        expect(infoUrl).toContain("locale=en");
+    });
+
+    it("shows no information box while the CMS has none", async () => {
+        renderDetail("E. coli");
+        await screen.findByTestId("multi-resistance-chart");
+
+        expect(
+            screen.queryByTestId("multi-resistance-information")
+        ).not.toBeInTheDocument();
+    });
 });
 
 /** The Combination picker, located via its floating label. */
