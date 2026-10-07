@@ -17,6 +17,11 @@ import {
 } from "recharts";
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import { ResistanceApiItem } from "./TrendDetails";
+import {
+    chartYearAxis,
+    distinctYears,
+    type YearWindow,
+} from "./trendYearWindow";
 
 export interface TrendChartProps {
     microorganism: string; // ✅ ADDED
@@ -28,6 +33,8 @@ export interface TrendChartProps {
     }[];
     fullData: ResistanceApiItem[];
     groupLabel?: React.ReactNode;
+    /** Shared view-only year window; the chart's own data span when unset. */
+    yearWindow?: YearWindow | null;
 }
 
 const ALL_SUBSTANCES = [
@@ -213,6 +220,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     fullData,
     microorganism, // ✅ ADDED
     groupLabel,
+    yearWindow,
 }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
@@ -225,13 +233,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     );
 
     // -- Chart data preparation
-    const yearRange = data.map((entry) => entry.samplingYear);
-    const yearMin = Math.min(...yearRange);
-    const yearMax = Math.max(...yearRange);
-    const years = Array.from(
-        { length: yearMax - yearMin + 1 },
-        (_, i) => yearMin + i
-    );
+    const years = chartYearAxis(distinctYears(data), yearWindow);
 
     // *** FIXED: Use ALL_SUBSTANCES order for legend/plot! ***
     const substances = ALL_SUBSTANCES.filter((substance) =>

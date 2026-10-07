@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
     Box,
     Button,
@@ -21,6 +21,7 @@ import {
     Checkbox,
     ListItemText,
     Pagination,
+    Slider,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
@@ -39,6 +40,11 @@ import type { MenuProps } from "@mui/material/Menu";
 import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
 
 import { TrendChart } from "./TrendChart";
+import {
+    distinctYears,
+    yearSliderMarks,
+    type YearWindow,
+} from "./trendYearWindow";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import {
     type FilterKey,
@@ -312,6 +318,11 @@ export const TrendDetails: React.FC<{
     const [allSubstances, setAllSubstances] = useState<FilterOption[]>([]);
 
     const [currentPage, setCurrentPage] = useState(1);
+    // Chart year window: one view-only x-axis range shared by every chart, so
+    // charts of different matrices line up. `null` means "full span".
+    const [chartYearWindow, setChartYearWindow] = useState<YearWindow | null>(
+        null
+    );
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -669,6 +680,28 @@ export const TrendDetails: React.FC<{
         setShowChart(true);
         //setCurrentPage(1);
     }, [substanceFilter]);
+
+    // Years any chart of the current search has data for: the slider's bounds.
+    const chartYears = useMemo(
+        () => distinctYears(filteredFullData),
+        [filteredFullData]
+    );
+    const chartYearMin = chartYears[0];
+    const chartYearMax = chartYears[chartYears.length - 1];
+    const chartYearMarks = useMemo(
+        () => yearSliderMarks(chartYears),
+        [chartYears]
+    );
+
+    // The window every chart is drawn with: the selection, else the full span.
+    const activeYearWindow: YearWindow | null =
+        chartYearWindow ??
+        (chartYears.length > 0 ? [chartYearMin, chartYearMax] : null);
+
+    // A new search with different year bounds starts again from full span.
+    useEffect(() => {
+        setChartYearWindow(null);
+    }, [chartYearMin, chartYearMax]);
 
     const resetFilters = (): void => {
         setSelected({ ...emptyFilterState });
@@ -1080,6 +1113,45 @@ export const TrendDetails: React.FC<{
                     {/* Show charts if available */}
                     {showChart && paginatedGroups.length > 0 && (
                         <Box mt={2} mb={2}>
+                            {chartYears.length >= 2 && (
+                                <Box sx={{ px: 1, mb: 2, maxWidth: 1400 }}>
+                                    <Typography
+                                        id="trend-chart-year-range-label"
+                                        variant="caption"
+                                        component="label"
+                                        sx={{
+                                            display: "block",
+                                            color: "text.secondary",
+                                            fontWeight: 500,
+                                        }}
+                                    >
+                                        {t("Chart_Year_Range")}
+                                    </Typography>
+                                    <Slider
+                                        size="small"
+                                        value={activeYearWindow ?? undefined}
+                                        min={chartYearMin}
+                                        max={chartYearMax}
+                                        step={1}
+                                        marks={chartYearMarks}
+                                        valueLabelDisplay="auto"
+                                        aria-labelledby="trend-chart-year-range-label"
+                                        onChange={(_, value) =>
+                                            setChartYearWindow(
+                                                value as YearWindow
+                                            )
+                                        }
+                                        sx={{
+                                            mt: 1,
+                                            mb: 3,
+                                            "& .MuiSlider-markLabel": {
+                                                fontSize: "0.7rem",
+                                                color: "text.secondary",
+                                            },
+                                        }}
+                                    />
+                                </Box>
+                            )}
                             <Grid container spacing={4}>
                                 {paginatedGroups.map(
                                     ([groupKey, groupItems]) => {
@@ -1114,6 +1186,9 @@ export const TrendDetails: React.FC<{
                                                             microorganism
                                                         }
                                                         fullData={groupItems}
+                                                        yearWindow={
+                                                            activeYearWindow
+                                                        }
                                                         groupLabel={renderGroupLabel(
                                                             groupKey,
                                                             t,
