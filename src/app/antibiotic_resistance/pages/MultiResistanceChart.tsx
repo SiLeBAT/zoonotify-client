@@ -22,22 +22,23 @@ import {
 } from "./multiResistanceHelpers";
 
 /**
- * By group code. 0–5 are sampled from the data steward's example plot
- * (susceptible green → >4× dark red); 6–10, MRSA's 5× … >8×, continue the
- * red ramp past 4× so each scheme darkens left to right.
+ * By group code, in the data steward's palette order (#1874): susceptible
+ * green → >4× dark red; MRSA's 5× … >8× continue into the blues, ending dark
+ * blue. The palette has nine colours for MRSA's ten groups, so 7× is the
+ * midpoint of light and mid blue, their widest step in lightness.
  */
 const RESISTANCE_GROUP_COLORS = [
-    "#47D406",
-    "#FBFCBB",
-    "#FAE918",
-    "#FA9018",
-    "#FA1C18",
-    "#89110F",
-    "#D61610",
-    "#B01310",
-    "#89110F",
-    "#630C0B",
-    "#3D0706",
+    "#c1c930", // susceptible: green
+    "#f8df39", // 1×: yellow
+    "#f7ba3c", // 2×: dark yellow
+    "#cd5038", // 3×: orange
+    "#c0003b", // 4×: light red
+    "#780f2c", // >4×: dark red
+    "#780f2c", // 5×: dark red
+    "#80cdeb", // 6×: light blue
+    "#40a2d0", // 7×: between light and mid blue
+    "#0077b6", // 8×: mid blue
+    "#004a76", // >8×: dark blue
 ];
 
 const BAR_HEIGHT = 44;
