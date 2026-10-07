@@ -27,7 +27,10 @@ import { useTranslation } from "react-i18next";
 
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
-import { INFORMATION } from "../../shared/infrastructure/router/routes";
+import {
+    INFORMATION,
+    MULTI_RESISTANCE_INFORMATION,
+} from "../../shared/infrastructure/router/routes";
 import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
 import { MultiResistanceChart } from "./MultiResistanceChart";
 import { fetchMultiResistance } from "./multiResistanceData";
@@ -92,6 +95,12 @@ export const MultiResistanceDetail: React.FC<{
         content: string;
     } | null>(null);
 
+    // the text box below the graph, maintained in the CMS
+    const [multiInfo, setMultiInfo] = useState<{
+        title: string;
+        description: string;
+    } | null>(null);
+
     const hydratedRef = useRef(false);
 
     useEffect(() => {
@@ -118,6 +127,43 @@ export const MultiResistanceDetail: React.FC<{
             cancelled = true;
         };
     }, [microorganism, apiLocale]);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        async function loadInfo(): Promise<void> {
+            try {
+                const response = await callApiService<
+                    CMSResponse<
+                        { title?: string; description?: string },
+                        unknown
+                    >
+                >(`${MULTI_RESISTANCE_INFORMATION}?locale=${apiLocale}`);
+                const data = response.data?.data;
+                if (cancelled) return;
+                // an unpublished single type has nothing to show
+                setMultiInfo(
+                    data?.title || data?.description
+                        ? {
+                              title: data.title ?? "",
+                              description: data.description ?? "",
+                          }
+                        : null
+                );
+            } catch (err) {
+                console.error(
+                    "Failed to fetch multi-resistance information",
+                    err
+                );
+                if (!cancelled) setMultiInfo(null);
+            }
+        }
+
+        loadInfo();
+        return () => {
+            cancelled = true;
+        };
+    }, [apiLocale]);
 
     // Restore a share link once the rows it refers to are here
     useEffect(() => {
@@ -634,6 +680,28 @@ export const MultiResistanceDetail: React.FC<{
                     <Box mt={2} mb={2}>
                         {renderResults()}
                     </Box>
+
+                    {multiInfo && (
+                        <Box
+                            data-testid="multi-resistance-information"
+                            mt={3}
+                            mb={3}
+                            p={3}
+                            bgcolor="#f6f7fa"
+                            borderRadius={2}
+                        >
+                            <Typography
+                                variant="h6"
+                                gutterBottom
+                                sx={{ color: "#003663" }}
+                            >
+                                {multiInfo.title}
+                            </Typography>
+                            <Markdown options={{ forceBlock: true }}>
+                                {multiInfo.description}
+                            </Markdown>
+                        </Box>
+                    )}
                 </Box>
 
                 <Dialog
