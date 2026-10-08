@@ -668,7 +668,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                 const urlSearchParams = new URLSearchParams(
                     window.location.search
                 );
-                const params: SearchParameters = {};
+                // Prototype-less: URL keys like `__proto__` must not reach Object.prototype.
+                const params: SearchParameters = Object.create(null);
                 urlSearchParams.forEach((value, key) => {
                     if (!params[key]) params[key] = [];
                     params[key].push(value);

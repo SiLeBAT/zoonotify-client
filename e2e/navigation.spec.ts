@@ -19,7 +19,7 @@ test.describe("the header navigates the whole site", () => {
 
             await navLink(page, label).click();
 
-            await expect(page).toHaveURL(new RegExp(`^[^?]*${path}\?`));
+            await expect(page).toHaveURL(new RegExp(`^[^?]*${path}\\?`));
             await expect(page.locator("main")).toBeVisible();
         });
     }
