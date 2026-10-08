@@ -58,12 +58,16 @@ function main() {
 
     let noindexed = false;
     if (!environment.indexable) {
-        if (!fs.existsSync(INDEX_HTML)) {
+        // Read directly rather than existsSync-then-read, which races.
+        let original;
+        try {
+            original = fs.readFileSync(INDEX_HTML, "utf8");
+        } catch (err) {
+            if (err.code !== "ENOENT") throw err;
             throw new Error(
                 `copy-seo: ${INDEX_HTML} not found. This script must run after 'cp:html'.`
             );
         }
-        const original = fs.readFileSync(INDEX_HTML, "utf8");
         const updated = withNoindex(original);
         if (updated === original && !original.includes('name="robots"')) {
             throw new Error(
