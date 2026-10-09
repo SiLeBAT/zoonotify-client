@@ -10,6 +10,9 @@ on:
         description: 'Release tag to deploy (e.g. v4.4.0)'
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,12 +34,20 @@ jobs:
 
       - name: Build
         run: npm run build:prod -- --env=lastChange=${{ steps.meta.outputs.builddate }}
-      - run: npm run cp:all
+      # cross-env scopes NODE_ENV to the webpack process above, so cp:all needs
+      # to be told separately. Without it copy-seo.js resolves to the
+      # non-indexable development profile and de-indexes the live site.
+      - name: Copy static and crawler artifacts
+        run: npm run cp:all
+        env:
+          NODE_ENV: production
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v6
         with:
           name: prod-artifacts
           path: ./public
+          # Default skips dotfiles, which would drop public/assets/api-docs/.htaccess.
+          include-hidden-files: true
 
   deploy:
     needs: build

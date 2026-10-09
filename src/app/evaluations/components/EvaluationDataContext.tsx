@@ -228,27 +228,9 @@ export const EvaluationDataProvider: React.FC<{ children: ReactNode }> = ({
     // guard against stale fetches overwriting fresh state
     const fetchIdRef = useRef(0);
 
-    // On first mount: align with ?lang=... if present; otherwise write current language to URL.
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const urlLang = params.get("lang");
-
-        if (urlLang && urlLang !== i18n.language) {
-            i18n.changeLanguage(urlLang);
-        }
-        if (!urlLang) {
-            params.set("lang", i18n.language);
-            const newSearch = `?${params.toString()}`;
-            if (newSearch !== window.location.search) {
-                window.history.replaceState(
-                    {},
-                    "",
-                    `${window.location.pathname}${newSearch}`
-                );
-            }
-        }
-        // run once on mount
-    }, []);
+    // Aligning i18next with ?lang= is useLanguageUrlSync's job, mounted once in
+    // Body-Router.component.tsx, so it now happens for every route rather than
+    // only the ones that remembered to do it.
 
     // Fetch data whenever the app language changes.
     // IMPORTANT: Reset filters unless URL explicitly provides them (prevents “no results” after language switch).

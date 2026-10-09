@@ -1,0 +1,7 @@
+# The docroot .htaccess (not in this repo) rewrites every request that is not a
+# file to the SPA's index.html. /assets/api-docs/ is a directory, so it got the
+# SPA, which renders blank here. Declaring the rewrite engine in this directory
+# stops the parent rules applying, and the rule below serves the page itself.
+# Copied to public/ by cp:api-docs, deployed with the rest of assets/.
+RewriteEngine On
+RewriteRule ^$ index.html [L]

@@ -17,6 +17,11 @@ import {
 } from "recharts";
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import { ResistanceApiItem } from "./TrendDetails";
+import {
+    chartYearAxis,
+    distinctYears,
+    type YearWindow,
+} from "./trendYearWindow";
 
 export interface TrendChartProps {
     microorganism: string; // ✅ ADDED
@@ -28,6 +33,8 @@ export interface TrendChartProps {
     }[];
     fullData: ResistanceApiItem[];
     groupLabel?: React.ReactNode;
+    /** Shared view-only year window; the chart's own data span when unset. */
+    yearWindow?: YearWindow | null;
 }
 
 const ALL_SUBSTANCES = [
@@ -97,6 +104,10 @@ const COLORS = [
     "#CD5C5C",
     "#008080",
 ];
+
+// Shared by the chart and the "not enough data" panel so paging between
+// groups does not shift the controls below.
+const CHART_HEIGHT = 450;
 
 const SUBSTANCE_COLORS: { [substance: string]: string } = {};
 ALL_SUBSTANCES.forEach((substance, idx) => {
@@ -209,6 +220,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     fullData,
     microorganism, // ✅ ADDED
     groupLabel,
+    yearWindow,
 }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
@@ -221,13 +233,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     );
 
     // -- Chart data preparation
-    const yearRange = data.map((entry) => entry.samplingYear);
-    const yearMin = Math.min(...yearRange);
-    const yearMax = Math.max(...yearRange);
-    const years = Array.from(
-        { length: yearMax - yearMin + 1 },
-        (_, i) => yearMin + i
-    );
+    const years = chartYearAxis(distinctYears(data), yearWindow);
 
     // *** FIXED: Use ALL_SUBSTANCES order for legend/plot! ***
     const substances = ALL_SUBSTANCES.filter((substance) =>
@@ -528,7 +534,7 @@ This file contains comma-separated data, which supports the correct format of nu
                 {/* ---- CHART OR "NOT ENOUGH DATA" MESSAGE ---- */}
                 {enoughData ? (
                     <div ref={chartContainerRef}>
-                        <ResponsiveContainer width="100%" height={450}>
+                        <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis
@@ -595,7 +601,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
-                        minHeight={300}
+                        height={CHART_HEIGHT}
                     >
                         <Typography
                             variant="body1"
