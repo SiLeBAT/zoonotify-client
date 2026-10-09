@@ -15,20 +15,25 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
 import { SubstanceDetail } from "./SubstanceDetail";
+import { MultiResistanceDetail } from "./MultiResistanceDetail";
 import LZString from "lz-string";
 import { useAmrPageTooltips } from "./amrPageUseCase";
+
+type AmrView = "main" | "trend" | "substance" | "multi";
+
+const AMR_VIEWS: AmrView[] = ["main", "trend", "substance", "multi"];
 
 // ---- Helpers for compressed state in URL (?s=...) ----
 function decodeCompressedState(
     sParam: string | null
-): null | { m?: string; v?: "main" | "trend" | "substance"; l?: string } {
+): null | { m?: string; v?: AmrView; l?: string } {
     if (!sParam) return null;
     try {
         const json = LZString.decompressFromEncodedURIComponent(sParam);
         if (!json) return null;
         return JSON.parse(json) as {
             m?: string;
-            v?: "main" | "trend" | "substance";
+            v?: AmrView;
             l?: string;
         };
     } catch {
@@ -37,14 +42,24 @@ function decodeCompressedState(
 }
 
 // ---- Constants ----
+const ESBL_AMPC_E_COLI = "ESBL/AmpC E. coli";
+
 const ORGANISMS = [
     "E. coli",
+    ESBL_AMPC_E_COLI,
     "Campylobacter spp.",
     "Salmonella spp.",
     "MRSA",
     "STEC",
     "Enterococcus spp.",
 ];
+
+/**
+ * Organisms that are listed in the sidebar but have no resistance data in the
+ * CMS yet. Selecting one announces "Coming soon" rather than rendering charts
+ * that would resolve to an empty result set.
+ */
+const ORGANISMS_WITHOUT_DATA = new Set([ESBL_AMPC_E_COLI]);
 
 const italicWords: string[] = [
     "Salmonella",
@@ -125,15 +140,12 @@ export const FormattedMicroorganismName: React.FC<
 };
 
 // ---- URL sync helpers ----
-function updateUrl(
-    selectedOrg: string,
-    view: "main" | "trend" | "substance"
-): void {
+function updateUrl(selectedOrg: string, view: AmrView): void {
     const params = new URLSearchParams(window.location.search);
     const hasCompressed = params.get("s");
 
-    // If currently in 'substance' and an 's' state exists, SubstanceDetail owns the URL
-    if (view === "substance" && hasCompressed) return;
+    // In a bar-graph view with an 's' state, that graph's detail owns the URL
+    if ((view === "substance" || view === "multi") && hasCompressed) return;
 
     // Otherwise use simple params and remove 's'
     params.delete("s");
@@ -143,9 +155,17 @@ function updateUrl(
     window.history.replaceState(null, "", `?${params.toString()}`);
 }
 
+/**
+ * Organisms without data have no charts to show, so any chart view requested
+ * via a deep link collapses back to the main view.
+ */
+function resolveView(selectedOrg: string, view: AmrView): AmrView {
+    return ORGANISMS_WITHOUT_DATA.has(selectedOrg) ? "main" : view;
+}
+
 function readStateFromUrl(): {
     selectedOrg: string;
-    view: "main" | "trend" | "substance";
+    view: AmrView;
 } {
     const params = new URLSearchParams(window.location.search);
 
@@ -156,13 +176,14 @@ function readStateFromUrl(): {
             decoded.m && ORGANISMS.includes(decoded.m)
                 ? decoded.m
                 : ORGANISMS[0];
-        const viewFromS: "main" | "trend" | "substance" =
-            decoded.v === "trend" ||
-            decoded.v === "main" ||
-            decoded.v === "substance"
+        const viewFromS: AmrView =
+            decoded.v && AMR_VIEWS.includes(decoded.v)
                 ? decoded.v
                 : "substance";
-        return { selectedOrg: orgFromS, view: viewFromS };
+        return {
+            selectedOrg: orgFromS,
+            view: resolveView(orgFromS, viewFromS),
+        };
     }
 
     // Legacy simple params
@@ -171,9 +192,8 @@ function readStateFromUrl(): {
         typeof orgParam === "string" && ORGANISMS.includes(orgParam)
             ? orgParam
             : ORGANISMS[0];
-    const view =
-        (params.get("view") as "main" | "trend" | "substance") || "main";
-    return { selectedOrg, view };
+    const view = (params.get("view") as AmrView) || "main";
+    return { selectedOrg, view: resolveView(selectedOrg, view) };
 }
 
 // ---- Breadcrumb ----
@@ -186,7 +206,7 @@ function Breadcrumb({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: any;
     selectedOrg: string;
-    view: "main" | "trend" | "substance";
+    view: AmrView;
     handleShowMain: () => void;
 }): JSX.Element {
     return (
@@ -209,6 +229,7 @@ function Breadcrumb({
             </span>
             {view === "trend" && <> / {t("Trend")}</>}
             {view === "substance" && <> / {t("Substans")}</>}
+            {view === "multi" && <> / {t("Multi_Breadcrumb")}</>}
         </div>
     );
 }
@@ -220,7 +241,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
     const [state, setState] = useState<{
         selectedOrg: string;
-        view: "main" | "trend" | "substance";
+        view: AmrView;
     }>(() => readStateFromUrl());
     const { selectedOrg, view } = state;
 
@@ -259,6 +280,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
     // Handlers
     const handleOrgSelect = (org: string): void => {
         setState({ selectedOrg: org, view: "main" });
+        if (ORGANISMS_WITHOUT_DATA.has(org)) setComingSoonOpen(true);
     };
 
     const handleTrendClick = (): void => {
@@ -269,11 +291,14 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         setState((prev) => ({ ...prev, view: "substance" }));
     };
 
+    const handleMultiClick = (): void => {
+        setState((prev) => ({ ...prev, view: "multi" }));
+    };
+
     const handleShowMain = (): void => {
         setState((prev) => ({ ...prev, view: "main" }));
     };
 
-    const handleComingSoon = (): void => setComingSoonOpen(true);
     const handleCloseComingSoon = (): void => setComingSoonOpen(false);
 
     return (
@@ -334,19 +359,21 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           z-index: 1;
         }
 
-        /* ✅ Breadcrumb: ONLY TEXT, always on top, no white box */
+        /* Breadcrumb: sticky bar, opaque so scrolled content can't bleed through */
         .abx-breadcrumb {
           font-size: 1.4rem;
           color: #003663;
           text-align: center;
-          margin-top: 1.5rem;
-          margin-bottom: 0.5rem;
 
           position: sticky;
-          top: 10px;
+          top: 0;
           z-index: 99999;
 
-          background: transparent; /* no box */
+          /* Opaque background masks content scrolling underneath */
+          background: #fff;
+          padding: 1rem 0 0.75rem;
+          margin-bottom: 0.5rem;
+          box-shadow: 0 2px 6px rgba(48, 56, 96, 0.12);
           pointer-events: auto;
         }
 
@@ -425,7 +452,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           }
 
           .abx-breadcrumb {
-            top: 12px;
+            top: 0;
             font-size: 1.15rem;
           }
         }
@@ -448,6 +475,18 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                     <SubstanceDetail
                         microorganism={selectedOrg}
                         onShowMain={handleShowMain}
+                        breadcrumb={
+                            <Breadcrumb
+                                t={t}
+                                selectedOrg={selectedOrg}
+                                view={view}
+                                handleShowMain={handleShowMain}
+                            />
+                        }
+                    />
+                ) : view === "multi" ? (
+                    <MultiResistanceDetail
+                        microorganism={selectedOrg}
                         breadcrumb={
                             <Breadcrumb
                                 t={t}
@@ -489,98 +528,108 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             </aside>
 
                             <section className="abx-content">
-                                <div
-                                    className="image-box"
-                                    onClick={handleTrendClick}
-                                >
-                                    {trendTooltip && (
-                                        <Tooltip
-                                            title={trendTooltip}
-                                            placement="top"
-                                            arrow
+                                {!ORGANISMS_WITHOUT_DATA.has(selectedOrg) && (
+                                    <>
+                                        <div
+                                            className="image-box"
+                                            onClick={handleTrendClick}
                                         >
-                                            <IconButton
-                                                className="image-box-info"
-                                                size="small"
-                                                aria-label={t(
-                                                    "MoreInfoOnTrend"
-                                                )}
-                                                onClick={(e): void =>
-                                                    e.stopPropagation()
-                                                }
-                                            >
-                                                <InfoOutlinedIcon fontSize="small" />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
-                                    <div className="image-label">
-                                        {t("Trend")}
-                                    </div>
-                                    <img src="/assets/trend.png" alt="Trend" />
-                                </div>
+                                            {trendTooltip && (
+                                                <Tooltip
+                                                    title={trendTooltip}
+                                                    placement="top"
+                                                    arrow
+                                                >
+                                                    <IconButton
+                                                        className="image-box-info"
+                                                        size="small"
+                                                        aria-label={t(
+                                                            "MoreInfoOnTrend"
+                                                        )}
+                                                        onClick={(e): void =>
+                                                            e.stopPropagation()
+                                                        }
+                                                    >
+                                                        <InfoOutlinedIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
+                                            <div className="image-label">
+                                                {t("Trend")}
+                                            </div>
+                                            <img
+                                                src="/assets/trend.png"
+                                                alt="Trend"
+                                            />
+                                        </div>
 
-                                <div
-                                    className="image-box"
-                                    onClick={handleSubstanceClick}
-                                >
-                                    {substanceTooltip && (
-                                        <Tooltip
-                                            title={substanceTooltip}
-                                            placement="top"
-                                            arrow
+                                        <div
+                                            className="image-box"
+                                            onClick={handleSubstanceClick}
                                         >
-                                            <IconButton
-                                                className="image-box-info"
-                                                size="small"
-                                                aria-label={t(
-                                                    "MoreInfoOnSubstance"
-                                                )}
-                                                onClick={(e): void =>
-                                                    e.stopPropagation()
-                                                }
-                                            >
-                                                <InfoOutlinedIcon fontSize="small" />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
-                                    <div className="image-label">
-                                        {t("Substans")}
-                                    </div>
-                                    <img
-                                        src="/assets/substans.png"
-                                        alt="Substans"
-                                    />
-                                </div>
+                                            {substanceTooltip && (
+                                                <Tooltip
+                                                    title={substanceTooltip}
+                                                    placement="top"
+                                                    arrow
+                                                >
+                                                    <IconButton
+                                                        className="image-box-info"
+                                                        size="small"
+                                                        aria-label={t(
+                                                            "MoreInfoOnSubstance"
+                                                        )}
+                                                        onClick={(e): void =>
+                                                            e.stopPropagation()
+                                                        }
+                                                    >
+                                                        <InfoOutlinedIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
+                                            <div className="image-label">
+                                                {t("Substans")}
+                                            </div>
+                                            <img
+                                                src="/assets/substans.png"
+                                                alt="Substans"
+                                            />
+                                        </div>
 
-                                <div
-                                    className="image-box bottom"
-                                    onClick={handleComingSoon}
-                                >
-                                    {multiTooltip && (
-                                        <Tooltip
-                                            title={multiTooltip}
-                                            placement="top"
-                                            arrow
+                                        <div
+                                            className="image-box bottom"
+                                            onClick={handleMultiClick}
                                         >
-                                            <IconButton
-                                                className="image-box-info"
-                                                size="small"
-                                                aria-label={t(
-                                                    "MoreInfoOnMulti"
-                                                )}
-                                                onClick={(e): void =>
-                                                    e.stopPropagation()
-                                                }
-                                            >
-                                                <InfoOutlinedIcon fontSize="small" />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
-                                    <div className="image-label">
-                                        {t("Multi")}
-                                    </div>
-                                    <img src="/assets/multi.png" alt="Multi" />
-                                </div>
+                                            {multiTooltip && (
+                                                <Tooltip
+                                                    title={multiTooltip}
+                                                    placement="top"
+                                                    arrow
+                                                >
+                                                    <IconButton
+                                                        className="image-box-info"
+                                                        size="small"
+                                                        aria-label={t(
+                                                            "MoreInfoOnMulti"
+                                                        )}
+                                                        onClick={(e): void =>
+                                                            e.stopPropagation()
+                                                        }
+                                                    >
+                                                        <InfoOutlinedIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
+                                            <div className="image-label">
+                                                {t("Multi")}
+                                            </div>
+                                            <img
+                                                src="/assets/multi.png"
+                                                alt="Multi"
+                                            />
+                                        </div>
+                                    </>
+                                )}
                             </section>
                         </div>
                     </>

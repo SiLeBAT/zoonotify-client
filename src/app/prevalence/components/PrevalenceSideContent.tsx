@@ -245,13 +245,17 @@ const LocalMultiSelect: React.FC<LocalMultiSelectProps> = ({
                     setFrozenOptionsWhileOpen(null);
                     onChange(staged);
                 }}
-                onChange={(e) => {
-                    const next =
-                        typeof e.target.value === "string"
-                            ? (e.target.value as string).split(",")
-                            : (e.target.value as string[]);
-                    setStaged(next);
-                }}
+                // No `onChange` on purpose. MUI's Select overrides each child
+                // MenuItem's onClick with its own handler, which appends
+                // `child.props.value` to the selection. The "Select All" row has
+                // no `value`, so that handler pushes `undefined` into the array
+                // and the resulting onChange overwrote whatever
+                // toggleSelectAllVisible had just computed — which is how `NaN`
+                // reached selectedYear (parseInt(undefined) === NaN) and then the
+                // API as `filters[samplingYear][$eq]=NaN`. Every row already
+                // drives `staged` through its own toggleValue /
+                // toggleSelectAllVisible, and the Select is fully controlled via
+                // `value`, so MUI's computed value is redundant here.
                 renderValue={(vals) => {
                     const arr = vals as string[];
                     return (
@@ -411,7 +415,7 @@ export function PrevalenceSideContent(): JSX.Element {
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
-            const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
+            const url = `${INFORMATION}?filters[title][$eqi]=${encodeURIComponent(
                 translatedCategory
             )}&locale=${i18next.language}&pagination[pageSize]=1`;
             const response = await callApiService<
@@ -480,7 +484,11 @@ export function PrevalenceSideContent(): JSX.Element {
                     showOnlySelected={onlySel(selectedYear)}
                     onChange={(values) => {
                         if (showOnlySelected) setShowOnlySelected(false);
-                        setSelectedYear(values.map((v) => parseInt(v, 10)));
+                        setSelectedYear(
+                            values
+                                .map((v) => parseInt(v, 10))
+                                .filter(Number.isFinite)
+                        );
                         updateFilterOrder("year");
                     }}
                 />
@@ -678,7 +686,7 @@ export function PrevalenceSideContent(): JSX.Element {
             </Grow>
         ));
 
-    const resetFilters = async (): Promise<void> => {
+    const resetFilters = (): void => {
         setSelectedMicroorganisms([]);
         setSelectedSampleOrigins([]);
         setSelectedMatrices([]);
@@ -690,7 +698,9 @@ export function PrevalenceSideContent(): JSX.Element {
         setShowOnlySelected(false);
         setIsSearchTriggered(false);
         setShowError(false);
-        await fetchOptions();
+        // No fetchOptions() here: clearing the selections already makes the
+        // context recompute every option list from the full dataset, and the
+        // raw CMS lists would overwrite that cascade.
         window.history.replaceState(null, "", window.location.pathname);
     };
 
