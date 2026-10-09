@@ -299,9 +299,13 @@ const CONTAINS_FILTER_ORGANISMS = new Set(["MRSA", "STEC"]);
  * "(ABBREV)" pattern above. "ESBL/AmpC E. coli" is stored with a translated
  * qualifier ("ESBL/AmpC-producing E. coli" / "ESBL/AmpC-bildende E. coli"),
  * so the "ESBL" stem is the only locale-stable part of the name.
+ * "Enterococcus spp." rows in `multires` link, in DE only, to species-level
+ * microorganisms ("Enterococcus faecalis" / "Enterococcus faecium", EN name
+ * "Enterococcus spp."), so only the genus matches in both locales.
  */
 const SUBSTRING_FILTER_ORGANISMS: Record<string, string> = {
     "ESBL/AmpC E. coli": "ESBL",
+    "Enterococcus spp.": "Enterococcus",
 };
 
 /**
