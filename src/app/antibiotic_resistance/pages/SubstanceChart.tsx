@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import { ResistanceApiItem } from "./TrendDetails";
+import { buildCombinationLabel, meetsMinimumN } from "./resistanceHelpers";
 
 const BAR_COLORS = [
     "#F08080",
@@ -39,31 +40,6 @@ const BAR_COLORS = [
     "#008080",
     "#FF6347",
 ];
-
-export function getGroupKey(
-    r: ResistanceApiItem,
-    microorganism: string
-): string {
-    let key = "";
-    if (
-        microorganism === "Campylobacter spp." ||
-        microorganism === "Enterococcus spp."
-    ) {
-        key = [
-            r.specie?.name ?? "",
-            r.matrix?.name ?? "",
-            r.sampleOrigin?.name ?? "",
-            r.samplingStage?.name ?? "",
-        ].join(" | ");
-    } else {
-        key = [
-            r.matrix?.name ?? "",
-            r.sampleOrigin?.name ?? "",
-            r.samplingStage?.name ?? "",
-        ].join(" | ");
-    }
-    return key;
-}
 
 interface SubstanceChartProps {
     data: ResistanceApiItem[];
@@ -167,7 +143,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
         (d) =>
             d.samplingYear === year &&
             d.anzahlGetesteterIsolate != null &&
-            d.anzahlGetesteterIsolate >= 10
+            meetsMinimumN(d.anzahlGetesteterIsolate)
     );
 
     const substances = Array.from(
@@ -177,7 +153,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     ).sort();
 
     const groupKeys = Array.from(
-        new Set(filtered.map((d) => getGroupKey(d, microorganism)))
+        new Set(filtered.map((d) => buildCombinationLabel(d, microorganism)))
     ).filter((key) => selectedCombinations.includes(key));
 
     const groupColors: { [key: string]: string } = {};
@@ -204,7 +180,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
     const nPerGroup: { [key: string]: number | undefined } = {};
     groupKeys.forEach((groupKey) => {
         const row = filtered.find(
-            (d) => getGroupKey(d, microorganism) === groupKey
+            (d) => buildCombinationLabel(d, microorganism) === groupKey
         );
         nPerGroup[groupKey] = row?.anzahlGetesteterIsolate ?? undefined;
     });
@@ -255,7 +231,7 @@ export const SubstanceChart: React.FC<SubstanceChartProps> = ({
             const found = filtered.find(
                 (d) =>
                     d.antimicrobialSubstance?.name === substance &&
-                    getGroupKey(d, microorganism) === groupKey
+                    buildCombinationLabel(d, microorganism) === groupKey
             );
             if (found) {
                 row[groupKey] = found.resistenzrate;
@@ -414,7 +390,7 @@ This file contains comma-separated data, which supports the correct format of nu
 
     const visibleSubstanceNames = new Set(substances);
     const rowsForCsv = filtered.filter((d) => {
-        const gk = getGroupKey(d, microorganism);
+        const gk = buildCombinationLabel(d, microorganism);
         const subName = d.antimicrobialSubstance?.name ?? "";
         return (
             selectedCombinations.includes(gk) &&

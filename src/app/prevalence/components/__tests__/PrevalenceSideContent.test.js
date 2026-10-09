@@ -93,3 +93,62 @@ describe("PrevalenceSideContent — year filter", () => {
         expect(emitted).toEqual([2021]);
     });
 });
+
+describe("PrevalenceSideContent — reset", () => {
+    let filters;
+
+    beforeEach(() => {
+        filters = {
+            selectedMicroorganisms: ["m1"],
+            setSelectedMicroorganisms: jest.fn(),
+            microorganismOptions: [{ documentId: "m1", name: "Micro" }],
+            selectedSampleOrigins: [],
+            setSelectedSampleOrigins: jest.fn(),
+            sampleOriginOptions: [],
+            selectedMatrices: [],
+            setSelectedMatrices: jest.fn(),
+            matrixOptions: [],
+            selectedSamplingStages: [],
+            setSelectedSamplingStages: jest.fn(),
+            samplingStageOptions: [],
+            selectedMatrixGroups: [],
+            setSelectedMatrixGroups: jest.fn(),
+            matrixGroupOptions: [],
+            selectedYear: [],
+            setSelectedYear: jest.fn(),
+            yearOptions: [],
+            selectedSuperCategory: [],
+            setSelectedSuperCategory: jest.fn(),
+            superCategorySampleOriginOptions: [],
+            fetchDataFromAPI: jest.fn(),
+            setShowError: jest.fn(),
+            fetchOptions: jest.fn(),
+            setIsSearchTriggered: jest.fn(),
+            loading: false,
+        };
+        usePrevalenceFilters.mockReturnValue(filters);
+    });
+
+    /**
+     * Regression guard. Reset used to call fetchOptions(), which overwrote the
+     * options cascaded from the full dataset with the raw CMS lists — and those
+     * came back as Strapi's default first page of 25, so later sample origins
+     * (wild boar, roe deer, …) and matrices vanished until another filter
+     * changed. Clearing the selections is enough: the context recomputes every
+     * option list from the full dataset.
+     */
+    it("clears every selection without refetching the option lists", () => {
+        render(<PrevalenceSideContent />);
+
+        fireEvent.click(screen.getByText("RESET_FILTERS"));
+
+        expect(filters.setSelectedMicroorganisms).toHaveBeenCalledWith([]);
+        expect(filters.setSelectedSampleOrigins).toHaveBeenCalledWith([]);
+        expect(filters.setSelectedMatrices).toHaveBeenCalledWith([]);
+        expect(filters.setSelectedSamplingStages).toHaveBeenCalledWith([]);
+        expect(filters.setSelectedMatrixGroups).toHaveBeenCalledWith([]);
+        expect(filters.setSelectedYear).toHaveBeenCalledWith([]);
+        expect(filters.setSelectedSuperCategory).toHaveBeenCalledWith([]);
+        expect(filters.fetchOptions).not.toHaveBeenCalled();
+    });
+});

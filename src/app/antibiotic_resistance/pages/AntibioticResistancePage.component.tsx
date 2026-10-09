@@ -2,33 +2,30 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
 import { useLocation } from "react-router-dom";
-import {
-    Typography,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    Button,
-    Tooltip,
-    IconButton,
-} from "@mui/material";
+import { Typography, Tooltip, IconButton } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { TrendDetails } from "./TrendDetails";
 import i18next from "i18next";
 import { SubstanceDetail } from "./SubstanceDetail";
+import { MultiResistanceDetail } from "./MultiResistanceDetail";
 import LZString from "lz-string";
 import { useAmrPageTooltips } from "./amrPageUseCase";
+
+type AmrView = "main" | "trend" | "substance" | "multi";
+
+const AMR_VIEWS: AmrView[] = ["main", "trend", "substance", "multi"];
 
 // ---- Helpers for compressed state in URL (?s=...) ----
 function decodeCompressedState(
     sParam: string | null
-): null | { m?: string; v?: "main" | "trend" | "substance"; l?: string } {
+): null | { m?: string; v?: AmrView; l?: string } {
     if (!sParam) return null;
     try {
         const json = LZString.decompressFromEncodedURIComponent(sParam);
         if (!json) return null;
         return JSON.parse(json) as {
             m?: string;
-            v?: "main" | "trend" | "substance";
+            v?: AmrView;
             l?: string;
         };
     } catch {
@@ -50,11 +47,14 @@ const ORGANISMS = [
 ];
 
 /**
- * Organisms that are listed in the sidebar but have no resistance data in the
- * CMS yet. Selecting one announces "Coming soon" rather than rendering charts
- * that would resolve to an empty result set.
+ * Organisms with multi-resistance data but no resistance rates yet: they offer
+ * only the Multi-resistance Graph, since the Trend and Substance Graphs would
+ * resolve to an empty result set.
  */
-const ORGANISMS_WITHOUT_DATA = new Set([ESBL_AMPC_E_COLI]);
+const ORGANISMS_WITHOUT_RESISTANCE_RATES = new Set([ESBL_AMPC_E_COLI]);
+
+/** The views drawn from resistance rates, which those organisms cannot open. */
+const RESISTANCE_RATE_VIEWS: AmrView[] = ["trend", "substance"];
 
 const italicWords: string[] = [
     "Salmonella",
@@ -135,15 +135,12 @@ export const FormattedMicroorganismName: React.FC<
 };
 
 // ---- URL sync helpers ----
-function updateUrl(
-    selectedOrg: string,
-    view: "main" | "trend" | "substance"
-): void {
+function updateUrl(selectedOrg: string, view: AmrView): void {
     const params = new URLSearchParams(window.location.search);
     const hasCompressed = params.get("s");
 
-    // If currently in 'substance' and an 's' state exists, SubstanceDetail owns the URL
-    if (view === "substance" && hasCompressed) return;
+    // In a bar-graph view with an 's' state, that graph's detail owns the URL
+    if ((view === "substance" || view === "multi") && hasCompressed) return;
 
     // Otherwise use simple params and remove 's'
     params.delete("s");
@@ -154,19 +151,19 @@ function updateUrl(
 }
 
 /**
- * Organisms without data have no charts to show, so any chart view requested
- * via a deep link collapses back to the main view.
+ * A deep link to a resistance-rate view for an organism without resistance
+ * rates collapses back to the main view.
  */
-function resolveView(
-    selectedOrg: string,
-    view: "main" | "trend" | "substance"
-): "main" | "trend" | "substance" {
-    return ORGANISMS_WITHOUT_DATA.has(selectedOrg) ? "main" : view;
+function resolveView(selectedOrg: string, view: AmrView): AmrView {
+    return ORGANISMS_WITHOUT_RESISTANCE_RATES.has(selectedOrg) &&
+        RESISTANCE_RATE_VIEWS.includes(view)
+        ? "main"
+        : view;
 }
 
 function readStateFromUrl(): {
     selectedOrg: string;
-    view: "main" | "trend" | "substance";
+    view: AmrView;
 } {
     const params = new URLSearchParams(window.location.search);
 
@@ -177,10 +174,8 @@ function readStateFromUrl(): {
             decoded.m && ORGANISMS.includes(decoded.m)
                 ? decoded.m
                 : ORGANISMS[0];
-        const viewFromS: "main" | "trend" | "substance" =
-            decoded.v === "trend" ||
-            decoded.v === "main" ||
-            decoded.v === "substance"
+        const viewFromS: AmrView =
+            decoded.v && AMR_VIEWS.includes(decoded.v)
                 ? decoded.v
                 : "substance";
         return {
@@ -195,8 +190,7 @@ function readStateFromUrl(): {
         typeof orgParam === "string" && ORGANISMS.includes(orgParam)
             ? orgParam
             : ORGANISMS[0];
-    const view =
-        (params.get("view") as "main" | "trend" | "substance") || "main";
+    const view = (params.get("view") as AmrView) || "main";
     return { selectedOrg, view: resolveView(selectedOrg, view) };
 }
 
@@ -210,7 +204,7 @@ function Breadcrumb({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: any;
     selectedOrg: string;
-    view: "main" | "trend" | "substance";
+    view: AmrView;
     handleShowMain: () => void;
 }): JSX.Element {
     return (
@@ -233,6 +227,7 @@ function Breadcrumb({
             </span>
             {view === "trend" && <> / {t("Trend")}</>}
             {view === "substance" && <> / {t("Substans")}</>}
+            {view === "multi" && <> / {t("Multi_Breadcrumb")}</>}
         </div>
     );
 }
@@ -244,11 +239,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
     const [state, setState] = useState<{
         selectedOrg: string;
-        view: "main" | "trend" | "substance";
+        view: AmrView;
     }>(() => readStateFromUrl());
     const { selectedOrg, view } = state;
-
-    const [comingSoonOpen, setComingSoonOpen] = useState(false);
 
     const { trendTooltip, substanceTooltip, multiTooltip } =
         useAmrPageTooltips();
@@ -283,7 +276,6 @@ export function AntibioticResistancePageComponent(): JSX.Element {
     // Handlers
     const handleOrgSelect = (org: string): void => {
         setState({ selectedOrg: org, view: "main" });
-        if (ORGANISMS_WITHOUT_DATA.has(org)) setComingSoonOpen(true);
     };
 
     const handleTrendClick = (): void => {
@@ -294,12 +286,13 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         setState((prev) => ({ ...prev, view: "substance" }));
     };
 
+    const handleMultiClick = (): void => {
+        setState((prev) => ({ ...prev, view: "multi" }));
+    };
+
     const handleShowMain = (): void => {
         setState((prev) => ({ ...prev, view: "main" }));
     };
-
-    const handleComingSoon = (): void => setComingSoonOpen(true);
-    const handleCloseComingSoon = (): void => setComingSoonOpen(false);
 
     return (
         <>
@@ -484,6 +477,18 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             />
                         }
                     />
+                ) : view === "multi" ? (
+                    <MultiResistanceDetail
+                        microorganism={selectedOrg}
+                        breadcrumb={
+                            <Breadcrumb
+                                t={t}
+                                selectedOrg={selectedOrg}
+                                view={view}
+                                handleShowMain={handleShowMain}
+                            />
+                        }
+                    />
                 ) : (
                     <>
                         <Breadcrumb
@@ -516,7 +521,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             </aside>
 
                             <section className="abx-content">
-                                {!ORGANISMS_WITHOUT_DATA.has(selectedOrg) && (
+                                {!ORGANISMS_WITHOUT_RESISTANCE_RATES.has(
+                                    selectedOrg
+                                ) && (
                                     <>
                                         <div
                                             className="image-box"
@@ -583,54 +590,42 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                                 alt="Substans"
                                             />
                                         </div>
-
-                                        <div
-                                            className="image-box bottom"
-                                            onClick={handleComingSoon}
-                                        >
-                                            {multiTooltip && (
-                                                <Tooltip
-                                                    title={multiTooltip}
-                                                    placement="top"
-                                                    arrow
-                                                >
-                                                    <IconButton
-                                                        className="image-box-info"
-                                                        size="small"
-                                                        aria-label={t(
-                                                            "MoreInfoOnMulti"
-                                                        )}
-                                                        onClick={(e): void =>
-                                                            e.stopPropagation()
-                                                        }
-                                                    >
-                                                        <InfoOutlinedIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            )}
-                                            <div className="image-label">
-                                                {t("Multi")}
-                                            </div>
-                                            <img
-                                                src="/assets/multi.png"
-                                                alt="Multi"
-                                            />
-                                        </div>
                                     </>
                                 )}
+
+                                <div
+                                    className="image-box bottom"
+                                    onClick={handleMultiClick}
+                                >
+                                    {multiTooltip && (
+                                        <Tooltip
+                                            title={multiTooltip}
+                                            placement="top"
+                                            arrow
+                                        >
+                                            <IconButton
+                                                className="image-box-info"
+                                                size="small"
+                                                aria-label={t(
+                                                    "MoreInfoOnMulti"
+                                                )}
+                                                onClick={(e): void =>
+                                                    e.stopPropagation()
+                                                }
+                                            >
+                                                <InfoOutlinedIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                    <div className="image-label">
+                                        {t("Multi")}
+                                    </div>
+                                    <img src="/assets/multi.png" alt="Multi" />
+                                </div>
                             </section>
                         </div>
                     </>
                 )}
-
-                <Dialog open={comingSoonOpen} onClose={handleCloseComingSoon}>
-                    <DialogTitle>{t("ComingSoon")}</DialogTitle>
-                    <DialogActions sx={{ justifyContent: "center" }}>
-                        <Button onClick={handleCloseComingSoon} autoFocus>
-                            OK
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </PageLayoutComponent>
         </>
     );
