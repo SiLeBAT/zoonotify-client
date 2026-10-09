@@ -18,6 +18,9 @@ export async function callApiService<T extends {}>(
     const apiResponse: Response = await fetch(apiUrl, options);
     const cmsVersion = apiResponse.headers.get("cms-version");
     window.sessionStorage.setItem("cms-version", cmsVersion ? cmsVersion : "");
+    // Only sent by QA deployments of the CMS.
+    const cmsCommit = apiResponse.headers.get("cms-commit");
+    window.sessionStorage.setItem("cms-commit", cmsCommit ? cmsCommit : "");
     const { status } = apiResponse;
 
     if (status === 200) {

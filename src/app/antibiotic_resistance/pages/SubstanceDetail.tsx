@@ -35,7 +35,7 @@ import { useTranslation } from "react-i18next";
 
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
-import { getGroupKey, SubstanceChart } from "./SubstanceChart";
+import { SubstanceChart } from "./SubstanceChart";
 import LZString from "lz-string";
 import {
     INFORMATION,
@@ -49,18 +49,17 @@ import {
     type FilterOption,
     type ResistanceApiItem,
     emptyFilterState,
+    filterDataExcludingKey,
     buildDocIdToNameMap,
     buildNameToDocIdMap,
     resolveUrlValueToDocId as resolveUrlValueToDocIdShared,
     buildMicroorganismFilter,
+    buildCombinationKey,
+    buildCombinationLabel,
+    meetsMinimumN,
+    shouldShowSpeciesFilter,
+    uniqueFromItems,
 } from "./resistanceHelpers";
-
-function shouldShowSpeciesFilter(microorganism: string): boolean {
-    return (
-        microorganism === "Campylobacter spp." ||
-        microorganism === "Enterococcus spp."
-    );
-}
 
 const menuItemTextStyle = `.menu-item-text-wrap {
   white-space: normal !important;
@@ -320,7 +319,10 @@ export const selectSx = {
     },
 };
 
+// variant "menu" instead of the default "selectedMenu": the latter focuses the
+// last selected option, which scrolls an all-selected list to the bottom on open
 export const fixedMenuProps: Partial<MenuProps> = {
+    variant: "menu",
     PaperProps: {
         sx: { minWidth: SELECT_WIDTH },
         style: { maxHeight: 400 },
@@ -328,147 +330,6 @@ export const fixedMenuProps: Partial<MenuProps> = {
     anchorOrigin: { vertical: "bottom", horizontal: "left" },
     transformOrigin: { vertical: "top", horizontal: "left" },
 };
-
-// ======================= COMBINATION STABLE KEY =============================
-//  Stable key from documentIds (language-independent, survives locale switches)
-function getComboIdKey(
-    entry: ResistanceApiItem,
-    microorganism: string
-): string {
-    const parts: string[] = [];
-
-    // include species for only those microorganisms where it's relevant/visible
-    if (shouldShowSpeciesFilter(microorganism)) {
-        parts.push(entry.specie?.documentId ?? "-");
-    }
-
-    parts.push(entry.superCategorySampleOrigin?.documentId ?? "-");
-    parts.push(entry.sampleOrigin?.documentId ?? "-");
-    parts.push(entry.samplingStage?.documentId ?? "-");
-    parts.push(entry.matrixGroup?.documentId ?? "-");
-    parts.push(entry.matrix?.documentId ?? "-");
-
-    return parts.join("|");
-}
-
-// ======================= WATERFALL HELPERS =============================
-
-function uniqueFromItems(
-    items: ResistanceApiItem[],
-    key: FilterKey
-): FilterOption[] {
-    if (key === "samplingYear") {
-        const years = Array.from(
-            new Set(
-                items
-                    .map((i) => i.samplingYear)
-                    .filter(Boolean)
-                    .map(String)
-            )
-        ).sort();
-        return years.map((y) => ({ id: y, name: y, documentId: y }));
-    }
-
-    const map = new Map<string, { id: string; name: string }>();
-
-    for (const row of items) {
-        const obj =
-            key === "specie"
-                ? row.specie
-                : key === "superCategorySampleOrigin"
-                ? row.superCategorySampleOrigin
-                : key === "sampleOrigin"
-                ? row.sampleOrigin
-                : key === "samplingStage"
-                ? row.samplingStage
-                : key === "matrixGroup"
-                ? row.matrixGroup
-                : key === "matrix"
-                ? row.matrix
-                : key === "antimicrobialSubstance"
-                ? row.antimicrobialSubstance
-                : null;
-
-        if (obj?.documentId && obj?.name && obj?.id !== undefined) {
-            map.set(obj.documentId, { id: String(obj.id), name: obj.name });
-        }
-    }
-
-    return Array.from(map.entries()).map(([documentId, v]) => ({
-        id: v.id,
-        name: v.name,
-        documentId,
-    }));
-}
-
-function filterDataExcludingKey(
-    data: ResistanceApiItem[],
-    sel: Record<FilterKey, string[]>,
-    sub: string[],
-    excludeKey: FilterKey
-): ResistanceApiItem[] {
-    let result = data;
-
-    if (excludeKey !== "samplingYear" && sel.samplingYear.length) {
-        result = result.filter((r) =>
-            sel.samplingYear.includes(String(r.samplingYear))
-        );
-    }
-    if (excludeKey !== "specie" && sel.specie.length) {
-        result = result.filter(
-            (r) => r.specie && sel.specie.includes(r.specie.documentId)
-        );
-    }
-    if (
-        excludeKey !== "superCategorySampleOrigin" &&
-        sel.superCategorySampleOrigin.length
-    ) {
-        result = result.filter(
-            (r) =>
-                r.superCategorySampleOrigin &&
-                sel.superCategorySampleOrigin.includes(
-                    r.superCategorySampleOrigin.documentId
-                )
-        );
-    }
-    if (excludeKey !== "sampleOrigin" && sel.sampleOrigin.length) {
-        result = result.filter(
-            (r) =>
-                r.sampleOrigin &&
-                sel.sampleOrigin.includes(r.sampleOrigin.documentId)
-        );
-    }
-    if (excludeKey !== "samplingStage" && sel.samplingStage.length) {
-        result = result.filter(
-            (r) =>
-                r.samplingStage &&
-                sel.samplingStage.includes(r.samplingStage.documentId)
-        );
-    }
-    if (excludeKey !== "matrixGroup" && sel.matrixGroup.length) {
-        result = result.filter(
-            (r) =>
-                r.matrixGroup &&
-                sel.matrixGroup.includes(r.matrixGroup.documentId)
-        );
-    }
-    if (excludeKey !== "matrix" && sel.matrix.length) {
-        result = result.filter(
-            (r) => r.matrix && sel.matrix.includes(r.matrix.documentId)
-        );
-    }
-
-    // antimicrobialSubstance uses substanceFilter (sub)
-    if (excludeKey !== "antimicrobialSubstance" && sub.length) {
-        result = result.filter(
-            (r) =>
-                r.antimicrobialSubstance &&
-                sub.includes(r.antimicrobialSubstance.documentId)
-        );
-    }
-
-    return result;
-}
 
 // ======================= COMPONENT =============================
 
@@ -489,7 +350,11 @@ export const SubstanceDetail: React.FC<{
     const langHydratedRef = useRef(false);
     const hydratedFromUrlRef = useRef(false);
     const prevMicroRef = useRef<string | null>(null);
+    //  Reset leaves the dropdown empty but a later Search still means "all
+    //  substances"; Deselect All means the user wants no substances at all.
+    //  Two different intents, so two flags.
     const keepEmptySubstanceAfterResetRef = useRef(false);
+    const userClearedSubstancesRef = useRef(false);
 
     const prevVisibleSubstanceIdsRef = useRef<string[] | null>(null);
 
@@ -616,10 +481,15 @@ export const SubstanceDetail: React.FC<{
             sub = substanceFilter,
             overrideYear?: number
         ): void => {
-            //  If user selected no substance, interpret it as "ALL visible substances"
+            //  If user selected no substance, interpret it as "ALL visible
+            //  substances" — unless the empty selection is deliberate (Deselect
+            //  All / reset), which must be left alone
             let effectiveSub = sub;
 
-            if (effectiveSub.length === 0) {
+            if (
+                effectiveSub.length === 0 &&
+                !userClearedSubstancesRef.current
+            ) {
                 const visibleSubs = uniqueFromItems(
                     filterDataExcludingKey(
                         resistanceRawData,
@@ -637,7 +507,13 @@ export const SubstanceDetail: React.FC<{
                 setSubstanceFilter(effectiveSub);
             }
 
-            const filtered = filterDataWithSelected(sel, effectiveSub);
+            //  filterDataWithSelected reads an empty substance list as "no
+            //  constraint" and would return every substance, so a deliberate
+            //  empty selection has to short-circuit to no data
+            const filtered =
+                effectiveSub.length === 0
+                    ? []
+                    : filterDataWithSelected(sel, effectiveSub);
             setFilteredFullData(filtered);
             setShowResults(true);
 
@@ -824,6 +700,9 @@ export const SubstanceDetail: React.FC<{
         };
         const resetSubs: string[] = []; //  empty on reset
         keepEmptySubstanceAfterResetRef.current = true;
+        //  a reset is not a deliberate "no substances" choice: a later Search
+        //  must still fall back to all visible substances
+        userClearedSubstancesRef.current = false;
 
         setSelected(resetSel);
         setShowResults(false);
@@ -850,7 +729,7 @@ export const SubstanceDetail: React.FC<{
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
-            const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
+            const url = `${INFORMATION}?filters[title][$eqi]=${encodeURIComponent(
                 translatedCategory
             )}&locale=${apiLocale}&pagination[pageSize]=1`;
 
@@ -978,9 +857,9 @@ export const SubstanceDetail: React.FC<{
         const nMap: Record<string, number | undefined> = {};
 
         for (const row of yearData) {
-            const idKey = getComboIdKey(row, microorganism);
+            const idKey = buildCombinationKey(row, microorganism);
             if (!labelMap[idKey]) {
-                labelMap[idKey] = getGroupKey(row, microorganism); // localized label
+                labelMap[idKey] = buildCombinationLabel(row, microorganism); // localized label
                 nMap[idKey] = row?.anzahlGetesteterIsolate ?? undefined;
             }
         }
@@ -1078,7 +957,7 @@ export const SubstanceDetail: React.FC<{
     ): React.ReactNode => {
         const label = comboLabelMap[comboIdKey] ?? comboIdKey;
         const N = nPerCombination[comboIdKey];
-        const notPlotted = typeof N === "number" && N < 10;
+        const notPlotted = typeof N === "number" && !meetsMinimumN(N);
 
         const nText =
             N != null
@@ -1148,7 +1027,11 @@ export const SubstanceDetail: React.FC<{
             }
 
             //  Like combinations: change state, update URL, but DO NOT auto-search
-            keepEmptySubstanceAfterResetRef.current = false;
+            //  Deselect All must stick: without these flags handleSearch and the
+            //  waterfall effect both re-select every visible substance
+            const cleared = newSubstanceFilter.length === 0;
+            userClearedSubstancesRef.current = cleared;
+            keepEmptySubstanceAfterResetRef.current = cleared;
             setSubstanceFilter(newSubstanceFilter);
 
             //  Update chart immediately (same behavior as combinations)
@@ -1296,6 +1179,7 @@ export const SubstanceDetail: React.FC<{
                                 : ""
                         }
                         MenuProps={{
+                            variant: "menu",
                             PaperProps: { style: { maxHeight: 400 } },
                         }}
                     >
@@ -1372,6 +1256,23 @@ export const SubstanceDetail: React.FC<{
             .filter(Boolean);
     }, [selectedCombinations, comboLabelMap]);
 
+    //  The chart can display at most MAX_COMBINATIONS combos, so "Select All" is
+    //  capped at that many. Measure the "all selected" state against the cap (not
+    //  the raw available count) so the toggle, checkbox and label work when more
+    //  than MAX_COMBINATIONS combinations are available.
+    const MAX_COMBINATIONS = 4;
+    const maxSelectableCombinations = Math.min(
+        MAX_COMBINATIONS,
+        availableCombinations.length
+    );
+    const allCombinationsSelected =
+        availableCombinations.length > 0 &&
+        selectedCombinations.length === maxSelectableCombinations;
+    //  When the cap actually limits the selection, say so ("Select first 4");
+    //  otherwise it really is a plain select-all.
+    const combinationsAreCapped =
+        availableCombinations.length > MAX_COMBINATIONS;
+
     return (
         <>
             <style>{menuItemTextStyle}</style>
@@ -1380,7 +1281,18 @@ export const SubstanceDetail: React.FC<{
             <Box
                 display="flex"
                 flexDirection="row"
-                sx={{ width: "100%", height: "calc(100vh - 75px)" }}
+                sx={{
+                    // Fill the scroll area PageLayoutComponent's <main> hands
+                    // down rather than guessing the header height with a 100vh
+                    // offset. A row taller than <main> makes <main> scroll on
+                    // top of the results pane's own scrollbar -- that is the
+                    // double scrollbar. Clip here so each pane scrolls itself.
+                    width: "100%",
+                    height: "100%",
+                    maxHeight: "100%",
+                    minHeight: 0,
+                    overflow: "hidden",
+                }}
             >
                 {/* SIDEBAR */}
                 <SidebarComponent
@@ -1396,7 +1308,12 @@ export const SubstanceDetail: React.FC<{
                             p: 3,
                             width: "380px",
                             maxWidth: "95%",
-                            height: "calc(100vh - 150px)",
+                            // Fill the sidebar panel handed down by
+                            // SidebarComponent so this pane owns its scrollbar
+                            // and the Search/Reset buttons stay reachable.
+                            height: "100%",
+                            maxHeight: "100%",
+                            boxSizing: "border-box",
                         }}
                     >
                         {loading && (
@@ -1493,7 +1410,11 @@ export const SubstanceDetail: React.FC<{
                     px={4}
                     py={3}
                     sx={{
+                        // Shrink inside the clipped row so overflow:auto
+                        // scrolls this pane instead of stretching the row.
                         overflow: "auto",
+                        minHeight: 0,
+                        boxSizing: "border-box",
                         boxShadow: "15px 0 15px -15px rgba(0,0,0,0.15) inset",
                         backgroundColor: "#fff",
                         marginLeft: "20px",
@@ -1514,14 +1435,12 @@ export const SubstanceDetail: React.FC<{
                                         let nextCombos: string[] = v;
 
                                         if (v.includes("all")) {
-                                            nextCombos =
-                                                selectedCombinations.length ===
-                                                availableCombinations.length
-                                                    ? []
-                                                    : availableCombinations.slice(
-                                                          0,
-                                                          4
-                                                      );
+                                            nextCombos = allCombinationsSelected
+                                                ? []
+                                                : availableCombinations.slice(
+                                                      0,
+                                                      maxSelectableCombinations
+                                                  );
                                             setSelectedCombinations(nextCombos);
                                         } else if (v.length > 4) {
                                             setMaxComboDialogOpen(true);
@@ -1555,23 +1474,26 @@ export const SubstanceDetail: React.FC<{
                                 >
                                     <MenuItem value="all">
                                         <Checkbox
-                                            checked={
-                                                selectedCombinations.length ===
-                                                availableCombinations.length
-                                            }
+                                            checked={allCombinationsSelected}
                                             indeterminate={
                                                 selectedCombinations.length >
                                                     0 &&
-                                                selectedCombinations.length <
-                                                    availableCombinations.length
+                                                !allCombinationsSelected
                                             }
                                         />
                                         <ListItemText
                                             primary={
-                                                selectedCombinations.length ===
-                                                availableCombinations.length
-                                                    ? t("DESELECT_ALL") ||
-                                                      "Deselect All"
+                                                allCombinationsSelected
+                                                    ? combinationsAreCapped
+                                                        ? t(
+                                                              "DESELECT_ALL_COMBINATIONS"
+                                                          ) || "Deselect all"
+                                                        : t("DESELECT_ALL") ||
+                                                          "Deselect All"
+                                                    : combinationsAreCapped
+                                                    ? t(
+                                                          "SELECT_ALL_COMBINATIONS"
+                                                      ) || "Select first 4"
                                                     : t("SELECT_ALL") ||
                                                       "Select All"
                                             }

@@ -1,0 +1,25 @@
+{
+  // The app's tsconfig targets es5 for the browser bundle and only includes
+  // src/**. The e2e suite runs in Node under playwright's own transpiler, so it
+  // gets a modern target and its own include -- plus `types: ["node"]` to keep
+  // jest's globals out of specs that import `test` from @playwright/test.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2021",
+    "lib": ["es2021", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": ["node"],
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "incremental": false
+  },
+  "include": [
+    "./**/*.ts",
+    "../playwright.config.ts",
+    "../src/app/shared/seo/seo.model.ts",
+    "../src/app/shared/infrastructure/router/routes.ts",
+    "../src/locales/de/Seo.json",
+    "../src/locales/en/Seo.json"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "home": {
+    "title": "ZooNotify — Web-basierte Abfrage von Daten aus dem Zoonosen Monitoring",
+    "description": "Das Bundesinstitut für Risikobewertung (BfR) stellt in diesem Portal Daten zum Vorkommen von Zoonoseerregern und deren Antibiotika-Resistenzen entlang der Lebensmittelkette in Deutschland zur Verfügung. Die Daten werden im Rahmen der Zoonosen-Überwachungsrichtlinie (Richtlinie 2003/99/EG) gesammelt."
+  },
+  "prevalence": {
+    "title": "Prävalenz",
+    "description": "Prävalenz von Zoonoseerregern entlang von Lebensmittelketten in Deutschland — interaktive Auswertung nach Erreger, Matrix und Probenahmestelle.",
+    "datasetName": "Prävalenz von Zoonoseerregern entlang von Lebensmittelketten (Deutschland)"
+  },
+  "antibioticResistance": {
+    "title": "Antibiotikaresistenz",
+    "description": "Antibiotikaresistenzen von Zoonoseerregern und kommensalen Bakterien entlang von Lebensmittelketten in Deutschland — Trends, Resistenzraten und Mehrfachresistenzen.",
+    "datasetName": "Antibiotikaresistenzen bei Zoonoseerregern und kommensalen Bakterien (Deutschland)"
+  },
+  "microbialCounts": {
+    "title": "Keimzahlen",
+    "description": "Mikrobielle Keimzahlen entlang von Lebensmittelketten in Deutschland, erhoben im Rahmen des Zoonosen-Monitorings.",
+    "datasetName": "Mikrobielle Keimzahlen entlang von Lebensmittelketten (Deutschland)"
+  },
+  "antimicrobial": {
+    "title": "Antibiotikaeinsatz",
+    "description": "Daten zum Antibiotikaeinsatz und zur Therapiehäufigkeit bei lebensmittelliefernden Tieren in Deutschland, zusammengestellt vom Bundesinstitut für Risikobewertung."
+  },
+  "evaluations": {
+    "title": "Auswertungen",
+    "description": "Grafische Auswertungen zu mikrobiologischen Typisierungen von Zoonoseerregern und deren Antibiotikaresistenzen aus dem deutschen Zoonosen-Monitoring entlang von Lebensmittelketten."
+  },
+  "explanations": {
+    "title": "Erläuterungen",
+    "description": "Hintergrundinformationen zu ZooNotify und zum Zoonosen-Monitoring: Erläuterungen zu Methoden der Isolatgewinnung und Antibiotikaresistenztestung, zu Datenvisualisierungen und zur Verwendung der Daten."
+  },
+  "links": {
+    "title": "Externe Links",
+    "description": "Weiterführende Quellen zu Zoonosen, Antibiotikaresistenz und Lebensmittelsicherheit von BfR, EFSA, RKI und weiteren Institutionen."
+  },
+  "dataProtection": {
+    "title": "Datenschutzerklärung",
+    "description": "Datenschutzerklärung für ZooNotify, das Portal für Zoonosen-Monitoring-Daten des Bundesinstituts für Risikobewertung (BfR)."
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die aufgerufene Seite existiert nicht."
+  }
+}

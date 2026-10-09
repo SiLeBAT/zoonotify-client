@@ -13,4 +13,13 @@ webpack.config.js
 jest.config.js
 empty-module.js
 
-cypress
+# playwright output
+playwright-report
+test-results
+
+# e2e suite -- playwright, not the app. Type-aware linting would need it in
+# tsconfig.eslint.json, and the jest plugin misreads playwright specs. It is
+# covered by `npm run typecheck:e2e` instead. (cypress sat here the same way.)
+e2e
+playwright.config.ts
+scripts/typecheck-e2e.mjs

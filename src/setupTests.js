@@ -1,4 +1,12 @@
 import "@testing-library/jest-dom";
+import { configure } from "@testing-library/react";
+
+// The first test in a file renders cold (module init, MUI/emotion style setup).
+// When the full suite runs in parallel — as the husky pre-commit hook does —
+// that first mocked fetch can take longer than testing-library's 1000ms default
+// to reach the DOM, so waitFor/findBy gave up while the loading spinner was
+// still showing. Failures there are timing, not behaviour.
+configure({ asyncUtilTimeout: 5000 });
 
 // jest.setup.js
 HTMLCanvasElement.prototype.getContext = () => ({

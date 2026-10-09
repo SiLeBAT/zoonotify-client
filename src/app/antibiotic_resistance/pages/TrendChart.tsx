@@ -17,6 +17,11 @@ import {
 } from "recharts";
 import { FormattedMicroorganismName } from "./AntibioticResistancePage.component";
 import { ResistanceApiItem } from "./TrendDetails";
+import {
+    chartYearAxis,
+    distinctYears,
+    type YearWindow,
+} from "./trendYearWindow";
 
 export interface TrendChartProps {
     microorganism: string; // ✅ ADDED
@@ -28,6 +33,8 @@ export interface TrendChartProps {
     }[];
     fullData: ResistanceApiItem[];
     groupLabel?: React.ReactNode;
+    /** Shared view-only year window; the chart's own data span when unset. */
+    yearWindow?: YearWindow | null;
 }
 
 const ALL_SUBSTANCES = [
@@ -98,6 +105,10 @@ const COLORS = [
     "#008080",
 ];
 
+// Shared by the chart and the "not enough data" panel so paging between
+// groups does not shift the controls below.
+const CHART_HEIGHT = 450;
+
 const SUBSTANCE_COLORS: { [substance: string]: string } = {};
 ALL_SUBSTANCES.forEach((substance, idx) => {
     SUBSTANCE_COLORS[substance] = COLORS[idx % COLORS.length];
@@ -106,6 +117,73 @@ ALL_SUBSTANCES.forEach((substance, idx) => {
 // OVERRIDE colors for CIP, GEN, NAL to be more different
 SUBSTANCE_COLORS.CIP = "#e41a1c"; // bright red
 SUBSTANCE_COLORS.GEN = "#377eb8"; // strong blue
+
+// Substances whose value at the hovered year is within this many percentage
+// points of the hovered one are treated as "overlapping" and shown together.
+const OVERLAP_THRESHOLD = 1.5;
+
+interface TrendTooltipProps {
+    active?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    payload?: any[];
+    label?: React.ReactNode;
+    hovered?: string | null;
+}
+
+// Custom tooltip: instead of listing every substance for the hovered year,
+// show only the substance whose data point is under the cursor, plus any other
+// substance whose value at that year overlaps it (within OVERLAP_THRESHOLD).
+const TrendTooltip: React.FC<TrendTooltipProps> = ({
+    active,
+    payload,
+    label,
+    hovered,
+}) => {
+    if (!active || !payload || payload.length === 0) return null;
+
+    const withValues = payload.filter(
+        (p) => p.value !== null && p.value !== undefined
+    );
+    if (withValues.length === 0) return null;
+
+    const hoveredEntry = hovered
+        ? withValues.find((p) => p.dataKey === hovered)
+        : undefined;
+
+    // Fall back to showing all substances until the cursor is actually over a
+    // specific line's point (so the tooltip is never empty).
+    let shown = withValues;
+    if (hoveredEntry) {
+        shown = withValues.filter(
+            (p) =>
+                p.dataKey === hovered ||
+                Math.abs(p.value - hoveredEntry.value) <= OVERLAP_THRESHOLD
+        );
+    }
+
+    return (
+        <div
+            style={{
+                background: "#fff",
+                border: "1px solid #ccc",
+                borderRadius: 6,
+                padding: "8px 12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                fontSize: 13,
+                lineHeight: 1.5,
+            }}
+        >
+            <div style={{ fontWeight: "bold", marginBottom: 4, color: "#333" }}>
+                {label}
+            </div>
+            {shown.map((p) => (
+                <div key={p.dataKey} style={{ color: p.color }}>
+                    {p.name} : {p.value.toFixed(1)}%
+                </div>
+            ))}
+        </div>
+    );
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderCustomXAxisTick = (chartData: any[]) => (props: any) => {
@@ -142,20 +220,20 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     fullData,
     microorganism, // ✅ ADDED
     groupLabel,
+    yearWindow,
 }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const fixedSizeChartRef = useRef<HTMLDivElement>(null);
     const { t, i18n } = useTranslation(["Antibiotic"]);
     const [copied, setCopied] = useState(false);
+    // Which substance's data point the cursor is currently over. Set when the
+    // mouse enters a line's active dot; drives the single-value tooltip.
+    const [hoveredSubstance, setHoveredSubstance] = useState<string | null>(
+        null
+    );
 
     // -- Chart data preparation
-    const yearRange = data.map((entry) => entry.samplingYear);
-    const yearMin = Math.min(...yearRange);
-    const yearMax = Math.max(...yearRange);
-    const years = Array.from(
-        { length: yearMax - yearMin + 1 },
-        (_, i) => yearMin + i
-    );
+    const years = chartYearAxis(distinctYears(data), yearWindow);
 
     // *** FIXED: Use ALL_SUBSTANCES order for legend/plot! ***
     const substances = ALL_SUBSTANCES.filter((substance) =>
@@ -306,7 +384,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
 
         function valueForCSV(
             row: ResistanceApiItem,
-            h: typeof headers[number]
+            h: (typeof headers)[number]
         ): string {
             // ✅ microorganism is not on row; inject from prop
             if (h === "microorganism") {
@@ -456,7 +534,7 @@ This file contains comma-separated data, which supports the correct format of nu
                 {/* ---- CHART OR "NOT ENOUGH DATA" MESSAGE ---- */}
                 {enoughData ? (
                     <div ref={chartContainerRef}>
-                        <ResponsiveContainer width="100%" height={450}>
+                        <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis
@@ -483,11 +561,10 @@ This file contains comma-separated data, which supports the correct format of nu
                                     />
                                 </YAxis>
                                 <Tooltip
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                    formatter={(value: any) =>
-                                        value !== null && value !== undefined
-                                            ? value.toFixed(1) + "%"
-                                            : "-"
+                                    content={
+                                        <TrendTooltip
+                                            hovered={hoveredSubstance}
+                                        />
                                     }
                                 />
                                 <Legend
@@ -508,6 +585,11 @@ This file contains comma-separated data, which supports the correct format of nu
                                         }
                                         strokeWidth={2}
                                         dot={{ r: 3 }}
+                                        activeDot={{
+                                            r: 5,
+                                            onMouseEnter: () =>
+                                                setHoveredSubstance(substance),
+                                        }}
                                         connectNulls
                                     />
                                 ))}
@@ -519,7 +601,7 @@ This file contains comma-separated data, which supports the correct format of nu
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
-                        minHeight={300}
+                        height={CHART_HEIGHT}
                     >
                         <Typography
                             variant="body1"

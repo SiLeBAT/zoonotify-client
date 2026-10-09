@@ -327,6 +327,23 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         columnMenuUnsort: t("dataGridcolumnMenuUnsort"),
         columnMenuHideColumn: t("dataGridcolumnMenuHideColumn"),
         columnMenuManageColumns: t("dataGridcolumnMenuManageColumns"),
+        columnMenuFilter: t("dataGridcolumnMenuFilter"),
+        // Filter panel
+        filterPanelColumns: t("dataGridfilterPanelColumns"),
+        filterPanelOperator: t("dataGridfilterPanelOperator"),
+        filterPanelInputLabel: t("dataGridfilterPanelInputLabel"),
+        filterPanelInputPlaceholder: t("dataGridfilterPanelInputPlaceholder"),
+        filterPanelLogicOperator: t("dataGridfilterPanelLogicOperator"),
+        filterPanelOperatorAnd: t("dataGridfilterPanelOperatorAnd"),
+        filterPanelOperatorOr: t("dataGridfilterPanelOperatorOr"),
+        // String operators
+        filterOperatorContains: t("dataGridfilterOperatorContains"),
+        filterOperatorEquals: t("dataGridfilterOperatorEquals"),
+        filterOperatorStartsWith: t("dataGridfilterOperatorStartsWith"),
+        filterOperatorEndsWith: t("dataGridfilterOperatorEndsWith"),
+        filterOperatorIsEmpty: t("dataGridfilterOperatorIsEmpty"),
+        filterOperatorIsNotEmpty: t("dataGridfilterOperatorIsNotEmpty"),
+        filterOperatorIsAnyOf: t("dataGridfilterOperatorIsAnyOf"),
     };
 
     const columns: GridColDef[] = [
@@ -518,7 +535,6 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                         rows={prevalenceData}
                                         columns={columns}
                                         loading={loading}
-                                        disableColumnFilter
                                         hideFooter={false}
                                         localeText={localeText}
                                         sx={{
