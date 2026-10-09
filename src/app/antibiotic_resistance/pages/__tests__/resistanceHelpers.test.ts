@@ -43,6 +43,14 @@ describe("buildMicroorganismFilter", () => {
             "&filters[microorganism][name][$containsi]=ESBL"
         );
     });
+
+    it("matches Enterococcus spp. by its genus so species-level DE names resolve", () => {
+        // German multi-resistance rows link to microorganisms named
+        // "Enterococcus faecalis" / "Enterococcus faecium" (EN: "Enterococcus spp.").
+        expect(buildMicroorganismFilter("Enterococcus spp.")).toBe(
+            "&filters[microorganism][name][$containsi]=Enterococcus"
+        );
+    });
 });
 
 describe("shouldShowSpeciesFilter", () => {
