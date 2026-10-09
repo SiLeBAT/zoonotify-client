@@ -7,6 +7,9 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: read
+
 concurrency:
   group: deploy-qa
   cancel-in-progress: true
@@ -39,10 +42,12 @@ jobs:
         env:
           NODE_ENV: qa
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v6
         with:
           name: qa-artifacts
           path: ./public
+          # Default skips dotfiles, which would drop public/assets/api-docs/.htaccess.
+          include-hidden-files: true
 
   deploy:
     needs: build

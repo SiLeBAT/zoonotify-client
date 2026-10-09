@@ -1,6 +1,7 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import LZString from "lz-string";
 import {
     AntibioticResistancePageComponent,
     FormattedMicroorganismName,
@@ -26,6 +27,14 @@ jest.mock("../TrendDetails", () => ({
 
 jest.mock("../SubstanceDetail", () => ({
     SubstanceDetail: () => <div data-testid="substance-detail" />,
+}));
+
+jest.mock("../MultiResistanceDetail", () => ({
+    MultiResistanceDetail: ({
+        breadcrumb,
+    }: {
+        breadcrumb: React.ReactNode;
+    }) => <div data-testid="multi-resistance-detail">{breadcrumb}</div>,
 }));
 
 jest.mock("react-i18next", () => ({
@@ -119,5 +128,53 @@ describe("FormattedMicroorganismName", () => {
 
         // The resistance-mechanism prefix stays upright.
         expect(container.textContent).toContain("ESBL/AmpC");
+    });
+});
+
+describe("AntibioticResistancePage Multi-resistance Graph", () => {
+    it("opens the Multi-resistance Graph from its tile instead of announcing Coming soon", () => {
+        renderPage();
+
+        fireEvent.click(screen.getByAltText("Multi"));
+
+        expect(
+            screen.getByTestId("multi-resistance-detail")
+        ).toBeInTheDocument();
+        expect(screen.queryByText("ComingSoon")).not.toBeInTheDocument();
+    });
+
+    it("names the Multi-resistance Graph in the breadcrumb", () => {
+        renderPage("?microorganism=E.%20coli&view=multi");
+
+        expect(
+            within(screen.getByTestId("multi-resistance-detail")).getByText(
+                /Multi_Breadcrumb/
+            )
+        ).toBeInTheDocument();
+    });
+
+    it("restores the Multi-resistance view from a share link", () => {
+        const s = LZString.compressToEncodedURIComponent(
+            JSON.stringify({
+                m: "Campylobacter spp.",
+                v: "multi",
+                l: "en",
+                f: {},
+                c: [],
+            })
+        );
+        renderPage(`?s=${s}`);
+
+        expect(
+            screen.getByTestId("multi-resistance-detail")
+        ).toBeInTheDocument();
+    });
+
+    it("keeps ESBL/AmpC E. coli on Coming soon for a Multi-resistance deep link", () => {
+        renderPage("?microorganism=ESBL%2FAmpC%20E.%20coli&view=multi");
+
+        expect(
+            screen.queryByTestId("multi-resistance-detail")
+        ).not.toBeInTheDocument();
     });
 });

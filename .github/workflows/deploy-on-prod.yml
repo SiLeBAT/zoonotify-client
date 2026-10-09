@@ -10,6 +10,9 @@ on:
         description: 'Release tag to deploy (e.g. v4.4.0)'
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,10 +42,12 @@ jobs:
         env:
           NODE_ENV: production
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v6
         with:
           name: prod-artifacts
           path: ./public
+          # Default skips dotfiles, which would drop public/assets/api-docs/.htaccess.
+          include-hidden-files: true
 
   deploy:
     needs: build

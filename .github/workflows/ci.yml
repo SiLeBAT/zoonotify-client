@@ -10,6 +10,9 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: read
+
 # Cancel superseded runs on the same ref (e.g. a new push to an open PR).
 concurrency:
   group: ci-${{ github.ref }}
@@ -55,6 +58,24 @@ jobs:
       # surfaced only after merge, when cd-qa built).
       - run: npm run build
 
+  # The API reference spec is generated in zoonotify-cms; this repo carries a
+  # synced copy. Drift only warns, so CMS changes never block client PRs.
+  api-docs-drift:
+    name: 'Check API reference is in sync with the CMS'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compare with zoonotify-cms develop
+        run: |
+          url="https://raw.githubusercontent.com/SiLeBAT/zoonotify-cms/develop/api-reference/openapi.json"
+          if ! curl -fsSL "$url" -o "$RUNNER_TEMP/cms-openapi.json"; then
+            echo "::warning::Could not fetch $url; API reference drift not checked."
+          elif ! cmp -s "$RUNNER_TEMP/cms-openapi.json" src/assets/api-docs/openapi.json; then
+            echo "::warning file=src/assets/api-docs/openapi.json::The API reference differs from zoonotify-cms develop. Run 'npm run sync:api-docs -- develop' and commit."
+          else
+            echo "API reference matches zoonotify-cms develop."
+          fi
+
   e2e:
     name: 'Run E2E tests'
     runs-on: ubuntu-latest
@@ -73,7 +94,7 @@ jobs:
       # for it. No CMS runs here: the suite covers routing, metadata and the
       # language contract, all of which the app shell renders on its own.
       - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
