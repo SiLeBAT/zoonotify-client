@@ -43,3 +43,9 @@ Thumbs.db
 CLAUDE.md
 AGENTS.md
 .claude/
+
+# e2e (playwright)
+/playwright-report
+/test-results
+/blob-report
+/playwright/.cache

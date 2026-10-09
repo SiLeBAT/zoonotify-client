@@ -7,7 +7,10 @@ module.exports = {
     // Ignore the .claude/ directory (e.g. git worktrees created under
     // .claude/worktrees/), otherwise jest discovers a second copy of every
     // test there and the duplicate package.json trips the haste-map.
-    testPathIgnorePatterns: ["/node_modules/", "/\\.claude/"],
+    // e2e/ belongs to playwright. This testRegex matches `.spec.ts` as well,
+    // so without the exclusion jest discovers the playwright specs and fails
+    // on their @playwright/test import.
+    testPathIgnorePatterns: ["/node_modules/", "/\\.claude/", "/e2e/"],
     modulePathIgnorePatterns: ["/\\.claude/"],
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     moduleNameMapper: {
@@ -17,4 +20,7 @@ module.exports = {
     },
     collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/app/App.tsx"],
     testEnvironment: "jest-environment-jsdom",
+    // Headroom above testing-library's asyncUtilTimeout (5000ms, setupTests.js):
+    // a cold first test takes ~2s alone and over 13s with the CPU oversubscribed.
+    testTimeout: 30000,
 };
