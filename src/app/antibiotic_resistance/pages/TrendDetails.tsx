@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
     Box,
     Button,
@@ -21,6 +21,7 @@ import {
     Checkbox,
     ListItemText,
     Pagination,
+    Slider,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
@@ -39,6 +40,11 @@ import type { MenuProps } from "@mui/material/Menu";
 import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
 
 import { TrendChart } from "./TrendChart";
+import {
+    distinctYears,
+    yearSliderMarks,
+    type YearWindow,
+} from "./trendYearWindow";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import {
     type FilterKey,
@@ -264,7 +270,10 @@ const selectSx = {
 };
 
 // keep the menu the same width and anchored consistently
+// variant "menu" instead of the default "selectedMenu": the latter focuses the
+// last selected option, which scrolls an all-selected list to the bottom on open
 const fixedMenuProps: Partial<MenuProps> = {
+    variant: "menu",
     PaperProps: {
         sx: { minWidth: SELECT_WIDTH },
         style: { maxHeight: 400 },
@@ -309,6 +318,11 @@ export const TrendDetails: React.FC<{
     const [allSubstances, setAllSubstances] = useState<FilterOption[]>([]);
 
     const [currentPage, setCurrentPage] = useState(1);
+    // Chart year window: one view-only x-axis range shared by every chart, so
+    // charts of different matrices line up. `null` means "full span".
+    const [chartYearWindow, setChartYearWindow] = useState<YearWindow | null>(
+        null
+    );
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
     const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -376,6 +390,10 @@ export const TrendDetails: React.FC<{
 
     // DATA FETCHING
     useEffect(() => {
+        // A response for a language or microorganism the reader has already
+        // left must not overwrite the current one (mixed-language charts).
+        let cancelled = false;
+
         async function fetchResistanceOptions(): Promise<void> {
             setLoading(true);
             setFetchError(null);
@@ -386,14 +404,16 @@ export const TrendDetails: React.FC<{
                     `&populate=*&pagination[pageSize]=8000`;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const res = await callApiService<any>(url);
-                setResistanceRawData(res.data?.data || []);
+                if (!cancelled) setResistanceRawData(res.data?.data || []);
             } catch (err) {
-                setFetchError(
-                    "Failed to fetch filter options. Please try again."
-                );
+                if (!cancelled) {
+                    setFetchError(
+                        "Failed to fetch filter options. Please try again."
+                    );
+                }
                 console.error("Failed to fetch resistance options", err);
             } finally {
-                setLoading(false);
+                if (!cancelled) setLoading(false);
             }
         }
         if (microorganism) {
@@ -403,6 +423,10 @@ export const TrendDetails: React.FC<{
                 setShowChart(false);
             }
         }
+
+        return () => {
+            cancelled = true;
+        };
     }, [i18next.language, microorganism]);
 
     // Set options for all filters (use documentId as key for all)
@@ -657,6 +681,28 @@ export const TrendDetails: React.FC<{
         //setCurrentPage(1);
     }, [substanceFilter]);
 
+    // Years any chart of the current search has data for: the slider's bounds.
+    const chartYears = useMemo(
+        () => distinctYears(filteredFullData),
+        [filteredFullData]
+    );
+    const chartYearMin = chartYears[0];
+    const chartYearMax = chartYears[chartYears.length - 1];
+    const chartYearMarks = useMemo(
+        () => yearSliderMarks(chartYears),
+        [chartYears]
+    );
+
+    // The window every chart is drawn with: the selection, else the full span.
+    const activeYearWindow: YearWindow | null =
+        chartYearWindow ??
+        (chartYears.length > 0 ? [chartYearMin, chartYearMax] : null);
+
+    // A new search with different year bounds starts again from full span.
+    useEffect(() => {
+        setChartYearWindow(null);
+    }, [chartYearMin, chartYearMax]);
+
     const resetFilters = (): void => {
         setSelected({ ...emptyFilterState });
         setShowChart(false);
@@ -673,7 +719,7 @@ export const TrendDetails: React.FC<{
     const handleInfoClick = async (categoryKey: string): Promise<void> => {
         const translatedCategory = t(categoryKey);
         try {
-            const url = `${INFORMATION}?filters[title][$eq]=${encodeURIComponent(
+            const url = `${INFORMATION}?filters[title][$eqi]=${encodeURIComponent(
                 translatedCategory
             )}&locale=${i18next.language}&pagination[pageSize]=1`;
             const response = await callApiService<
@@ -836,6 +882,7 @@ export const TrendDetails: React.FC<{
                                 : ""
                         }
                         MenuProps={{
+                            variant: "menu",
                             PaperProps: {
                                 style: {
                                     maxHeight: 400,
@@ -931,7 +978,18 @@ export const TrendDetails: React.FC<{
             <Box
                 display="flex"
                 flexDirection="row"
-                sx={{ width: "100%", height: "calc(100vh - 75px)" }}
+                sx={{
+                    // Fill the scroll area PageLayoutComponent's <main> hands
+                    // down rather than guessing the header height with a 100vh
+                    // offset. A row taller than <main> makes <main> scroll on
+                    // top of the results pane's own scrollbar -- that is the
+                    // double scrollbar. Clip here so each pane scrolls itself.
+                    width: "100%",
+                    height: "100%",
+                    maxHeight: "100%",
+                    minHeight: 0,
+                    overflow: "hidden",
+                }}
             >
                 {/* SIDEBAR */}
                 <SidebarComponent
@@ -947,7 +1005,12 @@ export const TrendDetails: React.FC<{
                             p: 3,
                             width: "380px",
                             maxWidth: "95%",
-                            height: "calc(100vh - 150px)",
+                            // Fill the sidebar panel handed down by
+                            // SidebarComponent so this pane owns its scrollbar
+                            // and the Search/Reset buttons stay reachable.
+                            height: "100%",
+                            maxHeight: "100%",
+                            boxSizing: "border-box",
                         }}
                     >
                         {loading && (
@@ -1034,7 +1097,11 @@ export const TrendDetails: React.FC<{
                     px={4}
                     py={3}
                     sx={{
+                        // Shrink inside the clipped row so overflow:auto
+                        // scrolls this pane instead of stretching the row.
                         overflow: "auto",
+                        minHeight: 0,
+                        boxSizing: "border-box",
                         boxShadow: "15px 0 15px -15px rgba(0,0,0,0.15) inset",
                         backgroundColor: "#fff",
                         marginLeft: "20px",
@@ -1046,6 +1113,45 @@ export const TrendDetails: React.FC<{
                     {/* Show charts if available */}
                     {showChart && paginatedGroups.length > 0 && (
                         <Box mt={2} mb={2}>
+                            {chartYears.length >= 2 && (
+                                <Box sx={{ px: 1, mb: 2, maxWidth: 1400 }}>
+                                    <Typography
+                                        id="trend-chart-year-range-label"
+                                        variant="caption"
+                                        component="label"
+                                        sx={{
+                                            display: "block",
+                                            color: "text.secondary",
+                                            fontWeight: 500,
+                                        }}
+                                    >
+                                        {t("Chart_Year_Range")}
+                                    </Typography>
+                                    <Slider
+                                        size="small"
+                                        value={activeYearWindow ?? undefined}
+                                        min={chartYearMin}
+                                        max={chartYearMax}
+                                        step={1}
+                                        marks={chartYearMarks}
+                                        valueLabelDisplay="auto"
+                                        aria-labelledby="trend-chart-year-range-label"
+                                        onChange={(_, value) =>
+                                            setChartYearWindow(
+                                                value as YearWindow
+                                            )
+                                        }
+                                        sx={{
+                                            mt: 1,
+                                            mb: 3,
+                                            "& .MuiSlider-markLabel": {
+                                                fontSize: "0.7rem",
+                                                color: "text.secondary",
+                                            },
+                                        }}
+                                    />
+                                </Box>
+                            )}
                             <Grid container spacing={4}>
                                 {paginatedGroups.map(
                                     ([groupKey, groupItems]) => {
@@ -1080,6 +1186,9 @@ export const TrendDetails: React.FC<{
                                                             microorganism
                                                         }
                                                         fullData={groupItems}
+                                                        yearWindow={
+                                                            activeYearWindow
+                                                        }
                                                         groupLabel={renderGroupLabel(
                                                             groupKey,
                                                             t,

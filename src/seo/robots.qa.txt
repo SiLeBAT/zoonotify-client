@@ -1,0 +1,6 @@
+# ZooNotify — QA and development builds.
+# This is a staging copy of production. It must never be indexed, or it
+# competes with zoonotify.bfr.berlin as duplicate content.
+
+User-agent: *
+Disallow: /
