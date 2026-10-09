@@ -13,12 +13,21 @@ import { AntimicrobialPageComponent } from "../../../antimicrobial/pages/Antimic
 import { MicrobialCountsPageComponent } from "../../../microbial_counts/pages/MicrobialCountsPage.component";
 
 import { pageRoute } from "./routes";
+import { useSeo } from "../../seo/useSeo";
+import { useLanguageUrlSync } from "../../seo/useLanguageUrlSync";
 
 function ErrorPage(): JSX.Element {
     return <ErrorPageComponent errorStatus={404} />;
 }
 
 export function BodyRouterComponent(): JSX.Element {
+    // Mounted here, inside the router but above the Switch, so they run for
+    // every route -- including any added later without a matching wiring step.
+    // Keeping the language sync in one place is what stopped the per-page
+    // effects from writing two different parameter names at each other.
+    useLanguageUrlSync();
+    useSeo();
+
     return (
         <Switch>
             <Route
