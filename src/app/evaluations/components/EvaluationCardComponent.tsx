@@ -1,4 +1,12 @@
-import { Box, Button, Card, CardContent, CardMedia, Link } from "@mui/material";
+import {
+    Box,
+    Button,
+    ButtonBase,
+    Card,
+    CardContent,
+    CardMedia,
+    Link,
+} from "@mui/material";
 import { useTheme } from "@mui/system";
 import {
     footerHeight,
@@ -66,13 +74,17 @@ export function EvaluationsCardComponent(props: {
                         width: ["100%", "50%"],
                     }}
                 >
-                    <CardMedia
-                        component="img"
-                        sx={{ cursor: "pointer" }}
-                        image={props.chartPath}
-                        alt={props.title}
+                    <ButtonBase
+                        focusRipple
                         onClick={openImageViewer}
-                    />
+                        sx={{ width: "100%" }}
+                    >
+                        <CardMedia
+                            component="img"
+                            image={props.chartPath}
+                            alt={props.title}
+                        />
+                    </ButtonBase>
                     <Box
                         sx={{
                             display: "flex",

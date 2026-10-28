@@ -15,6 +15,7 @@ module.exports = {
         "plugin:jest/recommended",
         "plugin:promise/recommended",
         "plugin:import/recommended",
+        "plugin:jsx-a11y/recommended",
         "prettier",
     ],
     parserOptions: {
@@ -75,5 +76,8 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": 2,
         "unicorn/filename-case": "off",
         "unicorn/no-null": "off",
+        // Focusing a modal's primary action is the WAI-ARIA dialog pattern;
+        // the rule still guards raw DOM elements.
+        "jsx-a11y/no-autofocus": ["error", { ignoreNonDOM: true }],
     },
 };

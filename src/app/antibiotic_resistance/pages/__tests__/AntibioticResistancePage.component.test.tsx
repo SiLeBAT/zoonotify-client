@@ -81,15 +81,36 @@ describe("AntibioticResistancePage sidebar", () => {
         fireEvent.click(navItem(ESBL) as HTMLElement);
 
         expect(screen.getByText("ComingSoon")).toBeInTheDocument();
-        expect(screen.queryByAltText("Trend")).not.toBeInTheDocument();
-        expect(screen.queryByAltText("Substans")).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("button", { name: "Trend" })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("button", { name: "Substans" })
+        ).not.toBeInTheDocument();
+    });
+
+    it("exposes organisms as buttons and marks only the selected one current", () => {
+        renderPage();
+
+        fireEvent.click(navItem(ESBL) as HTMLElement);
+
+        const item = navItem(ESBL) as HTMLElement;
+        expect(item.tagName).toBe("BUTTON");
+        expect(item).toHaveAttribute("aria-current", "true");
+        expect(
+            document.querySelectorAll(".abx-nav-item[aria-current]")
+        ).toHaveLength(1);
     });
 
     it("still offers the chart tiles for organisms that have data", () => {
         renderPage();
 
-        expect(screen.getByAltText("Trend")).toBeInTheDocument();
-        expect(screen.getByAltText("Substans")).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "Trend" })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "Substans" })
+        ).toBeInTheDocument();
         expect(screen.queryByText("ComingSoon")).not.toBeInTheDocument();
     });
 });
@@ -135,7 +156,7 @@ describe("AntibioticResistancePage Multi-resistance Graph", () => {
     it("opens the Multi-resistance Graph from its tile instead of announcing Coming soon", () => {
         renderPage();
 
-        fireEvent.click(screen.getByAltText("Multi"));
+        fireEvent.click(screen.getByRole("button", { name: "Multi" }));
 
         expect(
             screen.getByTestId("multi-resistance-detail")

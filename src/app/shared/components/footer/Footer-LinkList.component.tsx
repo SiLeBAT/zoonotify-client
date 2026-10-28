@@ -23,8 +23,9 @@ export function FooterLinkListComponent(props: {
         color: "inherit",
         display: "flex",
         justifyContent: "center",
-        "&:focus": {
-            outline: "none",
+        "&:focus-visible": {
+            outline: `2px solid ${theme.palette.primary.main}`,
+            outlineOffset: "2px",
         },
         fontSize: "0.85rem", // <--- Decrease as needed
         lineHeight: 1.2, // <--- Decrease as needed
@@ -35,7 +36,8 @@ export function FooterLinkListComponent(props: {
         margin: 0,
         display: "flex",
         justifyContent: "center",
-        color: "gray",
+        color: "#555", // 5.5:1 on the footer grey; plain "gray" fails WCAG AA
+
         fontSize: "0.85rem",
         lineHeight: 1.2,
     };

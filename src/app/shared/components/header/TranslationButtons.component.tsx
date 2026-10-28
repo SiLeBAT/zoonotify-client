@@ -30,8 +30,9 @@ const Button = styled("button")`
     &::-moz-focus-inner {
         border: none;
     }
-    &:focus {
-        outline: none;
+    &:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
     &:hover {
         transform: scale(1.2, 1.2);
@@ -71,6 +72,9 @@ export function TranslationButtonsComponent(): JSX.Element {
                 type="button"
                 css={selectedFlag ? selectedFlagStyle : "none"}
                 bgImage="url('/assets/germany_flag_icon.png')"
+                lang="de"
+                aria-label="Deutsch"
+                aria-pressed={selectedFlag}
                 onClick={() => {
                     localStorage.setItem("i18nextLng", "de");
                     changeAppLanguage("de");
@@ -82,6 +86,9 @@ export function TranslationButtonsComponent(): JSX.Element {
                 type="button"
                 css={selectedFlag ? "none" : selectedFlagStyle}
                 bgImage="url('/assets/united_kingdom_flag_icon.png')"
+                lang="en"
+                aria-label="English"
+                aria-pressed={!selectedFlag}
                 onClick={() => {
                     localStorage.setItem("i18nextLng", "en");
                     changeAppLanguage("en");
