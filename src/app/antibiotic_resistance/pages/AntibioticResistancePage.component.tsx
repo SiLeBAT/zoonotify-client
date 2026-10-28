@@ -18,6 +18,7 @@ import { SubstanceDetail } from "./SubstanceDetail";
 import { MultiResistanceDetail } from "./MultiResistanceDetail";
 import LZString from "lz-string";
 import { useAmrPageTooltips } from "./amrPageUseCase";
+import { useDataUpdateDate } from "../../hooks/useDataUpdateDate";
 
 type AmrView = "main" | "trend" | "substance" | "multi";
 
@@ -202,37 +203,50 @@ function Breadcrumb({
     selectedOrg,
     view,
     handleShowMain,
+    dataUpdateDate,
 }: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: any;
     selectedOrg: string;
     view: AmrView;
     handleShowMain: () => void;
+    dataUpdateDate: string | null;
 }): JSX.Element {
     return (
-        <div className="abx-breadcrumb">
-            <button
-                type="button"
-                className="abx-breadcrumb-link"
-                onClick={handleShowMain}
-            >
-                {t("AntibioticResistance")}
-            </button>
-            {" / "}
-            <button
-                type="button"
-                className="abx-breadcrumb-link"
-                onClick={handleShowMain}
-            >
-                <FormattedMicroorganismName
-                    microName={selectedOrg}
-                    isBreadcrumb
-                />
-            </button>
-            {view === "trend" && <> / {t("Trend")}</>}
-            {view === "substance" && <> / {t("Substans")}</>}
-            {view === "multi" && <> / {t("Multi_Breadcrumb")}</>}
-        </div>
+        <>
+            <div className="abx-breadcrumb">
+                <button
+                    type="button"
+                    className="abx-breadcrumb-link"
+                    onClick={handleShowMain}
+                >
+                    {t("AntibioticResistance")}
+                </button>
+                {" / "}
+                <button
+                    type="button"
+                    className="abx-breadcrumb-link"
+                    onClick={handleShowMain}
+                >
+                    <FormattedMicroorganismName
+                        microName={selectedOrg}
+                        isBreadcrumb
+                    />
+                </button>
+                {view === "trend" && <> / {t("Trend")}</>}
+                {view === "substance" && <> / {t("Substans")}</>}
+                {view === "multi" && <> / {t("Multi_Breadcrumb")}</>}
+            </div>
+            {dataUpdateDate && (
+                <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ px: "1rem", py: "0.25rem" }}
+                >
+                    {t("DataStatus")}: {dataUpdateDate}
+                </Typography>
+            )}
+        </>
     );
 }
 
@@ -251,6 +265,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
     const { trendTooltip, substanceTooltip, multiTooltip } =
         useAmrPageTooltips();
+    const dataUpdateDate = useDataUpdateDate();
 
     // On mount: sync state from URL (deep link support)
     useEffect(() => {
@@ -515,6 +530,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 selectedOrg={selectedOrg}
                                 view={view}
                                 handleShowMain={handleShowMain}
+                                dataUpdateDate={dataUpdateDate}
                             />
                         }
                     />
@@ -528,6 +544,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 selectedOrg={selectedOrg}
                                 view={view}
                                 handleShowMain={handleShowMain}
+                                dataUpdateDate={dataUpdateDate}
                             />
                         }
                     />
@@ -540,6 +557,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 selectedOrg={selectedOrg}
                                 view={view}
                                 handleShowMain={handleShowMain}
+                                dataUpdateDate={dataUpdateDate}
                             />
                         }
                     />
@@ -550,6 +568,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             selectedOrg={selectedOrg}
                             view={view}
                             handleShowMain={handleShowMain}
+                            dataUpdateDate={dataUpdateDate}
                         />
                         <div className="abx-page">
                             <aside className="abx-sidebar">
