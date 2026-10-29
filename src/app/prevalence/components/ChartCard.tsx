@@ -10,16 +10,16 @@ import {
     whiteBackgroundAndLogoPlugin,
 } from "./chartPlugins";
 import { useTranslation } from "react-i18next";
-import { ChartDataPoint } from "./types";
+import { ChartDataPoint, ChartSeries } from "./types";
 import { formatMicroorganismNameArray, WordObject } from "./utils";
 
 /** ----------------------------- Color helper ----------------------------- */
-// Curated, colourblind-safe palette (Okabe-Ito subset). Charts are coloured by
-// their global index, not by hashing the key: because the two charts shown on a
-// page are always consecutive indices, consecutive palette entries guarantee the
-// adjacent pair is visually distinct (the hash approach could land two charts on
-// near-identical hues). Yellow/black from the full Okabe-Ito set are omitted as
-// they read poorly as filled bars on a white card.
+// Curated, colourblind-safe palette (Okabe-Ito subset). Each combination in the
+// graph is coloured by its position in the series list, not by hashing its key:
+// consecutive palette entries guarantee the (at most four) compared combinations
+// are visually distinct (the hash approach could land two on near-identical
+// hues). Yellow/black from the full Okabe-Ito set are omitted as they read
+// poorly as filled bars on a white card.
 const CHART_PALETTE = [
     "#0072B2", // blue
     "#E69F00", // orange
@@ -70,10 +70,10 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
 
 /** ------------------------------ Props ------------------------------ */
 interface ChartCardProps {
+    /** Names the PNG figure on "Download chart". */
     chartKey: string;
-    /** Global index of this chart among all chart keys; drives the bar colour. */
-    colorIndex: number;
-    chartData: { [year: number]: ChartDataPoint };
+    /** One series per compared combination; its index drives the bar colour. */
+    series: ChartSeries[];
     chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>;
     currentMicroorganism: string | null;
 
@@ -90,8 +90,7 @@ interface ChartCardProps {
 /** ------------------------------ Component ------------------------------ */
 const ChartCard: React.FC<ChartCardProps> = ({
     chartKey,
-    colorIndex,
-    chartData,
+    series,
     chartRef,
     currentMicroorganism,
     yearsToShow,
@@ -100,7 +99,6 @@ const ChartCard: React.FC<ChartCardProps> = ({
     prevalenceUpdateDate,
 }) => {
     const { t } = useTranslation(["PrevalencePage"]);
-    const chartColor = colorForIndex(colorIndex);
 
     // ✅ Latest year first (top)
     const yearsDesc = useMemo(
@@ -131,26 +129,24 @@ const ChartCard: React.FC<ChartCardProps> = ({
             <Bar
                 data={{
                     labels: yearLabels,
-                    datasets: [
-                        {
-                            label: chartKey,
-                            data: yearsDesc.map((year) => {
-                                const d =
-                                    chartData[year] ||
-                                    ({
-                                        x: 0,
-                                        y: String(year),
-                                        ciMin: 0,
-                                        ciMax: 0,
-                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                    } as any);
+                    datasets: series.map(({ label, data }, index) => ({
+                        label,
+                        data: yearsDesc.map((year) => {
+                            const d =
+                                data[year] ||
+                                ({
+                                    x: 0,
+                                    y: String(year),
+                                    ciMin: 0,
+                                    ciMax: 0,
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                } as any);
 
-                                // ✅ Force y to be the category label (string)
-                                return { ...d, y: String(year) };
-                            }) as unknown as ChartDataPoint[],
-                            backgroundColor: chartColor,
-                        },
-                    ],
+                            // ✅ Force y to be the category label (string)
+                            return { ...d, y: String(year) };
+                        }) as unknown as ChartDataPoint[],
+                        backgroundColor: colorForIndex(index),
+                    })),
                 }}
                 options={{
                     indexAxis: "y",
@@ -223,7 +219,10 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                         String(context.label ?? ""),
                                         10
                                     );
-                                    const data = chartData[year] || {};
+                                    const data =
+                                        series[context.datasetIndex]?.data[
+                                            year
+                                        ] || {};
                                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                     const rawData = context.raw as any;
 
