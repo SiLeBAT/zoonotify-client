@@ -1,5 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { PrevalenceChart } from "../PrevalenceChart";
 import { usePrevalenceFilters } from "../PrevalenceDataContext";
 
@@ -17,13 +18,17 @@ jest.mock("../PrevalenceDataContext", () => ({
 
 // Mock react-chartjs-2 to avoid canvas rendering in jsdom. The mock surfaces the
 // two things the Chart year window controls — the visible years (data.labels) and
-// the rescaled prevalence-% axis (options.scales.x.max) — so tests can observe them.
+// the rescaled prevalence-% axis (options.scales.x.max) — plus the plotted
+// combinations (one dataset each), so tests can observe them.
 jest.mock("react-chartjs-2", () => ({
     Bar: ({ data, options }) => (
         <div
             data-testid="chart"
             data-labels={(data?.labels ?? []).join(",")}
             data-xmax={options?.scales?.x?.max}
+            data-datasets={(data?.datasets ?? [])
+                .map((dataset) => dataset.label)
+                .join("|")}
         />
     ),
 }));
@@ -284,5 +289,208 @@ describe("PrevalenceChart — Chart year window slider", () => {
         expect(thumbs[1]).toHaveAttribute("aria-valuemax", "2025");
         expect(thumbs[0]).toHaveAttribute("aria-valuenow", "2023");
         expect(thumbs[1]).toHaveAttribute("aria-valuenow", "2025");
+    });
+});
+
+describe("PrevalenceChart — comparing combinations in one graph", () => {
+    // One prevalence row per (combination, year) for E. Coli; a combination is
+    // sample origin × matrix × sampling stage.
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const row = (sampleOrigin, samplingYear = 2022, extra = {}) => ({
+        microorganism: "E. Coli",
+        sampleOrigin,
+        matrix: "Matrix",
+        samplingStage: "Stage",
+        samplingYear,
+        percentageOfPositive: 10,
+        ciMin: 5,
+        ciMax: 15,
+        numberOfSamples: 100,
+        numberOfPositive: 10,
+        ...extra,
+    });
+
+    const fiveCombinations = ["O1", "O2", "O3", "O4", "O5"].map((origin) =>
+        row(origin)
+    );
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const mockContext = (overrides = {}) =>
+        usePrevalenceFilters.mockReturnValue({
+            prevalenceData: fiveCombinations,
+            loading: false,
+            prevalenceUpdateDate: null,
+            selectedChartMicroorganism: "E. Coli",
+            setSelectedChartMicroorganism: jest.fn(),
+            ...overrides,
+        });
+
+    it("plots the first four combinations together in a single graph by default", () => {
+        mockContext();
+        render(<PrevalenceChart />);
+
+        const charts = screen.getAllByTestId("chart");
+        expect(charts).toHaveLength(1);
+        expect(charts[0]).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage|O2-Matrix-Stage|O3-Matrix-Stage|O4-Matrix-Stage"
+        );
+    });
+
+    it("offers every combination in a filter above the graph and drops a deselected one from it", async () => {
+        const user = userEvent.setup();
+        mockContext();
+        render(<PrevalenceChart />);
+
+        await user.click(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        const listbox = screen.getByRole("listbox");
+        for (const origin of ["O1", "O2", "O3", "O4", "O5"]) {
+            expect(
+                within(listbox).getByRole("option", {
+                    name: `${origin}-Matrix-Stage`,
+                })
+            ).toBeInTheDocument();
+        }
+
+        await user.click(
+            within(listbox).getByRole("option", { name: "O2-Matrix-Stage" })
+        );
+
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage|O3-Matrix-Stage|O4-Matrix-Stage"
+        );
+    });
+
+    it("refuses a fifth combination and explains the limit of four", async () => {
+        const user = userEvent.setup();
+        mockContext();
+        render(<PrevalenceChart />);
+
+        await user.click(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        await user.click(
+            screen.getByRole("option", { name: "O5-Matrix-Stage" })
+        );
+
+        expect(
+            screen.getByRole("dialog", { name: "Combination_Limit_Title" })
+        ).toHaveTextContent("Combination_Limit_Message");
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage|O2-Matrix-Stage|O3-Matrix-Stage|O4-Matrix-Stage"
+        );
+    });
+
+    it("toggles between deselecting all and selecting the first four when more than four exist", async () => {
+        const user = userEvent.setup();
+        mockContext();
+        render(<PrevalenceChart />);
+
+        await user.click(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        await user.click(screen.getByRole("option", { name: "Deselect_All" }));
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            ""
+        );
+
+        await user.click(
+            screen.getByRole("option", { name: "Select_First_Four" })
+        );
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage|O2-Matrix-Stage|O3-Matrix-Stage|O4-Matrix-Stage"
+        );
+    });
+
+    it("offers a plain select-all when no more than four combinations exist", async () => {
+        const user = userEvent.setup();
+        mockContext({ prevalenceData: ["O1", "O2", "O3"].map((o) => row(o)) });
+        render(<PrevalenceChart />);
+
+        await user.click(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        await user.click(
+            screen.getByRole("option", { name: "O2-Matrix-Stage" })
+        );
+        await user.click(screen.getByRole("option", { name: "Select_All" }));
+
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage|O2-Matrix-Stage|O3-Matrix-Stage"
+        );
+    });
+
+    it("resets to the new microorganism's first combinations when the microorganism changes", async () => {
+        const user = userEvent.setup();
+        const data = [
+            ...fiveCombinations,
+            ...["S1", "S2"].map((o) =>
+                row(o, 2022, { microorganism: "Salmonella" })
+            ),
+        ];
+        mockContext({ prevalenceData: data });
+        const { rerender } = render(<PrevalenceChart />);
+
+        await user.click(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        await user.click(
+            screen.getByRole("option", { name: "O2-Matrix-Stage" })
+        );
+
+        mockContext({
+            prevalenceData: data,
+            selectedChartMicroorganism: "Salmonella",
+        });
+        rerender(<PrevalenceChart />);
+
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "S1-Matrix-Stage|S2-Matrix-Stage"
+        );
+    });
+
+    it("resets to the default combinations after a new search", async () => {
+        const user = userEvent.setup();
+        mockContext();
+        const { rerender } = render(<PrevalenceChart />);
+
+        await user.click(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        await user.click(
+            screen.getByRole("option", { name: "O2-Matrix-Stage" })
+        );
+
+        // A new search returns a different dataset for the same microorganism.
+        mockContext({
+            prevalenceData: ["O3", "O4", "O5"].map((o) => row(o, 2023)),
+        });
+        rerender(<PrevalenceChart />);
+
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O3-Matrix-Stage|O4-Matrix-Stage|O5-Matrix-Stage"
+        );
+    });
+
+    it("scales the prevalence-% axis to the plotted combinations only", () => {
+        // O5 is not plotted by default; its wide CI must not widen the axis.
+        mockContext({
+            prevalenceData: [
+                ...["O1", "O2", "O3", "O4"].map((o) => row(o)),
+                row("O5", 2022, { ciMax: 40 }),
+            ],
+        });
+        render(<PrevalenceChart />);
+
+        expect(screen.getByTestId("chart")).toHaveAttribute("data-xmax", "25");
     });
 });

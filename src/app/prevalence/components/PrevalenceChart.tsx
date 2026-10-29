@@ -1,23 +1,19 @@
-import {
-    Box,
-    CircularProgress,
-    Grid,
-    Pagination,
-    Slider,
-    Typography,
-    useMediaQuery,
-} from "@mui/material";
+import { Box, CircularProgress, Slider, Typography } from "@mui/material";
 import type { ChartConfiguration } from "chart.js";
 import { Chart as ChartJS, registerables } from "chart.js";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ChartCard } from "./ChartCard";
+import { CombinationSelect } from "./CombinationSelect";
 import { MicroorganismSelect } from "./MicroorganismSelect";
 import { usePrevalenceFilters } from "./PrevalenceDataContext";
-import { ChartDataPoint } from "./types";
+import { ChartDataPoint, ChartSeries } from "./types";
 import { getCurrentTimestamp } from "./utils";
 
 ChartJS.register(...registerables);
+
+/** The graph compares at most this many combinations (as on the AMR page). */
+const MAX_COMBINATIONS = 4;
 
 const PrevalenceChart: React.FC = () => {
     const {
@@ -28,18 +24,21 @@ const PrevalenceChart: React.FC = () => {
         setSelectedChartMicroorganism,
     } = usePrevalenceFilters();
 
-    const chartRefs = useRef<{
-        [key: string]: React.RefObject<
-            ChartJS<"bar", ChartDataPoint[], unknown>
-        >;
-    }>({});
+    const chartRef = useRef<ChartJS<"bar", ChartDataPoint[], unknown>>(null);
 
     const { t } = useTranslation(["PrevalencePage"]);
 
     const [availableMicroorganisms, setAvailableMicroorganisms] = useState<
         string[]
     >([]);
-    const [currentPage, setCurrentPage] = useState(1);
+
+    /**
+     * Combinations picked for the graph — view-only, like the Chart year
+     * window. `null` means "the default": the first MAX_COMBINATIONS.
+     */
+    const [chosenCombinations, setChosenCombinations] = useState<
+        string[] | null
+    >(null);
 
     /**
      * Chart year window — a view-only range over the chart's year (y) axis.
@@ -97,8 +96,11 @@ const PrevalenceChart: React.FC = () => {
         setChartYearRange(null);
     }, [selectedChartMicroorganism, microYearMin, microYearMax]);
 
-    const chartsPerPage = 2;
-    const isSmallScreen = useMediaQuery("(max-width:1600px)");
+    // A new microorganism or a new search brings its own combinations: fall
+    // back to the default rather than keep picks that may no longer exist.
+    useEffect(() => {
+        setChosenCombinations(null);
+    }, [selectedChartMicroorganism, prevalenceData]);
 
     const updateAvailableMicroorganisms = (): void => {
         const microorganismsWithData = Array.from(
@@ -119,10 +121,6 @@ const PrevalenceChart: React.FC = () => {
     useEffect(() => {
         if (prevalenceData.length > 0) updateAvailableMicroorganisms();
     }, [prevalenceData]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedChartMicroorganism]);
 
     const generateChartData = (): {
         [key: string]: { [key: number]: ChartDataPoint };
@@ -150,15 +148,18 @@ const PrevalenceChart: React.FC = () => {
 
     const chartData = generateChartData();
     const chartKeys = Object.keys(chartData);
-    const totalCharts = chartKeys.length;
-    const totalPages = Math.ceil(totalCharts / chartsPerPage);
 
-    const displayedChartsSet = new Set(
-        chartKeys.slice(
-            (currentPage - 1) * chartsPerPage,
-            currentPage * chartsPerPage
-        )
+    // The combinations compared in the one graph: the user's pick, else the
+    // first MAX_COMBINATIONS. Plotted in data order so colours stay stable.
+    const selectedCombinations =
+        chosenCombinations ?? chartKeys.slice(0, MAX_COMBINATIONS);
+    const plottedCombinations = chartKeys.filter((key) =>
+        selectedCombinations.includes(key)
     );
+    const series: ChartSeries[] = plottedCombinations.map((key) => ({
+        label: key,
+        data: chartData[key],
+    }));
 
     const [rangeLo, rangeHi] = activeRange;
 
@@ -173,12 +174,12 @@ const PrevalenceChart: React.FC = () => {
         [microYears, rangeLo, rangeHi]
     );
 
-    // The prevalence-% axis rescales to the Chart year window: only CIs of years
-    // currently visible count. Zooming to low-prevalence years gives more detail,
+    // The prevalence-% axis rescales to what is plotted: only CIs of the
+    // selected combinations, in years currently visible, count. Zooming to low-prevalence years gives more detail,
     // and because the PNG "Download chart" figure is WYSIWYG it captures this
     // rescaled axis — while the CSV "Data download" stays full and unaffected.
     const visibleYears = new Set(yearsToShow);
-    const allCiMaxValues = Object.values(chartData).flatMap((yearData) =>
+    const allCiMaxValues = series.flatMap(({ data: yearData }) =>
         Object.entries(yearData)
             .filter(([year]) => visibleYears.has(Number(year)))
             .map(([, data]) => data.ciMax)
@@ -191,14 +192,14 @@ const PrevalenceChart: React.FC = () => {
     };
 
     const downloadChart = async (
-        chartRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
+        targetRef: React.RefObject<ChartJS<"bar", ChartDataPoint[], unknown>>,
         chartKey: string
     ): Promise<void> => {
-        if (!chartRef.current) {
+        if (!targetRef.current) {
             console.error("Chart reference is undefined");
             return;
         }
-        const originalChart = chartRef.current;
+        const originalChart = targetRef.current;
 
         const canvasWidth = 1380;
         const canvasHeight = 1000;
@@ -314,6 +315,12 @@ const PrevalenceChart: React.FC = () => {
                         availableMicroorganisms={availableMicroorganisms}
                         setCurrentMicroorganism={setSelectedChartMicroorganism}
                     />
+                    <CombinationSelect
+                        availableCombinations={chartKeys}
+                        selectedCombinations={selectedCombinations}
+                        setSelectedCombinations={setChosenCombinations}
+                        maxCombinations={MAX_COMBINATIONS}
+                    />
                     {microYears.length >= 2 && (
                         <Box sx={{ px: 1, mt: 1 }}>
                             <Typography
@@ -366,88 +373,20 @@ const PrevalenceChart: React.FC = () => {
                             {t("No_data_available")}
                         </Typography>
                     ) : (
-                        <>
-                            <Grid container rowSpacing={0} columnSpacing={2}>
-                                {chartKeys.map((key, index) => {
-                                    const sanitizedKey = sanitizeKey(key);
-                                    const refKey = `${sanitizedKey}-${selectedChartMicroorganism}`;
-
-                                    if (!chartRefs.current[refKey]) {
-                                        chartRefs.current[refKey] =
-                                            React.createRef<
-                                                ChartJS<
-                                                    "bar",
-                                                    ChartDataPoint[],
-                                                    unknown
-                                                >
-                                            >();
-                                    }
-
-                                    const isDisplayed =
-                                        displayedChartsSet.has(key);
-
-                                    return (
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            sm={12}
-                                            md={isSmallScreen ? 12 : 6}
-                                            lg={isSmallScreen ? 12 : 6}
-                                            key={refKey}
-                                            sx={{
-                                                visibility: isDisplayed
-                                                    ? "visible"
-                                                    : "hidden",
-                                                height: isDisplayed
-                                                    ? "auto"
-                                                    : 0,
-                                                overflow: "hidden",
-                                            }}
-                                        >
-                                            <ChartCard
-                                                chartKey={key}
-                                                colorIndex={index}
-                                                chartData={chartData[key]}
-                                                chartRef={
-                                                    chartRefs.current[refKey]
-                                                }
-                                                currentMicroorganism={
-                                                    selectedChartMicroorganism
-                                                }
-                                                yearsToShow={yearsToShow}
-                                                xAxisMax={xAxisMax}
-                                                downloadChart={downloadChart}
-                                                prevalenceUpdateDate={
-                                                    prevalenceUpdateDate
-                                                }
-                                            />
-                                        </Grid>
-                                    );
-                                })}
-                            </Grid>
-
-                            <Box
-                                sx={{
-                                    position: "sticky",
-                                    bottom: 0,
-                                    zIndex: 1000,
-                                    padding: 2,
-                                    backgroundColor: "rgb(219, 228, 235)",
-                                }}
-                            >
-                                <Pagination
-                                    count={totalPages}
-                                    page={currentPage}
-                                    onChange={(_, value) =>
-                                        setCurrentPage(value)
-                                    }
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                    }}
-                                />
-                            </Box>
-                        </>
+                        <Box sx={{ maxWidth: 1400, mx: "auto", width: "100%" }}>
+                            <ChartCard
+                                chartKey={selectedChartMicroorganism ?? ""}
+                                series={series}
+                                chartRef={chartRef}
+                                currentMicroorganism={
+                                    selectedChartMicroorganism
+                                }
+                                yearsToShow={yearsToShow}
+                                xAxisMax={xAxisMax}
+                                downloadChart={downloadChart}
+                                prevalenceUpdateDate={prevalenceUpdateDate}
+                            />
+                        </Box>
                     )}
                 </>
             )}
