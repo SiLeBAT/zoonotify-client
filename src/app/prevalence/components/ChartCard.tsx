@@ -32,17 +32,32 @@ const CHART_PALETTE = [
 const colorForIndex = (index: number): string =>
     CHART_PALETTE[index % CHART_PALETTE.length];
 
+/** ----------------------------- Layout ----------------------------- */
+// Baseline of the microorganism title, and the top padding that keeps the band
+// above it clear so the legend always starts below the title.
+const TITLE_BASELINE = 28;
+const TITLE_BAND = 44;
+// Below this many pixels per bar, comparing combinations gets unreadable, so
+// the card grows instead of squeezing the bars.
+const MIN_BAR_PX = 16;
+const BASE_CARD_HEIGHT = 620;
+// Card height outside the plotted rows: title, legend, x-axis, button.
+const CARD_CHROME_PX = 260;
+
 /** ----------------------------- Title plugin ----------------------------- */
 const customTitlePlugin = (microName: string | null): Plugin => ({
     id: "customTitle",
     beforeDraw(chart: ChartJS) {
-        const { ctx, chartArea, width } = chart;
+        const { ctx, width } = chart;
         if (!microName) return;
 
         const formattedWords: WordObject[] =
             formatMicroorganismNameArray(microName);
 
-        const titleYPosition = chartArea.top - 50;
+        // A fixed band at the top of the canvas, kept free by the layout's top
+        // padding: anchoring to chartArea.top collided with the legend as soon
+        // as several combinations wrapped it onto a second row.
+        const titleYPosition = TITLE_BASELINE;
 
         ctx.save();
         ctx.textAlign = "left";
@@ -112,11 +127,25 @@ const ChartCard: React.FC<ChartCardProps> = ({
     // ✅ Make category labels strings
     const yearLabels = useMemo(() => yearsDesc.map(String), [yearsDesc]);
 
+    // Every year row is equally tall, so size the rows for the busiest year:
+    // the most combinations with data in any one year (skipNull leaves no
+    // slot for a combination without data).
+    const barsInBusiestYear = Math.max(
+        1,
+        ...yearsDesc.map(
+            (year) => series.filter(({ data }) => data[year]).length
+        )
+    );
+    const cardHeight = Math.max(
+        BASE_CARD_HEIGHT,
+        CARD_CHROME_PX + yearsDesc.length * barsInBusiestYear * MIN_BAR_PX
+    );
+
     return (
         <Box
             sx={{
                 backgroundColor: "white",
-                height: "620px",
+                height: `${cardHeight}px`,
                 pt: 2,
                 px: 5,
                 pb: 8,
@@ -131,28 +160,36 @@ const ChartCard: React.FC<ChartCardProps> = ({
                     labels: yearLabels,
                     datasets: series.map(({ label, data }, index) => ({
                         label,
-                        data: yearsDesc.map((year) => {
-                            const d =
-                                data[year] ||
-                                ({
-                                    x: 0,
-                                    y: String(year),
-                                    ciMin: 0,
-                                    ciMax: 0,
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                } as any);
-
-                            // ✅ Force y to be the category label (string)
-                            return { ...d, y: String(year) };
-                        }) as unknown as ChartDataPoint[],
+                        // ✅ Force y to be the category label (string). A year
+                        // this combination has no data for is a null value, not
+                        // a 0 % bar: "not sampled" must not read as "0 % positive".
+                        data: yearsDesc.map((year) =>
+                            data[year]
+                                ? { ...data[year], y: String(year) }
+                                : { x: null, y: String(year) }
+                        ) as unknown as ChartDataPoint[],
                         backgroundColor: colorForIndex(index),
+                        // Let the compared bars fill most of each year row, and
+                        // give a year's row only to the combinations it has data
+                        // for (skipNull) instead of leaving empty slots.
+                        categoryPercentage: 0.9,
+                        barPercentage: 0.95,
+                        // Capped so a lone bar is not much thicker than the
+                        // bars of a busy year.
+                        maxBarThickness: 22,
+                        skipNull: true,
                     })),
                 }}
                 options={{
                     indexAxis: "y",
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 30, bottom: 15, left: 0, right: 0 },
+                        padding: {
+                            top: TITLE_BAND,
+                            bottom: 15,
+                            left: 0,
+                            right: 0,
+                        },
                     },
                     scales: {
                         x: {

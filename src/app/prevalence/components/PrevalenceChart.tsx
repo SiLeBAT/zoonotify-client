@@ -164,14 +164,17 @@ const PrevalenceChart: React.FC = () => {
     const [rangeLo, rangeHi] = activeRange;
 
     /**
-     * Years shown on the charts = the selected microorganism's years that fall
-     * inside the Chart year window. Intersection (not a contiguous fill), so a
-     * non-contiguous left-panel year filter is respected and years the micro has
-     * no data for drop out rather than showing as empty rows.
+     * Years shown on the chart = years a plotted combination has data for that
+     * fall inside the Chart year window. Intersection (not a contiguous fill),
+     * so a non-contiguous left-panel year filter is respected and years without
+     * plotted data drop out rather than showing as empty rows — each empty row
+     * would otherwise squeeze the bars of the compared combinations.
      */
-    const yearsToShow = useMemo(
-        () => microYears.filter((y) => y >= rangeLo && y <= rangeHi),
-        [microYears, rangeLo, rangeHi]
+    const plottedYears = new Set(
+        series.flatMap(({ data }) => Object.keys(data).map(Number))
+    );
+    const yearsToShow = microYears.filter(
+        (y) => plottedYears.has(y) && y >= rangeLo && y <= rangeHi
     );
 
     // The prevalence-% axis rescales to what is plotted: only CIs of the

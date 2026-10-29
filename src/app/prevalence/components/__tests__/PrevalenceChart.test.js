@@ -493,4 +493,22 @@ describe("PrevalenceChart — comparing combinations in one graph", () => {
 
         expect(screen.getByTestId("chart")).toHaveAttribute("data-xmax", "25");
     });
+
+    it("shows only the years that a plotted combination has data for", () => {
+        // 2021 exists only for O5, which is not plotted by default.
+        mockContext({
+            prevalenceData: [
+                row("O1", 2020),
+                row("O1", 2022),
+                ...["O2", "O3", "O4"].map((o) => row(o, 2022)),
+                row("O5", 2021),
+            ],
+        });
+        render(<PrevalenceChart />);
+
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-labels",
+            "2022,2020"
+        );
+    });
 });
