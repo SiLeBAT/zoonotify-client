@@ -2,7 +2,15 @@ import React, { useRef, useState } from "react";
 import { Box, Button, Chip, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { DataIndex, FoundLink, Lang, LinkFinder, OrganismChoice } from "..";
+import {
+    DataIndex,
+    FoundLink,
+    Lang,
+    LinkFinder,
+    LinkKind,
+    linkKind,
+    OrganismChoice,
+} from "..";
 
 type State =
     | { kind: "idle" }
@@ -15,7 +23,7 @@ type State =
           /** Organisms to pick from, with the text they re-run. */
           chooseOrganism?: OrganismChoice[];
           noResistanceData?: true;
-          searched?: string;
+          searched: string;
       };
 
 export interface LinkFinderSearchProps {
@@ -24,10 +32,11 @@ export interface LinkFinderSearchProps {
 }
 
 /** The i18n key of the page a link opens. */
-function pageTitleKey(link: FoundLink): string {
-    if (link.page === "prevalence") return "PagePrevalence";
-    return link.view === "trend" ? "PageAmrTrend" : "PageAmrSubstance";
-}
+const TITLE_KEY_OF_KIND: { [K in LinkKind]: string } = {
+    prevalence: "PagePrevalence",
+    amrSubstance: "PageAmrSubstance",
+    amrTrend: "PageAmrTrend",
+};
 
 function toLang(language: string | undefined): Lang {
     return language && language.toLowerCase().startsWith("en") ? "en" : "de";
@@ -53,9 +62,7 @@ export function LinkFinderSearch({
         setState({ kind: "searching" });
         try {
             const lang = toLang(i18n.language);
-            const result = organism
-                ? await finder.find(searched, lang, index, organism)
-                : await finder.find(searched, lang, index);
+            const result = await finder.find(searched, lang, index, organism);
             if (mine === latest.current)
                 setState({ kind: "done", ...result, searched });
         } catch {
@@ -154,7 +161,7 @@ export function LinkFinderSearch({
                             variant="outlined"
                             size="small"
                             onClick={() =>
-                                void run(state.searched ?? "", choice.organism)
+                                void run(state.searched, choice.organism)
                             }
                         >
                             {choice.label}
@@ -183,7 +190,7 @@ export function LinkFinderSearch({
                                 }}
                             >
                                 <Typography component="span" fontWeight="bold">
-                                    {t(pageTitleKey(link))}
+                                    {t(TITLE_KEY_OF_KIND[linkKind(link)])}
                                 </Typography>
                                 {link.closest && (
                                     <Typography

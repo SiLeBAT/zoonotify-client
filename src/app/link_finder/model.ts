@@ -71,6 +71,14 @@ export interface LinkSpec {
     without?: { dim: Dim | "samplingYear"; values: string[] }[];
 }
 
+/** What a link opens: its page and, on the AMR page, its graph. */
+export type LinkKind = "prevalence" | "amrSubstance" | "amrTrend";
+
+export function linkKind(link: LinkSpec): LinkKind {
+    if (link.page === "prevalence") return "prevalence";
+    return link.view === "trend" ? "amrTrend" : "amrSubstance";
+}
+
 /** One filter of a link, as the visitor reads it. */
 export interface FilterLabel {
     dim: Dim | "samplingYear";

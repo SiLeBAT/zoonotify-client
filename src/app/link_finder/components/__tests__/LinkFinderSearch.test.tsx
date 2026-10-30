@@ -66,7 +66,12 @@ describe("LinkFinderSearch", () => {
         expect(link).toHaveAttribute("href", EXACT.url);
         expect(within(link).getByText("Salmonella spp.")).toBeInTheDocument();
         expect(within(link).getByText("Fresh meat")).toBeInTheDocument();
-        expect(find).toHaveBeenCalledWith("Salmonella in meat", "en", index);
+        expect(find).toHaveBeenCalledWith(
+            "Salmonella in meat",
+            "en",
+            index,
+            undefined
+        );
     });
 
     it("names the unmatched words", async () => {

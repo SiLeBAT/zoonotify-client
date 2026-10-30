@@ -6,6 +6,8 @@ import {
     Filters,
     FoundLink,
     Lang,
+    LinkKind,
+    linkKind,
     LinkSpec,
 } from "./model";
 import { Parsed } from "./match";
@@ -15,6 +17,7 @@ import {
     AMR_ORGANISMS_WITHOUT_DATA,
 } from "../antibiotic_resistance/pages/amrOrganisms";
 import { encodeSubstanceState } from "../antibiotic_resistance/pages/substanceUrlState";
+import { LANG_PARAM } from "../shared/seo/seo.model";
 
 const PREVALENCE_DIMS: Dim[] = [
     "superCategorySampleOrigin",
@@ -242,7 +245,7 @@ function prevalenceUrl(list: WordList, link: LinkSpec, lang: Lang): string {
         for (const v of link.filters[d] ?? [])
             q.append(d, localName(list, d, v, lang));
     for (const y of link.years ?? []) q.append("samplingYear", String(y));
-    q.set("lang", lang);
+    q.set(LANG_PARAM, lang);
     return `/prevalence?${q.toString()}`;
 }
 
@@ -268,7 +271,7 @@ function substanceUrl(list: WordList, link: LinkSpec, lang: Lang): string {
         },
         lang
     );
-    return `/antibiotic-resistance?s=${s}&lang=${lang}`;
+    return `/antibiotic-resistance?s=${s}&${LANG_PARAM}=${lang}`;
 }
 
 /** AMR trend view: plain params, several values joined by commas as the view reads them. */
@@ -287,15 +290,17 @@ function trendUrl(list: WordList, link: LinkSpec, lang: Lang): string {
                     .map((v) => localName(list, d, v, lang))
                     .join(",")
             );
-    q.set("lang", lang);
+    q.set(LANG_PARAM, lang);
     return `/antibiotic-resistance?${q.toString()}`;
 }
 
-function buildUrl(list: WordList, link: LinkSpec, lang: Lang): string {
-    if (link.page === "prevalence") return prevalenceUrl(list, link, lang);
-    if (link.view === "trend") return trendUrl(list, link, lang);
-    return substanceUrl(list, link, lang);
-}
+const URL_OF_KIND: {
+    [K in LinkKind]: (list: WordList, link: LinkSpec, lang: Lang) => string;
+} = {
+    prevalence: prevalenceUrl,
+    amrSubstance: substanceUrl,
+    amrTrend: trendUrl,
+};
 
 function buildLabels(
     list: WordList,
@@ -318,7 +323,7 @@ export function organismLabel(list: WordList, cms: string, lang: Lang): string {
 export function toFound(list: WordList, link: LinkSpec, lang: Lang): FoundLink {
     return {
         ...link,
-        url: buildUrl(list, link, lang),
+        url: URL_OF_KIND[linkKind(link)](list, link, lang),
         labels: buildLabels(list, link, lang),
         dropped: ([] as FilterLabel[]).concat(
             ...(link.without ?? []).map(({ dim, values }) =>
