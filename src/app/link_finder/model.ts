@@ -67,6 +67,8 @@ export interface LinkSpec {
     latest?: boolean;
     /** The link drops something the search asked for, to avoid an empty page. */
     closest?: boolean;
+    /** What a closest link dropped: the values the search asked for, English official names. */
+    without?: { dim: Dim | "samplingYear"; values: string[] }[];
 }
 
 /** One filter of a link, as the visitor reads it. */
@@ -80,6 +82,8 @@ export interface FoundLink extends LinkSpec {
     url: string;
     /** One label per filter value set, in the link's language. */
     labels: FilterLabel[];
+    /** What a closest link dropped, one label per value, in the link's language; empty for an exact link. */
+    dropped: FilterLabel[];
 }
 
 /** An organism the visitor may pick when a resistance search names none. */

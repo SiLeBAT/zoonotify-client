@@ -29,6 +29,7 @@ const EXACT: FoundLink = {
         { dim: "microorganism", text: "Salmonella spp." },
         { dim: "matrix", text: "Fresh meat" },
     ],
+    dropped: [],
 };
 
 function fakeFinder(answer: () => Promise<LinkFinderResult>): {
@@ -108,6 +109,44 @@ describe("LinkFinderSearch", () => {
         expect(within(link).getByText("Closest")).toBeInTheDocument();
     });
 
+    it("says on a closest link which filters it dropped", async () => {
+        const { finder } = fakeFinder(() =>
+            Promise.resolve({
+                links: [
+                    {
+                        ...EXACT,
+                        closest: true,
+                        dropped: [
+                            { dim: "sampleOrigin", text: "Cattle" },
+                            { dim: "samplingYear", text: "2009" },
+                        ],
+                    },
+                ],
+                unmatched: [],
+            })
+        );
+        renderSearch(finder);
+
+        await search("Salmonella in cattle meat 2009");
+
+        const link = await screen.findByRole("link", { name: /Prevalence/ });
+        expect(
+            within(link).getByText('Without {"values":"Cattle, 2009"}')
+        ).toBeInTheDocument();
+    });
+
+    it("shows no dropped-filter note on an exact link", async () => {
+        const { finder } = fakeFinder(() =>
+            Promise.resolve({ links: [EXACT], unmatched: [] })
+        );
+        renderSearch(finder);
+
+        await search("Salmonella in meat");
+
+        const link = await screen.findByRole("link", { name: /Prevalence/ });
+        expect(within(link).queryByText(/Without/)).not.toBeInTheDocument();
+    });
+
     it("titles AMR links by their graph", async () => {
         const amr: FoundLink = {
             page: "amr",
@@ -115,6 +154,7 @@ describe("LinkFinderSearch", () => {
             filters: { microorganism: ["Campylobacter spp."] },
             url: "/antibiotic-resistance?s=abc&lang=en",
             labels: [{ dim: "microorganism", text: "Campylobacter spp." }],
+            dropped: [],
         };
         const { finder } = fakeFinder(() =>
             Promise.resolve({
@@ -174,6 +214,7 @@ describe("LinkFinderSearch", () => {
             },
             url: "/antibiotic-resistance?microorganism=Campylobacter+spp.&view=trend&lang=en",
             labels: [{ dim: "microorganism", text: "Campylobacter spp." }],
+            dropped: [],
         };
         const { finder, find } = fakeFinder(() =>
             Promise.resolve({

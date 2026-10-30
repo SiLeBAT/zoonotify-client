@@ -3,6 +3,7 @@
 import {
     candidates,
     checkLinks,
+    dedupeByUrl,
     organismChoices,
     organismLabel,
     toFound,
@@ -112,9 +113,9 @@ export function createLinkFinder(
                     index
                 );
             return {
-                links: checked
-                    .slice(0, SHOWN_LINKS)
-                    .map((l) => toFound(list, l, lang)),
+                links: dedupeByUrl(
+                    checked.map((l) => toFound(list, l, lang))
+                ).slice(0, SHOWN_LINKS),
                 unmatched: parsed.unmatched,
             };
         },

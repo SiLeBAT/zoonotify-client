@@ -191,6 +191,24 @@ export function LinkFinderSearch({
                                         {t("Closest")}
                                     </Typography>
                                 )}
+                                {link.dropped.length > 0 && (
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        sx={{
+                                            display: "block",
+                                            mt: 0.5,
+                                            fontStyle: "italic",
+                                            color: "text.secondary",
+                                        }}
+                                    >
+                                        {t("Without", {
+                                            values: link.dropped
+                                                .map((d) => d.text)
+                                                .join(", "),
+                                        })}
+                                    </Typography>
+                                )}
                                 <Box
                                     component="span"
                                     sx={{

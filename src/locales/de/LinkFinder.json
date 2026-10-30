@@ -13,5 +13,6 @@
   "PagePrevalence": "Prävalenz",
   "PageAmrSubstance": "Antibiotikaresistenz: Substanzgraph",
   "PageAmrTrend": "Antibiotikaresistenz: Trendgraph",
-  "Closest": "nächster Treffer"
+  "Closest": "nächster Treffer",
+  "Without": "ohne: {{values}}"
 }

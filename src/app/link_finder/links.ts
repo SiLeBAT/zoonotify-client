@@ -179,12 +179,25 @@ function relaxations(link: LinkSpec): LinkSpec[] {
                     years: undefined,
                     latest: false,
                     closest: true,
+                    without: link.years
+                        ? [
+                              {
+                                  dim: "samplingYear",
+                                  values: link.years.map(String),
+                              },
+                          ]
+                        : [],
                 });
         } else if (link.filters[what]) {
             const filters = { ...link.filters };
             delete filters[what];
             if (Object.keys(filters).length > (link.page === "amr" ? 1 : 0))
-                out.push({ ...link, filters, closest: true });
+                out.push({
+                    ...link,
+                    filters,
+                    closest: true,
+                    without: [{ dim: what, values: link.filters[what] ?? [] }],
+                });
         }
     }
     return out;
@@ -307,5 +320,43 @@ export function toFound(list: WordList, link: LinkSpec, lang: Lang): FoundLink {
         ...link,
         url: buildUrl(list, link, lang),
         labels: buildLabels(list, link, lang),
+        dropped: ([] as FilterLabel[]).concat(
+            ...(link.without ?? []).map(({ dim, values }) =>
+                values.map((v) => ({
+                    dim,
+                    text:
+                        dim === "samplingYear"
+                            ? v
+                            : localName(list, dim, v, lang),
+                }))
+            )
+        ),
     };
+}
+
+/**
+ * One link per URL: two closest links can coincide (sibling species relaxing `specie`).
+ * The kept one names everything either dropped.
+ */
+export function dedupeByUrl(links: FoundLink[]): FoundLink[] {
+    const out: FoundLink[] = [];
+    const byUrl = new Map<string, FoundLink>();
+    for (const link of links) {
+        const seen = byUrl.get(link.url);
+        if (!seen) {
+            const copy = {
+                ...link,
+                dropped: link.dropped.slice(),
+                without: link.without?.slice(),
+            };
+            byUrl.set(link.url, copy);
+            out.push(copy);
+            continue;
+        }
+        for (const d of link.dropped)
+            if (!seen.dropped.some((s) => s.dim === d.dim && s.text === d.text))
+                seen.dropped.push(d);
+        seen.without = (seen.without ?? []).concat(link.without ?? []);
+    }
+    return out;
 }
