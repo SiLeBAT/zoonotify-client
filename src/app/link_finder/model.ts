@@ -1,0 +1,96 @@
+// Types of the Link Finder (terms: docs/context/link-finder.md in the monorepo).
+
+export type Lang = "en" | "de";
+export type Page = "prevalence" | "amr";
+export type AmrView = "substance" | "trend";
+
+/** Filter dimensions, named as the pages' URLs name them. Values are English official names, substances by code. */
+export type Dim =
+    | "microorganism"
+    | "specie"
+    | "superCategorySampleOrigin"
+    | "sampleOrigin"
+    | "samplingStage"
+    | "matrixGroup"
+    | "matrix"
+    | "antimicrobialSubstance";
+
+/** Broadest first: when one name exists in two dimensions, the earlier one wins. */
+export const DIMS: Dim[] = [
+    "microorganism",
+    "specie",
+    "superCategorySampleOrigin",
+    "sampleOrigin",
+    "samplingStage",
+    "matrixGroup",
+    "matrix",
+    "antimicrobialSubstance",
+];
+
+export type Filters = { [D in Dim]?: string[] };
+
+/** The English and German official names of one value. */
+export interface ValuePair {
+    en: string;
+    de: string;
+}
+
+/** The official names, as fetched from both CMS locales and joined by documentId. */
+export interface OfficialNames {
+    /** Per dimension (plus `sampleType`, understood but never linked). */
+    values: { [dim: string]: ValuePair[] };
+    substances: { code: string; nameDe: string; classDe: string | null }[];
+}
+
+/** One row of the everyday-words table: one meaning. */
+export interface EverydayWord {
+    id: string;
+    category: string;
+    en: string[];
+    de: string[];
+    /** Values it sets: substances by code, every other value by English official name. */
+    sets?: Filters;
+    page?: Page;
+    view?: AmrView;
+}
+
+/** English drug names, by substance code. */
+export type EnglishSubstanceNames = { [code: string]: string };
+
+/** A link before it becomes a URL. */
+export interface LinkSpec {
+    page: Page;
+    view?: AmrView;
+    filters: Filters;
+    years?: number[];
+    /** The search asked for the latest year; `years` is resolved from the data. */
+    latest?: boolean;
+    /** The link drops something the search asked for, to avoid an empty page. */
+    closest?: boolean;
+}
+
+/** One filter of a link, as the visitor reads it. */
+export interface FilterLabel {
+    dim: Dim | "samplingYear";
+    text: string;
+}
+
+export interface FoundLink extends LinkSpec {
+    /** Site-relative URL carrying `?lang=`. */
+    url: string;
+    /** One label per filter value set, in the link's language. */
+    labels: FilterLabel[];
+}
+
+export interface LinkFinderResult {
+    /** At most three, each confirmed to have data. */
+    links: FoundLink[];
+    /** Words that matched nothing, as typed. */
+    unmatched: string[];
+}
+
+/** Answers "would this link draw something?" without ever seeing the search text. */
+export interface DataIndex {
+    /** Newest year with data for this link, or undefined when it has none. */
+    newestYear(link: LinkSpec): Promise<number | undefined>;
+}
