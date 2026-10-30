@@ -1,0 +1,14 @@
+{
+  "Heading": "Suche in eigenen Worten",
+  "SearchLabel": "Wonach suchen Sie?",
+  "Placeholder": "z. B. Salmonellen in Kalbfleisch",
+  "SearchButton": "Suchen",
+  "Searching": "Suche läuft …",
+  "Found": "{{count}} Link gefunden.",
+  "Found_plural": "{{count}} Links gefunden.",
+  "NoLinks": "Keine Links gefunden. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
+  "Unmatched": "Nicht erkannt: {{words}}",
+  "Unavailable": "Die Suche ist gerade nicht verfügbar. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
+  "PagePrevalence": "Prävalenz",
+  "Closest": "nächster Treffer"
+}

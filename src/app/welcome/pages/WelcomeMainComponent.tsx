@@ -4,6 +4,7 @@ import { LogoCardComponent } from "../../shared/components/logo_card/LogoCard.co
 import { useWelcomePageComponent } from "./welcomeUseCase";
 import Markdown from "markdown-to-jsx";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
+import { SiteLinkFinder } from "../../link_finder/components/SiteLinkFinder.component";
 
 // Note: Add global CSS to src/index.css or src/App.css
 // html, body {
@@ -44,6 +45,7 @@ export function WelcomeMainComponent(): JSX.Element {
                         },
                     }}
                 >
+                    <SiteLinkFinder />
                     {/* Wrapper for LogoCardComponent styling */}
                     <Box
                         sx={{

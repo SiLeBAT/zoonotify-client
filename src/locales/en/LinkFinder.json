@@ -1,0 +1,14 @@
+{
+  "Heading": "Search in your own words",
+  "SearchLabel": "What are you looking for?",
+  "Placeholder": "e.g. Salmonella in veal",
+  "SearchButton": "Search",
+  "Searching": "Searching…",
+  "Found": "{{count}} link found.",
+  "Found_plural": "{{count}} links found.",
+  "NoLinks": "No links found. Please use the filters in the side panel of the data pages.",
+  "Unmatched": "Not recognised: {{words}}",
+  "Unavailable": "The search is unavailable right now. Please use the filters in the side panel of the data pages.",
+  "PagePrevalence": "Prevalence",
+  "Closest": "closest match"
+}

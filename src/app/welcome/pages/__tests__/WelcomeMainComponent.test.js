@@ -1,6 +1,7 @@
 // WelcomeMainComponent.test.js
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { WelcomeMainComponent } from "../WelcomeMainComponent";
 import { useWelcomePageComponent } from "../welcomeUseCase";
 
@@ -36,7 +37,11 @@ describe("WelcomeMainComponent", () => {
         // Mock the use case to return the expected model
         useWelcomePageComponent.mockReturnValue({ model: mockModel });
 
-        render(<WelcomeMainComponent />);
+        render(
+            <MemoryRouter>
+                <WelcomeMainComponent />
+            </MemoryRouter>
+        );
 
         // Use screen.debug to print the DOM tree
         screen.debug();
@@ -44,5 +49,20 @@ describe("WelcomeMainComponent", () => {
         const logoCardProps = screen.getByTestId("logoCard").textContent;
         expect(logoCardProps).toContain("Discover Microbial Data");
         expect(logoCardProps).toContain("Welcome to ZooNotify!");
+    });
+
+    it("offers the plain-language search box", () => {
+        useWelcomePageComponent.mockReturnValue({
+            model: { subtitle: "", content: "" },
+        });
+
+        render(
+            <MemoryRouter>
+                <WelcomeMainComponent />
+            </MemoryRouter>
+        );
+
+        expect(screen.getByRole("search")).toBeInTheDocument();
+        expect(screen.getByRole("searchbox")).toBeInTheDocument();
     });
 });
