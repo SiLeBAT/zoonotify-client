@@ -1,6 +1,6 @@
 // The Link Finder facade: search text + language + data index in, checked links out.
 // Nothing here sends the search text anywhere; the data index sees only built links.
-import { candidates, checkLinks, toFound } from "./links";
+import { candidates, checkLinks, dedupeByUrl, toFound } from "./links";
 import { parse } from "./match";
 import {
     DataIndex,
@@ -76,9 +76,9 @@ export function createLinkFinder(
                     index
                 );
             return {
-                links: checked
-                    .slice(0, SHOWN_LINKS)
-                    .map((l) => toFound(list, l, lang)),
+                links: dedupeByUrl(
+                    checked.map((l) => toFound(list, l, lang))
+                ).slice(0, SHOWN_LINKS),
                 unmatched: parsed.unmatched,
             };
         },
