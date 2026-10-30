@@ -171,7 +171,9 @@ export function checkEverydayWords(
             for (const v of sets[dim] ?? [])
                 if (!known.has(v))
                     errors.push(
-                        `${row.id}: ${dim} "${v}" is not a current value`
+                        `${row.id} (${row.en
+                            .concat(row.de)
+                            .join(", ")}): ${dim} "${v}" is not a current value`
                     );
         }
     }

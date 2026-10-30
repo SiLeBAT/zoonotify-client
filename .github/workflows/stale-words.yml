@@ -1,0 +1,60 @@
+name: Link Finder stale-word check
+
+# Checks the Link Finder's everyday words against the PRODUCTION CMS public API
+# (https://zoonotify.bfr.berlin/cms/api, both locales). Each CMS import deletes and
+# recreates every value, so an import that renames or removes one silently breaks the
+# everyday words pointing at it. The job fails naming each stale row, its words and the
+# missing official name or substance code; fix the row in
+# src/app/link_finder/wordList/everyday-words.json.
+#
+# When it runs: daily at 05:17 UTC (imports land on the CMS, not in this repo), on PRs
+# and pushes to develop that touch the Link Finder, and by hand. A manual run can check
+# another CMS (e.g. QA) through the `cms_api` input.
+#
+# It needs the network, so it is not part of `npm test` or the pre-commit hook; locally:
+# `npm run check:stale-words` (LINK_FINDER_CMS_API overrides the CMS).
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+    inputs:
+      cms_api:
+        description: 'CMS public API base to check'
+        required: false
+        default: 'https://zoonotify.bfr.berlin/cms/api'
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'src/app/link_finder/**'
+      - 'jest.live.config.js'
+      - '.github/workflows/stale-words.yml'
+  push:
+    branches:
+      - develop
+    paths:
+      - 'src/app/link_finder/**'
+      - 'jest.live.config.js'
+      - '.github/workflows/stale-words.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stale-words-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  stale-words:
+    name: 'Check everyday words against the production CMS'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run check:stale-words
+        env:
+          LINK_FINDER_CMS_API: ${{ inputs.cms_api || 'https://zoonotify.bfr.berlin/cms/api' }}
