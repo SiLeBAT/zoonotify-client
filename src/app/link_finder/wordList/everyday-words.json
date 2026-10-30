@@ -34,6 +34,8 @@
  {"id": "stage-slaughter", "category": "food and animals", "en": ["slaughterhouse", "abattoir", "abattoirs", "at slaughter"], "de": ["Schlachthöfe", "Schlachtung", "Schlachthof"], "sets": {"samplingStage": ["Slaughterhouses"]}},
  {"id": "stage-retail", "category": "food and animals", "en": ["shop", "shops", "supermarket", "supermarkets", "store", "stores"], "de": ["Handel", "Supermarkt", "Laden", "Läden"], "sets": {"samplingStage": ["Retail"]}},
  {"id": "stage-farm", "category": "food and animals", "en": ["farms", "on farm", "on farms", "barn"], "de": ["Bauernhof", "Stall", "Tierhaltung"], "sets": {"samplingStage": ["Farm"]}},
+ {"id": "stage-import", "category": "food and animals", "en": ["imported", "import", "imports", "importing"], "de": ["Einfuhr", "Einfuhren", "eingeführt", "importiert", "Importware", "Importe"], "sets": {"samplingStage": ["Points of import"]}},
+ {"id": "stage-border", "category": "food and animals", "en": ["border", "borders", "border control", "border controls", "border check", "border checks", "border inspection post", "border inspection posts"], "de": ["Grenze", "Grenzen", "Grenzkontrolle", "Grenzkontrollen", "Grenzkontrollstelle", "Grenzübergang", "Grenzkontrollposten"], "sets": {"samplingStage": ["Border control posts"]}},
 
  {"id": "org-salmonella", "category": "organisms", "en": ["salmonellae", "salmonellas", "salmonellosis"], "de": ["Salmonellen", "Salmonelle", "Salmonellose"], "sets": {"microorganism": ["Salmonella spp."]}},
  {"id": "org-c-jejuni", "category": "organisms", "en": ["Campylobacter jejuni", "jejuni"], "de": [], "sets": {"specie": ["C. jejuni"]}},
