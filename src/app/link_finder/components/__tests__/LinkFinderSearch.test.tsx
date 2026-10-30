@@ -108,6 +108,35 @@ describe("LinkFinderSearch", () => {
         expect(within(link).getByText("Closest")).toBeInTheDocument();
     });
 
+    it("titles AMR links by their graph", async () => {
+        const amr: FoundLink = {
+            page: "amr",
+            view: "substance",
+            filters: { microorganism: ["Campylobacter spp."] },
+            url: "/antibiotic-resistance?s=abc&lang=en",
+            labels: [{ dim: "microorganism", text: "Campylobacter spp." }],
+        };
+        const { finder } = fakeFinder(() =>
+            Promise.resolve({
+                links: [amr, { ...amr, view: "trend", url: "/t" }],
+                unmatched: [],
+            })
+        );
+        renderSearch(finder);
+
+        await search("cipro resistance campylobacter");
+
+        expect(
+            await screen.findByRole("link", { name: /PageAmrSubstance/ })
+        ).toHaveAttribute("href", amr.url);
+        expect(
+            screen.getByRole("link", { name: /PageAmrTrend/ })
+        ).toHaveAttribute("href", "/t");
+        expect(
+            screen.queryByRole("link", { name: /PagePrevalence/ })
+        ).not.toBeInTheDocument();
+    });
+
     it("says the search is unavailable when the word list cannot be loaded", async () => {
         const { finder } = fakeFinder(() =>
             Promise.reject(new LinkFinderUnavailableError("CMS down"))

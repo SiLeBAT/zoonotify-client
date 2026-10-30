@@ -10,5 +10,7 @@
   "Unmatched": "Not recognised: {{words}}",
   "Unavailable": "The search is unavailable right now. Please use the filters in the side panel of the data pages.",
   "PagePrevalence": "Prevalence",
+  "PageAmrSubstance": "Antibiotic resistance: Substance graph",
+  "PageAmrTrend": "Antibiotic resistance: Trend graph",
   "Closest": "closest match"
 }

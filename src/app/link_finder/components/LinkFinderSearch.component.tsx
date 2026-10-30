@@ -15,6 +15,12 @@ export interface LinkFinderSearchProps {
     index: DataIndex;
 }
 
+/** The i18n key of the page a link opens. */
+function pageTitleKey(link: FoundLink): string {
+    if (link.page === "prevalence") return "PagePrevalence";
+    return link.view === "trend" ? "PageAmrTrend" : "PageAmrSubstance";
+}
+
 function toLang(language: string | undefined): Lang {
     return language && language.toLowerCase().startsWith("en") ? "en" : "de";
 }
@@ -144,7 +150,7 @@ export function LinkFinderSearch({
                                 }}
                             >
                                 <Typography component="span" fontWeight="bold">
-                                    {t("PagePrevalence")}
+                                    {t(pageTitleKey(link))}
                                 </Typography>
                                 {link.closest && (
                                     <Typography
