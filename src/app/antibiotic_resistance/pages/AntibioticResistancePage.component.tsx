@@ -19,6 +19,7 @@ import { MultiResistanceDetail } from "./MultiResistanceDetail";
 import LZString from "lz-string";
 import { useAmrPageTooltips } from "./amrPageUseCase";
 import { useDataUpdateDate } from "../../hooks/useDataUpdateDate";
+import { AMR_ORGANISMS, AMR_ORGANISMS_WITHOUT_DATA } from "./amrOrganisms";
 
 type AmrView = "main" | "trend" | "substance" | "multi";
 
@@ -41,26 +42,6 @@ function decodeCompressedState(
         return null;
     }
 }
-
-// ---- Constants ----
-const ESBL_AMPC_E_COLI = "ESBL/AmpC E. coli";
-
-const ORGANISMS = [
-    "E. coli",
-    ESBL_AMPC_E_COLI,
-    "Campylobacter spp.",
-    "Salmonella spp.",
-    "MRSA",
-    "STEC",
-    "Enterococcus spp.",
-];
-
-/**
- * Organisms that are listed in the sidebar but have no resistance data in the
- * CMS yet. Selecting one announces "Coming soon" rather than rendering charts
- * that would resolve to an empty result set.
- */
-const ORGANISMS_WITHOUT_DATA = new Set([ESBL_AMPC_E_COLI]);
 
 const italicWords: string[] = [
     "Salmonella",
@@ -161,7 +142,7 @@ function updateUrl(selectedOrg: string, view: AmrView): void {
  * via a deep link collapses back to the main view.
  */
 function resolveView(selectedOrg: string, view: AmrView): AmrView {
-    return ORGANISMS_WITHOUT_DATA.has(selectedOrg) ? "main" : view;
+    return AMR_ORGANISMS_WITHOUT_DATA.has(selectedOrg) ? "main" : view;
 }
 
 function readStateFromUrl(): {
@@ -174,9 +155,9 @@ function readStateFromUrl(): {
     const decoded = decodeCompressedState(params.get("s"));
     if (decoded) {
         const orgFromS =
-            decoded.m && ORGANISMS.includes(decoded.m)
+            decoded.m && AMR_ORGANISMS.includes(decoded.m)
                 ? decoded.m
-                : ORGANISMS[0];
+                : AMR_ORGANISMS[0];
         const viewFromS: AmrView =
             decoded.v && AMR_VIEWS.includes(decoded.v)
                 ? decoded.v
@@ -190,9 +171,9 @@ function readStateFromUrl(): {
     // Legacy simple params
     const orgParam = params.get("microorganism");
     const selectedOrg =
-        typeof orgParam === "string" && ORGANISMS.includes(orgParam)
+        typeof orgParam === "string" && AMR_ORGANISMS.includes(orgParam)
             ? orgParam
-            : ORGANISMS[0];
+            : AMR_ORGANISMS[0];
     const view = (params.get("view") as AmrView) || "main";
     return { selectedOrg, view: resolveView(selectedOrg, view) };
 }
@@ -297,7 +278,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
     // Handlers
     const handleOrgSelect = (org: string): void => {
         setState({ selectedOrg: org, view: "main" });
-        if (ORGANISMS_WITHOUT_DATA.has(org)) setComingSoonOpen(true);
+        if (AMR_ORGANISMS_WITHOUT_DATA.has(org)) setComingSoonOpen(true);
     };
 
     const handleTrendClick = (): void => {
@@ -573,7 +554,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                         <div className="abx-page">
                             <aside className="abx-sidebar">
                                 <ul className="abx-nav">
-                                    {ORGANISMS.map((org) => (
+                                    {AMR_ORGANISMS.map((org) => (
                                         <li key={org}>
                                             <button
                                                 type="button"
@@ -602,7 +583,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             </aside>
 
                             <section className="abx-content">
-                                {!ORGANISMS_WITHOUT_DATA.has(selectedOrg) && (
+                                {!AMR_ORGANISMS_WITHOUT_DATA.has(
+                                    selectedOrg
+                                ) && (
                                     <>
                                         <div className="image-box">
                                             {trendTooltip && (
