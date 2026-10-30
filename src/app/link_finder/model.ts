@@ -82,11 +82,24 @@ export interface FoundLink extends LinkSpec {
     labels: FilterLabel[];
 }
 
+/** An organism the visitor may pick when a resistance search names none. */
+export interface OrganismChoice {
+    /** English official name: pass it back to `find`. */
+    organism: string;
+    /** Official name in the search's language. */
+    label: string;
+}
+
 export interface LinkFinderResult {
     /** At most three, each confirmed to have data. */
     links: FoundLink[];
     /** Words that matched nothing, as typed. */
     unmatched: string[];
+    /**
+     * Set, with `links` empty, when a resistance search names no organism: the organisms with
+     * data for its other filters. Re-run `find` with one of them to get its links.
+     */
+    chooseOrganism?: OrganismChoice[];
 }
 
 /** Answers "would this link draw something?" without ever seeing the search text. */

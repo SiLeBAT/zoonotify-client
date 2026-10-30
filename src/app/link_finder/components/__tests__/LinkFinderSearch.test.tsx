@@ -164,4 +164,56 @@ describe("LinkFinderSearch", () => {
         expect(window.location.href).toBe(before);
         expect(window.location.href).not.toContain("quixotrumbel");
     });
+    it("offers organism choices as buttons and re-runs the same search with the one chosen", async () => {
+        const amr: FoundLink = {
+            page: "amr",
+            view: "trend",
+            filters: {
+                microorganism: ["Campylobacter spp."],
+                superCategorySampleOrigin: ["Chicken"],
+            },
+            url: "/antibiotic-resistance?microorganism=Campylobacter+spp.&view=trend&lang=en",
+            labels: [{ dim: "microorganism", text: "Campylobacter spp." }],
+        };
+        const { finder, find } = fakeFinder(() =>
+            Promise.resolve({
+                links: [],
+                unmatched: [],
+                chooseOrganism: [
+                    { organism: "E. coli", label: "E. coli" },
+                    {
+                        organism: "Campylobacter spp.",
+                        label: "Campylobacter spp.",
+                    },
+                ],
+            })
+        );
+        renderSearch(finder);
+
+        await search("resistance in chickens");
+
+        const group = await screen.findByRole("group", {
+            name: "ChooseOrganism",
+        });
+        expect(within(group).getAllByRole("button")).toHaveLength(2);
+        expect(screen.queryByText("NoLinks")).not.toBeInTheDocument();
+        expect(screen.queryByRole("link")).not.toBeInTheDocument();
+
+        find.mockImplementationOnce(() =>
+            Promise.resolve({ links: [amr], unmatched: [] })
+        );
+        await userEvent.click(
+            within(group).getByRole("button", { name: "Campylobacter spp." })
+        );
+
+        expect(find).toHaveBeenLastCalledWith(
+            "resistance in chickens",
+            "en",
+            index,
+            "Campylobacter spp."
+        );
+        expect(
+            await screen.findByRole("link", { name: /PageAmrTrend/ })
+        ).toHaveAttribute("href", amr.url);
+    });
 });

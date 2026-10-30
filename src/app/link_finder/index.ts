@@ -12,4 +12,5 @@ export type {
     LinkFinderResult,
     LinkSpec,
     OfficialNames,
+    OrganismChoice,
 } from "./model";

@@ -8,6 +8,7 @@
   "Found_plural": "{{count}} links found.",
   "NoLinks": "No links found. Please use the filters in the side panel of the data pages.",
   "Unmatched": "Not recognised: {{words}}",
+  "ChooseOrganism": "Which organism do you mean? Choose one to see its resistance data:",
   "Unavailable": "The search is unavailable right now. Please use the filters in the side panel of the data pages.",
   "PagePrevalence": "Prevalence",
   "PageAmrSubstance": "Antibiotic resistance: Substance graph",

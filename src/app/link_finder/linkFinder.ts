@@ -1,6 +1,12 @@
 // The Link Finder facade: search text + language + data index in, checked links out.
 // Nothing here sends the search text anywhere; the data index sees only built links.
-import { candidates, checkLinks, toFound } from "./links";
+import {
+    candidates,
+    checkLinks,
+    organismChoices,
+    organismLabel,
+    toFound,
+} from "./links";
 import { parse } from "./match";
 import {
     DataIndex,
@@ -31,7 +37,13 @@ export class LinkFinderUnavailableError extends Error {
 }
 
 export interface LinkFinder {
-    find(text: string, lang: Lang, index: DataIndex): Promise<LinkFinderResult>;
+    /** `organism` (English official name, from `chooseOrganism`) is added to what the text names. */
+    find(
+        text: string,
+        lang: Lang,
+        index: DataIndex,
+        organism?: string
+    ): Promise<LinkFinderResult>;
 }
 
 export interface LinkFinderTables {
@@ -65,9 +77,33 @@ export function createLinkFinder(
     }
 
     return {
-        async find(text, lang, index) {
+        async find(text, lang, index, organism) {
             const list = await load();
             const parsed = parse(list, text);
+            if (organism)
+                parsed.filters.microorganism = [
+                    organism,
+                    ...(parsed.filters.microorganism ?? []).filter(
+                        (o) => o !== organism
+                    ),
+                ];
+            // A resistance search naming no organism: ask which one, never fall back.
+            if (
+                parsed.page === "amr" &&
+                !parsed.filters.microorganism &&
+                !parsed.filters.specie
+            ) {
+                const choices = await organismChoices(list, parsed, index);
+                if (choices.length)
+                    return {
+                        links: [],
+                        unmatched: parsed.unmatched,
+                        chooseOrganism: choices.map((o) => ({
+                            organism: o,
+                            label: organismLabel(list, o, lang),
+                        })),
+                    };
+            }
             let checked = await checkLinks(candidates(list, parsed), index);
             // Nothing on the resistance page: try prevalence.
             if (!checked.length && parsed.page === "amr")

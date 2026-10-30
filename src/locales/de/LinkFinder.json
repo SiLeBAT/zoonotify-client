@@ -8,6 +8,7 @@
   "Found_plural": "{{count}} Links gefunden.",
   "NoLinks": "Keine Links gefunden. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
   "Unmatched": "Nicht erkannt: {{words}}",
+  "ChooseOrganism": "Welchen Erreger meinen Sie? Wählen Sie einen, um seine Resistenzdaten zu sehen:",
   "Unavailable": "Die Suche ist gerade nicht verfügbar. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
   "PagePrevalence": "Prävalenz",
   "PageAmrSubstance": "Antibiotikaresistenz: Substanzgraph",

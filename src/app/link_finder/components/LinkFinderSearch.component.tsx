@@ -2,13 +2,20 @@ import React, { useRef, useState } from "react";
 import { Box, Button, Chip, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { DataIndex, FoundLink, Lang, LinkFinder } from "..";
+import { DataIndex, FoundLink, Lang, LinkFinder, OrganismChoice } from "..";
 
 type State =
     | { kind: "idle" }
     | { kind: "searching" }
     | { kind: "unavailable" }
-    | { kind: "done"; links: FoundLink[]; unmatched: string[] };
+    | {
+          kind: "done";
+          links: FoundLink[];
+          unmatched: string[];
+          /** Organisms to pick from, with the text they re-run. */
+          chooseOrganism?: OrganismChoice[];
+          searched?: string;
+      };
 
 export interface LinkFinderSearchProps {
     finder: LinkFinder;
@@ -38,18 +45,18 @@ export function LinkFinderSearch({
     const [state, setState] = useState<State>({ kind: "idle" });
     const latest = useRef(0);
 
-    async function run(): Promise<void> {
-        if (!text.trim()) return;
+    async function run(searched: string, organism?: string): Promise<void> {
+        if (!searched.trim()) return;
         latest.current += 1;
         const mine = latest.current;
         setState({ kind: "searching" });
         try {
-            const result = await finder.find(
-                text,
-                toLang(i18n.language),
-                index
-            );
-            if (mine === latest.current) setState({ kind: "done", ...result });
+            const lang = toLang(i18n.language);
+            const result = organism
+                ? await finder.find(searched, lang, index, organism)
+                : await finder.find(searched, lang, index);
+            if (mine === latest.current)
+                setState({ kind: "done", ...result, searched });
         } catch {
             if (mine === latest.current) setState({ kind: "unavailable" });
         }
@@ -57,14 +64,17 @@ export function LinkFinderSearch({
 
     const onSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
-        void run();
+        void run(text);
     };
 
     let status = "";
     if (state.kind === "searching") status = t("Searching");
     if (state.kind === "unavailable") status = t("Unavailable");
+    const choices = state.kind === "done" ? state.chooseOrganism ?? [] : [];
     if (state.kind === "done")
-        status = state.links.length
+        status = choices.length
+            ? t("ChooseOrganism")
+            : state.links.length
             ? t("Found", { count: state.links.length })
             : t("NoLinks");
 
@@ -129,6 +139,26 @@ export function LinkFinderSearch({
                     </Typography>
                 )}
             </Box>
+            {state.kind === "done" && choices.length > 0 && (
+                <Box
+                    role="group"
+                    aria-label={t("ChooseOrganism")}
+                    sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 1 }}
+                >
+                    {choices.map((choice) => (
+                        <Button
+                            key={choice.organism}
+                            variant="outlined"
+                            size="small"
+                            onClick={() =>
+                                void run(state.searched ?? "", choice.organism)
+                            }
+                        >
+                            {choice.label}
+                        </Button>
+                    ))}
+                </Box>
+            )}
             {state.kind === "done" && state.links.length > 0 && (
                 <Box
                     component="ul"

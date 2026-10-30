@@ -135,6 +135,40 @@ export function candidates(list: WordList, parsed: Parsed): LinkSpec[] {
     return links;
 }
 
+/**
+ * For a resistance search that names no organism: the organisms the AMR page offers whose
+ * link, with the search's other filters, has data. English official names, in sidebar order.
+ */
+export async function organismChoices(
+    list: WordList,
+    parsed: Parsed,
+    index: DataIndex
+): Promise<string[]> {
+    const offered = Array.from(list.names.microorganism?.keys() ?? [])
+        .map((cms) => ({ cms, label: amrLabel(cms) }))
+        .filter(
+            (o): o is { cms: string; label: string } =>
+                !!o.label && !AMR_ORGANISMS_WITHOUT_DATA.has(o.label)
+        )
+        .sort(
+            (a, b) =>
+                AMR_ORGANISMS.indexOf(a.label) - AMR_ORGANISMS.indexOf(b.label)
+        );
+    const found = await Promise.all(
+        offered.map(async ({ cms }) => {
+            const specs = candidates(list, {
+                ...parsed,
+                filters: { ...parsed.filters, microorganism: [cms] },
+            });
+            const years = await Promise.all(
+                specs.map((s) => index.newestYear(s))
+            );
+            return years.some((y) => y !== undefined) ? cms : undefined;
+        })
+    );
+    return found.filter((cms): cms is string => cms !== undefined);
+}
+
 function relaxations(link: LinkSpec): LinkSpec[] {
     const out: LinkSpec[] = [];
     for (const what of RELAX_ORDER) {
@@ -262,6 +296,10 @@ function buildLabels(
     for (const y of link.years ?? [])
         labels.push({ dim: "samplingYear", text: String(y) });
     return labels;
+}
+
+export function organismLabel(list: WordList, cms: string, lang: Lang): string {
+    return localName(list, "microorganism", cms, lang);
 }
 
 export function toFound(list: WordList, link: LinkSpec, lang: Lang): FoundLink {
