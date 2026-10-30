@@ -124,16 +124,6 @@ describe("Link Finder", () => {
         }
     });
 
-    it("answers a resistance question with prevalence links only, until AMR links exist", async () => {
-        const result = await snapshotFinder().find(
-            "cipro resistance campylobacter chiken 2024",
-            "en",
-            snapshotIndex
-        );
-
-        for (const link of result.links) expect(link.page).toBe("prevalence");
-    });
-
     it("reports the search unavailable when the official names cannot be loaded, and retries", async () => {
         const load = jest
             .fn()

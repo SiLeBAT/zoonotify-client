@@ -68,11 +68,11 @@ export function createLinkFinder(
         async find(text, lang, index) {
             const list = await load();
             const parsed = parse(list, text);
-            let checked = await checkLinks(candidates(parsed), index);
+            let checked = await checkLinks(candidates(list, parsed), index);
             // Nothing on the resistance page: try prevalence.
             if (!checked.length && parsed.page === "amr")
                 checked = await checkLinks(
-                    candidates({ ...parsed, page: "prevalence" }),
+                    candidates(list, { ...parsed, page: "prevalence" }),
                     index
                 );
             return {

@@ -1,5 +1,6 @@
 // The Link Finder against the CMS public API. Requests carry only official filter values and
 // collection names, never the visitor's search text.
+import { MINIMUM_N } from "../antibiotic_resistance/pages/resistanceHelpers";
 import { DataIndex, Dim, LinkSpec, OfficialNames, ValuePair } from "./model";
 
 type Fetch = typeof fetch;
@@ -154,7 +155,11 @@ export function cmsOfficialNames(
     };
 }
 
-/** "Does this link have data?" as a one-row count read against the CMS. */
+/**
+ * "Does this link have data?" as a one-row count read against the CMS. An AMR link counts
+ * only rows the AMR graphs would draw: one row per Combination, substance and year, with at
+ * least `MINIMUM_N` tested isolates.
+ */
 export function cmsDataIndex(
     apiBase: string,
     fetchFn: Fetch = (...args) => fetch(...args)
@@ -167,6 +172,11 @@ export function cmsDataIndex(
             q.set("pagination[pageSize]", "1");
             q.set("fields[0]", "samplingYear");
             q.set("sort", "samplingYear:desc");
+            if (link.page === "amr")
+                q.set(
+                    "filters[anzahlGetesteterIsolate][$gte]",
+                    String(MINIMUM_N)
+                );
             (link.years ?? []).forEach((y, i) =>
                 q.set(`filters[samplingYear][$in][${i}]`, String(y))
             );
@@ -176,7 +186,9 @@ export function cmsDataIndex(
                 );
             const body = await getJson<StrapiPage<{ samplingYear: number }>>(
                 fetchFn,
-                `${base}/prevalences?${q.toString()}`
+                `${base}/${
+                    link.page === "amr" ? "resistances" : "prevalences"
+                }?${q.toString()}`
             );
             const total = body.meta?.pagination?.total ?? body.data.length;
             return total > 0 && body.data.length

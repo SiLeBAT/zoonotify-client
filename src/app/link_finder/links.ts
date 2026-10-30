@@ -10,6 +10,11 @@ import {
 } from "./model";
 import { Parsed } from "./match";
 import { WordList } from "./wordList";
+import {
+    AMR_ORGANISMS,
+    AMR_ORGANISMS_WITHOUT_DATA,
+} from "../antibiotic_resistance/pages/amrOrganisms";
+import { encodeSubstanceState } from "../antibiotic_resistance/pages/substanceUrlState";
 
 const PREVALENCE_DIMS: Dim[] = [
     "superCategorySampleOrigin",
@@ -26,6 +31,22 @@ const GENUS_OF_SPECIE: { [specie: string]: string } = {
     "Enterococcus faecalis": "Enterococcus spp.",
     "Enterococcus faecium": "Enterococcus spp.",
 };
+
+const AMR_DIMS: Dim[] = (["specie", "antimicrobialSubstance"] as Dim[]).concat(
+    PREVALENCE_DIMS
+);
+
+/** CMS organism names the AMR page labels differently; every other name is its own label. */
+const AMR_LABEL_OF_CMS_NAME: { [cms: string]: string } = {
+    "Methicillin-resistant Staphylococcus aureus (MRSA)": "MRSA",
+    "Shigatoxin-producing E. coli (STEC)": "STEC",
+};
+
+/** The AMR page's label for a CMS organism, or undefined when the page does not offer it. */
+function amrLabel(cmsName: string): string | undefined {
+    const label = AMR_LABEL_OF_CMS_NAME[cmsName] ?? cmsName;
+    return AMR_ORGANISMS.indexOf(label) >= 0 ? label : undefined;
+}
 
 /** What to give up first when the full link would be empty: the most specific things. */
 const RELAX_ORDER: (Dim | "years")[] = [
@@ -49,23 +70,69 @@ function pick(filters: Filters, dims: Dim[]): Filters {
 }
 
 /**
- * The links the search asks for, before any data check. This slice builds prevalence links
- * only; a search the matcher sends to the AMR page yields none here, so the finder falls back
- * to prevalence.
+ * Whether any value, in either language, contains a comma: the trend view joins its params
+ * with commas, so such a value would silently split into others.
  */
-export function candidates(parsed: Parsed): LinkSpec[] {
-    if (parsed.page !== "prevalence") return [];
-    const f = parsed.filters;
-    const years = parsed.years.length ? parsed.years.slice() : undefined;
+function hasComma(list: WordList, filters: Filters): boolean {
+    return (Object.keys(filters) as Dim[]).some((d) =>
+        (filters[d] ?? []).some(
+            (v) =>
+                v.indexOf(",") >= 0 ||
+                localName(list, d, v, "de").indexOf(",") >= 0
+        )
+    );
+}
+
+/** The organisms a search names, a species standing for its genus. */
+function organismsOf(f: Filters): string[] {
     const organisms = (f.microorganism ?? []).slice();
     for (const s of f.specie ?? []) {
         const genus = GENUS_OF_SPECIE[s];
         if (genus && organisms.indexOf(genus) < 0) organisms.push(genus);
     }
-    const filters = pick(f, PREVALENCE_DIMS);
-    if (organisms.length) filters.microorganism = organisms;
-    if (Object.keys(filters).length === 0 && !years) return [];
-    return [{ page: "prevalence", filters, years, latest: parsed.latest }];
+    return organisms;
+}
+
+/**
+ * The links the search asks for, before any data check. Prevalence: one link. AMR: one link
+ * per organism the page offers with data, and per species asked for, never a combined one.
+ */
+export function candidates(list: WordList, parsed: Parsed): LinkSpec[] {
+    const f = parsed.filters;
+    const years = parsed.years.length ? parsed.years.slice() : undefined;
+    const organisms = organismsOf(f);
+
+    if (parsed.page === "prevalence") {
+        const filters = pick(f, PREVALENCE_DIMS);
+        if (organisms.length) filters.microorganism = organisms;
+        if (Object.keys(filters).length === 0 && !years) return [];
+        return [{ page: "prevalence", filters, years, latest: parsed.latest }];
+    }
+
+    const links: LinkSpec[] = [];
+    for (const organism of organisms) {
+        const label = amrLabel(organism);
+        if (!label || AMR_ORGANISMS_WITHOUT_DATA.has(label)) continue;
+        const species = (f.specie ?? []).filter(
+            (s) => GENUS_OF_SPECIE[s] === organism
+        );
+        // Several species asked for together: one link each, never a combined one.
+        for (const specie of species.length ? species : [undefined]) {
+            const filters = pick(f, AMR_DIMS);
+            delete filters.specie;
+            if (specie) filters.specie = [specie];
+            filters.microorganism = [organism];
+            const trend = parsed.trend && !years && !hasComma(list, filters);
+            links.push({
+                page: "amr",
+                view: trend ? "trend" : "substance",
+                filters,
+                years,
+                latest: parsed.latest,
+            });
+        }
+    }
+    return links;
 }
 
 function relaxations(link: LinkSpec): LinkSpec[] {
@@ -122,7 +189,7 @@ function localName(list: WordList, dim: Dim, en: string, lang: Lang): string {
 }
 
 /** Prevalence: plain repeated query params, values by their official name in the link's language. */
-function buildUrl(list: WordList, link: LinkSpec, lang: Lang): string {
+function prevalenceUrl(list: WordList, link: LinkSpec, lang: Lang): string {
     const q = new URLSearchParams();
     for (const d of Object.keys(link.filters) as Dim[])
         for (const v of link.filters[d] ?? [])
@@ -130,6 +197,57 @@ function buildUrl(list: WordList, link: LinkSpec, lang: Lang): string {
     for (const y of link.years ?? []) q.append("samplingYear", String(y));
     q.set("lang", lang);
     return `/prevalence?${q.toString()}`;
+}
+
+/** AMR Substance graph: the page's own `?s=` payload, its `l` equal to `?lang=`. */
+function substanceUrl(list: WordList, link: LinkSpec, lang: Lang): string {
+    const organism = amrLabel((link.filters.microorganism ?? [])[0]) ?? "";
+    const selected: { [d: string]: string[] } = {};
+    for (const d of Object.keys(link.filters) as Dim[])
+        if (d !== "microorganism")
+            selected[d] = (link.filters[d] ?? []).map((v) =>
+                localName(list, d, v, lang)
+            );
+    if (link.years) selected.samplingYear = link.years.map(String);
+    const s = encodeSubstanceState(
+        {
+            microorganism: organism,
+            selected,
+            substanceFilter: selected.antimicrobialSubstance ?? [],
+            chartYear:
+                link.years && link.years.length === 1
+                    ? link.years[0]
+                    : undefined,
+        },
+        lang
+    );
+    return `/antibiotic-resistance?s=${s}&lang=${lang}`;
+}
+
+/** AMR trend view: plain params, several values joined by commas as the view reads them. */
+function trendUrl(list: WordList, link: LinkSpec, lang: Lang): string {
+    const q = new URLSearchParams();
+    q.set(
+        "microorganism",
+        amrLabel((link.filters.microorganism ?? [])[0]) ?? ""
+    );
+    q.set("view", "trend");
+    for (const d of Object.keys(link.filters) as Dim[])
+        if (d !== "microorganism")
+            q.set(
+                d,
+                (link.filters[d] ?? [])
+                    .map((v) => localName(list, d, v, lang))
+                    .join(",")
+            );
+    q.set("lang", lang);
+    return `/antibiotic-resistance?${q.toString()}`;
+}
+
+function buildUrl(list: WordList, link: LinkSpec, lang: Lang): string {
+    if (link.page === "prevalence") return prevalenceUrl(list, link, lang);
+    if (link.view === "trend") return trendUrl(list, link, lang);
+    return substanceUrl(list, link, lang);
 }
 
 function buildLabels(

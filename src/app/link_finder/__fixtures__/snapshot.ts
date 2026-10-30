@@ -43,17 +43,17 @@ const prevalences = unpack(
 
 export const snapshotOfficialNames = vocabularyJson as unknown as OfficialNames;
 
-/** Newest year the snapshot holds for a link, or undefined when the link would draw nothing. */
-export function newestYearInSnapshot(link: LinkSpec): number | undefined {
+/** Newest year among the snapshot's rows that fit a link, counting AMR rows of at least `minimumTested` isolates. */
+function newestYearInRows(
+    link: LinkSpec,
+    minimumTested: number
+): number | undefined {
     const amr = link.page === "amr";
-    const organisms = link.filters.microorganism ?? [];
-    if (amr && organisms.some((o) => AMR_ORGANISMS_WITHOUT_DATA.has(o)))
-        return undefined;
     const rows = amr ? resistances : prevalences;
     const dims = Object.keys(link.filters) as Dim[];
     let newest: number | undefined;
     for (const r of rows) {
-        if (amr && Number(r.tested) < MINIMUM_N) continue;
+        if (amr && Number(r.tested) < minimumTested) continue;
         if (link.years && link.years.indexOf(Number(r.samplingYear)) < 0)
             continue;
         const fits = dims.every((dim) => {
@@ -64,6 +64,17 @@ export function newestYearInSnapshot(link: LinkSpec): number | undefined {
             newest = Number(r.samplingYear);
     }
     return newest;
+}
+
+/** Newest year the snapshot holds for a link, or undefined when the link would draw nothing. */
+export function newestYearInSnapshot(link: LinkSpec): number | undefined {
+    const organisms = link.filters.microorganism ?? [];
+    if (
+        link.page === "amr" &&
+        organisms.some((o) => AMR_ORGANISMS_WITHOUT_DATA.has(o))
+    )
+        return undefined;
+    return newestYearInRows(link, MINIMUM_N);
 }
 
 /** The snapshot-backed data index. */
@@ -127,8 +138,12 @@ function linkFromQuery(
     return link;
 }
 
-function rowsFor(link: LinkSpec): Row[] {
-    const newest = newestYearInSnapshot(link);
+/** Rows as the CMS returns them: it knows nothing of "Coming soon", only the filters it is sent. */
+function rowsFor(link: LinkSpec, q: URLSearchParams): Row[] {
+    const minimum = Number(
+        q.get("filters[anzahlGetesteterIsolate][$gte]") ?? 0
+    );
+    const newest = newestYearInRows(link, minimum);
     return newest === undefined ? [] : [{ samplingYear: newest }];
 }
 
@@ -193,7 +208,7 @@ export function fakeCms(apiBase: string): FakeCms {
                 collection === "prevalences" ? "prevalence" : "amr",
                 q
             );
-            return Promise.resolve(json(page(rowsFor(link), q)));
+            return Promise.resolve(json(page(rowsFor(link, q), q)));
         }
         return Promise.resolve({
             ok: false,
