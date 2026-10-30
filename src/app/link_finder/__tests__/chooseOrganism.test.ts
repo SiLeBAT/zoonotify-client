@@ -71,6 +71,19 @@ describe("Link Finder: choose an organism", () => {
         }
     });
 
+    it("says no resistance data exists, without a prevalence fallback, when no organism has data for the other filters", async () => {
+        for (const [text, lang] of [
+            ["Has antibiotic resistance in berries gone down?", "en"],
+            ["Antibiotikaresistenzen bei Beeren", "de"],
+        ] as const) {
+            const result = await finder.find(text, lang, snapshotIndex);
+
+            expect(result.links).toEqual([]);
+            expect(result.chooseOrganism).toBeUndefined();
+            expect(result.noResistanceData).toBe(true);
+        }
+    });
+
     it("leaves resistance questions that name an organism as they were", async () => {
         const result = await finder.find(
             "MRSA Resistenz Huhn",

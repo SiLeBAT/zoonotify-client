@@ -104,6 +104,11 @@ export interface LinkFinderResult {
      * data for its other filters. Re-run `find` with one of them to get its links.
      */
     chooseOrganism?: OrganismChoice[];
+    /**
+     * Set, with `links` empty, when a resistance search names no organism and no organism has
+     * resistance data for its other filters. No prevalence links are offered instead.
+     */
+    noResistanceData?: true;
 }
 
 /** Answers "would this link draw something?" without ever seeing the search text. */

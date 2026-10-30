@@ -14,6 +14,7 @@ type State =
           unmatched: string[];
           /** Organisms to pick from, with the text they re-run. */
           chooseOrganism?: OrganismChoice[];
+          noResistanceData?: true;
           searched?: string;
       };
 
@@ -76,6 +77,8 @@ export function LinkFinderSearch({
             ? t("ChooseOrganism")
             : state.links.length
             ? t("Found", { count: state.links.length })
+            : state.noResistanceData
+            ? t("NoResistanceData")
             : t("NoLinks");
 
     return (

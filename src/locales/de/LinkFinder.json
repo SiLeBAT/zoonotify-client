@@ -9,6 +9,7 @@
   "NoLinks": "Keine Links gefunden. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
   "Unmatched": "Nicht erkannt: {{words}}",
   "ChooseOrganism": "Welchen Erreger meinen Sie? Wählen Sie einen, um seine Resistenzdaten zu sehen:",
+  "NoResistanceData": "Für diese Filter gibt es bei keinem Erreger Resistenzdaten. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
   "Unavailable": "Die Suche ist gerade nicht verfügbar. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
   "PagePrevalence": "Prävalenz",
   "PageAmrSubstance": "Antibiotikaresistenz: Substanzgraph",

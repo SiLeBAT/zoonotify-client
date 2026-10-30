@@ -94,6 +94,23 @@ describe("LinkFinderSearch", () => {
         expect(screen.queryByRole("link")).not.toBeInTheDocument();
     });
 
+    it("says plainly when no resistance data exists for the search's filters", async () => {
+        const { finder } = fakeFinder(() =>
+            Promise.resolve({
+                links: [],
+                unmatched: [],
+                noResistanceData: true,
+            })
+        );
+        renderSearch(finder);
+
+        await search("resistance in berries");
+
+        expect(await screen.findByText("NoResistanceData")).toBeInTheDocument();
+        expect(screen.queryByText("NoLinks")).not.toBeInTheDocument();
+        expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    });
+
     it("marks a closest link", async () => {
         const { finder } = fakeFinder(() =>
             Promise.resolve({
@@ -204,6 +221,7 @@ describe("LinkFinderSearch", () => {
         expect(window.location.href).toBe(before);
         expect(window.location.href).not.toContain("quixotrumbel");
     });
+
     it("offers organism choices as buttons and re-runs the same search with the one chosen", async () => {
         const amr: FoundLink = {
             page: "amr",

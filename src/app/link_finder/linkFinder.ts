@@ -95,15 +95,20 @@ export function createLinkFinder(
                 !parsed.filters.specie
             ) {
                 const choices = await organismChoices(list, parsed, index);
-                if (choices.length)
+                if (!choices.length)
                     return {
                         links: [],
                         unmatched: parsed.unmatched,
-                        chooseOrganism: choices.map((o) => ({
-                            organism: o,
-                            label: organismLabel(list, o, lang),
-                        })),
+                        noResistanceData: true,
                     };
+                return {
+                    links: [],
+                    unmatched: parsed.unmatched,
+                    chooseOrganism: choices.map((o) => ({
+                        organism: o,
+                        label: organismLabel(list, o, lang),
+                    })),
+                };
             }
             let checked = await checkLinks(candidates(list, parsed), index);
             // Nothing on the resistance page: try prevalence.
