@@ -1,12 +1,10 @@
 // Test-only: the frozen CMS snapshot (captured 2026-10-29 from zoonotify.bfr.berlin) as a
 // snapshot-backed data index, and as a fake `fetch` that answers the CMS public API.
+import { AMR_ORGANISMS_WITHOUT_DATA } from "../../antibiotic_resistance/pages/amrOrganisms";
+import { MINIMUM_N } from "../../antibiotic_resistance/pages/resistanceHelpers";
 import { DataIndex, Dim, LinkSpec, OfficialNames } from "../model";
 import vocabularyJson from "./snapshot-vocabulary.json";
 import factsJson from "./snapshot-facts.json";
-
-// Kept here until 105 links AMR through the AMR page's own exports (103).
-const MINIMUM_N = 10;
-const AMR_WITHOUT_DATA = ["ESBL/AmpC E. coli"];
 
 type Row = { [key: string]: string | number | null };
 
@@ -49,7 +47,7 @@ export const snapshotOfficialNames = vocabularyJson as unknown as OfficialNames;
 export function newestYearInSnapshot(link: LinkSpec): number | undefined {
     const amr = link.page === "amr";
     const organisms = link.filters.microorganism ?? [];
-    if (amr && organisms.some((o) => AMR_WITHOUT_DATA.indexOf(o) >= 0))
+    if (amr && organisms.some((o) => AMR_ORGANISMS_WITHOUT_DATA.has(o)))
         return undefined;
     const rows = amr ? resistances : prevalences;
     const dims = Object.keys(link.filters) as Dim[];
