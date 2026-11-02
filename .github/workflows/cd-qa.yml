@@ -95,7 +95,7 @@ jobs:
         env:
           E2E_BASE_URL: ${{ vars.QA_BASE_URL || 'https://zoonotify-dev.bfr.berlin' }}
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: qa-smoke-report
