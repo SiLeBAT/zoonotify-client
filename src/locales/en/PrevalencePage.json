@@ -99,6 +99,13 @@
   "PREVALENCE_INFORMATION": "Instructions",
   "Select_Microorganism": "Select Microorganism",
   "Chart_Year_Range": "Displayed year range",
+  "Combinations": "Combinations",
+  "Select_All": "Select all",
+  "Select_First_Four": "Select first 4",
+  "Deselect_All": "Deselect all",
+  "Combination_Limit_Title": "Combination Limit",
+  "Combination_Limit_Message": "You can choose a maximum of 4 combinations to be displayed in the graph.",
+  "Close": "Close",
 
   "REQUIRED_FIELD_INDICATOR": "Fields marked with a star (*) are required. Please select at least one option from each required field to activate the search button."
 }

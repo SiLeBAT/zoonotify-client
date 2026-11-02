@@ -22,6 +22,7 @@ export function LogoComponent(): JSX.Element {
             </Typography>
             <img
                 src="/assets/bfr_logo.png"
+                alt="Bundesinstitut für Risikobewertung (BfR)"
                 title="BfR Logo"
                 style={{
                     height: "60px",

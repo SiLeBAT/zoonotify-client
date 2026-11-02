@@ -51,15 +51,16 @@ export function langParam(page: Page): string | null {
 }
 
 /**
- * The header's flag buttons carry no accessible name -- they render a flag as a
- * CSS background on an empty button -- so there is nothing to query them by but
- * position. The hamburger is the only other button in the header and it does
- * have a label, which is what makes the `:not([aria-label])` narrowing safe.
+ * The header's flag buttons, by the name each carries in its own language --
+ * the same in either UI language, so tests need not know which one is active.
  */
 export function languageButton(page: Page, language: "de" | "en"): Locator {
     return page
-        .locator("header button:not([aria-label])")
-        .nth(language === "de" ? 0 : 1);
+        .getByRole("button", {
+            name: language === "de" ? "Deutsch" : "English",
+            exact: true,
+        })
+        .locator("visible=true");
 }
 
 /** The mobile drawer toggle, shown only under the 768px breakpoint. */

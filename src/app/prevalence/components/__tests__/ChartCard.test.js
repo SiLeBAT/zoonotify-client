@@ -18,24 +18,29 @@ jest.mock("react-chartjs-2", () => ({
 describe("ChartCard Component", () => {
     const defaultProps = {
         chartKey: "Test Key",
-        chartData: {
-            2021: {
-                x: 10,
-                y: 2021,
-                ciMin: 5,
-                ciMax: 15,
-                numberOfSamples: 100,
-                numberOfPositive: 20,
+        series: [
+            {
+                label: "Test Key",
+                data: {
+                    2021: {
+                        x: 10,
+                        y: 2021,
+                        ciMin: 5,
+                        ciMax: 15,
+                        numberOfSamples: 100,
+                        numberOfPositive: 20,
+                    },
+                    2022: {
+                        x: 15,
+                        y: 2022,
+                        ciMin: 10,
+                        ciMax: 20,
+                        numberOfSamples: 120,
+                        numberOfPositive: 25,
+                    },
+                },
             },
-            2022: {
-                x: 15,
-                y: 2022,
-                ciMin: 10,
-                ciMax: 20,
-                numberOfSamples: 120,
-                numberOfPositive: 25,
-            },
-        },
+        ],
         chartRef: { current: null },
         currentMicroorganism: "E. Coli",
         yearsToShow: [2021, 2022],

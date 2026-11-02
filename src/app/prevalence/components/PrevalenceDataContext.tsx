@@ -9,6 +9,7 @@ import React, {
     useState,
 } from "react";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
+import { fetchDataUpdateDate } from "../../hooks/useDataUpdateDate";
 import {
     MATRICES,
     MATRIX_GROUPS,
@@ -365,6 +366,8 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     // -------------- 2) fetchPrevalenceUpdateDate --------------
+    // The import CLI records this date; the manually maintained
+    // `prevelence-update` is only a fallback until a CMS records imports.
     interface PrevalenceUpdateFlatResponse {
         data: {
             id: number;
@@ -373,16 +376,24 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
         meta: unknown;
     }
 
+    const fetchManualPrevalenceUpdateDate = async (): Promise<
+        string | null
+    > => {
+        const baseUrl = process.env.REACT_APP_API_URL;
+        const url = `${baseUrl}/api/prevelence-update`;
+        const response = await callApiService<PrevalenceUpdateFlatResponse>(
+            url
+        );
+        return response.data?.data?.date || null;
+    };
+
     const fetchPrevalenceUpdateDate = async (): Promise<void> => {
         try {
-            const baseUrl = process.env.REACT_APP_API_URL;
-            const url = `${baseUrl}/api/prevelence-update`;
-            const response = await callApiService<PrevalenceUpdateFlatResponse>(
-                url
-            );
-
-            if (response.data?.data?.date) {
-                setPrevalenceUpdateDate(response.data.data.date || null);
+            const date =
+                (await fetchDataUpdateDate()) ||
+                (await fetchManualPrevalenceUpdateDate());
+            if (date) {
+                setPrevalenceUpdateDate(date);
             } else {
                 console.error("Date not found in response data.");
             }

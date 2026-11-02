@@ -51,8 +51,9 @@ const appNameStyle = css`
     color: ${onPrimaryColor};
     margin-right: 1em;
 
-    &:focus {
-        outline: none;
+    &:focus-visible {
+        outline: 2px solid ${onPrimaryColor};
+        outline-offset: 2px;
     }
 `;
 
@@ -109,8 +110,9 @@ const mobileNavLinkStyle = (open: boolean): SerializedStyles => css`
     border: 1px solid #000;
     width: 100%;
 
-    &:focus {
-        outline: none;
+    &:focus-visible {
+        outline: 2px solid #000;
+        outline-offset: -4px;
     }
     &:hover {
         background-color: rgba(0, 0, 0, 0.1);
@@ -124,8 +126,9 @@ const navLinkStyle = (open: boolean): SerializedStyles => css`
     background-color: ${open ? `${secondaryColor}` : "none"};
     color: ${open ? `${onSecondaryColor}` : `${onPrimaryColor}`};
 
-    &:focus {
-        outline: none;
+    &:focus-visible {
+        outline: 2px solid ${onPrimaryColor};
+        outline-offset: 2px;
     }
     &:hover {
         color: ${open ? `${onSecondaryColor}` : `${secondaryColor}`};

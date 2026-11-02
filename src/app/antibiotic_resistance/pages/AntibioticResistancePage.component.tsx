@@ -18,6 +18,7 @@ import { SubstanceDetail } from "./SubstanceDetail";
 import { MultiResistanceDetail } from "./MultiResistanceDetail";
 import LZString from "lz-string";
 import { useAmrPageTooltips } from "./amrPageUseCase";
+import { useDataUpdateDate } from "../../hooks/useDataUpdateDate";
 
 type AmrView = "main" | "trend" | "substance" | "multi";
 
@@ -202,35 +203,50 @@ function Breadcrumb({
     selectedOrg,
     view,
     handleShowMain,
+    dataUpdateDate,
 }: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: any;
     selectedOrg: string;
     view: AmrView;
     handleShowMain: () => void;
+    dataUpdateDate: string | null;
 }): JSX.Element {
     return (
-        <div className="abx-breadcrumb">
-            <span
-                style={{ textDecoration: "underline", cursor: "pointer" }}
-                onClick={handleShowMain}
-            >
-                {t("AntibioticResistance")}
-            </span>
-            {" / "}
-            <span
-                style={{ textDecoration: "underline", cursor: "pointer" }}
-                onClick={handleShowMain}
-            >
-                <FormattedMicroorganismName
-                    microName={selectedOrg}
-                    isBreadcrumb
-                />
-            </span>
-            {view === "trend" && <> / {t("Trend")}</>}
-            {view === "substance" && <> / {t("Substans")}</>}
-            {view === "multi" && <> / {t("Multi_Breadcrumb")}</>}
-        </div>
+        <>
+            <div className="abx-breadcrumb">
+                <button
+                    type="button"
+                    className="abx-breadcrumb-link"
+                    onClick={handleShowMain}
+                >
+                    {t("AntibioticResistance")}
+                </button>
+                {" / "}
+                <button
+                    type="button"
+                    className="abx-breadcrumb-link"
+                    onClick={handleShowMain}
+                >
+                    <FormattedMicroorganismName
+                        microName={selectedOrg}
+                        isBreadcrumb
+                    />
+                </button>
+                {view === "trend" && <> / {t("Trend")}</>}
+                {view === "substance" && <> / {t("Substans")}</>}
+                {view === "multi" && <> / {t("Multi_Breadcrumb")}</>}
+            </div>
+            {dataUpdateDate && (
+                <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ px: "1rem", py: "0.25rem" }}
+                >
+                    {t("DataStatus")}: {dataUpdateDate}
+                </Typography>
+            )}
+        </>
     );
 }
 
@@ -249,6 +265,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
     const { trendTooltip, substanceTooltip, multiTooltip } =
         useAmrPageTooltips();
+    const dataUpdateDate = useDataUpdateDate();
 
     // On mount: sync state from URL (deep link support)
     useEffect(() => {
@@ -342,11 +359,26 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           padding: 1.5rem 2rem 1.5rem 3rem;
           margin-bottom: 1.25rem;
           cursor: pointer;
+          display: block;
+          width: 100%;
+          border: 0;
+          text-align: left;
+          font-family: inherit;
+        }
+
+        /* clip-path cuts off an outer outline, so draw the ring inside */
+        .abx-nav-item:focus-visible {
+          outline: 3px solid #fff;
+          outline-offset: -6px;
         }
 
         .abx-active {
           background: #BFE1F2;
           color: #003663;
+        }
+
+        .abx-active:focus-visible {
+          outline-color: #003663;
         }
 
         .abx-content {
@@ -377,6 +409,21 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           pointer-events: auto;
         }
 
+        .abx-breadcrumb-link {
+          background: none;
+          border: 0;
+          padding: 0;
+          font: inherit;
+          color: inherit;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        .abx-breadcrumb-link:focus-visible {
+          outline: 3px solid #003663;
+          outline-offset: 2px;
+        }
+
         .image-box {
           position: relative;
           box-shadow: 0 9px 56px rgba(48,56,96,0.20), 0 5px 20px rgba(40,40,60,0.19);
@@ -385,7 +432,6 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           margin-right: 1.2rem;
           margin-bottom: 1.2rem;
           box-sizing: border-box;
-          cursor: pointer;
           border-radius: 20px;
           background: #fff;
           transition: transform 0.18s, box-shadow 0.18s;
@@ -401,6 +447,22 @@ export function AntibioticResistancePageComponent(): JSX.Element {
         }
         .image-box-info:hover {
           background: rgba(255,255,255,1);
+        }
+
+        .image-box-link {
+          display: block;
+          width: 100%;
+          background: none;
+          border: 0;
+          padding: 0;
+          font: inherit;
+          cursor: pointer;
+          border-radius: 20px;
+        }
+
+        .image-box-link:focus-visible {
+          outline: 3px solid #003663;
+          outline-offset: 4px;
         }
 
         .image-box:hover {
@@ -468,6 +530,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 selectedOrg={selectedOrg}
                                 view={view}
                                 handleShowMain={handleShowMain}
+                                dataUpdateDate={dataUpdateDate}
                             />
                         }
                     />
@@ -481,6 +544,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 selectedOrg={selectedOrg}
                                 view={view}
                                 handleShowMain={handleShowMain}
+                                dataUpdateDate={dataUpdateDate}
                             />
                         }
                     />
@@ -493,6 +557,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                 selectedOrg={selectedOrg}
                                 view={view}
                                 handleShowMain={handleShowMain}
+                                dataUpdateDate={dataUpdateDate}
                             />
                         }
                     />
@@ -503,25 +568,34 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             selectedOrg={selectedOrg}
                             view={view}
                             handleShowMain={handleShowMain}
+                            dataUpdateDate={dataUpdateDate}
                         />
                         <div className="abx-page">
                             <aside className="abx-sidebar">
                                 <ul className="abx-nav">
                                     {ORGANISMS.map((org) => (
-                                        <li
-                                            key={org}
-                                            className={`abx-nav-item${
-                                                org === selectedOrg
-                                                    ? " abx-active"
-                                                    : ""
-                                            }`}
-                                            onClick={() => handleOrgSelect(org)}
-                                        >
-                                            <FormattedMicroorganismName
-                                                microName={org}
-                                                fontWeight="bold"
-                                                fontSize="1.3rem"
-                                            />
+                                        <li key={org}>
+                                            <button
+                                                type="button"
+                                                className={`abx-nav-item${
+                                                    org === selectedOrg
+                                                        ? " abx-active"
+                                                        : ""
+                                                }`}
+                                                aria-current={
+                                                    org === selectedOrg ||
+                                                    undefined
+                                                }
+                                                onClick={() =>
+                                                    handleOrgSelect(org)
+                                                }
+                                            >
+                                                <FormattedMicroorganismName
+                                                    microName={org}
+                                                    fontWeight="bold"
+                                                    fontSize="1.3rem"
+                                                />
+                                            </button>
                                         </li>
                                     ))}
                                 </ul>
@@ -530,10 +604,7 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                             <section className="abx-content">
                                 {!ORGANISMS_WITHOUT_DATA.has(selectedOrg) && (
                                     <>
-                                        <div
-                                            className="image-box"
-                                            onClick={handleTrendClick}
-                                        >
+                                        <div className="image-box">
                                             {trendTooltip && (
                                                 <Tooltip
                                                     title={trendTooltip}
@@ -554,19 +625,22 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                                     </IconButton>
                                                 </Tooltip>
                                             )}
-                                            <div className="image-label">
-                                                {t("Trend")}
-                                            </div>
-                                            <img
-                                                src="/assets/trend.png"
-                                                alt="Trend"
-                                            />
+                                            <button
+                                                type="button"
+                                                className="image-box-link"
+                                                onClick={handleTrendClick}
+                                            >
+                                                <span className="image-label">
+                                                    {t("Trend")}
+                                                </span>
+                                                <img
+                                                    src="/assets/trend.png"
+                                                    alt=""
+                                                />
+                                            </button>
                                         </div>
 
-                                        <div
-                                            className="image-box"
-                                            onClick={handleSubstanceClick}
-                                        >
+                                        <div className="image-box">
                                             {substanceTooltip && (
                                                 <Tooltip
                                                     title={substanceTooltip}
@@ -587,19 +661,22 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                                     </IconButton>
                                                 </Tooltip>
                                             )}
-                                            <div className="image-label">
-                                                {t("Substans")}
-                                            </div>
-                                            <img
-                                                src="/assets/substans.png"
-                                                alt="Substans"
-                                            />
+                                            <button
+                                                type="button"
+                                                className="image-box-link"
+                                                onClick={handleSubstanceClick}
+                                            >
+                                                <span className="image-label">
+                                                    {t("Substans")}
+                                                </span>
+                                                <img
+                                                    src="/assets/substans.png"
+                                                    alt=""
+                                                />
+                                            </button>
                                         </div>
 
-                                        <div
-                                            className="image-box bottom"
-                                            onClick={handleMultiClick}
-                                        >
+                                        <div className="image-box bottom">
                                             {multiTooltip && (
                                                 <Tooltip
                                                     title={multiTooltip}
@@ -620,13 +697,19 @@ export function AntibioticResistancePageComponent(): JSX.Element {
                                                     </IconButton>
                                                 </Tooltip>
                                             )}
-                                            <div className="image-label">
-                                                {t("Multi")}
-                                            </div>
-                                            <img
-                                                src="/assets/multi.png"
-                                                alt="Multi"
-                                            />
+                                            <button
+                                                type="button"
+                                                className="image-box-link"
+                                                onClick={handleMultiClick}
+                                            >
+                                                <span className="image-label">
+                                                    {t("Multi")}
+                                                </span>
+                                                <img
+                                                    src="/assets/multi.png"
+                                                    alt=""
+                                                />
+                                            </button>
                                         </div>
                                     </>
                                 )}

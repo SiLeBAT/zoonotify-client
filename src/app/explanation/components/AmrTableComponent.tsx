@@ -68,7 +68,8 @@ const AmrTableComponent: React.FC<AmrTableComponentProps> = ({ tableData }) => {
 
     return (
         <div style={{ margin: "0 auto", maxWidth: "90%" }}>
-            <div
+            <button
+                type="button"
                 style={{
                     display: "inline-block",
                     padding: "4px 8px",
@@ -78,11 +79,14 @@ const AmrTableComponent: React.FC<AmrTableComponentProps> = ({ tableData }) => {
                     borderRadius: "4px",
                     cursor: "pointer",
                     transition: "background-color 0.3s",
+                    font: "inherit",
+                    color: "inherit",
+                    textAlign: "left",
                 }}
                 onClick={() => setOpen(true)}
             >
-                <Markdown>{title}</Markdown>
-            </div>
+                <Markdown options={{ forceInline: true }}>{title}</Markdown>
+            </button>
 
             <Dialog
                 open={open}

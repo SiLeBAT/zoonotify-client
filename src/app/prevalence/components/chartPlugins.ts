@@ -128,23 +128,29 @@ export const drawErrorBars = (chart: ChartJS): void => {
                 const xMin = chart.scales.x.getPixelForValue(dataPoint.ciMin);
                 const xMax = chart.scales.x.getPixelForValue(dataPoint.ciMax);
                 const y = bar.y;
+                // Whiskers stay inside their own bar: with several compared
+                // combinations per year, fixed 10px whiskers covered the
+                // (thinner) bars and spilled onto their neighbours.
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const barHeight = (bar as any).height ?? 10;
+                const whisker = Math.max(2, Math.min(5, barHeight * 0.35));
 
                 ctx.save();
                 ctx.strokeStyle = "black";
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1.5;
                 ctx.beginPath();
                 ctx.moveTo(xMin, y);
                 ctx.lineTo(xMax, y);
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(xMin, y - 5);
-                ctx.lineTo(xMin, y + 5);
+                ctx.moveTo(xMin, y - whisker);
+                ctx.lineTo(xMin, y + whisker);
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(xMax, y - 5);
-                ctx.lineTo(xMax, y + 5);
+                ctx.moveTo(xMax, y - whisker);
+                ctx.lineTo(xMax, y + whisker);
                 ctx.stroke();
 
                 ctx.restore();
