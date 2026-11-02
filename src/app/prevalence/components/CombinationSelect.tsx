@@ -49,6 +49,14 @@ const CombinationSelect: React.FC<CombinationSelectProps> = ({
         maxSelectable > 0 && selectedCombinations.length === maxSelectable;
     // Only call it "first four" when the cap actually limits the selection.
     const isCapped = availableCombinations.length > maxCombinations;
+    // A pick kept from another microorganism that this one lacks still holds
+    // its slot (it plots nothing), so it stays listed to be unchecked.
+    const listedCombinations = [
+        ...availableCombinations,
+        ...selectedCombinations.filter(
+            (combination) => !availableCombinations.includes(combination)
+        ),
+    ];
 
     const handleChange = (next: string[]): void => {
         if (next.includes(TOGGLE_ALL)) {
@@ -100,7 +108,7 @@ const CombinationSelect: React.FC<CombinationSelectProps> = ({
                             }
                         />
                     </MenuItem>
-                    {availableCombinations.map((combination) => (
+                    {listedCombinations.map((combination) => (
                         <MenuItem key={combination} value={combination}>
                             <Checkbox
                                 checked={selectedCombinations.includes(
