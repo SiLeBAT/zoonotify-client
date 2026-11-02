@@ -15,6 +15,13 @@ ChartJS.register(...registerables);
 /** The graph compares at most this many combinations (as on the AMR page). */
 const MAX_COMBINATIONS = 4;
 
+/** A Combination: sample origin × matrix × sampling stage. */
+const combinationKey = (entry: {
+    sampleOrigin: string;
+    matrix: string;
+    samplingStage: string;
+}): string => `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
+
 const PrevalenceChart: React.FC = () => {
     const {
         prevalenceData,
@@ -96,11 +103,40 @@ const PrevalenceChart: React.FC = () => {
         setChartYearRange(null);
     }, [selectedChartMicroorganism, microYearMin, microYearMax]);
 
-    // A new microorganism or a new search brings its own combinations: fall
-    // back to the default rather than keep picks that may no longer exist.
+    // A new search brings a new dataset: fall back to the default. A
+    // microorganism switch does not reset — the picks carry over, and one the
+    // new microorganism lacks simply plots nothing (its slot stays empty).
     useEffect(() => {
         setChosenCombinations(null);
-    }, [selectedChartMicroorganism, prevalenceData]);
+    }, [prevalenceData]);
+
+    // On a microorganism switch, an untouched default (`null`) would silently
+    // become the new microorganism's first combinations. Pin it to what was on
+    // screen instead: the previous microorganism's default. Done during render
+    // (not in an effect) so the swapped-in default is never shown. A previous
+    // microorganism without data (e.g. one from the URL that the search did not
+    // return) has nothing on screen to keep.
+    const [selectionMicroorganism, setSelectionMicroorganism] = useState(
+        selectedChartMicroorganism
+    );
+    if (selectionMicroorganism !== selectedChartMicroorganism) {
+        setSelectionMicroorganism(selectedChartMicroorganism);
+        if (chosenCombinations === null) {
+            const previousDefault = Array.from(
+                new Set(
+                    prevalenceData
+                        .filter(
+                            (entry) =>
+                                entry.microorganism === selectionMicroorganism
+                        )
+                        .map(combinationKey)
+                )
+            ).slice(0, MAX_COMBINATIONS);
+            if (previousDefault.length > 0) {
+                setChosenCombinations(previousDefault);
+            }
+        }
+    }
 
     const updateAvailableMicroorganisms = (): void => {
         const microorganismsWithData = Array.from(
@@ -130,7 +166,7 @@ const PrevalenceChart: React.FC = () => {
 
         prevalenceData.forEach((entry) => {
             if (entry.microorganism === selectedChartMicroorganism) {
-                const key = `${entry.sampleOrigin}-${entry.matrix}-${entry.samplingStage}`;
+                const key = combinationKey(entry);
                 if (!chartData[key]) chartData[key] = {};
                 chartData[key][entry.samplingYear] = {
                     x: entry.percentageOfPositive,
