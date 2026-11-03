@@ -10,7 +10,8 @@ import { checkExternalLinks, devRuleViolations } from "./support/links";
 import { apiGet } from "./support/oracle";
 import { currentTarget } from "./targets";
 
-const target = currentTarget();
+// Resolved inside each test: release specs are also loaded by runs that set
+// no E2E_TARGET (the QA smoke job), and must not throw while being collected.
 
 /**
  * footer.links: every footer link goes where the code says (the one place
@@ -41,7 +42,7 @@ for (const lang of LANGUAGES) {
                 [footer.Content
                     .Mail]: `mailto:${supportEmail}?subject=ZooNotify-Problem`,
             };
-            if (target.apiReferenceLinked) {
+            if (currentTarget().apiReferenceLinked) {
                 expected[footer.Content.Api] = API_DOCUMENTATION_URL;
             }
 
@@ -55,7 +56,7 @@ for (const lang of LANGUAGES) {
             expect(Object.fromEntries(actual)).toEqual(expected);
 
             const hrefs = actual.map(([, href]) => href);
-            if (target.name === "prod") {
+            if (currentTarget().name === "prod") {
                 expect(devRuleViolations(hrefs), "dev rule").toEqual([]);
             }
 

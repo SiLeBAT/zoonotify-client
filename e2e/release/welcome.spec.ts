@@ -29,7 +29,8 @@ import {
 } from "./support/welcome-links";
 import { currentTarget } from "./targets";
 
-const target = currentTarget();
+// Resolved inside each test: release specs are also loaded by runs that set
+// no E2E_TARGET (the QA smoke job), and must not throw while being collected.
 
 interface WelcomeLink {
     text: string;
@@ -64,11 +65,11 @@ for (const lang of LANGUAGES) {
             annotation: releaseCheck("welcome.links", { lang }),
         },
         async ({ page, request }, testInfo) => {
-            test.skip(target.name !== "prod", "post-release only");
+            test.skip(currentTarget().name !== "prod", "post-release only");
             const links = await welcomeLinks(page, lang);
             const hrefs = [...new Set(links.map((l) => l.href))];
 
-            if (target.name === "prod") {
+            if (currentTarget().name === "prod") {
                 expect(devRuleViolations(hrefs), "dev rule").toEqual([]);
             }
 
@@ -271,7 +272,7 @@ for (const lang of LANGUAGES) {
             annotation: releaseCheck("welcome.example-queries", { lang }),
         },
         async ({ page, request }) => {
-            test.skip(target.name !== "prod", "post-release only");
+            test.skip(currentTarget().name !== "prod", "post-release only");
             test.setTimeout(300_000);
             expect(
                 await exampleQueryFailures(page, request, lang),

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { spawnSync } from "node:child_process";
 import {
     CHECK_ANNOTATION,
     PARAMS_ANNOTATION,
@@ -141,6 +142,24 @@ test.describe("targets", () => {
         expect(() => resolveTarget(undefined)).toThrow(/E2E_TARGET/);
         expect(() => resolveTarget("staging")).toThrow(/E2E_TARGET/);
         expect(() => resolveTarget("toString")).toThrow(/E2E_TARGET/);
+    });
+
+    // The QA smoke job sets E2E_BASE_URL but no E2E_TARGET. That defines the
+    // release project, so Playwright loads its spec files while collecting,
+    // and a target resolved at module load would abort the whole smoke run.
+    test("release specs load without E2E_TARGET, as the smoke job runs", () => {
+        const env: NodeJS.ProcessEnv = {
+            ...process.env,
+            E2E_BASE_URL: "https://smoke.invalid",
+        };
+        delete env.E2E_TARGET;
+        const listed = spawnSync(
+            "npx",
+            ["playwright", "test", "--list", "--grep", "@smoke"],
+            { env, encoding: "utf8", shell: process.platform === "win32" }
+        );
+        expect(listed.stdout + listed.stderr).not.toMatch(/E2E_TARGET/);
+        expect(listed.status).toBe(0);
     });
 });
 
