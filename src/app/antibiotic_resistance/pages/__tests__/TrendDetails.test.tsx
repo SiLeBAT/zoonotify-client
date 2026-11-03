@@ -223,3 +223,22 @@ describe("TrendDetails chart year window", () => {
             .forEach((chart) => expect(chart).toHaveTextContent("2020-2021"));
     });
 });
+
+describe("TrendDetails filter selects", () => {
+    it.each([
+        "ANTIBIOTIC_SUBSTANCE",
+        "SUPER-CATEGORY-SAMPLE-ORIGIN",
+        "SAMPLE_ORIGIN",
+        "SAMPLING_STAGE",
+        "MATRIX_GROUP",
+        "MATRIX",
+    ])("exposes %s as the accessible name of its combobox", async (label) => {
+        await renderTrendDetails();
+
+        expect(
+            screen.getByRole("combobox", {
+                name: new RegExp(`^${label}(\s|$)`),
+            })
+        ).toBeInTheDocument();
+    });
+});

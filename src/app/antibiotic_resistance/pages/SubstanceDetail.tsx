@@ -891,8 +891,11 @@ export const SubstanceDetail: React.FC<{
                 sx={{ mb: 0 }}
             >
                 <FormControl sx={{ minWidth: 180 }}>
-                    <InputLabel>{t("SAMPLING_YEAR")}</InputLabel>
+                    <InputLabel id={"sampling-year"}>
+                        {t("SAMPLING_YEAR")}
+                    </InputLabel>
                     <Select
+                        labelId={"sampling-year"}
                         value={chartYear ?? ""}
                         label={t("SAMPLING_YEAR")}
                         onChange={(e) => {
@@ -1057,8 +1060,11 @@ export const SubstanceDetail: React.FC<{
                 sx={{ mb: 0 }}
             >
                 <FormControl sx={{ width: SELECT_WIDTH }}>
-                    <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
+                    <InputLabel id={"antibiotic-substance"}>
+                        {t("ANTIBIOTIC_SUBSTANCE")}
+                    </InputLabel>
                     <Select
+                        labelId={"antibiotic-substance"}
                         multiple
                         value={substanceFilter}
                         onChange={handleChange}
@@ -1162,8 +1168,9 @@ export const SubstanceDetail: React.FC<{
         return (
             <Stack direction="row" spacing={1} alignItems="center">
                 <FormControl fullWidth>
-                    <InputLabel>{label}</InputLabel>
+                    <InputLabel id={`filter-${key}`}>{label}</InputLabel>
                     <Select
+                        labelId={`filter-${key}`}
                         multiple
                         value={value}
                         onChange={handleChange}
@@ -1426,8 +1433,11 @@ export const SubstanceDetail: React.FC<{
 
                         <Stack direction="row" spacing={1} alignItems="center">
                             <FormControl sx={{ width: SELECT_WIDTH }}>
-                                <InputLabel>{t("combinations")}</InputLabel>
+                                <InputLabel id={"combinations"}>
+                                    {t("combinations")}
+                                </InputLabel>
                                 <Select
+                                    labelId={"combinations"}
                                     multiple
                                     value={selectedCombinations} //  stable ids
                                     onChange={(e) => {
