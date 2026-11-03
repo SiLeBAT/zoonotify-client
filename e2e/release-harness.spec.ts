@@ -13,7 +13,11 @@ import {
 } from "./release/support/checks-list";
 import { classifyLink, devRuleViolations } from "./release/support/links";
 import { assertNotTruncated, normalise } from "./release/support/oracle";
-import { commitMatches, servedCommit } from "./release/support/rc-guard";
+import {
+    commitMatches,
+    guardPasses,
+    servedCommit,
+} from "./release/support/rc-guard";
 import { resolveTarget } from "./release/targets";
 
 /**
@@ -109,6 +113,14 @@ test.describe("the RC guard", () => {
         expect(commitMatches("abcdef1", "abcdef1234567890")).toBe(true);
         expect(commitMatches("1111111", "abcdef1")).toBe(false);
         expect(commitMatches("abcdef1", null)).toBe(false);
+    });
+
+    test("the guard passes without an expected commit, whatever the footer says", () => {
+        expect(guardPasses(undefined, null)).toBe(true);
+        expect(guardPasses("", "abcdef1")).toBe(true);
+        expect(guardPasses("abcdef1", "abcdef1")).toBe(true);
+        expect(guardPasses("abcdef1", null)).toBe(false);
+        expect(guardPasses("abcdef1", "1111111")).toBe(false);
     });
 });
 
