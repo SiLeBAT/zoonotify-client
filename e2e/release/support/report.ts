@@ -111,7 +111,10 @@ function classify(record: TestRecord): {
 }
 
 function cell(text: string): string {
-    return text.replace(/\|/g, "\\|").replace(/\s*\r?\n\s*/g, " ");
+    return text
+        .replace(/\\/g, "\\\\")
+        .replace(/\|/g, "\\|")
+        .replace(/\s*\r?\n\s*/g, " ");
 }
 
 function rowsOf(records: TestRecord[]): Row[] {
