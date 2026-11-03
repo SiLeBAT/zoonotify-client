@@ -24,8 +24,8 @@ Runs: **RC** = RC run on QA; **post** = post-release run on production.
 | `prevalence.figure-download`         | Prevalence figure download                              | 11        | RC                     | pending #128                              |
 | `prevalence.figure-layout`           | Prevalence figure has no overlapping text               | 11        | -                      | manual                                    |
 | `prevalence.data-download`           | Prevalence data download                                | 12        | RC                     | `e2e/release/prevalence-download.spec.ts` |
-| `prevalence.data-filter`             | Prevalence data filter                                  | 13        | RC (level 1 also post) | pending #126                              |
-| `prevalence.reset-filter`            | Prevalence reset filter button                          | 14        | RC                     | pending #126                              |
+| `prevalence.data-filter`             | Prevalence data filter                                  | 13        | RC (level 1 also post) | `e2e/release/prevalence-filter.spec.ts`   |
+| `prevalence.reset-filter`            | Prevalence reset filter button                          | 14        | RC                     | `e2e/release/prevalence-filter.spec.ts`   |
 | `prevalence.small-screen`            | Prevalence figures on a small screen                    | 15        | RC (evidence)          | manual                                    |
 | `prevalence.change-language`         | Prevalence change language                              | 16        | RC                     | pending #128                              |
 | `prevalence.filter-above-graph`      | Prevalence filter above the graph                       | 17        | RC                     | pending #128                              |
