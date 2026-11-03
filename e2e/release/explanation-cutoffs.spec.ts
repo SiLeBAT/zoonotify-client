@@ -93,9 +93,7 @@ async function openTable(
         .click({ timeout: 30_000 });
     const opener = page.locator(`button[id="${tableId}"]`);
     await expect(opener).toBeVisible({ timeout: 30_000 });
-    // The page reads the table id from the click target or its parent; the
-    // button centre can land on a deeper child, so click near its corner.
-    await opener.click({ position: { x: 4, y: 4 } });
+    await opener.click();
     const dialog = page.getByRole("dialog");
     const grid = dialog.getByRole("table", { name: "amr-table" });
     await expect(grid).toBeVisible();
