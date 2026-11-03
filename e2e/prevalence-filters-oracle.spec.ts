@@ -99,6 +99,9 @@ test.describe("compareOptions", () => {
 });
 
 test("loading more rows than the client fetches trips the truncation guard", async () => {
+    // Restored afterwards: a worker is reused, and smoke.spec reads this
+    // variable to decide whether the run is against a deployment.
+    const previous = process.env.E2E_BASE_URL;
     process.env.E2E_BASE_URL ??= "http://oracle.invalid";
     const tooMany = {
         get: async () => ({
@@ -109,5 +112,10 @@ test("loading more rows than the client fetches trips the truncation guard", asy
             }),
         }),
     } as unknown as APIRequestContext;
-    await expect(loadFacetRows(tooMany, "en")).rejects.toThrow(/901/);
+    try {
+        await expect(loadFacetRows(tooMany, "en")).rejects.toThrow(/901/);
+    } finally {
+        if (previous === undefined) delete process.env.E2E_BASE_URL;
+        else process.env.E2E_BASE_URL = previous;
+    }
 });
