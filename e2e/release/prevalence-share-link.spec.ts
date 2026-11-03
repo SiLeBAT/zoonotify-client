@@ -2,7 +2,7 @@ import { expect, Page, test } from "@playwright/test";
 import { visit } from "../support/app";
 import { releaseCheck } from "./support/annotations";
 import { LANGUAGES, LOCALES } from "./support/locales";
-import { normalise } from "./support/oracle";
+import { Locale, normalise } from "./support/oracle";
 import { chooseOption, comboboxByLabel, readOptions } from "./support/select";
 
 /**
@@ -15,7 +15,7 @@ import { chooseOption, comboboxByLabel, readOptions } from "./support/select";
  * their defaults when the link is opened.
  */
 
-type Prevalence = (typeof LOCALES)["en"]["prevalence"];
+type Prevalence = (typeof LOCALES)[Locale]["prevalence"];
 
 /** Chooses "Select All" in a multi-select. */
 async function selectAll(

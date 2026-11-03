@@ -14,7 +14,7 @@ import {
  * reads the real one, so the comparison must reject the dropdown. Not a release
  * check itself (no annotation), so the report never lists it.
  */
-const labels = LOCALES.en.prevalence as Record<string, string>;
+const labels = LOCALES.en.prevalence as unknown as Record<string, string>;
 
 test("a response missing one value fails the options comparison", async ({
     page,

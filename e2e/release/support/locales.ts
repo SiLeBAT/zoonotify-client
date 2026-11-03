@@ -25,4 +25,4 @@ export const LOCALES = {
         information: infoEn,
         prevalence: prevalenceEn,
     },
-} as const;
+};

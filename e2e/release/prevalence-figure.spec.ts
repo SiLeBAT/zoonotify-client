@@ -28,7 +28,6 @@ import { reportOutcome } from "./support/annotations";
  * from the canvas spy; expected values come from the locale JSON and the
  * site's own API, for a sample origin picked from live data.
  */
-const LOCALES = { en: prevalenceEn, de: prevalenceDe } as const;
 const PLOTTED_TITLE_FONT = /\b19px Arial$/;
 
 interface Data {

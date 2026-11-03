@@ -25,7 +25,7 @@ import { closeSelect } from "./support/select";
  * dropdown) also runs on production; level 2 (options match the oracle, and the
  * cascade narrows) is RC only.
  */
-const labels = LOCALES.en.prevalence as Record<string, string>;
+const labels = LOCALES.en.prevalence as unknown as Record<string, string>;
 
 test(
     "prevalence data filter, level 1: every filter opens a dropdown with options @post-release",
