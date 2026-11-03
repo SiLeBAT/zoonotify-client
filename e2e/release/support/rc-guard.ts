@@ -20,3 +20,19 @@ export function commitMatches(
     const b = served.trim().toLowerCase();
     return a.length > 0 && (a.startsWith(b) || b.startsWith(a));
 }
+
+/** What the report shows when the footer does not say which commit it serves. */
+export const UNKNOWN_COMMIT = "unknown";
+
+/**
+ * Whether the guard passes. Without an expected commit (the post-release run)
+ * nothing is compared, so an older build whose footer carries no commit still
+ * passes; with one, a missing or different commit fails.
+ */
+export function guardPasses(
+    expected: string | undefined,
+    served: string | null
+): boolean {
+    if (!expected) return true;
+    return commitMatches(expected, served);
+}
