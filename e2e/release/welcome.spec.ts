@@ -59,6 +59,7 @@ for (const lang of LANGUAGES) {
             annotation: releaseCheck("welcome.links", { lang }),
         },
         async ({ page, request }, testInfo) => {
+            test.skip(target.name !== "prod", "post-release only");
             const links = await welcomeLinks(page, lang);
             const hrefs = [...new Set(links.map((l) => l.href))];
 
@@ -278,6 +279,7 @@ for (const lang of LANGUAGES) {
             annotation: releaseCheck("welcome.example-queries", { lang }),
         },
         async ({ page, request }) => {
+            test.skip(target.name !== "prod", "post-release only");
             test.setTimeout(300_000);
             expect(
                 await exampleQueryFailures(page, request, lang),
