@@ -771,8 +771,11 @@ export const TrendDetails: React.FC<{
                 sx={{ mb: 3 }}
             >
                 <FormControl sx={{ width: SELECT_WIDTH }}>
-                    <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
+                    <InputLabel id={"antibiotic-substance"}>
+                        {t("ANTIBIOTIC_SUBSTANCE")}
+                    </InputLabel>
                     <Select
+                        labelId={"antibiotic-substance"}
                         multiple
                         value={substanceFilter}
                         onChange={handleChange}
@@ -865,8 +868,9 @@ export const TrendDetails: React.FC<{
         return (
             <Stack direction="row" spacing={1} alignItems="center">
                 <FormControl fullWidth>
-                    <InputLabel>{label}</InputLabel>
+                    <InputLabel id={`filter-${key}`}>{label}</InputLabel>
                     <Select
+                        labelId={`filter-${key}`}
                         multiple
                         value={value}
                         onChange={handleChange}

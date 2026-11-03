@@ -72,3 +72,13 @@ jobs:
           ssh-port: ${{ vars.PROD_SSH_PORT }}
           ssh-user: ${{ secrets.PROD_SSH_USER }}
           ssh-key: ${{ secrets.PROD_SSH_KEY }}
+
+  # Read-only post-release run against the live site; the tests come from the
+  # tag that was just deployed.
+  release-checks:
+    name: 'Release checks (production)'
+    needs: deploy
+    uses: ./.github/workflows/release-checks.yml
+    with:
+      target: prod
+      ref: ${{ inputs.tag }}
