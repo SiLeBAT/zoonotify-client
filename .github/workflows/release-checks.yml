@@ -1,0 +1,83 @@
+name: Release checks
+
+# Runs the release checks (e2e/release) against a deployed site and writes the
+# release report to the job summary. Called after the QA deploy of an rc-*
+# branch and after the production deploy; also startable by hand, without a
+# redeploy, e.g. after a CMS data import. Informs the release decision, never
+# gates it. See docs/e2e-testing.md (monorepo root) and plans/release-e2e.md.
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: 'Site to check: qa or prod'
+        required: true
+        type: string
+      ref:
+        description: 'Branch, tag or commit whose tests run (the deployed ref)'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Site to check'
+        required: true
+        type: choice
+        options:
+          - qa
+          - prod
+      ref:
+        description: 'Branch, tag or commit whose tests run (default: the ref this run was started on)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  release-checks:
+    name: 'Release checks (${{ inputs.target }})'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: actions/setup-node@v6
+        with:
+          # Pinned (not node-version-file) because a release tag can predate .nvmrc.
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # Do not pass --reporter: it would replace the release reporter that
+      # playwright.config.ts adds, and with it the job summary.
+      #
+      # QA: the whole release project, guarded by the short commit of the ref
+      # (the same short form cd-qa stamps into the footer). The tests come from
+      # the ref under test.
+      - name: Release checks on QA
+        if: ${{ inputs.target == 'qa' }}
+        run: |
+          E2E_EXPECTED_COMMIT="$(git rev-parse --short HEAD)"
+          export E2E_EXPECTED_COMMIT
+          npx playwright test --project=release
+        env:
+          E2E_TARGET: qa
+          E2E_BASE_URL: ${{ vars.QA_BASE_URL || 'https://zoonotify-dev.bfr.berlin' }}
+
+      # Prod: read-only post-release run. Two workers, one retry and the
+      # User-Agent suffix `ZooNotify-release-check` come from playwright.config.ts
+      # when E2E_TARGET=prod.
+      - name: Post-release checks on production
+        if: ${{ inputs.target == 'prod' }}
+        run: npx playwright test --grep "@smoke|@post-release"
+        env:
+          E2E_TARGET: prod
+          E2E_BASE_URL: ${{ vars.PROD_BASE_URL || 'https://zoonotify.bfr.berlin' }}
+
+      - uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: release-report-${{ inputs.target }}
+          path: playwright-report/
+          retention-days: 90
