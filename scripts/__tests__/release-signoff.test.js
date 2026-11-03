@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const {
     versionFromRef,
+    versionFromRefs,
     manualChecks,
     buildIssueBody,
     signoffTitle,
@@ -62,6 +63,23 @@ describe("versionFromRef", () => {
         undefined,
     ])("returns null for %s", (ref) => {
         expect(versionFromRef(ref)).toBeNull();
+    });
+});
+
+describe("versionFromRefs", () => {
+    const sha = "1234567890abcdef1234567890abcdef12345678";
+
+    it("takes the caller branch when inputs.ref is a SHA", () => {
+        expect(versionFromRefs([sha, "refs/heads/rc-1.2.3"])).toBe("1.2.3");
+    });
+
+    it("takes the tag when the caller ref is develop", () => {
+        expect(versionFromRefs(["v2.0.1", "refs/heads/develop"])).toBe("2.0.1");
+    });
+
+    it("gives null when neither names a release", () => {
+        expect(versionFromRefs([sha, "refs/heads/develop"])).toBeNull();
+        expect(versionFromRefs([])).toBeNull();
     });
 });
 
@@ -140,7 +158,7 @@ describe("findOrCreateIssue", () => {
 
 describe("run", () => {
     const env = (ref) => ({
-        RELEASE_REF: ref,
+        RELEASE_REFS: ref,
         GITHUB_SERVER_URL: "https://github.com",
         GITHUB_REPOSITORY: "o/r",
         GITHUB_RUN_ID: "42",

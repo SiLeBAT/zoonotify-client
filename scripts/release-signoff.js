@@ -5,7 +5,7 @@
  * (or creates it from e2e/release/release-checks.md) and comments the run's
  * report plus a link to the run. Any other ref does nothing.
  *
- * Env: RELEASE_REF, GITHUB_TOKEN, GITHUB_REPOSITORY, GITHUB_SERVER_URL,
+ * Env: RELEASE_REFS (candidate refs, first that parses wins), GITHUB_TOKEN, GITHUB_REPOSITORY, GITHUB_SERVER_URL,
  * GITHUB_API_URL, GITHUB_RUN_ID.
  */
 const fs = require("fs");
@@ -21,6 +21,15 @@ function versionFromRef(ref) {
             ref || ""
         );
     return match ? match[1] : null;
+}
+
+/** First candidate ref that names a release, e.g. [inputs.ref, github.ref]. */
+function versionFromRefs(refs) {
+    for (const ref of refs) {
+        const version = versionFromRef(ref);
+        if (version) return version;
+    }
+    return null;
 }
 
 const signoffTitle = (version) => `Release sign-off ${version}`;
@@ -100,10 +109,11 @@ async function run({
     client,
     readFile = (f) => fs.readFileSync(f, "utf8"),
 }) {
-    const version = versionFromRef(env.RELEASE_REF);
+    const refs = (env.RELEASE_REFS || "").split(/\s+/).filter(Boolean);
+    const version = versionFromRefs(refs);
     if (!version) {
         console.log(
-            `Ref "${env.RELEASE_REF}" is not rc-X.Y.Z or vX.Y.Z: no comment.`
+            `Refs "${refs.join(" ")}" are not rc-X.Y.Z or vX.Y.Z: no comment.`
         );
         return { skipped: true };
     }
@@ -170,6 +180,7 @@ function restClient(env, fetchImpl = fetch) {
 
 module.exports = {
     versionFromRef,
+    versionFromRefs,
     signoffTitle,
     manualChecks,
     buildIssueBody,
