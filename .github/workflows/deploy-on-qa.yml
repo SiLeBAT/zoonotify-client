@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+# Same group as cd-qa, so a develop push cannot deploy over an RC while its
+# release checks are still reading the site (a push cancels this run instead).
+concurrency:
+  group: deploy-qa
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -62,3 +68,15 @@ jobs:
           ssh-port: ${{ vars.QA_SSH_PORT }}
           ssh-user: ${{ secrets.QA_SSH_USER }}
           ssh-key: ${{ secrets.QA_SSH_KEY }}
+
+  # Only an rc-* branch is a release candidate worth a release report; a manual
+  # deploy of any other branch runs no checks. github.sha is the commit that was
+  # just built and deployed, so the checks and the RC guard use that commit.
+  release-checks:
+    name: 'Release checks (QA)'
+    needs: deploy
+    if: ${{ startsWith(github.ref_name, 'rc-') }}
+    uses: ./.github/workflows/release-checks.yml
+    with:
+      target: qa
+      ref: ${{ github.sha }}
