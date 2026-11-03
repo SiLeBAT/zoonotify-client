@@ -25,8 +25,9 @@ const STATUS: Record<ReturnType<TestCase["outcome"]>, TestRecord["status"]> = {
 const RELEASE_PROJECTS = ["release", "release-setup"];
 
 /**
- * Writes the release report when a run is over: appended to
- * `$GITHUB_STEP_SUMMARY` when set, else written to `release-report.md`.
+ * Writes the release report when a run is over: always to `release-report.md`
+ * (the sign-off issue comment reuses it), and also appended to
+ * `$GITHUB_STEP_SUMMARY` when set.
  * Only wired in for runs against a deployed site (see playwright.config.ts).
  */
 export default class ReleaseReporter implements Reporter {
@@ -62,11 +63,8 @@ export default class ReleaseReporter implements Reporter {
         const header = await readHeader(process.env, this.servedCommit);
         const markdown = buildReport(header, [...this.records.values()]);
         const summary = process.env.GITHUB_STEP_SUMMARY;
-        if (summary) {
-            appendFileSync(summary, markdown);
-        } else {
-            writeFileSync("release-report.md", markdown);
-        }
+        writeFileSync("release-report.md", markdown);
+        if (summary) appendFileSync(summary, markdown);
     }
 }
 
