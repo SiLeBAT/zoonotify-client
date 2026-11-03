@@ -242,7 +242,7 @@ describe("SubstanceDetail filter selects", () => {
 
         expect(
             screen.getByRole("combobox", {
-                name: new RegExp(`^${label}(\s|$)`),
+                name: new RegExp(`^${label}(\\s|$)`),
             })
         ).toBeInTheDocument();
     });
