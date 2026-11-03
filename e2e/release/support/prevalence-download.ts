@@ -127,7 +127,7 @@ export function csvFormatProblems(
 
     const other = decimal === "." ? "," : ".";
     const numberShape = new RegExp(
-        `^-?\\d+(${decimal.replace(/[.]/g, "\\.")}\\d+)?$`
+        `^-?\\d+(${decimal.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\d+)?$`
     );
     const reported = new Set<string>();
     const report = (message: string): void => {
