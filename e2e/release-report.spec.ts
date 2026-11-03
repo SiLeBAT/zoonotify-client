@@ -1,10 +1,15 @@
+import { mkdtempSync, readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { expect, test } from "@playwright/test";
+import type { TestCase, TestResult } from "@playwright/test/reporter";
 import {
     CHECK_ANNOTATION,
     OUTCOME_ANNOTATION,
     PARAMS_ANNOTATION,
     releaseCheck,
 } from "./release/support/annotations";
+import ReleaseReporter from "./release/support/reporter";
 import {
     buildReport,
     formatDataStatus,
@@ -207,5 +212,65 @@ test.describe("header helpers", () => {
             })
         ).toBe("https://github.com/SiLeBAT/zoonotify/actions/runs/42");
         expect(runUrl({})).toBeNull();
+    });
+});
+
+test.describe("ReleaseReporter", () => {
+    function fakeTest(
+        id: string,
+        project: string,
+        title: string,
+        tags: string[]
+    ): TestCase {
+        return {
+            id,
+            title,
+            tags,
+            parent: { project: () => ({ name: project }) },
+            outcome: () => "expected",
+        } as unknown as TestCase;
+    }
+
+    function fakeResult(annotations: TestResult["annotations"]): TestResult {
+        return { annotations } as unknown as TestResult;
+    }
+
+    test("counts @smoke tests from the chromium project in the Smoke line", async () => {
+        const outputFile = path.join(
+            mkdtempSync(path.join(tmpdir(), "release-report-")),
+            "report.md"
+        );
+        const reporter = new ReleaseReporter({ outputFile });
+        reporter.onTestEnd(
+            fakeTest("1", "release", "a check", []),
+            fakeResult(releaseCheck("footer.links"))
+        );
+        reporter.onTestEnd(
+            fakeTest("2", "chromium", "@smoke boots", ["@smoke"]),
+            fakeResult([])
+        );
+        reporter.onTestEnd(
+            fakeTest("3", "chromium", "not smoke", []),
+            fakeResult([])
+        );
+        await reporter.onEnd({ status: "passed" } as never);
+
+        const report = readFileSync(outputFile, "utf8");
+        expect(report).toContain("Smoke: 1 passed.");
+        expect(report).toContain("`footer.links`");
+    });
+
+    test("a run without release projects writes no report", async () => {
+        const outputFile = path.join(
+            mkdtempSync(path.join(tmpdir(), "release-report-")),
+            "report.md"
+        );
+        const reporter = new ReleaseReporter({ outputFile });
+        reporter.onTestEnd(
+            fakeTest("2", "chromium", "@smoke boots", ["@smoke"]),
+            fakeResult([])
+        );
+        await reporter.onEnd({ status: "passed" } as never);
+        expect(() => readFileSync(outputFile, "utf8")).toThrow();
     });
 });

@@ -35,15 +35,26 @@ export default class ReleaseReporter implements Reporter {
     private ranRelease = false;
     private servedCommit: string | null = null;
 
+    private outputFile: string;
+
+    constructor(options: { outputFile?: string } = {}) {
+        this.outputFile = options.outputFile ?? "release-report.md";
+    }
+
     onTestEnd(test: TestCase, result: TestResult): void {
-        if (!RELEASE_PROJECTS.includes(test.parent.project()?.name ?? "")) {
-            return;
-        }
-        this.ranRelease = true;
-        const commit = result.annotations.find(
-            (a) => a.type === CLIENT_COMMIT_ANNOTATION
+        const inRelease = RELEASE_PROJECTS.includes(
+            test.parent.project()?.name ?? ""
         );
-        if (commit) this.servedCommit = commit.description ?? null;
+        // The Smoke line counts @smoke tests wherever they run (they live in
+        // the CMS-free chromium project); everything else is release-only.
+        if (!inRelease && !test.tags.includes("@smoke")) return;
+        if (inRelease) {
+            this.ranRelease = true;
+            const commit = result.annotations.find(
+                (a) => a.type === CLIENT_COMMIT_ANNOTATION
+            );
+            if (commit) this.servedCommit = commit.description ?? null;
+        }
         // Each attempt overwrites the last; the final one speaks for the test.
         this.records.set(test.id, {
             title: test.title,
@@ -63,7 +74,7 @@ export default class ReleaseReporter implements Reporter {
         const header = await readHeader(process.env, this.servedCommit);
         const markdown = buildReport(header, [...this.records.values()]);
         const summary = process.env.GITHUB_STEP_SUMMARY;
-        writeFileSync("release-report.md", markdown);
+        writeFileSync(this.outputFile, markdown);
         if (summary) appendFileSync(summary, markdown);
     }
 }
