@@ -1,4 +1,8 @@
-import { defineConfig, devices } from "@playwright/test";
+import {
+    defineConfig,
+    devices,
+    type ReporterDescription,
+} from "@playwright/test";
 
 /**
  * Where the suite points. Unset, it drives a dev server Playwright starts and
@@ -18,9 +22,14 @@ export default defineConfig({
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
     workers: process.env.CI ? 2 : undefined,
-    reporter: process.env.CI
-        ? [["github"], ["html", { open: "never" }]]
-        : [["list"], ["html", { open: "never" }]],
+    reporter: [
+        ...(process.env.CI
+            ? [["github"], ["html", { open: "never" }]]
+            : [["list"], ["html", { open: "never" }]]),
+        // Release runs (against a deployed site) also write the release
+        // report; the CMS-free sweep keeps exactly the reporters above.
+        ...(ownsServer ? [] : [["./e2e/release/support/reporter.ts"]]),
+    ] as ReporterDescription[],
     use: {
         baseURL,
         trace: "on-first-retry",
