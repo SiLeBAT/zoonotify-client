@@ -300,8 +300,9 @@ export const MultiResistanceDetail: React.FC<{
         return (
             <Stack direction="row" spacing={1} alignItems="center">
                 <FormControl fullWidth>
-                    <InputLabel>{label}</InputLabel>
+                    <InputLabel id={`filter-${key}`}>{label}</InputLabel>
                     <Select
+                        labelId={`filter-${key}`}
                         multiple
                         value={value}
                         onChange={handleChange}
@@ -535,10 +536,11 @@ export const MultiResistanceDetail: React.FC<{
                                 alignItems="center"
                             >
                                 <FormControl sx={{ minWidth: 180 }}>
-                                    <InputLabel>
+                                    <InputLabel id={"sampling-year"}>
                                         {t("SAMPLING_YEAR")}
                                     </InputLabel>
                                     <Select
+                                        labelId={"sampling-year"}
                                         value={chartYear ?? ""}
                                         label={t("SAMPLING_YEAR")}
                                         onChange={(e) => {
@@ -575,8 +577,11 @@ export const MultiResistanceDetail: React.FC<{
                                 <FormControl
                                     sx={{ width: 520, maxWidth: "100%" }}
                                 >
-                                    <InputLabel>{t("combinations")}</InputLabel>
+                                    <InputLabel id={"combinations"}>
+                                        {t("combinations")}
+                                    </InputLabel>
                                     <Select
+                                        labelId={"combinations"}
                                         multiple
                                         value={shownKeys}
                                         label={t("combinations")}
