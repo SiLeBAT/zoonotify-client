@@ -24,13 +24,13 @@ Runs: **RC** = RC run on QA; **post** = post-release run on production.
 | `prevalence.figure-download`         | Prevalence figure download                              | 11        | RC                     | pending #128                              |
 | `prevalence.figure-layout`           | Prevalence figure has no overlapping text               | 11        | -                      | manual                                    |
 | `prevalence.data-download`           | Prevalence data download                                | 12        | RC                     | `e2e/release/prevalence-download.spec.ts` |
-| `prevalence.data-filter`             | Prevalence data filter                                  | 13        | RC (level 1 also post) | pending #126                              |
-| `prevalence.reset-filter`            | Prevalence reset filter button                          | 14        | RC                     | pending #126                              |
+| `prevalence.data-filter`             | Prevalence data filter                                  | 13        | RC (level 1 also post) | `e2e/release/prevalence-filter.spec.ts`   |
+| `prevalence.reset-filter`            | Prevalence reset filter button                          | 14        | RC                     | `e2e/release/prevalence-filter.spec.ts`   |
 | `prevalence.small-screen`            | Prevalence figures on a small screen                    | 15        | RC (evidence)          | manual                                    |
 | `prevalence.change-language`         | Prevalence change language                              | 16        | RC                     | pending #128                              |
 | `prevalence.filter-above-graph`      | Prevalence filter above the graph                       | 17        | RC                     | pending #128                              |
 | `prevalence.share-link`              | Prevalence share link button                            | 18        | RC                     | e2e/release/prevalence-share-link.spec.ts |
-| `amr.trend-info-button`              | AMR trend graph information button                      | 19        | RC                     | pending #130                              |
-| `amr.filter`                         | AMR trend and substance graph data filter, per organism | 20-29     | RC (level 1 also post) | pending #130                              |
+| `amr.trend-info-button`              | AMR trend graph information button                      | 19        | RC                     | `e2e/release/amr.spec.ts`                 |
+| `amr.filter`                         | AMR trend and substance graph data filter, per organism | 20-29     | RC (level 1 also post) | `e2e/release/amr.spec.ts`                 |
 | `explanation.cut-off-table`          | Explanation page cut-off tables, de and en              | 30-36     | RC + post              | `e2e/release/explanation-cutoffs.spec.ts` |
 | `explanation.cut-off-title-language` | Cut-off table titles are in the page language           | 30-36     | -                      | manual                                    |
