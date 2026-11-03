@@ -1,10 +1,16 @@
 import { APIRequestContext, expect, Page, test } from "@playwright/test";
-import { buildMicroorganismFilter } from "../../src/app/antibiotic_resistance/pages/resistanceHelpers";
-import { MAX_PAGE_SIZE } from "../../src/app/shared/model/CMS.model";
 import { visit } from "../support/app";
 import { releaseCheck } from "./support/annotations";
-import { checkExternalLinks, devRuleViolations } from "./support/links";
 import {
+    FILTER_LABELS,
+    FilterKey,
+    resistanceRows,
+} from "./support/amr-filters";
+import { checkExternalLinks, devRuleViolations } from "./support/links";
+import { LANGUAGES } from "./support/locales";
+import type { Related } from "./support/prevalence-api";
+import {
+    apiBase,
     apiGet,
     apiGetAll,
     Locale,
@@ -24,7 +30,6 @@ import {
 import { currentTarget } from "./targets";
 
 const target = currentTarget();
-const LANGUAGES: Lang[] = ["de", "en"];
 
 interface WelcomeLink {
     text: string;
@@ -67,7 +72,7 @@ for (const lang of LANGUAGES) {
                 expect(devRuleViolations(hrefs), "dev rule").toEqual([]);
             }
 
-            const siteHost = new URL(process.env.E2E_BASE_URL ?? "").host;
+            const siteHost = new URL(apiBase()).host;
             const external = hrefs.filter(
                 (href) =>
                     /^https?:/.test(href) &&
@@ -103,15 +108,7 @@ const PREVALENCE_LOOKUPS: Record<string, string> = {
     superCategorySampleOrigin: "/super-category-sample-origins",
 };
 
-const AMR_RELATIONS = [
-    "specie",
-    "superCategorySampleOrigin",
-    "sampleOrigin",
-    "samplingStage",
-    "matrixGroup",
-    "matrix",
-    "antimicrobialSubstance",
-];
+const AMR_RELATIONS = Object.keys(FILTER_LABELS) as FilterKey[];
 
 /** The options the client would offer for a query, read live from the API. */
 class OptionSource {
@@ -137,10 +134,10 @@ class OptionSource {
     private async prevalence(lang: Locale): Promise<Options> {
         const options: Options = {};
         for (const [key, path] of Object.entries(PREVALENCE_LOOKUPS)) {
-            const rows = await apiGetAll(
+            const rows = await apiGetAll<Related>(
                 this.request,
                 path,
-                MAX_PAGE_SIZE,
+                PAGE_SIZE.prevalence,
                 lang
             );
             options[key] = rows.map(({ name, documentId }) => ({
@@ -152,12 +149,7 @@ class OptionSource {
     }
 
     private async amr(lang: Locale, organism: string): Promise<Options> {
-        const rows = await apiGetAll(
-            this.request,
-            `/resistances?populate=*${buildMicroorganismFilter(organism)}`,
-            PAGE_SIZE.resistances,
-            lang
-        );
+        const rows = await resistanceRows(this.request, organism, lang);
         const options: Options = {};
         for (const key of AMR_RELATIONS) {
             const byId = new Map<string, LookupEntry>();
@@ -259,7 +251,7 @@ async function exampleQueryFailures(
         try {
             await assertResult(
                 page,
-                rebaseToSite(link.href, process.env.E2E_BASE_URL ?? ""),
+                rebaseToSite(link.href, apiBase()),
                 query,
                 organismName
             );

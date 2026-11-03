@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
-import prevalenceEn from "../../src/locales/en/PrevalencePage.json";
 import { releaseCheck } from "./support/annotations";
+import { LOCALES } from "./support/locales";
 import {
-    choose,
+    chooseFilterValue,
     DIMENSIONS,
     Dimension,
     expectFacet,
@@ -15,8 +15,8 @@ import {
     shownValue,
     filterSelect,
     openOptions,
-    closeDropdown,
 } from "./support/prevalence-filters";
+import { closeSelect } from "./support/select";
 
 /**
  * prevalence.data-filter and prevalence.reset-filter. Expected options are the
@@ -25,7 +25,7 @@ import {
  * dropdown) also runs on production; level 2 (options match the oracle, and the
  * cascade narrows) is RC only.
  */
-const labels = prevalenceEn as Record<string, string>;
+const labels = LOCALES.en.prevalence as Record<string, string>;
 
 test(
     "prevalence data filter, level 1: every filter opens a dropdown with options @post-release",
@@ -41,7 +41,7 @@ test(
                 filterSelect(page, labelId),
                 selectAllLabels(labels)
             );
-            await closeDropdown(page);
+            await closeSelect(page);
             expect(shown.length, `${dim} has options`).toBeGreaterThan(0);
         }
     }
@@ -69,7 +69,7 @@ test(
         for (const dim of ["superCategory", "microorganism"] as Dimension[]) {
             const option = facetOptions(rows, selection, dim)[0];
             expect(option, `${dim} offers a value to choose`).toBeTruthy();
-            await choose(page, labels, dim, option.name);
+            await chooseFilterValue(page, labels, dim, option.name);
             selection[dim] = [option.id];
             for (const other of all) {
                 const shown = await expectFacet(
@@ -100,7 +100,7 @@ test(
         const selection: Selection = {};
         for (const dim of ["superCategory", "microorganism"] as Dimension[]) {
             const option = facetOptions(rows, selection, dim)[0];
-            await choose(page, labels, dim, option.name);
+            await chooseFilterValue(page, labels, dim, option.name);
             selection[dim] = [option.id];
         }
         await page

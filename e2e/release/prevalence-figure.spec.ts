@@ -1,8 +1,7 @@
 import { expect, Locator, Page, test } from "@playwright/test";
-import prevalenceDe from "../../src/locales/de/PrevalencePage.json";
-import prevalenceEn from "../../src/locales/en/PrevalencePage.json";
 import { languageButton } from "../support/app";
 import { releaseCheck } from "./support/annotations";
+import { LOCALES } from "./support/locales";
 import {
     clearDraws,
     drawnYears,
@@ -20,6 +19,7 @@ import {
     Scenario,
     yearsOf,
 } from "./support/prevalence-figure";
+import { chooseOption, comboboxByLabel, readOptions } from "./support/select";
 import { reportOutcome } from "./support/annotations";
 
 /**
@@ -66,10 +66,7 @@ function legendOf(pass: { text: string; font: string }[]): string[] {
 }
 
 function chartSelect(page: Page, lang: Locale): Locator {
-    const label = LOCALES[lang].Select_Microorganism;
-    return page.getByRole("combobox", {
-        name: new RegExp(`^${label}(\\s|$)`),
-    });
+    return comboboxByLabel(page, LOCALES[lang].prevalence.Select_Microorganism);
 }
 
 const spied = new WeakSet<Page>();
@@ -93,7 +90,7 @@ async function openChart(
     }
     await page.goto(`/prevalence?lang=${lang}`);
     await page.waitForLoadState("networkidle");
-    const labels = LOCALES[lang];
+    const labels = LOCALES[lang].prevalence;
     const origin = data.scenario.origin[lang];
     const name = microName(data, lang, micro);
     await pickFilterOption(
@@ -137,11 +134,12 @@ async function chartMicroShown(page: Page, lang: Locale): Promise<string> {
 /** Selects an organism in the filter above the graph, unless already shown. */
 async function chooseChartMicro(page: Page, lang: Locale, name: string) {
     if ((await chartMicroShown(page, lang)) !== squash(name)) {
-        await chartSelect(page, lang).click();
-        const texts = await page.getByRole("option").allTextContents();
-        const index = texts.map(squash).indexOf(squash(name));
-        expect(index, `option for ${name}`).toBeGreaterThanOrEqual(0);
-        await page.getByRole("option").nth(index).click();
+        await chooseOption(
+            page,
+            chartSelect(page, lang),
+            (text) => squash(text) === squash(name),
+            { close: false, what: `the organism select (${name})` }
+        );
     }
     await expect.poll(() => chartMicroShown(page, lang)).toBe(squash(name));
 }
@@ -156,25 +154,12 @@ async function pickFilterOption(
     matches: (optionText: string) => boolean,
     { optional = false } = {}
 ): Promise<boolean> {
-    const filter = page.getByRole("combobox", {
-        name: new RegExp(`^${escapeRegExp(label)}(\s|$)`),
+    return chooseOption(page, comboboxByLabel(page, label), matches, {
+        how: "keyboard",
+        optional,
+        what: `"${label}"`,
     });
-    await filter.focus();
-    await filter.press("Enter");
-    const texts = await page.getByRole("option").allTextContents();
-    const index = texts.findIndex(matches);
-    if (index < 0 && optional) {
-        await page.keyboard.press("Escape");
-        return false;
-    }
-    expect(index, `"${label}" offers the option`).toBeGreaterThanOrEqual(0);
-    await page.getByRole("option").nth(index).click();
-    await page.keyboard.press("Escape");
-    return true;
 }
-
-const escapeRegExp = (text: string): string =>
-    text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** Waits until the visible chart's latest pass has a title, returns that pass. */
 async function onScreenPass(page: Page, name: string) {
@@ -211,7 +196,7 @@ test(
 
         for (const lang of ["en", "de"] as const) {
             await test.step(`figure in ${lang}`, async () => {
-                const labels = LOCALES[lang];
+                const labels = LOCALES[lang].prevalence;
                 const name = microName(data, lang, id);
                 await openChart(page, data, lang, id);
                 await onScreenPass(page, name);
@@ -314,7 +299,7 @@ test(
 
         await languageButton(page, "de").click();
         await expect(chartSelect(page, "de")).toBeVisible({ timeout: 30_000 });
-        const de = prevalenceDe;
+        const de = LOCALES.de.prevalence;
 
         // Labels equal the new locale JSON.
         await expect(
@@ -334,8 +319,7 @@ test(
         expect(await chartMicroShown(page, "de")).toBe(squash(deName));
 
         // Option names equal the API's names in the new locale.
-        await chartSelect(page, "de").click();
-        const options = (await page.getByRole("option").allTextContents())
+        const options = (await readOptions(page, chartSelect(page, "de")))
             .map(squash)
             .sort();
         await page.keyboard.press("Escape");

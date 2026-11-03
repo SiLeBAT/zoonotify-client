@@ -5,10 +5,9 @@ import {
     Page,
     test,
 } from "@playwright/test";
-import infoDe from "../../src/locales/de/InfoPage.json";
-import infoEn from "../../src/locales/en/InfoPage.json";
 import { visit } from "../support/app";
 import { releaseCheck } from "./support/annotations";
+import { LANGUAGES, LOCALES } from "./support/locales";
 import { apiGet, Locale, normalise } from "./support/oracle";
 
 /**
@@ -29,8 +28,6 @@ const TABLES = [
     { id: "5a", name: "E. faecalis" },
     { id: "5b", name: "E. faecium" },
 ] as const;
-
-const LOCALES = { de: infoDe, en: infoEn } as const;
 
 interface CutOff {
     year: number;
@@ -117,7 +114,7 @@ async function expectTableMatchesApi(
     const rows = table.cut_offs.filter((c) => c.antibiotic);
     const years = [...new Set(rows.map((c) => c.year))].sort((a, b) => b - a);
     expect(years.length, "the table holds cut-offs").toBeGreaterThan(0);
-    const amrs = LOCALES[lang].Methods.Amrs;
+    const amrs = LOCALES[lang].information.Methods.Amrs;
 
     // The first year column is the latest year the CMS holds.
     const headers = await grid
@@ -166,7 +163,7 @@ async function expectTableMatchesApi(
     expect(Object.fromEntries(seen)).toEqual(Object.fromEntries(want));
 }
 
-for (const lang of ["de", "en"] as const) {
+for (const lang of LANGUAGES) {
     for (const { id, name } of TABLES) {
         test(
             `cut-off table ${id} (${name}), ${lang} @post-release`,

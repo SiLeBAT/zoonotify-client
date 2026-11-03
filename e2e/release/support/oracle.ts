@@ -56,12 +56,12 @@ export function assertNotTruncated(total: number, pageSize: number): void {
  * GET a collection the way the client does (one page of `pageSize`) and apply
  * the truncation guard. Returns the `data` array.
  */
-export async function apiGetAll(
+export async function apiGetAll<Row = any>(
     request: APIRequestContext,
     path: string,
     pageSize: number,
     locale?: Locale
-): Promise<any[]> {
+): Promise<Row[]> {
     const json = await apiGet(
         request,
         withQuery(path, { "pagination[pageSize]": pageSize }),

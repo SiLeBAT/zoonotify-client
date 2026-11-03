@@ -1,9 +1,9 @@
-import { expect, Locator, Page, test } from "@playwright/test";
-import prevalenceDe from "../../src/locales/de/PrevalencePage.json";
-import prevalenceEn from "../../src/locales/en/PrevalencePage.json";
+import { expect, Page, test } from "@playwright/test";
 import { visit } from "../support/app";
 import { releaseCheck } from "./support/annotations";
+import { LANGUAGES, LOCALES } from "./support/locales";
 import { normalise } from "./support/oracle";
+import { chooseOption, comboboxByLabel, readOptions } from "./support/select";
 
 /**
  * prevalence.share-link: the link the "Share Link" button copies restores the
@@ -14,14 +14,8 @@ import { normalise } from "./support/oracle";
  * above the chart and the year range slider. They are view-only and reset to
  * their defaults when the link is opened.
  */
-const LOCALES = { de: prevalenceDe, en: prevalenceEn } as const;
 
-function combobox(page: Page, label: string): Locator {
-    // MUI puts the selected value into the accessible name, so match a prefix.
-    return page.getByRole("combobox", {
-        name: new RegExp("^" + label + "(\\s|$)"),
-    });
-}
+type Prevalence = (typeof LOCALES)["en"]["prevalence"];
 
 /** Chooses "Select All" in a multi-select. */
 async function selectAll(
@@ -29,18 +23,15 @@ async function selectAll(
     label: string,
     all: string
 ): Promise<void> {
-    await combobox(page, label).click();
-    const listbox = page.getByRole("listbox");
-    await expect(listbox).toBeVisible();
-    await listbox.getByRole("option", { name: all }).click();
-    await page.keyboard.press("Escape");
-    await expect(listbox).toBeHidden();
+    await chooseOption(page, comboboxByLabel(page, label), all, {
+        what: `"${label}"`,
+    });
 }
 
 /** What the page shows for this query, read from the page itself. */
-async function snapshot(page: Page, labels: typeof prevalenceEn) {
+async function snapshot(page: Page, labels: Prevalence) {
     const text = async (label: string) =>
-        normalise(await combobox(page, label).innerText());
+        normalise(await comboboxByLabel(page, label).innerText());
     const grid = page.getByRole("grid");
     await expect(grid).toBeVisible({ timeout: 30_000 });
     return {
@@ -50,12 +41,13 @@ async function snapshot(page: Page, labels: typeof prevalenceEn) {
         // aria-rowcount counts the header row too.
         rowCount: await grid.getAttribute("aria-rowcount"),
         chartMicroorganism: normalise(
-            await combobox(page, labels.Select_Microorganism).innerText()
+            await comboboxByLabel(page, labels.Select_Microorganism).innerText()
         ),
     };
 }
 
-for (const [lang, labels] of Object.entries(LOCALES)) {
+for (const lang of LANGUAGES) {
+    const labels = LOCALES[lang].prevalence;
     test(
         `prevalence share link restores the query, ${lang}`,
         {
@@ -76,14 +68,15 @@ for (const [lang, labels] of Object.entries(LOCALES)) {
             });
 
             // Plot the second organism, so a restored default would show.
-            await combobox(page, labels.Select_Microorganism).click();
-            const chartOptions = page.getByRole("listbox").getByRole("option");
-            await expect(chartOptions.first()).toBeVisible();
+            const chartSelect = comboboxByLabel(
+                page,
+                labels.Select_Microorganism
+            );
             test.skip(
-                (await chartOptions.count()) < 2,
+                (await readOptions(page, chartSelect)).length < 2,
                 "needs two organisms with data to tell a restored chart organism from the default"
             );
-            await chartOptions.nth(1).click();
+            await page.getByRole("listbox").getByRole("option").nth(1).click();
             await expect(page).toHaveURL(/chartMicro=/);
 
             const before = await snapshot(page, labels);

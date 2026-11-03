@@ -1,5 +1,12 @@
 import { APIRequestContext, expect, Locator, Page } from "@playwright/test";
-import { apiGetAll, Locale, normalise, PAGE_SIZE } from "./oracle";
+import { Locale, normalise } from "./oracle";
+import {
+    ALL_RELATIONS,
+    loadPrevalenceItems,
+    PrevalenceItem,
+    PrevalenceRelation,
+} from "./prevalence-api";
+import { chooseOption, closeSelect, readOptions } from "./select";
 
 /**
  * Oracle and page helpers for the prevalence side filters (data filter and
@@ -53,7 +60,7 @@ export const DIMENSIONS: {
 ];
 
 /** API relation behind each dimension (year is a plain field). */
-const RELATION: Record<Exclude<Dimension, "year">, string> = {
+const RELATION: Record<Exclude<Dimension, "year">, PrevalenceRelation> = {
     microorganism: "microorganism",
     superCategory: "superCategorySampleOrigin",
     sampleOrigin: "sampleOrigin",
@@ -81,19 +88,11 @@ export async function loadFacetRows(
     request: APIRequestContext,
     locale: Locale
 ): Promise<FacetRow[]> {
-    const populate = Object.values(RELATION)
-        .map((relation) => `populate=${relation}`)
-        .join("&");
-    const items = await apiGetAll(
-        request,
-        `/prevalences?${populate}`,
-        PAGE_SIZE.prevalence,
-        locale
-    );
+    const items = await loadPrevalenceItems(request, locale, ALL_RELATIONS);
     return toFacetRows(items);
 }
 
-export function toFacetRows(items: any[]): FacetRow[] {
+export function toFacetRows(items: PrevalenceItem[]): FacetRow[] {
     return items.map((item) => {
         const values: FacetRow["values"] = {
             year: {
@@ -101,11 +100,14 @@ export function toFacetRows(items: any[]): FacetRow[] {
                 name: String(item.samplingYear),
             },
         };
-        for (const [dim, relation] of Object.entries(RELATION)) {
+        for (const [dim, relation] of Object.entries(RELATION) as [
+            Exclude<Dimension, "year">,
+            PrevalenceRelation
+        ][]) {
             const rel = item[relation];
             // The client skips relations lacking an id or a name.
             if (rel?.documentId && rel?.name) {
-                values[dim as Dimension] = {
+                values[dim] = {
                     id: rel.documentId,
                     name: rel.name,
                 };
@@ -195,22 +197,13 @@ export async function openOptions(
     select: Locator,
     selectAllLabels: string[]
 ): Promise<string[]> {
-    await select.click();
-    const options = page.getByRole("listbox").getByRole("option");
-    await expect(options.first()).toBeVisible();
-    const texts = (await options.allTextContents()).map(normalise);
+    const texts = await readOptions(page, select);
     expect(
         selectAllLabels,
         'the dropdown starts with a "Select all" row'
     ).toContain(texts[0]);
     // MUI also exposes the client's 4px spacer box between the two as an empty option.
     return texts.slice(1).filter((text) => text !== "");
-}
-
-/** Closes an open dropdown (the client applies its staged selection on close). */
-export async function closeDropdown(page: Page): Promise<void> {
-    await page.keyboard.press("Escape");
-    await expect(page.getByRole("listbox")).toHaveCount(0);
 }
 
 /** URL query keys the client writes for filter state. */
@@ -265,7 +258,7 @@ async function expectFacetOnce(
         select(page, labels, dim),
         selectAllLabels(labels)
     );
-    await closeDropdown(page);
+    await closeSelect(page);
     const expected = facetOptions(rows, selection, dim);
     const problem = compareOptions(expected, shown);
     if (problem) throw new Error(`${dim} options differ: ${problem}`);
@@ -286,18 +279,15 @@ async function expectFacetOnce(
 }
 
 /** Ticks the option called `name` in `dim`'s dropdown and applies it. */
-export async function choose(
+export async function chooseFilterValue(
     page: Page,
     labels: Labels,
     dim: Dimension,
     name: string
 ): Promise<void> {
-    await select(page, labels, dim).click();
-    await page
-        .getByRole("listbox")
-        .getByRole("option", { name, exact: true })
-        .click();
-    await closeDropdown(page);
+    await chooseOption(page, select(page, labels, dim), name, {
+        what: `"${dim}"`,
+    });
 }
 
 /** What a select currently shows as its value (empty when nothing is chosen). */

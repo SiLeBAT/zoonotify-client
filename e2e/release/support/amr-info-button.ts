@@ -1,16 +1,7 @@
 import { APIRequestContext, expect, Page } from "@playwright/test";
-import amrDe from "../../../src/locales/de/Antibiotic.json";
-import amrEn from "../../../src/locales/en/Antibiotic.json";
 import { visit } from "../../support/app";
-import { apiGet, normalise } from "./oracle";
-
-export const LANGUAGES = ["de", "en"] as const;
-type Lang = (typeof LANGUAGES)[number];
-
-const BUTTON_LABEL = {
-    de: amrDe.MoreInfoOnTrend,
-    en: amrEn.MoreInfoOnTrend,
-} as const;
+import { LOCALES } from "./locales";
+import { apiGet, Locale, normalise } from "./oracle";
 
 /**
  * The "i" on the Trend tile of the AMR page must show the CMS's `trendTooltip`
@@ -20,14 +11,14 @@ const BUTTON_LABEL = {
 export async function checkTrendInfoButton(
     page: Page,
     request: APIRequestContext,
-    lang: Lang
+    lang: Locale
 ): Promise<void> {
     const { trendTooltip } = (await apiGet(request, "/amr-page", lang)).data;
     expect(trendTooltip, "the CMS holds a trendTooltip").toBeTruthy();
 
     await visit(page, `/antibiotic-resistance?lang=${lang}`);
     const button = page.getByRole("button", {
-        name: BUTTON_LABEL[lang],
+        name: LOCALES[lang].amr.MoreInfoOnTrend,
         exact: true,
     });
     await expect(button, "the information button is shown").toBeVisible({

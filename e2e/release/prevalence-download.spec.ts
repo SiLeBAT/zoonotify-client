@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "fs/promises";
 import JSZip from "jszip";
-import prevalenceDe from "../../src/locales/de/PrevalencePage.json";
-import prevalenceEn from "../../src/locales/en/PrevalencePage.json";
 import { visit } from "../support/app";
 import { releaseCheck } from "./support/annotations";
-import { PAGE_SIZE, apiGetAll } from "./support/oracle";
+import { LANGUAGES, LOCALES } from "./support/locales";
+import { loadPrevalenceItems, PrevalenceItem } from "./support/prevalence-api";
 import {
     CSV_COLUMNS,
     ExpectedRow,
@@ -22,21 +21,8 @@ import {
  * language, `_dot` uses ".", `_comma` uses ",", separator ";", BOM; and the rows
  * equal the API's rows for the same filter, numerically and unrounded.
  */
-const LANGUAGES = { de: prevalenceDe, en: prevalenceEn } as const;
-
-const POPULATE = [
-    "matrix",
-    "microorganism",
-    "samplingStage",
-    "matrixGroup",
-    "sampleOrigin",
-    "superCategorySampleOrigin",
-]
-    .map((relation) => `populate=${relation}`)
-    .join("&");
-
 /** An API prevalence row as the client writes it into the CSV (absent values: "" and 0). */
-function expectedRow(item: any): ExpectedRow {
+function expectedRow(item: PrevalenceItem): ExpectedRow {
     return {
         samplingYear: item.samplingYear ?? 0,
         microorganism: item.microorganism?.name ?? "",
@@ -53,32 +39,29 @@ function expectedRow(item: any): ExpectedRow {
     };
 }
 
-for (const [lang, strings] of Object.entries(LANGUAGES) as [
-    "de" | "en",
-    typeof prevalenceDe
-][]) {
+for (const lang of LANGUAGES) {
+    const strings = LOCALES[lang].prevalence;
     test(
         `prevalence data download, ${lang}`,
         { annotation: releaseCheck("prevalence.data-download", { lang }) },
         async ({ page, request }) => {
             // The filter: the microorganism of the first row, so the test needs
             // no pinned data. The page runs it from the URL, as a share link does.
-            const all = await apiGetAll(
-                request,
-                `/prevalences?${POPULATE}`,
-                PAGE_SIZE.prevalence,
-                lang
-            );
+            const all = await loadPrevalenceItems(request, lang);
             const micro = all.find((item) => item.microorganism)?.microorganism;
-            expect(micro, "the API holds a prevalence row").toBeTruthy();
+            if (!micro) {
+                throw new Error(
+                    "the API holds no prevalence row with a microorganism"
+                );
+            }
 
-            const filtered = await apiGetAll(
+            const filtered = await loadPrevalenceItems(
                 request,
-                `/prevalences?${POPULATE}&filters[microorganism][documentId][$in]=${encodeURIComponent(
+                lang,
+                undefined,
+                `filters[microorganism][documentId][$in]=${encodeURIComponent(
                     micro.documentId
-                )}`,
-                PAGE_SIZE.prevalence,
-                lang
+                )}`
             );
             expect(filtered.length).toBeGreaterThan(0);
             const expected = filtered.map(expectedRow);

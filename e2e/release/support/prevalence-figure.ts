@@ -1,6 +1,7 @@
 import { APIRequestContext } from "@playwright/test";
 import { hasItalicWord } from "./canvas-spy";
-import { Locale, PAGE_SIZE, apiGetAll, normalise } from "./oracle";
+import { Locale, normalise } from "./oracle";
+import { loadPrevalenceItems } from "./prevalence-api";
 
 /** The graph compares at most this many combinations (MAX_COMBINATIONS). */
 export const MAX_COMBINATIONS = 4;
@@ -20,12 +21,12 @@ export async function prevalenceRows(
     request: APIRequestContext,
     locale: Locale
 ): Promise<PrevalenceRow[]> {
-    const data = await apiGetAll(
-        request,
-        "/prevalences?populate=matrix&populate=microorganism&populate=samplingStage&populate=sampleOrigin",
-        PAGE_SIZE.prevalence,
-        locale
-    );
+    const data = await loadPrevalenceItems(request, locale, [
+        "matrix",
+        "microorganism",
+        "samplingStage",
+        "sampleOrigin",
+    ]);
     return data.map((r) => {
         const origin = r.sampleOrigin?.name ?? "";
         return {

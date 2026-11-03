@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
-import prevalenceEn from "../../src/locales/en/PrevalencePage.json";
+import { LOCALES } from "./support/locales";
+import type { PrevalenceItem } from "./support/prevalence-api";
 import {
     DIMENSIONS,
     expectFacet,
@@ -13,7 +14,7 @@ import {
  * reads the real one, so the comparison must reject the dropdown. Not a release
  * check itself (no annotation), so the report never lists it.
  */
-const labels = prevalenceEn as Record<string, string>;
+const labels = LOCALES.en.prevalence as Record<string, string>;
 
 test("a response missing one value fails the options comparison", async ({
     page,
@@ -27,7 +28,7 @@ test("a response missing one value fails the options comparison", async ({
         const response = await route.fetch();
         const json = await response.json();
         json.data = json.data.filter(
-            (item: any) => item.sampleOrigin?.documentId !== dropped
+            (item: PrevalenceItem) => item.sampleOrigin?.documentId !== dropped
         );
         await route.fulfill({ response, json });
     });

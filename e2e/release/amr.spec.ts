@@ -2,16 +2,18 @@ import { expect, Page, test } from "@playwright/test";
 import { visit } from "../support/app";
 import { releaseCheck, reportOutcome } from "./support/annotations";
 import {
-    dropdown,
-    facet,
+    dropdownOptionNames,
+    facetNames,
+    filterDropdown,
     filterKeys,
-    optionNames,
     ORGANISMS,
     resistanceRows,
+    rowsWhere,
     VIEWS,
-    where,
-} from "./support/amr";
-import { checkTrendInfoButton, LANGUAGES } from "./support/amrInfoButton";
+} from "./support/amr-filters";
+import { checkTrendInfoButton } from "./support/amr-info-button";
+import { LANGUAGES } from "./support/locales";
+import { chooseOption } from "./support/select";
 
 /**
  * amr.filter: for every organism the AMR page lists, in the Trend and the
@@ -89,14 +91,14 @@ for (const organism of ORGANISMS) {
                 await openView(page, organism, view);
                 for (const key of filterKeys(organism)) {
                     expect(
-                        facet(rows, key).length,
+                        facetNames(rows, key).length,
                         `${key} has options in the data`
                     ).toBeGreaterThan(0);
                     // Options appear once the response is in, so the first
                     // poll doubles as the "data loaded" wait.
                     await expect
-                        .poll(() => optionNames(page, key), LOADED)
-                        .toEqual(facet(rows, key));
+                        .poll(() => dropdownOptionNames(page, key), LOADED)
+                        .toEqual(facetNames(rows, key));
                 }
             }
         );
@@ -121,11 +123,13 @@ for (const organism of ORGANISMS) {
                 const rows = await resistanceRows(request, organism);
                 expect(rows.length, `${organism} has data`).toBeGreaterThan(0);
 
-                const allMatrices = facet(rows, "matrix");
-                const pick = facet(rows, "superCategorySampleOrigin").find(
+                const allMatrices = facetNames(rows, "matrix");
+                const pick = facetNames(rows, "superCategorySampleOrigin").find(
                     (name) =>
-                        facet(
-                            where(rows, "superCategorySampleOrigin", [name]),
+                        facetNames(
+                            rowsWhere(rows, "superCategorySampleOrigin", [
+                                name,
+                            ]),
                             "matrix"
                         ).length < allMatrices.length
                 );
@@ -140,20 +144,22 @@ for (const organism of ORGANISMS) {
 
                 await openView(page, organism, view);
                 await expect
-                    .poll(() => optionNames(page, "matrix"), LOADED)
+                    .poll(() => dropdownOptionNames(page, "matrix"), LOADED)
                     .toEqual(allMatrices);
 
-                await dropdown(page, "superCategorySampleOrigin").click();
-                await page
-                    .getByRole("option", { name: pick, exact: true })
-                    .click();
-                await page.keyboard.press("Escape");
+                await chooseOption(
+                    page,
+                    filterDropdown(page, "superCategorySampleOrigin"),
+                    pick
+                );
 
                 await expect
-                    .poll(() => optionNames(page, "matrix"), LOADED)
+                    .poll(() => dropdownOptionNames(page, "matrix"), LOADED)
                     .toEqual(
-                        facet(
-                            where(rows, "superCategorySampleOrigin", [pick]),
+                        facetNames(
+                            rowsWhere(rows, "superCategorySampleOrigin", [
+                                pick,
+                            ]),
                             "matrix"
                         )
                     );

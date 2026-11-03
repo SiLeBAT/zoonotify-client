@@ -3,10 +3,9 @@ import {
     API_DOCUMENTATION_URL,
     pageRoute,
 } from "../../src/app/shared/infrastructure/router/routes";
-import footerDe from "../../src/locales/de/Footer.json";
-import footerEn from "../../src/locales/en/Footer.json";
 import { visit } from "../support/app";
 import { releaseCheck } from "./support/annotations";
+import { LANGUAGES, LOCALES } from "./support/locales";
 import { checkExternalLinks, devRuleViolations } from "./support/links";
 import { apiGet } from "./support/oracle";
 import { currentTarget } from "./targets";
@@ -18,9 +17,8 @@ const target = currentTarget();
  * hrefs are pinned), the mail link uses the CMS's support address, external
  * links answer, and production links to no development host.
  */
-const LANGUAGES = { de: footerDe, en: footerEn } as const;
-
-for (const [lang, footer] of Object.entries(LANGUAGES)) {
+for (const lang of LANGUAGES) {
+    const footer = LOCALES[lang].footer;
     test(
         `footer links, ${lang}`,
         {
