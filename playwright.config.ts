@@ -29,8 +29,28 @@ export default defineConfig({
     projects: [
         {
             name: "chromium",
+            // Release checks need a deployed site with real data; they belong
+            // to the `release` project below, never to the CMS-free sweep.
+            testIgnore: "release/**",
             use: { ...devices["Desktop Chrome"] },
         },
+        // Release checks: defined only against a deployed site. E2E_TARGET
+        // (qa|prod) picks e2e/release/targets.ts. See docs/e2e-testing.md.
+        ...(ownsServer
+            ? []
+            : [
+                  {
+                      name: "release-setup",
+                      testMatch: "release/*.setup.ts",
+                      use: { ...devices["Desktop Chrome"] },
+                  },
+                  {
+                      name: "release",
+                      testMatch: "release/**/*.spec.ts",
+                      dependencies: ["release-setup"],
+                      use: { ...devices["Desktop Chrome"] },
+                  },
+              ]),
     ],
     webServer: ownsServer
         ? {
