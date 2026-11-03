@@ -22,8 +22,10 @@ const fakeClient = (existing = []) => {
     return {
         issues,
         comments,
-        findOpenIssueByTitle: async (title) =>
-            issues.find((i) => i.title === title && i.state === "open") || null,
+        findIssueByTitle: async (title) =>
+            issues.find((i) => i.title === title && i.state === "open") ||
+            issues.find((i) => i.title === title) ||
+            null,
         createIssue: async (title, body) => {
             const issue = {
                 number: 100 + issues.length,
@@ -147,9 +149,28 @@ describe("findOrCreateIssue", () => {
         expect(client.issues).toHaveLength(1);
     });
 
-    it("creates a new one when the matching issue is closed", async () => {
+    it("reuses a closed issue without reopening it or creating a duplicate", async () => {
         const client = fakeClient([
             { number: 5, title: "Release sign-off 1.2.3", state: "closed" },
+        ]);
+        const result = await findOrCreateIssue(client, "1.2.3", "body");
+        expect(result).toMatchObject({ created: false, number: 5 });
+        expect(client.issues).toHaveLength(1);
+        expect(client.issues[0].state).toBe("closed");
+    });
+
+    it("prefers an open issue over a closed one with the same title", async () => {
+        const client = fakeClient([
+            { number: 5, title: "Release sign-off 1.2.3", state: "closed" },
+            { number: 7, title: "Release sign-off 1.2.3", state: "open" },
+        ]);
+        const result = await findOrCreateIssue(client, "1.2.3", "body");
+        expect(result.number).toBe(7);
+    });
+
+    it("does not match a different version's issue", async () => {
+        const client = fakeClient([
+            { number: 5, title: "Release sign-off 1.2.30", state: "closed" },
         ]);
         const result = await findOrCreateIssue(client, "1.2.3", "body");
         expect(result.created).toBe(true);

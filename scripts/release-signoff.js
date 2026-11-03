@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Release sign-off issue for release-checks.yml: derives X.Y.Z from the
- * rc-X.Y.Z branch or vX.Y.Z tag, finds the open issue "Release sign-off X.Y.Z"
- * (or creates it from e2e/release/release-checks.md) and comments the run's
+ * rc-X.Y.Z branch or vX.Y.Z tag, finds the issue "Release sign-off X.Y.Z", open or closed
+ * (a closed one is commented on, not reopened; or creates it from e2e/release/release-checks.md) and comments the run's
  * report plus a link to the run. Any other ref does nothing.
  *
  * Env: RELEASE_REFS (candidate refs, first that parses wins), GITHUB_TOKEN, GITHUB_REPOSITORY, GITHUB_SERVER_URL,
@@ -85,7 +85,7 @@ function buildIssueBody(version, checksMarkdown) {
 
 async function findOrCreateIssue(client, version, body) {
     const title = signoffTitle(version);
-    const existing = await client.findOpenIssueByTitle(title);
+    const existing = await client.findIssueByTitle(title);
     if (existing) return { number: existing.number, created: false };
     const issue = await client.createIssue(title, body);
     return { number: issue.number, created: true };
@@ -158,19 +158,22 @@ function restClient(env, fetchImpl = fetch) {
         return response.json();
     };
     return {
-        async findOpenIssueByTitle(title) {
+        /** Exact title across open and closed issues; an open one wins. */
+        async findIssueByTitle(title) {
+            let closed = null;
             for (let page = 1; page <= 20; page++) {
                 const items = await call(
                     "GET",
-                    `/issues?state=open&per_page=100&page=${page}`
+                    `/issues?state=all&per_page=100&page=${page}`
                 );
-                const hit = items.find(
-                    (i) => !i.pull_request && i.title === title
-                );
-                if (hit) return hit;
-                if (items.length < 100) return null;
+                for (const i of items) {
+                    if (i.pull_request || i.title !== title) continue;
+                    if (i.state === "open") return i;
+                    closed = closed || i;
+                }
+                if (items.length < 100) break;
             }
-            return null;
+            return closed;
         },
         createIssue: (title, body) => call("POST", "/issues", { title, body }),
         createComment: (number, body) =>
