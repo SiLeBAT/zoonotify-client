@@ -30,7 +30,7 @@ Runs: **RC** = RC run on QA; **post** = post-release run on production.
 | `prevalence.change-language`         | Prevalence change language                              | 16        | RC                     | pending #128                 |
 | `prevalence.filter-above-graph`      | Prevalence filter above the graph                       | 17        | RC                     | pending #128                 |
 | `prevalence.share-link`              | Prevalence share link button                            | 18        | RC                     | pending #129                 |
-| `amr.trend-info-button`              | AMR trend graph information button                      | 19        | RC                     | pending #130                 |
-| `amr.filter`                         | AMR trend and substance graph data filter, per organism | 20-29     | RC (level 1 also post) | pending #130                 |
+| `amr.trend-info-button`              | AMR trend graph information button                      | 19        | RC                     | `e2e/release/amr.spec.ts`     |
+| `amr.filter`                         | AMR trend and substance graph data filter, per organism | 20-29     | RC (level 1 also post) | `e2e/release/amr.spec.ts`     |
 | `explanation.cut-off-table`          | Explanation page cut-off tables, de and en              | 30-36     | RC + post              | pending #131                 |
 | `explanation.cut-off-title-language` | Cut-off table titles are in the page language           | 30-36     | -                      | manual                       |
