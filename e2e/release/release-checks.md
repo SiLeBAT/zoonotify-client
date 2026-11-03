@@ -18,9 +18,9 @@ Runs: **RC** = RC run on QA; **post** = post-release run on production.
 | ID                                   | Check                                                   | List rows | Runs                   | Test                                      |
 | ------------------------------------ | ------------------------------------------------------- | --------- | ---------------------- | ----------------------------------------- |
 | `footer.links`                       | Footer links, de and en                                 | 2-3       | RC + post              | `e2e/release/footer.spec.ts`              |
-| `welcome.example-queries`            | Welcome page example queries, de and en                 | 7, 9      | post                   | pending #125                              |
+| `welcome.example-queries`            | Welcome page example queries, de and en                 | 7, 9      | post                   | e2e/release/welcome.spec.ts               |
 | `welcome.example-queries.meaning`    | Example query results say what the link text promises   | 7, 9      | -                      | manual                                    |
-| `welcome.links`                      | Welcome page links, de and en                           | 8, 10     | post                   | pending #125                              |
+| `welcome.links`                      | Welcome page links, de and en                           | 8, 10     | post                   | e2e/release/welcome.spec.ts               |
 | `prevalence.figure-download`         | Prevalence figure download                              | 11        | RC                     | pending #128                              |
 | `prevalence.figure-layout`           | Prevalence figure has no overlapping text               | 11        | -                      | manual                                    |
 | `prevalence.data-download`           | Prevalence data download                                | 12        | RC                     | `e2e/release/prevalence-download.spec.ts` |
