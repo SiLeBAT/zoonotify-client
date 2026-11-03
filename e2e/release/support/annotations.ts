@@ -8,6 +8,8 @@ import type { TestInfo } from "@playwright/test";
 export const CHECK_ANNOTATION = "release-check";
 export const PARAMS_ANNOTATION = "release-check-params";
 export const OUTCOME_ANNOTATION = "release-outcome";
+/** The client commit the footer showed, recorded by the release setup step for the report header. */
+export const CLIENT_COMMIT_ANNOTATION = "release-client-commit";
 
 export type Annotation = { type: string; description: string };
 
