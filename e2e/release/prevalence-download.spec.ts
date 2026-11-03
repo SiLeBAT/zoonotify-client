@@ -10,6 +10,7 @@ import {
     CSV_COLUMNS,
     ExpectedRow,
     csvFormatProblems,
+    parseCsv,
     readmeProblems,
     rowProblems,
     zipEntryProblems,
@@ -82,27 +83,72 @@ for (const [lang, strings] of Object.entries(LANGUAGES) as [
             expect(filtered.length).toBeGreaterThan(0);
             const expected = filtered.map(expectedRow);
 
+            // The page first loads every row, then applies the URL filter. Wait
+            // for the filtered request, so a dropped filter fails here and says so.
+            const filterRequested = page
+                .waitForResponse(
+                    (r) =>
+                        decodeURIComponent(r.url()).includes(
+                            "filters[microorganism][documentId]"
+                        ),
+                    { timeout: 30_000 }
+                )
+                .catch(() => {
+                    throw new Error(
+                        `the page never requested the filter microorganism=${micro.name}: the URL filter was dropped`
+                    );
+                });
             await visit(
                 page,
                 `/prevalence?lang=${lang}&microorganism=${encodeURIComponent(
                     micro.name
                 )}`
             );
+            await filterRequested;
+            // The page mounts its data provider more than once on load, so the
+            // unfiltered and filtered answers can land in either order. Settle,
+            // then search again with the filter the URL selected: the last
+            // answer is then the filtered one.
+            await page.waitForLoadState("networkidle");
+            const searched = page.waitForResponse((r) =>
+                decodeURIComponent(r.url()).includes(
+                    "filters[microorganism][documentId]"
+                )
+            );
+            await page.getByRole("button", { name: strings.SEARCH }).click();
+            await searched;
             const button = page.getByRole("button", {
                 name: strings.DOWNLOAD_ZIP_FILE,
             });
             await expect(button).toBeVisible({ timeout: 30_000 });
             await expect(button).toBeEnabled();
 
-            const downloadPromise = page.waitForEvent("download");
-            await button.click();
-            const download = await downloadPromise;
-            expect(download.suggestedFilename()).toMatch(
-                /^data_package_.+\.zip$/
-            );
-            const zip = await JSZip.loadAsync(
-                await readFile(await download.path())
-            );
+            // The filtered answer is rendered a moment after it arrives, so
+            // download until the file holds the filtered row count.
+            let zip!: JSZip;
+            const downloadRows = async (): Promise<number> => {
+                const downloadPromise = page.waitForEvent("download");
+                await button.click();
+                const download = await downloadPromise;
+                expect(download.suggestedFilename()).toMatch(
+                    /^data_package_.+.zip$/
+                );
+                zip = await JSZip.loadAsync(
+                    await readFile(await download.path())
+                );
+                const dot = Object.keys(zip.files).find((n) =>
+                    /^prevalence_data_dot_/.test(n)
+                );
+                const text = dot ? await zip.file(dot)!.async("string") : "";
+                return parseCsv(text).rows.length - 1;
+            };
+            await expect
+                .poll(downloadRows, {
+                    timeout: 20_000,
+                    message: `the download should hold the ${expected.length} rows of microorganism=${micro.name} (the page did not apply the filter if it holds all rows)`,
+                })
+                .toBe(expected.length);
+
             const names = Object.keys(zip.files);
             expect(zipEntryProblems(names), "zip contents").toEqual([]);
 
