@@ -4,6 +4,8 @@ import { releaseCheck, reportOutcome } from "./support/annotations";
 import {
     dropdownOptionNames,
     facetNames,
+    FILTER_LABELS,
+    FilterKey,
     filterDropdown,
     filterKeys,
     ORGANISMS,
@@ -13,7 +15,7 @@ import {
 } from "./support/amr-filters";
 import { checkTrendInfoButton } from "./support/amr-info-button";
 import { LANGUAGES } from "./support/locales";
-import { chooseOption } from "./support/select";
+import { chooseOption, diffNames } from "./support/select";
 
 /**
  * amr.filter: for every organism the AMR page lists, in the Trend and the
@@ -45,6 +47,48 @@ async function openView(
 }
 
 /**
+ * Fails within seconds, not at the test timeout, when the page's filter
+ * dropdowns cannot be found by their labels: a client built before the
+ * dropdown labels (#1917) renders them without an accessible name.
+ */
+async function expectLabelledDropdowns(
+    page: Page,
+    keys: FilterKey[]
+): Promise<void> {
+    await expect(page.getByRole("combobox").first()).toBeVisible(LOADED);
+    for (const key of keys) {
+        await expect(filterDropdown(page, key))
+            .toHaveCount(1, { timeout: 5_000 })
+            .catch(() => {
+                throw new Error(
+                    `no dropdown labelled "${FILTER_LABELS[key]}": the filter dropdowns have no accessible name (client older than the dropdown labels of #1917?)`
+                );
+            });
+    }
+}
+
+/**
+ * Waits until `key`'s dropdown lists exactly `want` (the first poll doubles as
+ * the "data loaded" wait); on failure, names the missing and unexpected options.
+ */
+async function expectOptions(
+    page: Page,
+    key: FilterKey,
+    want: string[]
+): Promise<void> {
+    let problem: string | null = "no options read";
+    await expect
+        .poll(async () => {
+            problem = diffNames(want, await dropdownOptionNames(page, key));
+            return problem;
+        }, LOADED)
+        .toBeNull()
+        .catch(() => {
+            throw new Error(`${key} options differ: ${problem}`);
+        });
+}
+
+/**
  * Whether the AMR page announces "Coming soon" for this organism. The page, not
  * the API, decides that: ESBL/AmpC E. coli has rows in the CMS but no charts yet.
  */
@@ -56,7 +100,12 @@ async function announcesComingSoon(
     await page
         .getByRole("complementary")
         .getByRole("button", { name: organism, exact: true })
-        .click();
+        .click(LOADED)
+        .catch(() => {
+            throw new Error(
+                `no "${organism}" button in the AMR page's organism list (client older than this check?)`
+            );
+        });
     return page
         .getByRole("dialog")
         .filter({ hasText: "Coming soon" })
@@ -89,16 +138,14 @@ for (const organism of ORGANISMS) {
                 expect(rows.length, `${organism} has data`).toBeGreaterThan(0);
 
                 await openView(page, organism, view);
-                for (const key of filterKeys(organism)) {
+                const keys = filterKeys(organism);
+                await expectLabelledDropdowns(page, keys);
+                for (const key of keys) {
                     expect(
                         facetNames(rows, key).length,
                         `${key} has options in the data`
                     ).toBeGreaterThan(0);
-                    // Options appear once the response is in, so the first
-                    // poll doubles as the "data loaded" wait.
-                    await expect
-                        .poll(() => dropdownOptionNames(page, key), LOADED)
-                        .toEqual(facetNames(rows, key));
+                    await expectOptions(page, key, facetNames(rows, key));
                 }
             }
         );
@@ -143,9 +190,11 @@ for (const organism of ORGANISMS) {
                 }
 
                 await openView(page, organism, view);
-                await expect
-                    .poll(() => dropdownOptionNames(page, "matrix"), LOADED)
-                    .toEqual(allMatrices);
+                await expectLabelledDropdowns(page, [
+                    "matrix",
+                    "superCategorySampleOrigin",
+                ]);
+                await expectOptions(page, "matrix", allMatrices);
 
                 await chooseOption(
                     page,
@@ -153,16 +202,14 @@ for (const organism of ORGANISMS) {
                     pick
                 );
 
-                await expect
-                    .poll(() => dropdownOptionNames(page, "matrix"), LOADED)
-                    .toEqual(
-                        facetNames(
-                            rowsWhere(rows, "superCategorySampleOrigin", [
-                                pick,
-                            ]),
-                            "matrix"
-                        )
-                    );
+                await expectOptions(
+                    page,
+                    "matrix",
+                    facetNames(
+                        rowsWhere(rows, "superCategorySampleOrigin", [pick]),
+                        "matrix"
+                    )
+                );
             }
         );
     }

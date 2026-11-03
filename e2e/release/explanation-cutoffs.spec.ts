@@ -93,10 +93,14 @@ async function openTable(
         .click({ timeout: 30_000 });
     const opener = page.locator(`button[id="${tableId}"]`);
     await expect(opener).toBeVisible({ timeout: 30_000 });
-    await opener.click();
     const dialog = page.getByRole("dialog");
     const grid = dialog.getByRole("table", { name: "amr-table" });
-    await expect(grid).toBeVisible();
+    // In CI a click during the accordion's expand animation can be lost, so
+    // click again until the dialog opens (issue #1924).
+    await expect(async () => {
+        if (!(await dialog.isVisible())) await opener.click();
+        await expect(grid).toBeVisible({ timeout: 2_000 });
+    }).toPass({ timeout: 15_000 });
     return { dialog, grid };
 }
 
