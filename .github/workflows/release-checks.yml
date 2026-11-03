@@ -32,6 +32,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   release-checks:
@@ -75,9 +76,22 @@ jobs:
           E2E_TARGET: prod
           E2E_BASE_URL: ${{ vars.PROD_BASE_URL || 'https://zoonotify.bfr.berlin' }}
 
+      # Comment the report on the "Release sign-off X.Y.Z" issue, creating it
+      # first if needed. X.Y.Z comes from an rc-X.Y.Z branch or vX.Y.Z tag; any
+      # other ref (e.g. develop) comments nowhere. Never fails the run.
+      - name: Comment on the sign-off issue
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: node scripts/release-signoff.js
+        env:
+          RELEASE_REF: ${{ inputs.ref || github.ref }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: release-report-${{ inputs.target }}
-          path: playwright-report/
+          path: |
+            playwright-report/
+            release-report.md
           retention-days: 90
