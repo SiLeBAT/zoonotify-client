@@ -23,7 +23,7 @@ Runs: **RC** = RC run on QA; **post** = post-release run on production.
 | `welcome.links`                      | Welcome page links, de and en                           | 8, 10     | post                   | pending #125                              |
 | `prevalence.figure-download`         | Prevalence figure download                              | 11        | RC                     | pending #128                              |
 | `prevalence.figure-layout`           | Prevalence figure has no overlapping text               | 11        | -                      | manual                                    |
-| `prevalence.data-download`           | Prevalence data download                                | 12        | RC                     | pending #127                              |
+| `prevalence.data-download`           | Prevalence data download                                | 12        | RC                     | `e2e/release/prevalence-download.spec.ts` |
 | `prevalence.data-filter`             | Prevalence data filter                                  | 13        | RC (level 1 also post) | pending #126                              |
 | `prevalence.reset-filter`            | Prevalence reset filter button                          | 14        | RC                     | pending #126                              |
 | `prevalence.small-screen`            | Prevalence figures on a small screen                    | 15        | RC (evidence)          | manual                                    |
