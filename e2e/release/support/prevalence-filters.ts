@@ -6,7 +6,7 @@ import {
     PrevalenceItem,
     PrevalenceRelation,
 } from "./prevalence-api";
-import { chooseOption, closeSelect, readOptions } from "./select";
+import { chooseOption, closeSelect, diffNames, readOptions } from "./select";
 
 /**
  * Oracle and page helpers for the prevalence side filters (data filter and
@@ -167,16 +167,10 @@ export function compareOptions(
     expected: FacetOption[],
     shown: string[]
 ): string | null {
-    const want = expected.map((o) => normalise(o.name));
-    const got = shown.map(normalise);
-    const missing = want.filter((n) => !got.includes(n));
-    const extra = got.filter((n) => !want.includes(n));
-    if (missing.length || extra.length) {
-        return `missing ${JSON.stringify(missing)}, unexpected ${JSON.stringify(
-            extra
-        )}`;
-    }
-    return null;
+    return diffNames(
+        expected.map((o) => o.name),
+        shown
+    );
 }
 
 /**

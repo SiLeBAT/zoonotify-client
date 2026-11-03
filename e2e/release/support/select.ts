@@ -30,6 +30,24 @@ export function comboboxByLabel(
 }
 
 /**
+ * What differs between the option names a dropdown should list and the ones it
+ * shows, as a readable sentence, or null when they hold the same names.
+ * Names are whitespace-normalised on both sides; order is not compared.
+ */
+export function diffNames(want: string[], shown: string[]): string | null {
+    const expected = want.map(normalise);
+    const got = shown.map(normalise);
+    const missing = expected.filter((n) => !got.includes(n));
+    const extra = got.filter((n) => !expected.includes(n));
+    if (missing.length || extra.length) {
+        return `missing ${JSON.stringify(missing)}, unexpected ${JSON.stringify(
+            extra
+        )}`;
+    }
+    return null;
+}
+
+/**
  * How a select is opened. A click is the user's way; focus plus Enter is for
  * selects another element overlaps (the info icon over a select at 360 px).
  */
