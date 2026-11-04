@@ -28,6 +28,18 @@ const desktopChrome = {
         : {}),
 };
 
+const baseReporters: ReporterDescription[] = process.env.CI
+    ? [["github"], ["html", { open: "never" }]]
+    : [["list"], ["html", { open: "never" }]];
+// Release runs (against a deployed site) also write the release report; the
+// CMS-free sweep keeps exactly the base reporters.
+const releaseReporter: ReporterDescription = [
+    "./e2e/release/support/reporter.ts",
+];
+const reporter: ReporterDescription[] = ownsServer
+    ? baseReporters
+    : [...baseReporters, releaseReporter];
+
 export default defineConfig({
     testDir: "./e2e",
     // jest owns src/**, playwright owns e2e/**. jest's testPathIgnorePatterns
@@ -38,14 +50,7 @@ export default defineConfig({
     forbidOnly: !!process.env.CI,
     retries: isProd ? 1 : process.env.CI ? 2 : 0,
     workers: isProd ? 2 : process.env.CI ? 2 : undefined,
-    reporter: [
-        ...(process.env.CI
-            ? [["github"], ["html", { open: "never" }]]
-            : [["list"], ["html", { open: "never" }]]),
-        // Release runs (against a deployed site) also write the release
-        // report; the CMS-free sweep keeps exactly the reporters above.
-        ...(ownsServer ? [] : [["./e2e/release/support/reporter.ts"]]),
-    ] as ReporterDescription[],
+    reporter,
     use: {
         baseURL,
         trace: "on-first-retry",

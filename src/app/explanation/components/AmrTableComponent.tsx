@@ -102,7 +102,9 @@ const AmrTableComponent: React.FC<AmrTableComponentProps> = ({ tableData }) => {
                     <TableContainer component={Paper}>
                         <Table
                             size="small"
-                            aria-label={t("antibiotic-resistance-table")}
+                            aria-label={String(
+                                t("antibiotic-resistance-table")
+                            )}
                         >
                             <TableHead>
                                 <TableRow>
