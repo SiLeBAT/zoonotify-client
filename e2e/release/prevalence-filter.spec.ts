@@ -34,7 +34,7 @@ test(
         annotation: releaseCheck("prevalence.data-filter", { level: "1" }),
     },
     async ({ page }) => {
-        await openPrevalencePage(page, "en", labels);
+        await openPrevalencePage(page, "en");
         for (const { dim, labelId } of DIMENSIONS) {
             const shown = await openOptions(
                 page,
@@ -52,7 +52,7 @@ test(
     { annotation: releaseCheck("prevalence.data-filter", { level: "2" }) },
     async ({ page, request }) => {
         const rows = await loadFacetRows(request, "en");
-        await openPrevalencePage(page, "en", labels);
+        await openPrevalencePage(page, "en");
 
         const all = DIMENSIONS.map((d) => d.dim);
         const unfiltered: Record<string, number> = {};
@@ -69,7 +69,7 @@ test(
         for (const dim of ["superCategory", "microorganism"] as Dimension[]) {
             const option = facetOptions(rows, selection, dim)[0];
             expect(option, `${dim} offers a value to choose`).toBeTruthy();
-            await chooseFilterValue(page, labels, dim, option.name);
+            await chooseFilterValue(page, dim, option.name);
             selection[dim] = [option.id];
             for (const other of all) {
                 const shown = await expectFacet(
@@ -95,12 +95,12 @@ test(
     { annotation: releaseCheck("prevalence.reset-filter") },
     async ({ page, request }) => {
         const rows = await loadFacetRows(request, "en");
-        await openPrevalencePage(page, "en", labels);
+        await openPrevalencePage(page, "en");
 
         const selection: Selection = {};
         for (const dim of ["superCategory", "microorganism"] as Dimension[]) {
             const option = facetOptions(rows, selection, dim)[0];
-            await chooseFilterValue(page, labels, dim, option.name);
+            await chooseFilterValue(page, dim, option.name);
             selection[dim] = [option.id];
         }
         await page
@@ -108,7 +108,7 @@ test(
             .click();
         await expect(page.getByRole("grid")).toBeVisible({ timeout: 30_000 });
         await expect(page.locator("canvas").first()).toBeVisible();
-        expect(await shownValue(page, labels, "microorganism")).not.toBe("");
+        expect(await shownValue(page, "microorganism")).not.toBe("");
 
         await page
             .getByRole("button", { name: labels.RESET_FILTERS, exact: true })
@@ -116,7 +116,7 @@ test(
 
         for (const { dim } of DIMENSIONS) {
             await expect
-                .poll(() => shownValue(page, labels, dim), {
+                .poll(() => shownValue(page, dim), {
                     message: `${dim} selection is empty`,
                 })
                 .toBe("");

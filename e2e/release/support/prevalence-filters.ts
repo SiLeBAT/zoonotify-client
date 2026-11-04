@@ -222,8 +222,7 @@ export function selectAllLabels(labels: Labels): string[] {
 /** Opens the page and waits until the filters have rendered (data loaded). */
 export async function openPrevalencePage(
     page: Page,
-    lang: Locale,
-    labels: Labels
+    lang: Locale
 ): Promise<void> {
     await page.goto(`/prevalence?lang=${lang}`);
     await expect(filterSelect(page, "matrices-label")).toBeVisible({
@@ -231,7 +230,7 @@ export async function openPrevalencePage(
     });
 }
 
-function select(page: Page, labels: Labels, dim: Dimension): Locator {
+function select(page: Page, dim: Dimension): Locator {
     const entry = DIMENSIONS.find((d) => d.dim === dim)!;
     return filterSelect(page, entry.labelId);
 }
@@ -249,7 +248,7 @@ async function expectFacetOnce(
 ): Promise<string[]> {
     const shown = await openOptions(
         page,
-        select(page, labels, dim),
+        select(page, dim),
         selectAllLabels(labels)
     );
     await closeSelect(page);
@@ -275,22 +274,17 @@ async function expectFacetOnce(
 /** Ticks the option called `name` in `dim`'s dropdown and applies it. */
 export async function chooseFilterValue(
     page: Page,
-    labels: Labels,
     dim: Dimension,
     name: string
 ): Promise<void> {
-    await chooseOption(page, select(page, labels, dim), name, {
+    await chooseOption(page, select(page, dim), name, {
         what: `"${dim}"`,
     });
 }
 
 /** What a select currently shows as its value (empty when nothing is chosen). */
-export async function shownValue(
-    page: Page,
-    labels: Labels,
-    dim: Dimension
-): Promise<string> {
-    const text = await select(page, labels, dim).textContent();
+export async function shownValue(page: Page, dim: Dimension): Promise<string> {
+    const text = await select(page, dim).textContent();
     return normalise((text ?? "").replace(/​/g, ""));
 }
 

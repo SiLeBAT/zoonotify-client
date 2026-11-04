@@ -32,7 +32,7 @@ test("a response missing one value fails the options comparison", async ({
         );
         await route.fulfill({ response, json });
     });
-    await openPrevalencePage(page, "en", labels);
+    await openPrevalencePage(page, "en");
 
     // Every dimension whose options come from other rows may differ; the
     // sample origin list certainly lacks the dropped value.
