@@ -36,12 +36,20 @@ jest.mock("../AntibioticResistancePage.component", () => ({
     ),
 }));
 
-jest.mock("react-i18next", () => ({
-    useTranslation: () => ({
-        t: (key: string) => key,
-        i18n: { language: "en", changeLanguage: jest.fn() },
-    }),
-}));
+// A real i18next instance with no resources, so `t` behaves as in the app for
+// keys it has no translation for -- including reading a `:` as a namespace
+// separator. An identity `t` would hide that.
+jest.mock("react-i18next", () => {
+    const realI18next = jest.requireActual("i18next");
+    const instance = realI18next.createInstance();
+    instance.init({ lng: "en", resources: {}, initImmediate: false });
+    return {
+        useTranslation: () => ({
+            t: instance.t.bind(instance),
+            i18n: { language: "en", changeLanguage: jest.fn() },
+        }),
+    };
+});
 
 jest.mock("i18next", () => ({
     __esModule: true,
@@ -238,6 +246,76 @@ describe("TrendDetails filter selects", () => {
         expect(
             screen.getByRole("combobox", {
                 name: new RegExp(`^${label}(\\s|$)`),
+            })
+        ).toBeInTheDocument();
+    });
+});
+
+describe("TrendDetails CMS names", () => {
+    function comboboxNamed(label: string): HTMLElement {
+        return screen.getByRole("combobox", {
+            name: new RegExp(`^${label}(\\s|$)`),
+        });
+    }
+
+    it("shows a matrix name containing a colon exactly as the CMS stores it", async () => {
+        const feedRape = {
+            id: 7,
+            name: "Feed: Rape",
+            documentId: "matrix-rape",
+        };
+        mockedCallApiService.mockImplementation(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (url: string): Promise<any> =>
+                Promise.resolve({
+                    data: {
+                        data: url.includes("resistance")
+                            ? ROWS.map((row) => ({ ...row, matrix: feedRape }))
+                            : [],
+                    },
+                })
+        );
+        await renderTrendDetails();
+
+        // the open menu hides the rest of the page from the a11y tree
+        const matrix = comboboxNamed("MATRIX");
+        fireEvent.mouseDown(matrix);
+        const option = within(screen.getByRole("listbox")).getByRole("option", {
+            name: "Feed: Rape",
+        });
+        fireEvent.click(option);
+
+        expect(matrix).toHaveTextContent("Feed: Rape");
+    });
+    it("shows a substance name containing a colon exactly as the CMS stores it", async () => {
+        const rows = ROWS.map((row, index) =>
+            index === 0
+                ? {
+                      ...row,
+                      antimicrobialSubstance: {
+                          id: 9,
+                          name: "Group: Ampicillin",
+                          documentId: "sub-group-ampicillin",
+                      },
+                  }
+                : row
+        );
+        mockedCallApiService.mockImplementation(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (url: string): Promise<any> =>
+                Promise.resolve({
+                    data: { data: url.includes("resistance") ? rows : [] },
+                })
+        );
+        await renderTrendDetails();
+
+        const substance = substanceCombobox();
+        expect(substance).toHaveTextContent("Group: Ampicillin");
+
+        fireEvent.mouseDown(substance);
+        expect(
+            within(screen.getByRole("listbox")).getByRole("option", {
+                name: "Group: Ampicillin",
             })
         ).toBeInTheDocument();
     });
