@@ -335,6 +335,9 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
     }, [selectedChartMicroorganism, isSearchTriggered]);
 
     // -------------- 1) fetchPrevalenceData --------------
+    // The unfiltered dataset feeds only the option cascade. It must never
+    // write the search result: on a filtered deep link it races the filtered
+    // search, and a late answer would replace the filtered rows (#1919).
     const fetchPrevalenceData = async (): Promise<void> => {
         try {
             const relationsToPopulate = [
@@ -358,7 +361,6 @@ export const PrevalenceDataProvider: React.FC<{ children: ReactNode }> = ({
                     setError
                 );
                 setFullPrevalenceData(processedData);
-                setPrevalenceData(processedData);
             }
         } catch (err) {
             console.error("Error fetching prevalence data:", err);
