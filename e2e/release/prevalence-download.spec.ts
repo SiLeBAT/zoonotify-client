@@ -88,18 +88,6 @@ for (const lang of LANGUAGES) {
                 )}`
             );
             await filterRequested;
-            // The page mounts its data provider more than once on load, so the
-            // unfiltered and filtered answers can land in either order. Settle,
-            // then search again with the filter the URL selected: the last
-            // answer is then the filtered one.
-            await page.waitForLoadState("networkidle");
-            const searched = page.waitForResponse((r) =>
-                decodeURIComponent(r.url()).includes(
-                    "filters[microorganism][documentId]"
-                )
-            );
-            await page.getByRole("button", { name: strings.SEARCH }).click();
-            await searched;
             const button = page.getByRole("button", {
                 name: strings.DOWNLOAD_ZIP_FILE,
             });
