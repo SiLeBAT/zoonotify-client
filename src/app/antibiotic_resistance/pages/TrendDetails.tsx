@@ -788,7 +788,7 @@ export const TrendDetails: React.FC<{
                                       .filter((o) =>
                                           selectedItems.includes(o.documentId)
                                       )
-                                      .map((o) => t(o.name))
+                                      .map((o) => o.name)
                                       .join(", ")
                                 : ""
                         }
@@ -823,7 +823,7 @@ export const TrendDetails: React.FC<{
                                             ) > -1
                                         }
                                     />
-                                    <ListItemText primary={t(item.name)} />
+                                    <ListItemText primary={item.name} />
                                 </MenuItem>
                             ))
                         )}
@@ -881,7 +881,7 @@ export const TrendDetails: React.FC<{
                                       .filter((o) =>
                                           selectedItems.includes(o.documentId)
                                       )
-                                      .map((o) => t(o.name))
+                                      .map((o) => o.name)
                                       .join(", ")
                                 : ""
                         }
@@ -934,10 +934,10 @@ export const TrendDetails: React.FC<{
                                                         fontSize: "1rem",
                                                     }}
                                                 >
-                                                    {t(item.name)}
+                                                    {item.name}
                                                 </span>
                                             ) : (
-                                                t(item.name)
+                                                item.name
                                             )
                                         }
                                     />
