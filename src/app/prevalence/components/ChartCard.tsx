@@ -45,10 +45,14 @@ const BASE_CARD_HEIGHT = 620;
 const CARD_CHROME_PX = 260;
 
 /** ----------------------------- Title plugin ----------------------------- */
-const customTitlePlugin = (microName: string | null): Plugin => ({
+// The name comes from the plugin options (options.plugins.customTitle), not a
+// closure: react-chartjs-2 pushes changed options into the live chart but never
+// swaps its plugins, so a closed-over name stayed on the first organism.
+const customTitlePlugin: Plugin = {
     id: "customTitle",
-    beforeDraw(chart: ChartJS) {
+    beforeDraw(chart: ChartJS, _args, options: { microName?: string | null }) {
         const { ctx, width } = chart;
+        const microName = options?.microName;
         if (!microName) return;
 
         const formattedWords: WordObject[] =
@@ -81,7 +85,7 @@ const customTitlePlugin = (microName: string | null): Plugin => ({
 
         ctx.restore();
     },
-});
+};
 
 /** ------------------------------ Props ------------------------------ */
 interface ChartCardProps {
@@ -237,6 +241,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                     },
                     plugins: {
                         title: { display: false },
+                        customTitle: { microName: currentMicroorganism },
                         legend: {
                             labels: { color: "black", font: { size: 14 } },
                             position: "top",
@@ -284,7 +289,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                 }}
                 plugins={[
                     errorBarTooltipPlugin,
-                    customTitlePlugin(currentMicroorganism),
+                    customTitlePlugin,
                     {
                         id: "customErrorBars",
                         afterDraw: (chart: ChartJS) => drawErrorBars(chart),
