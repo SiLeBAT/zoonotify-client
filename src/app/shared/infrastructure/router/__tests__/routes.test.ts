@@ -1,6 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { isApiReferenceLinked, isMicrobialTypingVisible } from "../routes";
+import {
+    isApiReferenceLinked,
+    isLinkFinderVisible,
+    isMicrobialTypingVisible,
+} from "../routes";
 
 describe("isApiReferenceLinked", () => {
     it.each([undefined, "", "true", "yes"])(
@@ -70,5 +74,38 @@ describe("Microbial typing page per environment", () => {
 
     it.each([".env", ".env.qa"])("is visible in %s", (file) => {
         expect(isMicrobialTypingVisible(flagIn(file))).toBe(true);
+    });
+});
+
+describe("isLinkFinderVisible", () => {
+    it.each([undefined, "", "true"])("shows the search for %p", (value) => {
+        expect(isLinkFinderVisible(value)).toBe(true);
+    });
+
+    it("hides the search only when the build sets it to false", () => {
+        expect(isLinkFinderVisible("false")).toBe(false);
+        expect(isLinkFinderVisible(" false ")).toBe(false);
+    });
+});
+
+/**
+ * The Link Finder (spec 102) is for review on local and QA builds only: a
+ * production build must not show it.
+ */
+describe("Link Finder per environment", () => {
+    const flagIn = (file: string): string | undefined =>
+        fs
+            .readFileSync(
+                path.resolve(__dirname, "../../../../../..", file),
+                "utf8"
+            )
+            .match(/^REACT_APP_LINK_FINDER_VISIBLE\s*=\s*(.*)$/m)?.[1];
+
+    it("is hidden in production builds", () => {
+        expect(isLinkFinderVisible(flagIn(".env.production"))).toBe(false);
+    });
+
+    it.each([".env", ".env.qa"])("is visible in %s", (file) => {
+        expect(isLinkFinderVisible(flagIn(file))).toBe(true);
     });
 });

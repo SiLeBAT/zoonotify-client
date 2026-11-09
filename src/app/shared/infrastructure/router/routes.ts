@@ -47,6 +47,20 @@ export function isMicrobialTypingVisible(value: string | undefined): boolean {
 export const MICROBIAL_TYPING_VISIBLE = isMicrobialTypingVisible(
     process.env.REACT_APP_MICROBIAL_TYPING_VISIBLE
 );
+
+/**
+ * Whether the home page shows the Link Finder search (spec 102). A build hides
+ * it by setting REACT_APP_LINK_FINDER_VISIBLE to "false": production does, so
+ * only local and QA builds offer it. Hidden only on an explicit "false", for
+ * the same reason as the Microbial typing flag. The Link Finder has no route,
+ * so there is no sitemap or SEO entry to hide.
+ */
+export function isLinkFinderVisible(value: string | undefined): boolean {
+    return value?.trim() !== "false";
+}
+export const LINK_FINDER_VISIBLE = isLinkFinderVisible(
+    process.env.REACT_APP_LINK_FINDER_VISIBLE
+);
 export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;
 export const AMU_PAGE = `${CMS_API_ENDPOINT}/amu-page`;
