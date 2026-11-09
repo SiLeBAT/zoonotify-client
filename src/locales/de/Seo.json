@@ -8,6 +8,10 @@
     "description": "Prävalenz von Zoonoseerregern entlang von Lebensmittelketten in Deutschland — interaktive Auswertung nach Erreger, Matrix und Probenahmestelle.",
     "datasetName": "Prävalenz von Zoonoseerregern entlang von Lebensmittelketten (Deutschland)"
   },
+  "microbialTyping": {
+    "title": "Mikrobiologische Typisierung",
+    "description": "Mikrobiologische Typisierung von Zoonoseerregern aus dem deutschen Zoonosen-Monitoring, nach Mikroorganismus."
+  },
   "antibioticResistance": {
     "title": "Antibiotikaresistenz",
     "description": "Antibiotikaresistenzen von Zoonoseerregern und kommensalen Bakterien entlang von Lebensmittelketten in Deutschland — Trends, Resistenzraten und Mehrfachresistenzen.",

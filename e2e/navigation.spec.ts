@@ -6,6 +6,7 @@ const NAV = [
     { label: "Erläuterungen", path: "/explanations" },
     { label: "Auswertungen", path: "/evaluations" },
     { label: "Prävalenz", path: "/prevalence" },
+    { label: "Mikrobiologische Typisierung", path: "/microbial-typing" },
     { label: "Antibiotikaresistenz", path: "/antibiotic-resistance" },
     { label: "Keimzahlen", path: "/microbial-counts" },
     { label: "Antibiotikaeinsatz", path: "/antimicrobial" },

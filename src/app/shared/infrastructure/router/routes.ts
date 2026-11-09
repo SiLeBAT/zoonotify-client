@@ -5,6 +5,7 @@ export const pageRoute = {
     evaluationsPagePath: "/evaluations",
     dpdPagePath: "/dataProtectionDeclaration",
     prevalencePagePath: "/prevalence",
+    microbialTypingPagePath: "/microbial-typing",
     antimicrobialPagePath: "/antimicrobial",
     antibioticResistancePagePath: "/antibiotic-resistance",
     microbialCountsPagePath: "/microbial-counts",
@@ -27,6 +28,24 @@ export function isApiReferenceLinked(value: string | undefined): boolean {
 }
 export const API_REFERENCE_LINKED = isApiReferenceLinked(
     process.env.REACT_APP_API_REFERENCE_LINKED
+);
+
+/**
+ * Whether the Microbial typing page (#1898) is reachable: its route, header
+ * link, SEO entry and sitemap URLs. A build hides it by setting
+ * REACT_APP_MICROBIAL_TYPING_VISIBLE to "false": production does, until the
+ * page has content. Flip it at go-live.
+ *
+ * Hidden only on an explicit "false", like the API reference flag: the e2e
+ * build (NODE_ENV=development) loads no env file at all, and a missing flag
+ * must not hide a page the local and QA builds are meant to show.
+ * scripts/seo-artifacts.js applies the same rule to the sitemap.
+ */
+export function isMicrobialTypingVisible(value: string | undefined): boolean {
+    return value?.trim() !== "false";
+}
+export const MICROBIAL_TYPING_VISIBLE = isMicrobialTypingVisible(
+    process.env.REACT_APP_MICROBIAL_TYPING_VISIBLE
 );
 export const CONFIGURATION = `${CMS_API_ENDPOINT}/configuration`;
 export const WELCOME = `${CMS_API_ENDPOINT}/welcome`;

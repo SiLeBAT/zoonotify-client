@@ -771,8 +771,11 @@ export const TrendDetails: React.FC<{
                 sx={{ mb: 3 }}
             >
                 <FormControl sx={{ width: SELECT_WIDTH }}>
-                    <InputLabel>{t("ANTIBIOTIC_SUBSTANCE")}</InputLabel>
+                    <InputLabel id={"antibiotic-substance"}>
+                        {t("ANTIBIOTIC_SUBSTANCE")}
+                    </InputLabel>
                     <Select
+                        labelId={"antibiotic-substance"}
                         multiple
                         value={substanceFilter}
                         onChange={handleChange}
@@ -785,7 +788,7 @@ export const TrendDetails: React.FC<{
                                       .filter((o) =>
                                           selectedItems.includes(o.documentId)
                                       )
-                                      .map((o) => t(o.name))
+                                      .map((o) => o.name)
                                       .join(", ")
                                 : ""
                         }
@@ -820,7 +823,7 @@ export const TrendDetails: React.FC<{
                                             ) > -1
                                         }
                                     />
-                                    <ListItemText primary={t(item.name)} />
+                                    <ListItemText primary={item.name} />
                                 </MenuItem>
                             ))
                         )}
@@ -865,8 +868,9 @@ export const TrendDetails: React.FC<{
         return (
             <Stack direction="row" spacing={1} alignItems="center">
                 <FormControl fullWidth>
-                    <InputLabel>{label}</InputLabel>
+                    <InputLabel id={`filter-${key}`}>{label}</InputLabel>
                     <Select
+                        labelId={`filter-${key}`}
                         multiple
                         value={value}
                         onChange={handleChange}
@@ -877,7 +881,7 @@ export const TrendDetails: React.FC<{
                                       .filter((o) =>
                                           selectedItems.includes(o.documentId)
                                       )
-                                      .map((o) => t(o.name))
+                                      .map((o) => o.name)
                                       .join(", ")
                                 : ""
                         }
@@ -930,10 +934,10 @@ export const TrendDetails: React.FC<{
                                                         fontSize: "1rem",
                                                     }}
                                                 >
-                                                    {t(item.name)}
+                                                    {item.name}
                                                 </span>
                                             ) : (
-                                                t(item.name)
+                                                item.name
                                             )
                                         }
                                     />

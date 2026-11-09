@@ -23,6 +23,32 @@ function parseRoutePaths(routesSource) {
     return [...block[1].matchAll(/:\s*"([^"]+)"/g)].map((match) => match[1]);
 }
 
+/**
+ * Routes a build can hide, keyed by path, with the env flag that hides them.
+ * Mirrors the flag readers in routes.ts (e.g. isMicrobialTypingVisible): a
+ * route is hidden only when its flag is exactly "false", so a missing env file
+ * or flag keeps it listed.
+ */
+const ROUTE_FLAGS = {
+    "/microbial-typing": "REACT_APP_MICROBIAL_TYPING_VISIBLE",
+};
+
+/** The value of `name` in a dotenv file's source, or undefined. */
+function readEnvFlag(envSource, name) {
+    return envSource.match(new RegExp(`^${name}\\s*=\\s*(.*)$`, "m"))?.[1];
+}
+
+/**
+ * Drops the routes the build's env file hides, so a sitemap never advertises
+ * a page that answers with a 404.
+ */
+function visibleRoutePaths(routePaths, envSource, flags = ROUTE_FLAGS) {
+    return routePaths.filter((routePath) => {
+        const flag = flags[routePath];
+        return !flag || readEnvFlag(envSource, flag)?.trim() !== "false";
+    });
+}
+
 /** The locales the CMS publishes. Mirrors `languages` in src/i18n.ts. */
 const LANGUAGES = ["de", "en"];
 
@@ -137,5 +163,6 @@ module.exports = {
     buildSitemap,
     parseRoutePaths,
     resolveEnvironment,
+    visibleRoutePaths,
     withNoindex,
 };

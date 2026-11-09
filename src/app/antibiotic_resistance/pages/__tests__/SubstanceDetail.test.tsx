@@ -226,3 +226,24 @@ describe("SubstanceDetail reset", () => {
         );
     });
 });
+
+describe("SubstanceDetail filter selects", () => {
+    it.each([
+        "SAMPLING_YEAR",
+        "ANTIBIOTIC_SUBSTANCE",
+        "combinations",
+        "SUPER-CATEGORY-SAMPLE-ORIGIN",
+        "SAMPLE_ORIGIN",
+        "SAMPLING_STAGE",
+        "MATRIX_GROUP",
+        "MATRIX",
+    ])("exposes %s as the accessible name of its combobox", async (label) => {
+        await renderSubstanceDetail();
+
+        expect(
+            screen.getByRole("combobox", {
+                name: new RegExp(`^${label}(\\s|$)`),
+            })
+        ).toBeInTheDocument();
+    });
+});

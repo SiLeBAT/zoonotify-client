@@ -47,5 +47,6 @@ AGENTS.md
 # e2e (playwright)
 /playwright-report
 /test-results
+/release-report.md
 /blob-report
 /playwright/.cache

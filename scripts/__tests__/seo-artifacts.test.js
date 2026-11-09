@@ -4,6 +4,7 @@ const {
     buildSitemap,
     parseRoutePaths,
     resolveEnvironment,
+    visibleRoutePaths,
     withNoindex,
 } = require("../seo-artifacts");
 
@@ -41,6 +42,7 @@ describe("parseRoutePaths", () => {
             "/evaluations",
             "/dataProtectionDeclaration",
             "/prevalence",
+            "/microbial-typing",
             "/antimicrobial",
             "/antibiotic-resistance",
             "/microbial-counts",
@@ -126,7 +128,7 @@ describe("resolveEnvironment", () => {
         const { baseUrl } = resolveEnvironment("production");
         const xml = buildSitemap(baseUrl, parseRoutePaths(ROUTES_SOURCE));
 
-        expect(locsIn(xml)).toHaveLength(18);
+        expect(locsIn(xml)).toHaveLength(20);
         locsIn(xml).forEach((loc) => {
             expect(loc).toMatch(/^https:\/\/zoonotify\.bfr\.berlin\//);
         });
@@ -158,5 +160,38 @@ describe("withNoindex", () => {
         const headless = "<html><body>nothing here</body></html>";
 
         expect(withNoindex(headless)).toBe(headless);
+    });
+});
+
+describe("visibleRoutePaths", () => {
+    const ROUTES = ["/", "/prevalence", "/microbial-typing"];
+
+    it("drops a route whose flag is false, so the sitemap lists no 404", () => {
+        const envSource = [
+            "REACT_APP_API_URL=x",
+            "REACT_APP_MICROBIAL_TYPING_VISIBLE = false",
+        ].join("\n");
+
+        expect(visibleRoutePaths(ROUTES, envSource)).toEqual([
+            "/",
+            "/prevalence",
+        ]);
+    });
+
+    it.each([
+        ["no env file", ""],
+        ["the flag unset", "REACT_APP_API_URL=x"],
+        ["the flag true", "REACT_APP_MICROBIAL_TYPING_VISIBLE=true"],
+    ])("keeps every route with %s", (_, envSource) => {
+        expect(visibleRoutePaths(ROUTES, envSource)).toEqual(ROUTES);
+    });
+
+    it("only reads a whole line, not a flag that merely ends with the name", () => {
+        expect(
+            visibleRoutePaths(
+                ROUTES,
+                "OLD_REACT_APP_MICROBIAL_TYPING_VISIBLE=false"
+            )
+        ).toEqual(ROUTES);
     });
 });

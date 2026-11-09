@@ -1,4 +1,7 @@
-import { pageRoute } from "../infrastructure/router/routes";
+import {
+    MICROBIAL_TYPING_VISIBLE,
+    pageRoute,
+} from "../infrastructure/router/routes";
 
 /** The query parameter that carries the active language. */
 export const LANG_PARAM = "lang";
@@ -76,6 +79,11 @@ export const SEO_ROUTES: readonly SeoRoute[] = [
         key: "prevalence",
         dataset: { nameKey: "prevalence.datasetName" },
     },
+    // A hidden page must not claim its path either: the 404 that renders there
+    // has to resolve no entry, so it gets the noindex treatment.
+    ...(MICROBIAL_TYPING_VISIBLE
+        ? [{ path: pageRoute.microbialTypingPagePath, key: "microbialTyping" }]
+        : []),
     { path: pageRoute.antimicrobialPagePath, key: "antimicrobial" },
     {
         path: pageRoute.antibioticResistancePagePath,

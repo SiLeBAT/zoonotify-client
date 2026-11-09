@@ -5,7 +5,10 @@ import { css } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
 import i18next from "i18next";
-import { pageRoute } from "../../infrastructure/router/routes";
+import {
+    MICROBIAL_TYPING_VISIBLE,
+    pageRoute,
+} from "../../infrastructure/router/routes";
 import {
     headerHeight,
     onPrimaryColor,
@@ -141,6 +144,8 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+    const [microbialTypingOpen, setMicrobialTypingOpen] =
+        useState<boolean>(false);
     const [microbialCountsOpen, setMicrobialCountsOpen] =
         useState<boolean>(false);
     const [antimicrobialOpen, setAntimicrobialOpen] = useState<boolean>(false);
@@ -156,6 +161,7 @@ export function HeaderComponent(): JSX.Element {
         setLinkOpen(pathname === pageRoute.linkPagePath);
         setEvaluationsOpen(pathname === pageRoute.evaluationsPagePath);
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
+        setMicrobialTypingOpen(pathname === pageRoute.microbialTypingPagePath);
         setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
         setMicrobialCountsOpen(pathname === pageRoute.microbialCountsPagePath);
         setAntibioticResistanceOpen(
@@ -214,6 +220,14 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Prevalence")}
                     </NavLink>
+                    {MICROBIAL_TYPING_VISIBLE && (
+                        <NavLink
+                            to={pageRoute.microbialTypingPagePath}
+                            css={navLinkStyle(microbialTypingOpen)}
+                        >
+                            {t("MicrobialTyping")}
+                        </NavLink>
+                    )}
 
                     <NavLink
                         to={`${pageRoute.antibioticResistancePagePath}?view=main`}
@@ -271,6 +285,14 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("Prevalence")}
                 </NavLink>
+                {MICROBIAL_TYPING_VISIBLE && (
+                    <NavLink
+                        to={pageRoute.microbialTypingPagePath}
+                        css={mobileNavLinkStyle(microbialTypingOpen)}
+                    >
+                        {t("MicrobialTyping")}
+                    </NavLink>
+                )}
 
                 <NavLink
                     to={`${pageRoute.antibioticResistancePagePath}?view=main`}

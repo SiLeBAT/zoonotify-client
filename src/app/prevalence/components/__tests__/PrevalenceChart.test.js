@@ -427,23 +427,93 @@ describe("PrevalenceChart — comparing combinations in one graph", () => {
         );
     });
 
-    it("resets to the new microorganism's first combinations when the microorganism changes", async () => {
+    it("keeps the picked combinations when the microorganism changes, leaving a missing one's slot empty", async () => {
         const user = userEvent.setup();
         const data = [
             ...fiveCombinations,
-            ...["S1", "S2"].map((o) =>
+            // Salmonella shares O1 (picked) and O2 (not picked); S1 is its own.
+            ...["O1", "O2", "S1"].map((o) =>
                 row(o, 2022, { microorganism: "Salmonella" })
             ),
         ];
         mockContext({ prevalenceData: data });
         const { rerender } = render(<PrevalenceChart />);
 
+        // Pick O1 and O3 only.
         await user.click(
             screen.getByRole("combobox", { name: "Combinations" })
         );
-        await user.click(
-            screen.getByRole("option", { name: "O2-Matrix-Stage" })
+        for (const origin of ["O2", "O4"]) {
+            await user.click(
+                screen.getByRole("option", { name: `${origin}-Matrix-Stage` })
+            );
+        }
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage|O3-Matrix-Stage"
         );
+
+        mockContext({
+            prevalenceData: data,
+            selectedChartMicroorganism: "Salmonella",
+        });
+        rerender(<PrevalenceChart />);
+
+        // O3 does not exist for Salmonella: its slot stays empty instead of
+        // being filled with O2 or S1.
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage"
+        );
+    });
+
+    it("still lists a kept combination the new microorganism lacks, so its slot can be freed", async () => {
+        const user = userEvent.setup();
+        const data = [
+            ...["O1", "O2"].map((o) => row(o)),
+            ...["O1", "S1"].map((o) =>
+                row(o, 2022, { microorganism: "Salmonella" })
+            ),
+        ];
+        mockContext({ prevalenceData: data });
+        const { rerender } = render(<PrevalenceChart />);
+
+        mockContext({
+            prevalenceData: data,
+            selectedChartMicroorganism: "Salmonella",
+        });
+        rerender(<PrevalenceChart />);
+
+        await user.click(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        const kept = screen.getByRole("option", { name: "O2-Matrix-Stage" });
+        expect(within(kept).getByRole("checkbox")).toBeChecked();
+
+        await user.click(kept);
+        await user.click(
+            screen.getByRole("option", { name: "S1-Matrix-Stage" })
+        );
+
+        expect(screen.getByTestId("chart")).toHaveAttribute(
+            "data-datasets",
+            "O1-Matrix-Stage|S1-Matrix-Stage"
+        );
+        expect(
+            screen.queryByRole("option", { name: "O2-Matrix-Stage" })
+        ).not.toBeInTheDocument();
+    });
+
+    it("keeps the default combinations when the microorganism changes before any pick", () => {
+        const data = [
+            ...fiveCombinations,
+            // Salmonella shares only O2 with E. Coli's default first four.
+            ...["O2", "O5", "S1"].map((o) =>
+                row(o, 2022, { microorganism: "Salmonella" })
+            ),
+        ];
+        mockContext({ prevalenceData: data });
+        const { rerender } = render(<PrevalenceChart />);
 
         mockContext({
             prevalenceData: data,
@@ -453,7 +523,7 @@ describe("PrevalenceChart — comparing combinations in one graph", () => {
 
         expect(screen.getByTestId("chart")).toHaveAttribute(
             "data-datasets",
-            "S1-Matrix-Stage|S2-Matrix-Stage"
+            "O2-Matrix-Stage"
         );
     });
 

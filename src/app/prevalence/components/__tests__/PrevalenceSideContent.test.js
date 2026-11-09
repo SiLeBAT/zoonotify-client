@@ -152,3 +152,49 @@ describe("PrevalenceSideContent — reset", () => {
         expect(filters.fetchOptions).not.toHaveBeenCalled();
     });
 });
+
+describe("PrevalenceSideContent — accessible names", () => {
+    it.each([
+        "SAMPLING_YEAR",
+        "MICROORGANISM",
+        "SUPER-CATEGORY-SAMPLE-ORIGIN",
+        "SAMPLE_ORIGIN",
+        "SAMPLING_STAGE",
+        "MATRIX_GROUP",
+        "MATRIX",
+    ])("exposes %s as the accessible name of its combobox", (label) => {
+        usePrevalenceFilters.mockReturnValue({
+            selectedMicroorganisms: [],
+            setSelectedMicroorganisms: jest.fn(),
+            microorganismOptions: [],
+            selectedSampleOrigins: [],
+            setSelectedSampleOrigins: jest.fn(),
+            sampleOriginOptions: [],
+            selectedMatrices: [],
+            setSelectedMatrices: jest.fn(),
+            matrixOptions: [],
+            selectedSamplingStages: [],
+            setSelectedSamplingStages: jest.fn(),
+            samplingStageOptions: [],
+            selectedMatrixGroups: [],
+            setSelectedMatrixGroups: jest.fn(),
+            matrixGroupOptions: [],
+            selectedYear: [],
+            setSelectedYear: jest.fn(),
+            yearOptions: [2020],
+            selectedSuperCategory: [],
+            setSelectedSuperCategory: jest.fn(),
+            superCategorySampleOriginOptions: [],
+            fetchDataFromAPI: jest.fn(),
+            setShowError: jest.fn(),
+            fetchOptions: jest.fn(),
+            setIsSearchTriggered: jest.fn(),
+            loading: false,
+        });
+        render(<PrevalenceSideContent />);
+
+        expect(
+            screen.getByRole("combobox", { name: new RegExp(`^${label}$`) })
+        ).toBeInTheDocument();
+    });
+});

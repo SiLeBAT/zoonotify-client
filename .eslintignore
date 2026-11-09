@@ -23,4 +23,3 @@ test-results
 # covered by `npm run typecheck:e2e` instead. (cypress sat here the same way.)
 e2e
 playwright.config.ts
-scripts/typecheck-e2e.mjs
