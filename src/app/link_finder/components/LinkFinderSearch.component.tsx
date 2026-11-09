@@ -152,7 +152,7 @@ export function LinkFinderSearch({
             {state.kind === "done" && choices.length > 0 && (
                 <Box
                     role="group"
-                    aria-label={t("ChooseOrganism")}
+                    aria-label={String(t("ChooseOrganism"))}
                     sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 1 }}
                 >
                     {choices.map((choice) => (
