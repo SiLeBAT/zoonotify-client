@@ -1,0 +1,19 @@
+{
+  "Heading": "Search in your own words",
+  "SearchLabel": "What are you looking for?",
+  "Placeholder": "e.g. Salmonella in veal",
+  "SearchButton": "Search",
+  "Searching": "Searching…",
+  "Found": "{{count}} link found.",
+  "Found_plural": "{{count}} links found.",
+  "NoLinks": "No links found. Please use the filters in the side panel of the data pages.",
+  "Unmatched": "Not recognised: {{words}}",
+  "ChooseOrganism": "Which organism do you mean? Choose one to see its resistance data:",
+  "NoResistanceData": "No resistance data exists for these filters, for any organism. Please use the filters in the side panel of the data pages.",
+  "Unavailable": "The search is unavailable right now. Please use the filters in the side panel of the data pages.",
+  "PagePrevalence": "Prevalence",
+  "PageAmrSubstance": "Antibiotic resistance: Substance graph",
+  "PageAmrTrend": "Antibiotic resistance: Trend graph",
+  "Closest": "closest match",
+  "Without": "without: {{values}}"
+}

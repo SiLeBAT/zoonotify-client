@@ -42,6 +42,7 @@ Create a `.env` file (or `.env.qa` / `.env.production`) with:
 | `REACT_APP_ENV` | Environment name (`dev` / `qa` / `production`) |
 | `REACT_APP_SHOW_LD` | Enable the Linked Data page (`true` / `false`) |
 | `REACT_APP_MICROBIAL_TYPING_VISIBLE` | `false` hides the Microbial typing page (route, header link, SEO, sitemap); any other value or unset shows it. Production sets `false` until go-live |
+| `REACT_APP_LINK_FINDER_VISIBLE` | `false` hides the Link Finder search on the home page; any other value or unset shows it. Production sets `false`, so only local and QA builds offer it |
 
 ## Architecture
 

@@ -36,7 +36,6 @@ import { useTranslation } from "react-i18next";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { CMSResponse } from "../../shared/model/CMS.model";
 import { SubstanceChart } from "./SubstanceChart";
-import LZString from "lz-string";
 import {
     INFORMATION,
     RESISTANCES,
@@ -60,6 +59,10 @@ import {
     shouldShowSpeciesFilter,
     uniqueFromItems,
 } from "./resistanceHelpers";
+import {
+    decodeSubstanceState,
+    encodeSubstanceState,
+} from "./substanceUrlState";
 
 const menuItemTextStyle = `.menu-item-text-wrap {
   white-space: normal !important;
@@ -70,23 +73,6 @@ const menuItemTextStyle = `.menu-item-text-wrap {
 
 // ======== URL STATE HELPERS ========
 
-type ShortKey = "y" | "a" | "s" | "u" | "o" | "g" | "mG" | "m";
-
-const SHORT_MAP: Record<ShortKey, FilterKey> = {
-    y: "samplingYear",
-    a: "antimicrobialSubstance",
-    s: "specie",
-    u: "superCategorySampleOrigin",
-    o: "sampleOrigin",
-    g: "samplingStage",
-    mG: "matrixGroup",
-    m: "matrix",
-};
-
-const LONG_TO_SHORT = Object.fromEntries(
-    Object.entries(SHORT_MAP).map(([shortK, longK]) => [longK, shortK])
-) as Record<FilterKey, ShortKey>;
-
 function encodeStateToParam(
     microorganism: string,
     selected: Record<FilterKey, string[]>,
@@ -96,90 +82,20 @@ function encodeStateToParam(
     combinations?: string[], // stable name-keys
     dataItems?: ResistanceApiItem[] //  for docId->name conversion
 ): string {
-    // Build docId->name map for converting filter values to names
-    const docIdToName = dataItems
-        ? buildDocIdToNameMap(dataItems)
-        : ({} as Record<FilterKey, Map<string, string>>);
-
-    const f: Partial<Record<ShortKey, string[]>> = {};
-    (Object.keys(selected) as FilterKey[]).forEach((k) => {
-        const val = selected[k];
-        if (val && val.length) {
-            if (k === "samplingYear" || !docIdToName[k]) {
-                f[LONG_TO_SHORT[k]] = val;
-            } else {
-                // Convert docIds to names for URL stability
-                f[LONG_TO_SHORT[k]] = val.map(
-                    (docId) => docIdToName[k].get(docId) ?? docId
-                );
-            }
-        }
-    });
-    if (substanceFilter.length) {
-        const subMap = docIdToName.antimicrobialSubstance;
-        f[LONG_TO_SHORT.antimicrobialSubstance] = subMap
-            ? substanceFilter.map((docId) => subMap.get(docId) ?? docId)
-            : substanceFilter;
-    }
-
-    const payload: {
-        m: string;
-        v: "substance";
-        l: string;
-        f: Partial<Record<ShortKey, string[]>>;
-        y?: number;
-        c?: string[];
-    } = { m: microorganism, v: "substance", l: lang, f };
-
-    if (typeof chartYear === "number") payload.y = chartYear;
-    if (combinations && combinations.length) payload.c = combinations;
-
-    return LZString.compressToEncodedURIComponent(JSON.stringify(payload));
-}
-
-function decodeStateFromParam(sParam: string | null): {
-    microorganism?: string;
-    lang?: string;
-    selected: Record<FilterKey, string[]>;
-    substanceFilter: string[];
-    chartYear?: number;
-    combinations: string[];
-} | null {
-    if (!sParam) return null;
-    try {
-        const json = LZString.decompressFromEncodedURIComponent(sParam);
-        if (!json) return null;
-        const { m, l, f, y, c } = JSON.parse(json) as {
-            m?: string;
-            l?: string;
-            f?: Partial<Record<ShortKey, string[]>>;
-            y?: number;
-            c?: string[];
-        };
-
-        const selected: Record<FilterKey, string[]> = { ...emptyFilterState };
-        (Object.keys(f || {}) as ShortKey[]).forEach((sk) => {
-            const longKey = SHORT_MAP[sk];
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (longKey) selected[longKey] = (f as any)[sk] || [];
-        });
-
-        const substanceFilter = selected.antimicrobialSubstance || [];
-        const chartYear = typeof y === "number" ? y : undefined;
-        const combinations = Array.isArray(c) ? c : [];
-
-        return {
-            microorganism: m,
-            lang: l,
+    return encodeSubstanceState(
+        {
+            microorganism,
             selected,
             substanceFilter,
             chartYear,
             combinations,
-        };
-    } catch {
-        return null;
-    }
+            dataItems,
+        },
+        lang
+    );
 }
+
+const decodeStateFromParam = decodeSubstanceState;
 
 function readLangFromUrl(): string | undefined {
     const params = new URLSearchParams(window.location.search);

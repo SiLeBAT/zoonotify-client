@@ -11,6 +11,7 @@ coverage
 webpack.config.js
 .eslintrc.js
 jest.config.js
+jest.live.config.js
 empty-module.js
 
 # playwright output

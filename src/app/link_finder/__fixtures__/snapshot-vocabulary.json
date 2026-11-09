@@ -1,0 +1,1072 @@
+{
+ "meta": {
+  "capturedAt": "2026-10-29T15:05:50.532Z",
+  "source": "https://zoonotify.bfr.berlin/cms",
+  "resistances": 8454,
+  "prevalences": 689
+ },
+ "values": {
+  "microorganism": [
+   {
+    "en": "Baylisascaris procyonis",
+    "de": "Baylisascaris procyonis"
+   },
+   {
+    "en": "Campylobacter spp.",
+    "de": "Campylobacter spp."
+   },
+   {
+    "en": "CARBA-E. coli",
+    "de": "CARBA-E. coli"
+   },
+   {
+    "en": "Clostridioides difficile",
+    "de": "Clostridioides difficile"
+   },
+   {
+    "en": "Duncker's muscle fluke",
+    "de": "Duncker´scher Muskelegel"
+   },
+   {
+    "en": "E. coli",
+    "de": "E. coli"
+   },
+   {
+    "en": "Echinococcus spp.",
+    "de": "Echinococcus spp."
+   },
+   {
+    "en": "Enterococcus spp.",
+    "de": "Enterococcus spp."
+   },
+   {
+    "en": "ESBL/AmpC E. coli",
+    "de": "ESBL/AmpC-E. coli"
+   },
+   {
+    "en": "ESBL/AmpC-Klebsiella spp.",
+    "de": "ESBL/AmpC-Klebsiella spp."
+   },
+   {
+    "en": "Hepatitis A virus",
+    "de": "Hepatitis-A-Virus"
+   },
+   {
+    "en": "Hepatitis-E-Virus",
+    "de": "Hepatitis-E-Virus"
+   },
+   {
+    "en": "Listeria monocytogenes",
+    "de": "Listeria monocytogenes"
+   },
+   {
+    "en": "Methicillin-resistant Staphylococcus aureus (MRSA)",
+    "de": "Methicillin-resistente Staphylococcus aureus (MRSA)"
+   },
+   {
+    "en": "Norovirus",
+    "de": "Norovirus"
+   },
+   {
+    "en": "Salmonella spp.",
+    "de": "Salmonella spp."
+   },
+   {
+    "en": "Shigatoxin-producing E. coli (STEC)",
+    "de": "Shigatoxin-bildende E. coli (STEC)"
+   },
+   {
+    "en": "Vibrio spp.",
+    "de": "Vibrio spp."
+   },
+   {
+    "en": "Yersinia enterocolitica",
+    "de": "Yersinia enterocolitica"
+   }
+  ],
+  "specie": [
+   {
+    "en": "C. coli",
+    "de": "C. coli"
+   },
+   {
+    "en": "C. jejuni",
+    "de": "C. jejuni"
+   },
+   {
+    "en": "Enterococcus faecalis",
+    "de": "Enterococcus faecalis"
+   },
+   {
+    "en": "Enterococcus faecium",
+    "de": "Enterococcus faecium"
+   }
+  ],
+  "sampleType": [
+   {
+    "en": "Animal",
+    "de": "Tier"
+   },
+   {
+    "en": "Feed",
+    "de": "Futtermittel"
+   },
+   {
+    "en": "Food",
+    "de": "Lebensmittel"
+   }
+  ],
+  "superCategorySampleOrigin": [
+   {
+    "en": "Cattle, bovine animals",
+    "de": "Rind"
+   },
+   {
+    "en": "Chicken",
+    "de": "Huhn"
+   },
+   {
+    "en": "Duck",
+    "de": "Ente"
+   },
+   {
+    "en": "Feed",
+    "de": "Futtermittel"
+   },
+   {
+    "en": "Fish/seafood",
+    "de": "Fisch/Meeresfrüchte"
+   },
+   {
+    "en": "Food of mixed animal origin",
+    "de": "Lebensmittel gemischter tierischer Herkunft"
+   },
+   {
+    "en": "Food of non-animal origin",
+    "de": "Lebensmittel nicht-tierischen Ursprungs"
+   },
+   {
+    "en": "Pig",
+    "de": "Schwein"
+   },
+   {
+    "en": "Sheep and goats",
+    "de": "Schafe und Ziegen"
+   },
+   {
+    "en": "Turkey",
+    "de": "Pute"
+   },
+   {
+    "en": "Wild animals",
+    "de": "Wildtiere"
+   }
+  ],
+  "sampleOrigin": [
+   {
+    "en": "Bivalve molluscs",
+    "de": "Zweischalige Weichtiere"
+   },
+   {
+    "en": "Breeding sows",
+    "de": "Zuchtsauen"
+   },
+   {
+    "en": "Breeding turkeys",
+    "de": "Zuchtputen"
+   },
+   {
+    "en": "Broilers",
+    "de": "Masthähnchen"
+   },
+   {
+    "en": "Broilers, organic",
+    "de": "Masthähnchen, ökologisch"
+   },
+   {
+    "en": "Cattle",
+    "de": "Rind"
+   },
+   {
+    "en": "Crustaceans",
+    "de": "Krebstiere"
+   },
+   {
+    "en": "Cyprinids (carp-like fish)",
+    "de": "Cypriniden (Karpfenartige)"
+   },
+   {
+    "en": "Dairy cattle",
+    "de": "Milchrind"
+   },
+   {
+    "en": "Dairy cattle, organic",
+    "de": "Milchrind, ökologisch"
+   },
+   {
+    "en": "Ducks and geese",
+    "de": "Enten und Gänse"
+   },
+   {
+    "en": "Fattening calves (for slaughter at 12 months of age at the latest)",
+    "de": "Kälber zur Mast (für die Schlachtung mit spätestens 12 Monaten)"
+   },
+   {
+    "en": "Fattening calves (raised on beef cattle farms)",
+    "de": "Kälber zur Mast (aufgezogen in Mastrinderbetrieben)"
+   },
+   {
+    "en": "Fattening calves (under or up to 1 year)",
+    "de": "Mastkalb/Jungrind"
+   },
+   {
+    "en": "Fattening calvesg (raised on dairy farms)",
+    "de": "Kälber zur Mast (aufgezogen in Milchviehbetrieben)"
+   },
+   {
+    "en": "Fattening cattle",
+    "de": "Mastrind"
+   },
+   {
+    "en": "Fattening ducks",
+    "de": "Mastenten"
+   },
+   {
+    "en": "Fattening pig, organic",
+    "de": "Mastschwein, ökologisch"
+   },
+   {
+    "en": "Fattening pigs",
+    "de": "Mastschwein"
+   },
+   {
+    "en": "Fattening pigs up to 50 kg",
+    "de": "Mastschwein bis 50 kg"
+   },
+   {
+    "en": "Fattening poultry",
+    "de": "Mastgeflügel"
+   },
+   {
+    "en": "Fattening turkeys",
+    "de": "Mastputen"
+   },
+   {
+    "en": "Fattening turkeys, organic",
+    "de": "Mastputen, ökologisch"
+   },
+   {
+    "en": "Feed for fattening pigs",
+    "de": "Futtermittel für Mastschwein"
+   },
+   {
+    "en": "Feed for laying hens",
+    "de": "Futtermittel für Legehennen"
+   },
+   {
+    "en": "Feed for livestock",
+    "de": "Futtermittel für Nutztiere"
+   },
+   {
+    "en": "Fish",
+    "de": "Fisch"
+   },
+   {
+    "en": "Foxes",
+    "de": "Füchse"
+   },
+   {
+    "en": "Gallus gallus (fowl) - breeding flocks  for egg production",
+    "de": "Zuchthühner, Legelinie"
+   },
+   {
+    "en": "Gallus gallus (fowl) - breeding flocks for broiler production",
+    "de": "Zuchthühner, Mastlinie"
+   },
+   {
+    "en": "Gallus gallus (fowl) - breeding flocks, unspecified",
+    "de": "Zuchthühner, Lege- und Mastlinie"
+   },
+   {
+    "en": "Lamb",
+    "de": "Lamm"
+   },
+   {
+    "en": "Laying hens",
+    "de": "Legehennen"
+   },
+   {
+    "en": "Other",
+    "de": "Sonstige"
+   },
+   {
+    "en": "Plants",
+    "de": "Pflanzen"
+   },
+   {
+    "en": "Raccoons",
+    "de": "Waschbären"
+   },
+   {
+    "en": "Roe deer",
+    "de": "Rehwild"
+   },
+   {
+    "en": "Ruminants for milk production",
+    "de": "Wiederkäuer für Milchproduktion"
+   },
+   {
+    "en": "Salmonidae (salmon and trout)",
+    "de": "Salmonidae (Lachs- bzw. Forellenfische)"
+   },
+   {
+    "en": "Sheep and goats for milk production",
+    "de": "Schaf und Ziege für Milchproduktion"
+   },
+   {
+    "en": "Tilapia and pangasius",
+    "de": "Tilapia und Pangasius"
+   },
+   {
+    "en": "Weaners to growers up to 30 kg",
+    "de": "Läufer bis 30 kg"
+   },
+   {
+    "en": "Wild boar",
+    "de": "Wildschwein"
+   },
+   {
+    "en": "Wild carnivores",
+    "de": "Wildkarnivoren"
+   },
+   {
+    "en": "Wild ruminants",
+    "de": "Wildwiederkäuer"
+   }
+  ],
+  "samplingStage": [
+   {
+    "en": "Border control posts",
+    "de": "Grenzkontrollstellen"
+   },
+   {
+    "en": "Central oil mills",
+    "de": "Zentrale Ölmühlen"
+   },
+   {
+    "en": "Cutting plant",
+    "de": "Zerlegebetrieb"
+   },
+   {
+    "en": "Decentralised oil mills",
+    "de": "Dezentrale Ölmühlen"
+   },
+   {
+    "en": "Farm",
+    "de": "Erzeugerbetrieb"
+   },
+   {
+    "en": "Feed businesses",
+    "de": "Futtermittelbetriebe"
+   },
+   {
+    "en": "Hunting",
+    "de": "Wildbahn"
+   },
+   {
+    "en": "Manufacturer and packer",
+    "de": "Hersteller und Abpacker"
+   },
+   {
+    "en": "Mills",
+    "de": "Mühlen"
+   },
+   {
+    "en": "Mixed feed plant",
+    "de": "Mischfutterwerk"
+   },
+   {
+    "en": "Packing centres",
+    "de": "Packstellen"
+   },
+   {
+    "en": "Points of import",
+    "de": "Einfuhrstelle"
+   },
+   {
+    "en": "Processing plant",
+    "de": "Verarbeitungsbetrieb"
+   },
+   {
+    "en": "Retail",
+    "de": "Einzelhandel"
+   },
+   {
+    "en": "Slaughterhouses",
+    "de": "Schlachthof"
+   }
+  ],
+  "matrixGroup": [
+   {
+    "en": "(Neck) skin and carcasses (food samples)",
+    "de": "(Hals)haut und Schlachtkörper (Lebensmittelproben)"
+   },
+   {
+    "en": "Cereals and meals",
+    "de": "Getreide und Mehle"
+   },
+   {
+    "en": "Complete and compound feed",
+    "de": "Allein- und Mischfuttermittel"
+   },
+   {
+    "en": "Dust (animal samples)",
+    "de": "Staub (Tierproben)"
+   },
+   {
+    "en": "Eggs and egg products",
+    "de": "Eier und Eiprodukte"
+   },
+   {
+    "en": "Faeces and caecum contents (animal samples)",
+    "de": "Kot und Blinddarminhalt (Tierproben)"
+   },
+   {
+    "en": "Faeces/dust (animal samples)",
+    "de": "Kot/Staub (Tierproben)"
+   },
+   {
+    "en": "Feed from oilseeds and oil fruits",
+    "de": "Futtermittel aus Ölsaaten und Ölfrüchten"
+   },
+   {
+    "en": "Fish and fish products",
+    "de": "Fisch und Erzeugnisse daraus"
+   },
+   {
+    "en": "Fruit and fruit products",
+    "de": "Obst und Obsterzeugnisse"
+   },
+   {
+    "en": "Gill contents (animal samples)",
+    "de": "Kiemeninhalt (Tierproben)"
+   },
+   {
+    "en": "Herbs, spices and similar",
+    "de": "Kräuter, Gewürze und ähnliche"
+   },
+   {
+    "en": "Meat and meat products",
+    "de": "Fleisch und Fleischerzeugnisse"
+   },
+   {
+    "en": "Milk (animal samples)",
+    "de": "Milch (Tierproben)"
+   },
+   {
+    "en": "Milk and milk products",
+    "de": "Milch und Milchprodukte"
+   },
+   {
+    "en": "Muscle tissue (animal samples)",
+    "de": "Muskulatur (Tierproben)"
+   },
+   {
+    "en": "Mushrooms",
+    "de": "Pilze"
+   },
+   {
+    "en": "Mussels (animal samples)",
+    "de": "Muscheln (Tierproben)"
+   },
+   {
+    "en": "Nasal swabs (animal samples)",
+    "de": "Nasentupfer (Tierproben)"
+   },
+   {
+    "en": "Oilseeds and oil fruits and products thereof",
+    "de": "Ölsaaten und Ölfrüchte, sowie Erzeugnisse daraus"
+   },
+   {
+    "en": "Seafood (animal samples)",
+    "de": "Meeresfrüchte (Tierproben)"
+   },
+   {
+    "en": "Seafood and seafood products",
+    "de": "Meeresfrüchte und Erzeugnisse daraus"
+   },
+   {
+    "en": "Vegetables and vegetable products",
+    "de": "Gemüse und Gemüseerzeugnisse"
+   },
+   {
+    "en": "Vegetarian/vegan substitute products",
+    "de": "Vegetarische/Vegane Ersatzprodukte"
+   }
+  ],
+  "matrix": [
+   {
+    "en": "(Neck) skin",
+    "de": "(Hals)haut"
+   },
+   {
+    "en": "Adult shrimps",
+    "de": "Adulte Garnelen"
+   },
+   {
+    "en": "Baby spinach",
+    "de": "Babyspinat"
+   },
+   {
+    "en": "Boiled sausage products",
+    "de": "Brühwursterzeugnisse"
+   },
+   {
+    "en": "Buckwheat flour",
+    "de": "Buchweizenmehl"
+   },
+   {
+    "en": "Caecum contents",
+    "de": "Blinddarminhalt"
+   },
+   {
+    "en": "Carcasses",
+    "de": "Schlachtkörper"
+   },
+   {
+    "en": "Certfied raw milk",
+    "de": "Vorzugsmilch"
+   },
+   {
+    "en": "Cheek meat",
+    "de": "Backenfleisch"
+   },
+   {
+    "en": "Cheese substitutes",
+    "de": "Käseersatzprodukte"
+   },
+   {
+    "en": "Coconut pieces",
+    "de": "Kokosstückchen"
+   },
+   {
+    "en": "Collected milk",
+    "de": "Sammelmilch"
+   },
+   {
+    "en": "Complete feed",
+    "de": "Alleinfuttermittel"
+   },
+   {
+    "en": "Cornmeal",
+    "de": "Maismehl"
+   },
+   {
+    "en": "Dried leaf and grass products",
+    "de": "Getrocknete Blatt- und Grasprodukte"
+   },
+   {
+    "en": "Dried mushrooms",
+    "de": "Trockenpilze"
+   },
+   {
+    "en": "Dust",
+    "de": "Staub"
+   },
+   {
+    "en": "Eggshells, eggs, unsorted",
+    "de": "Eierschalen, Eier, unsortiert"
+   },
+   {
+    "en": "Eggshells, table eggs, sorted",
+    "de": "Eierschalen, Konsumeier, sortiert"
+   },
+   {
+    "en": "Faeces",
+    "de": "Kot"
+   },
+   {
+    "en": "Faeces/dust",
+    "de": "Kot/Staub"
+   },
+   {
+    "en": "Feed: Oilseeds",
+    "de": "Futtermittel: Ölsaaten"
+   },
+   {
+    "en": "Feed: Rape",
+    "de": "Futtermittel: Raps"
+   },
+   {
+    "en": "Feed: Rapeseed",
+    "de": "Futtermittel: Rapssaaten"
+   },
+   {
+    "en": "Feed: Rapeseed press cake",
+    "de": "Futtermittel: Rapspresskuchen"
+   },
+   {
+    "en": "Feed: Soya beans",
+    "de": "Futtermittel: Sojabohnen"
+   },
+   {
+    "en": "Feed: Soya extraction meal",
+    "de": "Futtermittel: Sojaextraktionsschrot"
+   },
+   {
+    "en": "Fresh herbs",
+    "de": "Frische Kräuter"
+   },
+   {
+    "en": "Fresh meat",
+    "de": "Frisches Fleisch"
+   },
+   {
+    "en": "Gill contents",
+    "de": "Kiemeninhalt"
+   },
+   {
+    "en": "Green spelt flour",
+    "de": "Grünkernmehl"
+   },
+   {
+    "en": "Leaf and head lettuce",
+    "de": "Blatt- und Kopfsalate"
+   },
+   {
+    "en": "Leaf lettuce",
+    "de": "Blattsalate"
+   },
+   {
+    "en": "Lettuce",
+    "de": "Kopfsalat"
+   },
+   {
+    "en": "Liver",
+    "de": "Leber"
+   },
+   {
+    "en": "Meat preparations",
+    "de": "Fleischzubereitungen"
+   },
+   {
+    "en": "Melons (except watermelon), pulp",
+    "de": "Zuckermelone, Fruchtfleisch"
+   },
+   {
+    "en": "Melons (except watermelon), rind",
+    "de": "Zuckermelone, Schale"
+   },
+   {
+    "en": "Minced meat",
+    "de": "Hackfleisch"
+   },
+   {
+    "en": "Mixed feed",
+    "de": "Mischfuttermittel"
+   },
+   {
+    "en": "Muscle",
+    "de": "Muskel"
+   },
+   {
+    "en": "Musculature",
+    "de": "Muskulatur"
+   },
+   {
+    "en": "Nasal swab",
+    "de": "Nasentupfer"
+   },
+   {
+    "en": "Olives",
+    "de": "Oliven"
+   },
+   {
+    "en": "Parsley",
+    "de": "Petersilie"
+   },
+   {
+    "en": "Raspberries",
+    "de": "Himbeeren"
+   },
+   {
+    "en": "Raw cured products",
+    "de": "Rohpökelware"
+   },
+   {
+    "en": "Raw milk cheese",
+    "de": "Rohmilchkäse"
+   },
+   {
+    "en": "Raw sausage",
+    "de": "Rohwurst"
+   },
+   {
+    "en": "Rice flour",
+    "de": "Reismehl"
+   },
+   {
+    "en": "Sesame",
+    "de": "Sesam"
+   },
+   {
+    "en": "Sesame products",
+    "de": "Sesamprodukte"
+   },
+   {
+    "en": "Shellfish",
+    "de": "Muscheln"
+   },
+   {
+    "en": "Shrimp larvae",
+    "de": "Garnelen Larven"
+   },
+   {
+    "en": "Shrimps",
+    "de": "Garnelen"
+   },
+   {
+    "en": "Skin",
+    "de": "Haut"
+   },
+   {
+    "en": "Smoked salmon",
+    "de": "Räucherlachs"
+   },
+   {
+    "en": "Smoked trout fillet",
+    "de": "Räucherforellenfilet"
+   },
+   {
+    "en": "Soft cheese and semi-hard cheese",
+    "de": "Weichkäse und halbfester Schnittkäse"
+   },
+   {
+    "en": "Sprouts",
+    "de": "Sprossen"
+   },
+   {
+    "en": "Strawberries",
+    "de": "Erdbeeren"
+   },
+   {
+    "en": "Tartare/minced meat",
+    "de": "Tatar/Schabefleisch"
+   },
+   {
+    "en": "Tomatoes",
+    "de": "Tomaten"
+   },
+   {
+    "en": "Vegetables, pre-cut",
+    "de": "Gemüse, vorgeschnitten"
+   },
+   {
+    "en": "Wheat flour",
+    "de": "Weizenmehl"
+   }
+  ],
+  "antimicrobialSubstance": [
+   {
+    "en": "AK",
+    "de": "AK"
+   },
+   {
+    "en": "AMP",
+    "de": "AMP"
+   },
+   {
+    "en": "AZI",
+    "de": "AZI"
+   },
+   {
+    "en": "CHL",
+    "de": "CHL"
+   },
+   {
+    "en": "CIP",
+    "de": "CIP"
+   },
+   {
+    "en": "CLI",
+    "de": "CLI"
+   },
+   {
+    "en": "COL",
+    "de": "COL"
+   },
+   {
+    "en": "DAP",
+    "de": "DAP"
+   },
+   {
+    "en": "ERY",
+    "de": "ERY"
+   },
+   {
+    "en": "ETP",
+    "de": "ETP"
+   },
+   {
+    "en": "FFN",
+    "de": "FFN"
+   },
+   {
+    "en": "FOT",
+    "de": "FOT"
+   },
+   {
+    "en": "FOX",
+    "de": "FOX"
+   },
+   {
+    "en": "FUS",
+    "de": "FUS"
+   },
+   {
+    "en": "GEN",
+    "de": "GEN"
+   },
+   {
+    "en": "KAN",
+    "de": "KAN"
+   },
+   {
+    "en": "LZD",
+    "de": "LZD"
+   },
+   {
+    "en": "MERO",
+    "de": "MERO"
+   },
+   {
+    "en": "MUP",
+    "de": "MUP"
+   },
+   {
+    "en": "NAL",
+    "de": "NAL"
+   },
+   {
+    "en": "PEN",
+    "de": "PEN"
+   },
+   {
+    "en": "RIF",
+    "de": "RIF"
+   },
+   {
+    "en": "SMX",
+    "de": "SMX"
+   },
+   {
+    "en": "STR",
+    "de": "STR"
+   },
+   {
+    "en": "SYN",
+    "de": "SYN"
+   },
+   {
+    "en": "TAZ",
+    "de": "TAZ"
+   },
+   {
+    "en": "TEC",
+    "de": "TEC"
+   },
+   {
+    "en": "TET",
+    "de": "TET"
+   },
+   {
+    "en": "TGC",
+    "de": "TGC"
+   },
+   {
+    "en": "TIA",
+    "de": "TIA"
+   },
+   {
+    "en": "TMP",
+    "de": "TMP"
+   },
+   {
+    "en": "VAN",
+    "de": "VAN"
+   }
+  ]
+ },
+ "substances": [
+  {
+   "code": "AK",
+   "nameDe": "Amikacin",
+   "classDe": "Aminoglycoside"
+  },
+  {
+   "code": "AMP",
+   "nameDe": "Ampicillin",
+   "classDe": "Penicilline"
+  },
+  {
+   "code": "AZI",
+   "nameDe": "Azithromycin",
+   "classDe": "Azalide"
+  },
+  {
+   "code": "CHL",
+   "nameDe": "Chloramphenicol",
+   "classDe": "Amphenicole"
+  },
+  {
+   "code": "CIP",
+   "nameDe": "Ciprofloxacin",
+   "classDe": "(Fluor)chinolone"
+  },
+  {
+   "code": "CLI",
+   "nameDe": "Clindamycin",
+   "classDe": "Lincosamide"
+  },
+  {
+   "code": "COL",
+   "nameDe": "Colistin",
+   "classDe": "Polymyxine"
+  },
+  {
+   "code": "DAP",
+   "nameDe": "Daptomycin",
+   "classDe": "Lipopeptide"
+  },
+  {
+   "code": "ERY",
+   "nameDe": "Erythromycin",
+   "classDe": "Makrolide"
+  },
+  {
+   "code": "ETP",
+   "nameDe": "Ertapenem",
+   "classDe": "Carbapeneme"
+  },
+  {
+   "code": "FFN",
+   "nameDe": "Florfenicol",
+   "classDe": "Amphenicole"
+  },
+  {
+   "code": "FOT",
+   "nameDe": "Cefotaxim",
+   "classDe": "Cephalosporine"
+  },
+  {
+   "code": "FOX",
+   "nameDe": "Cefoxitin",
+   "classDe": "Cephalosporine"
+  },
+  {
+   "code": "FUS",
+   "nameDe": "Fusidinsäure",
+   "classDe": "Triterpensäuren"
+  },
+  {
+   "code": "GEN",
+   "nameDe": "Gentamicin",
+   "classDe": "Aminoglycoside"
+  },
+  {
+   "code": "KAN",
+   "nameDe": "Kanamycin",
+   "classDe": "Aminoglycoside"
+  },
+  {
+   "code": "LZD",
+   "nameDe": "Linezolid",
+   "classDe": "Oxazolidinone"
+  },
+  {
+   "code": "MERO",
+   "nameDe": "Meropenem",
+   "classDe": "Carbapeneme"
+  },
+  {
+   "code": "MUP",
+   "nameDe": "Mupirocin",
+   "classDe": "Pseudomonische Säuren"
+  },
+  {
+   "code": "NAL",
+   "nameDe": "Nalidixinsäure",
+   "classDe": "(Fluor)chinolone"
+  },
+  {
+   "code": "PEN",
+   "nameDe": "Penicillin G",
+   "classDe": "Penicilline"
+  },
+  {
+   "code": "RIF",
+   "nameDe": "Rifampicin",
+   "classDe": "Ansamycine"
+  },
+  {
+   "code": "SMX",
+   "nameDe": "Sulfamethoxazol",
+   "classDe": "Sulfonamide"
+  },
+  {
+   "code": "STR",
+   "nameDe": "Streptomycin",
+   "classDe": "Aminoglycoside"
+  },
+  {
+   "code": "SYN",
+   "nameDe": "Quinupristin/Dalfopristin",
+   "classDe": "Streptogramine"
+  },
+  {
+   "code": "TAZ",
+   "nameDe": "Ceftazidim",
+   "classDe": "Cephalosporine"
+  },
+  {
+   "code": "TEC",
+   "nameDe": "Teicoplanin",
+   "classDe": "Glykopeptide"
+  },
+  {
+   "code": "TET",
+   "nameDe": "Tetrazyklin",
+   "classDe": "Tetrazykline"
+  },
+  {
+   "code": "TGC",
+   "nameDe": "Tigecyclin",
+   "classDe": "Glycylcycline"
+  },
+  {
+   "code": "TGC",
+   "nameDe": "Tigezyklin",
+   "classDe": "Glycylcycline"
+  },
+  {
+   "code": "TIA",
+   "nameDe": "Tiamulin",
+   "classDe": "Pleuromutiline"
+  },
+  {
+   "code": "TMP",
+   "nameDe": "Trimethoprim",
+   "classDe": "Folatsynthesehemmer"
+  },
+  {
+   "code": "TRM",
+   "nameDe": "Temocillin",
+   "classDe": "Penicilline"
+  },
+  {
+   "code": "VAN",
+   "nameDe": "Vancomycin",
+   "classDe": "Glykopeptide"
+  }
+ ]
+}

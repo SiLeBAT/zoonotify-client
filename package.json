@@ -25,6 +25,7 @@
     "sync:api-docs": "node scripts/sync-api-docs.js",
     "cp:all": "npm run cp:html && npm run cp:api-docs && npm run cp:assets && npm run cp:localesDe && npm run cp:localesEn && npm run cp:seo",
     "test": "jest",
+    "check:stale-words": "jest --config jest.live.config.js",
     "test:coverage": "./node_modules/.bin/jest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:smoke": "playwright test --project=chromium --grep @smoke",
