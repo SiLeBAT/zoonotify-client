@@ -11,6 +11,7 @@ import { WelcomeMainComponent } from "../../../welcome/pages/WelcomeMainComponen
 import { AntibioticResistancePageComponent } from "../../../antibiotic_resistance/pages/AntibioticResistancePage.component";
 import { AntimicrobialPageComponent } from "../../../antimicrobial/pages/AntimicrobialPage.component";
 import { MicrobialCountsPageComponent } from "../../../microbial_counts/pages/MicrobialCountsPage.component";
+import { MicrobialTypingPageComponent } from "../../../microbial_typing/pages/MicrobialTypingPage.component";
 
 import { pageRoute } from "./routes";
 import { useSeo } from "../../seo/useSeo";
@@ -46,6 +47,10 @@ export function BodyRouterComponent(): JSX.Element {
             <Route
                 path={pageRoute.prevalencePagePath}
                 component={PrevalenceMainComponent}
+            />
+            <Route
+                path={pageRoute.microbialTypingPagePath}
+                component={MicrobialTypingPageComponent}
             />
 
             {/* 2) Add the new route here, between Prevalence and Links */}

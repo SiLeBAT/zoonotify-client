@@ -41,6 +41,7 @@ describe("parseRoutePaths", () => {
             "/evaluations",
             "/dataProtectionDeclaration",
             "/prevalence",
+            "/microbial-typing",
             "/antimicrobial",
             "/antibiotic-resistance",
             "/microbial-counts",
@@ -126,7 +127,7 @@ describe("resolveEnvironment", () => {
         const { baseUrl } = resolveEnvironment("production");
         const xml = buildSitemap(baseUrl, parseRoutePaths(ROUTES_SOURCE));
 
-        expect(locsIn(xml)).toHaveLength(18);
+        expect(locsIn(xml)).toHaveLength(20);
         locsIn(xml).forEach((loc) => {
             expect(loc).toMatch(/^https:\/\/zoonotify\.bfr\.berlin\//);
         });

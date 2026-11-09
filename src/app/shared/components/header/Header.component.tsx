@@ -141,6 +141,8 @@ export function HeaderComponent(): JSX.Element {
     const [infoOpen, setInfoOpen] = useState<boolean>(false);
     const [evaluationsOpen, setEvaluationsOpen] = useState<boolean>(false);
     const [prevalenceOpen, setPrevalenceOpen] = useState<boolean>(false);
+    const [microbialTypingOpen, setMicrobialTypingOpen] =
+        useState<boolean>(false);
     const [microbialCountsOpen, setMicrobialCountsOpen] =
         useState<boolean>(false);
     const [antimicrobialOpen, setAntimicrobialOpen] = useState<boolean>(false);
@@ -156,6 +158,7 @@ export function HeaderComponent(): JSX.Element {
         setLinkOpen(pathname === pageRoute.linkPagePath);
         setEvaluationsOpen(pathname === pageRoute.evaluationsPagePath);
         setPrevalenceOpen(pathname === pageRoute.prevalencePagePath);
+        setMicrobialTypingOpen(pathname === pageRoute.microbialTypingPagePath);
         setAntimicrobialOpen(pathname === pageRoute.antimicrobialPagePath);
         setMicrobialCountsOpen(pathname === pageRoute.microbialCountsPagePath);
         setAntibioticResistanceOpen(
@@ -214,6 +217,12 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Prevalence")}
                     </NavLink>
+                    <NavLink
+                        to={pageRoute.microbialTypingPagePath}
+                        css={navLinkStyle(microbialTypingOpen)}
+                    >
+                        {t("MicrobialTyping")}
+                    </NavLink>
 
                     <NavLink
                         to={`${pageRoute.antibioticResistancePagePath}?view=main`}
@@ -270,6 +279,12 @@ export function HeaderComponent(): JSX.Element {
                     css={mobileNavLinkStyle(prevalenceOpen)}
                 >
                     {t("Prevalence")}
+                </NavLink>
+                <NavLink
+                    to={pageRoute.microbialTypingPagePath}
+                    css={mobileNavLinkStyle(microbialTypingOpen)}
+                >
+                    {t("MicrobialTyping")}
                 </NavLink>
 
                 <NavLink

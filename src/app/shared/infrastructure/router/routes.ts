@@ -5,6 +5,7 @@ export const pageRoute = {
     evaluationsPagePath: "/evaluations",
     dpdPagePath: "/dataProtectionDeclaration",
     prevalencePagePath: "/prevalence",
+    microbialTypingPagePath: "/microbial-typing",
     antimicrobialPagePath: "/antimicrobial",
     antibioticResistancePagePath: "/antibiotic-resistance",
     microbialCountsPagePath: "/microbial-counts",
