@@ -16,6 +16,7 @@ const {
     buildSitemap,
     parseRoutePaths,
     resolveEnvironment,
+    visibleRoutePaths,
     withNoindex,
 } = require("./seo-artifacts");
 
@@ -31,6 +32,24 @@ const ROUTES_FILE = path.join(
     "router",
     "routes.ts"
 );
+
+/**
+ * The env file webpack's Dotenv plugin loads for this build -- the same path
+ * expression as webpack.config.js -- so the sitemap hides exactly the routes
+ * the bundle hides. A missing file reads as empty, as it does for Dotenv.
+ */
+function readBuildEnv() {
+    const file = path.join(
+        ROOT,
+        `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ""}`
+    );
+    try {
+        return fs.readFileSync(file, "utf8");
+    } catch (err) {
+        if (err.code !== "ENOENT") throw err;
+        return "";
+    }
+}
 
 function main() {
     // `ci` makes an unnamed environment fatal rather than a silent fallback to
@@ -50,7 +69,10 @@ function main() {
         path.join(PUBLIC_DIR, "robots.txt")
     );
 
-    const routePaths = parseRoutePaths(fs.readFileSync(ROUTES_FILE, "utf8"));
+    const routePaths = visibleRoutePaths(
+        parseRoutePaths(fs.readFileSync(ROUTES_FILE, "utf8")),
+        readBuildEnv()
+    );
     fs.writeFileSync(
         path.join(PUBLIC_DIR, "sitemap.xml"),
         buildSitemap(environment.baseUrl, routePaths)

@@ -41,6 +41,7 @@ Create a `.env` file (or `.env.qa` / `.env.production`) with:
 | `REACT_APP_API_URL` | Backend API base URL |
 | `REACT_APP_ENV` | Environment name (`dev` / `qa` / `production`) |
 | `REACT_APP_SHOW_LD` | Enable the Linked Data page (`true` / `false`) |
+| `REACT_APP_MICROBIAL_TYPING_VISIBLE` | `false` hides the Microbial typing page (route, header link, SEO, sitemap); any other value or unset shows it. Production sets `false` until go-live |
 
 ## Architecture
 

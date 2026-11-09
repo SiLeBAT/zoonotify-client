@@ -5,7 +5,10 @@ import { css } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
 import i18next from "i18next";
-import { pageRoute } from "../../infrastructure/router/routes";
+import {
+    MICROBIAL_TYPING_VISIBLE,
+    pageRoute,
+} from "../../infrastructure/router/routes";
 import {
     headerHeight,
     onPrimaryColor,
@@ -217,12 +220,14 @@ export function HeaderComponent(): JSX.Element {
                     >
                         {t("Prevalence")}
                     </NavLink>
-                    <NavLink
-                        to={pageRoute.microbialTypingPagePath}
-                        css={navLinkStyle(microbialTypingOpen)}
-                    >
-                        {t("MicrobialTyping")}
-                    </NavLink>
+                    {MICROBIAL_TYPING_VISIBLE && (
+                        <NavLink
+                            to={pageRoute.microbialTypingPagePath}
+                            css={navLinkStyle(microbialTypingOpen)}
+                        >
+                            {t("MicrobialTyping")}
+                        </NavLink>
+                    )}
 
                     <NavLink
                         to={`${pageRoute.antibioticResistancePagePath}?view=main`}
@@ -280,12 +285,14 @@ export function HeaderComponent(): JSX.Element {
                 >
                     {t("Prevalence")}
                 </NavLink>
-                <NavLink
-                    to={pageRoute.microbialTypingPagePath}
-                    css={mobileNavLinkStyle(microbialTypingOpen)}
-                >
-                    {t("MicrobialTyping")}
-                </NavLink>
+                {MICROBIAL_TYPING_VISIBLE && (
+                    <NavLink
+                        to={pageRoute.microbialTypingPagePath}
+                        css={mobileNavLinkStyle(microbialTypingOpen)}
+                    >
+                        {t("MicrobialTyping")}
+                    </NavLink>
+                )}
 
                 <NavLink
                     to={`${pageRoute.antibioticResistancePagePath}?view=main`}
