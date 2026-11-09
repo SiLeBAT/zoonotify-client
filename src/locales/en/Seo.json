@@ -8,6 +8,10 @@
     "description": "Prevalence of zoonotic agents along the German food chain — explore the data interactively by pathogen, matrix and sampling stage.",
     "datasetName": "Prevalence of zoonotic agents along the food chain (Germany)"
   },
+  "microbialTyping": {
+    "title": "Microbial Typing",
+    "description": "Microbiological typing of zoonotic pathogens from the German zoonoses monitoring, by microorganism."
+  },
   "antibioticResistance": {
     "title": "Antibiotic Resistance",
     "description": "Antimicrobial resistance in zoonotic and commensal bacteria in Germany — trends, resistance rates and multi-resistance.",

@@ -76,6 +76,7 @@ export const SEO_ROUTES: readonly SeoRoute[] = [
         key: "prevalence",
         dataset: { nameKey: "prevalence.datasetName" },
     },
+    { path: pageRoute.microbialTypingPagePath, key: "microbialTyping" },
     { path: pageRoute.antimicrobialPagePath, key: "antimicrobial" },
     {
         path: pageRoute.antibioticResistancePagePath,
