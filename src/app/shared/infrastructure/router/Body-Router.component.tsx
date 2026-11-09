@@ -13,7 +13,7 @@ import { AntimicrobialPageComponent } from "../../../antimicrobial/pages/Antimic
 import { MicrobialCountsPageComponent } from "../../../microbial_counts/pages/MicrobialCountsPage.component";
 import { MicrobialTypingPageComponent } from "../../../microbial_typing/pages/MicrobialTypingPage.component";
 
-import { pageRoute } from "./routes";
+import { MICROBIAL_TYPING_VISIBLE, pageRoute } from "./routes";
 import { useSeo } from "../../seo/useSeo";
 import { useLanguageUrlSync } from "../../seo/useLanguageUrlSync";
 
@@ -48,10 +48,13 @@ export function BodyRouterComponent(): JSX.Element {
                 path={pageRoute.prevalencePagePath}
                 component={PrevalenceMainComponent}
             />
-            <Route
-                path={pageRoute.microbialTypingPagePath}
-                component={MicrobialTypingPageComponent}
-            />
+            {/* Hidden builds fall through to the 404 route below. */}
+            {MICROBIAL_TYPING_VISIBLE && (
+                <Route
+                    path={pageRoute.microbialTypingPagePath}
+                    component={MicrobialTypingPageComponent}
+                />
+            )}
 
             {/* 2) Add the new route here, between Prevalence and Links */}
             <Route
