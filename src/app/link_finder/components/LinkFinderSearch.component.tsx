@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useId, useRef, useState } from "react";
 import { Box, Button, Chip, Link, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -7,8 +7,7 @@ import {
     FoundLink,
     Lang,
     LinkFinder,
-    LinkKind,
-    linkKind,
+    titleKeyOf,
     OrganismChoice,
 } from "..";
 
@@ -31,17 +30,6 @@ export interface LinkFinderSearchProps {
     index: DataIndex;
 }
 
-/** The i18n key of the page a link opens. */
-const TITLE_KEY_OF_KIND: { [K in LinkKind]: string } = {
-    prevalence: "PagePrevalence",
-    amrSubstance: "PageAmrSubstance",
-    amrTrend: "PageAmrTrend",
-    amrMulti: "PageAmrMulti",
-    antimicrobialUse: "PageAntimicrobialUse",
-    microbialCounts: "PageMicrobialCounts",
-    evaluations: "PageEvaluations",
-};
-
 function toLang(language: string | undefined): Lang {
     return language && language.toLowerCase().startsWith("en") ? "en" : "de";
 }
@@ -58,6 +46,7 @@ export function LinkFinderSearch({
     const [text, setText] = useState("");
     const [state, setState] = useState<State>({ kind: "idle" });
     const latest = useRef(0);
+    const hintId = useId();
 
     async function run(searched: string, organism?: string): Promise<void> {
         if (!searched.trim()) return;
@@ -135,7 +124,7 @@ export function LinkFinderSearch({
                     onChange={(e) => setText(e.target.value)}
                     autoComplete="off"
                     size="small"
-                    inputProps={{ "aria-describedby": "link-finder-hint" }}
+                    inputProps={{ "aria-describedby": hintId }}
                     sx={{ flex: "1 1 16rem", minWidth: 0 }}
                 />
                 <Button
@@ -147,7 +136,7 @@ export function LinkFinderSearch({
                 </Button>
             </Box>
             <Typography
-                id="link-finder-hint"
+                id={hintId}
                 variant="body2"
                 color="text.secondary"
                 sx={{ mt: 0.5 }}
@@ -203,7 +192,7 @@ export function LinkFinderSearch({
                                 }}
                             >
                                 <Typography component="span" fontWeight="bold">
-                                    {t(TITLE_KEY_OF_KIND[linkKind(link)])}
+                                    {t(titleKeyOf(link))}
                                 </Typography>
                                 {link.closest && (
                                     <Typography

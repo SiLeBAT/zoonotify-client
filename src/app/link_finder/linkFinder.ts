@@ -9,11 +9,12 @@ import {
     pageLinks,
     toFound,
 } from "./links";
-import { parse } from "./match";
+import { parse, Parsed } from "./match";
 import {
     DataIndex,
     EnglishSubstanceNames,
     EverydayWord,
+    FoundLink,
     Lang,
     LinkFinderResult,
     OfficialNames,
@@ -36,6 +37,39 @@ export class LinkFinderUnavailableError extends Error {
         // ES5 target: keep instanceof working on a subclassed Error.
         Object.setPrototypeOf(this, LinkFinderUnavailableError.prototype);
     }
+}
+
+/** Page words alone ("evaluations") name a page; any filter or year means a data search. */
+function namesPagesOnly(parsed: Parsed, organism?: string): boolean {
+    return (
+        parsed.pageLinks.length > 0 &&
+        !organism &&
+        Object.keys(parsed.filters).length === 0 &&
+        parsed.years.length === 0
+    );
+}
+
+/** A resistance search that names no organism: ask which one, never fall back to prevalence. */
+function needsOrganism(parsed: Parsed): boolean {
+    return (
+        parsed.page === "amr" &&
+        !parsed.filters.microorganism &&
+        !parsed.filters.specie
+    );
+}
+
+/**
+ * Whether a checked link is worth showing. A closest (relaxed) link is kept only for what the
+ * search asked for: prevalence, the Substance graph, or the trend view when a trend word was
+ * used. The Multi-resistance graph is never asked for by a word, so it has no closest version.
+ */
+function isWorthShowing(link: FoundLink, parsed: Parsed): boolean {
+    return (
+        !link.closest ||
+        link.view === "substance" ||
+        link.page === "prevalence" ||
+        (link.view === "trend" && parsed.trend)
+    );
 }
 
 export interface LinkFinder {
@@ -83,14 +117,9 @@ export function createLinkFinder(
             const list = await load();
             const parsed = parse(list, text);
             // Page words alone ("evaluations") name a page; filters mean a data search.
-            if (
-                parsed.pageLinks.length &&
-                !organism &&
-                !Object.keys(parsed.filters).length &&
-                !parsed.years.length
-            )
+            if (namesPagesOnly(parsed, organism))
                 return {
-                    links: pageLinks(parsed, lang).slice(0, SHOWN_LINKS),
+                    links: pageLinks(list, parsed, lang).slice(0, SHOWN_LINKS),
                     unmatched: parsed.unmatched,
                 };
             if (organism)
@@ -100,12 +129,7 @@ export function createLinkFinder(
                         (o) => o !== organism
                     ),
                 ];
-            // A resistance search naming no organism: ask which one, never fall back.
-            if (
-                parsed.page === "amr" &&
-                !parsed.filters.microorganism &&
-                !parsed.filters.specie
-            ) {
+            if (needsOrganism(parsed)) {
                 const choices = await organismChoices(list, parsed, index);
                 if (!choices.length)
                     return {
@@ -139,18 +163,10 @@ export function createLinkFinder(
                     index
                 );
             return {
-                // A trend link nobody asked for is not worth a relaxed "closest" version, nor is
-                // a Multi-resistance link, which no word of the search asks for.
                 links: dedupeByUrl(
                     checked
                         .map((l) => toFound(list, l, lang))
-                        .filter(
-                            (l) =>
-                                !l.closest ||
-                                l.view === "substance" ||
-                                l.page === "prevalence" ||
-                                (l.view === "trend" && parsed.trend)
-                        )
+                        .filter((l) => isWorthShowing(l, parsed))
                 ).slice(0, SHOWN_LINKS),
                 unmatched: parsed.unmatched,
             };
