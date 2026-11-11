@@ -112,7 +112,8 @@ export function candidates(list: WordList, parsed: Parsed): LinkSpec[] {
         return [{ page: "prevalence", filters, years, latest: parsed.latest }];
     }
 
-    const links: LinkSpec[] = [];
+    const substance: LinkSpec[] = [];
+    const trends: LinkSpec[] = [];
     for (const organism of organisms) {
         const label = amrLabel(organism);
         if (!label || AMR_ORGANISMS_WITHOUT_DATA.has(label)) continue;
@@ -125,16 +126,27 @@ export function candidates(list: WordList, parsed: Parsed): LinkSpec[] {
             delete filters.specie;
             if (specie) filters.specie = [specie];
             filters.microorganism = [organism];
-            const trend = parsed.trend && !years && !hasComma(list, filters);
-            links.push({
+            const spec: LinkSpec = {
                 page: "amr",
-                view: trend ? "trend" : "substance",
+                view: "substance",
                 filters,
                 years,
                 latest: parsed.latest,
-            });
+            };
+            substance.push(spec);
+            // No single year asked for: the trend view of the same filters, unless a value has a
+            // comma. Offered unasked only for single values, as a joined list reads as a comma.
+            const joined = (Object.keys(filters) as Dim[]).some(
+                (d) => (filters[d] ?? []).length > 1
+            );
+            if (!years && !hasComma(list, filters) && (parsed.trend || !joined))
+                trends.push({ ...spec, view: "trend" });
         }
     }
+    // A trend word puts the trend links first; otherwise every Substance graph link comes first.
+    const links = parsed.trend
+        ? trends.concat(substance)
+        : substance.concat(trends);
     return links;
 }
 

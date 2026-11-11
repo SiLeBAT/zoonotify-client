@@ -254,7 +254,8 @@ export function parse(list: WordList, text: string): Parsed {
     if (filters.antimicrobialSubstance || filters.specie) explicitAmr = true;
     let page: Page = "prevalence";
     if (explicitAmr) page = "amr";
-    else if (!explicitPrevalence && impliedAmr) page = "amr";
+    // The trend view is a resistance graph, so a trend word points there too.
+    else if (!explicitPrevalence && (impliedAmr || trend)) page = "amr";
     const bothPages =
         !explicitAmr && !impliedAmr && !explicitPrevalence && !trend;
 
