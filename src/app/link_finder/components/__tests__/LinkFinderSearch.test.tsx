@@ -74,6 +74,35 @@ describe("LinkFinderSearch", () => {
         );
     });
 
+    it("tells what the search covers in a hint tied to the search box", () => {
+        renderSearch(fakeFinder(() => Promise.reject(new Error("x"))).finder);
+
+        const input = screen.getByRole("searchbox", { name: "SearchLabel" });
+        expect(input).toHaveAccessibleDescription("ScopeHint");
+    });
+
+    it("titles a page link by the page's name, with no filter chips", async () => {
+        const page: FoundLink = {
+            page: "prevalence",
+            pageLink: "microbialCounts",
+            filters: {},
+            url: "/microbial-counts?lang=en",
+            labels: [],
+            dropped: [],
+        };
+        const { finder } = fakeFinder(() =>
+            Promise.resolve({ links: [page], unmatched: [] })
+        );
+        renderSearch(finder);
+
+        await search("microbial counts");
+
+        const link = await screen.findByRole("link", {
+            name: "PageMicrobialCounts",
+        });
+        expect(link).toHaveAttribute("href", "/microbial-counts?lang=en");
+    });
+
     it("names the unmatched words", async () => {
         const { finder } = fakeFinder(() =>
             Promise.resolve({ links: [EXACT], unmatched: ["blorp", "zork"] })
