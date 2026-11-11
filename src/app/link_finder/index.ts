@@ -15,4 +15,5 @@ export type {
     LinkSpec,
     OfficialNames,
     OrganismChoice,
+    PageLinkId,
 } from "./model";

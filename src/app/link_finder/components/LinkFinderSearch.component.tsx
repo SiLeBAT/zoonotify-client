@@ -36,6 +36,9 @@ const TITLE_KEY_OF_KIND: { [K in LinkKind]: string } = {
     prevalence: "PagePrevalence",
     amrSubstance: "PageAmrSubstance",
     amrTrend: "PageAmrTrend",
+    antimicrobialUse: "PageAntimicrobialUse",
+    microbialCounts: "PageMicrobialCounts",
+    evaluations: "PageEvaluations",
 };
 
 function toLang(language: string | undefined): Lang {
@@ -131,6 +134,7 @@ export function LinkFinderSearch({
                     onChange={(e) => setText(e.target.value)}
                     autoComplete="off"
                     size="small"
+                    inputProps={{ "aria-describedby": "link-finder-hint" }}
                     sx={{ flex: "1 1 16rem", minWidth: 0 }}
                 />
                 <Button
@@ -141,6 +145,14 @@ export function LinkFinderSearch({
                     {t("SearchButton")}
                 </Button>
             </Box>
+            <Typography
+                id="link-finder-hint"
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 0.5 }}
+            >
+                {t("ScopeHint")}
+            </Typography>
             <Box role="status" aria-live="polite" sx={{ mt: 1 }}>
                 {status && <Typography variant="body2">{status}</Typography>}
                 {state.kind === "done" && state.unmatched.length > 0 && (

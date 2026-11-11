@@ -6,10 +6,11 @@ import {
     Filters,
     FoundLink,
     Lang,
-    LinkKind,
     linkKind,
     LinkSpec,
+    PageLinkId,
 } from "./model";
+import { pageRoute } from "../shared/infrastructure/router/routes";
 import { Parsed } from "./match";
 import { WordList } from "./wordList";
 import {
@@ -294,8 +295,34 @@ function trendUrl(list: WordList, link: LinkSpec, lang: Lang): string {
     return `/antibiotic-resistance?${q.toString()}`;
 }
 
+const PAGE_PATH: { [K in PageLinkId]: string } = {
+    antimicrobialUse: pageRoute.antimicrobialPagePath,
+    microbialCounts: pageRoute.microbialCountsPagePath,
+    evaluations: pageRoute.evaluationsPagePath,
+};
+
+function pageUrl(kind: PageLinkId): string {
+    return `${PAGE_PATH[kind]}?${LANG_PARAM}=`;
+}
+
+/** Links to the pages the search names by their own words, with no filters. */
+export function pageLinks(parsed: Parsed, lang: Lang): FoundLink[] {
+    return parsed.pageLinks.map((kind) => ({
+        page: "prevalence",
+        pageLink: kind,
+        filters: {},
+        url: `${pageUrl(kind)}${lang}`,
+        labels: [],
+        dropped: [],
+    }));
+}
+
 const URL_OF_KIND: {
-    [K in LinkKind]: (list: WordList, link: LinkSpec, lang: Lang) => string;
+    [K in "prevalence" | "amrSubstance" | "amrTrend"]: (
+        list: WordList,
+        link: LinkSpec,
+        lang: Lang
+    ) => string;
 } = {
     prevalence: prevalenceUrl,
     amrSubstance: substanceUrl,
@@ -323,7 +350,11 @@ export function organismLabel(list: WordList, cms: string, lang: Lang): string {
 export function toFound(list: WordList, link: LinkSpec, lang: Lang): FoundLink {
     return {
         ...link,
-        url: URL_OF_KIND[linkKind(link)](list, link, lang),
+        url: URL_OF_KIND[linkKind(link) as keyof typeof URL_OF_KIND](
+            list,
+            link,
+            lang
+        ),
         labels: buildLabels(list, link, lang),
         dropped: ([] as FilterLabel[]).concat(
             ...(link.without ?? []).map(({ dim, values }) =>

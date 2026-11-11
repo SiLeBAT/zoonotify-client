@@ -8,6 +8,7 @@ import {
     Filters,
     OfficialNames,
     Page,
+    PageLinkId,
 } from "./model";
 import { words } from "./text";
 
@@ -17,6 +18,7 @@ export interface Meaning {
     sets: Filters;
     page?: Page;
     view?: AmrView;
+    pageLink?: PageLinkId;
 }
 
 export interface Term {
@@ -141,6 +143,7 @@ export function buildWordList(
             sets: row.sets ?? {},
             page: row.page,
             view: row.view,
+            pageLink: row.pageLink,
         };
         for (const text of row.en.concat(row.de)) addTerm(list, text, meaning);
     }
@@ -159,7 +162,7 @@ export function checkEverydayWords(
         ids.add(row.id);
         if (row.en.length + row.de.length === 0)
             errors.push(`${row.id}: no words`);
-        if (!row.sets && !row.page && !row.view)
+        if (!row.sets && !row.page && !row.view && !row.pageLink)
             errors.push(`${row.id}: sets nothing`);
         const sets = row.sets ?? {};
         for (const dim of Object.keys(sets) as Dim[]) {

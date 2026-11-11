@@ -3,6 +3,8 @@
 export type Lang = "en" | "de";
 export type Page = "prevalence" | "amr";
 export type AmrView = "substance" | "trend";
+/** A data page that has no filters the Link Finder sets: linked by name only. */
+export type PageLinkId = "antimicrobialUse" | "microbialCounts" | "evaluations";
 
 /** Filter dimensions, named as the pages' URLs name them. Values are English official names, substances by code. */
 export type Dim =
@@ -52,6 +54,8 @@ export interface EverydayWord {
     sets?: Filters;
     page?: Page;
     view?: AmrView;
+    /** The word names one of the other data pages. */
+    pageLink?: PageLinkId;
 }
 
 /** English drug names, by substance code. */
@@ -61,6 +65,8 @@ export type EnglishSubstanceNames = { [code: string]: string };
 export interface LinkSpec {
     page: Page;
     view?: AmrView;
+    /** Set on a link that only opens a named page; `page` and `filters` are then placeholders. */
+    pageLink?: PageLinkId;
     filters: Filters;
     years?: number[];
     /** The search asked for the latest year; `years` is resolved from the data. */
@@ -72,9 +78,10 @@ export interface LinkSpec {
 }
 
 /** What a link opens: its page and, on the AMR page, its graph. */
-export type LinkKind = "prevalence" | "amrSubstance" | "amrTrend";
+export type LinkKind = "prevalence" | "amrSubstance" | "amrTrend" | PageLinkId;
 
 export function linkKind(link: LinkSpec): LinkKind {
+    if (link.pageLink) return link.pageLink;
     if (link.page === "prevalence") return "prevalence";
     return link.view === "trend" ? "amrTrend" : "amrSubstance";
 }

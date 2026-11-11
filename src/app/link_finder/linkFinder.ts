@@ -6,6 +6,7 @@ import {
     dedupeByUrl,
     organismChoices,
     organismLabel,
+    pageLinks,
     toFound,
 } from "./links";
 import { parse } from "./match";
@@ -81,6 +82,17 @@ export function createLinkFinder(
         async find(text, lang, index, organism) {
             const list = await load();
             const parsed = parse(list, text);
+            // Page words alone ("evaluations") name a page; filters mean a data search.
+            if (
+                parsed.pageLinks.length &&
+                !organism &&
+                !Object.keys(parsed.filters).length &&
+                !parsed.years.length
+            )
+                return {
+                    links: pageLinks(parsed, lang).slice(0, SHOWN_LINKS),
+                    unmatched: parsed.unmatched,
+                };
             if (organism)
                 parsed.filters.microorganism = [
                     organism,

@@ -89,5 +89,8 @@
 
  {"id": "page-amr", "category": "pages and views", "en": ["resistance", "resistances", "resistant", "antimicrobial resistance", "antibiotic resistance", "AMR", "susceptibility", "isolates", "tested"], "de": ["Resistenz", "Resistenzen", "resistent", "Antibiotikaresistenz", "Resistenzrate", "Isolate", "getestet"], "page": "amr"},
  {"id": "page-prevalence", "category": "pages and views", "en": ["prevalence", "how common", "how often", "how frequent", "occurrence", "contaminated", "contamination", "positive samples"], "de": ["Prävalenz", "Vorkommen", "häufig", "wie oft", "nachgewiesen", "Nachweis", "belastet", "Kontamination"], "page": "prevalence"},
+ {"id": "pagelink-amu", "category": "page names", "en": ["antimicrobial use", "antibiotic use", "antibiotics use", "antimicrobial usage", "antibiotic usage", "antimicrobial consumption", "antibiotic consumption", "AMU"], "de": ["Antibiotikaeinsatz", "Antibiotikaverbrauch", "Antibiotikaverwendung", "Antibiotika Einsatz", "Antibiotikaanwendung"], "pageLink": "antimicrobialUse"},
+ {"id": "pagelink-counts", "category": "page names", "en": ["microbial counts", "microbial count", "bacterial counts", "bacterial count", "germ counts", "germ count", "colony counts"], "de": ["Keimzahlen", "Keimzahl", "Keimbelastung", "Koloniezahlen", "Bakterienzahlen"], "pageLink": "microbialCounts"},
+ {"id": "pagelink-evaluations", "category": "page names", "en": ["evaluations", "evaluation"], "de": ["Auswertungen", "Auswertung"], "pageLink": "evaluations"},
  {"id": "view-trend", "category": "pages and views", "en": ["trend", "trends", "changed", "change", "development", "developed", "time series"], "de": ["Trend", "Verlauf", "Entwicklung", "entwickelt", "verändert", "Zeitreihe"], "view": "trend"}
 ]

@@ -2,11 +2,12 @@
   "Heading": "Suche in eigenen Worten",
   "SearchLabel": "Wonach suchen Sie?",
   "Placeholder": "z. B. Salmonellen in Kalbfleisch",
+  "ScopeHint": "Durchsucht die Daten zu Prävalenz und Antibiotikaresistenz, nicht die Texte der Seite.",
   "SearchButton": "Suchen",
   "Searching": "Suche läuft …",
   "Found": "{{count}} Link gefunden.",
   "Found_plural": "{{count}} Links gefunden.",
-  "NoLinks": "Keine Links gefunden. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
+  "NoLinks": "Keine Links gefunden. Die Suche umfasst nur die Daten zu Prävalenz und Antibiotikaresistenz, nicht die Texte der Seite. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
   "Unmatched": "Nicht erkannt: {{words}}",
   "ChooseOrganism": "Welchen Erreger meinen Sie? Wählen Sie einen, um seine Resistenzdaten zu sehen:",
   "NoResistanceData": "Für diese Filter gibt es bei keinem Erreger Resistenzdaten. Bitte nutzen Sie die Filter in der Seitenleiste der Datenseiten.",
@@ -14,6 +15,9 @@
   "PagePrevalence": "Prävalenz",
   "PageAmrSubstance": "Antibiotikaresistenz: Substanzgraph",
   "PageAmrTrend": "Antibiotikaresistenz: Trendgraph",
+  "PageAntimicrobialUse": "Antibiotikaeinsatz",
+  "PageMicrobialCounts": "Keimzahlen",
+  "PageEvaluations": "Auswertungen",
   "Closest": "nächster Treffer",
   "Without": "ohne: {{values}}"
 }

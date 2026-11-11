@@ -1,5 +1,5 @@
 // Search text -> filter values, page and view, by the word list and code rules alone.
-import { Dim, Filters, Page } from "./model";
+import { Dim, Filters, Page, PageLinkId } from "./model";
 import { Meaning, Term, WordList } from "./wordList";
 import {
     allowedEdits,
@@ -17,6 +17,8 @@ export interface Parsed {
     page: Page;
     /** No page, view, substance or class word: both pages are worth offering. */
     bothPages: boolean;
+    /** Other data pages named by their own words. */
+    pageLinks: PageLinkId[];
     /** As typed. */
     unmatched: string[];
 }
@@ -234,7 +236,10 @@ export function parse(list: WordList, text: string): Parsed {
     let explicitPrevalence = false;
     let impliedAmr = false;
     let trend = allYears;
+    const pageLinks: PageLinkId[] = [];
     for (const m of meanings) {
+        if (m.pageLink && pageLinks.indexOf(m.pageLink) < 0)
+            pageLinks.push(m.pageLink);
         const dims = Object.keys(m.sets) as Dim[];
         for (const dim of dims) {
             const into = filters[dim] ?? [];
@@ -265,6 +270,7 @@ export function parse(list: WordList, text: string): Parsed {
         trend: trend && years.length === 0,
         page,
         bothPages,
+        pageLinks,
         unmatched,
     };
 }
