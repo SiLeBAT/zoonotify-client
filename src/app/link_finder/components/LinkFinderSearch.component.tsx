@@ -36,6 +36,7 @@ const TITLE_KEY_OF_KIND: { [K in LinkKind]: string } = {
     prevalence: "PagePrevalence",
     amrSubstance: "PageAmrSubstance",
     amrTrend: "PageAmrTrend",
+    amrMulti: "PageAmrMulti",
     antimicrobialUse: "PageAntimicrobialUse",
     microbialCounts: "PageMicrobialCounts",
     evaluations: "PageEvaluations",

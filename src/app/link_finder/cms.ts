@@ -155,10 +155,16 @@ export function cmsOfficialNames(
     };
 }
 
+/** The CMS collection a link's graph reads. */
+function collectionOf(link: LinkSpec): string {
+    if (link.page !== "amr") return "prevalences";
+    return link.view === "multi" ? "multi-resistances" : "resistances";
+}
+
 /**
  * "Does this link have data?" as a one-row count read against the CMS. An AMR link counts
- * only rows the AMR graphs would draw: one row per Combination, substance and year, with at
- * least `MINIMUM_N` tested isolates.
+ * only rows the AMR graphs would draw, with at least `MINIMUM_N` tested isolates (the Multi-
+ * resistance graph reads `multi-resistances`, with the same minimum).
  */
 export function cmsDataIndex(
     apiBase: string,
@@ -186,9 +192,7 @@ export function cmsDataIndex(
                 );
             const body = await getJson<StrapiPage<{ samplingYear: number }>>(
                 fetchFn,
-                `${base}/${
-                    link.page === "amr" ? "resistances" : "prevalences"
-                }?${q.toString()}`
+                `${base}/${collectionOf(link)}?${q.toString()}`
             );
             const total = body.meta?.pagination?.total ?? body.data.length;
             return total > 0 && body.data.length

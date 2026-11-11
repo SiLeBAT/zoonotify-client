@@ -11,8 +11,10 @@ type Row = { [key: string]: string | number | null };
 interface PackedFacts {
     strings: string[];
     resistanceColumns: string[];
+    multiResistanceColumns: string[];
     prevalenceColumns: string[];
     resistances: number[][];
+    multiResistances: number[][];
     prevalences: number[][];
 }
 
@@ -35,6 +37,11 @@ const resistances = unpack(
     packed.resistances,
     packed.strings
 );
+const multiResistances = unpack(
+    packed.multiResistanceColumns,
+    packed.multiResistances,
+    packed.strings
+);
 const prevalences = unpack(
     packed.prevalenceColumns,
     packed.prevalences,
@@ -49,7 +56,11 @@ function newestYearInRows(
     minimumTested: number
 ): number | undefined {
     const amr = link.page === "amr";
-    const rows = amr ? resistances : prevalences;
+    const rows = !amr
+        ? prevalences
+        : link.view === "multi"
+        ? multiResistances
+        : resistances;
     const dims = Object.keys(link.filters) as Dim[];
     let newest: number | undefined;
     for (const r of rows) {
@@ -203,11 +214,16 @@ export function fakeCms(apiBase: string): FakeCms {
                     )
                 )
             );
-        if (collection === "prevalences" || collection === "resistances") {
+        if (
+            collection === "prevalences" ||
+            collection === "resistances" ||
+            collection === "multi-resistances"
+        ) {
             const link = linkFromQuery(
                 collection === "prevalences" ? "prevalence" : "amr",
                 q
             );
+            if (collection === "multi-resistances") link.view = "multi";
             return Promise.resolve(json(page(rowsFor(link, q), q)));
         }
         return Promise.resolve({

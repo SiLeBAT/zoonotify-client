@@ -1,6 +1,7 @@
 // Regression suite: the frozen questions run through the facade against the committed
 // snapshot. A floor, not proof of quality (see issue 102, Further Notes).
 import { createLinkFinder, Dim, EverydayWord, FoundLink } from "..";
+import { decodeMultiResistanceState } from "../../antibiotic_resistance/pages/multiResistanceHelpers";
 import { decodeSubstanceState } from "../../antibiotic_resistance/pages/substanceUrlState";
 import {
     newestYearInSnapshot,
@@ -33,8 +34,11 @@ function gateFailures(link: FoundLink, lang: string): string[] {
     const url = new URL(link.url, "https://zoonotify.test");
     if (url.searchParams.get("lang") !== lang) fails.push("?lang=");
     const s = url.searchParams.get("s");
-    if (s !== null && decodeSubstanceState(s)?.lang !== lang)
-        fails.push("payload language");
+    const payloadLang =
+        link.view === "multi"
+            ? decodeMultiResistanceState(s ?? "", [])?.lang
+            : decodeSubstanceState(s ?? "")?.lang;
+    if (s !== null && payloadLang !== lang) fails.push("payload language");
     if (link.view === "trend")
         url.searchParams.forEach((value, key) => {
             if (key !== "microorganism" && value.indexOf(",") >= 0)

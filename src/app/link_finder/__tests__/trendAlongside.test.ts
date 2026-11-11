@@ -16,10 +16,10 @@ const views = async (
     (await found(text, lang, organism)).map((l) => `${l.page}/${l.view ?? ""}`);
 
 describe("Link Finder trend link alongside the Substance graph", () => {
-    it("adds a trend link after the Substance graph link for a resistance search", async () => {
+    it("adds a trend link after the Substance graph link, before the Multi-resistance link", async () => {
         expect(
             await views("antimicrobial resistance", "en", "Salmonella spp.")
-        ).toEqual(["amr/substance", "amr/trend"]);
+        ).toEqual(["amr/substance", "amr/trend", "amr/multi"]);
     });
 
     it("keeps a single-year search on the Substance graph only", async () => {

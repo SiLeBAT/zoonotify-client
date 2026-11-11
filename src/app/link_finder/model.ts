@@ -2,7 +2,7 @@
 
 export type Lang = "en" | "de";
 export type Page = "prevalence" | "amr";
-export type AmrView = "substance" | "trend";
+export type AmrView = "substance" | "trend" | "multi";
 /** A data page that has no filters the Link Finder sets: linked by name only. */
 export type PageLinkId = "antimicrobialUse" | "microbialCounts" | "evaluations";
 
@@ -78,12 +78,18 @@ export interface LinkSpec {
 }
 
 /** What a link opens: its page and, on the AMR page, its graph. */
-export type LinkKind = "prevalence" | "amrSubstance" | "amrTrend" | PageLinkId;
+export type LinkKind =
+    | "prevalence"
+    | "amrSubstance"
+    | "amrTrend"
+    | "amrMulti"
+    | PageLinkId;
 
 export function linkKind(link: LinkSpec): LinkKind {
     if (link.pageLink) return link.pageLink;
     if (link.page === "prevalence") return "prevalence";
-    return link.view === "trend" ? "amrTrend" : "amrSubstance";
+    if (link.view === "trend") return "amrTrend";
+    return link.view === "multi" ? "amrMulti" : "amrSubstance";
 }
 
 /** One filter of a link, as the visitor reads it. */
