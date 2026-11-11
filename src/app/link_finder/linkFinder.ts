@@ -111,8 +111,17 @@ export function createLinkFinder(
                 };
             }
             let checked = await checkLinks(candidates(list, parsed), index);
+            // Only an organism named: prevalence first, then resistance; and
+            // resistance alone when no prevalence link has data.
+            if (parsed.bothPages)
+                checked = checked.concat(
+                    await checkLinks(
+                        candidates(list, { ...parsed, page: "amr" }),
+                        index
+                    )
+                );
             // Nothing on the resistance page: try prevalence.
-            if (!checked.length && parsed.page === "amr")
+            else if (!checked.length && parsed.page === "amr")
                 checked = await checkLinks(
                     candidates(list, { ...parsed, page: "prevalence" }),
                     index

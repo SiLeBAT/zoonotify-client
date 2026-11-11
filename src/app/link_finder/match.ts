@@ -15,6 +15,8 @@ export interface Parsed {
     latest: boolean;
     trend: boolean;
     page: Page;
+    /** No page, view, substance or class word: both pages are worth offering. */
+    bothPages: boolean;
     /** As typed. */
     unmatched: string[];
 }
@@ -253,6 +255,8 @@ export function parse(list: WordList, text: string): Parsed {
     let page: Page = "prevalence";
     if (explicitAmr) page = "amr";
     else if (!explicitPrevalence && impliedAmr) page = "amr";
+    const bothPages =
+        !explicitAmr && !impliedAmr && !explicitPrevalence && !trend;
 
     return {
         filters,
@@ -260,6 +264,7 @@ export function parse(list: WordList, text: string): Parsed {
         latest: latest && years.length === 0,
         trend: trend && years.length === 0,
         page,
+        bothPages,
         unmatched,
     };
 }
