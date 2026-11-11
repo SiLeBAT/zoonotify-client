@@ -17,6 +17,7 @@ import {
     AMR_ORGANISMS,
     AMR_ORGANISMS_WITHOUT_DATA,
 } from "../antibiotic_resistance/pages/amrOrganisms";
+import { encodeMultiResistanceState } from "../antibiotic_resistance/pages/multiResistanceHelpers";
 import { encodeSubstanceState } from "../antibiotic_resistance/pages/substanceUrlState";
 import { LANG_PARAM } from "../shared/seo/seo.model";
 
@@ -35,6 +36,9 @@ const GENUS_OF_SPECIE: { [specie: string]: string } = {
     "Enterococcus faecalis": "Enterococcus spp.",
     "Enterococcus faecium": "Enterococcus spp.",
 };
+
+/** The Multi-resistance graph combines substances, so it has no substance filter. */
+const MULTI_DIMS: Dim[] = (["specie"] as Dim[]).concat(PREVALENCE_DIMS);
 
 const AMR_DIMS: Dim[] = (["specie", "antimicrobialSubstance"] as Dim[]).concat(
     PREVALENCE_DIMS
@@ -115,6 +119,7 @@ export function candidates(list: WordList, parsed: Parsed): LinkSpec[] {
 
     const substance: LinkSpec[] = [];
     const trends: LinkSpec[] = [];
+    const multis: LinkSpec[] = [];
     for (const organism of organisms) {
         const label = amrLabel(organism);
         if (!label || AMR_ORGANISMS_WITHOUT_DATA.has(label)) continue;
@@ -142,13 +147,21 @@ export function candidates(list: WordList, parsed: Parsed): LinkSpec[] {
             );
             if (!years && !hasComma(list, filters) && (parsed.trend || !joined))
                 trends.push({ ...spec, view: "trend" });
+            // The Multi-resistance graph shows one year and has no substance filter: not offered
+            // for several years or for a substance, which it would silently drop.
+            if ((years?.length ?? 0) <= 1 && !filters.antimicrobialSubstance) {
+                const multiFilters = pick(filters, MULTI_DIMS);
+                multiFilters.microorganism = [organism];
+                multis.push({ ...spec, view: "multi", filters: multiFilters });
+            }
         }
     }
     // A trend word puts the trend links first; otherwise every Substance graph link comes first.
+    // Multi-resistance links come last, so they only fill slots the others leave free.
     const links = parsed.trend
         ? trends.concat(substance)
         : substance.concat(trends);
-    return links;
+    return links.concat(multis);
 }
 
 /**
@@ -307,6 +320,40 @@ function trendUrl(list: WordList, link: LinkSpec, lang: Lang): string {
     return `/antibiotic-resistance?${q.toString()}`;
 }
 
+/** AMR Multi-resistance graph: the page's own `?s=` payload, its `l` equal to `?lang=`. */
+function multiUrl(list: WordList, link: LinkSpec, lang: Lang): string {
+    const organism = amrLabel((link.filters.microorganism ?? [])[0]) ?? "";
+    const selected = {
+        samplingYear: [] as string[],
+        antimicrobialSubstance: [] as string[],
+        specie: [] as string[],
+        superCategorySampleOrigin: [] as string[],
+        sampleOrigin: [] as string[],
+        samplingStage: [] as string[],
+        matrixGroup: [] as string[],
+        matrix: [] as string[],
+    };
+    for (const d of MULTI_DIMS)
+        selected[d as keyof typeof selected] = (link.filters[d] ?? []).map(
+            (v) => localName(list, d, v, lang)
+        );
+    // No rows to map documentIds to names: the names go in as given, as for the Substance graph.
+    const s = encodeMultiResistanceState(
+        {
+            microorganism: organism,
+            lang,
+            selected,
+            year:
+                link.years && link.years.length === 1
+                    ? link.years[0]
+                    : undefined,
+            combinations: [],
+        },
+        []
+    );
+    return `/antibiotic-resistance?s=${s}&${LANG_PARAM}=${lang}`;
+}
+
 const PAGE_PATH: { [K in PageLinkId]: string } = {
     antimicrobialUse: pageRoute.antimicrobialPagePath,
     microbialCounts: pageRoute.microbialCountsPagePath,
@@ -330,7 +377,7 @@ export function pageLinks(parsed: Parsed, lang: Lang): FoundLink[] {
 }
 
 const URL_OF_KIND: {
-    [K in "prevalence" | "amrSubstance" | "amrTrend"]: (
+    [K in "prevalence" | "amrSubstance" | "amrTrend" | "amrMulti"]: (
         list: WordList,
         link: LinkSpec,
         lang: Lang
@@ -339,6 +386,7 @@ const URL_OF_KIND: {
     prevalence: prevalenceUrl,
     amrSubstance: substanceUrl,
     amrTrend: trendUrl,
+    amrMulti: multiUrl,
 };
 
 function buildLabels(

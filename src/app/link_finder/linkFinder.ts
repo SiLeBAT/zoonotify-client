@@ -139,14 +139,17 @@ export function createLinkFinder(
                     index
                 );
             return {
-                // A trend link nobody asked for is not worth a relaxed "closest" version.
+                // A trend link nobody asked for is not worth a relaxed "closest" version, nor is
+                // a Multi-resistance link, which no word of the search asks for.
                 links: dedupeByUrl(
                     checked
                         .map((l) => toFound(list, l, lang))
                         .filter(
                             (l) =>
-                                parsed.trend ||
-                                !(l.view === "trend" && l.closest)
+                                !l.closest ||
+                                l.view === "substance" ||
+                                l.page === "prevalence" ||
+                                (l.view === "trend" && parsed.trend)
                         )
                 ).slice(0, SHOWN_LINKS),
                 unmatched: parsed.unmatched,
