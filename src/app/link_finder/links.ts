@@ -7,6 +7,7 @@ import {
     FoundLink,
     Lang,
     linkKind,
+    LinkKind,
     LinkSpec,
     PageLinkId,
 } from "./model";
@@ -360,34 +361,54 @@ const PAGE_PATH: { [K in PageLinkId]: string } = {
     evaluations: pageRoute.evaluationsPagePath,
 };
 
-function pageUrl(kind: PageLinkId): string {
-    return `${PAGE_PATH[kind]}?${LANG_PARAM}=`;
+type UrlBuilder = (list: WordList, link: LinkSpec, lang: Lang) => string;
+
+function pageUrlOf(kind: PageLinkId): UrlBuilder {
+    return (_list, _link, lang) => `${PAGE_PATH[kind]}?${LANG_PARAM}=${lang}`;
+}
+
+/** Everything that differs between kinds of link: the card title (LinkFinder.json key) and the URL. */
+const KINDS: {
+    [K in LinkKind]: { titleKey: string; url: UrlBuilder };
+} = {
+    prevalence: { titleKey: "PagePrevalence", url: prevalenceUrl },
+    amrSubstance: { titleKey: "PageAmrSubstance", url: substanceUrl },
+    amrTrend: { titleKey: "PageAmrTrend", url: trendUrl },
+    amrMulti: { titleKey: "PageAmrMulti", url: multiUrl },
+    antimicrobialUse: {
+        titleKey: "PageAntimicrobialUse",
+        url: pageUrlOf("antimicrobialUse"),
+    },
+    microbialCounts: {
+        titleKey: "PageMicrobialCounts",
+        url: pageUrlOf("microbialCounts"),
+    },
+    evaluations: {
+        titleKey: "PageEvaluations",
+        url: pageUrlOf("evaluations"),
+    },
+};
+
+/** The LinkFinder.json key of the title a link's card shows. */
+export function titleKeyOf(link: LinkSpec): string {
+    return KINDS[linkKind(link)].titleKey;
 }
 
 /** Links to the pages the search names by their own words, with no filters. */
-export function pageLinks(parsed: Parsed, lang: Lang): FoundLink[] {
-    return parsed.pageLinks.map((kind) => ({
-        page: "prevalence",
-        pageLink: kind,
-        filters: {},
-        url: `${pageUrl(kind)}${lang}`,
-        labels: [],
-        dropped: [],
-    }));
+export function pageLinks(
+    list: WordList,
+    parsed: Parsed,
+    lang: Lang
+): FoundLink[] {
+    return parsed.pageLinks.map((kind) =>
+        toFound(
+            list,
+            // `page` is a placeholder: a page link has no filters and no graph.
+            { page: "prevalence", pageLink: kind, filters: {} },
+            lang
+        )
+    );
 }
-
-const URL_OF_KIND: {
-    [K in "prevalence" | "amrSubstance" | "amrTrend" | "amrMulti"]: (
-        list: WordList,
-        link: LinkSpec,
-        lang: Lang
-    ) => string;
-} = {
-    prevalence: prevalenceUrl,
-    amrSubstance: substanceUrl,
-    amrTrend: trendUrl,
-    amrMulti: multiUrl,
-};
 
 function buildLabels(
     list: WordList,
@@ -410,11 +431,7 @@ export function organismLabel(list: WordList, cms: string, lang: Lang): string {
 export function toFound(list: WordList, link: LinkSpec, lang: Lang): FoundLink {
     return {
         ...link,
-        url: URL_OF_KIND[linkKind(link) as keyof typeof URL_OF_KIND](
-            list,
-            link,
-            lang
-        ),
+        url: KINDS[linkKind(link)].url(list, link, lang),
         labels: buildLabels(list, link, lang),
         dropped: ([] as FilterLabel[]).concat(
             ...(link.without ?? []).map(({ dim, values }) =>

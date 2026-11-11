@@ -2,7 +2,7 @@
 export { createLinkFinder, LinkFinderUnavailableError } from "./linkFinder";
 export type { LinkFinder, LinkFinderTables } from "./linkFinder";
 export { cmsDataIndex, cmsOfficialNames } from "./cms";
-export { linkKind } from "./model";
+export { titleKeyOf } from "./links";
 export type {
     DataIndex,
     Dim,

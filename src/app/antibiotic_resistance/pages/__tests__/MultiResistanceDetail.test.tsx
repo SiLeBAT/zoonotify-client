@@ -7,6 +7,11 @@ import type {
 } from "../multiResistanceHelpers";
 import { callApiService } from "../../../shared/infrastructure/api/callApi.service";
 import fixture from "./fixtures/multiResistance.fixture.json";
+import { createLinkFinder } from "../../../link_finder";
+import {
+    snapshotIndex,
+    snapshotOfficialNames,
+} from "../../../link_finder/__fixtures__/snapshot";
 
 jest.mock("../../../shared/infrastructure/api/callApi.service", () => ({
     callApiService: jest.fn(),
@@ -78,6 +83,23 @@ function plottedLabels(): string[] {
 describe("MultiResistanceDetail", () => {
     it("plots every Combination of the latest year that reaches the Minimum N", async () => {
         renderDetail("E. coli");
+
+        await screen.findByTestId("multi-resistance-chart");
+
+        expect(plottedLabels()).toEqual([
+            "Caecal content – Broiler – Slaughterhouse (N = 170)",
+            "Chicken meat – Broiler – Retail (N = 150)",
+        ]);
+    });
+
+    it("opens a Link Finder link with every Combination plotted, as the page does on its own", async () => {
+        const { links } = await createLinkFinder(() =>
+            Promise.resolve(snapshotOfficialNames)
+        ).find("antimicrobial resistance", "en", snapshotIndex, "E. coli");
+        const link = links.find((l) => l.view === "multi");
+        expect(link).toBeDefined();
+        window.history.replaceState(null, "", link?.url);
+        render(<MultiResistanceDetail microorganism="E. coli" />);
 
         await screen.findByTestId("multi-resistance-chart");
 
