@@ -139,8 +139,15 @@ export function createLinkFinder(
                     index
                 );
             return {
+                // A trend link nobody asked for is not worth a relaxed "closest" version.
                 links: dedupeByUrl(
-                    checked.map((l) => toFound(list, l, lang))
+                    checked
+                        .map((l) => toFound(list, l, lang))
+                        .filter(
+                            (l) =>
+                                parsed.trend ||
+                                !(l.view === "trend" && l.closest)
+                        )
                 ).slice(0, SHOWN_LINKS),
                 unmatched: parsed.unmatched,
             };
