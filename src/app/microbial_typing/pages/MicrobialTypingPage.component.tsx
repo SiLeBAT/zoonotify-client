@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
@@ -10,6 +10,9 @@ import {
     TypingOrganism,
     resolveTypingOrganism,
 } from "./typingOrganisms";
+import { fetchTypingResults, samplingYears, TypingResult } from "./typingData";
+import { buildSerovarChart } from "./serovarChart";
+import { SerovarBarChart } from "./SerovarBarChart";
 
 // MUI's styled rather than the emotion css prop: the css prop needs the
 // @jsxImportSource pragma, which jest's classic-runtime babel cannot compile.
@@ -104,6 +107,98 @@ function OrganismName({ organism }: { organism: TypingOrganism }): JSX.Element {
     );
 }
 
+/** The only organism with a typing chart so far (#1935). */
+const SEROVAR_ORGANISM = "Salmonella spp.";
+const YEAR_PARAM = "year";
+
+const YearLabel = styled("label")`
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+`;
+
+const YearSelect = styled("select")`
+    padding: 0.4rem 0.6rem;
+    border: 1px solid ${primaryColor};
+    border-radius: 4px;
+    background: #fff;
+    color: ${primaryColor};
+    font-family: inherit;
+    font-size: 1rem;
+`;
+
+/** Salmonella serovars per combination, as 100 % stacked bars. */
+function SerovarSection(): JSX.Element | null {
+    const { t, i18n } = useTranslation(["MicrobialTyping"]);
+    const location = useLocation();
+    const history = useHistory();
+    const locale = (i18n.language || "en").toLowerCase().startsWith("de")
+        ? "de"
+        : "en";
+    const [rows, setRows] = useState<TypingResult[] | null>(null);
+    const [failed, setFailed] = useState(false);
+
+    useEffect(() => {
+        let cancelled = false;
+        setRows(null);
+        setFailed(false);
+        const load = async (): Promise<void> => {
+            try {
+                const result = await fetchTypingResults(
+                    SEROVAR_ORGANISM,
+                    locale
+                );
+                if (!cancelled) setRows(result);
+            } catch {
+                if (!cancelled) setFailed(true);
+            }
+        };
+        void load();
+        return () => {
+            cancelled = true;
+        };
+    }, [locale]);
+
+    if (failed) return <p role="alert">{t("LoadError")}</p>;
+    if (!rows) return null;
+    const years = samplingYears(rows);
+    if (years.length === 0) return null;
+    // Like the microorganism, the year lives in the URL so links can share it;
+    // a missing or unknown year falls back to the latest.
+    const requested = Number(
+        new URLSearchParams(location.search).get(YEAR_PARAM)
+    );
+    const year = years.includes(requested) ? requested : years[0];
+
+    const handleYear = (value: string): void => {
+        const params = new URLSearchParams(location.search);
+        params.set(YEAR_PARAM, value);
+        history.replace({ search: `?${params.toString()}` });
+    };
+
+    return (
+        <>
+            <YearLabel>
+                {t("SamplingYear")}
+                <YearSelect
+                    value={year}
+                    onChange={(event) => handleYear(event.target.value)}
+                >
+                    {years.map((y) => (
+                        <option key={y} value={y}>
+                            {y}
+                        </option>
+                    ))}
+                </YearSelect>
+            </YearLabel>
+            {/* Remount per year: Recharts would keep the old year's tooltip. */}
+            <SerovarBarChart key={year} chart={buildSerovarChart(rows, year)} />
+        </>
+    );
+}
+
 export function MicrobialTypingPageComponent(): JSX.Element {
     const { t } = useTranslation(["MicrobialTyping"]);
     const location = useLocation();
@@ -149,6 +244,7 @@ export function MicrobialTypingPageComponent(): JSX.Element {
                     <Title>
                         {t("Title")}: <OrganismName organism={selected} />
                     </Title>
+                    {selected.id === SEROVAR_ORGANISM && <SerovarSection />}
                 </Content>
             </Page>
         </PageLayoutComponent>

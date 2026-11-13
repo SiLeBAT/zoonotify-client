@@ -11,7 +11,15 @@ jest.mock("../../../shared/components/layout/PageLayoutComponent", () => ({
 }));
 
 jest.mock("react-i18next", () => ({
-    useTranslation: () => ({ t: (key: string) => key }),
+    useTranslation: () => ({
+        t: (key: string) => key,
+        i18n: { language: "en" },
+    }),
+}));
+
+// Salmonella, selected by default, loads its typing chart: answer with no rows.
+jest.mock("../../../shared/infrastructure/api/callApi.service", () => ({
+    callApiService: jest.fn(async () => ({ status: 200, data: { data: [] } })),
 }));
 
 const EXPECTED_ORDER = [
