@@ -1,4 +1,8 @@
 {
   "Title": "Microbial typing",
-  "SelectMicroorganism": "Select microorganism"
+  "SelectMicroorganism": "Select microorganism",
+  "SamplingYear": "Sampling year",
+  "SerovarShareAxis": "Share of Salmonella spp. isolates (%)",
+  "OtherSerovars": "other serovars",
+  "LoadError": "The typing data could not be loaded. Please try again later."
 }
