@@ -1,4 +1,8 @@
 {
   "Title": "Mikrobiologische Typisierung",
-  "SelectMicroorganism": "Mikroorganismus auswählen"
+  "SelectMicroorganism": "Mikroorganismus auswählen",
+  "SamplingYear": "Probenahmejahr",
+  "SerovarShareAxis": "Anteil Salmonella spp. Isolate (%)",
+  "OtherSerovars": "andere Salmonellen-Serovare",
+  "LoadError": "Die Typisierungsdaten konnten nicht geladen werden. Bitte versuchen Sie es später erneut."
 }
