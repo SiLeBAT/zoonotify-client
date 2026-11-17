@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import React, { useState } from "react";
-import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
+import React from "react";
 
 // The page fills the body slot handed down by MainLayout (between the global
 // header and footer) and owns its scrolling via main. The footer now lives in
@@ -35,20 +34,9 @@ interface PageLayoutProps {
 export const PageLayoutComponent: React.FC<PageLayoutProps> = ({
     children,
 }): JSX.Element => {
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-    const handleSnackbarClose = (): void => {
-        setSnackbarOpen(false);
-    };
-
     return (
         <div css={layoutWrapperStyle}>
             <main css={mainStyle}>{children}</main>
-
-            <ErrorSnackbar
-                open={snackbarOpen}
-                handleClose={handleSnackbarClose}
-            />
         </div>
     );
 };

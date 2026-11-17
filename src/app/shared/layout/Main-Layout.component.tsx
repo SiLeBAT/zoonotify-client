@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { BodyRouterComponent } from "../infrastructure/router/Body-Router.component";
 import { HeaderComponent } from "../components/header/Header.component";
 import { FooterContainer } from "../components/footer/Footer-Container.component";
+import { CmsOutageNotice } from "../components/cms_status/CmsOutageNotice.component";
 
 // App shell: a full-viewport flex column. The header and footer take their
 // natural heights and the body flexes to fill whatever is left, so nothing
@@ -37,6 +38,7 @@ export function MainLayoutComponent(): JSX.Element {
         <div css={wrapperStyle}>
             <BrowserRouter>
                 <HeaderComponent />
+                <CmsOutageNotice />
                 <div css={bodyStyle}>
                     <BodyRouterComponent />
                 </div>

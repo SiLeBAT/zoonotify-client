@@ -4,5 +4,6 @@
   "GeneralErrorTitle": "An error occurred.",
   "UNKNOWN-ERROR": "An unknown error occurred. Please try again later.",
   "GeneralErrorText": "There seems to be an error on our server side. You are welcome to contact our team under the 'Submit a problem' tab.",
-  "SmartPhone Detected": "Please note: The Zoonotify Webapp has not been optimized for mobile screens."
+  "SmartPhone Detected": "Please note: The Zoonotify Webapp has not been optimized for mobile screens.",
+  "CmsUnavailable": "The server is currently unavailable, so data cannot be loaded. Please try again later."
 }

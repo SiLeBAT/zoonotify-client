@@ -1,3 +1,5 @@
+import { reportCmsAvailability } from "./cmsAvailability";
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export interface ApiResponse<T extends {}> {
     status: number;
@@ -15,7 +17,17 @@ export async function callApiService<T extends {}>(
         },
     }
 ): Promise<ApiResponse<T>> {
-    const apiResponse: Response = await fetch(apiUrl, options);
+    let apiResponse: Response;
+    try {
+        apiResponse = await fetch(apiUrl, options);
+    } catch (error) {
+        reportCmsAvailability(false);
+        throw error;
+    }
+    // A 5xx is the CMS (or the Apache proxy in front of it, which answers
+    // 502/503 while Strapi is down) failing, not a bad request. Callers get
+    // the status back as before; only the outage notice reacts.
+    reportCmsAvailability(apiResponse.status < 500);
     const cmsVersion = apiResponse.headers.get("cms-version");
     window.sessionStorage.setItem("cms-version", cmsVersion ? cmsVersion : "");
     // Only sent by QA deployments of the CMS.
