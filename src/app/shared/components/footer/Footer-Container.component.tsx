@@ -7,7 +7,6 @@ import {
     callApiService,
 } from "../../infrastructure/api/callApi.service";
 import { CONFIGURATION } from "../../infrastructure/router/routes";
-import { ErrorSnackbar } from "../ErrorSnackbar/ErrorSnackbar";
 import { FooterLayoutComponent } from "./Footer-Layout.component";
 import { FooterLinkListComponent } from "./Footer-LinkList.component";
 import { LastUpdateComponent } from "./LastUpdate.component";
@@ -65,17 +64,15 @@ export const useFetchSupportEmail = (): {
  * and displays an error snackbar if any error occurs.
  */
 export function FooterContainer(): JSX.Element {
-    const { supportEmail, error, clearError } = useFetchSupportEmail();
+    // An unreachable CMS is announced app-wide by CmsOutageNotice.
+    const { supportEmail } = useFetchSupportEmail();
 
     return (
-        <>
-            <FooterLayoutComponent
-                lastUpdateComponent={<LastUpdateComponent />}
-                linkListComponent={
-                    <FooterLinkListComponent supportMail={supportEmail} />
-                }
-            />
-            {error && <ErrorSnackbar open={true} handleClose={clearError} />}
-        </>
+        <FooterLayoutComponent
+            lastUpdateComponent={<LastUpdateComponent />}
+            linkListComponent={
+                <FooterLinkListComponent supportMail={supportEmail} />
+            }
+        />
     );
 }
