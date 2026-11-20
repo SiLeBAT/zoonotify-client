@@ -22,6 +22,7 @@ import {
     distinctYears,
     type YearWindow,
 } from "./trendYearWindow";
+import { isPlottable, substancesWithTrend } from "./trendSeries";
 
 export interface TrendChartProps {
     microorganism: string; // ✅ ADDED
@@ -235,9 +236,11 @@ export const TrendChart: React.FC<TrendChartProps> = ({
     // -- Chart data preparation
     const years = chartYearAxis(distinctYears(data), yearWindow);
 
-    // *** FIXED: Use ALL_SUBSTANCES order for legend/plot! ***
+    // Only substances with a trend (2+ plotted years) get a line and legend
+    // entry, in ALL_SUBSTANCES order.
+    const withTrend = substancesWithTrend(data, years);
     const substances = ALL_SUBSTANCES.filter((substance) =>
-        data.some((d) => d.antimicrobialSubstance === substance)
+        withTrend.has(substance)
     );
 
     const chartData = years.map((year) => {
@@ -254,11 +257,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({
                     d.samplingYear === year &&
                     d.antimicrobialSubstance === substance
             );
-            if (
-                found &&
-                found.anzahlGetesteterIsolate != null &&
-                found.anzahlGetesteterIsolate >= 10
-            ) {
+            if (found && isPlottable(found)) {
                 entry[substance] = found.resistenzrate;
             } else {
                 entry[substance] = null;
@@ -267,19 +266,8 @@ export const TrendChart: React.FC<TrendChartProps> = ({
         return entry;
     });
 
-    // ---- ENOUGH DATA CHECK (show chart if >=2 years with N >= 10)
-    const yearsWithEnoughN = Array.from(
-        new Set(
-            data
-                .filter(
-                    (d) =>
-                        d.anzahlGetesteterIsolate != null &&
-                        d.anzahlGetesteterIsolate >= 10
-                )
-                .map((d) => d.samplingYear)
-        )
-    );
-    const enoughData = yearsWithEnoughN.length >= 2;
+    // Show the chart only if at least one substance has a trend to draw.
+    const enoughData = substances.length > 0;
 
     // --- Handlers
     const handleDownload = async (): Promise<void> => {
