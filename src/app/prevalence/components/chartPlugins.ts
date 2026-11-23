@@ -46,11 +46,11 @@ export const whiteBackgroundAndLogoPlugin = (
             ctx.restore();
         }
 
-        // "Generated On" text (bottom-right corner of the full canvas)
+        // "DataStatus" text (bottom-right corner of the full canvas)
         const generatedOnText =
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (chart.options.plugins as any)?.customTexts?.generatedOn ||
-            "Generated on";
+            "DataStatus";
 
         // Combine the translation key with the actual date
         const dateText = `${generatedOnText}: ${prevalenceUpdateDate || ""}`;

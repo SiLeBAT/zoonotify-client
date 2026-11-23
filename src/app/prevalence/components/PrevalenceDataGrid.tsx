@@ -45,11 +45,11 @@ const italicWords: string[] = [
 const GERMAN_README = `
 Dieser ZooNotify-Daten-Download enthält diese README-Datei, zwei CSV-Dateien und eine zusätzliche Textdatei. Der Inhalt und die Verwendung dieser Dateien wird im Folgenden erläutert.
 
-prevalence_data_dot.csv: für Software mit deutschen Spracheinstellungen 
-Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit deutschen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Kommas als Dezimaltrennzeichen verwenden. 
+prevalence_data_dot.csv: für Software mit deutschen Spracheinstellungen
+Diese Datei enthält punktgetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit deutschen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Kommas als Dezimaltrennzeichen verwenden.
 
-prevalence_data_comma.csv: für Software mit englischen Spracheeinstellungen 
-Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden. 
+prevalence_data_comma.csv: für Software mit englischen Spracheeinstellungen
+Diese Datei enthält kommagetrennte Daten, die das korrekte Zahlenformat in Softwareprogrammen (wie Microsoft Office Excel oder LibreOffice Sheets) mit englischen Spracheinstellungen unterstützen. Diese Datei kann in Programmen geöffnet werden, die Punkte als Dezimaltrennzeichen verwenden.
 
 search_parameters.txt
 In der Textdatei search_parameters.txt finden Sie Informationen zu den Parametern, die Sie im Suchmenü von ZooNotify ausgewählt haben, bevor Sie die Daten heruntergeladen haben. Die heruntergeladenen CSV-Dateien enthalten nur Daten, die mit den in der Datei search_parameters.txt angegebenen Suchkriterien übereinstimmen.
@@ -253,7 +253,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
         zip.file(`prevalence_data_comma_${timestamp}.csv`, csvContentComma);
 
         const searchParamsJson = JSON.stringify(searchParameters, null, 2);
-        const formattedText = `Search Parameters - Generated on ${timestamp}\n\n${searchParamsJson}`;
+        const formattedText = `Search Parameters - DataStatus ${timestamp}\n\n${searchParamsJson}`;
         const readmeContent =
             language?.toLowerCase() === "de" ? GERMAN_README : ENGLISH_README;
 
@@ -525,7 +525,7 @@ const PrevalenceDataGrid: React.FC<PrevalenceDataGridProps> = ({
                                         color: theme.palette.text.secondary,
                                     }}
                                 >
-                                    {t("Generated on")}:{" "}
+                                    {t("DataStatus")}:{" "}
                                     {prevalenceUpdateDate ||
                                         t("No date available")}
                                 </Typography>
