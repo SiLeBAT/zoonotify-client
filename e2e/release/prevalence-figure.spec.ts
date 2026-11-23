@@ -1,7 +1,6 @@
 import { expect, Locator, Page, test } from "@playwright/test";
 import { languageButton } from "../support/app";
-import { releaseCheck } from "./support/annotations";
-import { LOCALES } from "./support/locales";
+import { releaseCheck, reportOutcome } from "./support/annotations";
 import {
     clearDraws,
     drawnYears,
@@ -10,6 +9,7 @@ import {
     recordedDraws,
     titleProblems,
 } from "./support/canvas-spy";
+import { LOCALES } from "./support/locales";
 import { Locale, normalise } from "./support/oracle";
 import {
     combinationsOf,
@@ -20,7 +20,6 @@ import {
     yearsOf,
 } from "./support/prevalence-figure";
 import { chooseOption, comboboxByLabel, readOptions } from "./support/select";
-import { reportOutcome } from "./support/annotations";
 
 /**
  * prevalence.figure-download, prevalence.change-language and
@@ -251,11 +250,11 @@ test(
                 expect(texts).toContain(labels["Prevalence %"]);
                 expect(texts).toContain(labels.Year);
                 const modified = texts.find((t) =>
-                    t.startsWith(`${labels["Generated on"]}: `)
+                    t.startsWith(`${labels["DataStatus"]}: `)
                 );
                 expect(modified, "last-modified line").toBeTruthy();
                 expect(
-                    modified!.slice(labels["Generated on"].length + 2)
+                    modified!.slice(labels["DataStatus"].length + 2)
                 ).not.toBe("");
 
                 const rows = rowsFor(data, lang);
