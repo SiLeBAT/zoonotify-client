@@ -164,4 +164,18 @@ describe("MicrobialTypingPage microorganism selection", () => {
         expect(params.get("lang")).toBe("en");
         expect(sidebarButtons()).toHaveLength(6);
     });
+
+    it("collapses the search options into a side panel and opens them again", () => {
+        renderPage("?microorganism=MRSA");
+
+        fireEvent.click(screen.getByRole("button", { name: "apply filter" }));
+        expect(
+            screen.queryByRole("region", { name: "SearchOptions" })
+        ).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", { name: "apply filter" }));
+        expect(
+            screen.getByRole("region", { name: "SearchOptions" })
+        ).toBeInTheDocument();
+    });
 });
