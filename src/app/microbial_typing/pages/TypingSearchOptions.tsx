@@ -11,7 +11,6 @@ import {
     Select,
     Stack,
     Tooltip,
-    Typography,
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import InfoIcon from "@mui/icons-material/Info";
@@ -137,23 +136,18 @@ export function TypingSearchOptions({
     return (
         <Box
             component="section"
-            aria-labelledby="typing-search-options"
+            aria-label={String(t("SearchOptions"))}
             sx={{
                 p: 3,
                 width: "380px",
-                maxWidth: "100%",
+                maxWidth: "95%",
+                // Fill the panel SidebarComponent hands down so this pane
+                // owns its scrollbar and Search/Reset stay reachable.
+                height: "100%",
+                overflowY: "auto",
                 boxSizing: "border-box",
             }}
         >
-            <Typography
-                id="typing-search-options"
-                variant="h5"
-                component="h2"
-                textAlign="center"
-                mb={3}
-            >
-                {t("SearchOptions")}
-            </Typography>
             <Stack spacing={2}>{TYPING_FILTER_KEYS.map(renderSelect)}</Stack>
             <Box mt={4} display="flex" justifyContent="center" gap={2}>
                 <Button

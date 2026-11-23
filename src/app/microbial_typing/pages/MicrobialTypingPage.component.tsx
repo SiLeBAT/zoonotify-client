@@ -13,6 +13,7 @@ import Markdown from "markdown-to-jsx";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { INFORMATION } from "../../shared/infrastructure/router/routes";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
+import { SidebarComponent } from "../../shared/components/layout/SidebarComponent";
 import { primaryColor } from "../../shared/style/Style-MainTheme";
 import {
     MICROORGANISM_PARAM,
@@ -199,13 +200,19 @@ function SerovarSection({
     );
 }
 
+// Like the AMR and prevalence pages: fill the scroll area PageLayoutComponent's
+// <main> hands down and clip, so the side panel and the content each scroll
+// themselves instead of <main> adding a second scrollbar.
 const DetailLayout = styled("div")`
     display: flex;
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+`;
 
-    @media (max-width: 900px) {
-        flex-direction: column;
-    }
+const DetailContent = styled(Content)`
+    overflow-y: auto;
 `;
 
 const Breadcrumb = styled("nav")`
@@ -251,6 +258,7 @@ function TypingDetail({
     // pending copy that Search applies, as on the AMR trend page.
     const applied = readTypingSelection(new URLSearchParams(location.search));
     const [selection, setSelection] = useState<TypingSelection>(applied);
+    const [isPanelOpen, setIsPanelOpen] = useState(true);
     const [info, setInfo] = useState<{ title: string; content: string } | null>(
         null
     );
@@ -299,18 +307,24 @@ function TypingDetail({
 
     return (
         <DetailLayout>
-            <TypingSearchOptions
-                options={typingFilterOptions(rows ?? [], selection)}
-                selection={selection}
-                onChange={setSelection}
-                onSearch={() => applySelection(selection)}
-                onReset={() => {
-                    setSelection(emptyTypingSelection);
-                    applySelection(emptyTypingSelection);
-                }}
-                onInfo={(labelKey) => void showInfo(labelKey)}
-            />
-            <Content>
+            <SidebarComponent
+                isOpen={isPanelOpen}
+                handleOpenClick={() => setIsPanelOpen(!isPanelOpen)}
+                title={t("SearchOptions")}
+            >
+                <TypingSearchOptions
+                    options={typingFilterOptions(rows ?? [], selection)}
+                    selection={selection}
+                    onChange={setSelection}
+                    onSearch={() => applySelection(selection)}
+                    onReset={() => {
+                        setSelection(emptyTypingSelection);
+                        applySelection(emptyTypingSelection);
+                    }}
+                    onInfo={(labelKey) => void showInfo(labelKey)}
+                />
+            </SidebarComponent>
+            <DetailContent>
                 <Breadcrumb aria-label={t("Breadcrumb")}>
                     <BreadcrumbLink type="button" onClick={onBack}>
                         {t("Title")}
@@ -330,7 +344,7 @@ function TypingDetail({
                     ) : (
                         <p>{t("NoChartYet")}</p>
                     ))}
-            </Content>
+            </DetailContent>
             <Dialog open={info !== null} onClose={() => setInfo(null)}>
                 <DialogTitle>{info?.title}</DialogTitle>
                 <DialogContent>
