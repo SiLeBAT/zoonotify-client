@@ -222,7 +222,13 @@ function Breadcrumb({
                 <Typography
                     variant="body2"
                     color="text.secondary"
-                    sx={{ px: "1rem", py: "0.25rem" }}
+                    sx={{
+                        px: "1rem",
+                        py: "0.25rem",
+                        ...((view === "trend" || view === "substance") && {
+                            my: "12px",
+                        }),
+                    }}
                 >
                     {t("DataStatus")}: {dataUpdateDate}
                 </Typography>
@@ -386,7 +392,6 @@ export function AntibioticResistancePageComponent(): JSX.Element {
           background: #fff;
           padding: 1rem 0 0.75rem;
           margin-bottom: 0.5rem;
-          box-shadow: 0 2px 6px rgba(48, 56, 96, 0.12);
           pointer-events: auto;
         }
 
