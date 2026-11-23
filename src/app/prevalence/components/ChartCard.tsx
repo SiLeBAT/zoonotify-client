@@ -282,7 +282,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
                                 },
                             },
                         },
-                        customTexts: { generatedOn: t("Generated on") },
+                        customTexts: { generatedOn: t("DataStatus") },
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } as any,
                     animation: false,
