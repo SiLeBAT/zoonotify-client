@@ -47,8 +47,6 @@ export const TYPING_FILTER_LABELS: Record<
     matrix: { label: "MATRIX", info: "More Info on Matrices" },
 };
 
-const BUTTON_SX = { minWidth: 120, background: "#003663" };
-
 /** The typing page's Search Options panel, after the AMR trend page (#1948). */
 export function TypingSearchOptions({
     options,
@@ -133,34 +131,56 @@ export function TypingSearchOptions({
         );
     };
 
+    // Same frame as the prevalence page's side content
+    // (PrevalenceSideContent), so the two panels look alike.
     return (
         <Box
             component="section"
             aria-label={String(t("SearchOptions"))}
             sx={{
-                p: 3,
-                width: "380px",
+                display: "flex",
+                flexDirection: "column",
+                width: "430px",
                 maxWidth: "95%",
-                // Fill the panel SidebarComponent hands down so this pane
-                // owns its scrollbar and Search/Reset stay reachable.
-                height: "100%",
-                overflowY: "auto",
+                p: 2,
                 boxSizing: "border-box",
+                height: "100%",
+                maxHeight: "100%",
             }}
         >
-            <Stack spacing={2}>{TYPING_FILTER_KEYS.map(renderSelect)}</Stack>
-            <Box mt={4} display="flex" justifyContent="center" gap={2}>
-                <Button
-                    variant="contained"
-                    startIcon={<SearchIcon />}
-                    sx={BUTTON_SX}
-                    onClick={onSearch}
+            <Box
+                sx={{
+                    flex: 1,
+                    minHeight: 0,
+                    overflowY: "auto",
+                    pr: 1,
+                    pt: 2,
+                    pb: 4,
+                }}
+            >
+                <Stack spacing={2.5}>
+                    {TYPING_FILTER_KEYS.map(renderSelect)}
+                </Stack>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        mt: 2,
+                        gap: "16px",
+                        flexWrap: "wrap",
+                    }}
                 >
-                    {t("Search")}
-                </Button>
-                <Button variant="contained" sx={BUTTON_SX} onClick={onReset}>
-                    {t("ResetFilters")}
-                </Button>
+                    <Button
+                        variant="contained"
+                        startIcon={<SearchIcon />}
+                        onClick={onSearch}
+                    >
+                        {t("Search")}
+                    </Button>
+                    <Button variant="contained" onClick={onReset}>
+                        {t("ResetFilters")}
+                    </Button>
+                </Box>
             </Box>
         </Box>
     );
