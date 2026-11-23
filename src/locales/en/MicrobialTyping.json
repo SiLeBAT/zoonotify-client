@@ -4,5 +4,22 @@
   "SamplingYear": "Sampling year",
   "SerovarShareAxis": "Share of Salmonella spp. isolates (%)",
   "OtherSerovars": "other serovars",
-  "LoadError": "The typing data could not be loaded. Please try again later."
+  "LoadError": "The typing data could not be loaded. Please try again later.",
+  "Breadcrumb": "Breadcrumb",
+  "SearchOptions": "Search Options",
+  "Search": "Search",
+  "ResetFilters": "Reset Filters",
+  "NoOptions": "No options",
+  "NoChartYet": "There is no chart for this microorganism yet.",
+  "Close": "Close",
+  "SUPER-CATEGORY-SAMPLE-ORIGIN": "Superordinate Sample Origin",
+  "SAMPLE_ORIGIN": "Sample Origin",
+  "SAMPLING_STAGE": "Sampling Stage",
+  "MATRIX_GROUP": "Matrix Group",
+  "MATRIX": "Matrix",
+  "More Info on Super Categories": "More Information on Superordinate Sample Origin",
+  "More Info on Sample Origins": "More Information on Sample Origin",
+  "More Info on Sampling Stages": "More Information on Sampling Stage",
+  "More Info on Matrix Groups": "More Information on Matrix Group",
+  "More Info on Matrices": "More Information on Matrix"
 }

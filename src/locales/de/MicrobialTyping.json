@@ -4,5 +4,22 @@
   "SamplingYear": "Probenahmejahr",
   "SerovarShareAxis": "Anteil Salmonella spp. Isolate (%)",
   "OtherSerovars": "andere Salmonellen-Serovare",
-  "LoadError": "Die Typisierungsdaten konnten nicht geladen werden. Bitte versuchen Sie es später erneut."
+  "LoadError": "Die Typisierungsdaten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
+  "Breadcrumb": "Navigationspfad",
+  "SearchOptions": "Suchoptionen",
+  "Search": "Suche",
+  "ResetFilters": "Filter zurücksetzen",
+  "NoOptions": "Keine Optionen",
+  "NoChartYet": "Für diesen Mikroorganismus gibt es noch keine Grafik.",
+  "Close": "Schließen",
+  "SUPER-CATEGORY-SAMPLE-ORIGIN": "Oberkategorie Probenursprung",
+  "SAMPLE_ORIGIN": "Probenursprung",
+  "SAMPLING_STAGE": "Probenahmestelle",
+  "MATRIX_GROUP": "Matrixgruppe",
+  "MATRIX": "Matrix",
+  "More Info on Super Categories": "Mehr Informationen zu Oberkategorie Probenursprung",
+  "More Info on Sample Origins": "Mehr Informationen zu Probenursprung",
+  "More Info on Sampling Stages": "Mehr Informationen zu Probenahmestelle",
+  "More Info on Matrix Groups": "Mehr Informationen zu Matrixgruppe",
+  "More Info on Matrices": "Mehr Informationen zu Matrix"
 }
