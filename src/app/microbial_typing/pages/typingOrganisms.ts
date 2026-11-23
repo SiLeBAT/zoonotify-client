@@ -40,13 +40,3 @@ export const TYPING_ORGANISMS: readonly TypingOrganism[] = [
 ];
 
 export const MICROORGANISM_PARAM = "microorganism";
-
-/** The organism a `?microorganism=` value names, or the first one. */
-export function resolveTypingOrganism(
-    value: string | null | undefined
-): TypingOrganism {
-    return (
-        TYPING_ORGANISMS.find((organism) => organism.id === value) ??
-        TYPING_ORGANISMS[0]
-    );
-}

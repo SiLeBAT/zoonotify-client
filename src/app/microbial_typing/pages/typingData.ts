@@ -1,7 +1,9 @@
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { TYPING_RESULTS } from "../../shared/infrastructure/router/routes";
 
-type Relation = { name: string } | null;
+/** Strapi v5 returns `documentId` with every populated relation; it is the
+ * same in both locales, so filter selections survive a language switch. */
+type Relation = { name: string; documentId?: string } | null;
 
 /**
  * One row of the CMS `typing-result` collection: the isolates of one typing
@@ -12,9 +14,11 @@ export interface TypingResult {
     /** All isolates typed in the combination: its N. */
     numberOfIsolates: number;
     numberOfIsolatesInSubgroup: number;
+    superCategorySampleOrigin?: Relation;
     sampleOrigin?: Relation;
-    matrix?: Relation;
     samplingStage?: Relation;
+    matrixGroup?: Relation;
+    matrix?: Relation;
     typingSubgroup?: Relation;
 }
 
@@ -32,9 +36,11 @@ export async function fetchTypingResults(
         `&filters[microorganism][name][$eq]=${encodeURIComponent(
             microorganism
         )}` +
+        `&populate[superCategorySampleOrigin][fields][0]=name` +
         `&populate[sampleOrigin][fields][0]=name` +
-        `&populate[matrix][fields][0]=name` +
         `&populate[samplingStage][fields][0]=name` +
+        `&populate[matrixGroup][fields][0]=name` +
+        `&populate[matrix][fields][0]=name` +
         `&populate[typingSubgroup][fields][0]=name` +
         `&pagination[pageSize]=8000`;
     const res = await callApiService<{ data?: TypingResult[] }>(url);

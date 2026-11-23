@@ -17,7 +17,7 @@ jest.mock("react-i18next", () => ({
     }),
 }));
 
-// Salmonella, selected by default, loads its typing chart: answer with no rows.
+// Every opened microorganism loads its typing rows: answer with none.
 jest.mock("../../../shared/infrastructure/api/callApi.service", () => ({
     callApiService: jest.fn(async () => ({ status: 200, data: { data: [] } })),
 }));
@@ -92,35 +92,18 @@ describe("MicrobialTypingPage microorganism selection", () => {
         expect(italics(button("Enterococcus spp."))).toEqual(["Enterococcus"]);
     });
 
-    it("selects the first microorganism by default", () => {
+    it("lands on the list with no microorganism open", () => {
         renderPage();
 
-        expect(button("Salmonella spp.")).toHaveAttribute(
-            "aria-current",
-            "true"
+        sidebarButtons().forEach((b) =>
+            expect(b).not.toHaveAttribute("aria-current")
         );
-        expect(button("MRSA")).not.toHaveAttribute("aria-current");
+        expect(
+            screen.queryByRole("region", { name: "SearchOptions" })
+        ).not.toBeInTheDocument();
     });
 
-    it("opens on the microorganism a shared link names", () => {
-        renderPage("?microorganism=STEC&lang=en");
-
-        expect(button("STEC")).toHaveAttribute("aria-current", "true");
-        expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
-            "Title: STEC"
-        );
-    });
-
-    it("falls back to the first microorganism for an unknown value", () => {
-        renderPage("?microorganism=Unknown");
-
-        expect(button("Salmonella spp.")).toHaveAttribute(
-            "aria-current",
-            "true"
-        );
-    });
-
-    it("writes the selection to the URL and keeps the language", () => {
+    it("opens a microorganism's search options and keeps the language", () => {
         const { location } = renderPage("?lang=en");
 
         fireEvent.click(button("Listeria monocytogenes"));
@@ -128,9 +111,57 @@ describe("MicrobialTypingPage microorganism selection", () => {
         const params = new URLSearchParams(location().search);
         expect(params.get("microorganism")).toBe("Listeria monocytogenes");
         expect(params.get("lang")).toBe("en");
-        expect(button("Listeria monocytogenes")).toHaveAttribute(
-            "aria-current",
-            "true"
+        expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
+            "Title: Listeria monocytogenes"
         );
+        const panel = screen.getByRole("region", { name: "SearchOptions" });
+        expect(
+            within(panel)
+                .getAllByRole("combobox")
+                .map((c) => c.getAttribute("aria-labelledby"))
+        ).toEqual([
+            "typing-filter-superCategorySampleOrigin",
+            "typing-filter-sampleOrigin",
+            "typing-filter-samplingStage",
+            "typing-filter-matrixGroup",
+            "typing-filter-matrix",
+        ]);
+        expect(
+            within(panel).getByRole("button", { name: "Search" })
+        ).toBeInTheDocument();
+        expect(
+            within(panel).getByRole("button", { name: "ResetFilters" })
+        ).toBeInTheDocument();
+    });
+
+    it("opens on the microorganism a shared link names", () => {
+        renderPage("?microorganism=STEC&lang=en");
+
+        expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
+            "Title: STEC"
+        );
+        expect(
+            screen.getByRole("region", { name: "SearchOptions" })
+        ).toBeInTheDocument();
+    });
+
+    it("lands on the list for an unknown microorganism", () => {
+        renderPage("?microorganism=Unknown");
+
+        expect(sidebarButtons()).toHaveLength(6);
+        expect(
+            screen.queryByRole("region", { name: "SearchOptions" })
+        ).not.toBeInTheDocument();
+    });
+
+    it("leads back to the list from the breadcrumb, keeping the language", () => {
+        const { location } = renderPage("?microorganism=MRSA&lang=en");
+
+        fireEvent.click(screen.getByRole("button", { name: "Title" }));
+
+        const params = new URLSearchParams(location().search);
+        expect(params.get("microorganism")).toBeNull();
+        expect(params.get("lang")).toBe("en");
+        expect(sidebarButtons()).toHaveLength(6);
     });
 });
