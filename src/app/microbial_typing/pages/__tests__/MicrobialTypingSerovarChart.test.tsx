@@ -331,7 +331,9 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
 
         await screen.findByRole("combobox", { name: "SamplingYear" });
         const url = decodeURIComponent(
-            mockedCallApiService.mock.calls[0][0] as string
+            mockedCallApiService.mock.calls
+                .map(([called]) => called as string)
+                .find((called) => called.includes("/typing-results")) ?? ""
         );
         expect(url).toContain("/typing-results?locale=de");
         expect(url).toContain(
@@ -493,4 +495,49 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
             expect(url).toContain(`filters[title][$eqi]=${title}`);
         }
     );
+
+    it("shows the CMS's typing information below the graph in the UI language", async () => {
+        mockLanguage = "de";
+        mockedCallApiService.mockImplementation(async (url: string) => {
+            if (url.includes("/typing-information")) {
+                return {
+                    status: 200,
+                    data: {
+                        data: {
+                            title: "Zu dieser Grafik",
+                            description: "Serovare sind **gruppiert**.",
+                        },
+                    },
+                };
+            }
+            if (url.includes("/typing-results")) {
+                return { status: 200, data: { data: SALMONELLA_ROWS } };
+            }
+            return { status: 404 };
+        });
+        renderPage();
+
+        const box = await screen.findByTestId("typing-information");
+        expect(within(box).getByText("Zu dieser Grafik")).toBeInTheDocument();
+        expect(within(box).getByText("gruppiert").tagName).toBe("STRONG");
+        const chart = document.querySelector(".recharts-wrapper");
+        expect(
+            chart?.compareDocumentPosition(box) &
+                Node.DOCUMENT_POSITION_FOLLOWING
+        ).toBeTruthy();
+        const infoUrl = mockedCallApiService.mock.calls
+            .map(([url]) => url)
+            .find((url) => url.includes("/typing-information"));
+        expect(infoUrl).toContain("locale=de");
+    });
+
+    it("shows no information box while the CMS has none", async () => {
+        serve(SALMONELLA_ROWS);
+        renderPage();
+
+        await screen.findByRole("combobox", { name: "SamplingYear" });
+        expect(
+            screen.queryByTestId("typing-information")
+        ).not.toBeInTheDocument();
+    });
 });
