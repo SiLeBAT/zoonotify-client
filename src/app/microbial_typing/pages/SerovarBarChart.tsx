@@ -32,6 +32,9 @@ const OTHER_COLOR = "#9e0142";
 
 const BAR_HEIGHT = 44;
 
+/** Space between the bars and the legend, in px (#1951). */
+const LEGEND_GAP = 24;
+
 /** Recharts reads a dataKey as a path, so a serovar's "." would break it. */
 function segmentKey(index: number): string {
     return `s${index}`;
@@ -117,6 +120,9 @@ export function SerovarBarChart({ chart }: { chart: Chart }): JSX.Element {
                     layout="vertical"
                     verticalAlign="middle"
                     align="right"
+                    // Recharts measures the legend with its padding and
+                    // narrows the plot to fit, so this is the gap to the bars.
+                    wrapperStyle={{ paddingLeft: LEGEND_GAP }}
                 />
                 {chart.serovars.map((serovar, index) => {
                     const other = serovar === OTHER_SEROVARS;
