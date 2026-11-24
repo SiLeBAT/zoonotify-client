@@ -186,9 +186,12 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
             "Broilers, Fresh meat, Retail (N=26)",
             "Calves, Caecal content, Slaughterhouse (N=5, data_not_plotted)",
         ]);
-        combinations.forEach((o) =>
-            expect(within(o).getByRole("checkbox")).toBeChecked()
-        );
+        const [layingHens, broilers, calves] = combinations;
+        expect(within(layingHens).getByRole("checkbox")).toBeChecked();
+        expect(within(broilers).getByRole("checkbox")).toBeChecked();
+        // under the minimum N: listed for information, but not pickable
+        expect(calves).toHaveAttribute("aria-disabled", "true");
+        expect(within(calves).queryByRole("checkbox")).not.toBeInTheDocument();
 
         fireEvent.click(combinations[0]);
 
@@ -210,7 +213,6 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
         const params = new URLSearchParams(location().search);
         expect(params.getAll("combination")).toEqual([
             "o-Broilers|m-Fresh meat|st-Retail",
-            "o-Calves|m-Caecal content|st-Slaughterhouse",
         ]);
         expect(params.get("lang")).toBe("en");
     });
