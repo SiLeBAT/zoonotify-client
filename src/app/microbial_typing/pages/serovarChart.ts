@@ -9,13 +9,18 @@ export const TOP_SEROVARS = 10;
 /** Key of the lumped serovars; the chart translates it for display. */
 export const OTHER_SEROVARS = "__other__";
 
-/** One bar: a combination of sample origin, matrix and sampling stage. */
-export interface SerovarBar {
+/** A combination of sample origin, matrix and sampling stage. */
+export interface SerovarCombination {
+    /** Built from the relations' documentIds, so it is the same in both locales. */
     key: string;
     sampleOrigin: string;
     matrix: string;
     samplingStage: string;
     n: number;
+}
+
+/** One bar: a plotted combination. */
+export interface SerovarBar extends SerovarCombination {
     /** Percentage of the combination's isolates, by serovar. */
     shares: Record<string, number>;
 }
@@ -24,6 +29,8 @@ export interface SerovarChart {
     /** Legend order: most isolates first, other serovars last. */
     serovars: string[];
     bars: SerovarBar[];
+    /** The year's combinations under MIN_ISOLATES: listed, not plotted. */
+    belowMinimum: SerovarCombination[];
 }
 
 /**
@@ -35,9 +42,9 @@ export function buildSerovarChart(
     rows: TypingResult[],
     year: number
 ): SerovarChart {
-    const plotted = rows.filter(
-        (row) =>
-            row.samplingYear === year && row.numberOfIsolates >= MIN_ISOLATES
+    const ofYear = rows.filter((row) => row.samplingYear === year);
+    const plotted = ofYear.filter(
+        (row) => row.numberOfIsolates >= MIN_ISOLATES
     );
 
     const weights = new Map<string, number>();
@@ -59,21 +66,11 @@ export function buildSerovarChart(
 
     const bars = new Map<string, SerovarBar>();
     for (const row of plotted) {
-        const sampleOrigin = row.sampleOrigin?.name ?? "";
-        const matrix = row.matrix?.name ?? "";
-        const samplingStage = row.samplingStage?.name ?? "";
-        const key = [sampleOrigin, matrix, samplingStage].join("|");
-        let bar = bars.get(key);
+        const combination = combinationOf(row);
+        let bar = bars.get(combination.key);
         if (!bar) {
-            bar = {
-                key,
-                sampleOrigin,
-                matrix,
-                samplingStage,
-                n: row.numberOfIsolates,
-                shares: {},
-            };
-            bars.set(key, bar);
+            bar = { ...combination, shares: {} };
+            bars.set(combination.key, bar);
         }
         const serovar = serovarOf(row);
         const segment = kept.has(serovar) ? serovar : OTHER_SEROVARS;
@@ -82,7 +79,30 @@ export function buildSerovarChart(
             (100 * row.numberOfIsolatesInSubgroup) / row.numberOfIsolates;
     }
 
-    return { serovars, bars: Array.from(bars.values()) };
+    const belowMinimum = new Map<string, SerovarCombination>();
+    for (const row of ofYear) {
+        if (row.numberOfIsolates >= MIN_ISOLATES) continue;
+        const combination = combinationOf(row);
+        belowMinimum.set(combination.key, combination);
+    }
+
+    return {
+        serovars,
+        bars: Array.from(bars.values()),
+        belowMinimum: Array.from(belowMinimum.values()),
+    };
+}
+
+function combinationOf(row: TypingResult): SerovarCombination {
+    return {
+        key: [row.sampleOrigin, row.matrix, row.samplingStage]
+            .map((relation) => relation?.documentId ?? "")
+            .join("|"),
+        sampleOrigin: row.sampleOrigin?.name ?? "",
+        matrix: row.matrix?.name ?? "",
+        samplingStage: row.samplingStage?.name ?? "",
+        n: row.numberOfIsolates,
+    };
 }
 
 function serovarOf(row: TypingResult): string {

@@ -8,7 +8,17 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Checkbox,
+    FormControl,
+    IconButton,
+    InputLabel,
+    ListItemText,
+    MenuItem,
+    Select,
+    Stack,
+    Tooltip,
 } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import Markdown from "markdown-to-jsx";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { INFORMATION } from "../../shared/infrastructure/router/routes";
@@ -21,7 +31,7 @@ import {
     TypingOrganism,
 } from "./typingOrganisms";
 import { fetchTypingResults, samplingYears, TypingResult } from "./typingData";
-import { buildSerovarChart } from "./serovarChart";
+import { buildSerovarChart, SerovarCombination } from "./serovarChart";
 import { SerovarBarChart } from "./SerovarBarChart";
 import { TypingSearchOptions } from "./TypingSearchOptions";
 import {
@@ -129,30 +139,47 @@ function OrganismName({ organism }: { organism: TypingOrganism }): JSX.Element {
 /** The only organism with a typing chart so far (#1935). */
 const SEROVAR_ORGANISM = "Salmonella spp.";
 const YEAR_PARAM = "year";
+/**
+ * Repeated once per ticked combination; absent means every combination, and
+ * a single empty value means none ("Deselect all").
+ */
+const COMBINATION_PARAM = "combination";
 
-const YearLabel = styled("label")`
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    font-weight: bold;
-`;
+/** As on the chart's axis, without the N. */
+function combinationName(combination: SerovarCombination): string {
+    return `${combination.sampleOrigin}, ${combination.matrix}, ${combination.samplingStage}`;
+}
 
-const YearSelect = styled("select")`
-    padding: 0.4rem 0.6rem;
-    border: 1px solid ${primaryColor};
-    border-radius: 4px;
-    background: #fff;
-    color: ${primaryColor};
-    font-family: inherit;
-    font-size: 1rem;
+function InfoButton({
+    label,
+    onClick,
+}: {
+    label: string;
+    onClick: () => void;
+}): JSX.Element {
+    return (
+        <Tooltip title={label}>
+            <IconButton size="small" aria-label={label} onClick={onClick}>
+                <InfoIcon />
+            </IconButton>
+        </Tooltip>
+    );
+}
+
+/** The picker's first entry, which ticks or unticks every combination. */
+const SELECT_ALL = "__all__";
+
+const NotPlotted = styled("span")`
+    color: #888;
 `;
 
 /** Salmonella serovars per combination, as 100 % stacked bars. */
 function SerovarSection({
     rows,
+    onInfo,
 }: {
     rows: TypingResult[];
+    onInfo: (labelKey: string) => void;
 }): JSX.Element | null {
     const { t } = useTranslation(["MicrobialTyping"]);
     const location = useLocation();
@@ -168,33 +195,159 @@ function SerovarSection({
     const year = years.includes(requested) ? requested : years[0];
 
     const chart = buildSerovarChart(rows, year);
+    // picker order: plotted combinations, then those under the minimum N
+    const entries: SerovarCombination[] = [
+        ...chart.bars,
+        ...chart.belowMinimum,
+    ];
+    const allKeys = entries.map((entry) => entry.key);
+    // Like the year, the ticked combinations live in the URL; a pick that
+    // matches none of the year's combinations falls back to all of them.
+    const requestedKeys = new URLSearchParams(location.search).getAll(
+        COMBINATION_PARAM
+    );
+    const picked = requestedKeys.filter((key) => allKeys.includes(key));
+    const noneRequested =
+        requestedKeys.length > 0 && requestedKeys.every((key) => key === "");
+    const shownKeys = noneRequested ? [] : picked.length > 0 ? picked : allKeys;
+    const allShown = shownKeys.length === allKeys.length;
+    const shownChart = {
+        ...chart,
+        bars: chart.bars.filter((bar) => shownKeys.includes(bar.key)),
+    };
 
     const handleYear = (value: string): void => {
         const params = new URLSearchParams(location.search);
         params.set(YEAR_PARAM, value);
+        params.delete(COMBINATION_PARAM);
+        history.replace({ search: `?${params.toString()}` });
+    };
+
+    const handleCombinations = (keys: string[]): void => {
+        const params = new URLSearchParams(location.search);
+        params.delete(COMBINATION_PARAM);
+        if (keys.length === 0) {
+            params.append(COMBINATION_PARAM, "");
+        } else if (keys.length < allKeys.length) {
+            keys.forEach((key) => params.append(COMBINATION_PARAM, key));
+        }
         history.replace({ search: `?${params.toString()}` });
     };
 
     return (
         <>
-            <YearLabel>
-                {t("SamplingYear")}
-                <YearSelect
-                    value={year}
-                    onChange={(event) => handleYear(event.target.value)}
-                >
-                    {years.map((y) => (
-                        <option key={y} value={y}>
-                            {y}
-                        </option>
-                    ))}
-                </YearSelect>
-            </YearLabel>
+            <Stack direction="row" spacing={1} alignItems="center" mb={3}>
+                <FormControl sx={{ minWidth: 180 }}>
+                    <InputLabel id="typing-sampling-year">
+                        {t("SamplingYear")}
+                    </InputLabel>
+                    <Select
+                        labelId="typing-sampling-year"
+                        value={year}
+                        label={t("SamplingYear")}
+                        onChange={(event) =>
+                            handleYear(String(event.target.value))
+                        }
+                    >
+                        {years.map((y) => (
+                            <MenuItem key={y} value={y}>
+                                {y}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <InfoButton
+                    label={t("More Info on Sampling Year")}
+                    onClick={() => onInfo("SamplingYear")}
+                />
+            </Stack>
+            <Stack direction="row" spacing={1} alignItems="center" mb={3}>
+                <FormControl sx={{ width: 520, maxWidth: "100%" }}>
+                    <InputLabel id="typing-combinations">
+                        {t("Combinations")}
+                    </InputLabel>
+                    <Select
+                        labelId="typing-combinations"
+                        multiple
+                        value={shownKeys}
+                        label={t("Combinations")}
+                        onChange={(event) => {
+                            const value = event.target.value;
+                            const keys =
+                                typeof value === "string"
+                                    ? value.split(",")
+                                    : value;
+                            if (keys.includes(SELECT_ALL)) {
+                                handleCombinations(allShown ? [] : allKeys);
+                                return;
+                            }
+                            handleCombinations(keys);
+                        }}
+                        renderValue={(keys) =>
+                            entries
+                                .filter((entry) => keys.includes(entry.key))
+                                .map(combinationName)
+                                .join(", ")
+                        }
+                        MenuProps={{
+                            PaperProps: { style: { maxHeight: 400 } },
+                        }}
+                    >
+                        <MenuItem value={SELECT_ALL}>
+                            <Checkbox
+                                checked={allShown}
+                                indeterminate={
+                                    shownKeys.length > 0 && !allShown
+                                }
+                            />
+                            <ListItemText
+                                primary={
+                                    allShown
+                                        ? t("DESELECT_ALL")
+                                        : t("SELECT_ALL")
+                                }
+                            />
+                        </MenuItem>
+                        {entries.map((entry) => {
+                            const plotted = chart.bars.some(
+                                (bar) => bar.key === entry.key
+                            );
+                            return (
+                                <MenuItem key={entry.key} value={entry.key}>
+                                    <Checkbox
+                                        checked={shownKeys.includes(entry.key)}
+                                    />
+                                    <ListItemText
+                                        primary={
+                                            <>
+                                                {combinationName(entry)}
+                                                <NotPlotted>
+                                                    {plotted
+                                                        ? ` (N=${entry.n})`
+                                                        : ` (N=${entry.n}, ${t(
+                                                              "data_not_plotted"
+                                                          )})`}
+                                                </NotPlotted>
+                                            </>
+                                        }
+                                    />
+                                </MenuItem>
+                            );
+                        })}
+                    </Select>
+                </FormControl>
+                <InfoButton
+                    label={t("More Info on Combinations")}
+                    onClick={() => onInfo("Combinations")}
+                />
+            </Stack>
             {/* Remount per year and search: Recharts would keep the old
                 bars' ticks and tooltip. */}
             <SerovarBarChart
-                key={`${year}|${chart.bars.map((bar) => bar.key).join("/")}`}
-                chart={chart}
+                key={`${year}|${shownChart.bars
+                    .map((bar) => bar.key)
+                    .join("/")}`}
+                chart={shownChart}
             />
         </>
     );
@@ -276,6 +429,8 @@ function TypingDetail({
     const applySelection = (next: TypingSelection): void => {
         const params = new URLSearchParams(location.search);
         writeTypingSelection(params, next);
+        // a new search starts again from every combination
+        params.delete(COMBINATION_PARAM);
         history.replace({ search: `?${params.toString()}` });
     };
 
@@ -331,6 +486,9 @@ function TypingDetail({
                             (organism.id === SEROVAR_ORGANISM ? (
                                 <SerovarSection
                                     rows={filterTypingRows(rows, applied)}
+                                    onInfo={(labelKey) =>
+                                        void showInfo(labelKey)
+                                    }
                                 />
                             ) : (
                                 <p>{t("NoChartYet")}</p>

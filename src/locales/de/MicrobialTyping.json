@@ -21,5 +21,11 @@
   "More Info on Sample Origins": "Mehr Informationen zu Probenursprung",
   "More Info on Sampling Stages": "Mehr Informationen zu Probenahmestelle",
   "More Info on Matrix Groups": "Mehr Informationen zu Matrixgruppe",
-  "More Info on Matrices": "Mehr Informationen zu Matrix"
+  "More Info on Matrices": "Mehr Informationen zu Matrix",
+  "Combinations": "Kombinationen",
+  "More Info on Sampling Year": "Mehr Informationen zu Probenahmejahr",
+  "More Info on Combinations": "Mehr Informationen zu Kombinationen",
+  "data_not_plotted": "keine grafische Darstellung",
+  "SELECT_ALL": "Alle auswählen",
+  "DESELECT_ALL": "Alle abwählen"
 }

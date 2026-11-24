@@ -21,5 +21,11 @@
   "More Info on Sample Origins": "More Information on Sample Origin",
   "More Info on Sampling Stages": "More Information on Sampling Stage",
   "More Info on Matrix Groups": "More Information on Matrix Group",
-  "More Info on Matrices": "More Information on Matrix"
+  "More Info on Matrices": "More Information on Matrix",
+  "Combinations": "Combinations",
+  "More Info on Sampling Year": "More Information on Sampling Year",
+  "More Info on Combinations": "More Information on Combinations",
+  "data_not_plotted": "data is not plotted",
+  "SELECT_ALL": "Select All",
+  "DESELECT_ALL": "Deselect All"
 }

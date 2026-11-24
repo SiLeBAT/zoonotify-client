@@ -14,9 +14,9 @@ function row(
         samplingYear,
         numberOfIsolates: n,
         numberOfIsolatesInSubgroup: isolates,
-        sampleOrigin: { name: origin },
-        matrix: { name: matrix },
-        samplingStage: { name: stage },
+        sampleOrigin: { name: origin, documentId: `o-${origin}` },
+        matrix: { name: matrix, documentId: `m-${matrix}` },
+        samplingStage: { name: stage, documentId: `st-${stage}` },
         typingSubgroup: { name: serovar },
     };
 }
@@ -96,6 +96,42 @@ describe("buildSerovarChart", () => {
 
         expect(chart.bars.map((b) => b.samplingStage)).toEqual(["Retail"]);
         expect(chart.serovars).toEqual(["S. Infantis"]);
+    });
+
+    it("lists the combinations under the minimum apart, for the picker", () => {
+        const chart = buildSerovarChart(
+            [
+                row("Broilers", "Fresh meat", "Retail", 10, "S. Infantis", 10),
+                row(
+                    "Broilers",
+                    "Fresh meat",
+                    "Border control posts",
+                    9,
+                    "S. Indiana",
+                    6
+                ),
+                row(
+                    "Broilers",
+                    "Fresh meat",
+                    "Border control posts",
+                    9,
+                    "S. Kentucky",
+                    3
+                ),
+            ],
+            2022
+        );
+
+        expect(chart.belowMinimum).toEqual([
+            {
+                key: "o-Broilers|m-Fresh meat|st-Border control posts",
+                sampleOrigin: "Broilers",
+                matrix: "Fresh meat",
+                samplingStage: "Border control posts",
+                n: 9,
+            },
+        ]);
+        expect(chart.bars[0].key).toBe("o-Broilers|m-Fresh meat|st-Retail");
     });
 
     it("keeps the ten most frequent serovars and lumps the rest into other serovars", () => {
