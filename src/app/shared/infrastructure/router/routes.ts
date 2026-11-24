@@ -88,6 +88,7 @@ export const SPECIES = `${CMS_API_ENDPOINT}/species`;
 export const TREND_INFORMATION = `${CMS_API_ENDPOINT}/trend-information`;
 export const SUBSTANCE_INFORMATION = `${CMS_API_ENDPOINT}/substance-information`;
 export const MULTI_RESISTANCE_INFORMATION = `${CMS_API_ENDPOINT}/multi-resistance-information`;
+export const TYPING_INFORMATION = `${CMS_API_ENDPOINT}/typing-information`;
 export const AMR_PAGE = `${CMS_API_ENDPOINT}/amr-page`;
 export const MICROBIAL_COUNTS = `${CMS_API_ENDPOINT}/microbial-counts`;
 export const ANTIMICROBIAL_SUBSTANCES = `${CMS_API_ENDPOINT}/antimicrobial-substances`;

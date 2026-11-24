@@ -17,11 +17,15 @@ import {
     Select,
     Stack,
     Tooltip,
+    Typography,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Markdown from "markdown-to-jsx";
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
-import { INFORMATION } from "../../shared/infrastructure/router/routes";
+import {
+    INFORMATION,
+    TYPING_INFORMATION,
+} from "../../shared/infrastructure/router/routes";
 import { PageLayoutComponent } from "../../shared/components/layout/PageLayoutComponent";
 import { MainWithSideLayout } from "../../shared/components/layout/MainWithSideLayoutComponent";
 import { primaryColor } from "../../shared/style/Style-MainTheme";
@@ -370,6 +374,18 @@ const DetailContent = styled(Content)`
     text-align: left;
 `;
 
+// The explanation box below the graph, styled as on the AMR pages.
+const InfoBlock = styled("section")`
+    margin: 24px 0;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: #f6f7fa;
+`;
+
+const InfoTitle = styled(Typography)`
+    color: #003663;
+`;
+
 const Breadcrumb = styled("nav")`
     margin-bottom: 1rem;
     font-size: 1.1rem;
@@ -416,6 +432,10 @@ function TypingDetail({
     const [info, setInfo] = useState<{ title: string; content: string } | null>(
         null
     );
+    const [typingInfo, setTypingInfo] = useState<{
+        title: string;
+        description: string;
+    } | null>(null);
 
     // The info icons explain a filter with the CMS `information` entry titled
     // like the filter's label, as on the AMR trend page.
@@ -442,6 +462,36 @@ function TypingDetail({
         params.delete(COMBINATION_PARAM);
         history.replace({ search: `?${params.toString()}` });
     };
+
+    // The explanation below the graph, edited in the CMS as on the AMR pages.
+    useEffect(() => {
+        let cancelled = false;
+        const load = async (): Promise<void> => {
+            try {
+                const res = await callApiService<{
+                    data?: { title?: string; description?: string };
+                }>(`${TYPING_INFORMATION}?locale=${locale}`);
+                const data = res.data?.data;
+                if (cancelled) return;
+                // an unpublished single type has nothing to show
+                setTypingInfo(
+                    data?.title || data?.description
+                        ? {
+                              title: data.title ?? "",
+                              description: data.description ?? "",
+                          }
+                        : null
+                );
+            } catch (err) {
+                console.error("Failed to fetch typing information", err);
+                if (!cancelled) setTypingInfo(null);
+            }
+        };
+        void load();
+        return () => {
+            cancelled = true;
+        };
+    }, [locale]);
 
     useEffect(() => {
         let cancelled = false;
@@ -493,12 +543,29 @@ function TypingDetail({
                         {failed && <p role="alert">{t("LoadError")}</p>}
                         {rows &&
                             (organism.id === SEROVAR_ORGANISM ? (
-                                <SerovarSection
-                                    rows={filterTypingRows(rows, applied)}
-                                    onInfo={(labelKey) =>
-                                        void showInfo(labelKey)
-                                    }
-                                />
+                                <>
+                                    <SerovarSection
+                                        rows={filterTypingRows(rows, applied)}
+                                        onInfo={(labelKey) =>
+                                            void showInfo(labelKey)
+                                        }
+                                    />
+                                    {typingInfo && (
+                                        <InfoBlock data-testid="typing-information">
+                                            <InfoTitle
+                                                variant="h6"
+                                                gutterBottom
+                                            >
+                                                {typingInfo.title}
+                                            </InfoTitle>
+                                            <Markdown
+                                                options={{ forceBlock: true }}
+                                            >
+                                                {typingInfo.description}
+                                            </Markdown>
+                                        </InfoBlock>
+                                    )}
+                                </>
                             ) : (
                                 <p>{t("NoChartYet")}</p>
                             ))}
