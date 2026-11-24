@@ -77,6 +77,8 @@ const SALMONELLA_ROWS: TypingResult[] = [
     row(2022, "Laying hens", "Faeces/dust", "Farm", 58, "S. Enteritidis", 40),
     row(2022, "Laying hens", "Faeces/dust", "Farm", 58, "S. Typhimurium", 18),
     row(2022, "Broilers", "Fresh meat", "Retail", 26, "S. Infantis", 26),
+    // under the minimum N: listed in the Combinations picker, not plotted
+    row(2022, "Calves", "Caecal content", "Slaughterhouse", 5, "S. Dublin", 5),
 ];
 
 /** Stands in for the CMS: answers typing-results requests with the rows. */
@@ -147,14 +149,16 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
         const year = await screen.findByRole("combobox", {
             name: "SamplingYear",
         });
+        expect(year).toHaveTextContent("2022");
+        fireEvent.mouseDown(year);
+        const listbox = screen.getByRole("listbox");
         expect(
-            within(year)
+            within(listbox)
                 .getAllByRole("option")
                 .map((o) => o.textContent)
         ).toEqual(["2022", "2021"]);
-        expect(year).toHaveValue("2022");
 
-        fireEvent.change(year, { target: { value: "2021" } });
+        fireEvent.click(within(listbox).getByRole("option", { name: "2021" }));
 
         expect(
             await screen.findByText(
@@ -165,6 +169,128 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
         const params = new URLSearchParams(location().search);
         expect(params.get("year")).toBe("2021");
         expect(params.get("lang")).toBe("en");
+    });
+
+    it("lists the year's combinations above the graph and plots only the ticked ones", async () => {
+        serve(SALMONELLA_ROWS);
+        renderPage();
+        await screen.findByText("Laying hens, Faeces/dust, Farm, N = 58");
+
+        fireEvent.mouseDown(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        const listbox = screen.getByRole("listbox");
+        const combinations = within(listbox).getAllByRole("option").slice(1); // after Select all
+        expect(combinations.map((o) => o.textContent)).toEqual([
+            "Laying hens, Faeces/dust, Farm (N=58)",
+            "Broilers, Fresh meat, Retail (N=26)",
+            "Calves, Caecal content, Slaughterhouse (N=5, data_not_plotted)",
+        ]);
+        combinations.forEach((o) =>
+            expect(within(o).getByRole("checkbox")).toBeChecked()
+        );
+
+        fireEvent.click(combinations[0]);
+
+        expect(
+            screen.queryByText("Laying hens, Faeces/dust, Farm, N = 58")
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByText("Broilers, Fresh meat, Retail, N = 26")
+        ).toBeInTheDocument();
+    });
+
+    it("keeps the ticked combinations in the URL by documentId", async () => {
+        serve(SALMONELLA_ROWS);
+        const { location } = renderPage("&lang=en");
+        await screen.findByText("Laying hens, Faeces/dust, Farm, N = 58");
+
+        pick(/^Combinations/, "Laying hens, Faeces/dust, Farm (N=58)");
+
+        const params = new URLSearchParams(location().search);
+        expect(params.getAll("combination")).toEqual([
+            "o-Broilers|m-Fresh meat|st-Retail",
+            "o-Calves|m-Caecal content|st-Slaughterhouse",
+        ]);
+        expect(params.get("lang")).toBe("en");
+    });
+
+    it("opens on the combinations a shared link names", async () => {
+        serve(SALMONELLA_ROWS);
+
+        renderPage(
+            "&combination=" +
+                encodeURIComponent("o-Broilers|m-Fresh meat|st-Retail")
+        );
+
+        expect(
+            await screen.findByText("Broilers, Fresh meat, Retail, N = 26")
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText("Laying hens, Faeces/dust, Farm, N = 58")
+        ).not.toBeInTheDocument();
+    });
+
+    it("deselects and reselects every combination at once", async () => {
+        serve(SALMONELLA_ROWS);
+        const { location } = renderPage();
+        await screen.findByText("Laying hens, Faeces/dust, Farm, N = 58");
+
+        fireEvent.mouseDown(
+            screen.getByRole("combobox", { name: "Combinations" })
+        );
+        fireEvent.click(screen.getByRole("option", { name: "DESELECT_ALL" }));
+
+        expect(screen.queryByText(/, N = \d+$/)).not.toBeInTheDocument();
+        expect(new URLSearchParams(location().search).get("combination")).toBe(
+            ""
+        );
+
+        fireEvent.click(screen.getByRole("option", { name: "SELECT_ALL" }));
+
+        expect(
+            screen.getByText("Laying hens, Faeces/dust, Farm, N = 58")
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText("Broilers, Fresh meat, Retail, N = 26")
+        ).toBeInTheDocument();
+    });
+
+    it("opens on no combination when a shared link deselected them all", async () => {
+        serve(SALMONELLA_ROWS);
+
+        renderPage("&combination=");
+
+        await screen.findByRole("combobox", { name: "Combinations" });
+        expect(screen.queryByText(/, N = \d+$/)).not.toBeInTheDocument();
+    });
+
+    it("starts again from every combination on a new year or Search", async () => {
+        serve(SALMONELLA_ROWS);
+        const BROILERS = encodeURIComponent(
+            "o-Broilers|m-Fresh meat|st-Retail"
+        );
+        const { location } = renderPage(`&combination=${BROILERS}`);
+        await screen.findByText("Broilers, Fresh meat, Retail, N = 26");
+
+        fireEvent.click(screen.getByRole("button", { name: "Search" }));
+
+        expect(
+            await screen.findByText("Laying hens, Faeces/dust, Farm, N = 58")
+        ).toBeInTheDocument();
+        expect(
+            new URLSearchParams(location().search).get("combination")
+        ).toBeNull();
+
+        pick(/^Combinations/, "Laying hens, Faeces/dust, Farm (N=58)");
+        fireEvent.mouseDown(
+            screen.getByRole("combobox", { name: "SamplingYear" })
+        );
+        fireEvent.click(screen.getByRole("option", { name: "2021" }));
+
+        expect(
+            new URLSearchParams(location().search).get("combination")
+        ).toBeNull();
     });
 
     it("says so when the typing data cannot be loaded", async () => {
@@ -333,4 +459,36 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
         expect(url).toContain("filters[title][$eqi]=SAMPLE_ORIGIN");
         expect(url).toContain("locale=en");
     });
+
+    it.each([
+        ["More Info on Sampling Year", "SamplingYear"],
+        ["More Info on Combinations", "Combinations"],
+    ])(
+        "explains the graph filter behind %s from the CMS",
+        async (button, title) => {
+            mockedCallApiService.mockImplementation(async (url: string) => {
+                if (url.includes("/informations")) {
+                    return {
+                        status: 200,
+                        data: { data: [{ title, content: "Explained." }] },
+                    };
+                }
+                return { status: 200, data: { data: SALMONELLA_ROWS } };
+            });
+            renderPage();
+            await screen.findByText("Laying hens, Faeces/dust, Farm, N = 58");
+
+            fireEvent.click(screen.getByRole("button", { name: button }));
+
+            expect(await screen.findByRole("dialog")).toHaveTextContent(
+                "Explained."
+            );
+            const url = decodeURIComponent(
+                mockedCallApiService.mock.calls
+                    .map(([u]) => u as string)
+                    .find((u) => u.includes("/informations")) ?? ""
+            );
+            expect(url).toContain(`filters[title][$eqi]=${title}`);
+        }
+    );
 });
