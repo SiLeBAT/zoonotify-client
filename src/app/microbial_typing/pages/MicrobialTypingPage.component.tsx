@@ -169,7 +169,8 @@ function InfoButton({
 /** The picker's first entry, which ticks or unticks every combination. */
 const SELECT_ALL = "__all__";
 
-const NotPlotted = styled("span")`
+/** The N after a combination's name. */
+const Muted = styled("span")`
     color: #888;
 `;
 
@@ -200,7 +201,9 @@ function SerovarSection({
         ...chart.bars,
         ...chart.belowMinimum,
     ];
-    const allKeys = entries.map((entry) => entry.key);
+    // Only plotted combinations can be picked; those under the minimum N are
+    // listed for information, as ticking them could never add a bar.
+    const allKeys = chart.bars.map((bar) => bar.key);
     // Like the year, the ticked combinations live in the URL; a pick that
     // matches none of the year's combinations falls back to all of them.
     const requestedKeys = new URLSearchParams(location.search).getAll(
@@ -309,25 +312,31 @@ function SerovarSection({
                             />
                         </MenuItem>
                         {entries.map((entry) => {
-                            const plotted = chart.bars.some(
-                                (bar) => bar.key === entry.key
-                            );
+                            const plotted = allKeys.includes(entry.key);
                             return (
-                                <MenuItem key={entry.key} value={entry.key}>
-                                    <Checkbox
-                                        checked={shownKeys.includes(entry.key)}
-                                    />
+                                <MenuItem
+                                    key={entry.key}
+                                    value={entry.key}
+                                    disabled={!plotted}
+                                >
+                                    {plotted && (
+                                        <Checkbox
+                                            checked={shownKeys.includes(
+                                                entry.key
+                                            )}
+                                        />
+                                    )}
                                     <ListItemText
                                         primary={
                                             <>
                                                 {combinationName(entry)}
-                                                <NotPlotted>
+                                                <Muted>
                                                     {plotted
                                                         ? ` (N=${entry.n})`
                                                         : ` (N=${entry.n}, ${t(
                                                               "data_not_plotted"
                                                           )})`}
-                                                </NotPlotted>
+                                                </Muted>
                                             </>
                                         }
                                     />
