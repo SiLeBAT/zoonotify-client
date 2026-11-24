@@ -37,6 +37,42 @@ function segmentKey(index: number): string {
     return `s${index}`;
 }
 
+/**
+ * The x-axis title. Its translation marks the genus as `<i>…</i>`, which a
+ * plain Recharts label would print literally, so draw the italics as tspans.
+ */
+function AxisLabel({
+    text,
+    viewBox,
+}: {
+    text: string;
+    /** Set by Recharts: the axis's box. */
+    viewBox?: { x: number; y: number; width: number; height: number };
+}): JSX.Element | null {
+    if (!viewBox) return null;
+    // split on <i>…</i>: odd-indexed parts are the italic ones
+    const parts = text.split(/<i>(.*?)<\/i>/);
+    return (
+        <text
+            x={viewBox.x + viewBox.width / 2}
+            y={viewBox.y + viewBox.height + 10}
+            textAnchor="middle"
+            dominantBaseline="hanging"
+            fill="#666"
+        >
+            {parts.map((part, index) =>
+                index % 2 === 1 ? (
+                    <tspan key={index} fontStyle="italic">
+                        {part}
+                    </tspan>
+                ) : (
+                    part
+                )
+            )}
+        </text>
+    );
+}
+
 export function SerovarBarChart({ chart }: { chart: Chart }): JSX.Element {
     const { t } = useTranslation(["MicrobialTyping"]);
 
@@ -66,11 +102,7 @@ export function SerovarBarChart({ chart }: { chart: Chart }): JSX.Element {
                     type="number"
                     domain={[0, 100]}
                     ticks={[0, 20, 40, 60, 80, 100]}
-                    label={{
-                        value: t("SerovarShareAxis"),
-                        position: "bottom",
-                        offset: 10,
-                    }}
+                    label={<AxisLabel text={t("SerovarShareAxis")} />}
                 />
                 <YAxis
                     dataKey="label"
