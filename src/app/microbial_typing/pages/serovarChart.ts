@@ -9,6 +9,15 @@ export const TOP_SEROVARS = 10;
 /** Key of the lumped serovars; the chart translates it for display. */
 export const OTHER_SEROVARS = "__other__";
 
+/**
+ * Organisms whose subgroups follow a fixed order rather than their isolate
+ * count: the Listeria serogroups as in the BfR report's figure (#1955).
+ * Subgroups not listed follow, by count.
+ */
+const SUBGROUP_ORDER: Record<string, string[]> = {
+    "Listeria monocytogenes": ["IIa", "IIb", "IIc", "IVa", "IVb"],
+};
+
 /** A combination of sample origin, matrix and sampling stage. */
 export interface SerovarCombination {
     /** Built from the relations' documentIds, so it is the same in both locales. */
@@ -40,7 +49,9 @@ export interface SerovarChart {
  */
 export function buildSerovarChart(
     rows: TypingResult[],
-    year: number
+    year: number,
+    /** The typing organism's id; picks its subgroup order, if it has one. */
+    organism?: string
 ): SerovarChart {
     const ofYear = rows.filter((row) => row.samplingYear === year);
     const plotted = ofYear.filter(
@@ -59,10 +70,15 @@ export function buildSerovarChart(
         (a, b) => (weights.get(b) ?? 0) - (weights.get(a) ?? 0)
     );
     const kept = new Set(ranked.slice(0, TOP_SEROVARS));
+    const order = (organism && SUBGROUP_ORDER[organism]) || [];
+    // listed subgroups first, in their order; the rest keep their rank
+    const position = (serovar: string): number =>
+        order.includes(serovar) ? order.indexOf(serovar) : order.length;
+    const top = ranked
+        .slice(0, TOP_SEROVARS)
+        .sort((a, b) => position(a) - position(b));
     const serovars =
-        ranked.length > TOP_SEROVARS
-            ? [...ranked.slice(0, TOP_SEROVARS), OTHER_SEROVARS]
-            : ranked;
+        ranked.length > TOP_SEROVARS ? [...top, OTHER_SEROVARS] : top;
 
     const bars = new Map<string, SerovarBar>();
     for (const row of plotted) {

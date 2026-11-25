@@ -4,6 +4,7 @@
   "SamplingYear": "Probenahmejahr",
   "SerovarShareAxis": "Anteil <i>Salmonella</i> spp. Isolate (%)",
   "CampylobacterShareAxis": "Anteil <i>Campylobacter</i> spp. Isolate (%)",
+  "ListeriaShareAxis": "Anteil <i>Listeria monocytogenes</i> Isolate (%)",
   "OtherSerovars": "andere Salmonellen-Serovare",
   "LoadError": "Die Typisierungsdaten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
   "Breadcrumb": "Navigationspfad",

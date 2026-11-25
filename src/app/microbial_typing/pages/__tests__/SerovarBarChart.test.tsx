@@ -184,8 +184,64 @@ describe("SerovarBarChart Campylobacter species (#1954)", () => {
     });
 });
 
+describe("SerovarBarChart Listeria serogroups (#1955)", () => {
+    const serogroups = ["IIa", "IIb", "IIc", "IVa", "IVb", "IVc"];
+    const SEROGROUP_CHART: SerovarChart = {
+        serovars: serogroups,
+        bars: [
+            {
+                key: "o|m|st",
+                sampleOrigin: "Wild ruminants",
+                matrix: "Fresh meat",
+                samplingStage: "Retail",
+                n: 34,
+                shares: Object.fromEntries(
+                    serogroups.map((s) => [s, 100 / serogroups.length])
+                ),
+            },
+        ],
+        belowMinimum: [],
+    };
+
+    it("gives each serogroup the prism colour nearest the report's, in roman", () => {
+        mockStrings = typingEn;
+
+        const { container } = render(
+            <SerovarBarChart
+                chart={SEROGROUP_CHART}
+                organism="Listeria monocytogenes"
+            />
+        );
+
+        expect(legendFills(container)).toEqual([
+            ["IIa", "#edad08"],
+            ["IIb", "#e17c05"],
+            ["IIc", "#73af48"],
+            ["IVa", "#38a6a5"],
+            ["IVb", "#1d6996"],
+            // not in the report: the first prism colour no serogroup holds
+            ["IVc", "#5f4690"],
+        ]);
+        expect(legendItalic(container, "IIa")).toBe(false);
+    });
+});
+
 describe("SerovarBarChart x-axis", () => {
     it.each([
+        [
+            "Listeria monocytogenes",
+            "en",
+            typingEn,
+            "Proportion of Listeria monocytogenes isolates (%)",
+            "Listeria monocytogenes",
+        ],
+        [
+            "Listeria monocytogenes",
+            "de",
+            typingDe,
+            "Anteil Listeria monocytogenes Isolate (%)",
+            "Listeria monocytogenes",
+        ],
         [
             "Salmonella spp.",
             "en",
