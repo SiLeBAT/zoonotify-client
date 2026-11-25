@@ -140,8 +140,11 @@ function OrganismName({ organism }: { organism: TypingOrganism }): JSX.Element {
     );
 }
 
-/** The only organism with a typing chart so far (#1935). */
-const SEROVAR_ORGANISM = "Salmonella spp.";
+/**
+ * The organisms with a typing chart: Salmonella serovars (#1935) and
+ * Campylobacter species (#1954), both drawn from the typing subgroups.
+ */
+const CHARTED_ORGANISMS = ["Salmonella spp.", "Campylobacter spp."];
 const YEAR_PARAM = "year";
 /**
  * Repeated once per ticked combination; absent means every combination, and
@@ -178,11 +181,16 @@ const Muted = styled("span")`
     color: #888;
 `;
 
-/** Salmonella serovars per combination, as 100 % stacked bars. */
+/**
+ * Typing subgroups per combination, as 100 % stacked bars: Salmonella
+ * serovars or Campylobacter species.
+ */
 function SerovarSection({
+    organism,
     rows,
     onInfo,
 }: {
+    organism: string;
     rows: TypingResult[];
     onInfo: (labelKey: string) => void;
 }): JSX.Element | null {
@@ -361,6 +369,7 @@ function SerovarSection({
                     .map((bar) => bar.key)
                     .join("/")}`}
                 chart={shownChart}
+                organism={organism}
             />
         </>
     );
@@ -542,9 +551,10 @@ function TypingDetail({
                         </Title>
                         {failed && <p role="alert">{t("LoadError")}</p>}
                         {rows &&
-                            (organism.id === SEROVAR_ORGANISM ? (
+                            (CHARTED_ORGANISMS.includes(organism.id) ? (
                                 <>
                                     <SerovarSection
+                                        organism={organism.id}
                                         rows={filterTypingRows(rows, applied)}
                                         onInfo={(labelKey) =>
                                             void showInfo(labelKey)

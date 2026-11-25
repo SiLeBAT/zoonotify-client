@@ -31,6 +31,45 @@ const SEROVAR_COLORS = [
 ];
 const OTHER_COLOR = "#666666";
 
+/**
+ * Subgroups that keep one colour whatever their rank, per organism (#1954):
+ * the Campylobacter species as in the BfR report's figure, all from Prism.
+ */
+const FIXED_COLORS: Record<string, Record<string, string>> = {
+    "Campylobacter spp.": {
+        "C. coli": "#CC503E",
+        "C. jejuni": "#1D6996",
+        "C. lari": "#EDAD08",
+    },
+};
+
+/**
+ * Each series' fill, in legend order: a fixed colour where the organism has
+ * one, otherwise the next Prism colour no fixed subgroup holds.
+ */
+function seriesColors(serovars: string[], organism: string): string[] {
+    const fixed = FIXED_COLORS[organism] ?? {};
+    const reserved = new Set(Object.values(fixed));
+    const free = SEROVAR_COLORS.filter((color) => !reserved.has(color));
+    let next = 0;
+    return serovars.map((serovar) => {
+        if (serovar === OTHER_SEROVARS) return OTHER_COLOR;
+        return fixed[serovar] ?? free[next++];
+    });
+}
+
+/** The x-axis title per organism (#1954), keyed by the organism's id. */
+const AXIS_TITLES: Record<string, string> = {
+    "Salmonella spp.": "SerovarShareAxis",
+    "Campylobacter spp.": "CampylobacterShareAxis",
+};
+
+/**
+ * Organisms whose subgroups are species, set in italics in the legend
+ * (#1954); Salmonella serovars stay roman.
+ */
+const ITALIC_SUBGROUPS = ["Campylobacter spp."];
+
 const BAR_HEIGHT = 44;
 
 /** Space between the bars and the legend, in px (#1951). */
@@ -77,9 +116,24 @@ function AxisLabel({
     );
 }
 
-export function SerovarBarChart({ chart }: { chart: Chart }): JSX.Element {
+export function SerovarBarChart({
+    chart,
+    organism,
+}: {
+    chart: Chart;
+    /** The typing organism's id, e.g. "Campylobacter spp.". */
+    organism: string;
+}): JSX.Element {
     const { t } = useTranslation(["MicrobialTyping"]);
 
+    const colors = seriesColors(chart.serovars, organism);
+    const otherName = t("OtherSerovars");
+    const legendName = (name: string): React.ReactNode =>
+        ITALIC_SUBGROUPS.includes(organism) && name !== otherName ? (
+            <span style={{ fontStyle: "italic" }}>{name}</span>
+        ) : (
+            name
+        );
     const data = chart.bars.map((bar) => {
         const point: Record<string, string | number> = {
             label: `${bar.sampleOrigin}, ${bar.matrix}, ${bar.samplingStage}, N = ${bar.n}`,
@@ -106,7 +160,13 @@ export function SerovarBarChart({ chart }: { chart: Chart }): JSX.Element {
                     type="number"
                     domain={[0, 100]}
                     ticks={[0, 20, 40, 60, 80, 100]}
-                    label={<AxisLabel text={t("SerovarShareAxis")} />}
+                    label={
+                        <AxisLabel
+                            text={t(
+                                AXIS_TITLES[organism] ?? "SerovarShareAxis"
+                            )}
+                        />
+                    }
                 />
                 <YAxis
                     dataKey="label"
@@ -124,6 +184,7 @@ export function SerovarBarChart({ chart }: { chart: Chart }): JSX.Element {
                     // Recharts measures the legend with its padding and
                     // narrows the plot to fit, so this is the gap to the bars.
                     wrapperStyle={{ paddingLeft: LEGEND_GAP }}
+                    formatter={legendName}
                 />
                 {chart.serovars.map((serovar, index) => {
                     const other = serovar === OTHER_SEROVARS;
@@ -131,9 +192,9 @@ export function SerovarBarChart({ chart }: { chart: Chart }): JSX.Element {
                         <Bar
                             key={serovar}
                             dataKey={segmentKey(index)}
-                            name={other ? t("OtherSerovars") : serovar}
+                            name={other ? otherName : serovar}
                             stackId="serovars"
-                            fill={other ? OTHER_COLOR : SEROVAR_COLORS[index]}
+                            fill={colors[index]}
                             isAnimationActive={false}
                         />
                     );

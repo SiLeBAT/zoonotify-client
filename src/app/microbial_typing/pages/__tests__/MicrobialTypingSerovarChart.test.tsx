@@ -541,3 +541,81 @@ describe("MicrobialTypingPage Salmonella serovar chart", () => {
         ).not.toBeInTheDocument();
     });
 });
+
+describe("MicrobialTypingPage Campylobacter species chart (#1954)", () => {
+    beforeEach(() => {
+        mockedCallApiService.mockReset();
+        mockLanguage = "en";
+    });
+
+    const CAMPYLOBACTER = "?microorganism=Campylobacter%20spp.";
+    const CAMPYLOBACTER_ROWS: TypingResult[] = [
+        row(
+            2024,
+            "Broilers",
+            "Caecal content",
+            "Slaughterhouse",
+            224,
+            "C. coli",
+            54
+        ),
+        row(
+            2024,
+            "Broilers",
+            "Caecal content",
+            "Slaughterhouse",
+            224,
+            "C. jejuni",
+            170
+        ),
+        row(
+            2024,
+            "Fattening turkeys",
+            "Neck skin",
+            "Slaughterhouse",
+            88,
+            "C. coli",
+            29
+        ),
+        row(
+            2024,
+            "Fattening turkeys",
+            "Neck skin",
+            "Slaughterhouse",
+            88,
+            "C. jejuni",
+            57
+        ),
+        row(
+            2024,
+            "Fattening turkeys",
+            "Neck skin",
+            "Slaughterhouse",
+            88,
+            "C. lari",
+            2
+        ),
+        // under the minimum N: listed in the Combinations picker, not plotted
+        row(2024, "Roe deer", "Faeces", "Wild", 4, "C. jejuni", 4),
+    ];
+
+    it("plots the species per combination, as for Salmonella", async () => {
+        serve(CAMPYLOBACTER_ROWS);
+
+        renderPage("", CAMPYLOBACTER);
+
+        expect(
+            await screen.findByText(
+                "Broilers, Caecal content, Slaughterhouse, N = 224"
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Fattening turkeys, Neck skin, Slaughterhouse, N = 88"
+            )
+        ).toBeInTheDocument();
+        expect(screen.queryByText(/Roe deer/)).not.toBeInTheDocument();
+        expect(screen.getByText("C. lari")).toBeInTheDocument();
+        expect(screen.queryByText("NoChartYet")).not.toBeInTheDocument();
+    });
+});
