@@ -60,7 +60,7 @@ export function buildSerovarChart(
 
     const weights = new Map<string, number>();
     for (const row of plotted) {
-        const serovar = serovarOf(row);
+        const serovar = serovarOf(row, organism);
         weights.set(
             serovar,
             (weights.get(serovar) ?? 0) + row.numberOfIsolatesInSubgroup
@@ -88,7 +88,7 @@ export function buildSerovarChart(
             bar = { ...combination, shares: {} };
             bars.set(combination.key, bar);
         }
-        const serovar = serovarOf(row);
+        const serovar = serovarOf(row, organism);
         const segment = kept.has(serovar) ? serovar : OTHER_SEROVARS;
         bar.shares[segment] =
             (bar.shares[segment] ?? 0) +
@@ -121,6 +121,17 @@ function combinationOf(row: TypingResult): SerovarCombination {
     };
 }
 
-function serovarOf(row: TypingResult): string {
-    return row.typingSubgroup?.name ?? "";
+/**
+ * Organisms whose subgroup names may carry their serotypes in brackets, which
+ * are dropped so the rows count towards the bare serogroup: on zoonotify-dev
+ * "IIa (1/2a. 3a)" sits beside "IIa" (#1955). Variants such as "IVb-v1" have
+ * no brackets and stay apart.
+ */
+const SEROTYPES_IN_BRACKETS = ["Listeria monocytogenes"];
+
+function serovarOf(row: TypingResult, organism?: string): string {
+    const name = row.typingSubgroup?.name ?? "";
+    return organism && SEROTYPES_IN_BRACKETS.includes(organism)
+        ? name.replace(/\s*\(.*\)$/, "")
+        : name;
 }
