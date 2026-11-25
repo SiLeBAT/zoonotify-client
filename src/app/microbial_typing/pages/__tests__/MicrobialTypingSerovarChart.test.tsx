@@ -619,3 +619,54 @@ describe("MicrobialTypingPage Campylobacter species chart (#1954)", () => {
         expect(screen.queryByText("NoChartYet")).not.toBeInTheDocument();
     });
 });
+
+describe("MicrobialTypingPage Listeria serogroup chart (#1955)", () => {
+    beforeEach(() => {
+        mockedCallApiService.mockReset();
+        mockLanguage = "en";
+    });
+
+    const LISTERIA = "?microorganism=Listeria%20monocytogenes";
+    // Ranked by isolates, IVb would lead: the legend must not follow that.
+    const LISTERIA_ROWS: TypingResult[] = [
+        row(2024, "Wild ruminants", "Fresh meat", "Retail", 34, "IVb", 13),
+        row(2024, "Wild ruminants", "Fresh meat", "Retail", 34, "IIa", 17),
+        row(2024, "Wild ruminants", "Fresh meat", "Retail", 34, "IIc", 2),
+        row(2024, "Wild ruminants", "Fresh meat", "Retail", 34, "IVa", 1),
+        row(2024, "Wild ruminants", "Fresh meat", "Retail", 34, "IIb", 1),
+        row(2024, "Lamb's lettuce", "Packaged salad", "Retail", 14, "IVb", 10),
+        row(2024, "Lamb's lettuce", "Packaged salad", "Retail", 14, "IIa", 3),
+        row(2024, "Lamb's lettuce", "Packaged salad", "Retail", 14, "IIb", 1),
+        // under the minimum N: listed in the Combinations picker, not plotted
+        row(2024, "Seafood", "Crustaceans", "Retail", 5, "IIb", 3),
+    ];
+
+    it("plots the serogroups per combination, as for Salmonella", async () => {
+        serve(LISTERIA_ROWS);
+
+        renderPage("", LISTERIA);
+
+        expect(
+            await screen.findByText(
+                "Wild ruminants, Fresh meat, Retail, N = 34"
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText("Lamb's lettuce, Packaged salad, Retail, N = 14")
+        ).toBeInTheDocument();
+        expect(screen.queryByText(/Seafood/)).not.toBeInTheDocument();
+        expect(screen.queryByText("NoChartYet")).not.toBeInTheDocument();
+    });
+
+    it("stacks and lists the serogroups in the report's order, not by count", async () => {
+        serve(LISTERIA_ROWS);
+
+        renderPage("", LISTERIA);
+
+        await screen.findByText("Wild ruminants, Fresh meat, Retail, N = 34");
+        const legend = Array.from(
+            document.querySelectorAll(".recharts-legend-item")
+        ).map((item) => item.textContent);
+        expect(legend).toEqual(["IIa", "IIb", "IIc", "IVa", "IVb"]);
+    });
+});

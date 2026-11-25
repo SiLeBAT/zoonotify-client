@@ -4,6 +4,7 @@
   "SamplingYear": "Sampling year",
   "SerovarShareAxis": "Proportion of <i>Salmonella</i> spp. isolates (%)",
   "CampylobacterShareAxis": "Proportion of <i>Campylobacter</i> spp. isolates (%)",
+  "ListeriaShareAxis": "Proportion of <i>Listeria monocytogenes</i> isolates (%)",
   "OtherSerovars": "other serovars",
   "LoadError": "The typing data could not be loaded. Please try again later.",
   "Breadcrumb": "Breadcrumb",

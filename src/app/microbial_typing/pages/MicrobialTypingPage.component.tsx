@@ -141,10 +141,15 @@ function OrganismName({ organism }: { organism: TypingOrganism }): JSX.Element {
 }
 
 /**
- * The organisms with a typing chart: Salmonella serovars (#1935) and
- * Campylobacter species (#1954), both drawn from the typing subgroups.
+ * The organisms with a typing chart, all drawn from the typing subgroups:
+ * Salmonella serovars (#1935), Campylobacter species (#1954) and Listeria
+ * monocytogenes serogroups (#1955).
  */
-const CHARTED_ORGANISMS = ["Salmonella spp.", "Campylobacter spp."];
+const CHARTED_ORGANISMS = [
+    "Salmonella spp.",
+    "Campylobacter spp.",
+    "Listeria monocytogenes",
+];
 const YEAR_PARAM = "year";
 /**
  * Repeated once per ticked combination; absent means every combination, and
@@ -183,7 +188,7 @@ const Muted = styled("span")`
 
 /**
  * Typing subgroups per combination, as 100 % stacked bars: Salmonella
- * serovars or Campylobacter species.
+ * serovars, Campylobacter species or Listeria serogroups.
  */
 function SerovarSection({
     organism,
@@ -207,7 +212,7 @@ function SerovarSection({
     );
     const year = years.includes(requested) ? requested : years[0];
 
-    const chart = buildSerovarChart(rows, year);
+    const chart = buildSerovarChart(rows, year, organism);
     // picker order: plotted combinations, then those under the minimum N
     const entries: SerovarCombination[] = [
         ...chart.bars,

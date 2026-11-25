@@ -32,14 +32,22 @@ const SEROVAR_COLORS = [
 const OTHER_COLOR = "#666666";
 
 /**
- * Subgroups that keep one colour whatever their rank, per organism (#1954):
- * the Campylobacter species as in the BfR report's figure, all from Prism.
+ * Subgroups that keep one colour whatever their rank, per organism, all from
+ * Prism: the Campylobacter species as in the BfR report's figure (#1954), and
+ * the Listeria serogroups in the hues nearest the report's (#1955).
  */
 const FIXED_COLORS: Record<string, Record<string, string>> = {
     "Campylobacter spp.": {
         "C. coli": "#CC503E",
         "C. jejuni": "#1D6996",
         "C. lari": "#EDAD08",
+    },
+    "Listeria monocytogenes": {
+        IIa: "#EDAD08",
+        IIb: "#E17C05",
+        IIc: "#73AF48",
+        IVa: "#38A6A5",
+        IVb: "#1D6996",
     },
 };
 
@@ -62,6 +70,7 @@ function seriesColors(serovars: string[], organism: string): string[] {
 const AXIS_TITLES: Record<string, string> = {
     "Salmonella spp.": "SerovarShareAxis",
     "Campylobacter spp.": "CampylobacterShareAxis",
+    "Listeria monocytogenes": "ListeriaShareAxis",
 };
 
 /**
