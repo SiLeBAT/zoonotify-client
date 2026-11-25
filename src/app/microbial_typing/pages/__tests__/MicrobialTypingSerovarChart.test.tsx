@@ -1,5 +1,11 @@
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+    within,
+} from "@testing-library/react";
 import { MemoryRouter, Route } from "react-router-dom";
 import type { Location } from "history";
 import { callApiService } from "../../../shared/infrastructure/api/callApi.service";
@@ -668,5 +674,51 @@ describe("MicrobialTypingPage Listeria serogroup chart (#1955)", () => {
             document.querySelectorAll(".recharts-legend-item")
         ).map((item) => item.textContent);
         expect(legend).toEqual(["IIa", "IIb", "IIc", "IVa", "IVb"]);
+    });
+
+    it("merges a serogroup written with its serotypes into the serogroup, keeping variants apart", async () => {
+        // As on zoonotify-dev: some rows name the serotypes after the serogroup.
+        serve([
+            row(2024, "Wild ruminants", "Fresh meat", "Retail", 20, "IIa", 8),
+            row(
+                2024,
+                "Wild ruminants",
+                "Fresh meat",
+                "Retail",
+                20,
+                "IIa (1/2a. 3a)",
+                6
+            ),
+            row(
+                2024,
+                "Wild ruminants",
+                "Fresh meat",
+                "Retail",
+                20,
+                "IVb (4b. 4d. 4e)",
+                4
+            ),
+            row(
+                2024,
+                "Wild ruminants",
+                "Fresh meat",
+                "Retail",
+                20,
+                "IVb-v1",
+                2
+            ),
+        ]);
+
+        renderPage("", LISTERIA);
+
+        // Recharts keeps a measuring copy of the bar labels in the document,
+        // so wait on the legend rather than on a label.
+        await waitFor(() =>
+            expect(
+                Array.from(
+                    document.querySelectorAll(".recharts-legend-item")
+                ).map((item) => item.textContent)
+            ).toEqual(["IIa", "IVb", "IVb-v1"])
+        );
     });
 });
