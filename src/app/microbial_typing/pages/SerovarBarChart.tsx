@@ -13,22 +13,23 @@ import {
 import { OTHER_SEROVARS, type SerovarChart as Chart } from "./serovarChart";
 
 /**
- * ColorBrewer "Spectral", as in the data steward's reference plot (#1935):
- * the most frequent serovar purple, through to dark red for other serovars.
+ * CARTOColors "Prism" (#1953), replacing ColorBrewer "Spectral" whose light
+ * yellow was hard to see on screen: one colour per serovar in rank order, and
+ * the palette's neutral grey for other serovars.
  */
 const SEROVAR_COLORS = [
-    "#5e4fa2",
-    "#3288bd",
-    "#66c2a5",
-    "#abdda4",
-    "#e6f598",
-    "#ffffbf",
-    "#fee08b",
-    "#fdae61",
-    "#f46d43",
-    "#d53e4f",
+    "#5F4690",
+    "#1D6996",
+    "#38A6A5",
+    "#0F8554",
+    "#73AF48",
+    "#EDAD08",
+    "#E17C05",
+    "#CC503E",
+    "#94346E",
+    "#6F4070",
 ];
-const OTHER_COLOR = "#9e0142";
+const OTHER_COLOR = "#666666";
 
 const BAR_HEIGHT = 44;
 
