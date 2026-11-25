@@ -52,6 +52,31 @@ function svgText(container: HTMLElement, text: string): Element | undefined {
     );
 }
 
+/** Each legend entry's text, paired with its icon's fill. */
+function legendFills(container: HTMLElement): [string, string][] {
+    return Array.from(container.querySelectorAll(".recharts-legend-item")).map(
+        (item) => [
+            item.textContent ?? "",
+            (
+                item
+                    .querySelector(".recharts-legend-icon")
+                    ?.getAttribute("fill") ?? ""
+            ).toLowerCase(),
+        ]
+    );
+}
+
+/** Whether the legend entry reading `name` is set in italics. */
+function legendItalic(container: HTMLElement, name: string): boolean {
+    const item = Array.from(
+        container.querySelectorAll(".recharts-legend-item")
+    ).find((element) => element.textContent === name);
+    if (!item) throw new Error(`no legend entry "${name}"`);
+    return Array.from(item.querySelectorAll("*")).some(
+        (element) => window.getComputedStyle(element).fontStyle === "italic"
+    );
+}
+
 describe("SerovarBarChart colours", () => {
     // Ten serovars plus "Other", the most the chart ever draws.
     const serovars = [
@@ -73,24 +98,12 @@ describe("SerovarBarChart colours", () => {
         belowMinimum: [],
     };
 
-    /** Each legend entry's text, paired with its icon's fill. */
-    function legendFills(container: HTMLElement): [string, string][] {
-        return Array.from(
-            container.querySelectorAll(".recharts-legend-item")
-        ).map((item) => [
-            item.textContent ?? "",
-            (
-                item
-                    .querySelector(".recharts-legend-icon")
-                    ?.getAttribute("fill") ?? ""
-            ).toLowerCase(),
-        ]);
-    }
-
     it("uses the prism palette in rank order, grey for other serovars (#1953)", () => {
         mockStrings = typingEn;
 
-        const { container } = render(<SerovarBarChart chart={ELEVEN_SERIES} />);
+        const { container } = render(
+            <SerovarBarChart chart={ELEVEN_SERIES} organism="Salmonella spp." />
+        );
 
         expect(legendFills(container)).toEqual([
             ["S. Serovar1", "#5f4690"],
@@ -108,21 +121,112 @@ describe("SerovarBarChart colours", () => {
     });
 });
 
+describe("SerovarBarChart Campylobacter species (#1954)", () => {
+    // Ranked as buildSerovarChart would: most isolates first.
+    const species = ["C. jejuni", "C. coli", "C. upsaliensis", "C. lari"];
+    const SPECIES_CHART: SerovarChart = {
+        serovars: species,
+        bars: [
+            {
+                key: "o|m|st",
+                sampleOrigin: "Broilers",
+                matrix: "Caecal content",
+                samplingStage: "Slaughterhouse",
+                n: 224,
+                shares: Object.fromEntries(species.map((s) => [s, 25])),
+            },
+        ],
+        belowMinimum: [],
+    };
+
+    it("keeps each known species' colour from the report, whatever its rank", () => {
+        mockStrings = typingEn;
+
+        const { container } = render(
+            <SerovarBarChart
+                chart={SPECIES_CHART}
+                organism="Campylobacter spp."
+            />
+        );
+
+        expect(legendFills(container)).toEqual([
+            ["C. jejuni", "#1d6996"],
+            ["C. coli", "#cc503e"],
+            // not in the report: the first prism colour no species holds
+            ["C. upsaliensis", "#5f4690"],
+            ["C. lari", "#edad08"],
+        ]);
+    });
+    it("sets the species in italics, other species in roman", () => {
+        mockStrings = typingEn;
+        const chart = {
+            ...SPECIES_CHART,
+            serovars: [...species, OTHER_SEROVARS],
+        };
+
+        const { container } = render(
+            <SerovarBarChart chart={chart} organism="Campylobacter spp." />
+        );
+
+        expect(legendItalic(container, "C. jejuni")).toBe(true);
+        expect(legendItalic(container, "C. lari")).toBe(true);
+        expect(legendItalic(container, typingEn.OtherSerovars)).toBe(false);
+    });
+
+    it("leaves Salmonella serovars in roman", () => {
+        mockStrings = typingEn;
+
+        const { container } = render(
+            <SerovarBarChart chart={CHART} organism="Salmonella spp." />
+        );
+
+        expect(legendItalic(container, "S. Infantis")).toBe(false);
+    });
+});
+
 describe("SerovarBarChart x-axis", () => {
     it.each([
-        ["en", typingEn, "Proportion of Salmonella spp. isolates (%)"],
-        ["de", typingDe, "Anteil Salmonella spp. Isolate (%)"],
+        [
+            "Salmonella spp.",
+            "en",
+            typingEn,
+            "Proportion of Salmonella spp. isolates (%)",
+            "Salmonella",
+        ],
+        [
+            "Salmonella spp.",
+            "de",
+            typingDe,
+            "Anteil Salmonella spp. Isolate (%)",
+            "Salmonella",
+        ],
+        [
+            "Campylobacter spp.",
+            "en",
+            typingEn,
+            "Proportion of Campylobacter spp. isolates (%)",
+            "Campylobacter",
+        ],
+        [
+            "Campylobacter spp.",
+            "de",
+            typingDe,
+            "Anteil Campylobacter spp. Isolate (%)",
+            "Campylobacter",
+        ],
     ])(
-        "names the proportion of Salmonella isolates, the genus in italics (%s)",
-        (_, strings, label) => {
+        "names the proportion of %s isolates, the genus in italics (%s)",
+        (organism, _, strings, label, genus) => {
             mockStrings = strings;
 
-            const { container } = render(<SerovarBarChart chart={CHART} />);
+            const { container } = render(
+                <SerovarBarChart chart={CHART} organism={organism} />
+            );
 
             const axisLabel = svgText(container, label);
             expect(axisLabel).toBeDefined();
             const italic = axisLabel?.querySelector('[font-style="italic"]');
-            expect(italic?.textContent).toBe("Salmonella");
+            expect(italic?.textContent).toBe(genus);
         }
     );
 });
