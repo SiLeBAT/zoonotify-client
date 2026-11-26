@@ -852,3 +852,97 @@ describe("MicrobialTypingPage MRSA clonal group chart (#1956)", () => {
         }
     );
 });
+
+describe("MicrobialTypingPage Enterococcus species chart (#1957)", () => {
+    beforeEach(() => {
+        mockedCallApiService.mockReset();
+        mockLanguage = "en";
+    });
+
+    const ENTEROCOCCUS = "?microorganism=Enterococcus%20spp.";
+    // Ranked by isolates, E. faecium would lead: the legend must not follow that.
+    const ENTEROCOCCUS_ROWS: TypingResult[] = [
+        row(
+            2024,
+            "Calves",
+            "Caecal content",
+            "Slaughterhouse",
+            179,
+            "Enterococcus faecium",
+            92
+        ),
+        row(
+            2024,
+            "Calves",
+            "Caecal content",
+            "Slaughterhouse",
+            179,
+            "Enterococcus faecalis",
+            87
+        ),
+        row(
+            2024,
+            "Fattening pigs",
+            "Caecal content",
+            "Slaughterhouse",
+            74,
+            "Enterococcus faecalis",
+            33
+        ),
+        row(
+            2024,
+            "Fattening pigs",
+            "Caecal content",
+            "Slaughterhouse",
+            74,
+            "Enterococcus faecium",
+            41
+        ),
+        // under the minimum N: listed in the Combinations picker, not plotted
+        row(
+            2024,
+            "Broilers",
+            "Caecal content",
+            "Slaughterhouse",
+            4,
+            "Enterococcus faecium",
+            4
+        ),
+    ];
+
+    it("plots the species per combination, as for Salmonella", async () => {
+        serve(ENTEROCOCCUS_ROWS);
+
+        renderPage("", ENTEROCOCCUS);
+
+        expect(
+            await screen.findByText(
+                "Calves, Caecal content, Slaughterhouse, N = 179"
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Fattening pigs, Caecal content, Slaughterhouse, N = 74"
+            )
+        ).toBeInTheDocument();
+        expect(screen.queryByText(/Broilers/)).not.toBeInTheDocument();
+        expect(screen.queryByText("NoChartYet")).not.toBeInTheDocument();
+    });
+
+    it("stacks and lists the species in the report's order, not by count", async () => {
+        serve(ENTEROCOCCUS_ROWS);
+
+        renderPage("", ENTEROCOCCUS);
+
+        await screen.findByText(
+            "Calves, Caecal content, Slaughterhouse, N = 179"
+        );
+        const legend = Array.from(
+            document.querySelectorAll(".recharts-legend-item")
+        ).map((item) => item.textContent);
+        expect(legend).toEqual([
+            "Enterococcus faecalis",
+            "Enterococcus faecium",
+        ]);
+    });
+});

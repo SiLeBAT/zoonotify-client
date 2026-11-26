@@ -275,8 +275,59 @@ describe("SerovarBarChart MRSA clonal groups (#1956)", () => {
     );
 });
 
+describe("SerovarBarChart Enterococcus species (#1957)", () => {
+    it("gives each species the report's colour from prism, in italics", () => {
+        mockStrings = typingEn;
+        const species = ["Enterococcus faecalis", "Enterococcus faecium"];
+
+        const { container } = render(
+            <SerovarBarChart
+                chart={{
+                    serovars: species,
+                    bars: [
+                        {
+                            key: "o|m|st",
+                            sampleOrigin: "Calves",
+                            matrix: "Caecal content",
+                            samplingStage: "Slaughterhouse",
+                            n: 179,
+                            shares: {
+                                "Enterococcus faecalis": 48.6,
+                                "Enterococcus faecium": 51.4,
+                            },
+                        },
+                    ],
+                    belowMinimum: [],
+                }}
+                organism="Enterococcus spp."
+            />
+        );
+
+        expect(legendFills(container)).toEqual([
+            ["Enterococcus faecalis", "#1d6996"],
+            ["Enterococcus faecium", "#edad08"],
+        ]);
+        expect(legendItalic(container, "Enterococcus faecalis")).toBe(true);
+        expect(legendItalic(container, "Enterococcus faecium")).toBe(true);
+    });
+});
+
 describe("SerovarBarChart x-axis", () => {
     it.each([
+        [
+            "Enterococcus spp.",
+            "en",
+            typingEn,
+            "Proportion of Enterococcus spp. isolates (%)",
+            "Enterococcus",
+        ],
+        [
+            "Enterococcus spp.",
+            "de",
+            typingDe,
+            "Anteil Enterococcus spp. Isolate (%)",
+            "Enterococcus",
+        ],
         [
             "Listeria monocytogenes",
             "en",

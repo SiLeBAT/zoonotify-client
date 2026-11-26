@@ -11,8 +11,9 @@ export const OTHER_SEROVARS = "__other__";
 
 /**
  * Organisms whose subgroups follow a fixed order rather than their isolate
- * count, as in the BfR report's figures: the Listeria serogroups (#1955) and
- * the MRSA clonal groups (#1956), whose "other CC398" is named per locale.
+ * count, as in the BfR report's figures: the Listeria serogroups (#1955), the
+ * MRSA clonal groups (#1956), whose "other CC398" is named per locale, and the
+ * Enterococcus species (#1957).
  * Subgroups not listed follow, by count.
  */
 const SUBGROUP_ORDER: Record<string, string[]> = {
@@ -24,6 +25,7 @@ const SUBGROUP_ORDER: Record<string, string[]> = {
         "andere CC398",
         "non CC398",
     ],
+    "Enterococcus spp.": ["Enterococcus faecalis", "Enterococcus faecium"],
 };
 
 /** A combination of sample origin, matrix and sampling stage. */

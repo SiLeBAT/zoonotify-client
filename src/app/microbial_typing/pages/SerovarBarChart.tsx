@@ -35,9 +35,13 @@ const OTHER_COLOR = "#666666";
  * Subgroups that keep one colour whatever their rank, per organism, all from
  * Prism: the Campylobacter species as in the BfR report's figure (#1954), and
  * the Listeria serogroups (#1955) and MRSA clonal groups (#1956) in the hues
- * nearest the report's.
+ * nearest the report's, and the Enterococcus species as in the report (#1957).
  */
 const FIXED_COLORS: Record<string, Record<string, string>> = {
+    "Enterococcus spp.": {
+        "Enterococcus faecalis": "#1D6996",
+        "Enterococcus faecium": "#EDAD08",
+    },
     MRSA: {
         "CC398 t011": "#38A6A5",
         "CC398 t034": "#1D6996",
@@ -80,13 +84,14 @@ const AXIS_TITLES: Record<string, string> = {
     "Campylobacter spp.": "CampylobacterShareAxis",
     "Listeria monocytogenes": "ListeriaShareAxis",
     MRSA: "MrsaShareAxis",
+    "Enterococcus spp.": "EnterococcusShareAxis",
 };
 
 /**
  * Organisms whose subgroups are species, set in italics in the legend
- * (#1954); Salmonella serovars stay roman.
+ * (#1954, #1957); Salmonella serovars stay roman.
  */
-const ITALIC_SUBGROUPS = ["Campylobacter spp."];
+const ITALIC_SUBGROUPS = ["Campylobacter spp.", "Enterococcus spp."];
 
 const BAR_HEIGHT = 44;
 
