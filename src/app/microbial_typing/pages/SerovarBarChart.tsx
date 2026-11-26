@@ -34,9 +34,17 @@ const OTHER_COLOR = "#666666";
 /**
  * Subgroups that keep one colour whatever their rank, per organism, all from
  * Prism: the Campylobacter species as in the BfR report's figure (#1954), and
- * the Listeria serogroups in the hues nearest the report's (#1955).
+ * the Listeria serogroups (#1955) and MRSA clonal groups (#1956) in the hues
+ * nearest the report's.
  */
 const FIXED_COLORS: Record<string, Record<string, string>> = {
+    MRSA: {
+        "CC398 t011": "#38A6A5",
+        "CC398 t034": "#1D6996",
+        "other CC398": "#5F4690",
+        "andere CC398": "#5F4690",
+        "non CC398": "#CC503E",
+    },
     "Campylobacter spp.": {
         "C. coli": "#CC503E",
         "C. jejuni": "#1D6996",
@@ -71,6 +79,7 @@ const AXIS_TITLES: Record<string, string> = {
     "Salmonella spp.": "SerovarShareAxis",
     "Campylobacter spp.": "CampylobacterShareAxis",
     "Listeria monocytogenes": "ListeriaShareAxis",
+    MRSA: "MrsaShareAxis",
 };
 
 /**

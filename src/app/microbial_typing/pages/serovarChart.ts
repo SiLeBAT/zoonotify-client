@@ -11,11 +11,19 @@ export const OTHER_SEROVARS = "__other__";
 
 /**
  * Organisms whose subgroups follow a fixed order rather than their isolate
- * count: the Listeria serogroups as in the BfR report's figure (#1955).
+ * count, as in the BfR report's figures: the Listeria serogroups (#1955) and
+ * the MRSA clonal groups (#1956), whose "other CC398" is named per locale.
  * Subgroups not listed follow, by count.
  */
 const SUBGROUP_ORDER: Record<string, string[]> = {
     "Listeria monocytogenes": ["IIa", "IIb", "IIc", "IVa", "IVb"],
+    MRSA: [
+        "CC398 t011",
+        "CC398 t034",
+        "other CC398",
+        "andere CC398",
+        "non CC398",
+    ],
 };
 
 /** A combination of sample origin, matrix and sampling stage. */

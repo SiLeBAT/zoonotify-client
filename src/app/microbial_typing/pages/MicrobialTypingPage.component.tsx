@@ -142,13 +142,14 @@ function OrganismName({ organism }: { organism: TypingOrganism }): JSX.Element {
 
 /**
  * The organisms with a typing chart, all drawn from the typing subgroups:
- * Salmonella serovars (#1935), Campylobacter species (#1954) and Listeria
- * monocytogenes serogroups (#1955).
+ * Salmonella serovars (#1935), Campylobacter species (#1954), Listeria
+ * monocytogenes serogroups (#1955) and MRSA clonal groups (#1956).
  */
 const CHARTED_ORGANISMS = [
     "Salmonella spp.",
     "Campylobacter spp.",
     "Listeria monocytogenes",
+    "MRSA",
 ];
 const YEAR_PARAM = "year";
 /**
@@ -513,7 +514,7 @@ function TypingDetail({
         setFailed(false);
         const load = async (): Promise<void> => {
             try {
-                const result = await fetchTypingResults(organism.id, locale);
+                const result = await fetchTypingResults(organism, locale);
                 if (!cancelled) setRows(result);
             } catch {
                 if (!cancelled) setFailed(true);
@@ -523,7 +524,7 @@ function TypingDetail({
         return () => {
             cancelled = true;
         };
-    }, [organism.id, locale]);
+    }, [organism, locale]);
 
     return (
         <>
