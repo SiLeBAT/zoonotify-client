@@ -6,6 +6,7 @@
   "CampylobacterShareAxis": "Proportion of <i>Campylobacter</i> spp. isolates (%)",
   "ListeriaShareAxis": "Proportion of <i>Listeria monocytogenes</i> isolates (%)",
   "MrsaShareAxis": "Proportion of MRSA isolates (%)",
+  "EnterococcusShareAxis": "Proportion of <i>Enterococcus</i> spp. isolates (%)",
   "OtherSerovars": "other serovars",
   "LoadError": "The typing data could not be loaded. Please try again later.",
   "Breadcrumb": "Breadcrumb",

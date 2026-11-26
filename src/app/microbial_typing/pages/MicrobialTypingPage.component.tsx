@@ -143,13 +143,15 @@ function OrganismName({ organism }: { organism: TypingOrganism }): JSX.Element {
 /**
  * The organisms with a typing chart, all drawn from the typing subgroups:
  * Salmonella serovars (#1935), Campylobacter species (#1954), Listeria
- * monocytogenes serogroups (#1955) and MRSA clonal groups (#1956).
+ * monocytogenes serogroups (#1955), MRSA clonal groups (#1956) and
+ * Enterococcus species (#1957).
  */
 const CHARTED_ORGANISMS = [
     "Salmonella spp.",
     "Campylobacter spp.",
     "Listeria monocytogenes",
     "MRSA",
+    "Enterococcus spp.",
 ];
 const YEAR_PARAM = "year";
 /**
