@@ -1,6 +1,12 @@
 import React from "react";
 import { render, screen, within, fireEvent } from "@testing-library/react";
 import { MultiResistanceDetail } from "../MultiResistanceDetail";
+import {
+    buildMultiResistanceBars,
+    decodeMultiResistanceState,
+    encodeMultiResistanceState,
+} from "../multiResistanceHelpers";
+import { emptyFilterState } from "../resistanceHelpers";
 import type {
     MultiResistanceBar,
     MultiResistanceItem,
@@ -122,6 +128,76 @@ describe("MultiResistanceDetail", () => {
         ).toBeInTheDocument();
     });
 
+    it("lists a Combination under the Minimum N disabled and without a checkbox (#1964)", async () => {
+        renderDetail("E. coli");
+        await screen.findByTestId("multi-resistance-chart");
+
+        fireEvent.mouseDown(combinationPicker());
+
+        const lowN = combinationOption(/N=7, data_not_plotted/);
+        expect(lowN).toHaveAttribute("aria-disabled", "true");
+        expect(within(lowN).queryByRole("checkbox")).not.toBeInTheDocument();
+    });
+
+    it("counts every bar shown as all selected, whatever is under the Minimum N (#1964)", async () => {
+        renderDetail("E. coli");
+        await screen.findByTestId("multi-resistance-chart");
+        fireEvent.mouseDown(combinationPicker());
+
+        fireEvent.click(combinationOption(/DESELECT_ALL/));
+        fireEvent.click(combinationOption(/Caecal content/));
+        fireEvent.click(combinationOption(/Chicken meat/));
+
+        const selectAll = combinationOption(/SELECT_ALL/);
+        expect(selectAll).toHaveTextContent("DESELECT_ALL");
+        const box = within(selectAll).getByRole("checkbox");
+        expect(box).toBeChecked();
+        expect(box).toHaveAttribute("data-indeterminate", "false");
+    });
+
+    it("shares only plotted Combinations in the link (#1964)", async () => {
+        renderDetail("E. coli");
+        await screen.findByTestId("multi-resistance-chart");
+        fireEvent.mouseDown(combinationPicker());
+
+        fireEvent.click(combinationOption(/Chicken meat/));
+        fireEvent.keyDown(screen.getByRole("listbox"), { key: "Escape" });
+
+        expect(plottedLabels()).toEqual([
+            "Caecal content – Broiler – Slaughterhouse (N = 170)",
+        ]);
+        expect(sharedCombinations()).toHaveLength(1);
+    });
+
+    it("still opens an older link that names a Combination under the Minimum N (#1964)", async () => {
+        const rows = (fixture as Fixture)["E. coli"].en;
+        const latest = Math.max(...rows.map((r) => r.samplingYear));
+        const { bars, belowMinimum } = buildMultiResistanceBars(
+            rows.filter((r) => r.samplingYear === latest),
+            "E. coli"
+        );
+        const caecal = bars.find((b) => b.name.startsWith("Caecal content"));
+        const s = encodeMultiResistanceState(
+            {
+                microorganism: "E. coli",
+                lang: "en",
+                selected: { ...emptyFilterState },
+                year: latest,
+                combinations: [caecal?.key ?? "", belowMinimum[0].key],
+            },
+            rows
+        );
+        window.history.replaceState(null, "", `/?s=${s}`);
+        render(<MultiResistanceDetail microorganism="E. coli" />);
+
+        await screen.findByTestId("multi-resistance-chart");
+
+        expect(plottedLabels()).toEqual([
+            "Caecal content – Broiler – Slaughterhouse (N = 170)",
+        ]);
+        expect(sharedCombinations()).toEqual([caecal?.key]);
+    });
+
     it("requests the microorganism's multi-resistance rows from the CMS in the UI language", async () => {
         renderDetail("E. coli");
         await screen.findByTestId("multi-resistance-chart");
@@ -186,4 +262,18 @@ function combinationPicker(): HTMLElement {
     return within(
         label.closest(".MuiFormControl-root") as HTMLElement
     ).getByRole("combobox");
+}
+
+/** The open Combination picker's option whose text matches `text`. */
+function combinationOption(text: RegExp): HTMLElement {
+    return within(screen.getByRole("listbox"))
+        .getByText(text)
+        .closest('[role="option"]') as HTMLElement;
+}
+
+/** The Combination keys the page's share link (`?s=`) currently holds. */
+function sharedCombinations(): string[] {
+    const s = new URLSearchParams(window.location.search).get("s");
+    if (!s) throw new Error("no share link");
+    return decodeMultiResistanceState(s, [])?.combinations ?? [];
 }

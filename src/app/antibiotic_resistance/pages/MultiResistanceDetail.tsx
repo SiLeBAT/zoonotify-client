@@ -205,7 +205,10 @@ export const MultiResistanceDetail: React.FC<{
 
     // picker order = bar order: plotted Combinations, then the ones under Minimum N
     const pickerEntries = [...bars, ...belowMinimum];
-    const availableKeys = pickerEntries.map((b) => b.key);
+    // Only plotted Combinations can be picked (#1964): those under Minimum N
+    // are listed for information, so Select All and ?s= leave them out, and an
+    // older link naming one simply drops it.
+    const availableKeys = bars.map((b) => b.key);
     const stillPicked = (pickedCombinations ?? []).filter((k) =>
         availableKeys.includes(k)
     );
@@ -630,16 +633,22 @@ export const MultiResistanceDetail: React.FC<{
                                         </MenuItem>
                                         {pickerEntries.map((b) => {
                                             const plotted = bars.includes(b);
+                                            // under the Minimum N: listed for
+                                            // information, as ticking it could
+                                            // never add a bar (#1964)
                                             return (
                                                 <MenuItem
                                                     key={b.key}
                                                     value={b.key}
+                                                    disabled={!plotted}
                                                 >
-                                                    <Checkbox
-                                                        checked={shownKeys.includes(
-                                                            b.key
-                                                        )}
-                                                    />
+                                                    {plotted && (
+                                                        <Checkbox
+                                                            checked={shownKeys.includes(
+                                                                b.key
+                                                            )}
+                                                        />
+                                                    )}
                                                     <ListItemText
                                                         primary={
                                                             <span>
