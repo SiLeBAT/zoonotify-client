@@ -386,7 +386,9 @@ export function AntibioticResistancePageComponent(): JSX.Element {
 
           position: sticky;
           top: 0;
-          z-index: 99999;
+          /* above the sidebar and content (1), below MUI's app bar and
+             snackbar, so error messages stay visible (issue 1976) */
+          z-index: 2;
 
           /* Opaque background masks content scrolling underneath */
           background: #fff;

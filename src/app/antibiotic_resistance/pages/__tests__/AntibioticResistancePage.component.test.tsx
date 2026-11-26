@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import LZString from "lz-string";
+import { createTheme } from "@mui/material/styles";
 import {
     AntibioticResistancePageComponent,
     FormattedMicroorganismName,
@@ -197,5 +198,28 @@ describe("AntibioticResistancePage Multi-resistance Graph", () => {
         expect(
             screen.queryByTestId("multi-resistance-detail")
         ).not.toBeInTheDocument();
+    });
+});
+
+describe("AntibioticResistancePage sticky breadcrumb (#1976)", () => {
+    const zIndexOf = (selector: string): number =>
+        Number(
+            getComputedStyle(document.querySelector(selector) as Element).zIndex
+        );
+
+    it("stays under the app bar and snackbar so error messages show", () => {
+        renderPage();
+        const { zIndex } = createTheme();
+
+        expect(zIndexOf(".abx-breadcrumb")).toBeLessThan(zIndex.appBar);
+        expect(zIndexOf(".abx-breadcrumb")).toBeLessThan(zIndex.snackbar);
+    });
+
+    it("still covers the content scrolling under it", () => {
+        renderPage();
+
+        expect(zIndexOf(".abx-breadcrumb")).toBeGreaterThan(
+            zIndexOf(".abx-content")
+        );
     });
 });
