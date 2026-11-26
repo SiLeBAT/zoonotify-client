@@ -226,6 +226,55 @@ describe("SerovarBarChart Listeria serogroups (#1955)", () => {
     });
 });
 
+describe("SerovarBarChart MRSA clonal groups (#1956)", () => {
+    const mrsaChart = (groups: string[]): SerovarChart => ({
+        serovars: groups,
+        bars: [
+            {
+                key: "o|m|st",
+                sampleOrigin: "Fattening turkeys",
+                matrix: "Fresh meat",
+                samplingStage: "Retail",
+                n: 103,
+                shares: Object.fromEntries(
+                    groups.map((g) => [g, 100 / groups.length])
+                ),
+            },
+        ],
+        belowMinimum: [],
+    });
+
+    it.each([
+        ["en", "other CC398"],
+        ["de", "andere CC398"],
+    ])(
+        "gives each clonal group the prism colour nearest the report's (%s), in roman",
+        (_language, otherCc398) => {
+            mockStrings = typingEn;
+
+            const { container } = render(
+                <SerovarBarChart
+                    chart={mrsaChart([
+                        "CC398 t011",
+                        "CC398 t034",
+                        otherCc398,
+                        "non CC398",
+                    ])}
+                    organism="MRSA"
+                />
+            );
+
+            expect(legendFills(container)).toEqual([
+                ["CC398 t011", "#38a6a5"],
+                ["CC398 t034", "#1d6996"],
+                [otherCc398, "#5f4690"],
+                ["non CC398", "#cc503e"],
+            ]);
+            expect(legendItalic(container, "CC398 t011")).toBe(false);
+        }
+    );
+});
+
 describe("SerovarBarChart x-axis", () => {
     it.each([
         [
@@ -283,6 +332,26 @@ describe("SerovarBarChart x-axis", () => {
             expect(axisLabel).toBeDefined();
             const italic = axisLabel?.querySelector('[font-style="italic"]');
             expect(italic?.textContent).toBe(genus);
+        }
+    );
+
+    it.each([
+        ["en", typingEn, "Proportion of MRSA isolates (%)"],
+        ["de", typingDe, "Anteil MRSA Isolate (%)"],
+    ])(
+        "names the proportion of MRSA isolates, in roman (%s)",
+        (_, strings, label) => {
+            mockStrings = strings;
+
+            const { container } = render(
+                <SerovarBarChart chart={CHART} organism="MRSA" />
+            );
+
+            const axisLabel = svgText(container, label);
+            expect(axisLabel).toBeDefined();
+            expect(
+                axisLabel?.querySelector('[font-style="italic"]')
+            ).toBeNull();
         }
     );
 });

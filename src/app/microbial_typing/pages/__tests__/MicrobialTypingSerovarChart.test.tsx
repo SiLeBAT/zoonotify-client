@@ -722,3 +722,133 @@ describe("MicrobialTypingPage Listeria serogroup chart (#1955)", () => {
         );
     });
 });
+
+describe("MicrobialTypingPage MRSA clonal group chart (#1956)", () => {
+    beforeEach(() => {
+        mockedCallApiService.mockReset();
+        mockLanguage = "en";
+    });
+
+    const MRSA = "?microorganism=MRSA";
+    // Ranked by isolates, non CC398 would lead: the legend must not follow that.
+    const MRSA_ROWS: TypingResult[] = [
+        row(
+            2024,
+            "Fattening turkeys",
+            "Fresh meat",
+            "Retail",
+            103,
+            "non CC398",
+            40
+        ),
+        row(
+            2024,
+            "Fattening turkeys",
+            "Fresh meat",
+            "Retail",
+            103,
+            "CC398 t034",
+            30
+        ),
+        row(
+            2024,
+            "Fattening turkeys",
+            "Fresh meat",
+            "Retail",
+            103,
+            "other CC398",
+            18
+        ),
+        row(
+            2024,
+            "Fattening turkeys",
+            "Fresh meat",
+            "Retail",
+            103,
+            "CC398 t011",
+            15
+        ),
+        row(2024, "Crustaceans", "Seafood", "Retail", 34, "non CC398", 31),
+        row(2024, "Crustaceans", "Seafood", "Retail", 34, "other CC398", 2),
+        row(2024, "Crustaceans", "Seafood", "Retail", 34, "CC398 t034", 1),
+        // under the minimum N: listed in the Combinations picker, not plotted
+        row(2024, "Broilers", "Dust", "Farm", 3, "CC398 t034", 3),
+    ];
+
+    it("plots the clonal groups per combination, as for Salmonella", async () => {
+        serve(MRSA_ROWS);
+
+        renderPage("", MRSA);
+
+        expect(
+            await screen.findByText(
+                "Fattening turkeys, Fresh meat, Retail, N = 103"
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText("Crustaceans, Seafood, Retail, N = 34")
+        ).toBeInTheDocument();
+        expect(screen.queryByText(/Broilers/)).not.toBeInTheDocument();
+        expect(screen.queryByText("NoChartYet")).not.toBeInTheDocument();
+    });
+
+    it.each(["en", "de"])(
+        "asks the CMS (%s) for MRSA's clonal groups, not its spa types",
+        async (language) => {
+            mockLanguage = language;
+            serve(MRSA_ROWS);
+
+            renderPage("", MRSA);
+
+            await screen.findByRole("combobox", { name: "SamplingYear" });
+            const url = decodeURIComponent(
+                mockedCallApiService.mock.calls
+                    .map(([called]) => called as string)
+                    .find((called) => called.includes("/typing-results")) ?? ""
+            );
+            // the CMS names it "Methicillin-resistant Staphylococcus aureus
+            // (MRSA)" in English and "Methicillin-resistente …" in German
+            expect(url).toContain(
+                "filters[microorganism][name][$containsi]=MRSA"
+            );
+            expect(url).toContain(
+                "filters[typing][name][$in][0]=MRSA Clonal Complex"
+            );
+            expect(url).toContain(
+                "filters[typing][name][$in][1]=MRSA klonale Gruppe"
+            );
+        }
+    );
+
+    it.each([
+        ["en", "other CC398"],
+        ["de", "andere CC398"],
+    ])(
+        "stacks and lists the clonal groups in the report's order (%s), not by count",
+        async (language, otherCc398) => {
+            mockLanguage = language;
+            serve(
+                MRSA_ROWS.map((r) =>
+                    r.typingSubgroup?.name === "other CC398"
+                        ? { ...r, typingSubgroup: { name: otherCc398 } }
+                        : r
+                )
+            );
+
+            renderPage("", MRSA);
+
+            await screen.findByText(
+                "Fattening turkeys, Fresh meat, Retail, N = 103"
+            );
+            const legend = Array.from(
+                document.querySelectorAll(".recharts-legend-item")
+            ).map((item) => item.textContent);
+            expect(legend).toEqual([
+                "CC398 t011",
+                "CC398 t034",
+                otherCc398,
+                "non CC398",
+            ]);
+        }
+    );
+});

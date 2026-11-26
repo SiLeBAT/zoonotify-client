@@ -11,6 +11,16 @@ export interface TypingOrganism {
     /** Stable value carried in the URL as `?microorganism=`. */
     readonly id: string;
     readonly segments: readonly NameSegment[];
+    /**
+     * How the CMS is asked for the organism's rows, where its `id` is not the
+     * CMS name: a fragment of the localized name, and the one typing method
+     * to chart, by its name in each locale. Without it, the `id` is the name
+     * and every typing method is fetched.
+     */
+    readonly cms?: {
+        readonly nameContains: string;
+        readonly typings: readonly string[];
+    };
 }
 
 /**
@@ -31,7 +41,17 @@ export const TYPING_ORGANISMS: readonly TypingOrganism[] = [
         id: "Listeria monocytogenes",
         segments: [{ text: "Listeria monocytogenes", italic: true }],
     },
-    { id: "MRSA", segments: [{ text: "MRSA" }] },
+    {
+        id: "MRSA",
+        segments: [{ text: "MRSA" }],
+        // The CMS has "Methicillin-resistant Staphylococcus aureus (MRSA)"
+        // (de: "Methicillin-resistente …"), typed by clonal group and by spa
+        // type; the chart shows the clonal groups (#1956).
+        cms: {
+            nameContains: "MRSA",
+            typings: ["MRSA Clonal Complex", "MRSA klonale Gruppe"],
+        },
+    },
     { id: "STEC", segments: [{ text: "STEC" }] },
     {
         id: "Enterococcus spp.",

@@ -1,5 +1,6 @@
 import { callApiService } from "../../shared/infrastructure/api/callApi.service";
 import { TYPING_RESULTS } from "../../shared/infrastructure/router/routes";
+import type { TypingOrganism } from "./typingOrganisms";
 
 /** Strapi v5 returns `documentId` with every populated relation; it is the
  * same in both locales, so filter selections survive a language switch. */
@@ -23,19 +24,34 @@ export interface TypingResult {
 }
 
 /**
- * The one seam for typing data: every row of one microorganism, in one locale,
- * with its relations populated. Rejects on a non-200 answer (e.g. the Public
+ * The one seam for typing data: every row of one microorganism (of its charted
+ * typing method, where it has several), in one locale, with its relations
+ * populated. Rejects on a non-200 answer (e.g. the Public
  * role lacks `find` on `typing-result`).
  */
 export async function fetchTypingResults(
-    microorganism: string,
+    organism: TypingOrganism,
     locale: string
 ): Promise<TypingResult[]> {
+    const { cms } = organism;
+    const organismFilter = cms
+        ? `&filters[microorganism][name][$containsi]=${encodeURIComponent(
+              cms.nameContains
+          )}` +
+          cms.typings
+              .map(
+                  (typing, index) =>
+                      `&filters[typing][name][$in][${index}]=${encodeURIComponent(
+                          typing
+                      )}`
+              )
+              .join("")
+        : `&filters[microorganism][name][$eq]=${encodeURIComponent(
+              organism.id
+          )}`;
     const url =
         `${TYPING_RESULTS}?locale=${locale}` +
-        `&filters[microorganism][name][$eq]=${encodeURIComponent(
-            microorganism
-        )}` +
+        organismFilter +
         `&populate[superCategorySampleOrigin][fields][0]=name` +
         `&populate[sampleOrigin][fields][0]=name` +
         `&populate[samplingStage][fields][0]=name` +
